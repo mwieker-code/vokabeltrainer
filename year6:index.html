@@ -1,0 +1,6477 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vokabeltrainer Englisch – Year 6</title>
+<script>
+/* Faengt Fehler ab, die sonst zu einer leeren Seite fuehren, und zeigt sie an. */
+window.onerror = function(msg, src, line, col){
+  try{
+    var box = document.getElementById("warn");
+    if(!box){
+      box = document.createElement("div");
+      box.id = "warn";
+      document.body.insertBefore(box, document.body.firstChild);
+    }
+    box.innerHTML = '<div class="warn"><b>Diese Seite laeuft in deinem Browser nicht.</b><br>'
+      + 'Wahrscheinlich ist er zu alt fuer eine der verwendeten Funktionen. '
+      + 'Bitte diesen Text weitergeben:<br><span style="font-family:monospace;font-size:11px">'
+      + String(msg) + ' (Zeile ' + line + ':' + col + ')</span></div>';
+  }catch(e){}
+  return false;
+};
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --ground:#EEF1F3;
+  --card:#FFFFFF;
+  --ink:#16232B;
+  --ink-soft:#5A6B75;
+  --rule:#D6DCE0;
+  --petrol:#0E5A66;
+  --amber:#C9761E;
+  --moss:#3F7A4B;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Consolas,monospace;
+  --r:4px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--ground);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:760px;margin:0 auto;padding:24px 20px 64px}
+
+/* ---------- Kopfzeile ---------- */
+.masthead{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;
+  border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:28px;flex-wrap:wrap}
+.mhead-text{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;min-width:0}
+@media(max-width:560px){
+  .masthead{align-items:center}
+  .mhead-text{gap:2px;display:block}
+}
+.masthead h1{font-family:var(--serif);font-weight:600;font-size:24px;margin:0;letter-spacing:-.01em}
+.masthead .sub{font-family:var(--mono);font-size:11px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-soft)}
+
+/* ---------- Unit-Farben (Variante A: Rand und Kopf) ---------- */
+/* Im Schwarz-Weiss-Druck traegt die Kachelbeschriftung die Unterscheidung,
+   nicht die Farbe. */
+.y6u1{--unit:#2B5F8A; --unit-bg:#E6EDF4; --unit-ink:#1B3C56}   /* Blau     */
+
+/* Hauptmenue: eigene, von den Units unabhaengige Farbgebung, damit
+   Jahrgang, Gesamtliste und Anleitung auf einen Blick auseinanderzuhalten
+   sind. */
+.home-year{--unit:#0E5A66; --unit-bg:#E4EFF1; --unit-ink:#083C45}   /* Petrol   */
+.home-all{--unit:#3F5E8A;  --unit-bg:#E7ECF4; --unit-ink:#24344F}   /* Blau     */
+.home-help{--unit:#6B5E3F; --unit-bg:#F1EEE4; --unit-ink:#463C24}   /* Sand     */
+.topic.home-year, .topic.home-all, .topic.home-help{
+  border-left-color:var(--unit); border-left-width:4px;
+  background:var(--unit-bg); border-top-color:transparent;
+  border-right-color:transparent; border-bottom-color:transparent}
+.topic.home-year .t-name, .topic.home-all .t-name, .topic.home-help .t-name{color:var(--unit-ink)}
+.topic.home-year .t-count, .topic.home-all .t-count, .topic.home-help .t-count{color:var(--unit)}
+.topic.home-year .minirail i.f{background:var(--unit)}
+.topic.home-year:hover, .topic.home-all:hover, .topic.home-help:hover{
+  border-color:transparent; border-left-color:var(--unit-ink)}
+@media print{
+  .topic.home-year, .topic.home-all, .topic.home-help{background:#fff;border:1px solid #000;border-left-width:4px}
+  .topic.home-year .t-name, .topic.home-all .t-name, .topic.home-help .t-name,
+  .topic.home-year .t-count, .topic.home-all .t-count, .topic.home-help .t-count{color:#000}
+}
+.y6u2{--unit:#B0472A; --unit-bg:#F5E7E1; --unit-ink:#6E2C1A}   /* Terrakotta */
+.y6u3{--unit:#5B7A2E; --unit-bg:#EBF0E1; --unit-ink:#374A1C}   /* Olive    */
+.y6u4{--unit:#7A5C9E; --unit-bg:#EEE8F3; --unit-ink:#4B3763}   /* Violett  */
+.y6u5{--unit:#B08A1E; --unit-bg:#F5EFDD; --unit-ink:#6E5612}   /* Ocker    */
+.uall{--unit:#16232B; --unit-bg:#ECEFF1; --unit-ink:#16232B}
+
+/* ---------- Startseite ---------- */
+.yeargroup{margin-bottom:34px}
+.yearhead{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.yearhead .tag{font-family:var(--mono);font-size:12px;background:var(--unit,var(--ink));
+  color:#fff;padding:2px 7px;border-radius:2px}
+.yeargroup[class*="u"] .yearhead{border-bottom:1px solid var(--unit);padding-bottom:6px}
+.yeargroup[class*="u"] .yearhead .name{color:var(--unit)}
+.topic[class*="u"]{border-left-color:var(--unit);border-left-width:4px;
+  background:var(--unit-bg);border-top-color:transparent;
+  border-right-color:transparent;border-bottom-color:transparent}
+.topic[class*="u"] .t-name{color:var(--unit-ink)}
+.topic[class*="u"] .t-count{color:var(--unit)}
+.topic[class*="u"] .t-due{color:var(--unit-ink);font-weight:500}
+.topic[class*="u"] .minirail i{background:#fff}
+.topic[class*="u"] .minirail i.f{background:var(--unit)}
+.topic[class*="u"]:hover{border-color:transparent;border-left-color:var(--unit-ink)}
+@media print{
+  .topic[class*="u"]{background:#fff;border:1px solid #000;border-left-width:4px}
+  .topic[class*="u"] .t-name,
+  .topic[class*="u"] .t-count,
+  .topic[class*="u"] .t-due{color:#000}
+  .yearhead .tag{background:#000}
+  .yeargroup[class*="u"] .yearhead{border-bottom-color:#000}
+  .yeargroup[class*="u"] .yearhead .name{color:#000}
+}
+.yearhead .name{font-family:var(--serif);font-size:17px;font-style:italic;color:var(--ink-soft)}
+
+.topic{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--rule);
+  border-left:3px solid var(--rule);border-radius:var(--r);padding:13px 15px;margin-bottom:8px;
+  cursor:pointer;font:inherit;color:inherit;transition:border-color .15s,transform .15s}
+.topic:hover{border-left-color:var(--petrol);transform:translateX(2px)}
+.topic:focus-visible{outline:2px solid var(--petrol);outline-offset:2px}
+.topic .t-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.topic .t-name{font-weight:500}
+.topic .t-count{font-family:var(--mono);font-size:12px;color:var(--ink-soft);white-space:nowrap}
+.topic .t-due{color:var(--amber)}
+.minirail{display:flex;gap:2px;margin-top:9px}
+.minirail i{height:4px;flex:1;background:var(--rule);border-radius:1px}
+.minirail i.f{background:var(--petrol)}
+
+.emptyhint{background:var(--card);border:1px dashed var(--rule);border-radius:var(--r);
+  padding:14px 16px;color:var(--ink-soft);font-size:14px}
+
+/* ---------- Sitzung: Leitner-Schiene (Signature) ---------- */
+.rail{display:flex;gap:6px;margin-bottom:22px}
+.slot{flex:1;background:var(--card);border:1px solid var(--rule);border-radius:var(--r);
+  padding:7px 6px 6px;text-align:center;position:relative;transition:border-color .2s,background .2s}
+.slot .n{font-family:var(--mono);font-size:10px;color:var(--ink-soft);letter-spacing:.06em}
+.slot .c{font-family:var(--serif);font-size:19px;line-height:1.1;margin-top:1px}
+.slot .iv{font-family:var(--mono);font-size:9px;color:var(--ink-soft);margin-top:2px}
+.slot.here{border-color:var(--petrol);background:#E7F0F1}
+.slot.here::after{content:"";position:absolute;left:50%;bottom:-7px;width:8px;height:8px;
+  transform:translateX(-50%) rotate(45deg);background:#E7F0F1;
+  border-right:1px solid var(--petrol);border-bottom:1px solid var(--petrol)}
+.slot.land{animation:land .45s ease-out}
+@keyframes land{0%{transform:translateY(-6px)}60%{transform:translateY(2px)}100%{transform:none}}
+
+/* Unit-Farbe als Ortsangabe waehrend des Lernens: farbige Kante an der
+   Karte, farbige Kopfzeile, farbiges aktives Fach. Sonst nichts. */
+.stage[class*="u"] .vcard{border-top:3px solid var(--unit)}
+.eyebrow[class*="u"]{color:var(--unit);border-bottom-color:var(--unit)}
+.rail[class*="u"] .slot.here{border-color:var(--unit);background:var(--unit-bg)}
+.rail[class*="u"] .slot.here::after{background:var(--unit-bg);
+  border-right-color:var(--unit);border-bottom-color:var(--unit)}
+@media print{
+  .stage[class*="u"] .vcard{border-top-color:#000}
+  .eyebrow[class*="u"]{color:#000;border-bottom-color:#000}
+}
+
+/* ---------- Karte ---------- */
+.stage{position:relative}
+.vcard{background:var(--card);border:1px solid var(--rule);border-radius:var(--r);
+  padding:30px 26px;min-height:250px;display:flex;flex-direction:column;
+  box-shadow:0 1px 0 var(--rule),0 6px 22px rgba(22,35,43,.06)}
+.vcard.deal{animation:deal .28s ease-out}
+@keyframes deal{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+.eyebrow{display:flex;justify-content:space-between;gap:12px;font-family:var(--mono);font-size:11px;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);
+  border-bottom:1px solid var(--rule);padding-bottom:8px;margin-bottom:20px}
+.prompt{font-family:var(--serif);font-size:38px;line-height:1.15;letter-spacing:-.015em;margin:0}
+.pos{font-family:var(--serif);font-style:italic;color:var(--ink-soft);font-size:15px;margin-top:5px}
+.phon{display:flex;align-items:center;gap:10px;margin-top:7px;flex-wrap:wrap}
+.ipa{font-family:var(--mono);font-size:13px;color:var(--ink-soft);letter-spacing:.01em}
+.speak{padding:5px 9px;line-height:0;border-color:var(--rule);color:var(--petrol)}
+.speak:hover{border-color:var(--petrol);background:#E7F0F1}
+.speak svg{width:15px;height:15px;display:block}
+.speak.on{background:var(--petrol);border-color:var(--petrol);color:#fff}
+.answer{margin-top:20px;padding-top:18px;border-top:1px solid var(--rule)}
+.answer .de{font-family:var(--serif);font-size:23px}
+.answer .coll{font-size:13px;color:var(--ink-soft);margin-top:8px}
+.answer .ex{font-family:var(--serif);font-style:italic;font-size:16px;margin-top:14px;
+  padding-left:12px;border-left:2px solid var(--petrol);color:#31434D}
+.answer .ex b{font-style:normal;font-weight:600;color:var(--ink);
+  box-shadow:inset 0 -.42em 0 rgba(14,90,102,.14)}
+.answer .ex .speak{margin-left:8px;vertical-align:middle;padding:4px 7px}
+.answer .ex .speak svg{width:13px;height:13px}
+.spacer{flex:1}
+
+/* Hinweis, welche Bedeutung gemeint ist - nur bei Woertern, deren
+   Schulbuchliste zwei getrennte Bedeutungen nennt. */
+.sense{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--ink-soft);
+  margin-top:8px;padding-left:11px;border-left:2px solid var(--rule)}
+
+/* ---------- Bedienelemente ---------- */
+.controls{margin-top:16px;display:flex;gap:8px;flex-wrap:wrap}
+button{font:inherit;cursor:pointer;border-radius:var(--r);border:1px solid var(--rule);
+  background:var(--card);color:var(--ink);padding:11px 15px;transition:background .15s,border-color .15s}
+button:hover{border-color:var(--ink-soft)}
+button:focus-visible{outline:2px solid var(--petrol);outline-offset:2px}
+button.primary{background:var(--petrol);border-color:var(--petrol);color:#fff;flex:1}
+button.primary:hover{background:#0B4A54}
+.rate{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 8px}
+.rate span{font-family:var(--mono);font-size:10px;color:var(--ink-soft);letter-spacing:.05em}
+.rate.again{border-color:var(--amber);color:var(--amber)}
+.rate.again:hover{background:#FBF2E6}
+.rate.hard{border-color:var(--ink-soft)}
+.rate.hard:hover{background:#EEF1F3}
+.rate.good{border-color:var(--moss);color:var(--moss)}
+.rate.good:hover{background:#EDF4EE}
+
+.opts{display:grid;gap:8px;margin-top:20px}
+.opt{text-align:left;padding:13px 15px;font-family:var(--serif);font-size:17px}
+.opt.right{border-color:var(--moss);background:#EDF4EE;color:var(--moss)}
+.opt.wrong{border-color:var(--amber);background:#FBF2E6;color:var(--amber)}
+.opt:disabled{cursor:default;opacity:1}
+
+.typebox{margin-top:20px}
+.typebox input{width:100%;font-family:var(--serif);font-size:22px;padding:12px 14px;
+  border:1px solid var(--rule);border-radius:var(--r);background:var(--ground);color:var(--ink)}
+.typebox input:focus{outline:2px solid var(--petrol);outline-offset:1px;background:var(--card)}
+.verdict{margin-top:12px;font-size:14px}
+.verdict.ok{color:var(--moss)}
+.verdict.near{color:var(--amber)}
+.verdict.no{color:var(--amber)}
+.verdict .sol{font-family:var(--serif);font-size:18px;color:var(--ink);display:block;margin-top:3px}
+
+/* ---------- Kopf der Sitzung ---------- */
+.sessionbar{display:flex;justify-content:space-between;align-items:center;gap:12px;
+  margin-bottom:18px;flex-wrap:wrap}
+.linkbtn{background:none;border:none;padding:4px 0;color:var(--petrol);text-decoration:underline;
+  text-underline-offset:3px}
+.switches{display:flex;gap:6px;flex-wrap:wrap}
+.switch{font-family:var(--mono);font-size:11px;letter-spacing:.05em;padding:6px 9px;
+  text-transform:uppercase}
+.switch[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+
+/* ---------- Abschluss ---------- */
+.done{background:var(--card);border:1px solid var(--rule);border-radius:var(--r);padding:34px 26px;text-align:center}
+.done h2{font-family:var(--serif);font-weight:600;font-size:26px;margin:0 0 8px}
+.done p{color:var(--ink-soft);margin:0 0 20px}
+
+/* ---------- Fußzeile ---------- */
+.foot{margin-top:40px;padding-top:14px;border-top:1px solid var(--rule);
+  display:flex;gap:16px;flex-wrap:wrap;align-items:center;
+  font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.04em}
+.foot button{padding:5px 9px;font-family:var(--mono);font-size:11px}
+.warn{background:#FBF2E6;border:1px solid var(--amber);color:#8A4E12;border-radius:var(--r);
+  padding:9px 12px;font-size:13px;margin-bottom:20px;line-height:1.4}
+
+/* ---------- Anleitung ---------- */
+.doc{background:var(--card);border:1px solid var(--rule);border-radius:var(--r);
+  padding:26px 26px 30px;max-width:640px}
+.doc h2{font-family:var(--serif);font-weight:600;font-size:21px;margin:34px 0 8px;
+  letter-spacing:-.01em}
+.doc h2:first-child{margin-top:0}
+.doc h3{font-family:var(--sans);font-weight:600;font-size:15px;margin:20px 0 5px}
+.doc p{margin:0 0 12px;font-size:15px}
+.doc ul{margin:0 0 12px;padding-left:20px;font-size:15px}
+.doc li{margin-bottom:5px}
+.doc .lead{color:var(--ink-soft)}
+.doc code{font-family:var(--mono);font-size:12.5px;background:var(--ground);
+  padding:1px 5px;border-radius:2px}
+.doc table{border-collapse:collapse;width:100%;margin:6px 0 14px;font-size:14px}
+.doc th,.doc td{text-align:left;padding:6px 10px;border-bottom:1px solid var(--rule)}
+.doc th{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--ink-soft);font-weight:500}
+.doc td:first-child{font-family:var(--mono);font-size:12.5px;white-space:nowrap}
+.kbd{font-family:var(--mono);font-size:11.5px;border:1px solid var(--rule);
+  border-bottom-width:2px;border-radius:3px;padding:1px 6px;background:var(--ground)}
+.doc .warnbox{background:#FBF2E6;border:1px solid var(--amber);border-radius:var(--r);
+  padding:12px 14px;font-size:14.5px;margin:0 0 14px;line-height:1.5}
+.doc .teacher{border-top:2px solid var(--ink);margin-top:36px;padding-top:18px}
+@media print{
+  .doc{border:none;padding:0;max-width:none}
+  .doc h2{page-break-after:avoid}
+}
+
+/* ---------- Lueckensatz ---------- */
+.cloze{font-family:var(--serif);font-size:22px;line-height:1.55;margin:0}
+.cloze .gap{display:inline-block;min-width:5.5em;border-bottom:2px solid var(--petrol);
+  text-align:center;color:var(--petrol);font-family:var(--mono);font-size:15px;
+  vertical-align:baseline;padding:0 4px}
+.basef{font-family:var(--mono);font-size:14px;color:var(--ink-soft);margin-left:5px}
+.cloze b{font-style:normal;font-weight:600;
+  box-shadow:inset 0 -.42em 0 rgba(14,90,102,.18)}
+.clue{font-family:var(--serif);font-size:16px;color:var(--ink-soft);margin-top:14px}
+.clue span{color:var(--ink)}
+
+/* ---------- Listenansicht ---------- */
+.listctl{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.listctl input[type=search]{flex:1;min-width:180px;font:inherit;font-size:15px;
+  padding:10px 13px;border:1px solid var(--rule);border-radius:var(--r);
+  background:var(--card);color:var(--ink);-webkit-appearance:none}
+.listctl input[type=search]:focus{outline:2px solid var(--petrol);outline-offset:1px}
+.listcount{font-family:var(--mono);font-size:11px;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--ink-soft);margin-bottom:16px}
+
+.lsec{background:var(--card);border:1px solid var(--rule);border-radius:var(--r);
+  margin-bottom:8px;overflow:hidden}
+.lsec > summary{cursor:pointer;padding:13px 15px;display:flex;justify-content:space-between;
+  align-items:baseline;gap:12px;list-style:none;font-weight:500}
+.lsec > summary::-webkit-details-marker{display:none}
+.lsec > summary:hover{background:var(--ground)}
+.lsec > summary .lyear{font-family:var(--mono);font-size:10px;letter-spacing:.08em;
+  background:var(--ink);color:var(--ground);border-radius:2px;padding:2px 6px;margin-right:9px}
+.lsec > summary .lnum{font-family:var(--mono);font-size:12px;color:var(--ink-soft);white-space:nowrap}
+.lsec[open] > summary{border-bottom:1px solid var(--rule)}
+.lbody{padding:4px 15px 12px}
+
+.vrow{display:grid;grid-template-columns:1fr 1fr;gap:4px 18px;
+  padding:9px 0;border-bottom:1px solid var(--ground);break-inside:avoid}
+.vrow:last-child{border-bottom:none}
+.ven{font-family:var(--serif);font-size:16px}
+.vipa{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin-left:7px;white-space:nowrap}
+.vpos{font-family:var(--serif);font-style:italic;font-size:12.5px;color:var(--ink-soft);margin-left:7px}
+.vde{font-size:14.5px}
+.vsense{display:block;font-family:var(--serif);font-style:italic;font-size:13px;color:var(--ink-soft)}
+.vex{grid-column:1 / -1;font-family:var(--serif);font-style:italic;font-size:14px;
+  color:#31434D;padding-left:11px;border-left:2px solid var(--rule);margin-top:3px}
+.vlist.hide-ex .vex{display:none}
+.vlist.hide-ipa .vipa{display:none}
+.vrow.off{display:none}
+.lsec.off{display:none}
+.noresult{background:var(--card);border:1px dashed var(--rule);border-radius:var(--r);
+  padding:14px 16px;color:var(--ink-soft);font-size:14px}
+
+@media print{
+  body{background:#fff}
+  .wrap{max-width:none;padding:0}
+  .masthead{border-bottom:1px solid #000;margin-bottom:14px}
+  .sessionbar,.listctl,.foot,#warn,.listcount button{display:none!important}
+  .lsec{border:none;border-radius:0;margin:0 0 6mm;page-break-inside:auto}
+  .lsec + .lsec{page-break-before:always}
+  .lsec > summary{padding:0 0 4px;border-bottom:1px solid #000;font-size:14pt}
+  .lsec > summary .lnum{color:#000}
+  .lbody{padding:6px 0 0;columns:2;column-gap:10mm}
+  .vrow{grid-template-columns:1fr;gap:1px;padding:3px 0;
+    border-bottom:none;page-break-inside:avoid}
+  .ven{font-size:11pt}
+  .vde{font-size:10pt;color:#333}
+  .vipa{color:#555}
+  .vex{font-size:9.5pt;border-left:1px solid #999}
+}
+
+@media(max-width:560px){
+  .prompt{font-size:30px}
+  .slot .c{font-size:16px}
+  .slot .iv{display:none}
+  .vcard{padding:22px 18px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+</style>
+
+<div class="wrap">
+    <div class="masthead">
+    <div class="mhead-text">
+      <h1>Vokabeltrainer Englisch</h1>
+      <div class="sub">Mittelstufe · Lehrwerksvokabular</div>
+    </div>
+  </div>
+  <div id="warn"></div>
+  <div id="view"></div>
+  <div class="foot">
+    <span id="footstat"></span>
+    <button id="exportBtn">Fortschritt sichern</button>
+    <button id="importBtn">Fortschritt laden</button>
+    <input type="file" id="importFile" accept="application/json" hidden>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   VOKABELDATEN
+   Alles steckt in dieser Datei. Zum Aendern: Eintrag im passenden Thema
+   ergaenzen oder korrigieren. Pflichtfelder sind id, en, de, pos.
+   Optional: ipa, collocations, example_en, distractor_hint.
+   ========================================================================= */
+const YEARS = [
+ {
+  "id": "y6",
+  "label": "Year 6",
+  "book": "",
+  "units": [
+ {
+  "id": "y6u1",
+  "name": "Unit 1 – In the Summer Holidays"
+ },
+ {
+  "id": "y6u2",
+  "name": "Unit 2 – A School Day"
+ },
+ {
+  "id": "y6u3",
+  "name": "Unit 3 – Out and About"
+ },
+ {
+  "id": "y6u4",
+  "name": "Unit 4 – On Dartmoor"
+ },
+ {
+  "id": "y6u5",
+  "name": "Unit 5 – Celebrate!"
+ }
+]
+ }
+];
+
+const TOPICS = [
+ {
+  "id": "y6u1-intro",
+  "year": "6",
+  "yearName": "",
+  "unit": "y6u1",
+  "unitName": "Unit 1 – In the Summer Holidays",
+  "name": "Introduction"
+ },
+ {
+  "id": "y6u1-parta",
+  "year": "6",
+  "yearName": "",
+  "unit": "y6u1",
+  "unitName": "Unit 1 – In the Summer Holidays",
+  "name": "Part A"
+ },
+ {
+  "id": "y6u1-partb",
+  "year": "6",
+  "yearName": "",
+  "unit": "y6u1",
+  "unitName": "Unit 1 – In the Summer Holidays",
+  "name": "Part B"
+ },
+ {
+  "id": "y6u1-partc",
+  "year": "6",
+  "yearName": "",
+  "unit": "y6u1",
+  "unitName": "Unit 1 – In the Summer Holidays",
+  "name": "Part C"
+ },
+ {
+  "id": "y6u1-partd",
+  "year": "6",
+  "yearName": "",
+  "unit": "y6u1",
+  "unitName": "Unit 1 – In the Summer Holidays",
+  "name": "Part D"
+ },
+ {
+  "id": "y6u1-logbook",
+  "year": "6",
+  "yearName": "",
+  "unit": "y6u1",
+  "unitName": "Unit 1 – In the Summer Holidays",
+  "name": "My USA Logbook"
+ },
+ {
+  "id": "y6u2-intro",
+  "year": "6",
+  "yearName": "",
+  "unit": "y6u2",
+  "unitName": "Unit 2 – A School Day",
+  "name": "Introduction"
+ },
+ {
+  "id": "y6u2-parta",
+  "year": "6",
+  "yearName": "",
+  "unit": "y6u2",
+  "unitName": "Unit 2 – A School Day",
+  "name": "Part A"
+ },
+ {
+  "id": "y6u2-partb",
+  "year": "6",
+  "yearName": "",
+  "unit": "y6u2",
+  "unitName": "Unit 2 – A School Day",
+  "name": "Part B"
+ },
+ {
+  "id": "y6u2-partc",
+  "year": "6",
+  "yearName": "",
+  "unit": "y6u2",
+  "unitName": "Unit 2 – A School Day",
+  "name": "Part C"
+ },
+ {
+  "id": "y6u2-disco",
+  "year": "6",
+  "yearName": "",
+  "unit": "y6u2",
+  "unitName": "Unit 2 – A School Day",
+  "name": "Disco Night"
+ },
+ {
+  "id": "y6u3-intro",
+  "year": "6",
+  "yearName": "",
+  "unit": "y6u3",
+  "unitName": "Unit 3 – Out and About",
+  "name": "Introduction"
+ },
+ {
+  "id": "y6u3-parta",
+  "year": "6",
+  "yearName": "",
+  "unit": "y6u3",
+  "unitName": "Unit 3 – Out and About",
+  "name": "Part A"
+ },
+ {
+  "id": "y6u3-partb",
+  "year": "6",
+  "yearName": "",
+  "unit": "y6u3",
+  "unitName": "Unit 3 – Out and About",
+  "name": "Part B"
+ },
+ {
+  "id": "y6u3-partc",
+  "year": "6",
+  "yearName": "",
+  "unit": "y6u3",
+  "unitName": "Unit 3 – Out and About",
+  "name": "Part C"
+ },
+ {
+  "id": "y6u3-magicbook",
+  "year": "6",
+  "yearName": "",
+  "unit": "y6u3",
+  "unitName": "Unit 3 – Out and About",
+  "name": "Master Wu and the Magic Book"
+ },
+ {
+  "id": "y6u4-intro",
+  "year": "6",
+  "yearName": "",
+  "unit": "y6u4",
+  "unitName": "Unit 4 – On Dartmoor",
+  "name": "Introduction"
+ },
+ {
+  "id": "y6u4-parta",
+  "year": "6",
+  "yearName": "",
+  "unit": "y6u4",
+  "unitName": "Unit 4 – On Dartmoor",
+  "name": "Part A"
+ },
+ {
+  "id": "y6u4-partb",
+  "year": "6",
+  "yearName": "",
+  "unit": "y6u4",
+  "unitName": "Unit 4 – On Dartmoor",
+  "name": "Part B"
+ },
+ {
+  "id": "y6u4-partc",
+  "year": "6",
+  "yearName": "",
+  "unit": "y6u4",
+  "unitName": "Unit 4 – On Dartmoor",
+  "name": "Part C"
+ },
+ {
+  "id": "y6u4-tulipgarden",
+  "year": "6",
+  "yearName": "",
+  "unit": "y6u4",
+  "unitName": "Unit 4 – On Dartmoor",
+  "name": "The Tulip Garden"
+ },
+ {
+  "id": "y6u5-intro",
+  "year": "6",
+  "yearName": "",
+  "unit": "y6u5",
+  "unitName": "Unit 5 – Celebrate!",
+  "name": "Introduction"
+ },
+ {
+  "id": "y6u5-parta",
+  "year": "6",
+  "yearName": "",
+  "unit": "y6u5",
+  "unitName": "Unit 5 – Celebrate!",
+  "name": "Part A"
+ },
+ {
+  "id": "y6u5-partb",
+  "year": "6",
+  "yearName": "",
+  "unit": "y6u5",
+  "unitName": "Unit 5 – Celebrate!",
+  "name": "Part B"
+ },
+ {
+  "id": "y6u5-partc",
+  "year": "6",
+  "yearName": "",
+  "unit": "y6u5",
+  "unitName": "Unit 5 – Celebrate!",
+  "name": "Part C"
+ },
+ {
+  "id": "y6u5-celebrate",
+  "year": "6",
+  "yearName": "",
+  "unit": "y6u5",
+  "unitName": "Unit 5 – Celebrate!",
+  "name": "A Day to Celebrate"
+ }
+];
+
+const SETS = {
+ "y6u1-intro": [
+  {
+   "id": "y6u1-intro-001",
+   "en": "summer",
+   "de": "Sommer",
+   "pos": "noun",
+   "example_en": "We always go to the seaside in summer."
+  },
+  {
+   "id": "y6u1-intro-002",
+   "en": "grandparents",
+   "de": "Großeltern",
+   "pos": "noun",
+   "example_en": "My grandparents live in a small village."
+  },
+  {
+   "id": "y6u1-intro-003",
+   "en": "parents",
+   "de": "Eltern",
+   "pos": "noun",
+   "example_en": "My parents work in Lübeck."
+  },
+  {
+   "id": "y6u1-intro-004",
+   "en": "windy",
+   "de": "windig",
+   "pos": "adjective",
+   "example_en": "It was very windy on the beach today."
+  },
+  {
+   "id": "y6u1-intro-005",
+   "en": "wind",
+   "de": "Wind",
+   "pos": "noun",
+   "example_en": "The wind blew the tent over."
+  },
+  {
+   "id": "y6u1-intro-006",
+   "en": "project",
+   "de": "Projekt",
+   "pos": "noun",
+   "example_en": "We are doing a project about the rainforest."
+  },
+  {
+   "id": "y6u1-intro-007",
+   "en": "I can't wait to see ...",
+   "de": "Ich kann es kaum erwarten, ... zu sehen.",
+   "pos": "phrase",
+   "example_en": "I can't wait to see my cousins this summer."
+  },
+  {
+   "id": "y6u1-intro-008",
+   "en": "rainforest",
+   "de": "Regenwald",
+   "pos": "noun",
+   "example_en": "Many animals live in the rainforest."
+  },
+  {
+   "id": "y6u1-intro-009",
+   "en": "forest",
+   "de": "Wald",
+   "pos": "noun",
+   "example_en": "We went for a walk in the forest."
+  },
+  {
+   "id": "y6u1-intro-010",
+   "en": "rain",
+   "de": "Regen",
+   "pos": "noun",
+   "example_en": "The rain didn't stop all day."
+  },
+  {
+   "id": "y6u1-intro-011",
+   "en": "(to) rain",
+   "de": "regnen",
+   "pos": "verb",
+   "example_en": "It always rains here in autumn."
+  },
+  {
+   "id": "y6u1-intro-012",
+   "en": "plant",
+   "de": "Pflanze",
+   "pos": "noun",
+   "example_en": "She has a lot of plants in her room."
+  },
+  {
+   "id": "y6u1-intro-013",
+   "en": "the USA",
+   "de": "die USA, die Vereinigten Staaten von Amerika",
+   "pos": "noun",
+   "example_en": "My uncle lives in the USA."
+  },
+  {
+   "id": "y6u1-intro-014",
+   "en": "sights",
+   "de": "Sehenswürdigkeiten",
+   "pos": "noun",
+   "example_en": "We saw a lot of sights in New York."
+  },
+  {
+   "id": "y6u1-intro-015",
+   "en": "(to) take photos",
+   "de": "fotografieren, Fotos machen",
+   "pos": "verb",
+   "example_en": "We took photos of the waterfall."
+  },
+  {
+   "id": "y6u1-intro-016",
+   "en": "stop",
+   "de": "Halt; Station, Haltestelle",
+   "pos": "noun",
+   "example_en": "The bus stop is next to the school."
+  },
+  {
+   "id": "y6u1-intro-017",
+   "en": "full (of)",
+   "de": "voll",
+   "pos": "adjective",
+   "example_en": "The bus was full of tourists."
+  },
+  {
+   "id": "y6u1-intro-018",
+   "en": "cloudy",
+   "de": "bewölkt",
+   "pos": "adjective",
+   "example_en": "It was cloudy all morning."
+  },
+  {
+   "id": "y6u1-intro-019",
+   "en": "cloud",
+   "de": "Wolke",
+   "pos": "noun",
+   "example_en": "There isn't a single cloud in the sky."
+  },
+  {
+   "id": "y6u1-intro-020",
+   "en": "caravan",
+   "de": "Wohnwagen",
+   "pos": "noun",
+   "example_en": "We slept in a caravan by the lake."
+  },
+  {
+   "id": "y6u1-intro-021",
+   "en": "(to) get",
+   "de": "bekommen",
+   "pos": "verb",
+   "example_en": "Did you get my postcard from Spain?"
+  },
+  {
+   "id": "y6u1-intro-022",
+   "en": "weather",
+   "de": "Wetter",
+   "pos": "noun",
+   "example_en": "The weather was great in Cornwall."
+  },
+  {
+   "id": "y6u1-intro-023",
+   "en": "wave",
+   "de": "Welle",
+   "pos": "noun",
+   "example_en": "The waves were too big to swim."
+  },
+  {
+   "id": "y6u1-intro-024",
+   "en": "tomorrow",
+   "de": "morgen",
+   "pos": "adverb",
+   "example_en": "We are going home tomorrow."
+  },
+  {
+   "id": "y6u1-intro-025",
+   "en": "world",
+   "de": "Welt",
+   "pos": "noun",
+   "example_en": "He wants to travel around the world."
+  },
+  {
+   "id": "y6u1-intro-026",
+   "en": "warm",
+   "de": "warm",
+   "pos": "adjective",
+   "example_en": "It's warm enough to swim in the sea."
+  },
+  {
+   "id": "y6u1-intro-027",
+   "en": "sunny",
+   "de": "sonnig",
+   "pos": "adjective",
+   "example_en": "It was sunny all week."
+  },
+  {
+   "id": "y6u1-intro-028",
+   "en": "mountain",
+   "de": "Berg",
+   "pos": "noun",
+   "example_en": "We climbed a small mountain near the campsite."
+  },
+  {
+   "id": "y6u1-intro-029",
+   "en": "beautiful",
+   "de": "schön",
+   "pos": "adjective",
+   "example_en": "The view from the top was beautiful."
+  },
+  {
+   "id": "y6u1-intro-030",
+   "en": "I like her a lot.",
+   "de": "Ich mag sie sehr.",
+   "pos": "phrase",
+   "example_en": "I like her a lot, she's really funny."
+  },
+  {
+   "id": "y6u1-intro-031",
+   "en": "Say hello to ... for me.",
+   "de": "Grüß ... von mir.",
+   "pos": "phrase",
+   "example_en": "Say hello to your sister for me."
+  },
+  {
+   "id": "y6u1-intro-032",
+   "en": "message",
+   "de": "Nachricht",
+   "pos": "noun",
+   "example_en": "She left a message on my phone."
+  },
+  {
+   "id": "y6u1-intro-033",
+   "en": "brochure",
+   "de": "Broschüre, Prospekt",
+   "pos": "noun",
+   "example_en": "We got a brochure about the campsite."
+  }
+ ],
+ "y6u1-parta": [
+  {
+   "id": "y6u1-parta-001",
+   "en": "phone call",
+   "de": "Anruf; Telefongespräch",
+   "pos": "noun",
+   "example_en": "I got a phone call from my grandma."
+  },
+  {
+   "id": "y6u1-parta-002",
+   "en": "(to) phone sb.",
+   "de": "jn. anrufen",
+   "pos": "verb",
+   "example_en": "Can you phone me tonight?"
+  },
+  {
+   "id": "y6u1-parta-003",
+   "en": "(to) answer the phone",
+   "de": "ans Telefon gehen",
+   "pos": "verb",
+   "example_en": "Nobody answered the phone."
+  },
+  {
+   "id": "y6u1-parta-004",
+   "en": "(to) be in",
+   "de": "zu Hause sein",
+   "pos": "phrase",
+   "example_en": "Is your mum in?"
+  },
+  {
+   "id": "y6u1-parta-005",
+   "en": "(to) be out",
+   "de": "nicht zu Hause sein, nicht da sein",
+   "pos": "phrase",
+   "example_en": "Sorry, my dad is out at the moment."
+  },
+  {
+   "id": "y6u1-parta-006",
+   "en": "(to) leave a message",
+   "de": "eine Nachricht hinterlassen",
+   "pos": "verb",
+   "example_en": "You can leave a message after the beep."
+  },
+  {
+   "id": "y6u1-parta-007",
+   "en": "holiday",
+   "de": "Urlaub",
+   "pos": "noun",
+   "example_en": "We had a great holiday in Devon."
+  },
+  {
+   "id": "y6u1-parta-008",
+   "en": "(we/you/they) were",
+   "de": "Vergangenheitsform von „be“",
+   "pos": "verb",
+   "example_en": "We were on the beach all afternoon."
+  },
+  {
+   "id": "y6u1-parta-009",
+   "en": "(I/he/she/it) was",
+   "de": "Vergangenheitsform von „be“",
+   "pos": "verb",
+   "example_en": "The film was really exciting."
+  },
+  {
+   "id": "y6u1-parta-010",
+   "en": "..., right?",
+   "de": "..., nicht wahr?",
+   "pos": "phrase",
+   "example_en": "You went to Cornwall, right?"
+  },
+  {
+   "id": "y6u1-parta-011",
+   "en": "at first",
+   "de": "zuerst, anfangs, am Anfang",
+   "pos": "phrase",
+   "example_en": "At first I didn't like the food, but now I love it."
+  },
+  {
+   "id": "y6u1-parta-012",
+   "en": "bad",
+   "de": "schlecht, schlimm",
+   "pos": "adjective",
+   "example_en": "The weather was really bad on Monday."
+  },
+  {
+   "id": "y6u1-parta-013",
+   "en": "fun park",
+   "de": "Vergnügungspark",
+   "pos": "noun",
+   "example_en": "We spent the whole day at the fun park."
+  },
+  {
+   "id": "y6u1-parta-014",
+   "en": "ride",
+   "de": "Fahrt; Karussellfahrt",
+   "pos": "noun",
+   "example_en": "The best ride was the roller coaster."
+  },
+  {
+   "id": "y6u1-parta-015",
+   "en": "What were the rides like?",
+   "de": "Wie waren die Fahrten/Karussells?",
+   "pos": "phrase",
+   "example_en": "What were the rides like at the fun park?"
+  },
+  {
+   "id": "y6u1-parta-016",
+   "en": "fantastic",
+   "de": "fantastisch",
+   "pos": "adjective",
+   "example_en": "The trip to Scotland was fantastic."
+  },
+  {
+   "id": "y6u1-parta-017",
+   "en": "country",
+   "de": "Land, Staat",
+   "pos": "noun",
+   "example_en": "Which country are you going to this summer?"
+  },
+  {
+   "id": "y6u1-parta-018",
+   "en": "building",
+   "de": "Gebäude",
+   "pos": "noun",
+   "example_en": "That's the tallest building in the city."
+  },
+  {
+   "id": "y6u1-parta-019",
+   "en": "if",
+   "de": "wenn, falls",
+   "pos": "conjunction",
+   "example_en": "If it rains, we'll stay at the campsite."
+  },
+  {
+   "id": "y6u1-parta-020",
+   "en": "(to) bring",
+   "de": "mit-, herbringen",
+   "pos": "verb",
+   "example_en": "Can you bring your camera tomorrow?"
+  },
+  {
+   "id": "y6u1-parta-021",
+   "en": "one more time",
+   "de": "noch einmal, noch ein Mal",
+   "pos": "phrase",
+   "example_en": "Can we go on the ride one more time?"
+  },
+  {
+   "id": "y6u1-parta-022",
+   "en": "time",
+   "de": "Mal",
+   "pos": "noun",
+   "example_en": "This was the third time we visited London."
+  },
+  {
+   "id": "y6u1-parta-023",
+   "en": "past",
+   "de": "Vergangenheit",
+   "pos": "noun",
+   "example_en": "We talked about the past on the long car journey."
+  },
+  {
+   "id": "y6u1-parta-024",
+   "en": "train",
+   "de": "Zug",
+   "pos": "noun",
+   "example_en": "We took the train to the coast."
+  },
+  {
+   "id": "y6u1-parta-025",
+   "en": "island",
+   "de": "Insel",
+   "pos": "noun",
+   "example_en": "The island only has one small shop."
+  },
+  {
+   "id": "y6u1-parta-026",
+   "en": "campsite",
+   "de": "Zeltplatz",
+   "pos": "noun",
+   "example_en": "Our campsite was right next to the beach."
+  },
+  {
+   "id": "y6u1-parta-027",
+   "en": "lake",
+   "de": "Binnensee",
+   "pos": "noun",
+   "example_en": "We swam in the lake every morning."
+  },
+  {
+   "id": "y6u1-parta-028",
+   "en": "shopping mall",
+   "de": "großes Einkaufszentrum",
+   "pos": "noun",
+   "example_en": "There's a huge shopping mall near the campsite."
+  },
+  {
+   "id": "y6u1-parta-029",
+   "en": "rainy",
+   "de": "regnerisch",
+   "pos": "adjective",
+   "example_en": "It was a rainy day, so we stayed inside."
+  },
+  {
+   "id": "y6u1-parta-030",
+   "en": "paragraph",
+   "de": "Absatz in einem Text",
+   "pos": "noun",
+   "example_en": "Read the first paragraph again."
+  },
+  {
+   "id": "y6u1-parta-031",
+   "en": "expensive",
+   "de": "teuer",
+   "pos": "adjective",
+   "example_en": "The hotel was too expensive for us."
+  },
+  {
+   "id": "y6u1-parta-032",
+   "en": "cheap",
+   "de": "billig, preiswert",
+   "pos": "adjective",
+   "example_en": "We found a cheap campsite by the lake."
+  },
+  {
+   "id": "y6u1-parta-033",
+   "en": "chips",
+   "de": "Pommes frites",
+   "pos": "noun",
+   "example_en": "We had fish and chips by the sea."
+  },
+  {
+   "id": "y6u1-parta-034",
+   "en": "sky",
+   "de": "Himmel",
+   "pos": "noun",
+   "example_en": "The sky was full of stars at night."
+  },
+  {
+   "id": "y6u1-parta-035",
+   "en": "top",
+   "de": "Spitze",
+   "pos": "noun",
+   "example_en": "We could see the whole valley from the top."
+  },
+  {
+   "id": "y6u1-parta-036",
+   "en": "(to) draw",
+   "de": "zeichnen",
+   "pos": "verb",
+   "example_en": "Can you draw a picture of the mountain?"
+  },
+  {
+   "id": "y6u1-parta-037",
+   "en": "order",
+   "de": "Reihenfolge",
+   "pos": "noun",
+   "example_en": "Put the pictures in the right order."
+  },
+  {
+   "id": "y6u1-parta-038",
+   "en": "(to) think of sth.",
+   "de": "sich etwas ausdenken; an etwas denken",
+   "pos": "verb",
+   "example_en": "Can you think of a good title for the story?"
+  },
+  {
+   "id": "y6u1-parta-039",
+   "en": "another",
+   "de": "ein(e) andere(r, s); noch ein(e)",
+   "pos": "determiner",
+   "example_en": "Can I have another glass of juice?"
+  },
+  {
+   "id": "y6u1-parta-040",
+   "en": "(to) arrange",
+   "de": "anordnen",
+   "pos": "verb",
+   "example_en": "Arrange the sentences in the correct order."
+  }
+ ],
+ "y6u1-partb": [
+  {
+   "id": "y6u1-partb-001",
+   "en": "neighbour",
+   "de": "Nachbar/in",
+   "pos": "noun",
+   "example_en": "Our neighbour looked after the cat."
+  },
+  {
+   "id": "y6u1-partb-002",
+   "en": "note",
+   "de": "Notiz, Mitteilung",
+   "pos": "noun",
+   "example_en": "She left a note on the kitchen table."
+  },
+  {
+   "id": "y6u1-partb-003",
+   "en": "tea",
+   "de": "leichte Nachmittags- oder Abendmahlzeit",
+   "pos": "noun",
+   "example_en": "Come round for tea on Saturday."
+  },
+  {
+   "id": "y6u1-partb-004",
+   "en": "Love, ...",
+   "de": "Alles Liebe, ... / Liebe Grüße, ...",
+   "pos": "phrase",
+   "example_en": "Love, Grandma"
+  },
+  {
+   "id": "y6u1-partb-005",
+   "en": "this afternoon/evening/...",
+   "de": "heute Nachmittag/Abend/...",
+   "pos": "phrase",
+   "example_en": "Can you come round this afternoon?"
+  },
+  {
+   "id": "y6u1-partb-006",
+   "en": "son",
+   "de": "Sohn",
+   "pos": "noun",
+   "example_en": "Their son is the same age as me."
+  },
+  {
+   "id": "y6u1-partb-007",
+   "en": "daughter",
+   "de": "Tochter",
+   "pos": "noun",
+   "example_en": "Her daughter goes to my school."
+  },
+  {
+   "id": "y6u1-partb-008",
+   "en": "..., you see.",
+   "de": "..., weißt du.",
+   "pos": "phrase",
+   "example_en": "I can't come today, I'm busy, you see."
+  },
+  {
+   "id": "y6u1-partb-009",
+   "en": "lonely",
+   "de": "einsam",
+   "pos": "adjective",
+   "example_en": "She felt lonely on the first day at the new school."
+  },
+  {
+   "id": "y6u1-partb-010",
+   "en": "(to) be busy",
+   "de": "beschäftigt sein; viel zu tun haben",
+   "pos": "phrase",
+   "example_en": "Sorry, I can't talk now, I'm busy."
+  },
+  {
+   "id": "y6u1-partb-011",
+   "en": "I'm sorry about ...",
+   "de": "Es tut mir leid wegen ...",
+   "pos": "phrase",
+   "example_en": "I'm sorry about your bike."
+  },
+  {
+   "id": "y6u1-partb-012",
+   "en": "already",
+   "de": "schon, bereits",
+   "pos": "adverb",
+   "example_en": "We have already been to that museum."
+  },
+  {
+   "id": "y6u1-partb-013",
+   "en": "(to) invite sb. (to)",
+   "de": "jn. einladen zu",
+   "pos": "verb",
+   "example_en": "Did you invite Sam to your party?"
+  },
+  {
+   "id": "y6u1-partb-014",
+   "en": "only",
+   "de": "erst",
+   "pos": "adverb",
+   "example_en": "We only moved here a week ago."
+  },
+  {
+   "id": "y6u1-partb-015",
+   "en": "(to) move in",
+   "de": "einziehen",
+   "pos": "verb",
+   "example_en": "The new family moved in yesterday."
+  },
+  {
+   "id": "y6u1-partb-016",
+   "en": "a week ago",
+   "de": "vor einer Woche",
+   "pos": "phrase",
+   "example_en": "We got back from holiday a week ago."
+  },
+  {
+   "id": "y6u1-partb-017",
+   "en": "problem",
+   "de": "Problem",
+   "pos": "noun",
+   "example_en": "There's a problem with the bus timetable."
+  },
+  {
+   "id": "y6u1-partb-018",
+   "en": "news",
+   "de": "Nachrichten; Neuigkeiten",
+   "pos": "noun",
+   "example_en": "Have you heard the news about the new pool?"
+  },
+  {
+   "id": "y6u1-partb-019",
+   "en": "around the library/the beach",
+   "de": "in der Bücherei / auf dem Strand umher",
+   "pos": "phrase",
+   "example_en": "We walked around the beach for hours."
+  },
+  {
+   "id": "y6u1-partb-020",
+   "en": "visit",
+   "de": "Besuch",
+   "pos": "noun",
+   "example_en": "We had a visit from our cousins last week."
+  },
+  {
+   "id": "y6u1-partb-021",
+   "en": "meaning",
+   "de": "Bedeutung",
+   "pos": "noun",
+   "example_en": "What is the meaning of this word?"
+  },
+  {
+   "id": "y6u1-partb-022",
+   "en": "(to) mean",
+   "de": "bedeuten",
+   "pos": "verb",
+   "example_en": "What does this word mean?"
+  },
+  {
+   "id": "y6u1-partb-023",
+   "en": "context",
+   "de": "Text-, Satz-Zusammenhang; Kontext",
+   "pos": "noun",
+   "example_en": "Try to guess the word from the context."
+  },
+  {
+   "id": "y6u1-partb-024",
+   "en": "must",
+   "de": "müssen",
+   "pos": "verb",
+   "example_en": "You must wear a helmet on your bike."
+  },
+  {
+   "id": "y6u1-partb-025",
+   "en": "(to) get sth.",
+   "de": "etwas verstehen, kapieren, mitbekommen",
+   "pos": "verb",
+   "example_en": "Sorry, I didn't get that."
+  },
+  {
+   "id": "y6u1-partb-026",
+   "en": "similar (to sth./sb.)",
+   "de": "etwas/jm. ähnlich",
+   "pos": "adjective",
+   "example_en": "Her bike is similar to mine."
+  },
+  {
+   "id": "y6u1-partb-027",
+   "en": "revision",
+   "de": "Wiederholung des Lernstoffs",
+   "pos": "noun",
+   "example_en": "We are doing revision for the test."
+  }
+ ],
+ "y6u1-partc": [
+  {
+   "id": "y6u1-partc-001",
+   "en": "(to) ring",
+   "de": "klingeln, läuten",
+   "pos": "verb",
+   "example_en": "The phone rang three times."
+  },
+  {
+   "id": "y6u1-partc-002",
+   "en": "text message",
+   "de": "SMS",
+   "pos": "noun",
+   "example_en": "I got a text message from my friend."
+  },
+  {
+   "id": "y6u1-partc-003",
+   "en": "Did you get my text?",
+   "de": "Hast du meine SMS bekommen?",
+   "pos": "phrase",
+   "example_en": "Did you get my text about the party?"
+  },
+  {
+   "id": "y6u1-partc-004",
+   "en": "Yes, I did.",
+   "de": "Ja. / Ja, habe ich.",
+   "pos": "phrase",
+   "example_en": "Yes, I did, thanks."
+  },
+  {
+   "id": "y6u1-partc-005",
+   "en": "No, I didn't.",
+   "de": "Nein. / Nein, habe ich nicht.",
+   "pos": "phrase",
+   "example_en": "No, I didn't get your message."
+  },
+  {
+   "id": "y6u1-partc-006",
+   "en": "invitation (to)",
+   "de": "Einladung zu, nach",
+   "pos": "noun",
+   "example_en": "Thanks for the invitation to your party."
+  },
+  {
+   "id": "y6u1-partc-007",
+   "en": "(to) be allowed to do sth.",
+   "de": "etwas tun dürfen",
+   "pos": "phrase",
+   "example_en": "We're not allowed to use our phones in class."
+  },
+  {
+   "id": "y6u1-partc-008",
+   "en": "(to) stay",
+   "de": "bleiben",
+   "pos": "verb",
+   "example_en": "Can I stay a bit longer?"
+  },
+  {
+   "id": "y6u1-partc-009",
+   "en": "easy",
+   "de": "einfach, leicht",
+   "pos": "adjective",
+   "example_en": "The homework was really easy today."
+  },
+  {
+   "id": "y6u1-partc-010",
+   "en": "difficult",
+   "de": "schwierig, schwer",
+   "pos": "adjective",
+   "example_en": "Maths was quite difficult this week."
+  },
+  {
+   "id": "y6u1-partc-011",
+   "en": "when",
+   "de": "als",
+   "pos": "conjunction",
+   "example_en": "When I was little, we lived in Kiel."
+  },
+  {
+   "id": "y6u1-partc-012",
+   "en": "to",
+   "de": "um zu",
+   "pos": "preposition",
+   "example_en": "I need a pen to write with."
+  },
+  {
+   "id": "y6u1-partc-013",
+   "en": "(to) hit",
+   "de": "schlagen; treffen auf",
+   "pos": "verb",
+   "example_en": "The ball hit the window."
+  },
+  {
+   "id": "y6u1-partc-014",
+   "en": "(to) miss",
+   "de": "verpassen, verfehlen",
+   "pos": "verb",
+   "example_en": "Hurry up or we'll miss the bus."
+  },
+  {
+   "id": "y6u1-partc-015",
+   "en": "Here you are.",
+   "de": "Bitte sehr. / Hier bitte.",
+   "pos": "phrase",
+   "example_en": "Here you are, one ticket to Lübeck."
+  },
+  {
+   "id": "y6u1-partc-016",
+   "en": "(to) roll",
+   "de": "rollen",
+   "pos": "verb",
+   "example_en": "The ball rolled under the car."
+  },
+  {
+   "id": "y6u1-partc-017",
+   "en": "against",
+   "de": "gegen",
+   "pos": "preposition",
+   "example_en": "Our class is playing against 6b on Friday."
+  },
+  {
+   "id": "y6u1-partc-018",
+   "en": "sure",
+   "de": "sicher",
+   "pos": "adjective",
+   "example_en": "Are you sure about the time?"
+  },
+  {
+   "id": "y6u1-partc-019",
+   "en": "careful",
+   "de": "vorsichtig",
+   "pos": "adjective",
+   "example_en": "Be careful on the wet stairs."
+  },
+  {
+   "id": "y6u1-partc-020",
+   "en": "Hold on a minute.",
+   "de": "Bleib / Bleiben Sie am Apparat.",
+   "pos": "phrase",
+   "example_en": "Hold on a minute, I'll get my mum."
+  },
+  {
+   "id": "y6u1-partc-021",
+   "en": "(to) get in touch (with sb.)",
+   "de": "mit jm. Kontakt aufnehmen",
+   "pos": "verb",
+   "example_en": "Please get in touch with me soon."
+  },
+  {
+   "id": "y6u1-partc-022",
+   "en": "(to) stay in touch (with sb.)",
+   "de": "mit jm. Kontakt halten",
+   "pos": "verb",
+   "example_en": "We still stay in touch by text."
+  },
+  {
+   "id": "y6u1-partc-023",
+   "en": "free",
+   "de": "kostenlos",
+   "pos": "adjective",
+   "example_en": "Entry to the museum is free for children."
+  },
+  {
+   "id": "y6u1-partc-024",
+   "en": "rule",
+   "de": "Regel, Vorschrift",
+   "pos": "noun",
+   "example_en": "What are the rules of this game?"
+  },
+  {
+   "id": "y6u1-partc-025",
+   "en": "host family",
+   "de": "Gastfamilie",
+   "pos": "noun",
+   "example_en": "My host family lives near London."
+  }
+ ],
+ "y6u1-partd": [
+  {
+   "id": "y6u1-partd-001",
+   "en": "Skip didn't stop.",
+   "de": "Skip hörte nicht auf.",
+   "pos": "phrase",
+   "example_en": "Skip didn't stop barking all night."
+  },
+  {
+   "id": "y6u1-partd-002",
+   "en": "(to) pull",
+   "de": "ziehen",
+   "pos": "verb",
+   "example_en": "She pulled the dog back on its lead."
+  },
+  {
+   "id": "y6u1-partd-003",
+   "en": "(to) be lucky",
+   "de": "Glück haben",
+   "pos": "phrase",
+   "example_en": "We were lucky, the sun came out just in time."
+  },
+  {
+   "id": "y6u1-partd-004",
+   "en": "(to) bite",
+   "de": "beißen",
+   "pos": "verb",
+   "example_en": "The dog didn't bite, he just wanted to play."
+  },
+  {
+   "id": "y6u1-partd-005",
+   "en": "(to) give sb. a hug",
+   "de": "jn. umarmen",
+   "pos": "verb",
+   "example_en": "She gave her mum a hug before school."
+  },
+  {
+   "id": "y6u1-partd-006",
+   "en": "(to) mean",
+   "de": "meinen, sagen wollen",
+   "pos": "verb",
+   "example_en": "Sorry, I didn't mean to be rude.",
+   "sense_en": "meinen, sagen wollen (nicht: bedeuten)"
+  },
+  {
+   "id": "y6u1-partd-007",
+   "en": "(to) be/feel bored",
+   "de": "gelangweilt sein, sich langweilen",
+   "pos": "phrase",
+   "example_en": "I always feel bored on rainy days."
+  },
+  {
+   "id": "y6u1-partd-008",
+   "en": "just like ...",
+   "de": "genau wie ...",
+   "pos": "phrase",
+   "example_en": "She sings just like her mum."
+  },
+  {
+   "id": "y6u1-partd-009",
+   "en": "term",
+   "de": "Trimester",
+   "pos": "noun",
+   "example_en": "The new term starts in September."
+  },
+  {
+   "id": "y6u1-partd-010",
+   "en": "(to) walk/run/sail/...on",
+   "de": "weitergehen/-laufen/-segeln/...",
+   "pos": "verb",
+   "example_en": "We walked on until we reached the farm."
+  },
+  {
+   "id": "y6u1-partd-011",
+   "en": "boarding school",
+   "de": "Internat",
+   "pos": "noun",
+   "example_en": "My cousin goes to a boarding school in England."
+  },
+  {
+   "id": "y6u1-partd-012",
+   "en": "shocked",
+   "de": "schockiert, entsetzt",
+   "pos": "adjective",
+   "example_en": "We were shocked when we heard the news."
+  },
+  {
+   "id": "y6u1-partd-013",
+   "en": "outdoor",
+   "de": "Außen-, im Freien",
+   "pos": "adjective",
+   "example_en": "The school has a big outdoor pool."
+  },
+  {
+   "id": "y6u1-partd-014",
+   "en": "(to) climb",
+   "de": "klettern; hinaufklettern auf",
+   "pos": "verb",
+   "example_en": "We climbed the old tower in the village."
+  },
+  {
+   "id": "y6u1-partd-015",
+   "en": "(to) look forward to sth.",
+   "de": "sich auf etwas freuen",
+   "pos": "verb",
+   "example_en": "I'm really looking forward to the holidays."
+  },
+  {
+   "id": "y6u1-partd-016",
+   "en": "tear",
+   "de": "Träne",
+   "pos": "noun",
+   "example_en": "A tear ran down her face."
+  },
+  {
+   "id": "y6u1-partd-017",
+   "en": "She could feel the tears.",
+   "de": "Sie konnte die Tränen spüren.",
+   "pos": "phrase",
+   "example_en": "She could feel the tears coming."
+  },
+  {
+   "id": "y6u1-partd-018",
+   "en": "unhappy",
+   "de": "unglücklich",
+   "pos": "adjective",
+   "example_en": "He looked unhappy on his first day."
+  },
+  {
+   "id": "y6u1-partd-019",
+   "en": "(to) make notes (on sth.)",
+   "de": "sich Notizen machen über/zu etwas",
+   "pos": "verb",
+   "example_en": "Make notes on the text as you read it."
+  },
+  {
+   "id": "y6u1-partd-020",
+   "en": "crib sheet",
+   "de": "Spickzettel, Merkzettel",
+   "pos": "noun",
+   "example_en": "The teacher found a crib sheet on his desk."
+  },
+  {
+   "id": "y6u1-partd-021",
+   "en": "jacket",
+   "de": "Jacke, Jackett",
+   "pos": "noun",
+   "example_en": "Take a jacket, it might get cold."
+  },
+  {
+   "id": "y6u1-partd-022",
+   "en": "pocket",
+   "de": "Tasche",
+   "pos": "noun",
+   "example_en": "He keeps his key in his jacket pocket."
+  },
+  {
+   "id": "y6u1-partd-023",
+   "en": "litter bin",
+   "de": "Abfalleimer",
+   "pos": "noun",
+   "example_en": "Please put your rubbish in the litter bin."
+  }
+ ],
+ "y6u1-logbook": [
+  {
+   "id": "y6u1-logbook-001",
+   "en": "at Dad's",
+   "de": "bei Papa/Vati",
+   "pos": "phrase",
+   "example_en": "We stayed at Dad's for the weekend."
+  },
+  {
+   "id": "y6u1-logbook-002",
+   "en": "apartment",
+   "de": "Wohnung",
+   "pos": "noun",
+   "example_en": "My dad lives in a small apartment in New York."
+  },
+  {
+   "id": "y6u1-logbook-003",
+   "en": "screen",
+   "de": "Bildschirm",
+   "pos": "noun",
+   "example_en": "The screen was too small to see the map."
+  },
+  {
+   "id": "y6u1-logbook-004",
+   "en": "fries",
+   "de": "Pommes frites",
+   "pos": "noun",
+   "example_en": "We had a burger and fries for lunch."
+  },
+  {
+   "id": "y6u1-logbook-005",
+   "en": "(to) wash the dishes",
+   "de": "das Geschirr abwaschen, spülen",
+   "pos": "verb",
+   "example_en": "It's my turn to wash the dishes tonight."
+  },
+  {
+   "id": "y6u1-logbook-006",
+   "en": "century",
+   "de": "Jahrhundert",
+   "pos": "noun",
+   "example_en": "The old bridge is over a century old."
+  },
+  {
+   "id": "y6u1-logbook-007",
+   "en": "(to) land",
+   "de": "landen; an Land gehen",
+   "pos": "verb",
+   "example_en": "Our plane landed two hours late."
+  },
+  {
+   "id": "y6u1-logbook-008",
+   "en": "land",
+   "de": "Land",
+   "pos": "noun",
+   "example_en": "There was no land in sight, just the sea."
+  },
+  {
+   "id": "y6u1-logbook-009",
+   "en": "right now",
+   "de": "jetzt gerade",
+   "pos": "phrase",
+   "example_en": "I can't talk right now, I'm busy."
+  },
+  {
+   "id": "y6u1-logbook-010",
+   "en": "(to) order",
+   "de": "bestellen",
+   "pos": "verb",
+   "example_en": "We ordered pancakes for breakfast."
+  },
+  {
+   "id": "y6u1-logbook-011",
+   "en": "pancake",
+   "de": "Pfannkuchen, Eierkuchen",
+   "pos": "noun",
+   "example_en": "American pancakes are much bigger than German ones."
+  },
+  {
+   "id": "y6u1-logbook-012",
+   "en": "outside Rosie's Diner",
+   "de": "vor Rosie's Diner",
+   "pos": "phrase",
+   "example_en": "We waited outside Rosie's Diner for our table."
+  },
+  {
+   "id": "y6u1-logbook-013",
+   "en": "next to",
+   "de": "neben",
+   "pos": "preposition",
+   "example_en": "The diner is right next to the petrol station."
+  },
+  {
+   "id": "y6u1-logbook-014",
+   "en": "tent",
+   "de": "Zelt",
+   "pos": "noun",
+   "example_en": "We put up the tent before it got dark."
+  },
+  {
+   "id": "y6u1-logbook-015",
+   "en": "rocky",
+   "de": "felsig, steinig",
+   "pos": "adjective",
+   "example_en": "The path up the mountain was rocky."
+  },
+  {
+   "id": "y6u1-logbook-016",
+   "en": "high",
+   "de": "hoch",
+   "pos": "adjective",
+   "example_en": "The mountain is very high."
+  },
+  {
+   "id": "y6u1-logbook-017",
+   "en": "top",
+   "de": "Spitze; oberes Ende",
+   "pos": "noun",
+   "example_en": "We reached the top just before sunset."
+  },
+  {
+   "id": "y6u1-logbook-018",
+   "en": "shadow",
+   "de": "Schatten",
+   "pos": "noun",
+   "example_en": "Our tent cast a long shadow in the evening sun."
+  },
+  {
+   "id": "y6u1-logbook-019",
+   "en": "over",
+   "de": "über",
+   "pos": "preposition",
+   "example_en": "A bird flew over the campsite."
+  },
+  {
+   "id": "y6u1-logbook-020",
+   "en": "fire",
+   "de": "Feuer",
+   "pos": "noun",
+   "example_en": "We sat around the fire and told stories."
+  },
+  {
+   "id": "y6u1-logbook-021",
+   "en": "soft",
+   "de": "weich",
+   "pos": "adjective",
+   "example_en": "The grass was soft under the tent."
+  },
+  {
+   "id": "y6u1-logbook-022",
+   "en": "(to) look up",
+   "de": "hochsehen, aufschauen",
+   "pos": "verb",
+   "example_en": "We looked up and saw thousands of stars."
+  },
+  {
+   "id": "y6u1-logbook-023",
+   "en": "(to) be asleep",
+   "de": "schlafen",
+   "pos": "phrase",
+   "example_en": "Everyone was asleep by ten o'clock."
+  },
+  {
+   "id": "y6u1-logbook-024",
+   "en": "torch",
+   "de": "Taschenlampe",
+   "pos": "noun",
+   "example_en": "Don't forget to pack a torch."
+  },
+  {
+   "id": "y6u1-logbook-025",
+   "en": "(to) hang sth. up",
+   "de": "etwas aufhängen",
+   "pos": "verb",
+   "example_en": "We hung our wet clothes up by the fire."
+  },
+  {
+   "id": "y6u1-logbook-026",
+   "en": "so that ...",
+   "de": "sodass, damit",
+   "pos": "conjunction",
+   "example_en": "We left early so that we wouldn't miss the sunrise."
+  },
+  {
+   "id": "y6u1-logbook-027",
+   "en": "wild",
+   "de": "wild",
+   "pos": "adjective",
+   "example_en": "We heard a wild animal near the tent at night."
+  },
+  {
+   "id": "y6u1-logbook-028",
+   "en": "again and again",
+   "de": "immer wieder",
+   "pos": "phrase",
+   "example_en": "The waves crashed on the rocks again and again."
+  },
+  {
+   "id": "y6u1-logbook-029",
+   "en": "(to) turn sth. off",
+   "de": "etwas ausschalten",
+   "pos": "verb",
+   "example_en": "Turn the torch off to save the battery."
+  },
+  {
+   "id": "y6u1-logbook-030",
+   "en": "my own film/room/...",
+   "de": "mein eigener Film / mein eigenes Zimmer / ...",
+   "pos": "phrase",
+   "example_en": "I want to make my own film about our trip."
+  },
+  {
+   "id": "y6u1-logbook-031",
+   "en": "memory",
+   "de": "Erinnerung",
+   "pos": "noun",
+   "example_en": "This trip will be a great memory."
+  }
+ ],
+ "y6u2-intro": [
+  {
+   "id": "y6u2-intro-001",
+   "en": "this year's musical",
+   "de": "das diesjährige Musical",
+   "pos": "noun",
+   "example_en": "This year's musical is about pirates."
+  },
+  {
+   "id": "y6u2-intro-002",
+   "en": "audition",
+   "de": "Vorsprechen, Vorsingen, Vorspielen",
+   "pos": "noun",
+   "example_en": "I'm really nervous about my audition."
+  },
+  {
+   "id": "y6u2-intro-003",
+   "en": "(to) queue",
+   "de": "Schlange stehen, sich anstellen",
+   "pos": "verb",
+   "example_en": "We had to queue outside the hall."
+  },
+  {
+   "id": "y6u2-intro-004",
+   "en": "doorbell",
+   "de": "Türklingel, Türglocke",
+   "pos": "noun",
+   "example_en": "The doorbell rang just as we sat down."
+  },
+  {
+   "id": "y6u2-intro-005",
+   "en": "(to) call out the names",
+   "de": "die Namen aufrufen",
+   "pos": "verb",
+   "example_en": "The teacher called out the names one by one."
+  },
+  {
+   "id": "y6u2-intro-006",
+   "en": "article",
+   "de": "Artikel",
+   "pos": "noun",
+   "example_en": "Read the article about the school musical."
+  }
+ ],
+ "y6u2-parta": [
+  {
+   "id": "y6u2-parta-001",
+   "en": "earphones",
+   "de": "Ohrhörer, Kopfhörer",
+   "pos": "noun",
+   "example_en": "Don't forget your earphones for the listening test."
+  },
+  {
+   "id": "y6u2-parta-002",
+   "en": "And guess what!",
+   "de": "Und stell dir/stellt euch vor!",
+   "pos": "phrase",
+   "example_en": "And guess what! I got the part in the musical."
+  },
+  {
+   "id": "y6u2-parta-003",
+   "en": "I'm going to sing a song.",
+   "de": "Ich werde ein Lied singen.",
+   "pos": "phrase",
+   "example_en": "I'm going to sing a song at the audition."
+  },
+  {
+   "id": "y6u2-parta-004",
+   "en": "by ...",
+   "de": "von ...",
+   "pos": "preposition",
+   "example_en": "It's a song by a famous singer."
+  },
+  {
+   "id": "y6u2-parta-005",
+   "en": "nervous",
+   "de": "nervös, aufgeregt",
+   "pos": "adjective",
+   "example_en": "She was really nervous before the audition."
+  },
+  {
+   "id": "y6u2-parta-006",
+   "en": "a bit",
+   "de": "ein bisschen, etwas",
+   "pos": "phrase",
+   "example_en": "I'm a bit tired today."
+  },
+  {
+   "id": "y6u2-parta-007",
+   "en": "You should ...",
+   "de": "Du solltest ... / Ihr solltet ...",
+   "pos": "phrase",
+   "example_en": "You should practise your song again."
+  },
+  {
+   "id": "y6u2-parta-008",
+   "en": "side",
+   "de": "Seite",
+   "pos": "noun",
+   "example_en": "Write your name on the other side of the paper."
+  },
+  {
+   "id": "y6u2-parta-009",
+   "en": "a few",
+   "de": "ein paar, einige",
+   "pos": "determiner",
+   "example_en": "We only have a few minutes left."
+  },
+  {
+   "id": "y6u2-parta-010",
+   "en": "present",
+   "de": "Gegenwart",
+   "pos": "noun",
+   "example_en": "We use the present tense to talk about now."
+  },
+  {
+   "id": "y6u2-parta-011",
+   "en": "future",
+   "de": "Zukunft; zukünftige(r, s)",
+   "pos": "noun",
+   "example_en": "We use the future tense to talk about tomorrow."
+  },
+  {
+   "id": "y6u2-parta-012",
+   "en": "dialogue",
+   "de": "Dialog",
+   "pos": "noun",
+   "example_en": "Read the dialogue with a partner."
+  }
+ ],
+ "y6u2-partb": [
+  {
+   "id": "y6u2-partb-001",
+   "en": "(to) get ready (for)",
+   "de": "sich fertig machen für; sich vorbereiten auf",
+   "pos": "verb",
+   "example_en": "Get ready for the test, it starts in five minutes."
+  },
+  {
+   "id": "y6u2-partb-002",
+   "en": "mine",
+   "de": "meiner, meine, meins",
+   "pos": "determiner",
+   "example_en": "This bag isn't mine, it's Sam's."
+  },
+  {
+   "id": "y6u2-partb-003",
+   "en": "worksheet",
+   "de": "Arbeitsblatt",
+   "pos": "noun",
+   "example_en": "Please hand in your worksheet at the end."
+  },
+  {
+   "id": "y6u2-partb-004",
+   "en": "(the) longest ...",
+   "de": "der/die/das längste ...",
+   "pos": "adjective",
+   "example_en": "The Nile is the longest river in the world."
+  },
+  {
+   "id": "y6u2-partb-005",
+   "en": "(to) label",
+   "de": "beschriften; etikettieren",
+   "pos": "verb",
+   "example_en": "Label the parts of the plant."
+  },
+  {
+   "id": "y6u2-partb-006",
+   "en": "label",
+   "de": "Beschriftung; Schild, Etikett",
+   "pos": "noun",
+   "example_en": "Check the label for the size."
+  },
+  {
+   "id": "y6u2-partb-007",
+   "en": "large",
+   "de": "groß",
+   "pos": "adjective",
+   "example_en": "Australia is a very large country."
+  },
+  {
+   "id": "y6u2-partb-008",
+   "en": "(to) get on",
+   "de": "vorankommen, zurechtkommen",
+   "pos": "verb",
+   "example_en": "How are you getting on with your project?"
+  },
+  {
+   "id": "y6u2-partb-009",
+   "en": "(not) as big as",
+   "de": "nicht so groß wie",
+   "pos": "phrase",
+   "example_en": "Germany isn't as big as Russia."
+  },
+  {
+   "id": "y6u2-partb-010",
+   "en": "bigger than",
+   "de": "größer als",
+   "pos": "adjective",
+   "example_en": "Berlin is bigger than Lübeck."
+  },
+  {
+   "id": "y6u2-partb-011",
+   "en": "(to) get sth.",
+   "de": "sich etwas besorgen, sich etwas holen",
+   "pos": "verb",
+   "example_en": "Can you get me a glass of water?"
+  },
+  {
+   "id": "y6u2-partb-012",
+   "en": "ours",
+   "de": "unserer, unsere, unseres",
+   "pos": "determiner",
+   "example_en": "That classroom is ours, not theirs."
+  },
+  {
+   "id": "y6u2-partb-013",
+   "en": "awful",
+   "de": "schrecklich, fürchterlich",
+   "pos": "adjective",
+   "example_en": "The weather was awful during the trip."
+  },
+  {
+   "id": "y6u2-partb-014",
+   "en": "mistake",
+   "de": "Fehler",
+   "pos": "noun",
+   "example_en": "I made a mistake in question three."
+  },
+  {
+   "id": "y6u2-partb-015",
+   "en": "square kilometre (sq km)",
+   "de": "Quadratkilometer (km²)",
+   "pos": "noun",
+   "example_en": "The park covers ten square kilometres."
+  },
+  {
+   "id": "y6u2-partb-016",
+   "en": "tall",
+   "de": "groß",
+   "pos": "adjective",
+   "example_en": "My brother is much taller than me."
+  },
+  {
+   "id": "y6u2-partb-017",
+   "en": "(the) earth / Earth",
+   "de": "die Erde; der Planet",
+   "pos": "noun",
+   "example_en": "The Earth goes round the sun."
+  },
+  {
+   "id": "y6u2-partb-018",
+   "en": "about",
+   "de": "ungefähr",
+   "pos": "adverb",
+   "example_en": "It's about ten kilometres to school."
+  },
+  {
+   "id": "y6u2-partb-019",
+   "en": "plane",
+   "de": "Flugzeug",
+   "pos": "noun",
+   "example_en": "We watched a plane land at the airport."
+  },
+  {
+   "id": "y6u2-partb-020",
+   "en": "(to) read aloud",
+   "de": "laut vorlesen",
+   "pos": "verb",
+   "example_en": "Please read the text aloud."
+  },
+  {
+   "id": "y6u2-partb-021",
+   "en": "(to) make sure that ...",
+   "de": "sich vergewissern, dass ...",
+   "pos": "phrase",
+   "example_en": "Make sure that you bring your PE kit."
+  },
+  {
+   "id": "y6u2-partb-022",
+   "en": "everything",
+   "de": "alles",
+   "pos": "pronoun",
+   "example_en": "Have you packed everything for the trip?"
+  },
+  {
+   "id": "y6u2-partb-023",
+   "en": "(to) pause",
+   "de": "innehalten, pausieren",
+   "pos": "verb",
+   "example_en": "She paused before answering the question."
+  },
+  {
+   "id": "y6u2-partb-024",
+   "en": "scared",
+   "de": "verängstigt",
+   "pos": "adjective",
+   "example_en": "He was a bit scared before the audition."
+  },
+  {
+   "id": "y6u2-partb-025",
+   "en": "(to) change",
+   "de": "verändern; sich verändern",
+   "pos": "verb",
+   "example_en": "The weather can change very quickly here."
+  }
+ ],
+ "y6u2-partc": [
+  {
+   "id": "y6u2-partc-001",
+   "en": "brilliant",
+   "de": "großartig, genial, glänzend",
+   "pos": "adjective",
+   "example_en": "That was a brilliant idea!"
+  },
+  {
+   "id": "y6u2-partc-002",
+   "en": "yours",
+   "de": "deiner, deine, deins",
+   "pos": "determiner",
+   "example_en": "Is this pencil yours or mine?"
+  },
+  {
+   "id": "y6u2-partc-003",
+   "en": "hers",
+   "de": "ihrer, ihre, ihrs",
+   "pos": "determiner",
+   "example_en": "That bag is hers, not mine."
+  },
+  {
+   "id": "y6u2-partc-004",
+   "en": "lovely",
+   "de": "schön, hübsch, herrlich",
+   "pos": "adjective",
+   "example_en": "It was a lovely evening for the concert."
+  },
+  {
+   "id": "y6u2-partc-005",
+   "en": "even",
+   "de": "sogar",
+   "pos": "adverb",
+   "example_en": "Even the teacher laughed at the joke."
+  },
+  {
+   "id": "y6u2-partc-006",
+   "en": "more beautiful (than)",
+   "de": "schöner als",
+   "pos": "adjective",
+   "example_en": "Her song was even more beautiful than last year's."
+  },
+  {
+   "id": "y6u2-partc-007",
+   "en": "(the) most beautiful",
+   "de": "der/die/das schönste ...",
+   "pos": "adjective",
+   "example_en": "That was the most beautiful song of the show."
+  },
+  {
+   "id": "y6u2-partc-008",
+   "en": "so far",
+   "de": "bis jetzt; bis hierher",
+   "pos": "phrase",
+   "example_en": "So far, the musical has gone really well."
+  },
+  {
+   "id": "y6u2-partc-009",
+   "en": "stage",
+   "de": "Bühne",
+   "pos": "noun",
+   "example_en": "She walked onto the stage and started to sing."
+  },
+  {
+   "id": "y6u2-partc-010",
+   "en": "on my/your/their/... own",
+   "de": "allein",
+   "pos": "phrase",
+   "example_en": "He practised the song on his own every evening."
+  },
+  {
+   "id": "y6u2-partc-011",
+   "en": "talented",
+   "de": "begabt, talentiert",
+   "pos": "adjective",
+   "example_en": "She's a really talented singer."
+  },
+  {
+   "id": "y6u2-partc-012",
+   "en": "(to) cheer",
+   "de": "jubeln",
+   "pos": "verb",
+   "example_en": "Everyone cheered at the end of the show."
+  },
+  {
+   "id": "y6u2-partc-013",
+   "en": "(to) clap",
+   "de": "Beifall klatschen",
+   "pos": "verb",
+   "example_en": "The audience clapped for a long time."
+  },
+  {
+   "id": "y6u2-partc-014",
+   "en": "cinema",
+   "de": "Kino",
+   "pos": "noun",
+   "example_en": "We're going to the cinema on Saturday."
+  },
+  {
+   "id": "y6u2-partc-015",
+   "en": "concert",
+   "de": "Konzert",
+   "pos": "noun",
+   "example_en": "My favourite band is giving a concert next month."
+  },
+  {
+   "id": "y6u2-partc-016",
+   "en": "recorder",
+   "de": "Blockflöte",
+   "pos": "noun",
+   "example_en": "We play the recorder in music lessons."
+  },
+  {
+   "id": "y6u2-partc-017",
+   "en": "theatre",
+   "de": "Theater",
+   "pos": "noun",
+   "example_en": "The musical takes place in the school theatre."
+  },
+  {
+   "id": "y6u2-partc-018",
+   "en": "syllable",
+   "de": "Silbe",
+   "pos": "noun",
+   "example_en": "Clap the syllables of the word together."
+  },
+  {
+   "id": "y6u2-partc-019",
+   "en": "fashion",
+   "de": "Mode",
+   "pos": "noun",
+   "example_en": "She's really interested in fashion."
+  },
+  {
+   "id": "y6u2-partc-020",
+   "en": "round the world",
+   "de": "um die Welt",
+   "pos": "phrase",
+   "example_en": "The song is popular all round the world."
+  },
+  {
+   "id": "y6u2-partc-021",
+   "en": "town hall",
+   "de": "Rathaus",
+   "pos": "noun",
+   "example_en": "The concert is in the town hall this year."
+  },
+  {
+   "id": "y6u2-partc-022",
+   "en": "snow",
+   "de": "Schnee",
+   "pos": "noun",
+   "example_en": "There was snow on the mountains in the picture."
+  },
+  {
+   "id": "y6u2-partc-023",
+   "en": "whose?",
+   "de": "wessen?",
+   "pos": "pronoun",
+   "example_en": "Whose bag is this on the stage?"
+  },
+  {
+   "id": "y6u2-partc-024",
+   "en": "fat",
+   "de": "dick, fett",
+   "pos": "adjective",
+   "example_en": "The costume made him look really fat."
+  },
+  {
+   "id": "y6u2-partc-025",
+   "en": "paw",
+   "de": "Pfote, Tatze",
+   "pos": "noun",
+   "example_en": "The dog costume even had paws."
+  },
+  {
+   "id": "y6u2-partc-026",
+   "en": "stairs",
+   "de": "Treppe; Treppenstufen",
+   "pos": "noun",
+   "example_en": "Be careful on the stairs backstage."
+  },
+  {
+   "id": "y6u2-partc-027",
+   "en": "What could be better?",
+   "de": "Was könnte besser sein?",
+   "pos": "phrase",
+   "example_en": "A concert on a sunny evening – what could be better?"
+  },
+  {
+   "id": "y6u2-partc-028",
+   "en": "clear",
+   "de": "klar, deutlich",
+   "pos": "adjective",
+   "example_en": "Speak clearly so everyone can hear you."
+  },
+  {
+   "id": "y6u2-partc-029",
+   "en": "size",
+   "de": "Größe",
+   "pos": "noun",
+   "example_en": "What size is your costume?"
+  },
+  {
+   "id": "y6u2-partc-030",
+   "en": "correct",
+   "de": "richtig, korrekt",
+   "pos": "adjective",
+   "example_en": "Check that all your answers are correct."
+  },
+  {
+   "id": "y6u2-partc-031",
+   "en": "like this",
+   "de": "so",
+   "pos": "phrase",
+   "example_en": "Hold the recorder like this."
+  },
+  {
+   "id": "y6u2-partc-032",
+   "en": "(to) lie",
+   "de": "liegen",
+   "pos": "verb",
+   "example_en": "The dog was lying on the stage the whole time."
+  },
+  {
+   "id": "y6u2-partc-033",
+   "en": "(to) wake sb. up",
+   "de": "jn. aufwecken",
+   "pos": "verb",
+   "example_en": "The loud music woke the baby up."
+  }
+ ],
+ "y6u2-disco": [
+  {
+   "id": "y6u2-disco-001",
+   "en": "(to) stick sth. into sth.",
+   "de": "etwas in etwas stechen, stecken",
+   "pos": "verb",
+   "example_en": "She stuck a flower into her hair."
+  },
+  {
+   "id": "y6u2-disco-002",
+   "en": "fork",
+   "de": "Gabel",
+   "pos": "noun",
+   "example_en": "He dropped his fork on the floor."
+  },
+  {
+   "id": "y6u2-disco-003",
+   "en": "knife",
+   "de": "Messer",
+   "pos": "noun",
+   "example_en": "Be careful, that knife is sharp."
+  },
+  {
+   "id": "y6u2-disco-004",
+   "en": "spoon",
+   "de": "Löffel",
+   "pos": "noun",
+   "example_en": "I need a spoon for my soup."
+  },
+  {
+   "id": "y6u2-disco-005",
+   "en": "(to) drop sth.",
+   "de": "etwas fallen lassen",
+   "pos": "verb",
+   "example_en": "She dropped her phone on the dance floor."
+  },
+  {
+   "id": "y6u2-disco-006",
+   "en": "drama",
+   "de": "Schauspiel; darstellende Kunst",
+   "pos": "noun",
+   "example_en": "We have drama club every Thursday."
+  },
+  {
+   "id": "y6u2-disco-007",
+   "en": "gel",
+   "de": "Gel",
+   "pos": "noun",
+   "example_en": "He put gel in his hair for the disco."
+  },
+  {
+   "id": "y6u2-disco-008",
+   "en": "sunglasses",
+   "de": "Sonnenbrille",
+   "pos": "noun",
+   "example_en": "He wore sunglasses at the disco, even at night."
+  },
+  {
+   "id": "y6u2-disco-009",
+   "en": "glasses",
+   "de": "Brille",
+   "pos": "noun",
+   "example_en": "She can't see well without her glasses."
+  },
+  {
+   "id": "y6u2-disco-010",
+   "en": "arm",
+   "de": "Arm",
+   "pos": "noun",
+   "example_en": "He hurt his arm dancing."
+  },
+  {
+   "id": "y6u2-disco-011",
+   "en": "flash",
+   "de": "Lichtblitz",
+   "pos": "noun",
+   "example_en": "The camera flash lit up the whole room."
+  },
+  {
+   "id": "y6u2-disco-012",
+   "en": "head",
+   "de": "Kopf",
+   "pos": "noun",
+   "example_en": "Mind your head, the door is quite low."
+  },
+  {
+   "id": "y6u2-disco-013",
+   "en": "(to) shake",
+   "de": "schütteln",
+   "pos": "verb",
+   "example_en": "He shook his head and laughed."
+  },
+  {
+   "id": "y6u2-disco-014",
+   "en": "(to) beep",
+   "de": "piepen",
+   "pos": "verb",
+   "example_en": "My phone beeped during the music."
+  },
+  {
+   "id": "y6u2-disco-015",
+   "en": "(to) wish",
+   "de": "wünschen",
+   "pos": "verb",
+   "example_en": "I wish I could dance like that."
+  },
+  {
+   "id": "y6u2-disco-016",
+   "en": "(to) stand",
+   "de": "stehen; sich hinstellen",
+   "pos": "verb",
+   "example_en": "Everyone stood near the speakers."
+  },
+  {
+   "id": "y6u2-disco-017",
+   "en": "most people",
+   "de": "die meisten Menschen",
+   "pos": "pronoun",
+   "example_en": "Most people were dancing by nine o'clock."
+  },
+  {
+   "id": "y6u2-disco-018",
+   "en": "one by one",
+   "de": "einer nach dem anderen",
+   "pos": "phrase",
+   "example_en": "The teachers left one by one."
+  },
+  {
+   "id": "y6u2-disco-019",
+   "en": "except",
+   "de": "außer, bis auf",
+   "pos": "preposition",
+   "example_en": "Everyone came except Sam, who was ill."
+  },
+  {
+   "id": "y6u2-disco-020",
+   "en": "good-looking",
+   "de": "gutaussehend",
+   "pos": "adjective",
+   "example_en": "He's tall and good-looking, everyone says so."
+  },
+  {
+   "id": "y6u2-disco-021",
+   "en": "Anyway, ...",
+   "de": "Jedenfalls, ...",
+   "pos": "phrase",
+   "example_en": "Anyway, the disco was great fun."
+  }
+ ],
+ "y6u3-intro": [
+  {
+   "id": "y6u3-intro-001",
+   "en": "out and about",
+   "de": "unterwegs",
+   "pos": "phrase",
+   "example_en": "We were out and about in town all afternoon."
+  },
+  {
+   "id": "y6u3-intro-002",
+   "en": "opposite",
+   "de": "gegenüber von",
+   "pos": "preposition",
+   "example_en": "The bakery is opposite the church."
+  },
+  {
+   "id": "y6u3-intro-003",
+   "en": "post office",
+   "de": "Postamt",
+   "pos": "noun",
+   "example_en": "I need to post a letter at the post office."
+  },
+  {
+   "id": "y6u3-intro-004",
+   "en": "station",
+   "de": "Bahnhof",
+   "pos": "noun",
+   "example_en": "The station is at the end of this road."
+  },
+  {
+   "id": "y6u3-intro-005",
+   "en": "church",
+   "de": "Kirche",
+   "pos": "noun",
+   "example_en": "Turn left at the old church."
+  },
+  {
+   "id": "y6u3-intro-006",
+   "en": "roundabout",
+   "de": "Kreisverkehr",
+   "pos": "noun",
+   "example_en": "Go straight on at the roundabout."
+  },
+  {
+   "id": "y6u3-intro-007",
+   "en": "on the corner of Church Road and London Road",
+   "de": "Church Road, Ecke London Road",
+   "pos": "phrase",
+   "example_en": "The shop is on the corner of Church Road and London Road."
+  },
+  {
+   "id": "y6u3-intro-008",
+   "en": "(to) cross",
+   "de": "überqueren, kreuzen",
+   "pos": "verb",
+   "example_en": "Look both ways before you cross the road."
+  },
+  {
+   "id": "y6u3-intro-009",
+   "en": "(to) turn left/right",
+   "de": "nach links/rechts abbiegen",
+   "pos": "verb",
+   "example_en": "Turn left at the post office."
+  },
+  {
+   "id": "y6u3-intro-010",
+   "en": "straight on",
+   "de": "geradeaus weiter",
+   "pos": "adverb",
+   "example_en": "Go straight on for two hundred metres."
+  },
+  {
+   "id": "y6u3-intro-011",
+   "en": "past",
+   "de": "vorbei an, vorüber an",
+   "pos": "preposition",
+   "example_en": "Walk past the station and turn right."
+  },
+  {
+   "id": "y6u3-intro-012",
+   "en": "Excuse me, ...",
+   "de": "Entschuldigung, ...",
+   "pos": "phrase",
+   "example_en": "Excuse me, where is the nearest bus stop?"
+  },
+  {
+   "id": "y6u3-intro-013",
+   "en": "(to) tell sb. the way (to ...)",
+   "de": "jm. den Weg nach ... beschreiben",
+   "pos": "verb",
+   "example_en": "Can you tell me the way to the station?"
+  },
+  {
+   "id": "y6u3-intro-014",
+   "en": "(to) ask sb. the way",
+   "de": "jn. nach dem Weg fragen",
+   "pos": "verb",
+   "example_en": "We asked a woman the way to the museum."
+  },
+  {
+   "id": "y6u3-intro-015",
+   "en": "visitor",
+   "de": "Besucher/in, Gast",
+   "pos": "noun",
+   "example_en": "The town gets a lot of visitors in summer."
+  }
+ ],
+ "y6u3-parta": [
+  {
+   "id": "y6u3-parta-001",
+   "en": "pedestrian zone",
+   "de": "Fußgängerzone",
+   "pos": "noun",
+   "example_en": "Cars aren't allowed in the pedestrian zone."
+  },
+  {
+   "id": "y6u3-parta-002",
+   "en": "after",
+   "de": "nachdem",
+   "pos": "conjunction",
+   "example_en": "After the market, we went to the café."
+  },
+  {
+   "id": "y6u3-parta-003",
+   "en": "just after ...",
+   "de": "gleich nachdem ...; kurz nachdem ...",
+   "pos": "phrase",
+   "example_en": "We arrived just after the market opened."
+  },
+  {
+   "id": "y6u3-parta-004",
+   "en": "(to) cost",
+   "de": "kosten",
+   "pos": "verb",
+   "example_en": "How much does this bag cost?"
+  },
+  {
+   "id": "y6u3-parta-005",
+   "en": "(to) close",
+   "de": "schließen, zumachen",
+   "pos": "verb",
+   "example_en": "The market closes at four o'clock."
+  },
+  {
+   "id": "y6u3-parta-006",
+   "en": "chocolate",
+   "de": "Praline",
+   "pos": "noun",
+   "example_en": "She bought some chocolate for her mum."
+  },
+  {
+   "id": "y6u3-parta-007",
+   "en": "(to) need to do sth.",
+   "de": "etwas tun müssen",
+   "pos": "phrase",
+   "example_en": "We need to buy some flowers for Grandma."
+  },
+  {
+   "id": "y6u3-parta-008",
+   "en": "flower",
+   "de": "Blume; Blüte",
+   "pos": "noun",
+   "example_en": "The flower stall smelled amazing."
+  },
+  {
+   "id": "y6u3-parta-009",
+   "en": "stall",
+   "de": "Marktstand",
+   "pos": "noun",
+   "example_en": "There was a stall selling fresh fruit."
+  },
+  {
+   "id": "y6u3-parta-010",
+   "en": "plastic",
+   "de": "Plastik, Kunststoff",
+   "pos": "noun",
+   "example_en": "The pens are made of plastic."
+  },
+  {
+   "id": "y6u3-parta-011",
+   "en": "(to) break",
+   "de": "zerbrechen, kaputt machen",
+   "pos": "verb",
+   "example_en": "Be careful not to break the vase."
+  },
+  {
+   "id": "y6u3-parta-012",
+   "en": "felt pen",
+   "de": "Filzstift",
+   "pos": "noun",
+   "example_en": "Can I borrow a felt pen?"
+  },
+  {
+   "id": "y6u3-parta-013",
+   "en": "as",
+   "de": "als, während",
+   "pos": "conjunction",
+   "example_en": "As we walked past, the market was closing."
+  },
+  {
+   "id": "y6u3-parta-014",
+   "en": "cash desk",
+   "de": "Kasse in Geschäften",
+   "pos": "noun",
+   "example_en": "Pay for the socks at the cash desk."
+  },
+  {
+   "id": "y6u3-parta-015",
+   "en": "shop assistant",
+   "de": "Verkäufer/in",
+   "pos": "noun",
+   "example_en": "The shop assistant helped us find the right size."
+  },
+  {
+   "id": "y6u3-parta-016",
+   "en": "set",
+   "de": "Satz, Set",
+   "pos": "noun",
+   "example_en": "I bought a set of felt pens."
+  },
+  {
+   "id": "y6u3-parta-017",
+   "en": "Have you got ...?",
+   "de": "Haben Sie ...? / Hast du ...?",
+   "pos": "phrase",
+   "example_en": "Excuse me, have you got any postcards?"
+  },
+  {
+   "id": "y6u3-parta-018",
+   "en": "change",
+   "de": "Wechselgeld",
+   "pos": "noun",
+   "example_en": "Here's your change, two euros fifty."
+  },
+  {
+   "id": "y6u3-parta-019",
+   "en": "(to) know about sth.",
+   "de": "sich mit etwas auskennen",
+   "pos": "verb",
+   "example_en": "My dad knows a lot about old churches."
+  },
+  {
+   "id": "y6u3-parta-020",
+   "en": "gram",
+   "de": "Gramm",
+   "pos": "noun",
+   "example_en": "Can I have two hundred grams of cheese?"
+  },
+  {
+   "id": "y6u3-parta-021",
+   "en": "packet",
+   "de": "Packung, Päckchen",
+   "pos": "noun",
+   "example_en": "We bought a packet of biscuits."
+  },
+  {
+   "id": "y6u3-parta-022",
+   "en": "tin",
+   "de": "Dose",
+   "pos": "noun",
+   "example_en": "There's a tin of tomatoes in the cupboard."
+  },
+  {
+   "id": "y6u3-parta-023",
+   "en": "juice",
+   "de": "Saft",
+   "pos": "noun",
+   "example_en": "I'd like a glass of orange juice, please."
+  },
+  {
+   "id": "y6u3-parta-024",
+   "en": "tomato",
+   "de": "Tomate",
+   "pos": "noun",
+   "example_en": "We need three tomatoes for the salad."
+  },
+  {
+   "id": "y6u3-parta-025",
+   "en": "sock",
+   "de": "Socke",
+   "pos": "noun",
+   "example_en": "I lost one sock at the campsite."
+  },
+  {
+   "id": "y6u3-parta-026",
+   "en": "(to) scan a text",
+   "de": "einen Text schnell nach Informationen absuchen",
+   "pos": "verb",
+   "example_en": "Scan the text for the opening times."
+  },
+  {
+   "id": "y6u3-parta-027",
+   "en": "skill",
+   "de": "Fertigkeit",
+   "pos": "noun",
+   "example_en": "Reading a map is a useful skill."
+  },
+  {
+   "id": "y6u3-parta-028",
+   "en": "souvenir",
+   "de": "Andenken, Souvenir",
+   "pos": "noun",
+   "example_en": "We bought a small souvenir from the market."
+  }
+ ],
+ "y6u3-partb": [
+  {
+   "id": "y6u3-partb-001",
+   "en": "magic",
+   "de": "magisch, Zauber-",
+   "pos": "adjective",
+   "example_en": "The old book seemed to have magic powers."
+  },
+  {
+   "id": "y6u3-partb-002",
+   "en": "(to) make sb. sth.",
+   "de": "jn. zu etwas machen",
+   "pos": "verb",
+   "example_en": "The book made him a kung fu master."
+  },
+  {
+   "id": "y6u3-partb-003",
+   "en": "(to) fight sb.",
+   "de": "jn. bekämpfen; gegen jn. kämpfen",
+   "pos": "verb",
+   "example_en": "In the story, he has to fight three enemies."
+  },
+  {
+   "id": "y6u3-partb-004",
+   "en": "prize",
+   "de": "Preis, Gewinn",
+   "pos": "noun",
+   "example_en": "She won a prize for the best costume."
+  },
+  {
+   "id": "y6u3-partb-005",
+   "en": "just then",
+   "de": "genau in dem Moment",
+   "pos": "phrase",
+   "example_en": "Just then, the door opened."
+  },
+  {
+   "id": "y6u3-partb-006",
+   "en": "he shook his head slowly",
+   "de": "er schüttelte langsam den Kopf",
+   "pos": "phrase",
+   "example_en": "He shook his head slowly and said nothing."
+  },
+  {
+   "id": "y6u3-partb-007",
+   "en": "wall",
+   "de": "Mauer; Wand",
+   "pos": "noun",
+   "example_en": "There's a poster on the wall."
+  },
+  {
+   "id": "y6u3-partb-008",
+   "en": "role",
+   "de": "Rolle in einem Theaterstück, Film",
+   "pos": "noun",
+   "example_en": "She got the main role in the play."
+  },
+  {
+   "id": "y6u3-partb-009",
+   "en": "as kung fu master",
+   "de": "als Kung Fu-Master",
+   "pos": "phrase",
+   "example_en": "He appeared as a kung fu master in the film."
+  },
+  {
+   "id": "y6u3-partb-010",
+   "en": "in a loud/soft voice",
+   "de": "mit lauter/sanfter Stimme",
+   "pos": "phrase",
+   "example_en": "She spoke in a soft voice so no one heard."
+  },
+  {
+   "id": "y6u3-partb-011",
+   "en": "up and down",
+   "de": "auf und ab; rauf und runter",
+   "pos": "adverb",
+   "example_en": "He walked up and down, waiting nervously."
+  },
+  {
+   "id": "y6u3-partb-012",
+   "en": "good",
+   "de": "brav",
+   "pos": "adjective",
+   "example_en": "The children were very good at the market."
+  },
+  {
+   "id": "y6u3-partb-013",
+   "en": "responsible",
+   "de": "verantwortlich",
+   "pos": "adjective",
+   "example_en": "You are responsible for your little brother today."
+  },
+  {
+   "id": "y6u3-partb-014",
+   "en": "(to) look after sb.",
+   "de": "auf jn. aufpassen; sich um jn. kümmern",
+   "pos": "verb",
+   "example_en": "Can you look after the dog this afternoon?"
+  },
+  {
+   "id": "y6u3-partb-015",
+   "en": "well",
+   "de": "gut",
+   "pos": "adverb",
+   "example_en": "She did really well in the competition."
+  },
+  {
+   "id": "y6u3-partb-016",
+   "en": "(to) worry (about)",
+   "de": "sich Sorgen machen wegen/um",
+   "pos": "verb",
+   "example_en": "Don't worry about the test, you'll be fine."
+  },
+  {
+   "id": "y6u3-partb-017",
+   "en": "(to) happen (to)",
+   "de": "geschehen, passieren mit",
+   "pos": "verb",
+   "example_en": "What happened to your bike?"
+  },
+  {
+   "id": "y6u3-partb-018",
+   "en": "(to) describe sth. (to sb.)",
+   "de": "jm. etwas beschreiben",
+   "pos": "verb",
+   "example_en": "Can you describe the man you saw?"
+  },
+  {
+   "id": "y6u3-partb-019",
+   "en": "irregular",
+   "de": "unregelmäßig",
+   "pos": "adjective",
+   "example_en": "\"Go\" is an irregular verb."
+  },
+  {
+   "id": "y6u3-partb-020",
+   "en": "topic",
+   "de": "Thema, Themengebiet",
+   "pos": "noun",
+   "example_en": "What's the topic of your project?"
+  },
+  {
+   "id": "y6u3-partb-021",
+   "en": "(to) highlight",
+   "de": "hervorheben, markieren",
+   "pos": "verb",
+   "example_en": "Highlight the new words in the text."
+  },
+  {
+   "id": "y6u3-partb-022",
+   "en": "example",
+   "de": "Beispiel",
+   "pos": "noun",
+   "example_en": "Can you give me an example?"
+  }
+ ],
+ "y6u3-partc": [
+  {
+   "id": "y6u3-partc-001",
+   "en": "back",
+   "de": "Rückseite, hintere Seite",
+   "pos": "noun",
+   "example_en": "Write your name on the back of the sheet."
+  },
+  {
+   "id": "y6u3-partc-002",
+   "en": "front",
+   "de": "Vorderseite, vordere Seite",
+   "pos": "noun",
+   "example_en": "We sat at the front of the bus."
+  },
+  {
+   "id": "y6u3-partc-003",
+   "en": "seat",
+   "de": "Sitz, Platz",
+   "pos": "noun",
+   "example_en": "Is this seat free?"
+  },
+  {
+   "id": "y6u3-partc-004",
+   "en": "not ... anybody/anyone",
+   "de": "niemand",
+   "pos": "pronoun",
+   "example_en": "There wasn't anybody at the bus stop."
+  },
+  {
+   "id": "y6u3-partc-005",
+   "en": "Who did you dance with?",
+   "de": "Mit wem hast du getanzt?",
+   "pos": "phrase",
+   "example_en": "Who did you dance with at the party?"
+  },
+  {
+   "id": "y6u3-partc-006",
+   "en": "Who danced with you?",
+   "de": "Wer hat mit dir getanzt?",
+   "pos": "phrase",
+   "example_en": "Who danced with you at the party?"
+  },
+  {
+   "id": "y6u3-partc-007",
+   "en": "close (to)",
+   "de": "nah, dicht bei/an",
+   "pos": "adjective",
+   "example_en": "The market is close to the station."
+  },
+  {
+   "id": "y6u3-partc-008",
+   "en": "(to) whisper",
+   "de": "flüstern",
+   "pos": "verb",
+   "example_en": "She whispered the answer to me."
+  },
+  {
+   "id": "y6u3-partc-009",
+   "en": "(to) cry",
+   "de": "schreien; weinen",
+   "pos": "verb",
+   "example_en": "The little boy started to cry."
+  },
+  {
+   "id": "y6u3-partc-010",
+   "en": "(to) look around",
+   "de": "sich umsehen, sich umdrehen",
+   "pos": "verb",
+   "example_en": "We looked around but couldn't see the shop."
+  },
+  {
+   "id": "y6u3-partc-011",
+   "en": "not ... at all",
+   "de": "überhaupt nicht(s)",
+   "pos": "phrase",
+   "example_en": "I'm not tired at all."
+  },
+  {
+   "id": "y6u3-partc-012",
+   "en": "(to) hurry",
+   "de": "eilen; sich beeilen",
+   "pos": "verb",
+   "example_en": "Hurry, the bus is leaving!"
+  },
+  {
+   "id": "y6u3-partc-013",
+   "en": "(to) be interested (in)",
+   "de": "interessiert sein an",
+   "pos": "phrase",
+   "example_en": "She's really interested in old buildings."
+  },
+  {
+   "id": "y6u3-partc-014",
+   "en": "race",
+   "de": "Rennen",
+   "pos": "noun",
+   "example_en": "We watched a bike race in the town centre."
+  },
+  {
+   "id": "y6u3-partc-015",
+   "en": "change",
+   "de": "Änderung, Veränderung",
+   "pos": "noun",
+   "example_en": "There's been a change to the timetable."
+  },
+  {
+   "id": "y6u3-partc-016",
+   "en": "subject",
+   "de": "Subjekt",
+   "pos": "noun",
+   "example_en": "Find the subject of the sentence."
+  },
+  {
+   "id": "y6u3-partc-017",
+   "en": "object",
+   "de": "Objekt",
+   "pos": "noun",
+   "example_en": "Find the object of the sentence."
+  }
+ ],
+ "y6u3-magicbook": [
+  {
+   "id": "y6u3-magicbook-001",
+   "en": "broken",
+   "de": "zerbrochen, kaputt; gebrochen",
+   "pos": "adjective",
+   "example_en": "The old gate was broken."
+  },
+  {
+   "id": "y6u3-magicbook-002",
+   "en": "that's why",
+   "de": "deshalb, darum",
+   "pos": "phrase",
+   "example_en": "It was raining, that's why we stayed inside."
+  },
+  {
+   "id": "y6u3-magicbook-003",
+   "en": "gate",
+   "de": "Tor, Pforte, Gatter",
+   "pos": "noun",
+   "example_en": "They climbed over the old gate."
+  },
+  {
+   "id": "y6u3-magicbook-004",
+   "en": "Cut!",
+   "de": "Schnitt!",
+   "pos": "phrase",
+   "example_en": "\"Cut!\" shouted the director."
+  },
+  {
+   "id": "y6u3-magicbook-005",
+   "en": "(to) cut",
+   "de": "schneiden",
+   "pos": "verb",
+   "example_en": "Cut the rope with the knife."
+  },
+  {
+   "id": "y6u3-magicbook-006",
+   "en": "(to) disappear",
+   "de": "verschwinden",
+   "pos": "verb",
+   "example_en": "The magic book suddenly disappeared."
+  },
+  {
+   "id": "y6u3-magicbook-007",
+   "en": "up here",
+   "de": "hier oben",
+   "pos": "phrase",
+   "example_en": "Come up here, the view is amazing."
+  },
+  {
+   "id": "y6u3-magicbook-008",
+   "en": "roof",
+   "de": "Dach",
+   "pos": "noun",
+   "example_en": "They climbed onto the roof of the old house."
+  },
+  {
+   "id": "y6u3-magicbook-009",
+   "en": "view (of)",
+   "de": "Aussicht, Blick auf",
+   "pos": "noun",
+   "example_en": "There's a great view of the town from here."
+  },
+  {
+   "id": "y6u3-magicbook-010",
+   "en": "shore",
+   "de": "Ufer eines Sees, Strand",
+   "pos": "noun",
+   "example_en": "They swam to the shore of the lake."
+  },
+  {
+   "id": "y6u3-magicbook-011",
+   "en": "further",
+   "de": "weiter",
+   "pos": "adverb",
+   "example_en": "The village is a bit further down the road."
+  },
+  {
+   "id": "y6u3-magicbook-012",
+   "en": "hole",
+   "de": "Loch",
+   "pos": "noun",
+   "example_en": "There was a hole in the old wall."
+  },
+  {
+   "id": "y6u3-magicbook-013",
+   "en": "up to",
+   "de": "bis zu",
+   "pos": "preposition",
+   "example_en": "The water came up to his waist."
+  },
+  {
+   "id": "y6u3-magicbook-014",
+   "en": "waist",
+   "de": "Taille",
+   "pos": "noun",
+   "example_en": "The water reached up to his waist."
+  },
+  {
+   "id": "y6u3-magicbook-015",
+   "en": "the only ...",
+   "de": "der/die/das einzige ...",
+   "pos": "determiner",
+   "example_en": "She was the only one who wasn't scared."
+  },
+  {
+   "id": "y6u3-magicbook-016",
+   "en": "hurt",
+   "de": "verletzt",
+   "pos": "adjective",
+   "example_en": "His leg was badly hurt after the fall."
+  },
+  {
+   "id": "y6u3-magicbook-017",
+   "en": "leg",
+   "de": "Bein",
+   "pos": "noun",
+   "example_en": "He hurt his leg climbing the wall."
+  },
+  {
+   "id": "y6u3-magicbook-018",
+   "en": "wood",
+   "de": "Holz",
+   "pos": "noun",
+   "example_en": "The gate was made of old wood."
+  },
+  {
+   "id": "y6u3-magicbook-019",
+   "en": "body",
+   "de": "Körper",
+   "pos": "noun",
+   "example_en": "He was cold all over his body."
+  },
+  {
+   "id": "y6u3-magicbook-020",
+   "en": "over to ...",
+   "de": "hinüber zu/nach ...",
+   "pos": "preposition",
+   "example_en": "They swam over to the little island."
+  },
+  {
+   "id": "y6u3-magicbook-021",
+   "en": "thanks to Maya",
+   "de": "dank Maya",
+   "pos": "phrase",
+   "example_en": "Thanks to Maya, they found the way home."
+  },
+  {
+   "id": "y6u3-magicbook-022",
+   "en": "(to) be cold",
+   "de": "frieren",
+   "pos": "phrase",
+   "example_en": "He was cold after swimming in the lake."
+  },
+  {
+   "id": "y6u3-magicbook-023",
+   "en": "lip",
+   "de": "Lippe",
+   "pos": "noun",
+   "example_en": "His lips were blue with cold."
+  },
+  {
+   "id": "y6u3-magicbook-024",
+   "en": "(to) hug sb.",
+   "de": "jn. umarmen",
+   "pos": "verb",
+   "example_en": "She hugged her friend after the scary adventure."
+  },
+  {
+   "id": "y6u3-magicbook-025",
+   "en": "(to) rescue",
+   "de": "retten",
+   "pos": "verb",
+   "example_en": "The kung fu master rescued them just in time."
+  }
+ ],
+ "y6u4-intro": [
+  {
+   "id": "y6u4-intro-001",
+   "en": "background",
+   "de": "Hintergrund",
+   "pos": "noun",
+   "ipa": "bækɡraʊnd",
+   "example_en": "You can see a farm in the background of the photo."
+  },
+  {
+   "id": "y6u4-intro-002",
+   "en": "foreground",
+   "de": "Vordergrund",
+   "pos": "noun",
+   "ipa": "fɔːɡraʊnd",
+   "example_en": "There's a sheep in the foreground of the picture."
+  },
+  {
+   "id": "y6u4-intro-003",
+   "en": "at the bottom (of)",
+   "de": "unten, am unteren Ende von",
+   "pos": "phrase",
+   "ipa": "ˈbɒtəm",
+   "example_en": "There's a river at the bottom of the valley."
+  },
+  {
+   "id": "y6u4-intro-004",
+   "en": "countryside",
+   "de": "Landschaft, ländliche Gegend",
+   "pos": "noun",
+   "ipa": "ˈkʌntrisaɪd",
+   "example_en": "We love walking in the countryside."
+  },
+  {
+   "id": "y6u4-intro-005",
+   "en": "(to) begin",
+   "de": "beginnen, anfangen",
+   "pos": "verb",
+   "ipa": "bɪˈɡɪn",
+   "example_en": "The walk begins at the old farm gate."
+  },
+  {
+   "id": "y6u4-intro-006",
+   "en": "field",
+   "de": "Feld, Acker, Weide",
+   "pos": "noun",
+   "ipa": "fiːld",
+   "example_en": "The sheep were in the field next to the road."
+  },
+  {
+   "id": "y6u4-intro-007",
+   "en": "footprint",
+   "de": "Fußabdruck",
+   "pos": "noun",
+   "ipa": "ˈfʊtprɪnt",
+   "example_en": "We saw a footprint in the mud."
+  },
+  {
+   "id": "y6u4-intro-008",
+   "en": "foot",
+   "de": "Fuß",
+   "pos": "noun",
+   "ipa": "fʊt",
+   "example_en": "My foot hurts after the long walk."
+  },
+  {
+   "id": "y6u4-intro-009",
+   "en": "grass",
+   "de": "Gras; Rasen",
+   "pos": "noun",
+   "ipa": "ɡrɑːs",
+   "example_en": "The grass was wet after the rain."
+  },
+  {
+   "id": "y6u4-intro-010",
+   "en": "mist",
+   "de": "leichter Nebel, Dunstschleier",
+   "pos": "noun",
+   "ipa": "mɪst",
+   "example_en": "There was mist over the moor early in the morning."
+  },
+  {
+   "id": "y6u4-intro-011",
+   "en": "pony",
+   "de": "Pony",
+   "pos": "noun",
+   "ipa": "ˈpəʊni",
+   "example_en": "A wild pony walked past our tent."
+  },
+  {
+   "id": "y6u4-intro-012",
+   "en": "valley",
+   "de": "Tal",
+   "pos": "noun",
+   "ipa": "ˈvæli",
+   "example_en": "The village lies in a green valley."
+  },
+  {
+   "id": "y6u4-intro-013",
+   "en": "cow",
+   "de": "Kuh",
+   "pos": "noun",
+   "ipa": "kaʊ",
+   "example_en": "The cows were standing in the field."
+  },
+  {
+   "id": "y6u4-intro-014",
+   "en": "sheep",
+   "de": "Schaf",
+   "pos": "noun",
+   "ipa": "ʃiːp",
+   "example_en": "There are more sheep than people on Dartmoor."
+  },
+  {
+   "id": "y6u4-intro-015",
+   "en": "goat",
+   "de": "Ziege",
+   "pos": "noun",
+   "ipa": "ɡəʊt",
+   "example_en": "A goat was eating grass by the path."
+  },
+  {
+   "id": "y6u4-intro-016",
+   "en": "etc.",
+   "de": "usw., und so weiter",
+   "pos": "phrase",
+   "ipa": "etˈsetərə",
+   "example_en": "Bring a coat, boots, gloves etc."
+  },
+  {
+   "id": "y6u4-intro-017",
+   "en": "poem",
+   "de": "Gedicht",
+   "pos": "noun",
+   "ipa": "ˈpəʊɪm",
+   "example_en": "We wrote a poem about the moor."
+  }
+ ],
+ "y6u4-parta": [
+  {
+   "id": "y6u4-parta-001",
+   "en": "twice",
+   "de": "zweimal",
+   "pos": "adverb",
+   "ipa": "twaɪs",
+   "example_en": "We visited the farm twice last week."
+  },
+  {
+   "id": "y6u4-parta-002",
+   "en": "once",
+   "de": "einmal",
+   "pos": "adverb",
+   "ipa": "wʌns",
+   "example_en": "I've only been on a pony once."
+  },
+  {
+   "id": "y6u4-parta-003",
+   "en": "over there",
+   "de": "da drüben, dort drüben",
+   "pos": "phrase",
+   "example_en": "The farmhouse is over there, past the trees."
+  },
+  {
+   "id": "y6u4-parta-004",
+   "en": "told",
+   "de": "Partizip Perfekt von „tell“",
+   "pos": "verb",
+   "ipa": "təʊld",
+   "example_en": "She told us a story about the moor."
+  },
+  {
+   "id": "y6u4-parta-005",
+   "en": "just",
+   "de": "gerade eben, soeben",
+   "pos": "adverb",
+   "ipa": "dʒʌst",
+   "example_en": "We had just arrived when it started to rain."
+  },
+  {
+   "id": "y6u4-parta-006",
+   "en": "made",
+   "de": "Partizip Perfekt von „make“",
+   "pos": "verb",
+   "ipa": "meɪd",
+   "example_en": "The barn was made of old wood."
+  },
+  {
+   "id": "y6u4-parta-007",
+   "en": "(to) be hungry",
+   "de": "hungrig sein, Hunger haben",
+   "pos": "phrase",
+   "ipa": "ˈhʌŋɡri",
+   "example_en": "We were hungry after the long walk."
+  },
+  {
+   "id": "y6u4-parta-008",
+   "en": "not ... anything",
+   "de": "nichts",
+   "pos": "pronoun",
+   "ipa": "ˈeniθɪŋ",
+   "example_en": "There wasn't anything to eat in the barn."
+  },
+  {
+   "id": "y6u4-parta-009",
+   "en": "anybody?",
+   "de": "irgendjemand?",
+   "pos": "pronoun",
+   "example_en": "Is anybody at the farmhouse?"
+  },
+  {
+   "id": "y6u4-parta-010",
+   "en": "hay",
+   "de": "Heu",
+   "pos": "noun",
+   "ipa": "heɪ",
+   "example_en": "The horses were eating hay in the barn."
+  },
+  {
+   "id": "y6u4-parta-011",
+   "en": "key",
+   "de": "Schlüssel",
+   "pos": "noun",
+   "ipa": "kiː",
+   "example_en": "We found an old key by the gate."
+  },
+  {
+   "id": "y6u4-parta-012",
+   "en": "(to) own",
+   "de": "besitzen",
+   "pos": "verb",
+   "ipa": "əʊn",
+   "example_en": "The family owns the farm and the moor around it."
+  },
+  {
+   "id": "y6u4-parta-013",
+   "en": "moor",
+   "de": "Hochmoor",
+   "pos": "noun",
+   "ipa": "mɔː",
+   "example_en": "Dartmoor is a wild, empty moor."
+  },
+  {
+   "id": "y6u4-parta-014",
+   "en": "once/twice a week/year",
+   "de": "einmal/zweimal pro Woche/Jahr",
+   "pos": "phrase",
+   "example_en": "We visit the farm twice a year."
+  },
+  {
+   "id": "y6u4-parta-015",
+   "en": "that way",
+   "de": "dort entlang; in die Richtung",
+   "pos": "phrase",
+   "ipa": "weɪ",
+   "example_en": "The farmhouse is that way, past the field."
+  },
+  {
+   "id": "y6u4-parta-016",
+   "en": "mud",
+   "de": "Schlamm, Matsch",
+   "pos": "noun",
+   "ipa": "mʌd",
+   "example_en": "Our boots were covered in mud."
+  },
+  {
+   "id": "y6u4-parta-017",
+   "en": "(to) leave sth.",
+   "de": "etwas übrig lassen",
+   "pos": "verb",
+   "ipa": "liːv",
+   "example_en": "We left some hay for the pony."
+  },
+  {
+   "id": "y6u4-parta-018",
+   "en": "bath",
+   "de": "Bad",
+   "pos": "noun",
+   "ipa": "bɑːθ",
+   "example_en": "I need a bath after that muddy walk!"
+  },
+  {
+   "id": "y6u4-parta-019",
+   "en": "Oh dear!",
+   "de": "Oje!",
+   "pos": "phrase",
+   "ipa": "dɪə",
+   "example_en": "Oh dear! We're completely lost."
+  }
+ ],
+ "y6u4-partb": [
+  {
+   "id": "y6u4-partb-001",
+   "en": "lamb",
+   "de": "Lamm",
+   "pos": "noun",
+   "ipa": "læm",
+   "example_en": "A little lamb followed its mother across the field."
+  },
+  {
+   "id": "y6u4-partb-002",
+   "en": "barn",
+   "de": "Scheune",
+   "pos": "noun",
+   "ipa": "bɑːn",
+   "example_en": "We slept in the old barn during the storm."
+  },
+  {
+   "id": "y6u4-partb-003",
+   "en": "bacon",
+   "de": "Schinkenspeck",
+   "pos": "noun",
+   "ipa": "ˈbeɪkən",
+   "example_en": "We had bacon and eggs for breakfast."
+  },
+  {
+   "id": "y6u4-partb-004",
+   "en": "egg",
+   "de": "Ei",
+   "pos": "noun",
+   "ipa": "eg",
+   "example_en": "Can I have another egg, please?"
+  },
+  {
+   "id": "y6u4-partb-005",
+   "en": "a glass (of)",
+   "de": "ein Glas",
+   "pos": "noun",
+   "ipa": "glɑːs",
+   "example_en": "I'd like a glass of milk, please."
+  },
+  {
+   "id": "y6u4-partb-006",
+   "en": "ever",
+   "de": "jemals",
+   "pos": "adverb",
+   "ipa": "ˈevə",
+   "example_en": "Have you ever been to Dartmoor?"
+  },
+  {
+   "id": "y6u4-partb-007",
+   "en": "delicious",
+   "de": "köstlich, lecker",
+   "pos": "adjective",
+   "ipa": "dɪˈlɪʃəs",
+   "example_en": "The farmhouse breakfast was delicious."
+  },
+  {
+   "id": "y6u4-partb-008",
+   "en": "Have you ever been to ...?",
+   "de": "Bist du jemals in ... gewesen?",
+   "pos": "phrase",
+   "example_en": "Have you ever been to Dartmoor before?"
+  },
+  {
+   "id": "y6u4-partb-009",
+   "en": "Have you ... yet?",
+   "de": "Hast du schon ...?",
+   "pos": "phrase",
+   "ipa": "jet",
+   "example_en": "Have you finished your breakfast yet?"
+  },
+  {
+   "id": "y6u4-partb-010",
+   "en": "I'd love to ...",
+   "de": "Ich würde sehr gern ...",
+   "pos": "phrase",
+   "example_en": "I'd love to visit the farm again."
+  },
+  {
+   "id": "y6u4-partb-011",
+   "en": "dirty",
+   "de": "schmutzig",
+   "pos": "adjective",
+   "ipa": "ˈdɜːti",
+   "example_en": "Our boots got really dirty in the mud."
+  },
+  {
+   "id": "y6u4-partb-012",
+   "en": "a pair (of)",
+   "de": "ein Paar",
+   "pos": "noun",
+   "ipa": "peə",
+   "example_en": "I need a new pair of walking boots."
+  },
+  {
+   "id": "y6u4-partb-013",
+   "en": "boot",
+   "de": "Stiefel",
+   "pos": "noun",
+   "ipa": "buːt",
+   "example_en": "My boot got stuck in the mud."
+  },
+  {
+   "id": "y6u4-partb-014",
+   "en": "(to) lose",
+   "de": "verlieren",
+   "pos": "verb",
+   "ipa": "luːz",
+   "example_en": "Don't lose the key to the barn."
+  },
+  {
+   "id": "y6u4-partb-015",
+   "en": "strong",
+   "de": "stark, kräftig",
+   "pos": "adjective",
+   "ipa": "strɒŋ",
+   "example_en": "You need to be strong to carry that bag of hay."
+  },
+  {
+   "id": "y6u4-partb-016",
+   "en": "anything?",
+   "de": "irgendetwas?",
+   "pos": "pronoun",
+   "example_en": "Do you need anything from the farm shop?"
+  },
+  {
+   "id": "y6u4-partb-017",
+   "en": "sweet",
+   "de": "süß",
+   "pos": "adjective",
+   "ipa": "swiːt",
+   "example_en": "The pancakes were really sweet."
+  },
+  {
+   "id": "y6u4-partb-018",
+   "en": "heavy",
+   "de": "schwer von Gewicht",
+   "pos": "adjective",
+   "ipa": "ˈhevi",
+   "example_en": "That bag of hay is really heavy."
+  },
+  {
+   "id": "y6u4-partb-019",
+   "en": "one more photo",
+   "de": "noch ein Foto; ein weiteres Foto",
+   "pos": "phrase",
+   "ipa": "mɔː",
+   "example_en": "Wait, let's take one more photo of the ponies."
+  },
+  {
+   "id": "y6u4-partb-020",
+   "en": "quick",
+   "de": "schnell",
+   "pos": "adjective",
+   "ipa": "kwɪk",
+   "example_en": "We had a quick breakfast before the walk."
+  },
+  {
+   "id": "y6u4-partb-021",
+   "en": "(to) be missing",
+   "de": "fehlen",
+   "pos": "phrase",
+   "ipa": "ˈmɪsɪŋ",
+   "example_en": "One of the sheep is missing from the field."
+  },
+  {
+   "id": "y6u4-partb-022",
+   "en": "(to) mark sth. up",
+   "de": "etwas markieren, kennzeichnen",
+   "pos": "verb",
+   "ipa": "ˈmɑːk ˈʌp",
+   "example_en": "Mark up the path on the map."
+  },
+  {
+   "id": "y6u4-partb-023",
+   "en": "(to) decide",
+   "de": "beschließen, sich entscheiden",
+   "pos": "verb",
+   "ipa": "dɪˈsaɪd",
+   "example_en": "We decided to walk to the waterfall."
+  },
+  {
+   "id": "y6u4-partb-024",
+   "en": "waterfall",
+   "de": "Wasserfall",
+   "pos": "noun",
+   "ipa": "ˈwɔːtəfɔːl",
+   "example_en": "The waterfall was hidden behind some rocks."
+  },
+  {
+   "id": "y6u4-partb-025",
+   "en": "(to) take",
+   "de": "Zeit brauchen; dauern",
+   "pos": "verb",
+   "ipa": "teɪk",
+   "example_en": "The walk to the farm takes about an hour."
+  },
+  {
+   "id": "y6u4-partb-026",
+   "en": "stamp",
+   "de": "Stempel",
+   "pos": "noun",
+   "ipa": "stæmp",
+   "example_en": "We got a stamp in our nature diary at each stop."
+  }
+ ],
+ "y6u4-partc": [
+  {
+   "id": "y6u4-partc-001",
+   "en": "everywhere",
+   "de": "überall",
+   "pos": "adverb",
+   "ipa": "ˈevriweə",
+   "example_en": "There was mist everywhere on the moor."
+  },
+  {
+   "id": "y6u4-partc-002",
+   "en": "no sign of ...",
+   "de": "keine Spur von ...",
+   "pos": "phrase",
+   "example_en": "There was no sign of the ponies anywhere."
+  },
+  {
+   "id": "y6u4-partc-003",
+   "en": "for ever",
+   "de": "für immer; ewig",
+   "pos": "adverb",
+   "ipa": "fər ˈevə",
+   "example_en": "It felt like the walk went on for ever."
+  },
+  {
+   "id": "y6u4-partc-004",
+   "en": "for miles",
+   "de": "meilenweit",
+   "pos": "phrase",
+   "ipa": "maɪlz",
+   "example_en": "You can see for miles from the top of the hill."
+  },
+  {
+   "id": "y6u4-partc-005",
+   "en": "(to) hurt",
+   "de": "schmerzen, wehtun; verletzen",
+   "pos": "verb",
+   "ipa": "hɜːt",
+   "example_en": "My feet hurt after the long walk."
+  },
+  {
+   "id": "y6u4-partc-006",
+   "en": "not ... any more",
+   "de": "nicht mehr",
+   "pos": "phrase",
+   "example_en": "We couldn't see the farmhouse any more."
+  },
+  {
+   "id": "y6u4-partc-007",
+   "en": "across the moor",
+   "de": "quer über das Moor",
+   "pos": "phrase",
+   "ipa": "əˈkrɒs",
+   "example_en": "We walked across the moor for two hours."
+  },
+  {
+   "id": "y6u4-partc-008",
+   "en": "impossible",
+   "de": "unmöglich",
+   "pos": "adjective",
+   "ipa": "ɪmˈpɒsəbl",
+   "example_en": "It was impossible to see anything in the mist."
+  },
+  {
+   "id": "y6u4-partc-009",
+   "en": "(to) pass sth./sb.",
+   "de": "an etwas/jm. vorbeigehen/vorbeifahren",
+   "pos": "verb",
+   "ipa": "pɑːs",
+   "example_en": "We passed a farmhouse and a small church."
+  },
+  {
+   "id": "y6u4-partc-010",
+   "en": "path",
+   "de": "Pfad, Weg",
+   "pos": "noun",
+   "ipa": "pɑːθ",
+   "example_en": "We followed the path back to the farm."
+  },
+  {
+   "id": "y6u4-partc-011",
+   "en": "raincoat",
+   "de": "Regenmantel",
+   "pos": "noun",
+   "ipa": "ˈreɪnkəʊt",
+   "example_en": "Take your raincoat, it might rain on the moor."
+  },
+  {
+   "id": "y6u4-partc-012",
+   "en": "coat",
+   "de": "Mantel",
+   "pos": "noun",
+   "ipa": "kəʊt",
+   "example_en": "Put your coat on, it's getting cold."
+  },
+  {
+   "id": "y6u4-partc-013",
+   "en": "until",
+   "de": "bis",
+   "pos": "conjunction",
+   "ipa": "ənˈtɪl",
+   "example_en": "We walked until we reached the road."
+  },
+  {
+   "id": "y6u4-partc-014",
+   "en": "jigsaw",
+   "de": "Puzzle",
+   "pos": "noun",
+   "ipa": "ˈdʒɪɡsɔː",
+   "example_en": "We did a jigsaw of Dartmoor on the rainy afternoon."
+  },
+  {
+   "id": "y6u4-partc-015",
+   "en": "verse",
+   "de": "Vers, Strophe",
+   "pos": "noun",
+   "ipa": "vɜːs",
+   "example_en": "Read the first verse of the poem aloud."
+  },
+  {
+   "id": "y6u4-partc-016",
+   "en": "(to) train",
+   "de": "trainieren",
+   "pos": "verb",
+   "ipa": "treɪn",
+   "example_en": "Farm dogs are trained to look after sheep."
+  },
+  {
+   "id": "y6u4-partc-017",
+   "en": "otter",
+   "de": "Otter",
+   "pos": "noun",
+   "ipa": "ˈɒtə",
+   "example_en": "We saw an otter swimming in the river."
+  },
+  {
+   "id": "y6u4-partc-018",
+   "en": "deer",
+   "de": "Reh, Hirsch",
+   "pos": "noun",
+   "ipa": "dɪə",
+   "example_en": "A deer ran across the path in front of us."
+  },
+  {
+   "id": "y6u4-partc-019",
+   "en": "adder",
+   "de": "Kreuzotter",
+   "pos": "noun",
+   "ipa": "ˈædə",
+   "example_en": "Be careful, there are adders on the moor."
+  }
+ ],
+ "y6u4-tulipgarden": [
+  {
+   "id": "y6u4-tulipgarden-001",
+   "en": "tulip",
+   "de": "Tulpe",
+   "pos": "noun",
+   "ipa": "ˈtjuːlɪp",
+   "example_en": "The garden was full of red and yellow tulips."
+  },
+  {
+   "id": "y6u4-tulipgarden-002",
+   "en": "adventure",
+   "de": "Abenteuer",
+   "pos": "noun",
+   "ipa": "ədˈventʃə",
+   "example_en": "It felt like the start of a real adventure."
+  },
+  {
+   "id": "y6u4-tulipgarden-003",
+   "en": "(to) nod",
+   "de": "nicken",
+   "pos": "verb",
+   "ipa": "nɒd",
+   "example_en": "The old man nodded and smiled at us."
+  },
+  {
+   "id": "y6u4-tulipgarden-004",
+   "en": "(to) wander",
+   "de": "herumlaufen; herumirren",
+   "pos": "verb",
+   "ipa": "ˈwɒndə",
+   "example_en": "We wandered around the old garden."
+  },
+  {
+   "id": "y6u4-tulipgarden-005",
+   "en": "cocoa",
+   "de": "Kakao",
+   "pos": "noun",
+   "ipa": "ˈkəʊkəʊ",
+   "example_en": "We had a hot cocoa after the cold walk."
+  },
+  {
+   "id": "y6u4-tulipgarden-006",
+   "en": "both",
+   "de": "beide",
+   "pos": "determiner",
+   "ipa": "bəʊθ",
+   "example_en": "Both of the children loved the story."
+  },
+  {
+   "id": "y6u4-tulipgarden-007",
+   "en": "fireplace",
+   "de": "Kamin",
+   "pos": "noun",
+   "ipa": "ˈfaɪəpleɪs",
+   "example_en": "We sat by the fireplace and got warm."
+  },
+  {
+   "id": "y6u4-tulipgarden-008",
+   "en": "a mug (of)",
+   "de": "ein Becher",
+   "pos": "noun",
+   "ipa": "mʌɡ",
+   "example_en": "She gave us a mug of hot cocoa."
+  },
+  {
+   "id": "y6u4-tulipgarden-009",
+   "en": "ruin",
+   "de": "Ruine",
+   "pos": "noun",
+   "ipa": "ˈruːɪn",
+   "example_en": "The old cottage was now just a ruin."
+  },
+  {
+   "id": "y6u4-tulipgarden-010",
+   "en": "ground",
+   "de": "Erdboden",
+   "pos": "noun",
+   "ipa": "ɡraʊnd",
+   "example_en": "Some tulip petals lay on the ground."
+  },
+  {
+   "id": "y6u4-tulipgarden-011",
+   "en": "pretty",
+   "de": "hübsch",
+   "pos": "adjective",
+   "ipa": "ˈprɪti",
+   "example_en": "It was a pretty little cottage by the garden."
+  },
+  {
+   "id": "y6u4-tulipgarden-012",
+   "en": "cottage",
+   "de": "Häuschen, Cottage",
+   "pos": "noun",
+   "ipa": "ˈkɒtɪdʒ",
+   "example_en": "An old lady lived alone in the cottage."
+  },
+  {
+   "id": "y6u4-tulipgarden-013",
+   "en": "one night/day",
+   "de": "eines Nachts/Tages",
+   "pos": "phrase",
+   "example_en": "One day, the old cottage will be a garden again."
+  },
+  {
+   "id": "y6u4-tulipgarden-014",
+   "en": "(to) believe",
+   "de": "glauben",
+   "pos": "verb",
+   "ipa": "bɪˈliːv",
+   "example_en": "I could hardly believe what I saw in the garden."
+  },
+  {
+   "id": "y6u4-tulipgarden-015",
+   "en": "kind",
+   "de": "freundlich, nett",
+   "pos": "adjective",
+   "ipa": "kaɪnd",
+   "example_en": "The old man was kind and told us the story."
+  },
+  {
+   "id": "y6u4-tulipgarden-016",
+   "en": "(to) look closely",
+   "de": "genau hinschauen",
+   "pos": "verb",
+   "ipa": "ˈkləʊsli",
+   "example_en": "Look closely and you can see the old gate."
+  },
+  {
+   "id": "y6u4-tulipgarden-017",
+   "en": "honour",
+   "de": "Ehre",
+   "pos": "noun",
+   "ipa": "ˈɒnə",
+   "example_en": "The garden was planted in her honour."
+  },
+  {
+   "id": "y6u4-tulipgarden-018",
+   "en": "(to) die",
+   "de": "sterben",
+   "pos": "verb",
+   "ipa": "daɪ",
+   "example_en": "The old lady died many years ago."
+  },
+  {
+   "id": "y6u4-tulipgarden-019",
+   "en": "a nearby town",
+   "de": "eine nahegelegene Stadt",
+   "pos": "phrase",
+   "ipa": "ˈnɪəbaɪ",
+   "example_en": "We drove to a nearby town for lunch."
+  },
+  {
+   "id": "y6u4-tulipgarden-020",
+   "en": "instead",
+   "de": "stattdessen",
+   "pos": "adverb",
+   "ipa": "ɪnˈsted",
+   "example_en": "We couldn't find the path, so we took another one instead."
+  },
+  {
+   "id": "y6u4-tulipgarden-021",
+   "en": "not ... either",
+   "de": "auch nicht",
+   "pos": "phrase",
+   "ipa": "ˈaɪðə",
+   "example_en": "I didn't see the ruin, and my sister didn't either."
+  },
+  {
+   "id": "y6u4-tulipgarden-022",
+   "en": "fence",
+   "de": "Zaun",
+   "pos": "noun",
+   "ipa": "fens",
+   "example_en": "There's an old fence around the garden."
+  },
+  {
+   "id": "y6u4-tulipgarden-023",
+   "en": "around ...",
+   "de": "um ... herum",
+   "pos": "preposition",
+   "ipa": "əˈraʊnd",
+   "example_en": "Tulips grow all around the ruined cottage."
+  },
+  {
+   "id": "y6u4-tulipgarden-024",
+   "en": "(to) grow",
+   "de": "wachsen",
+   "pos": "verb",
+   "ipa": "ɡrəʊ",
+   "example_en": "The tulips grow there every spring."
+  },
+  {
+   "id": "y6u4-tulipgarden-025",
+   "en": "(to) plant",
+   "de": "pflanzen",
+   "pos": "verb",
+   "ipa": "plɑːnt",
+   "example_en": "She planted the tulips herself, long ago."
+  },
+  {
+   "id": "y6u4-tulipgarden-026",
+   "en": "not even",
+   "de": "noch nicht einmal",
+   "pos": "phrase",
+   "example_en": "We didn't even notice the old grave at first."
+  },
+  {
+   "id": "y6u4-tulipgarden-027",
+   "en": "grave",
+   "de": "Grab",
+   "pos": "noun",
+   "ipa": "ɡreɪv",
+   "example_en": "There was a small grave hidden among the tulips."
+  },
+  {
+   "id": "y6u4-tulipgarden-028",
+   "en": "(to) appear",
+   "de": "erscheinen, auftauchen",
+   "pos": "verb",
+   "ipa": "əˈpɪə",
+   "example_en": "The old cottage seemed to appear out of nowhere."
+  }
+ ],
+ "y6u5-intro": [
+  {
+   "id": "y6u5-intro-001",
+   "en": "(to) celebrate",
+   "de": "feiern",
+   "pos": "verb",
+   "ipa": "ˈselɪbreɪt",
+   "example_en": "We always celebrate my birthday with a big cake."
+  },
+  {
+   "id": "y6u5-intro-002",
+   "en": "celebration",
+   "de": "Feier",
+   "pos": "noun",
+   "ipa": "ˌselɪˈbreɪʃn",
+   "example_en": "The parade is part of the town's summer celebration."
+  },
+  {
+   "id": "y6u5-intro-003",
+   "en": "parade",
+   "de": "Parade, Umzug",
+   "pos": "noun",
+   "ipa": "pəˈreɪd",
+   "example_en": "Hundreds of people watched the parade."
+  },
+  {
+   "id": "y6u5-intro-004",
+   "en": "mayor",
+   "de": "Bürgermeister/in",
+   "pos": "noun",
+   "ipa": "meə",
+   "example_en": "The mayor gave a short speech at the festival."
+  },
+  {
+   "id": "y6u5-intro-005",
+   "en": "(to) light",
+   "de": "anzünden",
+   "pos": "verb",
+   "ipa": "laɪt",
+   "example_en": "She lit the candles on the cake."
+  },
+  {
+   "id": "y6u5-intro-006",
+   "en": "candle",
+   "de": "Kerze",
+   "pos": "noun",
+   "ipa": "ˈkændl",
+   "example_en": "There were ten candles on the birthday cake."
+  },
+  {
+   "id": "y6u5-intro-007",
+   "en": "(to) blow sth. out",
+   "de": "etwas auspusten, ausblasen",
+   "pos": "verb",
+   "ipa": "ˌbləʊ ˈaʊt",
+   "example_en": "Make a wish and blow out the candles."
+  },
+  {
+   "id": "y6u5-intro-008",
+   "en": "New Year's Eve",
+   "de": "Silvester",
+   "pos": "noun",
+   "ipa": "ˌnjuː jɪəz ˈiːv",
+   "example_en": "We stay up late on New Year's Eve."
+  },
+  {
+   "id": "y6u5-intro-009",
+   "en": "(to) stay up late",
+   "de": "lange aufbleiben",
+   "pos": "phrase",
+   "example_en": "We stayed up late to watch the fireworks."
+  },
+  {
+   "id": "y6u5-intro-010",
+   "en": "fireworks",
+   "de": "Feuerwerk",
+   "pos": "noun",
+   "ipa": "ˈfaɪəwɜːks",
+   "example_en": "The fireworks lit up the whole sky."
+  },
+  {
+   "id": "y6u5-intro-011",
+   "en": "firework",
+   "de": "Feuerwerkskörper",
+   "pos": "noun",
+   "ipa": "ˈfaɪəwɜːk",
+   "example_en": "One firework was much louder than the others."
+  },
+  {
+   "id": "y6u5-intro-012",
+   "en": "(to) dress up",
+   "de": "sich verkleiden",
+   "pos": "verb",
+   "ipa": "ˌdres ˈʌp",
+   "example_en": "We dressed up as pirates for the party."
+  },
+  {
+   "id": "y6u5-intro-013",
+   "en": "costume",
+   "de": "Kostüm, Verkleidung",
+   "pos": "noun",
+   "ipa": "ˈkɒstjuːm",
+   "example_en": "My costume for the parade was a dragon."
+  },
+  {
+   "id": "y6u5-intro-014",
+   "en": "special",
+   "de": "besondere(r, s)",
+   "pos": "adjective",
+   "ipa": "ˈspeʃl",
+   "example_en": "Christmas is a special day for our family."
+  },
+  {
+   "id": "y6u5-intro-015",
+   "en": "bucket",
+   "de": "Eimer",
+   "pos": "noun",
+   "ipa": "ˈbʌkɪt",
+   "example_en": "We collected money in a bucket for the charity."
+  },
+  {
+   "id": "y6u5-intro-016",
+   "en": "crowd",
+   "de": "(Menschen-)Menge",
+   "pos": "noun",
+   "ipa": "kraʊd",
+   "example_en": "A huge crowd gathered to watch the parade."
+  },
+  {
+   "id": "y6u5-intro-017",
+   "en": "festival",
+   "de": "Fest, Festival",
+   "pos": "noun",
+   "ipa": "ˈfestɪvl",
+   "example_en": "The whole town takes part in the summer festival."
+  },
+  {
+   "id": "y6u5-intro-018",
+   "en": "flag",
+   "de": "Fahne, Flagge",
+   "pos": "noun",
+   "ipa": "flæg",
+   "example_en": "Children waved small flags along the street."
+  },
+  {
+   "id": "y6u5-intro-019",
+   "en": "(to) raise money (for sth.)",
+   "de": "Geld sammeln für etwas",
+   "pos": "verb",
+   "ipa": "reɪz",
+   "example_en": "The school raised money for a children's charity."
+  },
+  {
+   "id": "y6u5-intro-020",
+   "en": "charity",
+   "de": "Wohlfahrtsorganisation; wohltätige Zwecke",
+   "pos": "noun",
+   "ipa": "ˈtʃærəti",
+   "example_en": "All the money goes to a local charity."
+  },
+  {
+   "id": "y6u5-intro-021",
+   "en": "(to) take part in sth.",
+   "de": "an etwas teilnehmen",
+   "pos": "verb",
+   "ipa": "ˌteɪk ˈpɑːt",
+   "example_en": "Would you like to take part in the parade?"
+  },
+  {
+   "id": "y6u5-intro-022",
+   "en": "(to) plan",
+   "de": "planen",
+   "pos": "verb",
+   "ipa": "plæn",
+   "example_en": "We planned the party for weeks."
+  },
+  {
+   "id": "y6u5-intro-023",
+   "en": "theme",
+   "de": "Thema",
+   "pos": "noun",
+   "ipa": "θiːm",
+   "example_en": "This year's parade theme is \"under the sea\"."
+  }
+ ],
+ "y6u5-parta": [
+  {
+   "id": "y6u5-parta-001",
+   "en": "juggler",
+   "de": "Jongleur/in",
+   "pos": "noun",
+   "ipa": "ˈdʒʌɡlə",
+   "example_en": "A juggler entertained the crowd before the parade."
+  },
+  {
+   "id": "y6u5-parta-002",
+   "en": "(to) juggle sth.",
+   "de": "mit etwas jonglieren",
+   "pos": "verb",
+   "ipa": "ˈdʒʌɡl",
+   "example_en": "He can juggle five balls at once."
+  },
+  {
+   "id": "y6u5-parta-003",
+   "en": "(to) drive",
+   "de": "mit dem Auto fahren",
+   "pos": "verb",
+   "ipa": "draɪv",
+   "example_en": "They drove the decorated float through the town."
+  },
+  {
+   "id": "y6u5-parta-004",
+   "en": "(to) get out (of a car)",
+   "de": "aus einem Auto aussteigen",
+   "pos": "verb",
+   "ipa": "ˌɡet ˈaʊt",
+   "example_en": "The mayor got out of the car and waved."
+  },
+  {
+   "id": "y6u5-parta-005",
+   "en": "(to) put sth. on",
+   "de": "etwas anziehen; etwas aufsetzen",
+   "pos": "verb",
+   "ipa": "ˌpʊt ˈɒn",
+   "example_en": "Put your costume on before the parade starts."
+  },
+  {
+   "id": "y6u5-parta-006",
+   "en": "(to) take sth. off",
+   "de": "etwas ausziehen; etwas absetzen",
+   "pos": "verb",
+   "ipa": "ˌteɪk ˈɒf",
+   "example_en": "You can take your costume off after the show."
+  },
+  {
+   "id": "y6u5-parta-007",
+   "en": "choir",
+   "de": "Chor",
+   "pos": "noun",
+   "ipa": "ˈkwaɪə",
+   "example_en": "The school choir sang at the festival."
+  },
+  {
+   "id": "y6u5-parta-008",
+   "en": "not till three",
+   "de": "erst um drei, nicht vor drei",
+   "pos": "phrase",
+   "example_en": "The parade doesn't start till three."
+  },
+  {
+   "id": "y6u5-parta-009",
+   "en": "probably",
+   "de": "wahrscheinlich",
+   "pos": "adverb",
+   "ipa": "ˈprɒbəbli",
+   "example_en": "It will probably rain during the parade."
+  },
+  {
+   "id": "y6u5-parta-010",
+   "en": "artist",
+   "de": "Künstler/in",
+   "pos": "noun",
+   "ipa": "ˈɑːtɪst",
+   "example_en": "A local artist painted faces at the festival."
+  },
+  {
+   "id": "y6u5-parta-011",
+   "en": "torch",
+   "de": "Fackel",
+   "pos": "noun",
+   "ipa": "tɔːtʃ",
+   "example_en": "Someone carried a burning torch at the front."
+  },
+  {
+   "id": "y6u5-parta-012",
+   "en": "(to) pass sth. (around)",
+   "de": "etwas herumreichen",
+   "pos": "verb",
+   "ipa": "ˌpɑːs əˈraʊnd",
+   "example_en": "They passed the torch around the circle."
+  },
+  {
+   "id": "y6u5-parta-013",
+   "en": "encore",
+   "de": "Zugabe",
+   "pos": "noun",
+   "ipa": "ˈɒŋkɔː",
+   "example_en": "The crowd shouted for an encore."
+  },
+  {
+   "id": "y6u5-parta-014",
+   "en": "(to) promise",
+   "de": "versprechen",
+   "pos": "verb",
+   "ipa": "ˈprɒmɪs",
+   "example_en": "She promised to come to the parade."
+  },
+  {
+   "id": "y6u5-parta-015",
+   "en": "(to) fly",
+   "de": "fliegen",
+   "pos": "verb",
+   "ipa": "flaɪ",
+   "example_en": "Hundreds of balloons flew into the sky."
+  },
+  {
+   "id": "y6u5-parta-016",
+   "en": "(to) take notes",
+   "de": "sich Notizen machen",
+   "pos": "verb",
+   "example_en": "Take notes while you listen to the mayor's speech."
+  },
+  {
+   "id": "y6u5-parta-017",
+   "en": "symbol",
+   "de": "Symbol",
+   "pos": "noun",
+   "ipa": "ˈsɪmbl",
+   "example_en": "The flag is a symbol of the town."
+  },
+  {
+   "id": "y6u5-parta-018",
+   "en": "abbreviation",
+   "de": "Abkürzung",
+   "pos": "noun",
+   "ipa": "əˌbriːviˈeɪʃn",
+   "example_en": "\"e.g.\" is an abbreviation."
+  },
+  {
+   "id": "y6u5-parta-019",
+   "en": "e.g.",
+   "de": "z.B., zum Beispiel",
+   "pos": "phrase",
+   "ipa": "ˌiː ˈdʒiː",
+   "example_en": "Wear something warm, e.g. a jacket."
+  }
+ ],
+ "y6u5-partb": [
+  {
+   "id": "y6u5-partb-001",
+   "en": "demonstration",
+   "de": "Demonstration, Vorführung",
+   "pos": "noun",
+   "ipa": "ˌdemənˈstreɪʃn",
+   "example_en": "There was a cooking demonstration at the festival."
+  },
+  {
+   "id": "y6u5-partb-002",
+   "en": "speech",
+   "de": "offizielle Rede",
+   "pos": "noun",
+   "ipa": "spiːtʃ",
+   "example_en": "The mayor gave a speech before the parade."
+  },
+  {
+   "id": "y6u5-partb-003",
+   "en": "competition",
+   "de": "Wettbewerb",
+   "pos": "noun",
+   "ipa": "ˌkɒmpəˈtɪʃn",
+   "example_en": "There's a costume competition every year."
+  },
+  {
+   "id": "y6u5-partb-004",
+   "en": "workshop",
+   "de": "Workshop, Lehrgang",
+   "pos": "noun",
+   "ipa": "ˈwɜːkʃɒp",
+   "example_en": "We did a drumming workshop at the festival."
+  },
+  {
+   "id": "y6u5-partb-005",
+   "en": "(to) paint",
+   "de": "anstreichen; anmalen",
+   "pos": "verb",
+   "ipa": "peɪnt",
+   "example_en": "They painted the old town hall for the celebration."
+  },
+  {
+   "id": "y6u5-partb-006",
+   "en": "Spanish",
+   "de": "spanisch",
+   "pos": "adjective",
+   "ipa": "ˈspænɪʃ",
+   "example_en": "There was a Spanish dance group in the parade."
+  },
+  {
+   "id": "y6u5-partb-007",
+   "en": "main",
+   "de": "Haupt-",
+   "pos": "adjective",
+   "ipa": "meɪn",
+   "example_en": "The main event starts at three o'clock."
+  },
+  {
+   "id": "y6u5-partb-008",
+   "en": "we mustn't do it",
+   "de": "wir dürfen es nicht tun",
+   "pos": "phrase",
+   "ipa": "wiː ˈmʌsnt",
+   "example_en": "We mustn't do it without asking the mayor first."
+  },
+  {
+   "id": "y6u5-partb-009",
+   "en": "tasty",
+   "de": "lecker",
+   "pos": "adjective",
+   "ipa": "ˈteɪsti",
+   "example_en": "The food at the festival was really tasty."
+  },
+  {
+   "id": "y6u5-partb-010",
+   "en": "Indian",
+   "de": "Inder/in; indisch",
+   "pos": "adjective",
+   "ipa": "ˈɪndiən",
+   "example_en": "There was an Indian food stall at the festival."
+  },
+  {
+   "id": "y6u5-partb-011",
+   "en": "traditional",
+   "de": "traditionell",
+   "pos": "adjective",
+   "ipa": "trəˈdɪʃənl",
+   "example_en": "They wore traditional costumes for the parade."
+  },
+  {
+   "id": "y6u5-partb-012",
+   "en": "(to) repeat",
+   "de": "wiederholen",
+   "pos": "verb",
+   "ipa": "rɪˈpiːt",
+   "example_en": "Can you repeat that tongue-twister?"
+  },
+  {
+   "id": "y6u5-partb-013",
+   "en": "tongue-twister",
+   "de": "Zungenbrecher",
+   "pos": "noun",
+   "ipa": "ˈtʌŋˌtwɪstə",
+   "example_en": "We tried the tongue-twister three times."
+  },
+  {
+   "id": "y6u5-partb-014",
+   "en": "we needn't do it",
+   "de": "wir müssen es nicht tun",
+   "pos": "phrase",
+   "ipa": "ˈniːdnt",
+   "example_en": "We needn't do it today, we can do it tomorrow."
+  },
+  {
+   "id": "y6u5-partb-015",
+   "en": "puppet",
+   "de": "Marionette, Handpuppe",
+   "pos": "noun",
+   "ipa": "ˈpʌpɪt",
+   "example_en": "There was a puppet show for the little kids."
+  },
+  {
+   "id": "y6u5-partb-016",
+   "en": "May I have a word with you?",
+   "de": "Kann ich Sie kurz sprechen?",
+   "pos": "phrase",
+   "ipa": "meɪ",
+   "example_en": "May I have a word with you about the parade?"
+  },
+  {
+   "id": "y6u5-partb-017",
+   "en": "may",
+   "de": "dürfen",
+   "pos": "verb",
+   "ipa": "meɪ",
+   "example_en": "You may take one flag each."
+  },
+  {
+   "id": "y6u5-partb-018",
+   "en": "queen",
+   "de": "Königin",
+   "pos": "noun",
+   "ipa": "kwiːn",
+   "example_en": "A girl was dressed as the queen in the parade."
+  },
+  {
+   "id": "y6u5-partb-019",
+   "en": "knight",
+   "de": "Ritter",
+   "pos": "noun",
+   "ipa": "naɪt",
+   "example_en": "One boy came dressed as a knight."
+  },
+  {
+   "id": "y6u5-partb-020",
+   "en": "(to) become",
+   "de": "werden",
+   "pos": "verb",
+   "ipa": "bɪˈkʌm",
+   "example_en": "The small festival became a big event over the years."
+  },
+  {
+   "id": "y6u5-partb-021",
+   "en": "famous (for)",
+   "de": "berühmt für, wegen",
+   "pos": "adjective",
+   "ipa": "ˈfeɪməs",
+   "example_en": "The town is famous for its summer parade."
+  },
+  {
+   "id": "y6u5-partb-022",
+   "en": "(to) defend sb./sth. (against sb./sth.)",
+   "de": "jn./etwas verteidigen gegen",
+   "pos": "verb",
+   "ipa": "dɪˈfend",
+   "example_en": "The knight had to defend the castle."
+  }
+ ],
+ "y6u5-partc": [
+  {
+   "id": "y6u5-partc-001",
+   "en": "hospital",
+   "de": "Krankenhaus",
+   "pos": "noun",
+   "ipa": "ˈhɒspɪtl",
+   "example_en": "He was taken to hospital after the accident."
+  },
+  {
+   "id": "y6u5-partc-002",
+   "en": "What's wrong with you?",
+   "de": "Was fehlt dir? Was ist los mit dir?",
+   "pos": "phrase",
+   "example_en": "What's wrong with you? You look pale."
+  },
+  {
+   "id": "y6u5-partc-003",
+   "en": "ill",
+   "de": "krank",
+   "pos": "adjective",
+   "ipa": "ɪl",
+   "example_en": "Sam was ill and couldn't come to the party."
+  },
+  {
+   "id": "y6u5-partc-004",
+   "en": "at least",
+   "de": "zumindest, wenigstens",
+   "pos": "phrase",
+   "ipa": "ət ˈliːst",
+   "example_en": "At least the fireworks weren't cancelled."
+  },
+  {
+   "id": "y6u5-partc-005",
+   "en": "doctor",
+   "de": "Arzt/Ärztin",
+   "pos": "noun",
+   "ipa": "ˈdɒktə",
+   "example_en": "A doctor was there in case anyone got hurt."
+  },
+  {
+   "id": "y6u5-partc-006",
+   "en": "each",
+   "de": "jeder, jede, jedes einzelne",
+   "pos": "determiner",
+   "ipa": "iːtʃ",
+   "example_en": "Each child got a balloon."
+  },
+  {
+   "id": "y6u5-partc-007",
+   "en": "(to) frown",
+   "de": "die Stirn runzeln",
+   "pos": "verb",
+   "ipa": "fraʊn",
+   "example_en": "She frowned when she heard the news."
+  },
+  {
+   "id": "y6u5-partc-008",
+   "en": "(to) tap",
+   "de": "antippen, vorsichtig klopfen",
+   "pos": "verb",
+   "ipa": "tæp",
+   "example_en": "He tapped me on the shoulder during the parade."
+  },
+  {
+   "id": "y6u5-partc-009",
+   "en": "(to) end",
+   "de": "enden; beenden",
+   "pos": "verb",
+   "ipa": "end",
+   "example_en": "The festival ends with a big firework show."
+  },
+  {
+   "id": "y6u5-partc-010",
+   "en": "apple",
+   "de": "Apfel",
+   "pos": "noun",
+   "ipa": "ˈæpl",
+   "example_en": "We bit into toffee apples at the fair."
+  },
+  {
+   "id": "y6u5-partc-011",
+   "en": "fresh",
+   "de": "frisch",
+   "pos": "adjective",
+   "ipa": "freʃ",
+   "example_en": "The stall sold fresh strawberries."
+  },
+  {
+   "id": "y6u5-partc-012",
+   "en": "strawberry",
+   "de": "Erdbeere",
+   "pos": "noun",
+   "ipa": "ˈstrɔːbəri",
+   "example_en": "We shared a punnet of strawberries."
+  },
+  {
+   "id": "y6u5-partc-013",
+   "en": "(to) kill",
+   "de": "töten",
+   "pos": "verb",
+   "ipa": "kɪl",
+   "example_en": "The story was about a knight who had to kill a dragon."
+  },
+  {
+   "id": "y6u5-partc-014",
+   "en": "I'll have a tea/pizza/...",
+   "de": "Ich nehme einen Tee / eine Pizza / ...",
+   "pos": "phrase",
+   "example_en": "I'll have a pizza, please."
+  },
+  {
+   "id": "y6u5-partc-015",
+   "en": "lift",
+   "de": "Mitfahrgelegenheit",
+   "pos": "noun",
+   "ipa": "lɪft",
+   "example_en": "Can you give me a lift to the festival?"
+  },
+  {
+   "id": "y6u5-partc-016",
+   "en": "(to) offer",
+   "de": "anbieten",
+   "pos": "verb",
+   "ipa": "ˈɒfə",
+   "example_en": "She offered us some of her strawberries."
+  },
+  {
+   "id": "y6u5-partc-017",
+   "en": "(to) groan",
+   "de": "stöhnen",
+   "pos": "verb",
+   "ipa": "ɡrəʊn",
+   "example_en": "He groaned when he saw the long queue."
+  },
+  {
+   "id": "y6u5-partc-018",
+   "en": "terrible",
+   "de": "schrecklich, furchtbar",
+   "pos": "adjective",
+   "ipa": "ˈterəbl",
+   "example_en": "The weather was terrible for the parade this year."
+  },
+  {
+   "id": "y6u5-partc-019",
+   "en": "event",
+   "de": "Ereignis",
+   "pos": "noun",
+   "ipa": "ɪˈvent",
+   "example_en": "The summer festival is the biggest event of the year."
+  },
+  {
+   "id": "y6u5-partc-020",
+   "en": "(to) be sore",
+   "de": "wund sein; wehtun",
+   "pos": "phrase",
+   "ipa": "sɔː",
+   "example_en": "My feet were sore after standing all day."
+  },
+  {
+   "id": "y6u5-partc-021",
+   "en": "truth",
+   "de": "Wahrheit",
+   "pos": "noun",
+   "ipa": "truːθ",
+   "example_en": "Tell me the truth, did you eat my sweets?"
+  },
+  {
+   "id": "y6u5-partc-022",
+   "en": "even if",
+   "de": "selbst wenn",
+   "pos": "conjunction",
+   "ipa": "ˈiːvn ɪf",
+   "example_en": "We'll go, even if it rains."
+  },
+  {
+   "id": "y6u5-partc-023",
+   "en": "better than ever",
+   "de": "besser als je zuvor",
+   "pos": "phrase",
+   "example_en": "The fireworks were better than ever this year."
+  },
+  {
+   "id": "y6u5-partc-024",
+   "en": "director",
+   "de": "Leiter/in; Dirigent/in; Regisseur/in",
+   "pos": "noun",
+   "ipa": "dəˈrektə",
+   "example_en": "The choir director thanked everyone at the end."
+  },
+  {
+   "id": "y6u5-partc-025",
+   "en": "million",
+   "de": "Million",
+   "pos": "noun",
+   "ipa": "ˈmɪljən",
+   "example_en": "It felt like a million people were at the parade."
+  },
+  {
+   "id": "y6u5-partc-026",
+   "en": "whole",
+   "de": "ganze(r, s), gesamte(r, s)",
+   "pos": "adjective",
+   "ipa": "həʊl",
+   "example_en": "The whole town came out for the festival."
+  },
+  {
+   "id": "y6u5-partc-027",
+   "en": "mirror",
+   "de": "Spiegel",
+   "pos": "noun",
+   "ipa": "ˈmɪrə",
+   "example_en": "She checked her costume in the mirror."
+  },
+  {
+   "id": "y6u5-partc-028",
+   "en": "reason",
+   "de": "Grund, Begründung",
+   "pos": "noun",
+   "ipa": "ˈriːzn",
+   "example_en": "There's a good reason for the celebration."
+  },
+  {
+   "id": "y6u5-partc-029",
+   "en": "air",
+   "de": "Luft",
+   "pos": "noun",
+   "ipa": "eə",
+   "example_en": "The smell of popcorn filled the air."
+  },
+  {
+   "id": "y6u5-partc-030",
+   "en": "(to) turn to sb.",
+   "de": "sich jm. zuwenden; sich an jn. wenden",
+   "pos": "verb",
+   "ipa": "tɜːn",
+   "example_en": "She turned to her friend and smiled."
+  },
+  {
+   "id": "y6u5-partc-031",
+   "en": "(to) go red",
+   "de": "rot werden, erröten",
+   "pos": "verb",
+   "example_en": "He went red when everyone started singing to him."
+  },
+  {
+   "id": "y6u5-partc-032",
+   "en": "back",
+   "de": "Rücken",
+   "pos": "noun",
+   "ipa": "bæk",
+   "example_en": "He carried his little sister on his back."
+  },
+  {
+   "id": "y6u5-partc-033",
+   "en": "beard",
+   "de": "Bart",
+   "pos": "noun",
+   "ipa": "bɪəd",
+   "example_en": "The man in the parade had a long white beard."
+  },
+  {
+   "id": "y6u5-partc-034",
+   "en": "chest",
+   "de": "Brust, Brustkorb",
+   "pos": "noun",
+   "ipa": "tʃest",
+   "example_en": "The costume had a big number on the chest."
+  },
+  {
+   "id": "y6u5-partc-035",
+   "en": "finger",
+   "de": "Finger",
+   "pos": "noun",
+   "ipa": "ˈfɪŋɡə",
+   "example_en": "She burnt her finger on the sparkler."
+  },
+  {
+   "id": "y6u5-partc-036",
+   "en": "heart",
+   "de": "Herz",
+   "pos": "noun",
+   "ipa": "hɑːt",
+   "example_en": "My heart was beating fast during the fireworks."
+  },
+  {
+   "id": "y6u5-partc-037",
+   "en": "knee",
+   "de": "Knie",
+   "pos": "noun",
+   "ipa": "niː",
+   "example_en": "He fell and hurt his knee at the parade."
+  },
+  {
+   "id": "y6u5-partc-038",
+   "en": "neck",
+   "de": "Hals",
+   "pos": "noun",
+   "ipa": "nek",
+   "example_en": "She wore a scarf around her neck."
+  },
+  {
+   "id": "y6u5-partc-039",
+   "en": "throat",
+   "de": "Hals, Kehle",
+   "pos": "noun",
+   "ipa": "θrəʊt",
+   "example_en": "My throat hurt from all the cheering."
+  },
+  {
+   "id": "y6u5-partc-040",
+   "en": "toe",
+   "de": "Zeh",
+   "pos": "noun",
+   "ipa": "təʊ",
+   "example_en": "Someone stepped on my toe in the crowd."
+  },
+  {
+   "id": "y6u5-partc-041",
+   "en": "tongue",
+   "de": "Zunge",
+   "pos": "noun",
+   "ipa": "tʌŋ",
+   "example_en": "The ice cream turned his tongue blue."
+  },
+  {
+   "id": "y6u5-partc-042",
+   "en": "stomach",
+   "de": "Magen",
+   "pos": "noun",
+   "ipa": "ˈstʌmək",
+   "example_en": "My stomach hurt after all that cake."
+  },
+  {
+   "id": "y6u5-partc-043",
+   "en": "(to) have a toothache",
+   "de": "Zahnschmerzen haben",
+   "pos": "phrase",
+   "ipa": "ˈtuːθeɪk",
+   "example_en": "He couldn't eat the cake because he had a toothache."
+  },
+  {
+   "id": "y6u5-partc-044",
+   "en": "tooth",
+   "de": "Zahn",
+   "pos": "noun",
+   "ipa": "tuːθ",
+   "example_en": "She lost a tooth just before her birthday."
+  },
+  {
+   "id": "y6u5-partc-045",
+   "en": "(to) have a temperature",
+   "de": "Fieber haben",
+   "pos": "phrase",
+   "ipa": "ˈtemprətʃə",
+   "example_en": "He stayed home because he had a temperature."
+  },
+  {
+   "id": "y6u5-partc-046",
+   "en": "(to) have a cough",
+   "de": "Husten haben",
+   "pos": "phrase",
+   "ipa": "kɒf",
+   "example_en": "She had a cough, so she missed the parade."
+  },
+  {
+   "id": "y6u5-partc-047",
+   "en": "(to) have a cold",
+   "de": "erkältet sein",
+   "pos": "phrase",
+   "ipa": "kəʊld",
+   "example_en": "I have a cold, so I need a lot of tissues."
+  },
+  {
+   "id": "y6u5-partc-048",
+   "en": "plaster",
+   "de": "Heftpflaster",
+   "pos": "noun",
+   "ipa": "ˈplɑːstə",
+   "example_en": "Can I have a plaster for my finger?"
+  },
+  {
+   "id": "y6u5-partc-049",
+   "en": "thermometer",
+   "de": "Thermometer",
+   "pos": "noun",
+   "ipa": "θəˈmɒmɪtə",
+   "example_en": "The nurse used a thermometer to check his temperature."
+  },
+  {
+   "id": "y6u5-partc-050",
+   "en": "sweet",
+   "de": "Süßigkeit",
+   "pos": "noun",
+   "ipa": "swiːt",
+   "example_en": "We handed out sweets to the children."
+  },
+  {
+   "id": "y6u5-partc-051",
+   "en": "(to) see a doctor",
+   "de": "einen Arzt aufsuchen",
+   "pos": "phrase",
+   "example_en": "If it doesn't get better, you should see a doctor."
+  },
+  {
+   "id": "y6u5-partc-052",
+   "en": "dentist",
+   "de": "Zahnarzt/-ärztin",
+   "pos": "noun",
+   "ipa": "ˈdentɪst",
+   "example_en": "I have a check-up at the dentist next week."
+  },
+  {
+   "id": "y6u5-partc-053",
+   "en": "report",
+   "de": "Bericht, Reportage",
+   "pos": "noun",
+   "ipa": "rɪˈpɔːt",
+   "example_en": "The local newspaper wrote a report about the festival."
+  },
+  {
+   "id": "y6u5-partc-054",
+   "en": "takeaway",
+   "de": "Restaurant/Imbissgeschäft, Essen zum Mitnehmen",
+   "pos": "noun",
+   "ipa": "ˈteɪkəweɪ",
+   "example_en": "We got a takeaway after the fireworks."
+  },
+  {
+   "id": "y6u5-partc-055",
+   "en": "(to) write sth. down",
+   "de": "etwas aufschreiben",
+   "pos": "verb",
+   "example_en": "Write down the important dates for the festival."
+  },
+  {
+   "id": "y6u5-partc-056",
+   "en": "(to) hand sth. in",
+   "de": "etwas abgeben; etwas einreichen",
+   "pos": "verb",
+   "example_en": "Please hand in your festival project on Monday."
+  },
+  {
+   "id": "y6u5-partc-057",
+   "en": "guide",
+   "de": "Fremdenführer/in; Reiseleiter/in",
+   "pos": "noun",
+   "ipa": "ɡaɪd",
+   "example_en": "A guide showed us around the old town hall."
+  },
+  {
+   "id": "y6u5-partc-058",
+   "en": "bridge",
+   "de": "Brücke",
+   "pos": "noun",
+   "ipa": "brɪdʒ",
+   "example_en": "The parade crossed the old stone bridge."
+  },
+  {
+   "id": "y6u5-partc-059",
+   "en": "(to) melt",
+   "de": "schmelzen",
+   "pos": "verb",
+   "ipa": "melt",
+   "example_en": "My ice cream melted before I could eat it."
+  },
+  {
+   "id": "y6u5-partc-060",
+   "en": "(to) translate",
+   "de": "übersetzen",
+   "pos": "verb",
+   "ipa": "trænsˈleɪt",
+   "example_en": "Can you translate this sign for me?"
+  },
+  {
+   "id": "y6u5-partc-061",
+   "en": "(to) present sth. (to sb.)",
+   "de": "jm. etwas präsentieren, vorstellen",
+   "pos": "verb",
+   "ipa": "prɪˈzent",
+   "example_en": "The mayor presented the prize to the winner."
+  },
+  {
+   "id": "y6u5-partc-062",
+   "en": "presentation",
+   "de": "Präsentation, Vorstellung",
+   "pos": "noun",
+   "ipa": "ˌpreznˈteɪʃn",
+   "example_en": "We gave a presentation about the festival's history."
+  },
+  {
+   "id": "y6u5-partc-063",
+   "en": "(to) introduce sth./sb. (to sb.)",
+   "de": "etwas/jn. jm. vorstellen",
+   "pos": "verb",
+   "ipa": "ˌɪntrəˈdjuːs",
+   "example_en": "Let me introduce you to the mayor."
+  }
+ ],
+ "y6u5-celebrate": [
+  {
+   "id": "y6u5-celebrate-001",
+   "en": "storm",
+   "de": "Sturm, Unwetter, Gewitter",
+   "pos": "noun",
+   "ipa": "stɔːm",
+   "example_en": "A storm nearly ruined the festival."
+  },
+  {
+   "id": "y6u5-celebrate-002",
+   "en": "thunder",
+   "de": "Donner",
+   "pos": "noun",
+   "ipa": "ˈθʌndə",
+   "example_en": "We heard thunder just before the parade started."
+  },
+  {
+   "id": "y6u5-celebrate-003",
+   "en": "journey",
+   "de": "Reise, Fahrt",
+   "pos": "noun",
+   "ipa": "ˈdʒɜːni",
+   "example_en": "It was a long journey to the festival."
+  },
+  {
+   "id": "y6u5-celebrate-004",
+   "en": "bowl",
+   "de": "Schüssel",
+   "pos": "noun",
+   "ipa": "bəʊl",
+   "example_en": "She carried a bowl of fruit to the party."
+  },
+  {
+   "id": "y6u5-celebrate-005",
+   "en": "painted",
+   "de": "bemalt, angemalt",
+   "pos": "adjective",
+   "ipa": "ˈpeɪntɪd",
+   "example_en": "The float was painted in bright colours."
+  },
+  {
+   "id": "y6u5-celebrate-006",
+   "en": "(to) ask for sth.",
+   "de": "um etwas bitten",
+   "pos": "verb",
+   "example_en": "He asked for a second slice of cake."
+  },
+  {
+   "id": "y6u5-celebrate-007",
+   "en": "audience",
+   "de": "Publikum, Zuschauer/innen",
+   "pos": "noun",
+   "ipa": "ˈɔːdiəns",
+   "example_en": "The audience clapped after the performance."
+  },
+  {
+   "id": "y6u5-celebrate-008",
+   "en": "deep",
+   "de": "tief",
+   "pos": "adjective",
+   "ipa": "diːp",
+   "example_en": "She took a deep breath before her speech."
+  },
+  {
+   "id": "y6u5-celebrate-009",
+   "en": "breath",
+   "de": "Atem, Atemzug",
+   "pos": "noun",
+   "ipa": "breθ",
+   "example_en": "Take a deep breath and relax."
+  },
+  {
+   "id": "y6u5-celebrate-010",
+   "en": "(to) pay (for sth.)",
+   "de": "etwas bezahlen",
+   "pos": "verb",
+   "ipa": "peɪ",
+   "example_en": "Who paid for the fireworks this year?"
+  },
+  {
+   "id": "y6u5-celebrate-011",
+   "en": "chorus",
+   "de": "Refrain",
+   "pos": "noun",
+   "ipa": "ˈkɔːrəs",
+   "example_en": "Everyone sang the chorus together."
+  },
+  {
+   "id": "y6u5-celebrate-012",
+   "en": "lightning",
+   "de": "Blitz(e)",
+   "pos": "noun",
+   "ipa": "ˈlaɪtnɪŋ",
+   "example_en": "Lightning lit up the sky during the storm."
+  },
+  {
+   "id": "y6u5-celebrate-013",
+   "en": "second",
+   "de": "Sekunde",
+   "pos": "noun",
+   "ipa": "ˈsekənd",
+   "example_en": "The fireworks lasted for thirty seconds."
+  },
+  {
+   "id": "y6u5-celebrate-014",
+   "en": "heavy rain",
+   "de": "starker Regen, heftiger Regen",
+   "pos": "noun",
+   "ipa": "ˈhevi",
+   "example_en": "Heavy rain stopped the parade for a while."
+  },
+  {
+   "id": "y6u5-celebrate-015",
+   "en": "(to) bow",
+   "de": "sich verbeugen, sich verneigen",
+   "pos": "verb",
+   "ipa": "baʊ",
+   "example_en": "The performers bowed at the end of the show."
+  },
+  {
+   "id": "y6u5-celebrate-016",
+   "en": "(to) interrupt",
+   "de": "unterbrechen",
+   "pos": "verb",
+   "ipa": "ˌɪntəˈrʌpt",
+   "example_en": "The storm interrupted the fireworks show."
+  },
+  {
+   "id": "y6u5-celebrate-017",
+   "en": "(to) pour",
+   "de": "gießen",
+   "pos": "verb",
+   "ipa": "pɔː",
+   "example_en": "It poured with rain during the parade."
+  },
+  {
+   "id": "y6u5-celebrate-018",
+   "en": "circle",
+   "de": "Kreis",
+   "pos": "noun",
+   "ipa": "ˈsɜːkl",
+   "example_en": "Everyone stood in a circle around the fire."
+  },
+  {
+   "id": "y6u5-celebrate-019",
+   "en": "ring",
+   "de": "Ring",
+   "pos": "noun",
+   "ipa": "rɪŋ",
+   "example_en": "She wore a golden ring for the celebration."
+  },
+  {
+   "id": "y6u5-celebrate-020",
+   "en": "shoulder",
+   "de": "Schulter",
+   "pos": "noun",
+   "ipa": "ˈʃəʊldə",
+   "example_en": "He carried his little brother on his shoulders."
+  },
+  {
+   "id": "y6u5-celebrate-021",
+   "en": "(to) light sth. up",
+   "de": "etwas erhellen, aufleuchten lassen",
+   "pos": "verb",
+   "ipa": "ˌlaɪt ˈʌp",
+   "example_en": "The fireworks lit up the whole sky."
+  },
+  {
+   "id": "y6u5-celebrate-022",
+   "en": "(to) whistle",
+   "de": "pfeifen",
+   "pos": "verb",
+   "ipa": "ˈwɪsl",
+   "example_en": "The crowd whistled and cheered."
+  },
+  {
+   "id": "y6u5-celebrate-023",
+   "en": "entry",
+   "de": "Eintrag, Eintragung",
+   "pos": "noun",
+   "ipa": "ˈentri",
+   "example_en": "She wrote an entry about the festival in her diary."
+  },
+  {
+   "id": "y6u5-celebrate-024",
+   "en": "conversation",
+   "de": "Gespräch, Unterhaltung",
+   "pos": "noun",
+   "ipa": "ˌkɒnvəˈseɪʃn",
+   "example_en": "We had a long conversation about the parade."
+  }
+ ]
+};;
+</script>
+
+<script>
+/* =========================================================================
+   SPEICHER  –  localStorage mit Rückfallebene im Arbeitsspeicher
+   ========================================================================= */
+const Store = (function(){
+  let persistent = true, mem = {};
+  try{
+    localStorage.setItem("vt6:test","1");
+    localStorage.removeItem("vt6:test");
+  }catch(e){ persistent = false; }
+  return {
+    persistent,
+    get(k){
+      try{
+        if(persistent) return localStorage.getItem(k);
+        return (k in mem) ? mem[k] : null;
+      }catch(e){ return (k in mem) ? mem[k] : null; }
+    },
+    set(k,v){
+      try{ persistent ? localStorage.setItem(k,v) : (mem[k]=v); }
+      catch(e){ mem[k]=v; }
+    }
+  };
+})();
+
+const KEY = "vt6:progress";
+const INTERVALS = [0,1,2,4,8,16];      // Fach 1..5 -> Tage bis zur Wiedervorlage
+const DAY = 86400000;
+
+let progress = (function(){
+  try{ return JSON.parse(Store.get(KEY)) || {}; }catch(e){ return {}; }
+})();
+
+function save(){ Store.set(KEY, JSON.stringify(progress)); }
+
+function rec(dir, vid){
+  if(!progress[dir]) progress[dir] = {};
+  if(!progress[dir][vid]) progress[dir][vid] = {box:1, due:0};
+  return progress[dir][vid];
+}
+function isDue(r){ return Date.now() >= r.due; }
+
+function boxCounts(list, dir){
+  const c=[0,0,0,0,0];
+  for(const v of list) c[rec(dir,v.id).box-1]++;
+  return c;
+}
+function dueCount(list, dir){
+  return list.filter(v => isDue(rec(dir,v.id))).length;
+}
+
+/* Liefert die Vokabeln zu einer Auswahl. Neben den einzelnen Parts gibt es
+   zwei Sammel-IDs: "<unit>-all" fuer eine ganze Unit und "<jahrgang>-all"
+   fuer das ganze Buch. Der Lernstand haengt an der Vokabel, nicht an der
+   Auswahl - wer eine Unit am Stueck lernt, sieht denselben Fortschritt
+   auch in den einzelnen Parts. */
+function setOf(id){
+  if(SETS[id]) return SETS[id];
+  var m = /^(.+)-all$/.exec(id);
+  if(!m) return [];
+  var key = m[1];
+  var parts = TOPICS.filter(function(t){ return t.unit === key; });
+  if(!parts.length){
+    var yr = YEARS.filter(function(y){ return y.id === key; })[0];
+    if(yr) parts = TOPICS.filter(function(t){
+      return yr.units.some(function(u){ return u.id === t.unit; }); });
+  }
+  return parts.reduce(function(a,t){ return a.concat(SETS[t.id]); }, []);
+}
+function topicName(id){
+  var t = TOPICS.filter(function(x){ return x.id === id; })[0];
+  if(t) return t.unitName + " \u00b7 " + t.name;
+  var m = /^(.+)-all$/.exec(id);
+  if(m){
+    var u = TOPICS.filter(function(x){ return x.unit === m[1]; })[0];
+    if(u) return u.unitName + " \u2013 ganze Unit";
+    var y = YEARS.filter(function(x){ return x.id === m[1]; })[0];
+    if(y) return y.label + " (" + y.book + ") \u2013 alle Units";
+  }
+  return id;
+}
+
+/* -------------------------------------------------------------------------
+   Kurze Rueckmeldetoene. Erzeugt ueber die Web Audio API, damit die Datei
+   ohne Audiodateien auskommt: aufwaerts bei richtig, abwaerts bei falsch.
+   Abschaltbar, weil Ton im Klassenraum nicht immer erwuenscht ist.
+   ------------------------------------------------------------------------- */
+const Sfx = (function(){
+  let ctx = null, on = true;
+  try{ on = localStorage.getItem("vt6:sfx") !== "0"; }catch(e){}
+  function enabled(){ return on; }
+  function toggle(){
+    on = !on;
+    try{ localStorage.setItem("vt6:sfx", on ? "1" : "0"); }catch(e){}
+    if(on) play("ok");
+    return on;
+  }
+  function play(kind){
+    if(!on) return;
+    try{
+      if(!ctx){
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if(!AC) return;
+        ctx = new AC();
+      }
+      if(ctx.state === "suspended") ctx.resume();
+      const seq = kind === "ok"   ? [[660,0.02],[990,0.11]]
+                : kind === "near" ? [[560,0.02],[560,0.12]]
+                :                   [[300,0.02],[190,0.13]];
+      for(const [freq, at] of seq){
+        const t = ctx.currentTime + at;
+        const osc = ctx.createOscillator(), g = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(freq, t);
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(0.16, t + 0.012);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + 0.13);
+        osc.connect(g); g.connect(ctx.destination);
+        osc.start(t); osc.stop(t + 0.15);
+      }
+    }catch(e){}
+  }
+  function unlock(){
+    try{
+      if(!ctx){
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if(!AC) return;
+        ctx = new AC();
+      }
+      if(ctx.state === "suspended") ctx.resume();
+    }catch(e){}
+  }
+  ["pointerdown","keydown","touchstart"].forEach(ev =>
+    document.addEventListener(ev, unlock, {once:true, passive:true}));
+  return {play, toggle, enabled, unlock};
+})();
+
+/* =========================================================================
+   AUSSPRACHE  –  Web Speech API des Browsers, keine externe Anbindung
+   Nutzt die auf dem Gerät installierten Stimmen. Kein Konto, kein Schlüssel,
+   kein Datenversand. Verfügbarkeit und Qualität hängen vom Endgerät ab.
+   ========================================================================= */
+const Speech = (function(){
+  var synth = window.speechSynthesis;
+  if(!synth) return {available:false, say:function(){}, status:function(){ return "nicht unterstützt"; }};
+
+  var voice = null;
+  var last = "noch nichts abgespielt";
+
+  function pick(){
+    var vs = [];
+    try{ vs = synth.getVoices() || []; }catch(e){ return; }
+    vs = vs.filter(function(v){ return /^en/i.test(v.lang); });
+    if(!vs.length) return;                        // auf iOS anfangs leer
+    voice = vs.filter(function(v){ return /en[-_]GB/i.test(v.lang); })[0]
+         || vs.filter(function(v){ return /en[-_]US/i.test(v.lang); })[0]
+         || vs[0];
+  }
+  pick();
+  if(synth.addEventListener) synth.addEventListener("voiceschanged", pick);
+
+  return {
+    available:true,
+
+    /* Zaehlt die geladenen Stimmen und meldet, was zuletzt passiert ist. */
+    status:function(){
+      var n = 0;
+      try{ n = (synth.getVoices() || []).length; }catch(e){}
+      return n + " Stimmen geladen \u00b7 " + (voice ? "gewählt: " + voice.name + " (" + voice.lang + ")"
+                                                     : "keine englische Stimme gefunden")
+           + " \u00b7 zuletzt: " + last;
+    },
+
+    say:function(text, btn){
+      try{
+        // Laeuft schon etwas? Dann nur abbrechen und beenden. Niemals
+        // cancel() unmittelbar vor speak() aufrufen - iOS verschluckt sonst
+        // beides und bleibt stumm.
+        if(synth.speaking || synth.pending){
+          synth.cancel();
+          last = "abgebrochen";
+          if(btn) btn.classList.remove("on");
+          return;
+        }
+
+        // Stimmenliste im Moment des Antippens auffrischen; auf iOS ist sie
+        // beim Laden der Seite noch leer.
+        if(!voice) pick();
+
+        var u = new SpeechSynthesisUtterance(String(text).replace(/^to\s+/i, ""));
+        u.lang = "en-GB";
+        if(voice){ try{ u.voice = voice; u.lang = voice.lang || "en-GB"; }catch(e){} }
+        u.rate = 0.9;
+
+        last = "gestartet";
+        u.onstart = function(){ last = "spricht"; };
+        u.onend   = function(){ last = "fertig"; if(btn) btn.classList.remove("on"); };
+        u.onerror = function(ev){
+          last = "Fehler: " + ((ev && ev.error) ? ev.error : "unbekannt");
+          if(btn) btn.classList.remove("on");
+        };
+
+        if(btn) btn.classList.add("on");
+        synth.speak(u);                  // direkt aus der Nutzeraktion heraus
+        if(synth.paused){ try{ synth.resume(); }catch(e){} }
+      }catch(e){
+        last = "Ausnahme: " + e.message;
+        if(btn) btn.classList.remove("on");
+      }
+    }
+  };
+})();
+
+const SPK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+  <path d="M15.5 8.5a5 5 0 0 1 0 7"></path><path d="M18.5 5.5a9 9 0 0 1 0 13"></path></svg>`;
+
+function speakBtn(text){
+  if(!Speech.available) return "";
+  return `<button class="speak" data-say="${esc(text)}" title="Aussprache anhören"
+    aria-label="Aussprache von ${esc(text)} anhören">${SPK}</button>`;
+}
+
+/* =========================================================================
+   HILFSFUNKTIONEN
+   ========================================================================= */
+const shuffle = a => a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]);
+const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function normalise(s){
+  return s.toLowerCase().trim()
+    .replace(/^(to|the|a|an)\s+/,"")
+    .replace(/[.,;!?'"’]/g,"")
+    .replace(/\s+/g," ");
+}
+function distance(a,b){
+  const m=a.length,n=b.length,d=Array.from({length:m+1},(_,i)=>[i,...Array(n).fill(0)]);
+  for(let j=0;j<=n;j++) d[0][j]=j;
+  for(let i=1;i<=m;i++) for(let j=1;j<=n;j++)
+    d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));
+  return d[m][n];
+}
+function checkTyped(input, target){
+  const a=normalise(input), b=normalise(target);
+  if(!a) return "no";
+  if(a===b) return "ok";
+  // Mehrere zulässige Übersetzungen, durch Komma getrennt
+  if(b.split(",").map(s=>s.trim()).includes(a)) return "ok";
+  const tol = b.length > 6 ? 2 : 1;
+  return distance(a,b) <= tol ? "near" : "no";
+}
+function markExample(sentence, word){
+  const stem = word.replace(/^to\s+/i,"").split(/[\s/]/)[0].slice(0, Math.max(4, word.length-3));
+  const re = new RegExp("("+stem.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"\\w*)","i");
+  return esc(sentence).replace(re,"<b>$1</b>");
+}
+
+/* =========================================================================
+   ZUSTAND
+   ========================================================================= */
+const S = {
+  view:"home",
+  yearId:null,
+  topicId:null,
+  dir:"en2de",          // en2de | de2en
+  mode:"card",          // card | mc | type
+  onlyDue:true,
+  queue:[], i:0, revealed:false, answered:null, landed:null,
+  seen:0
+};
+const view = document.getElementById("view");
+const dirLabel = () => S.dir==="en2de" ? "EN → DE" : "DE → EN";
+const askSide  = v => S.dir==="en2de" ? v.en : v.de;
+const ansSide  = v => S.dir==="en2de" ? v.de : v.en;
+
+/* =========================================================================
+   STARTSEITE
+   ========================================================================= */
+function railFor(list){
+  const total = list.length;
+  const c = boxCounts(list, S.dir);
+  const known = c[2]+c[3]+c[4];
+  const filled = total ? Math.round(known/total*5) : 0;
+  return `<span class="minirail">${[0,1,2,3,4].map(k=>`<i class="${k<filled?"f":""}"></i>`).join("")}</span>`;
+}
+function countLabel(list){
+  const total = list.length;
+  if(!total) return "leer";
+  const due = dueCount(list, S.dir);
+  return (due ? `<span class="t-due">${due} f\u00e4llig</span> \u00b7 ` : "") + total + " Vok.";
+}
+function topicRow(id, label, list, cls){
+  return `<button class="topic ${cls||""}" data-topic="${id}">
+    <span class="t-row">
+      <span class="t-name">${esc(label)}</span>
+      <span class="t-count">${countLabel(list)}</span>
+    </span>
+    ${railFor(list)}
+  </button>`;
+}
+
+/* Startseite: nur die Jahrgaenge mit ihrem Lehrwerk. */
+function renderHome(){
+  let h = "";
+  for(const y of YEARS){
+    const list = setOf(y.id + "-all");
+    h += `<section class="yeargroup">
+      <div class="yearhead"><span class="tag">${esc(y.label)}</span>
+      <span class="name">${esc(y.book)}</span></div>
+      <button class="topic home-year" data-year="${y.id}">
+        <span class="t-row">
+          <span class="t-name">${esc(y.label)}</span>
+          <span class="t-count">${y.units.length} Units \u00b7 ${list.length} Vok.</span>
+        </span>
+        ${railFor(list)}
+      </button>
+    </section>`;
+  }
+  h += `<div class="emptyhint">W\u00e4hle einen Jahrgang. Der Fortschritt wird pro
+        Abfragerichtung (${dirLabel()}) getrennt gespeichert und bleibt auf diesem Ger\u00e4t.</div>`;
+  const grand = TOPICS.reduce((n,t) => n + (SETS[t.id] ? SETS[t.id].length : 0), 0);
+  h += `<button class="topic home-all" id="allBtn">
+    <span class="t-row">
+      <span class="t-name">Alle Vokabeln ansehen</span>
+      <span class="t-count">${grand} Eintr\u00e4ge</span>
+    </span>
+  </button>`;
+  h += `<button class="topic home-help" id="helpBtn">
+    <span class="t-row">
+      <span class="t-name">Anleitung</span>
+      <span class="t-count">So funktioniert die Seite</span>
+    </span>
+  </button>`;
+
+  view.innerHTML = h;
+  view.querySelectorAll("[data-year]").forEach(b =>
+    b.addEventListener("click", () => { S.yearId = b.dataset.year; S.view = "year"; render(); }));
+  const ab = document.getElementById("allBtn");
+  if(ab) ab.onclick = () => { S.view = "list"; render(); };
+  const hb = document.getElementById("helpBtn");
+  if(hb) hb.onclick = () => { S.view = "help"; render(); };
+  updateFoot();
+}
+
+/* Jahrgangsseite: pro Unit ein Abschnitt, darin die Parts als Zeilen,
+   dazu je eine Zeile fuer die ganze Unit und eine fuer das ganze Buch. */
+function renderYear(){
+  const y = YEARS.filter(x => x.id === S.yearId)[0] || YEARS[0];
+  let h = `<div class="sessionbar">
+      <button class="linkbtn" id="yback">\u2190 Jahrg\u00e4nge</button>
+      <div class="switches"><button class="switch" id="ydir">${dirLabel()}</button></div>
+    </div>`;
+
+  h += topicRow(y.id + "-all", "Alle Vokabeln des Buches", setOf(y.id + "-all"), "uall");
+
+  for(const u of y.units){
+    const parts = TOPICS.filter(t => t.unit === u.id);
+    if(!parts.length) continue;
+    h += `<section class="yeargroup ${u.id}">
+      <div class="yearhead"><span class="tag">${esc(u.name.split(" \u2013 ")[0])}</span>
+      <span class="name">${esc(u.name.split(" \u2013 ").slice(1).join(" \u2013 "))}</span></div>`;
+    h += topicRow(u.id + "-all", "Ganze Unit", setOf(u.id + "-all"), u.id);
+    for(const t of parts) h += topicRow(t.id, t.name, SETS[t.id], u.id);
+    h += `</section>`;
+  }
+
+  view.innerHTML = h;
+  document.getElementById("yback").onclick = () => { S.view = "home"; render(); };
+  document.getElementById("ydir").onclick = () => {
+    S.dir = S.dir === "en2de" ? "de2en" : "en2de"; render();
+  };
+  view.querySelectorAll("[data-topic]").forEach(b =>
+    b.addEventListener("click", () => startSession(b.dataset.topic)));
+  updateFoot();
+}
+
+/* =========================================================================
+   SITZUNG
+   ========================================================================= */
+function buildQueue(){
+  let all = setOf(S.topicId);
+  if(S.mode === "cloze") all = all.filter(hasCloze);
+  if(!all.length){ S.queue = []; S.i = 0; return; }
+  const pool = S.onlyDue ? all.filter(v=>isDue(rec(S.dir,v.id))) : all;
+  S.queue = shuffle(pool.length ? pool : all);
+  S.i = 0; S.revealed = false; S.answered = null;
+}
+function startSession(topicId){
+  S.topicId = topicId; S.view = "session"; S.seen = 0;
+  buildQueue(); render();
+}
+function current(){ return S.queue[S.i]; }
+
+/* Unit-Klasse der laufenden Sitzung: nur wenn die Auswahl zu genau einer
+   Unit gehoert. Beim ganzen Buch gibt es keine eindeutige Farbe. */
+function sessionUnit(){
+  const t = TOPICS.filter(x => x.id === S.topicId)[0];
+  if(t) return t.unit;
+  const m = /^(u\d+)-all$/.exec(S.topicId || "");
+  return m ? m[1] : "";
+}
+
+function renderSession(){
+  if(!S.queue.length){
+    view.innerHTML = `<div class="done"><h2>Keine Karten</h2>
+      <p>In dieser Auswahl gibt es für den Lückensatz-Modus noch keine Beispielsätze.
+         Nutze so lange „Tippen“.</p>
+      <div class="controls"><button class="primary" id="home">Zurück zur Übersicht</button></div></div>`;
+    document.getElementById("home").onclick = () => { S.view="year"; S.mode="card"; render(); };
+    return;
+  }
+  if(S.i >= S.queue.length){ renderDone(); return; }
+  const v = current();
+  const r = rec(S.dir, v.id);
+  const setNow = setOf(S.topicId);
+
+  const rail = [1,2,3,4,5].map(n=>{
+    const cls = (n===r.box?"here":"") + (S.landed===n?" land":"");
+    return `<div class="slot ${cls}"><div class="n">FACH ${n}</div>
+      <div class="c">${boxCounts(setNow,S.dir)[n-1]}</div>
+      <div class="iv">${n===1?"sofort":INTERVALS[n]+" d"}</div></div>`;
+  }).join("");
+
+  let body = `<div class="eyebrow ${sessionUnit()}">
+      <span>${esc(topicName(S.topicId))}</span>
+      <span>${S.i+1} / ${S.queue.length}</span>
+    </div>`;
+
+  if(S.mode === "card"){
+    body += promptBlock(v);
+    if(S.revealed){
+      body += answerBlock(v);
+    }
+    body += `<div class="spacer"></div>`;
+  }
+
+  if(S.mode === "mc"){
+    if(!S.options) S.options = shuffle([v, ...buildDistractors(v)]);
+    body += promptBlock(v) + `<div class="opts">`;
+    for(const o of S.options){
+      let cls = "";
+      if(S.answered){
+        if(o.id===v.id) cls = "right";
+        else if(o.id===S.answered) cls = "wrong";
+      }
+      body += `<button class="opt ${cls}" data-opt="${o.id}" ${S.answered?"disabled":""}>
+        ${esc(ansSide(o))}</button>`;
+    }
+    body += `</div>`;
+    if(S.answered) body += answerBlock(v, true);
+    body += `<div class="spacer"></div>`;
+  }
+
+  if(S.mode === "type"){
+    body += promptBlock(v) + `
+      <div class="typebox">
+        <input id="typeIn" placeholder="${S.dir==="en2de"?"Deutsche Bedeutung":"English word"}"
+               autocomplete="off" autocapitalize="off" spellcheck="false" ${S.answered?"disabled":""}>
+        <div class="verdict" id="verdict"></div>
+      </div>`;
+    if(S.answered) body += answerBlock(v, true);
+    body += `<div class="spacer"></div>`;
+  }
+
+  if(S.mode === "cloze"){
+    const cp = clozeParts(v);
+    body += '<div class="cloze">' + esc(cp.before)
+          + (S.answered ? '<b>' + esc(cp.word) + '</b>'
+                        : '<span class="gap">?</span>')
+          + (baseForm(v) ? '<span class="basef">(' + esc(baseForm(v)) + ')</span>' : "")
+          + esc(cp.after) + '</div>'
+          + '<div class="clue">gesucht: <span>' + esc(v.de) + '</span>'
+          + (v.pos ? ' \u00b7 ' + esc(v.pos) : "") + '</div>'
+          + '<div class="typebox">'
+          + '<input id="typeIn" placeholder="englisches Wort" autocomplete="off" '
+          + 'autocapitalize="off" spellcheck="false" ' + (S.answered ? "disabled" : "") + '>'
+          + '<div class="verdict" id="verdict"></div></div>';
+    if(S.answered) body += answerBlock(v, true);
+    body += '<div class="spacer"></div>';
+  }
+
+  const controls = S.revealed || S.answered
+    ? `<button class="rate again" data-rate="0">Nochmal<span>1</span></button>
+       <button class="rate hard"  data-rate="1">Unsicher<span>2</span></button>
+       <button class="rate good"  data-rate="2">Gewusst<span>3</span></button>`
+    : (S.mode==="card"
+        ? `<button class="primary" id="flip">Umdrehen <span style="opacity:.6">(Leertaste)</span></button>`
+        : ((S.mode==="type" || S.mode==="cloze")
+            ? `<button class="primary" id="submit">Prüfen (Enter)</button>` : ""));
+
+  view.innerHTML = `
+    <div class="sessionbar">
+      <button class="linkbtn" id="back">← Übersicht</button>
+      <div class="switches">
+        <button class="switch" data-mode="card" aria-pressed="${S.mode==="card"}">Karteikarte</button>
+        <button class="switch" data-mode="mc"   aria-pressed="${S.mode==="mc"}">Auswahl</button>
+        <button class="switch" data-mode="type" aria-pressed="${S.mode==="type"}">Tippen</button>
+        <button class="switch" data-mode="cloze" aria-pressed="${S.mode==="cloze"}">Lückensatz</button>
+        ${S.mode==="cloze" ? "" : `<button class="switch" id="dirBtn">${dirLabel()}</button>`}
+        <button class="switch" id="sfxBtn" aria-pressed="${Sfx.enabled()}"
+          title="Rückmeldetöne an- oder ausschalten">${Sfx.enabled() ? "Ton an" : "Ton aus"}</button>
+      </div>
+    </div>
+    <div class="rail ${sessionUnit()}">${rail}</div>
+    <div class="stage ${sessionUnit()}"><div class="vcard deal">${body}</div></div>
+    <div class="controls">${controls}</div>`;
+
+  bindSession();
+  const inp = document.getElementById("typeIn");
+  if(inp && !S.answered) inp.focus();
+  updateFoot();
+}
+
+/* Zerlegt den Beispielsatz in Teil vor der Vokabel, Vokabel, Teil danach.
+   Versucht zuerst die ganze Wendung, dann das erste Wort mit Endungen.
+   Gibt null zurueck, wenn die Vokabel im Satz nicht auffindbar ist. */
+function clozeParts(v){
+  var ex = v.example_en;
+  if(!ex) return null;
+  var core = String(v.en).replace(/\([^)]*\)/g, " ").split("/")[0];
+  core = core.replace(/^\s*to\s+/i, "").replace(/\s+/g, " ").trim();
+  if(!core) return null;
+  var esc0 = function(x){ return x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); };
+
+  var words = core.split(" ");
+  var tries = [];
+  if(words.length > 1){
+    tries.push(words.map(esc0).join("\\s+") + "\\w*");           // ganze Wendung
+    tries.push(esc0(words[words.length - 1]) + "\\w*");          // letztes Wort
+  }
+  var first = words[0];
+  tries.push(esc0(first.slice(0, Math.max(4, first.length - 3))) + "\\w*");
+
+  for(var i = 0; i < tries.length; i++){
+    var m = ex.match(new RegExp("(" + tries[i] + ")", "i"));
+    if(m && m.index !== undefined && m[1].length > 2){
+      return {before: ex.slice(0, m.index), word: m[1],
+              after: ex.slice(m.index + m[1].length), core: core};
+    }
+  }
+  return null;
+}
+
+function hasCloze(v){ return clozeParts(v) !== null; }
+
+/* Bei Verben steht die Grundform hinter der Luecke, damit klar ist, welche
+   Zeitform gesucht wird - so wie im Lehrwerk. */
+function baseForm(v){
+  if(!/verb/.test(v.pos || "")) return null;
+  let s = (v.en || "").replace(/\([^)]*\)/g, " ");
+  s = s.split(",")[0].split("/")[0];
+  s = s.replace(/\b(sb|sth)\.?\b/g, " ").replace(/\s+/g, " ").trim();
+  return s || null;
+}
+
+function promptBlock(v){
+  const englishAsked = S.dir === "en2de";
+  const phon = englishAsked && (v.ipa || Speech.available)
+    ? `<div class="phon">
+         ${v.ipa ? `<span class="ipa">/${esc(v.ipa)}/</span>` : ""}
+         ${speakBtn(v.en)}
+       </div>`
+    : "";
+  const sense = (v.sense_en && S.dir === "en2de")
+    ? `<div class="sense">${esc(v.sense_en)}</div>` : "";
+  return `<h2 class="prompt">${esc(askSide(v))}</h2>
+    <div class="pos">${esc(v.pos)}</div>${phon}${sense}`;
+}
+
+/* Distraktoren: erst die gepflegten Verwechslungskandidaten, dann Zufall
+   aus demselben Thema. Freie Paare bekommen eine synthetische ID. */
+function buildDistractors(v){
+  const out = [];
+  const set = setOf(S.topicId);
+  let n = 0;
+  for(const h of (v.distractor_hint || [])){
+    if(typeof h === "string"){
+      const found = set.find(x => x.id === h);
+      if(found && found.id !== v.id) out.push(found);
+    }else if(h && h.en && h.de){
+      out.push({id:"hint-"+v.id+"-"+(n++), en:h.en, de:h.de, pos:v.pos, hint:true});
+    }
+  }
+  const used = new Set([v.id, ...out.map(o=>o.id)]);
+  const rest = shuffle(set.filter(x => !used.has(x.id) && x.en !== v.en));
+  return [...out, ...rest].slice(0,3);
+}
+
+function answerBlock(v, compact){
+  const englishIsAnswer = S.dir === "de2en";
+  const phon = englishIsAnswer && (v.ipa || Speech.available)
+    ? `<div class="phon">
+         ${v.ipa ? `<span class="ipa">/${esc(v.ipa)}/</span>` : ""}
+         ${speakBtn(v.en)}
+       </div>`
+    : "";
+  return `<div class="answer">
+    ${compact ? "" : `<div class="de">${esc(ansSide(v))}</div>`}
+    ${phon}
+    ${v.collocations ? `<div class="coll">${esc(v.collocations)}</div>` : ""}
+    ${v.example_en ? `<div class="ex">${markExample(v.example_en, v.en)}
+      ${speakBtn(v.example_en)}</div>` : ""}
+  </div>`;
+}
+
+function bindSession(){
+  document.getElementById("back").onclick = () => { S.view="year"; S.options=null; render(); };
+  const sfxB = document.getElementById("sfxBtn");
+  if(sfxB) sfxB.onclick = () => { Sfx.toggle(); render(); };
+  const dirB = document.getElementById("dirBtn");
+  if(dirB) dirB.onclick = () => {
+    S.dir = S.dir==="en2de" ? "de2en" : "en2de";
+    S.options=null; buildQueue(); render();
+  };
+  view.querySelectorAll("[data-mode]").forEach(b => b.onclick = () => {
+    const was = S.mode;
+    S.mode = b.dataset.mode; S.revealed=false; S.answered=null; S.options=null;
+    if(was === "cloze" || S.mode === "cloze") buildQueue();
+    render();
+  });
+  const flip = document.getElementById("flip");
+  if(flip) flip.onclick = () => { S.revealed = true; render(); };
+
+  view.querySelectorAll("[data-opt]").forEach(b => b.onclick = () => {
+    S.answered = b.dataset.opt;
+    Sfx.play(b.dataset.opt === current().id ? "ok" : "no");
+    render();
+  });
+
+  const sub = document.getElementById("submit");
+  if(sub) sub.onclick = submitTyped;
+
+  view.querySelectorAll("[data-rate]").forEach(b =>
+    b.onclick = () => rate(Number(b.dataset.rate)));
+
+  view.querySelectorAll("[data-say]").forEach(b => b.onclick = ev => {
+    ev.stopPropagation();
+    Speech.say(b.dataset.say, b);
+  });
+}
+
+function submitTyped(){
+  const inp = document.getElementById("typeIn");
+  if(!inp) return;
+  const v = current();
+  let res;
+  if(S.mode === "cloze"){
+    const cp = clozeParts(v);
+    res = checkTyped(inp.value, cp.word);
+    if(res !== "ok") {
+      const alt = checkTyped(inp.value, cp.core);
+      if(alt === "ok" || (alt === "near" && res === "no")) res = alt;
+    }
+  }else{
+    res = checkTyped(inp.value, ansSide(v));
+  }
+  S.answered = res;
+  Sfx.play(res === "ok" ? "ok" : res === "near" ? "near" : "no");
+  render();
+  const el = document.getElementById("verdict");
+  if(el){
+    el.className = "verdict " + res;
+    const sol = S.mode === "cloze" ? clozeParts(v).word : ansSide(v);
+    el.innerHTML = res==="ok"   ? "Richtig."
+                 : res==="near" ? `Fast – Schreibweise prüfen.<span class="sol">${esc(sol)}</span>`
+                 :                `Noch nicht.<span class="sol">${esc(sol)}</span>`;
+  }
+}
+
+function rate(quality){
+  Sfx.play(quality === 0 ? "no" : quality === 1 ? "near" : "ok");
+  const v = current();
+  const r = rec(S.dir, v.id);
+  if(quality === 0)       r.box = 1;
+  else if(quality === 1)  r.box = Math.max(1, r.box - 1);
+  else                    r.box = Math.min(5, r.box + 1);
+  r.due = Date.now() + INTERVALS[r.box] * DAY;
+  save();
+  S.landed = r.box;
+  S.seen++;
+  S.i++; S.revealed=false; S.answered=null; S.options=null;
+  render();
+  setTimeout(()=>{ S.landed=null; }, 500);
+}
+
+function renderDone(){
+  const setNow = setOf(S.topicId);
+  const c = boxCounts(setNow, S.dir);
+  const total = setNow.length;
+  view.innerHTML = `<div class="done">
+    <h2>Durchgang beendet</h2>
+    <p>${S.seen} Karten bearbeitet · ${c[4]} von ${total} in Fach 5</p>
+    <div class="controls">
+      <button class="primary" id="again">Weiter üben</button>
+      <button id="home">Übersicht</button>
+    </div></div>`;
+  document.getElementById("again").onclick = () => {
+    S.onlyDue = false; buildQueue(); S.seen = 0; render();
+  };
+  document.getElementById("home").onclick = () => { S.view="year"; render(); };
+  updateFoot();
+}
+
+/* =========================================================================
+   ANLEITUNG
+   Reine Anzeige. Text bewusst kurz gehalten: Schuelerinnen und Schueler
+   lesen das einmal, danach nie wieder.
+   ========================================================================= */
+function renderHelp(){
+  var d = [];
+
+  d.push('<h2>Wofür ist diese Seite?</h2>');
+  d.push('<p class="lead">Zum Lernen des Englisch-Vokabulars aus deinem Schulbuch. Alle Wörter sind nach Unit und Part sortiert. Du kannst sie auf vier verschiedene Arten üben, und die Seite merkt sich, was du schon kannst.</p>');
+  d.push('<p>Es gibt keine Anmeldung und kein Passwort. Öffne einfach den Link.</p>');
+
+  d.push('<h2>Loslegen</h2>');
+  d.push('<ul>');
+  d.push('<li>Auf der Startseite den Jahrgang antippen, dann eine Unit, einen Part, eine ganze Unit oder das ganze Buch.</li>');
+  d.push('<li>Die erste Karte erscheint. Überlege, dann tippe auf <b>Umdrehen</b>.</li>');
+  d.push('<li>Bewerte ehrlich: <b>Nochmal</b>, <b>Unsicher</b> oder <b>Gewusst</b>.</li>');
+  d.push('<li>Die nächste Karte kommt automatisch.</li>');
+  d.push('</ul>');
+  d.push('<p>Zurück zur Übersicht kommst du jederzeit oben links.</p>');
+
+  d.push('<h2>Die fünf Fächer</h2>');
+  d.push('<p>Das ist der wichtigste Teil. Oben über der Karte siehst du fünf Fächer. Jede Vokabel steckt in einem davon.</p>');
+  d.push('<p>Eine neue Vokabel startet in Fach 1. Antwortest du richtig, rückt sie ein Fach weiter. Antwortest du falsch, fällt sie zurück in Fach 1. Je weiter oben eine Vokabel steht, desto seltener siehst du sie wieder:</p>');
+  d.push('<table><thead><tr><th>Fach</th><th>Du siehst die Vokabel wieder</th></tr></thead><tbody>'
+       + '<tr><td>1</td><td>sofort im selben Durchgang</td></tr>'
+       + '<tr><td>2</td><td>nach 1 Tag</td></tr>'
+       + '<tr><td>3</td><td>nach 2 Tagen</td></tr>'
+       + '<tr><td>4</td><td>nach 4 Tagen</td></tr>'
+       + '<tr><td>5</td><td>nach 8 Tagen</td></tr>'
+       + '</tbody></table>');
+  d.push('<p>Dadurch übst du automatisch genau das, was dir schwerfällt, und verschwendest keine Zeit mit Wörtern, die längst sitzen. Damit das funktioniert, solltest du lieber <b>jeden Tag zehn Minuten</b> üben als einmal pro Woche eine Stunde.</p>');
+  d.push('<p>Die Zahl in jedem Fach zeigt, wie viele Vokabeln der gewählten Auswahl gerade dort liegen. Ziel ist, alles nach Fach 5 zu bekommen.</p>');
+
+  d.push('<h2>Die vier Übungsarten</h2>');
+  d.push('<p>Oben rechts kannst du umschalten. Alle vier greifen auf dieselben Vokabeln und dasselbe Fächersystem zu.</p>');
+  d.push('<h3>Karteikarte</h3>');
+  d.push('<p>Wort ansehen, überlegen, umdrehen, selbst bewerten. Am schnellsten, aber du musst ehrlich zu dir sein.</p>');
+  d.push('<h3>Auswahl</h3>');
+  d.push('<p>Vier Antworten, eine ist richtig. Gut zum Aufwärmen. Achtung: Wiedererkennen ist leichter als Wissen.</p>');
+  d.push('<h3>Tippen</h3>');
+  d.push('<p>Du schreibst die Übersetzung. Kleine Tippfehler werden verziehen und als „Fast" angezeigt. Das ist die ehrlichste Übung für eine Klausur.</p>');
+  d.push('<h3>Lückensatz</h3>');
+  d.push('<p>Ein englischer Beispielsatz mit einer Lücke, darunter die deutsche Bedeutung. Du schreibst das fehlende englische Wort. Hier lernst du nicht nur die Vokabel, sondern auch, wie sie im Satz benutzt wird — genau das brauchst du beim Schreiben.</p>');
+
+  d.push('<h2>Abfragerichtung</h2>');
+  d.push('<p>Mit dem Knopf <code>EN → DE</code> schaltest du um. <b>EN → DE</b> heißt: Du siehst Englisch und sagst die deutsche Bedeutung. <b>DE → EN</b> ist die schwerere und für Klausuren wichtigere Richtung.</p>');
+  d.push('<p>Beide Richtungen haben getrennte Fächer. Eine Vokabel kann in der einen Richtung in Fach 5 stehen und in der anderen in Fach 1.</p>');
+
+  d.push('<h2>Aussprache</h2>');
+  d.push('<p>Neben dem englischen Wort stehen die Lautschrift und ein Lautsprecher-Symbol. Antippen liest das Wort vor. Am Beispielsatz gibt es ein zweites, kleineres Symbol für den ganzen Satz. Am Computer geht es auch mit der Taste <span class="kbd">S</span>.</p>');
+  d.push('<p>Die Stimme kommt von deinem Gerät und klingt je nach Handy unterschiedlich gut.</p>');
+  d.push('<p><button class="switch" id="sptest">Aussprache testen</button> '
+       + '<span id="spout" style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)"></span></p>');
+  d.push('<p class="lead" style="font-size:13.5px">Hörst du nichts, prüfe am iPhone den Stummschalter an der linken Gehäusekante. Bleibt es still, gib die Zeile neben dem Knopf an deine Lehrkraft weiter.</p>');
+
+  d.push('<h2>Tastatur am Computer</h2>');
+  d.push('<table><tbody>'
+       + '<tr><td><span class="kbd">Leertaste</span></td><td>Karte umdrehen</td></tr>'
+       + '<tr><td><span class="kbd">1</span> <span class="kbd">2</span> <span class="kbd">3</span></td><td>Nochmal / Unsicher / Gewusst</td></tr>'
+       + '<tr><td><span class="kbd">Enter</span></td><td>Eingabe prüfen</td></tr>'
+       + '<tr><td><span class="kbd">S</span></td><td>Aussprache abspielen</td></tr>'
+       + '</tbody></table>');
+
+  d.push('<h2>Dein Lernstand</h2>');
+  d.push('<div class="warnbox"><b>Wichtig:</b> Dein Fortschritt wird nur in dem Browser gespeichert, in dem du übst. Er wandert nicht zwischen Handy und Computer, und er verschwindet, wenn du die Browserdaten löschst.</div>');
+  d.push('<p>Ganz unten auf der Seite gibt es <b>Fortschritt sichern</b>. Damit lädst du eine kleine Datei herunter, die deinen Lernstand enthält. Mit <b>Fortschritt laden</b> spielst du sie wieder ein — zum Beispiel auf einem anderen Gerät oder nachdem du den Cache geleert hast. Die Datei enthält keine Vokabeln, nur Zahlen.</p>');
+  d.push('<p>Wenn du auf Nummer sicher gehen willst: einmal im Monat sichern und die Datei sich selbst per Mail schicken.</p>');
+
+  d.push('<h2>Alle Vokabeln nachschlagen</h2>');
+  d.push('<p>Auf der Startseite unten steht <b>Alle Vokabeln ansehen</b>. Dort findest du:</p>');
+  d.push('<ul>');
+  d.push('<li>ein <b>Suchfeld</b> — es durchsucht Englisch, Deutsch und die Beispielsätze;</li>');
+  d.push('<li>Schalter für <b>Beispielsätze</b> und <b>Lautschrift</b>;</li>');
+  d.push('<li><b>Drucken</b> — druckt genau die Parts, die du aufgeklappt hast, zweispaltig und ohne Bedienelemente. Auf dem Handy kannst du daraus ein PDF sichern.</li>');
+  d.push('</ul>');
+
+  d.push('<h2>Wenn etwas nicht geht</h2>');
+  d.push('<h3>Kein Ton bei der Aussprache</h3>');
+  d.push('<p>Prüfe am iPhone den Stummschalter an der linken Gehäusekante. Ist er auf stumm, bleibt auch die Sprachausgabe still.</p>');
+  d.push('<h3>Der Lernstand ist weg</h3>');
+  d.push('<p>Wahrscheinlich wurden die Browserdaten gelöscht, oder du hast die Seite über eine andere Adresse geöffnet. Für den Browser sind das zwei verschiedene Orte. Nutze immer denselben Link.</p>');
+  d.push('<h3>Die Seite bleibt leer</h3>');
+  d.push('<p>Lade sie neu. Kommt danach ein gelber Kasten mit einer Fehlermeldung, gib den Text an deine Lehrkraft weiter.</p>');
+
+  d.push('<div class="teacher">');
+  d.push('<h2>Für Kolleginnen und Kollegen</h2>');
+  d.push('<p>Die Seite läuft ohne Server, ohne Konten und ohne Datenbank. Es werden keine personenbezogenen Daten erhoben oder übertragen; der Lernstand bleibt ausschließlich im Browser des Geräts.</p>');
+  d.push('<p>In der Listenansicht gibt es zusätzlich einen <b>CSV-Export</b> der gerade sichtbaren Einträge — für Arbeitsblätter, Tests oder eigene Listen. Spalten: Unit/Part, en, de, pos, ipa, sense_en, example_en.</p>');
+  d.push('<p>Stichwörter und Übersetzungen folgen den Wortlisten des eingeführten Lehrwerks. Die Beispielsätze sind eigenständig formuliert. Die Lautschrift stammt aus dem offenen Datensatz ipa-dict (github.com/open-dict-data/ipa-dict): britische Aussprache aus en_UK, abgeleitet von ipacards (GPL 3.0), Lücken ergänzt aus en_US, abgeleitet von cmudict-ipa (MIT). Einzelne Einträge wurden von Hand ergänzt.</p>');
+  d.push('</div>');
+
+  view.innerHTML =
+      '<div class="sessionbar">'
+    +   '<button class="linkbtn" id="hback">\u2190 Startseite</button>'
+    +   '<div class="switches"><button class="switch" id="hprint">Drucken</button></div>'
+    + '</div>'
+    + '<div class="doc">' + d.join("") + '</div>';
+
+  document.getElementById("hback").onclick = function(){ S.view = "home"; render(); };
+  document.getElementById("hprint").onclick = function(){ try{ window.print(); }catch(e){} };
+
+  var st = document.getElementById("sptest"), out = document.getElementById("spout");
+  if(st && out){
+    st.onclick = function(){
+      Speech.say("This is a test of the pronunciation.");
+      out.textContent = Speech.status();
+      setTimeout(function(){ out.textContent = Speech.status(); }, 1200);
+    };
+    out.textContent = Speech.status();
+  }
+  updateFoot();
+}
+
+/* =========================================================================
+   LISTENANSICHT
+   Reine Anzeige: liest die Vokabeln, schreibt nichts und ruehrt den
+   Lernstand nicht an. Themen sind eingeklappt; die Suche oeffnet sie.
+   ========================================================================= */
+var LIST_PREFS = {ex:false, ipa:true};   // Beispielsaetze aus, Lautschrift an
+
+function renderList(){
+  var grand = 0, h = "";
+
+  for(var i = 0; i < TOPICS.length; i++){
+    var t = TOPICS[i];
+    var entries = SETS[t.id];
+    if(!entries || !entries.length) continue;
+    grand += entries.length;
+
+    h += '<details class="lsec ' + t.unit + '" data-sec="' + t.id + '"><summary>'
+       + '<span><span class="lyear ' + esc(t.unit) + '" style="background:var(--unit)">' + esc(t.unitName.split(" \u2013 ")[0]) + '</span>'
+       + esc(t.unitName.split(" \u2013 ").slice(1).join(" \u2013 ")) + ' \u00b7 ' + esc(t.name) + '</span>'
+       + '<span class="lnum">' + entries.length + '</span></summary><div class="lbody">';
+
+    for(var j = 0; j < entries.length; j++){
+      var e = entries[j];
+      var hay = (e.en + " " + e.de + " " + (e.pos||"") + " "
+               + (e.collocations||"") + " " + (e.example_en||"")).toLowerCase();
+      h += '<div class="vrow" data-s="' + esc(hay) + '">'
+         + '<div><span class="ven">' + esc(e.en) + '</span>'
+         + (e.pos ? '<span class="vpos">' + esc(e.pos) + '</span>' : "")
+         + (e.ipa ? '<span class="vipa">/' + esc(e.ipa) + '/</span>' : "")
+         + '</div>'
+         + '<div class="vde">' + esc(e.de)
+         + (e.sense_en ? '<span class="vsense">' + esc(e.sense_en) + '</span>' : "")
+         + '</div>'
+         + (e.example_en ? '<div class="vex">' + esc(e.example_en) + '</div>' : "")
+         + '</div>';
+    }
+    h += "</div></details>";
+  }
+
+  view.innerHTML =
+      '<div class="sessionbar">'
+    +   '<button class="linkbtn" id="lback">\u2190 Themen\u00fcbersicht</button>'
+    +   '<div class="switches">'
+    +     '<button class="switch" id="lex" aria-pressed="' + LIST_PREFS.ex + '">Beispiels\u00e4tze</button>'
+    +     '<button class="switch" id="lipa" aria-pressed="' + LIST_PREFS.ipa + '">Lautschrift</button>'
+    +     '<button class="switch" id="lopen">Alle aufklappen</button>'
+    +     '<button class="switch" id="lprint">Drucken</button>'
+    +     '<button class="switch" id="lcsv">CSV</button>'
+    +   '</div>'
+    + '</div>'
+    + '<div class="listctl">'
+    +   '<input type="search" id="lq" placeholder="Suchen \u2013 englisch, deutsch oder im Beispielsatz" '
+    +     'autocomplete="off" autocapitalize="off" spellcheck="false">'
+    + '</div>'
+    + '<div class="listcount" id="lcount">' + grand + ' Vokabeln in '
+    +   Object.keys(SETS).length + ' Themen \u00b7 Thema antippen zum \u00d6ffnen</div>'
+    + '<div class="vlist" id="vlist">' + h + '</div>'
+    + '<div class="noresult" id="lnone" hidden>Kein Treffer.</div>';
+
+  var box = document.getElementById("vlist");
+  applyListPrefs(box);
+
+  document.getElementById("lback").onclick = function(){ S.view = "home"; render(); };
+  document.getElementById("lex").onclick = function(){
+    LIST_PREFS.ex = !LIST_PREFS.ex;
+    this.setAttribute("aria-pressed", LIST_PREFS.ex);
+    applyListPrefs(box);
+  };
+  document.getElementById("lipa").onclick = function(){
+    LIST_PREFS.ipa = !LIST_PREFS.ipa;
+    this.setAttribute("aria-pressed", LIST_PREFS.ipa);
+    applyListPrefs(box);
+  };
+  document.getElementById("lopen").onclick = function(){
+    var secs = box.querySelectorAll("details.lsec");
+    var anyClosed = false;
+    for(var i = 0; i < secs.length; i++){ if(!secs[i].open) anyClosed = true; }
+    for(var k = 0; k < secs.length; k++){ secs[k].open = anyClosed; }
+    this.textContent = anyClosed ? "Alle zuklappen" : "Alle aufklappen";
+  };
+  document.getElementById("lprint").onclick = function(){
+    try{ window.print(); }catch(e){}
+  };
+  document.getElementById("lcsv").onclick = function(){ exportCsv(box); };
+
+  var q = document.getElementById("lq");
+  q.oninput = function(){ filterList(box, q.value); };
+
+  updateFoot();
+}
+
+/* Exportiert die gerade sichtbaren Zeilen als Tabelle (Tab-getrennt,
+   mit BOM, damit Excel die Umlaute richtig liest). */
+function exportCsv(box){
+  var cols = ["Thema","en","de","pos","ipa","collocations","example_en"];
+  var rows = [cols.join("\t")];
+  var n = 0;
+
+  for(var i = 0; i < TOPICS.length; i++){
+    var t = TOPICS[i];
+    var entries = SETS[t.id];
+    if(!entries) continue;
+    var sec = box.querySelector('details[data-sec="' + t.id + '"]');
+    if(!sec || sec.className.indexOf("off") !== -1) continue;
+    var domRows = sec.querySelectorAll(".vrow");
+
+    for(var j = 0; j < entries.length; j++){
+      if(domRows[j] && domRows[j].className.indexOf("off") !== -1) continue;
+      var e = entries[j];
+      var cell = function(x){ return String(x == null ? "" : x).replace(/[\t\r\n]+/g, " "); };
+      rows.push([t.unitName + " / " + t.name, e.en, e.de, e.pos || "", e.ipa || "",
+                 e.collocations || "", e.example_en || ""].map(cell).join("\t"));
+      n++;
+    }
+  }
+
+  if(!n){ alert("Nichts zu exportieren \u2013 die Suche liefert keine Treffer."); return; }
+  try{
+    var blob = new Blob(["\ufeff" + rows.join("\n")], {type:"text/csv;charset=utf-8"});
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "vokabeln.csv";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }catch(err){ alert("Der Export hat nicht funktioniert: " + err.message); }
+}
+
+function applyListPrefs(box){
+  box.className = "vlist" + (LIST_PREFS.ex ? "" : " hide-ex")
+                          + (LIST_PREFS.ipa ? "" : " hide-ipa");
+}
+
+function filterList(box, raw){
+  var term = String(raw || "").toLowerCase().trim();
+  var secs = box.querySelectorAll("details.lsec");
+  var hits = 0;
+
+  for(var i = 0; i < secs.length; i++){
+    var sec = secs[i];
+    var rows = sec.querySelectorAll(".vrow");
+    var shown = 0;
+    for(var j = 0; j < rows.length; j++){
+      var match = !term || rows[j].getAttribute("data-s").indexOf(term) !== -1;
+      rows[j].className = "vrow" + (match ? "" : " off");
+      if(match) shown++;
+    }
+    hits += shown;
+    sec.className = "lsec" + (shown ? "" : " off");
+    if(term) sec.open = shown > 0;
+  }
+
+  document.getElementById("lnone").hidden = !(term && hits === 0);
+  document.getElementById("lcount").textContent = term
+    ? hits + " Treffer f\u00fcr \u201e" + raw.trim() + "\u201c"
+    : box.querySelectorAll(".vrow").length + " Vokabeln in "
+      + Object.keys(SETS).length + " Themen \u00b7 Thema antippen zum \u00d6ffnen";
+}
+
+/* =========================================================================
+   TASTATUR
+   ========================================================================= */
+document.addEventListener("keydown", e => {
+  if(S.view !== "session") return;
+  const typing = document.activeElement && document.activeElement.id === "typeIn";
+  if(typing && e.key === "Enter"){ e.preventDefault(); submitTyped(); return; }
+  if(typing && !S.answered) return;
+  if((e.key === "s" || e.key === "S") && current()){
+    e.preventDefault(); Speech.say(current().en); return;
+  }
+  if(e.key === " " && S.mode === "card" && !S.revealed){
+    e.preventDefault(); S.revealed = true; render(); return;
+  }
+  if((S.revealed || S.answered) && ["1","2","3"].includes(e.key)){
+    e.preventDefault(); rate(Number(e.key) - 1);
+  }
+});
+
+/* =========================================================================
+   EXPORT / IMPORT
+   ========================================================================= */
+document.getElementById("exportBtn").onclick = () => {
+  const blob = new Blob([JSON.stringify(progress,null,1)],{type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "vokabelfortschritt.json";
+  a.click();
+  URL.revokeObjectURL(a.href);
+};
+document.getElementById("importBtn").onclick = () => document.getElementById("importFile").click();
+document.getElementById("importFile").onchange = ev => {
+  const f = ev.target.files[0]; if(!f) return;
+  const fr = new FileReader();
+  fr.onload = () => {
+    try{ progress = JSON.parse(fr.result); save(); render(); }
+    catch(e){ alert("Die Datei konnte nicht gelesen werden."); }
+  };
+  fr.readAsText(f);
+};
+
+function updateFoot(){
+  let done = 0, all = 0;
+  for(const t of TOPICS){
+    if(!SETS[t.id]) continue;
+    all += SETS[t.id].length;
+    done += boxCounts(SETS[t.id], S.dir).slice(2).reduce((a,b)=>a+b,0);
+  }
+  document.getElementById("footstat").textContent =
+    `${done}/${all} SICHER · ${dirLabel()}`;
+}
+
+/* =========================================================================
+   START
+   ========================================================================= */
+function render(){
+  if(S.view === "home") return renderHome();
+  if(S.view === "year") return renderYear();
+  if(S.view === "list") return renderList();
+  if(S.view === "help") return renderHelp();
+  return renderSession();
+}
+
+function showWarn(html){ document.getElementById("warn").innerHTML = html; }
+
+if(!Store.persistent){
+  showWarn(`<div class="warn"><b>Vorschau-Modus:</b> Dieser Browserkontext erlaubt keinen
+     dauerhaften Speicher. Der Fortschritt gilt nur fuer diese Sitzung. Lade die Datei
+     herunter und oeffne sie per Doppelklick \u2013 dort bleibt der Lernstand erhalten.</div>`);
+}
+
+try{
+  render();
+}catch(err){
+  showWarn('<div class="warn"><b>Beim Aufbau der Seite ist ein Fehler aufgetreten.</b><br>'
+    + '<span style="font-family:var(--mono);font-size:11px">' + err.message + '</span></div>');
+}
+</script>
