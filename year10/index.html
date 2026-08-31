@@ -1,0 +1,5227 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vokabeltrainer Englisch – Year 10</title>
+<script>
+/* Faengt Fehler ab, die sonst zu einer leeren Seite fuehren, und zeigt sie an. */
+window.onerror = function(msg, src, line, col){
+  try{
+    var box = document.getElementById("warn");
+    if(!box){
+      box = document.createElement("div");
+      box.id = "warn";
+      document.body.insertBefore(box, document.body.firstChild);
+    }
+    box.innerHTML = '<div class="warn"><b>Diese Seite laeuft in deinem Browser nicht.</b><br>'
+      + 'Wahrscheinlich ist er zu alt fuer eine der verwendeten Funktionen. '
+      + 'Bitte diesen Text weitergeben:<br><span style="font-family:monospace;font-size:11px">'
+      + String(msg) + ' (Zeile ' + line + ':' + col + ')</span></div>';
+  }catch(e){}
+  return false;
+};
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --ground:#EEF1F3;
+  --card:#FFFFFF;
+  --ink:#16232B;
+  --ink-soft:#5A6B75;
+  --rule:#D6DCE0;
+  --petrol:#0E5A66;
+  --amber:#C9761E;
+  --moss:#3F7A4B;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Consolas,monospace;
+  --r:4px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--ground);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:760px;margin:0 auto;padding:24px 20px 64px}
+
+/* ---------- Kopfzeile ---------- */
+.masthead{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;
+  border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:28px;flex-wrap:wrap}
+.mhead-text{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;min-width:0}
+@media(max-width:560px){
+  .masthead{align-items:center}
+  .mhead-text{gap:2px;display:block}
+}
+.masthead h1{font-family:var(--serif);font-weight:600;font-size:24px;margin:0;letter-spacing:-.01em}
+.masthead .sub{font-family:var(--mono);font-size:11px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-soft)}
+.home-link{font-family:var(--mono);font-size:11px;letter-spacing:.04em;
+  text-transform:uppercase;color:var(--ink-soft);text-decoration:none;
+  white-space:nowrap;align-self:flex-end}
+.home-link:hover{color:var(--ink);text-decoration:underline}
+
+/* ---------- Unit-Farben (Variante A: Rand und Kopf) ---------- */
+/* Im Schwarz-Weiss-Druck traegt die Kachelbeschriftung die Unterscheidung,
+   nicht die Farbe. */
+.u1{--unit:#0E5A66; --unit-bg:#E4EFF1; --unit-ink:#083C45}   /* Petrol  */
+
+/* Hauptmenue: eigene, von den Units unabhaengige Farbgebung, damit
+   Jahrgang, Gesamtliste und Anleitung auf einen Blick auseinanderzuhalten
+   sind. */
+.home-year{--unit:#0E5A66; --unit-bg:#E4EFF1; --unit-ink:#083C45}   /* Petrol   */
+.home-all{--unit:#3F5E8A;  --unit-bg:#E7ECF4; --unit-ink:#24344F}   /* Blau     */
+.home-help{--unit:#6B5E3F; --unit-bg:#F1EEE4; --unit-ink:#463C24}   /* Sand     */
+.topic.home-year, .topic.home-all, .topic.home-help{
+  border-left-color:var(--unit); border-left-width:4px;
+  background:var(--unit-bg); border-top-color:transparent;
+  border-right-color:transparent; border-bottom-color:transparent}
+.topic.home-year .t-name, .topic.home-all .t-name, .topic.home-help .t-name{color:var(--unit-ink)}
+.topic.home-year .t-count, .topic.home-all .t-count, .topic.home-help .t-count{color:var(--unit)}
+.topic.home-year .minirail i.f{background:var(--unit)}
+.topic.home-year:hover, .topic.home-all:hover, .topic.home-help:hover{
+  border-color:transparent; border-left-color:var(--unit-ink)}
+@media print{
+  .topic.home-year, .topic.home-all, .topic.home-help{background:#fff;border:1px solid #000;border-left-width:4px}
+  .topic.home-year .t-name, .topic.home-all .t-name, .topic.home-help .t-name,
+  .topic.home-year .t-count, .topic.home-all .t-count, .topic.home-help .t-count{color:#000}
+}
+.u2{--unit:#C9761E; --unit-bg:#FAEEDF; --unit-ink:#7A4610}   /* Amber   */
+.u3{--unit:#3F7A4B; --unit-bg:#E8F1E9; --unit-ink:#27502F}   /* Moos    */
+.u4{--unit:#8A3B52; --unit-bg:#F6E8EC; --unit-ink:#5A2435}   /* Weinrot */
+.uall{--unit:#16232B; --unit-bg:#ECEFF1; --unit-ink:#16232B}
+
+/* ---------- Startseite ---------- */
+.yeargroup{margin-bottom:34px}
+.yeargroup[class*="u"]{border:none;background:none}
+.yearhead{display:flex;align-items:center;gap:12px;margin-bottom:12px;cursor:pointer;list-style:none}
+.yearhead::-webkit-details-marker{display:none}
+.yearhead::after{content:"+";margin-left:auto;font-family:var(--mono);font-size:15px;
+  color:var(--unit,var(--ink-soft));flex:0 0 auto}
+details[open] > .yearhead::after{content:"\2212"}
+.yearhead .tag{font-family:var(--mono);font-size:12px;background:var(--unit,var(--ink));
+  color:#fff;padding:2px 7px;border-radius:2px}
+.yeargroup[class*="u"] .yearhead{border-bottom:1px solid var(--unit);padding-bottom:6px}
+.yeargroup[class*="u"] .yearhead .name{color:var(--unit)}
+.topic[class*="u"]{border-left-color:var(--unit);border-left-width:4px;
+  background:var(--unit-bg);border-top-color:transparent;
+  border-right-color:transparent;border-bottom-color:transparent}
+.topic[class*="u"] .t-name{color:var(--unit-ink)}
+.topic[class*="u"] .t-count{color:var(--unit)}
+.topic[class*="u"] .t-due{color:var(--unit-ink);font-weight:500}
+.topic[class*="u"] .minirail i{background:#fff}
+.topic[class*="u"] .minirail i.f{background:var(--unit)}
+.topic[class*="u"]:hover{border-color:transparent;border-left-color:var(--unit-ink)}
+@media print{
+  .topic[class*="u"]{background:#fff;border:1px solid #000;border-left-width:4px}
+  .topic[class*="u"] .t-name,
+  .topic[class*="u"] .t-count,
+  .topic[class*="u"] .t-due{color:#000}
+  .yearhead .tag{background:#000}
+  .yeargroup[class*="u"] .yearhead{border-bottom-color:#000}
+  .yeargroup[class*="u"] .yearhead .name{color:#000}
+}
+.yearhead .name{font-family:var(--serif);font-size:17px;font-style:italic;color:var(--ink-soft)}
+
+.topic{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--rule);
+  border-left:3px solid var(--rule);border-radius:var(--r);padding:13px 15px;margin-bottom:8px;
+  cursor:pointer;font:inherit;color:inherit;transition:border-color .15s,transform .15s}
+.topic:hover{border-left-color:var(--petrol);transform:translateX(2px)}
+.topic:focus-visible{outline:2px solid var(--petrol);outline-offset:2px}
+.topic .t-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.topic .t-name{font-weight:500}
+.topic .t-count{font-family:var(--mono);font-size:12px;color:var(--ink-soft);white-space:nowrap}
+.topic .t-due{color:var(--amber)}
+.minirail{display:flex;gap:2px;margin-top:9px}
+.minirail i{height:4px;flex:1;background:var(--rule);border-radius:1px}
+.minirail i.f{background:var(--petrol)}
+
+.emptyhint{background:var(--card);border:1px dashed var(--rule);border-radius:var(--r);
+  padding:14px 16px;color:var(--ink-soft);font-size:14px}
+
+/* ---------- Sitzung: Leitner-Schiene (Signature) ---------- */
+.rail{display:flex;gap:6px;margin-bottom:22px}
+.slot{flex:1;background:var(--card);border:1px solid var(--rule);border-radius:var(--r);
+  padding:7px 6px 6px;text-align:center;position:relative;transition:border-color .2s,background .2s}
+.slot .n{font-family:var(--mono);font-size:10px;color:var(--ink-soft);letter-spacing:.06em}
+.slot .c{font-family:var(--serif);font-size:19px;line-height:1.1;margin-top:1px}
+.slot .iv{font-family:var(--mono);font-size:9px;color:var(--ink-soft);margin-top:2px}
+.slot.here{border-color:var(--petrol);background:#E7F0F1}
+.slot.here::after{content:"";position:absolute;left:50%;bottom:-7px;width:8px;height:8px;
+  transform:translateX(-50%) rotate(45deg);background:#E7F0F1;
+  border-right:1px solid var(--petrol);border-bottom:1px solid var(--petrol)}
+.slot.land{animation:land .45s ease-out}
+@keyframes land{0%{transform:translateY(-6px)}60%{transform:translateY(2px)}100%{transform:none}}
+
+/* Unit-Farbe als Ortsangabe waehrend des Lernens: farbige Kante an der
+   Karte, farbige Kopfzeile, farbiges aktives Fach. Sonst nichts. */
+.stage[class*="u"] .vcard{border-top:3px solid var(--unit)}
+.eyebrow[class*="u"]{color:var(--unit);border-bottom-color:var(--unit)}
+.rail[class*="u"] .slot.here{border-color:var(--unit);background:var(--unit-bg)}
+.rail[class*="u"] .slot.here::after{background:var(--unit-bg);
+  border-right-color:var(--unit);border-bottom-color:var(--unit)}
+@media print{
+  .stage[class*="u"] .vcard{border-top-color:#000}
+  .eyebrow[class*="u"]{color:#000;border-bottom-color:#000}
+}
+
+/* ---------- Karte ---------- */
+.stage{position:relative}
+.vcard{background:var(--card);border:1px solid var(--rule);border-radius:var(--r);
+  padding:30px 26px;min-height:250px;display:flex;flex-direction:column;
+  box-shadow:0 1px 0 var(--rule),0 6px 22px rgba(22,35,43,.06)}
+.vcard.deal{animation:deal .28s ease-out}
+@keyframes deal{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+.eyebrow{display:flex;justify-content:space-between;gap:12px;font-family:var(--mono);font-size:11px;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);
+  border-bottom:1px solid var(--rule);padding-bottom:8px;margin-bottom:20px}
+.prompt{font-family:var(--serif);font-size:38px;line-height:1.15;letter-spacing:-.015em;margin:0}
+.pos{font-family:var(--serif);font-style:italic;color:var(--ink-soft);font-size:15px;margin-top:5px}
+.phon{display:flex;align-items:center;gap:10px;margin-top:7px;flex-wrap:wrap}
+.ipa{font-family:var(--mono);font-size:13px;color:var(--ink-soft);letter-spacing:.01em}
+.speak{padding:5px 9px;line-height:0;border-color:var(--rule);color:var(--petrol)}
+.speak:hover{border-color:var(--petrol);background:#E7F0F1}
+.speak svg{width:15px;height:15px;display:block}
+.speak.on{background:var(--petrol);border-color:var(--petrol);color:#fff}
+.answer{margin-top:20px;padding-top:18px;border-top:1px solid var(--rule)}
+.answer .de{font-family:var(--serif);font-size:23px}
+.answer .coll{font-size:13px;color:var(--ink-soft);margin-top:8px}
+.answer .ex{font-family:var(--serif);font-style:italic;font-size:16px;margin-top:14px;
+  padding-left:12px;border-left:2px solid var(--petrol);color:#31434D}
+.answer .ex b{font-style:normal;font-weight:600;color:var(--ink);
+  box-shadow:inset 0 -.42em 0 rgba(14,90,102,.14)}
+.answer .ex .speak{margin-left:8px;vertical-align:middle;padding:4px 7px}
+.answer .ex .speak svg{width:13px;height:13px}
+.spacer{flex:1}
+
+/* Hinweis, welche Bedeutung gemeint ist - nur bei Woertern, deren
+   Schulbuchliste zwei getrennte Bedeutungen nennt. */
+.sense{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--ink-soft);
+  margin-top:8px;padding-left:11px;border-left:2px solid var(--rule)}
+
+/* ---------- Bedienelemente ---------- */
+.controls{margin-top:16px;display:flex;gap:8px;flex-wrap:wrap}
+button{font:inherit;cursor:pointer;border-radius:var(--r);border:1px solid var(--rule);
+  background:var(--card);color:var(--ink);padding:11px 15px;transition:background .15s,border-color .15s}
+button:hover{border-color:var(--ink-soft)}
+button:focus-visible{outline:2px solid var(--petrol);outline-offset:2px}
+button.primary{background:var(--petrol);border-color:var(--petrol);color:#fff;flex:1}
+button.primary:hover{background:#0B4A54}
+.rate{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 8px}
+.rate span{font-family:var(--mono);font-size:10px;color:var(--ink-soft);letter-spacing:.05em}
+.rate.again{border-color:var(--amber);color:var(--amber)}
+.rate.again:hover{background:#FBF2E6}
+.rate.hard{border-color:var(--ink-soft)}
+.rate.hard:hover{background:#EEF1F3}
+.rate.good{border-color:var(--moss);color:var(--moss)}
+.rate.good:hover{background:#EDF4EE}
+
+.opts{display:grid;gap:8px;margin-top:20px}
+.opt{text-align:left;padding:13px 15px;font-family:var(--serif);font-size:17px}
+.opt.right{border-color:var(--moss);background:#EDF4EE;color:var(--moss)}
+.opt.wrong{border-color:var(--amber);background:#FBF2E6;color:var(--amber)}
+.opt:disabled{cursor:default;opacity:1}
+
+.typebox{margin-top:20px}
+.typebox input{width:100%;font-family:var(--serif);font-size:22px;padding:12px 14px;
+  border:1px solid var(--rule);border-radius:var(--r);background:var(--ground);color:var(--ink)}
+.typebox input:focus{outline:2px solid var(--petrol);outline-offset:1px;background:var(--card)}
+.verdict{margin-top:12px;font-size:14px}
+.verdict.ok{color:var(--moss)}
+.verdict.near{color:var(--amber)}
+.verdict.no{color:var(--amber)}
+.verdict .sol{font-family:var(--serif);font-size:18px;color:var(--ink);display:block;margin-top:3px}
+
+/* ---------- Kopf der Sitzung ---------- */
+.sessionbar{display:flex;justify-content:space-between;align-items:center;gap:12px;
+  margin-bottom:18px;flex-wrap:wrap}
+.linkbtn{background:none;border:none;padding:4px 0;color:var(--petrol);text-decoration:underline;
+  text-underline-offset:3px}
+.switches{display:flex;gap:6px;flex-wrap:wrap}
+.switch{font-family:var(--mono);font-size:11px;letter-spacing:.05em;padding:6px 9px;
+  text-transform:uppercase}
+.switch[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+
+/* ---------- Abschluss ---------- */
+.done{background:var(--card);border:1px solid var(--rule);border-radius:var(--r);padding:34px 26px;text-align:center}
+.done h2{font-family:var(--serif);font-weight:600;font-size:26px;margin:0 0 8px}
+.done p{color:var(--ink-soft);margin:0 0 20px}
+
+/* ---------- Fußzeile ---------- */
+.foot{margin-top:40px;padding-top:14px;border-top:1px solid var(--rule);
+  display:flex;gap:16px;flex-wrap:wrap;align-items:center;
+  font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.04em}
+.foot button{padding:5px 9px;font-family:var(--mono);font-size:11px}
+.warn{background:#FBF2E6;border:1px solid var(--amber);color:#8A4E12;border-radius:var(--r);
+  padding:9px 12px;font-size:13px;margin-bottom:20px;line-height:1.4}
+
+/* ---------- Anleitung ---------- */
+.doc{background:var(--card);border:1px solid var(--rule);border-radius:var(--r);
+  padding:26px 26px 30px;max-width:640px}
+.doc h2{font-family:var(--serif);font-weight:600;font-size:21px;margin:34px 0 8px;
+  letter-spacing:-.01em}
+.doc h2:first-child{margin-top:0}
+.doc h3{font-family:var(--sans);font-weight:600;font-size:15px;margin:20px 0 5px}
+.doc p{margin:0 0 12px;font-size:15px}
+.doc ul{margin:0 0 12px;padding-left:20px;font-size:15px}
+.doc li{margin-bottom:5px}
+.doc .lead{color:var(--ink-soft)}
+.doc code{font-family:var(--mono);font-size:12.5px;background:var(--ground);
+  padding:1px 5px;border-radius:2px}
+.doc table{border-collapse:collapse;width:100%;margin:6px 0 14px;font-size:14px}
+.doc th,.doc td{text-align:left;padding:6px 10px;border-bottom:1px solid var(--rule)}
+.doc th{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--ink-soft);font-weight:500}
+.doc td:first-child{font-family:var(--mono);font-size:12.5px;white-space:nowrap}
+.kbd{font-family:var(--mono);font-size:11.5px;border:1px solid var(--rule);
+  border-bottom-width:2px;border-radius:3px;padding:1px 6px;background:var(--ground)}
+.doc .warnbox{background:#FBF2E6;border:1px solid var(--amber);border-radius:var(--r);
+  padding:12px 14px;font-size:14.5px;margin:0 0 14px;line-height:1.5}
+.doc .teacher{border-top:2px solid var(--ink);margin-top:36px;padding-top:18px}
+@media print{
+  .doc{border:none;padding:0;max-width:none}
+  .doc h2{page-break-after:avoid}
+}
+
+/* ---------- Lueckensatz ---------- */
+.cloze{font-family:var(--serif);font-size:22px;line-height:1.55;margin:0}
+.cloze .gap{display:inline-block;min-width:5.5em;border-bottom:2px solid var(--petrol);
+  text-align:center;color:var(--petrol);font-family:var(--mono);font-size:15px;
+  vertical-align:baseline;padding:0 4px}
+.basef{font-family:var(--mono);font-size:14px;color:var(--ink-soft);margin-left:5px}
+.cloze b{font-style:normal;font-weight:600;
+  box-shadow:inset 0 -.42em 0 rgba(14,90,102,.18)}
+.clue{font-family:var(--serif);font-size:16px;color:var(--ink-soft);margin-top:14px}
+.clue span{color:var(--ink)}
+
+/* ---------- Listenansicht ---------- */
+.listctl{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.listctl input[type=search]{flex:1;min-width:180px;font:inherit;font-size:15px;
+  padding:10px 13px;border:1px solid var(--rule);border-radius:var(--r);
+  background:var(--card);color:var(--ink);-webkit-appearance:none}
+.listctl input[type=search]:focus{outline:2px solid var(--petrol);outline-offset:1px}
+.listcount{font-family:var(--mono);font-size:11px;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--ink-soft);margin-bottom:16px}
+
+.lsec{background:var(--card);border:1px solid var(--rule);border-radius:var(--r);
+  margin-bottom:8px;overflow:hidden}
+.lsec > summary{cursor:pointer;padding:13px 15px;display:flex;justify-content:space-between;
+  align-items:baseline;gap:12px;list-style:none;font-weight:500}
+.lsec > summary::-webkit-details-marker{display:none}
+.lsec > summary:hover{background:var(--ground)}
+.lsec > summary .lyear{font-family:var(--mono);font-size:10px;letter-spacing:.08em;
+  background:var(--ink);color:var(--ground);border-radius:2px;padding:2px 6px;margin-right:9px}
+.lsec > summary .lnum{font-family:var(--mono);font-size:12px;color:var(--ink-soft);white-space:nowrap}
+.lsec[open] > summary{border-bottom:1px solid var(--rule)}
+.lbody{padding:4px 15px 12px}
+
+.vrow{display:grid;grid-template-columns:1fr 1fr;gap:4px 18px;
+  padding:9px 0;border-bottom:1px solid var(--ground);break-inside:avoid}
+.vrow:last-child{border-bottom:none}
+.ven{font-family:var(--serif);font-size:16px}
+.vipa{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin-left:7px;white-space:nowrap}
+.vpos{font-family:var(--serif);font-style:italic;font-size:12.5px;color:var(--ink-soft);margin-left:7px}
+.vde{font-size:14.5px}
+.vsense{display:block;font-family:var(--serif);font-style:italic;font-size:13px;color:var(--ink-soft)}
+.vex{grid-column:1 / -1;font-family:var(--serif);font-style:italic;font-size:14px;
+  color:#31434D;padding-left:11px;border-left:2px solid var(--rule);margin-top:3px}
+.vlist.hide-ex .vex{display:none}
+.vlist.hide-ipa .vipa{display:none}
+.vrow.off{display:none}
+.lsec.off{display:none}
+.noresult{background:var(--card);border:1px dashed var(--rule);border-radius:var(--r);
+  padding:14px 16px;color:var(--ink-soft);font-size:14px}
+
+@media print{
+  body{background:#fff}
+  .wrap{max-width:none;padding:0}
+  .masthead{border-bottom:1px solid #000;margin-bottom:14px}
+  .sessionbar,.listctl,.foot,#warn,.listcount button{display:none!important}
+  .lsec{border:none;border-radius:0;margin:0 0 6mm;page-break-inside:auto}
+  .lsec + .lsec{page-break-before:always}
+  .lsec > summary{padding:0 0 4px;border-bottom:1px solid #000;font-size:14pt}
+  .lsec > summary .lnum{color:#000}
+  .lbody{padding:6px 0 0;columns:2;column-gap:10mm}
+  .vrow{grid-template-columns:1fr;gap:1px;padding:3px 0;
+    border-bottom:none;page-break-inside:avoid}
+  .ven{font-size:11pt}
+  .vde{font-size:10pt;color:#333}
+  .vipa{color:#555}
+  .vex{font-size:9.5pt;border-left:1px solid #999}
+}
+
+@media(max-width:560px){
+  .prompt{font-size:30px}
+  .slot .c{font-size:16px}
+  .slot .iv{display:none}
+  .vcard{padding:22px 18px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+</style>
+
+<div class="wrap">
+    <div class="masthead">
+    <div class="mhead-text">
+      <h1>Vokabeltrainer Englisch</h1>
+      <div class="sub">Mittelstufe · Lehrwerksvokabular</div>
+    </div>
+    <a class="home-link" href="../">&larr; Alle Jahrg&auml;nge</a>
+  </div>
+  <div id="warn"></div>
+  <div id="view"></div>
+  <div class="foot">
+    <span id="footstat"></span>
+    <button id="exportBtn">Fortschritt sichern</button>
+    <button id="importBtn">Fortschritt laden</button>
+    <input type="file" id="importFile" accept="application/json" hidden>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   VOKABELDATEN
+   Alles steckt in dieser Datei. Zum Aendern: Eintrag im passenden Thema
+   ergaenzen oder korrigieren. Pflichtfelder sind id, en, de, pos.
+   Optional: ipa, collocations, example_en, distractor_hint.
+   ========================================================================= */
+const YEARS = [
+ {
+  "id": "y10",
+  "label": "Year 10",
+  "book": "",
+  "units": [
+   {
+    "id": "u1",
+    "name": "Unit 1 – Who are you?"
+   },
+   {
+    "id": "u2",
+    "name": "Unit 2 – What makes a community?"
+   },
+   {
+    "id": "u3",
+    "name": "Unit 3 – How is the world changing?"
+   }
+  ]
+ }
+];
+
+const TOPICS = [
+ {
+  "id": "u1-introduction",
+  "year": "10",
+  "yearName": "",
+  "unit": "u1",
+  "unitName": "Unit 1 – Who are you?",
+  "name": "Introduction"
+ },
+ {
+  "id": "u1-part-a",
+  "year": "10",
+  "yearName": "",
+  "unit": "u1",
+  "unitName": "Unit 1 – Who are you?",
+  "name": "Part A"
+ },
+ {
+  "id": "u1-part-b",
+  "year": "10",
+  "yearName": "",
+  "unit": "u1",
+  "unitName": "Unit 1 – Who are you?",
+  "name": "Part B"
+ },
+ {
+  "id": "u1-part-c",
+  "year": "10",
+  "yearName": "",
+  "unit": "u1",
+  "unitName": "Unit 1 – Who are you?",
+  "name": "Part C"
+ },
+ {
+  "id": "u2-part-a",
+  "year": "10",
+  "yearName": "",
+  "unit": "u2",
+  "unitName": "Unit 2 – What makes a community?",
+  "name": "Part A"
+ },
+ {
+  "id": "u2-part-b",
+  "year": "10",
+  "yearName": "",
+  "unit": "u2",
+  "unitName": "Unit 2 – What makes a community?",
+  "name": "Part B"
+ },
+ {
+  "id": "u2-part-c",
+  "year": "10",
+  "yearName": "",
+  "unit": "u2",
+  "unitName": "Unit 2 – What makes a community?",
+  "name": "Part C"
+ },
+ {
+  "id": "u3-introduction",
+  "year": "10",
+  "yearName": "",
+  "unit": "u3",
+  "unitName": "Unit 3 – How is the world changing?",
+  "name": "Introduction"
+ },
+ {
+  "id": "u3-part-a",
+  "year": "10",
+  "yearName": "",
+  "unit": "u3",
+  "unitName": "Unit 3 – How is the world changing?",
+  "name": "Part A"
+ },
+ {
+  "id": "u3-part-b",
+  "year": "10",
+  "yearName": "",
+  "unit": "u3",
+  "unitName": "Unit 3 – How is the world changing?",
+  "name": "Part B"
+ },
+ {
+  "id": "u3-part-c",
+  "year": "10",
+  "yearName": "",
+  "unit": "u3",
+  "unitName": "Unit 3 – How is the world changing?",
+  "name": "Part C"
+ }
+];
+
+const SETS = {
+ "u1-introduction": [
+  {
+   "id": "u1-001",
+   "en": "in their (late) teens",
+   "de": "im (späten) Teenageralter",
+   "pos": "phrase"
+  },
+  {
+   "id": "u1-002",
+   "en": "dreadlocks (pl)",
+   "de": "Rasta-Locken",
+   "pos": "noun",
+   "ipa": "ˈdredlɒks"
+  },
+  {
+   "id": "u1-003",
+   "en": "curly",
+   "de": "lockig",
+   "pos": "adjective",
+   "ipa": "ˈkɜːli"
+  },
+  {
+   "id": "u1-004",
+   "en": "curl",
+   "de": "Locke",
+   "pos": "noun",
+   "ipa": "kɜːl"
+  },
+  {
+   "id": "u1-005",
+   "en": "kinky (AE)",
+   "de": "kraus, gekräuselt (Haare)",
+   "pos": "adjective",
+   "ipa": "ˈkɪŋki"
+  },
+  {
+   "id": "u1-006",
+   "en": "(to) be dressed",
+   "de": "angezogen sein",
+   "pos": "verb",
+   "ipa": "drest"
+  },
+  {
+   "id": "u1-007",
+   "en": "casually",
+   "de": "leger, lässig (gekleidet)",
+   "pos": "adverb",
+   "ipa": "ˈkæʒuəli"
+  },
+  {
+   "id": "u1-008",
+   "en": "blazer",
+   "de": "Sakko, Blazer (sportliches Jackett)",
+   "pos": "noun",
+   "ipa": "ˈbleɪzə"
+  },
+  {
+   "id": "u1-009",
+   "en": "denim",
+   "de": "Jeansstoff",
+   "pos": "noun",
+   "ipa": "ˈdenɪm"
+  },
+  {
+   "id": "u1-010",
+   "en": "paint",
+   "de": "Farbe, Lack",
+   "pos": "noun",
+   "ipa": "peɪnt"
+  },
+  {
+   "id": "u1-011",
+   "en": "headscarf, pl headscarves",
+   "de": "Kopftuch",
+   "pos": "noun",
+   "ipa": "ˈhedskɑːf, ˈhedskɑːvz"
+  },
+  {
+   "id": "u1-012",
+   "en": "tie",
+   "de": "Krawatte, Schlips",
+   "pos": "noun",
+   "ipa": "taɪ"
+  },
+  {
+   "id": "u1-013",
+   "en": "patriotic",
+   "de": "patriotisch, vaterlandsliebend",
+   "pos": "adjective",
+   "ipa": "ˌpeɪtriˈɒtɪk"
+  },
+  {
+   "id": "u1-014",
+   "en": "hairstyle",
+   "de": "Frisur",
+   "pos": "noun",
+   "ipa": "ˈheəstaɪl"
+  },
+  {
+   "id": "u1-015",
+   "en": "(to) suggest sth.",
+   "de": "auf etwas hindeuten, etwas nahelegen",
+   "pos": "verb",
+   "ipa": "səˈdʒest"
+  },
+  {
+   "id": "u1-016",
+   "en": "conservative",
+   "de": "konservativ; Conservative(r)",
+   "pos": "adjective/noun",
+   "ipa": "kənˈsɜːvətɪv"
+  },
+  {
+   "id": "u1-017",
+   "en": "original",
+   "de": "originell",
+   "pos": "adjective",
+   "ipa": "əˈrɪdʒənl"
+  },
+  {
+   "id": "u1-018",
+   "en": "(to) prefer sb. to do sth.",
+   "de": "es vorziehen, wenn jd. etwas täte/tun würde",
+   "pos": "verb",
+   "ipa": "prɪˈfɜː"
+  }
+ ],
+ "u1-part-a": [
+  {
+   "id": "u1-019",
+   "en": "award-winning",
+   "de": "preisgekrönt",
+   "pos": "adjective",
+   "ipa": "əˈwɔːd wɪnɪŋ"
+  },
+  {
+   "id": "u1-020",
+   "en": "poet",
+   "de": "Dichter/in, Poet/in",
+   "pos": "noun",
+   "ipa": "ˈpəʊɪt"
+  },
+  {
+   "id": "u1-021",
+   "en": "playwright",
+   "de": "Dramatiker/in, Bühnenautor/in",
+   "pos": "noun",
+   "ipa": "ˈpleɪraɪt"
+  },
+  {
+   "id": "u1-022",
+   "en": "novelist",
+   "de": "Romanautor/in",
+   "pos": "noun",
+   "ipa": "ˈnɒvəlɪst"
+  },
+  {
+   "id": "u1-023",
+   "en": "(to) picture sb./sth.",
+   "de": "sich jn./etwas vorstellen",
+   "pos": "verb",
+   "ipa": "ˈpɪktʃə"
+  },
+  {
+   "id": "u1-024",
+   "en": "desire",
+   "de": "Wunsch, Verlangen",
+   "pos": "noun",
+   "ipa": "dɪˈzaɪə"
+  },
+  {
+   "id": "u1-025",
+   "en": "awkward",
+   "de": "plump; peinlich, unangenehm",
+   "pos": "adjective",
+   "ipa": "ˈɔːkwəd"
+  },
+  {
+   "id": "u1-026",
+   "en": "painfully",
+   "de": "furchtbar, äußerst, schmerzlich",
+   "pos": "adverb",
+   "ipa": "ˈpeɪnfəli"
+  },
+  {
+   "id": "u1-027",
+   "en": "pain",
+   "de": "Schmerz(en)",
+   "pos": "noun",
+   "ipa": "peɪn"
+  },
+  {
+   "id": "u1-028",
+   "en": "(to) cope",
+   "de": "zurechtkommen, klarkommen",
+   "pos": "verb",
+   "ipa": "kəʊp"
+  },
+  {
+   "id": "u1-029",
+   "en": "alarm",
+   "de": "Wecker; kurz für: alarm clock",
+   "pos": "noun",
+   "ipa": "əˈlɑːm"
+  },
+  {
+   "id": "u1-030",
+   "en": "(to) wink (at sb.)",
+   "de": "jm. zuzwinkern",
+   "pos": "verb",
+   "ipa": "wɪŋk"
+  },
+  {
+   "id": "u1-031",
+   "en": "(to) shave",
+   "de": "sich rasieren",
+   "pos": "verb",
+   "ipa": "ʃeɪv"
+  },
+  {
+   "id": "u1-032",
+   "en": "headphones (pl)",
+   "de": "Kopfhörer",
+   "pos": "noun",
+   "ipa": "ˈhedfəʊnz"
+  },
+  {
+   "id": "u1-033",
+   "en": "hood",
+   "de": "Kapuze",
+   "pos": "noun",
+   "ipa": "hʊd"
+  },
+  {
+   "id": "u1-034",
+   "en": "instructor",
+   "de": "Lehrer/in, Ausbilder/in",
+   "pos": "noun",
+   "ipa": "ɪnˈstrʌktə"
+  },
+  {
+   "id": "u1-035",
+   "en": "simple",
+   "de": "einfach, unkompliziert",
+   "pos": "adjective",
+   "ipa": "ˈsɪmpl"
+  },
+  {
+   "id": "u1-036",
+   "en": "branch",
+   "de": "Ast, Zweig; Zweigstelle, Filiale",
+   "pos": "noun",
+   "ipa": "brɑːntʃ"
+  },
+  {
+   "id": "u1-037",
+   "en": "record",
+   "de": "Schallplatte",
+   "pos": "noun",
+   "ipa": "ˈrekɔːd"
+  },
+  {
+   "id": "u1-038",
+   "en": "(to) make sb. do sth.",
+   "de": "jn. dazu bringen, etwas zu tun; jn. veranlassen, etwas zu tun",
+   "pos": "verb"
+  }
+ ],
+ "u1-part-b": [
+  {
+   "id": "u1-039",
+   "en": "yet",
+   "de": "trotzdem, dennoch",
+   "pos": "adverb",
+   "ipa": "jet"
+  },
+  {
+   "id": "u1-040",
+   "en": "nor do I want to ...",
+   "de": "und ich will auch nicht ...",
+   "pos": "phrase",
+   "ipa": "nɔː"
+  },
+  {
+   "id": "u1-041",
+   "en": "somewhat",
+   "de": "etwas, ein wenig",
+   "pos": "adverb",
+   "ipa": "ˈsʌmwɒt"
+  },
+  {
+   "id": "u1-042",
+   "en": "perspective",
+   "de": "Perspektive, Blickwinkel",
+   "pos": "noun",
+   "ipa": "pəˈspektɪv"
+  },
+  {
+   "id": "u1-043",
+   "en": "aggressive",
+   "de": "aggressiv",
+   "pos": "adjective",
+   "ipa": "əˈɡresɪv"
+  },
+  {
+   "id": "u1-044",
+   "en": "depressed",
+   "de": "depri(miert)",
+   "pos": "adjective",
+   "ipa": "dɪˈprest"
+  },
+  {
+   "id": "u1-045",
+   "en": "light-hearted",
+   "de": "fröhlich, heiter",
+   "pos": "adjective",
+   "ipa": "ˌlaɪt ˈhɑːtɪd"
+  },
+  {
+   "id": "u1-046",
+   "en": "melancholic",
+   "de": "trübsinnig",
+   "pos": "adjective",
+   "ipa": "ˌmelənˈkɒlɪk"
+  },
+  {
+   "id": "u1-047",
+   "en": "nostalgic",
+   "de": "nostalgisch",
+   "pos": "adjective",
+   "ipa": "nɒˈstældʒɪk"
+  },
+  {
+   "id": "u1-048",
+   "en": "uplifting",
+   "de": "erhebend, aufmunternd",
+   "pos": "adjective",
+   "ipa": "ʌpˈlɪftɪŋ"
+  },
+  {
+   "id": "u1-049",
+   "en": "poetry",
+   "de": "Gedichte, Lyrik",
+   "pos": "noun",
+   "ipa": "ˈpəʊətri"
+  },
+  {
+   "id": "u1-050",
+   "en": "(to) reflect",
+   "de": "reflektieren, widerspiegeln",
+   "pos": "verb",
+   "ipa": "rɪˈflekt"
+  },
+  {
+   "id": "u1-051",
+   "en": "(to) realize sth.",
+   "de": "etwas erkennen; sich einer Sache bewusst werden",
+   "pos": "verb",
+   "ipa": "ˈriːəlaɪz"
+  },
+  {
+   "id": "u1-052",
+   "en": "imagery",
+   "de": "bildhafte Sprache; Sprachbilder",
+   "pos": "noun",
+   "ipa": "ˈɪmɪdʒəri"
+  },
+  {
+   "id": "u1-053",
+   "en": "simile",
+   "de": "Vergleich",
+   "pos": "noun",
+   "ipa": "ˈsɪməli"
+  },
+  {
+   "id": "u1-054",
+   "en": "metaphor",
+   "de": "Metapher",
+   "pos": "noun",
+   "ipa": "ˈmetəfɔː"
+  },
+  {
+   "id": "u1-055",
+   "en": "device",
+   "de": "Mittel; Gerät, Apparat",
+   "pos": "noun",
+   "ipa": "dɪˈvaɪs"
+  },
+  {
+   "id": "u1-056",
+   "en": "gentle",
+   "de": "sanft(mütig)",
+   "pos": "adjective",
+   "ipa": "ˈdʒentl"
+  },
+  {
+   "id": "u1-057",
+   "en": "dove",
+   "de": "Taube",
+   "pos": "noun",
+   "ipa": "dʌv"
+  },
+  {
+   "id": "u1-058",
+   "en": "(to) be considered sth.",
+   "de": "als etwas betrachtet werden; für etwas gehalten werden",
+   "pos": "verb",
+   "ipa": "kənˈsɪdəd"
+  },
+  {
+   "id": "u1-059",
+   "en": "hawk",
+   "de": "Habicht; im übertragenen Sinn: Falke",
+   "pos": "noun",
+   "ipa": "hɔːk"
+  },
+  {
+   "id": "u1-060",
+   "en": "owl",
+   "de": "Eule",
+   "pos": "noun",
+   "ipa": "aʊl"
+  },
+  {
+   "id": "u1-061",
+   "en": "blind",
+   "de": "blind",
+   "pos": "adjective",
+   "ipa": "blaɪnd"
+  },
+  {
+   "id": "u1-062",
+   "en": "peaceful",
+   "de": "friedlich, friedfertig",
+   "pos": "adjective",
+   "ipa": "ˈpiːsfl"
+  },
+  {
+   "id": "u1-063",
+   "en": "athletic",
+   "de": "athletisch, sportlich",
+   "pos": "adjective",
+   "ipa": "æθˈletɪk"
+  },
+  {
+   "id": "u1-064",
+   "en": "gay",
+   "de": "schwul, lesbisch",
+   "pos": "adjective",
+   "ipa": "ɡeɪ"
+  },
+  {
+   "id": "u1-065",
+   "en": "straight",
+   "de": "hetero",
+   "pos": "adjective",
+   "ipa": "streɪt"
+  },
+  {
+   "id": "u1-066",
+   "en": "conventional",
+   "de": "konventionell",
+   "pos": "adjective",
+   "ipa": "kənˈvenʃənl"
+  },
+  {
+   "id": "u1-067",
+   "en": "liberal",
+   "de": "liberal",
+   "pos": "adjective",
+   "ipa": "ˈlɪbərəl"
+  },
+  {
+   "id": "u1-068",
+   "en": "religious",
+   "de": "religiös; gläubig",
+   "pos": "adjective",
+   "ipa": "rɪˈlɪdʒəs"
+  },
+  {
+   "id": "u1-069",
+   "en": "African-American",
+   "de": "Afroamerikaner/in; afroamerikanisch",
+   "pos": "adjective/noun",
+   "ipa": "ˌæfrɪkən əˈmerɪkən"
+  },
+  {
+   "id": "u1-070",
+   "en": "upbringing",
+   "de": "Erziehung",
+   "pos": "noun",
+   "ipa": "ˈʌpbrɪŋɪŋ"
+  },
+  {
+   "id": "u1-071",
+   "en": "dialect",
+   "de": "Dialekt",
+   "pos": "noun",
+   "ipa": "ˈdaɪəlekt"
+  },
+  {
+   "id": "u1-072",
+   "en": "particularly",
+   "de": "besonders; vor allem",
+   "pos": "adverb",
+   "ipa": "pəˈtɪkjələli"
+  },
+  {
+   "id": "u1-073",
+   "en": "(to) modify",
+   "de": "näher bestimmen",
+   "pos": "verb",
+   "ipa": "ˈmɒdɪfaɪ"
+  },
+  {
+   "id": "u1-074",
+   "en": "search engine",
+   "de": "(Internet-)Suchmaschine",
+   "pos": "noun",
+   "ipa": "ˈsɜːtʃ ˌendʒɪn"
+  },
+  {
+   "id": "u1-075",
+   "en": "(to) format",
+   "de": "formatieren (Text am Computer)",
+   "pos": "verb",
+   "ipa": "ˈfɔːmæt"
+  },
+  {
+   "id": "u1-076",
+   "en": "electronic",
+   "de": "elektronisch",
+   "pos": "adjective",
+   "ipa": "ɪˌlekˈtrɒnɪk"
+  },
+  {
+   "id": "u1-077",
+   "en": "visual",
+   "de": "optisch, visuell",
+   "pos": "adjective",
+   "ipa": "ˈvɪʒuəl"
+  },
+  {
+   "id": "u1-078",
+   "en": "proper",
+   "de": "richtige(r, s), angemessene(r, s), ordentliche(r, s)",
+   "pos": "adjective",
+   "ipa": "ˈprɒpə"
+  },
+  {
+   "id": "u1-079",
+   "en": "margin",
+   "de": "Rand",
+   "pos": "noun",
+   "ipa": "ˈmɑːdʒɪn"
+  },
+  {
+   "id": "u1-080",
+   "en": "(to) indent",
+   "de": "eine Zeile einrücken",
+   "pos": "verb",
+   "ipa": "ɪnˈdent"
+  },
+  {
+   "id": "u1-081",
+   "en": "neither ... nor ...",
+   "de": "weder ... noch ...",
+   "pos": "conjunction"
+  },
+  {
+   "id": "u1-082",
+   "en": "in relation to",
+   "de": "im Verhältnis zu",
+   "pos": "phrase",
+   "ipa": "rɪˈleɪʃn"
+  },
+  {
+   "id": "u1-083",
+   "en": "source",
+   "de": "Quelle; auch: Textquelle",
+   "pos": "noun",
+   "ipa": "sɔːs"
+  },
+  {
+   "id": "u1-084",
+   "en": "font",
+   "de": "Schriftart",
+   "pos": "noun",
+   "ipa": "fɒnt"
+  },
+  {
+   "id": "u1-085",
+   "en": "italics",
+   "de": "Kursivschrift",
+   "pos": "noun",
+   "ipa": "ɪˈtælɪks"
+  },
+  {
+   "id": "u1-086",
+   "en": "bold (type)",
+   "de": "Fettdruck",
+   "pos": "noun",
+   "ipa": "bəʊld"
+  },
+  {
+   "id": "u1-087",
+   "en": "clarity",
+   "de": "Klarheit",
+   "pos": "noun",
+   "ipa": "ˈklærəti"
+  },
+  {
+   "id": "u1-088",
+   "en": "untidy",
+   "de": "unordentlich, unsauber",
+   "pos": "adjective",
+   "ipa": "ʌnˈtaɪdi"
+  },
+  {
+   "id": "u1-089",
+   "en": "legible",
+   "de": "lesbar, leserlich",
+   "pos": "adjective",
+   "ipa": "ˈledʒəbl"
+  },
+  {
+   "id": "u1-090",
+   "en": "pt",
+   "de": "Punkt (Maßeinheit für Schriftgrad, Zeilenabstände u. Ä.)",
+   "pos": "noun"
+  },
+  {
+   "id": "u1-091",
+   "en": "function",
+   "de": "Funktion",
+   "pos": "noun",
+   "ipa": "ˈfʌŋkʃn"
+  },
+  {
+   "id": "u1-092",
+   "en": "(to) type",
+   "de": "tippen, Maschine schreiben",
+   "pos": "verb",
+   "ipa": "taɪp"
+  }
+ ],
+ "u1-part-c": [
+  {
+   "id": "u1-093",
+   "en": "equality",
+   "de": "Gleichheit, Gleichberechtigung",
+   "pos": "noun",
+   "ipa": "iˈkwɒləti"
+  },
+  {
+   "id": "u1-094",
+   "en": "opinion piece",
+   "de": "Stellungnahme, Meinungsartikel",
+   "pos": "noun",
+   "ipa": "əˈpɪnjən piːs"
+  },
+  {
+   "id": "u1-095",
+   "en": "(to) recognize",
+   "de": "anerkennen",
+   "pos": "verb",
+   "ipa": "ˈrekəɡnaɪz"
+  },
+  {
+   "id": "u1-096",
+   "en": "(to) make sth. up",
+   "de": "etwas bilden",
+   "pos": "verb"
+  },
+  {
+   "id": "u1-097",
+   "en": "percent (AE), per cent (BE)",
+   "de": "Prozent",
+   "pos": "noun",
+   "ipa": "pəˈsent"
+  },
+  {
+   "id": "u1-098",
+   "en": "nonexistent",
+   "de": "nicht vorhanden, nicht existierend",
+   "pos": "adjective",
+   "ipa": "ˌnɒnɪɡˈzɪstənt"
+  },
+  {
+   "id": "u1-099",
+   "en": "(to) exist",
+   "de": "existieren",
+   "pos": "verb",
+   "ipa": "ɪɡˈzɪst"
+  },
+  {
+   "id": "u1-100",
+   "en": "(to) differ",
+   "de": "sich unterscheiden, verschieden sein",
+   "pos": "verb",
+   "ipa": "ˈdɪfə"
+  },
+  {
+   "id": "u1-101",
+   "en": "biological",
+   "de": "biologisch",
+   "pos": "adjective",
+   "ipa": "ˌbaɪəˈlɒdʒɪkl"
+  },
+  {
+   "id": "u1-102",
+   "en": "when it comes to ...",
+   "de": "was ... betrifft/anbelangt, ...",
+   "pos": "phrase"
+  },
+  {
+   "id": "u1-103",
+   "en": "representation",
+   "de": "Vertretung, Repräsentanz",
+   "pos": "noun",
+   "ipa": "ˌreprɪzenˈteɪʃn"
+  },
+  {
+   "id": "u1-104",
+   "en": "(to) have sb. do sth.",
+   "de": "jn. etwas tun lassen; veranlassen, dass jemand etwas tut",
+   "pos": "verb"
+  },
+  {
+   "id": "u1-105",
+   "en": "(to) show up (infml)",
+   "de": "auftauchen, erscheinen",
+   "pos": "verb"
+  },
+  {
+   "id": "u1-106",
+   "en": "husband",
+   "de": "Ehemann",
+   "pos": "noun",
+   "ipa": "ˈhʌzbənd"
+  },
+  {
+   "id": "u1-107",
+   "en": "counselor (BE: counsellor)",
+   "de": "Berater/in; Betreuer/in",
+   "pos": "noun",
+   "ipa": "ˈkaʊnsələ"
+  },
+  {
+   "id": "u1-108",
+   "en": "ridiculous",
+   "de": "lächerlich",
+   "pos": "adjective",
+   "ipa": "rɪˈdɪkjələs"
+  },
+  {
+   "id": "u1-109",
+   "en": "contribution",
+   "de": "Beitrag",
+   "pos": "noun",
+   "ipa": "ˌkɒntrɪˈbjuːʃn"
+  },
+  {
+   "id": "u1-110",
+   "en": "after all",
+   "de": "schließlich doch",
+   "pos": "phrase",
+   "ipa": "ˌɑːftər ˈɔːl"
+  },
+  {
+   "id": "u1-111",
+   "en": "constantly",
+   "de": "ständig, dauernd",
+   "pos": "adverb",
+   "ipa": "ˈkɒnstəntli"
+  },
+  {
+   "id": "u1-112",
+   "en": "(to) eliminate",
+   "de": "abschaffen, beseitigen, eliminieren",
+   "pos": "verb",
+   "ipa": "ɪˈlɪmɪneɪt"
+  },
+  {
+   "id": "u1-113",
+   "en": "in the meantime",
+   "de": "in der Zwischenzeit, inzwischen",
+   "pos": "phrase",
+   "ipa": "ˈmiːntaɪm"
+  },
+  {
+   "id": "u1-114",
+   "en": "importance",
+   "de": "Wichtigkeit, Bedeutung",
+   "pos": "noun",
+   "ipa": "ɪmˈpɔːtəns"
+  },
+  {
+   "id": "u1-115",
+   "en": "(to) produce",
+   "de": "produzieren, erzeugen, herstellen",
+   "pos": "verb",
+   "ipa": "prəˈdjuːs"
+  },
+  {
+   "id": "u1-116",
+   "en": "headline",
+   "de": "Schlagzeile, Überschrift",
+   "pos": "noun",
+   "ipa": "ˈhedlaɪn"
+  },
+  {
+   "id": "u1-117",
+   "en": "provocative",
+   "de": "provozierend, provokativ",
+   "pos": "adjective",
+   "ipa": "prəˈvɒkətɪv"
+  },
+  {
+   "id": "u1-118",
+   "en": "(to) support",
+   "de": "unterstützen",
+   "pos": "verb",
+   "ipa": "səˈpɔːt"
+  },
+  {
+   "id": "u1-119",
+   "en": "(to) back sth. up",
+   "de": "etwas untermauern (Argument)",
+   "pos": "verb"
+  },
+  {
+   "id": "u1-120",
+   "en": "(to) restate sth.",
+   "de": "etwas wiederholen, etwas noch einmal formulieren",
+   "pos": "verb",
+   "ipa": "ˌriːˈsteɪt"
+  },
+  {
+   "id": "u1-121",
+   "en": "(to) call for sth.",
+   "de": "etwas verlangen, etwas fordern; zu etwas auffordern",
+   "pos": "verb"
+  },
+  {
+   "id": "u1-122",
+   "en": "sex",
+   "de": "Geschlecht",
+   "pos": "noun",
+   "ipa": "seks"
+  },
+  {
+   "id": "u1-123",
+   "en": "marriage",
+   "de": "Ehe; Heirat",
+   "pos": "noun",
+   "ipa": "ˈmærɪdʒ"
+  },
+  {
+   "id": "u1-124",
+   "en": "same-sex marriage",
+   "de": "gleichgeschlechtliche Ehe",
+   "pos": "noun"
+  },
+  {
+   "id": "u1-125",
+   "en": "paragraph break",
+   "de": "Absatzumbruch",
+   "pos": "noun",
+   "ipa": "ˈpærəɡrɑːf breɪk"
+  },
+  {
+   "id": "u1-126",
+   "en": "pay",
+   "de": "Bezahlung, Lohn",
+   "pos": "noun",
+   "ipa": "peɪ"
+  },
+  {
+   "id": "u1-127",
+   "en": "(to) discriminate against sb.",
+   "de": "jn. diskriminieren, jn. benachteiligen",
+   "pos": "verb",
+   "ipa": "dɪˈskrɪmɪneɪt"
+  },
+  {
+   "id": "u1-128",
+   "en": "sadly",
+   "de": "leider, bedauerlicherweise",
+   "pos": "adverb",
+   "ipa": "ˈsædli"
+  },
+  {
+   "id": "u1-129",
+   "en": "(to) take time off",
+   "de": "sich frei nehmen",
+   "pos": "verb"
+  },
+  {
+   "id": "u1-130",
+   "en": "(to) raise your voice",
+   "de": "seine Stimme erheben",
+   "pos": "verb",
+   "ipa": "reɪz"
+  },
+  {
+   "id": "u1-131",
+   "en": "fine",
+   "de": "Geldstrafe",
+   "pos": "noun",
+   "ipa": "faɪn"
+  },
+  {
+   "id": "u1-132",
+   "en": "(to) take sth./sb. seriously",
+   "de": "etwas/jn. ernst nehmen",
+   "pos": "verb",
+   "ipa": "ˈsɪəriəsli"
+  },
+  {
+   "id": "u1-133",
+   "en": "unequal",
+   "de": "ungleich",
+   "pos": "adjective",
+   "ipa": "ʌnˈiːkwəl"
+  },
+  {
+   "id": "u1-134",
+   "en": "persuasion",
+   "de": "Überredung, Überzeugung",
+   "pos": "noun",
+   "ipa": "pəˈsweɪʒn"
+  },
+  {
+   "id": "u1-135",
+   "en": "(to) persuade",
+   "de": "überreden",
+   "pos": "verb",
+   "ipa": "pəˈsweɪd"
+  },
+  {
+   "id": "u1-136",
+   "en": "anecdote",
+   "de": "Anekdote",
+   "pos": "noun",
+   "ipa": "ˈænɪkdəʊt"
+  },
+  {
+   "id": "u1-137",
+   "en": "historical",
+   "de": "historisch, geschichtlich",
+   "pos": "adjective",
+   "ipa": "hɪˈstɒrɪkl"
+  },
+  {
+   "id": "u1-138",
+   "en": "factual",
+   "de": "sachlich; faktisch; den Tatsachen entsprechend",
+   "pos": "adjective",
+   "ipa": "ˈfæktʃuəl"
+  },
+  {
+   "id": "u1-139",
+   "en": "expressive",
+   "de": "ausdrucksstark, aussagekräftig",
+   "pos": "adjective",
+   "ipa": "ɪkˈspresɪv"
+  },
+  {
+   "id": "u1-140",
+   "en": "rhetorical",
+   "de": "rhetorisch",
+   "pos": "adjective",
+   "ipa": "rɪˈtɒrɪkl"
+  },
+  {
+   "id": "u1-141",
+   "en": "(to) deny",
+   "de": "bestreiten, abstreiten; leugnen",
+   "pos": "verb",
+   "ipa": "dɪˈnaɪ"
+  },
+  {
+   "id": "u1-142",
+   "en": "emphatic",
+   "de": "nachdrücklich, eindringlich, emphatisch",
+   "pos": "adjective",
+   "ipa": "ɪmˈfætɪk"
+  },
+  {
+   "id": "u1-143",
+   "en": "improvement",
+   "de": "Verbesserung",
+   "pos": "noun",
+   "ipa": "ɪmˈpruːvmənt"
+  },
+  {
+   "id": "u1-144",
+   "en": "cell",
+   "de": "Zelle",
+   "pos": "noun",
+   "ipa": "sel"
+  },
+  {
+   "id": "u1-145",
+   "en": "genetics",
+   "de": "Genetik",
+   "pos": "noun",
+   "ipa": "dʒəˈnetɪks"
+  },
+  {
+   "id": "u1-146",
+   "en": "gene",
+   "de": "Gen",
+   "pos": "noun",
+   "ipa": "dʒiːn"
+  },
+  {
+   "id": "u1-147",
+   "en": "genetic",
+   "de": "genetisch",
+   "pos": "adjective",
+   "ipa": "dʒəˈnetɪk"
+  },
+  {
+   "id": "u1-148",
+   "en": "human race",
+   "de": "Menschheit",
+   "pos": "noun",
+   "ipa": "ˌhjuːmən ˈreɪs"
+  },
+  {
+   "id": "u1-149",
+   "en": "aid",
+   "de": "Hilfe, Unterstützung",
+   "pos": "noun",
+   "ipa": "eɪd"
+  },
+  {
+   "id": "u1-150",
+   "en": "technology",
+   "de": "Technik, Technologie",
+   "pos": "noun",
+   "ipa": "tekˈnɒlədʒi"
+  },
+  {
+   "id": "u1-151",
+   "en": "ancient",
+   "de": "uralt; antik",
+   "pos": "adjective",
+   "ipa": "ˈeɪnʃənt"
+  },
+  {
+   "id": "u1-152",
+   "en": "(to) rust",
+   "de": "rosten, verrosten",
+   "pos": "verb",
+   "ipa": "rʌst"
+  },
+  {
+   "id": "u1-153",
+   "en": "(to) erode",
+   "de": "abtragen, erodieren, auswaschen (Boden)",
+   "pos": "verb",
+   "ipa": "ɪˈrəʊd"
+  },
+  {
+   "id": "u1-154",
+   "en": "earthquake",
+   "de": "Erdbeben",
+   "pos": "noun",
+   "ipa": "ˈɜːθkweɪk"
+  },
+  {
+   "id": "u1-155",
+   "en": "species, pl species",
+   "de": "Art, Spezies",
+   "pos": "noun",
+   "ipa": "ˈspiːʃiːz"
+  },
+  {
+   "id": "u1-156",
+   "en": "record",
+   "de": "Aufzeichnung(en)",
+   "pos": "noun",
+   "ipa": "ˈrekɔːd"
+  },
+  {
+   "id": "u1-157",
+   "en": "(to) be around",
+   "de": "da sein, dabei sein; in der Nähe sein",
+   "pos": "verb",
+   "ipa": "əˈraʊnd"
+  },
+  {
+   "id": "u1-158",
+   "en": "skeleton",
+   "de": "Skelett",
+   "pos": "noun",
+   "ipa": "ˈskelɪtn"
+  },
+  {
+   "id": "u1-159",
+   "en": "astonishment",
+   "de": "Erstaunen",
+   "pos": "noun",
+   "ipa": "əˈstɒnɪʃmənt"
+  },
+  {
+   "id": "u1-160",
+   "en": "excitement",
+   "de": "Aufregung, Begeisterung",
+   "pos": "noun",
+   "ipa": "ɪkˈsaɪtmənt"
+  },
+  {
+   "id": "u1-161",
+   "en": "frustration",
+   "de": "Frust; Enttäuschung",
+   "pos": "noun",
+   "ipa": "frʌˈstreɪʃn"
+  },
+  {
+   "id": "u1-162",
+   "en": "the ups and downs",
+   "de": "die Höhen und Tiefen",
+   "pos": "phrase"
+  },
+  {
+   "id": "u1-163",
+   "en": "compound",
+   "de": "Verbindung",
+   "pos": "noun",
+   "ipa": "ˈkɒmpaʊnd"
+  },
+  {
+   "id": "u1-164",
+   "en": "(to) contain",
+   "de": "enthalten, beinhalten",
+   "pos": "verb",
+   "ipa": "kənˈteɪn"
+  },
+  {
+   "id": "u1-165",
+   "en": "instruction",
+   "de": "Anweisung",
+   "pos": "noun",
+   "ipa": "ɪnˈstrʌkʃn"
+  },
+  {
+   "id": "u1-166",
+   "en": "organism",
+   "de": "Organismus",
+   "pos": "noun",
+   "ipa": "ˈɔːɡənɪzəm"
+  },
+  {
+   "id": "u1-167",
+   "en": "(to) pack",
+   "de": "packen; verpacken",
+   "pos": "verb",
+   "ipa": "pæk"
+  },
+  {
+   "id": "u1-168",
+   "en": "controversial",
+   "de": "kontrovers, umstritten",
+   "pos": "adjective",
+   "ipa": "ˌkɒntrəˈvɜːʃl"
+  },
+  {
+   "id": "u1-169",
+   "en": "whereas",
+   "de": "während, wohingegen",
+   "pos": "conjunction",
+   "ipa": "ˌweərˈæz"
+  },
+  {
+   "id": "u1-170",
+   "en": "humanity",
+   "de": "Menschheit; Menschlichkeit, Humanität",
+   "pos": "noun",
+   "ipa": "hjuːˈmænəti"
+  },
+  {
+   "id": "u1-171",
+   "en": "bacteria (pl)",
+   "de": "Bakterien",
+   "pos": "noun",
+   "ipa": "bækˈtɪəriə"
+  },
+  {
+   "id": "u1-172",
+   "en": "(to) be located (in ...)",
+   "de": "in ... liegen, sich in ... befinden",
+   "pos": "verb",
+   "ipa": "ləʊˈkeɪtɪd"
+  },
+  {
+   "id": "u1-173",
+   "en": "(to) remove",
+   "de": "entfernen, beseitigen; ausziehen (Kleidung)",
+   "pos": "verb",
+   "ipa": "rɪˈmuːv"
+  },
+  {
+   "id": "u1-174",
+   "en": "harmless",
+   "de": "harmlos",
+   "pos": "adjective",
+   "ipa": "ˈhɑːmləs"
+  },
+  {
+   "id": "u1-175",
+   "en": "extraordinary",
+   "de": "außergewöhnlich",
+   "pos": "adjective",
+   "ipa": "ɪkˈstrɔːdnri"
+  },
+  {
+   "id": "u1-176",
+   "en": "breakthrough",
+   "de": "Durchbruch",
+   "pos": "noun",
+   "ipa": "ˈbreɪkθruː"
+  },
+  {
+   "id": "u1-177",
+   "en": "precise",
+   "de": "genau, präzise",
+   "pos": "adjective",
+   "ipa": "prɪˈsaɪs"
+  },
+  {
+   "id": "u1-178",
+   "en": "accurate",
+   "de": "genau, präzise",
+   "pos": "adjective",
+   "ipa": "ˈækjərət"
+  },
+  {
+   "id": "u1-179",
+   "en": "method",
+   "de": "Methode",
+   "pos": "noun",
+   "ipa": "ˈmeθəd"
+  },
+  {
+   "id": "u1-180",
+   "en": "cancer",
+   "de": "Krebs (Erkrankung)",
+   "pos": "noun",
+   "ipa": "ˈkænsə"
+  },
+  {
+   "id": "u1-181",
+   "en": "permanent",
+   "de": "permanent, dauerhaft",
+   "pos": "adjective",
+   "ipa": "ˈpɜːmənənt"
+  },
+  {
+   "id": "u1-182",
+   "en": "pill",
+   "de": "Pille, Tablette",
+   "pos": "noun",
+   "ipa": "pɪl"
+  },
+  {
+   "id": "u1-183",
+   "en": "fear (of)",
+   "de": "Angst (vor)",
+   "pos": "noun",
+   "ipa": "fɪə"
+  },
+  {
+   "id": "u1-184",
+   "en": "so-called",
+   "de": "sogenannt",
+   "pos": "adjective",
+   "ipa": "ˌsəʊ ˈkɔːld"
+  },
+  {
+   "id": "u1-185",
+   "en": "topping",
+   "de": "Überzug, Belag; Soße",
+   "pos": "noun",
+   "ipa": "ˈtɒpɪŋ"
+  },
+  {
+   "id": "u1-186",
+   "en": "unethical",
+   "de": "unethisch",
+   "pos": "adjective",
+   "ipa": "ʌnˈeθɪkl"
+  },
+  {
+   "id": "u1-187",
+   "en": "with regard to",
+   "de": "bezüglich",
+   "pos": "phrase",
+   "ipa": "rɪˈɡɑːd"
+  },
+  {
+   "id": "u1-188",
+   "en": "(to) acquire",
+   "de": "erwerben, in den Besitz gelangen",
+   "pos": "verb",
+   "ipa": "əˈkwaɪə"
+  },
+  {
+   "id": "u1-189",
+   "en": "newsreader",
+   "de": "Nachrichtensprecher/in",
+   "pos": "noun",
+   "ipa": "ˈnjuːzriːdə"
+  },
+  {
+   "id": "u1-190",
+   "en": "power line",
+   "de": "Überlandleitung",
+   "pos": "noun",
+   "ipa": "ˈpaʊə laɪn"
+  },
+  {
+   "id": "u1-191",
+   "en": "(to) repair",
+   "de": "reparieren",
+   "pos": "verb",
+   "ipa": "rɪˈpeə"
+  },
+  {
+   "id": "u1-192",
+   "en": "high winds (pl)",
+   "de": "starker Wind, starke Winde",
+   "pos": "noun"
+  },
+  {
+   "id": "u1-193",
+   "en": "rail link",
+   "de": "Bahnverbindung",
+   "pos": "noun",
+   "ipa": "ˌreɪl ˈlɪŋk"
+  },
+  {
+   "id": "u1-194",
+   "en": "applause",
+   "de": "Beifall, Applaus",
+   "pos": "noun",
+   "ipa": "əˈplɔːz"
+  },
+  {
+   "id": "u1-195",
+   "en": "climax",
+   "de": "Höhepunkt",
+   "pos": "noun",
+   "ipa": "ˈklaɪmæks"
+  },
+  {
+   "id": "u1-196",
+   "en": "single",
+   "de": "einzige(r, s)",
+   "pos": "adjective",
+   "ipa": "ˈsɪŋɡl"
+  }
+ ],
+ "u2-part-a": [
+  {
+   "id": "u2-001",
+   "en": "(to) define",
+   "de": "definieren; charakterisieren, ausmachen",
+   "pos": "verb",
+   "ipa": "dɪˈfaɪn"
+  },
+  {
+   "id": "u2-002",
+   "en": "meeting",
+   "de": "Treffen; Besprechung, Versammlung",
+   "pos": "noun",
+   "ipa": "ˈmiːtɪŋ"
+  },
+  {
+   "id": "u2-003",
+   "en": "jungle",
+   "de": "Dschungel",
+   "pos": "noun",
+   "ipa": "ˈdʒʌŋɡl"
+  },
+  {
+   "id": "u2-004",
+   "en": "the locals (pl)",
+   "de": "die Einheimischen",
+   "pos": "noun",
+   "ipa": "ˈləʊklz"
+  },
+  {
+   "id": "u2-005",
+   "en": "villager",
+   "de": "Dorfbewohner/in",
+   "pos": "noun",
+   "ipa": "ˈvɪlɪdʒə"
+  },
+  {
+   "id": "u2-006",
+   "en": "(to) observe (fml)",
+   "de": "beobachten",
+   "pos": "verb",
+   "ipa": "əbˈzɜːv"
+  },
+  {
+   "id": "u2-007",
+   "en": "(to) affect",
+   "de": "betreffen, sich auswirken auf; beeinflussen",
+   "pos": "verb",
+   "ipa": "əˈfekt"
+  },
+  {
+   "id": "u2-008",
+   "en": "drunk",
+   "de": "betrunken",
+   "pos": "adjective",
+   "ipa": "drʌŋk"
+  },
+  {
+   "id": "u2-009",
+   "en": "(to) save",
+   "de": "sparen; speichern",
+   "pos": "verb",
+   "ipa": "seɪv"
+  },
+  {
+   "id": "u2-010",
+   "en": "therefore",
+   "de": "daher, deshalb",
+   "pos": "adverb",
+   "ipa": "ˈðeəfɔː"
+  },
+  {
+   "id": "u2-011",
+   "en": "(to) infect",
+   "de": "infizieren; anstecken",
+   "pos": "verb",
+   "ipa": "ɪnˈfekt"
+  },
+  {
+   "id": "u2-012",
+   "en": "cream",
+   "de": "Creme; Salbe",
+   "pos": "noun",
+   "ipa": "kriːm"
+  },
+  {
+   "id": "u2-013",
+   "en": "liquid",
+   "de": "Flüssigkeit",
+   "pos": "noun",
+   "ipa": "ˈlɪkwɪd"
+  },
+  {
+   "id": "u2-014",
+   "en": "manners (pl)",
+   "de": "Manieren",
+   "pos": "noun",
+   "ipa": "ˈmænəz"
+  },
+  {
+   "id": "u2-015",
+   "en": "no matter if/whether; no matter what/who/how/...",
+   "de": "ganz gleich, ob; ganz gleich, was/wer/wie/...",
+   "pos": "phrase",
+   "ipa": "ˈmætə"
+  },
+  {
+   "id": "u2-016",
+   "en": "(to) happen to do sth.",
+   "de": "zufällig(erweise) etwas tun",
+   "pos": "verb",
+   "ipa": "ˈhæpn"
+  },
+  {
+   "id": "u2-017",
+   "en": "(to) teach sb. a lesson",
+   "de": "jm. eine Lektion erteilen",
+   "pos": "verb"
+  },
+  {
+   "id": "u2-018",
+   "en": "(to) trade",
+   "de": "(ein)tauschen; Handel treiben",
+   "pos": "verb",
+   "ipa": "treɪd"
+  },
+  {
+   "id": "u2-019",
+   "en": "bullet",
+   "de": "(Gewehr-)Kugel",
+   "pos": "noun",
+   "ipa": "ˈbʊlɪt"
+  },
+  {
+   "id": "u2-020",
+   "en": "(to) return",
+   "de": "zurückkehren, zurückkommen",
+   "pos": "verb",
+   "ipa": "rɪˈtɜːn"
+  },
+  {
+   "id": "u2-021",
+   "en": "greeting",
+   "de": "Begrüßung",
+   "pos": "noun",
+   "ipa": "ˈɡriːtɪŋ"
+  },
+  {
+   "id": "u2-022",
+   "en": "(to) respond",
+   "de": "antworten, erwidern; reagieren",
+   "pos": "verb",
+   "ipa": "rɪˈspɒnd"
+  },
+  {
+   "id": "u2-023",
+   "en": "post",
+   "de": "Pfosten",
+   "pos": "noun",
+   "ipa": "pəʊst"
+  },
+  {
+   "id": "u2-024",
+   "en": "turtle",
+   "de": "Wasserschildkröte",
+   "pos": "noun",
+   "ipa": "ˈtɜːtl"
+  },
+  {
+   "id": "u2-025",
+   "en": "the other day",
+   "de": "neulich",
+   "pos": "phrase"
+  },
+  {
+   "id": "u2-026",
+   "en": "sense",
+   "de": "Vernunft, Verstand",
+   "pos": "noun",
+   "ipa": "sens"
+  },
+  {
+   "id": "u2-027",
+   "en": "pole",
+   "de": "Stange, Pfahl, Mast",
+   "pos": "noun",
+   "ipa": "pəʊl"
+  },
+  {
+   "id": "u2-028",
+   "en": "(to) come to an understanding",
+   "de": "sich einigen; zu einer Übereinkunft kommen",
+   "pos": "verb"
+  },
+  {
+   "id": "u2-029",
+   "en": "none of us",
+   "de": "keine/r von uns",
+   "pos": "phrase",
+   "ipa": "nʌn"
+  },
+  {
+   "id": "u2-030",
+   "en": "stingy (infml)",
+   "de": "knauserig, geizig",
+   "pos": "noun",
+   "ipa": "ˈstɪndʒi"
+  },
+  {
+   "id": "u2-031",
+   "en": "(to) refuse",
+   "de": "sich weigern, ablehnen",
+   "pos": "verb",
+   "ipa": "rɪˈfjuːz"
+  },
+  {
+   "id": "u2-032",
+   "en": "mattress",
+   "de": "Matratze",
+   "pos": "noun",
+   "ipa": "ˈmætrəs"
+  },
+  {
+   "id": "u2-033",
+   "en": "(to) reach for sth.",
+   "de": "nach etwas greifen",
+   "pos": "verb"
+  },
+  {
+   "id": "u2-034",
+   "en": "(to) unwrap",
+   "de": "auspacken, auswickeln",
+   "pos": "verb",
+   "ipa": "ʌnˈræp"
+  },
+  {
+   "id": "u2-035",
+   "en": "(to) indicate sth./sb. (fml)",
+   "de": "auf etwas/jn. zeigen, deuten, hinweisen",
+   "pos": "verb",
+   "ipa": "ˈɪndɪkeɪt"
+  },
+  {
+   "id": "u2-036",
+   "en": "narrative",
+   "de": "Erzählung, Geschichte",
+   "pos": "noun",
+   "ipa": "ˈnærətɪv"
+  },
+  {
+   "id": "u2-037",
+   "en": "prose",
+   "de": "Prosa",
+   "pos": "noun",
+   "ipa": "prəʊz"
+  },
+  {
+   "id": "u2-038",
+   "en": "fiction",
+   "de": "Belletristik, Prosa(literatur); Märchen, Fiktion",
+   "pos": "noun",
+   "ipa": "ˈfɪkʃn"
+  },
+  {
+   "id": "u2-039",
+   "en": "graphic novel",
+   "de": "Bildroman, Comicroman",
+   "pos": "noun",
+   "ipa": "ˌɡræfɪk ˈnɒvl"
+  },
+  {
+   "id": "u2-040",
+   "en": "non-fiction",
+   "de": "Sachliteratur",
+   "pos": "noun",
+   "ipa": "ˌnɒn ˈfɪkʃn"
+  },
+  {
+   "id": "u2-041",
+   "en": "companion",
+   "de": "Begleiter/in, Gefährte/-in",
+   "pos": "noun",
+   "ipa": "kəmˈpænjən"
+  },
+  {
+   "id": "u2-042",
+   "en": "sympathy",
+   "de": "Sympathie; Mitgefühl",
+   "pos": "noun",
+   "ipa": "ˈsɪmpəθi"
+  },
+  {
+   "id": "u2-043",
+   "en": "(to) succeed",
+   "de": "Erfolg haben",
+   "pos": "verb",
+   "ipa": "səkˈsiːd"
+  },
+  {
+   "id": "u2-044",
+   "en": "observation",
+   "de": "Beobachtung",
+   "pos": "noun",
+   "ipa": "ˌɒbzəˈveɪʃn"
+  },
+  {
+   "id": "u2-045",
+   "en": "omniscient",
+   "de": "allwissend",
+   "pos": "adjective",
+   "ipa": "ɒmˈnɪsiənt"
+  },
+  {
+   "id": "u2-046",
+   "en": "messaging app",
+   "de": "Chatprogramm",
+   "pos": "noun",
+   "ipa": "ˈmesɪdʒɪŋ æp"
+  },
+  {
+   "id": "u2-047",
+   "en": "footage",
+   "de": "Bildmaterial, Film(material)",
+   "pos": "noun",
+   "ipa": "ˈfʊtɪdʒ"
+  },
+  {
+   "id": "u2-048",
+   "en": "cotton",
+   "de": "Baumwolle",
+   "pos": "noun",
+   "ipa": "ˈkɒtn"
+  },
+  {
+   "id": "u2-049",
+   "en": "reflection",
+   "de": "Betrachtung, Reflexion",
+   "pos": "noun",
+   "ipa": "rɪˈflekʃn"
+  }
+ ],
+ "u2-part-b": [
+  {
+   "id": "u2-050",
+   "en": "review",
+   "de": "Rezension, Besprechung, Kritik",
+   "pos": "noun",
+   "ipa": "rɪˈvjuː"
+  },
+  {
+   "id": "u2-051",
+   "en": "(to) review",
+   "de": "besprechen, rezensieren",
+   "pos": "verb",
+   "ipa": "rɪˈvjuː"
+  },
+  {
+   "id": "u2-052",
+   "en": "fictional",
+   "de": "fiktiv, erfunden",
+   "pos": "adjective",
+   "ipa": "ˈfɪkʃənl"
+  },
+  {
+   "id": "u2-053",
+   "en": "misunderstanding",
+   "de": "Missverständnis",
+   "pos": "noun",
+   "ipa": "ˌmɪsʌndəˈstændɪŋ"
+  },
+  {
+   "id": "u2-054",
+   "en": "(to) narrate",
+   "de": "schildern, erzählen",
+   "pos": "verb",
+   "ipa": "nəˈreɪt"
+  },
+  {
+   "id": "u2-055",
+   "en": "(to) bathe (bes. AE)",
+   "de": "baden",
+   "pos": "verb",
+   "ipa": "beɪð"
+  },
+  {
+   "id": "u2-056",
+   "en": "ignorant",
+   "de": "unwissend, nicht informiert, schlecht informiert",
+   "pos": "adjective",
+   "ipa": "ˈɪɡnərənt"
+  },
+  {
+   "id": "u2-057",
+   "en": "wife, pl wives",
+   "de": "Ehefrau",
+   "pos": "noun",
+   "ipa": "waɪf"
+  },
+  {
+   "id": "u2-058",
+   "en": "(to) put sth. off",
+   "de": "etwas aufschieben",
+   "pos": "verb"
+  },
+  {
+   "id": "u2-059",
+   "en": "for now",
+   "de": "einstweilen, vorerst, fürs Erste",
+   "pos": "phrase"
+  },
+  {
+   "id": "u2-060",
+   "en": "(to) abandon sb.",
+   "de": "jn. verlassen, im Stich lassen; aussetzen",
+   "pos": "verb",
+   "ipa": "əˈbændən"
+  },
+  {
+   "id": "u2-061",
+   "en": "(to) breastfeed, -fed, -fed",
+   "de": "stillen",
+   "pos": "verb",
+   "ipa": "ˈbrestfiːd"
+  },
+  {
+   "id": "u2-062",
+   "en": "eventually",
+   "de": "schließlich, letzten Endes",
+   "pos": "adverb",
+   "ipa": "ɪˈventʃuəli"
+  },
+  {
+   "id": "u2-063",
+   "en": "literally",
+   "de": "im wahrsten Sinne des Wortes; buchstäblich",
+   "pos": "adverb",
+   "ipa": "ˈlɪtərəli"
+  },
+  {
+   "id": "u2-064",
+   "en": "(to) grow smaller/old/..., grew, grown",
+   "de": "allmählich kleiner/alt/... werden",
+   "pos": "verb"
+  },
+  {
+   "id": "u2-065",
+   "en": "enormous",
+   "de": "riesig, gewaltig, enorm",
+   "pos": "adjective",
+   "ipa": "ɪˈnɔːməs"
+  },
+  {
+   "id": "u2-066",
+   "en": "credible",
+   "de": "glaubwürdig, glaubhaft",
+   "pos": "adjective",
+   "ipa": "ˈkredəbl"
+  },
+  {
+   "id": "u2-067",
+   "en": "informative",
+   "de": "informativ, lehrreich",
+   "pos": "adjective",
+   "ipa": "ɪnˈfɔːmətɪv"
+  },
+  {
+   "id": "u2-068",
+   "en": "strongly",
+   "de": "nachdrücklich, entschieden, eindringlich",
+   "pos": "adverb",
+   "ipa": "ˈstrɒŋli"
+  },
+  {
+   "id": "u2-069",
+   "en": "engaging",
+   "de": "fesselnd (Literatur, Film u. Ä.)",
+   "pos": "adjective",
+   "ipa": "ɪnˈɡeɪdʒɪŋ"
+  },
+  {
+   "id": "u2-070",
+   "en": "distant",
+   "de": "weit entfernt, fern",
+   "pos": "adjective",
+   "ipa": "ˈdɪstənt"
+  },
+  {
+   "id": "u2-071",
+   "en": "(to) inform sb.",
+   "de": "jn. informieren",
+   "pos": "verb",
+   "ipa": "ɪnˈfɔːm"
+  },
+  {
+   "id": "u2-072",
+   "en": "plot",
+   "de": "Handlungsverlauf eines Films/einer Geschichte",
+   "pos": "noun",
+   "ipa": "plɒt"
+  },
+  {
+   "id": "u2-073",
+   "en": "(to) hint (at sth.)",
+   "de": "etwas andeuten, durchblicken lassen",
+   "pos": "verb",
+   "ipa": "hɪnt"
+  },
+  {
+   "id": "u2-074",
+   "en": "(to) summarize",
+   "de": "zusammenfassen",
+   "pos": "verb",
+   "ipa": "ˈsʌməraɪz"
+  },
+  {
+   "id": "u2-075",
+   "en": "suitable",
+   "de": "geeignet, passend",
+   "pos": "adjective",
+   "ipa": "ˈsuːtəbl"
+  },
+  {
+   "id": "u2-076",
+   "en": "(to) appeal to sb.",
+   "de": "für jn. attraktiv sein, jn. ansprechen",
+   "pos": "verb",
+   "ipa": "əˈpiːl"
+  },
+  {
+   "id": "u2-077",
+   "en": "ladder",
+   "de": "Leiter",
+   "pos": "noun",
+   "ipa": "ˈlædə"
+  },
+  {
+   "id": "u2-078",
+   "en": "genre",
+   "de": "Gattung, Genre",
+   "pos": "noun",
+   "ipa": "ˈʒɒnrə"
+  },
+  {
+   "id": "u2-079",
+   "en": "semi-",
+   "de": "halb-; Halb-",
+   "pos": "prefix",
+   "ipa": "ˈsemi"
+  },
+  {
+   "id": "u2-080",
+   "en": "autobiographical",
+   "de": "autobiografisch",
+   "pos": "adjective",
+   "ipa": "ˌɔːtəˌbaɪəˈɡræfɪkl"
+  },
+  {
+   "id": "u2-081",
+   "en": "intended",
+   "de": "beabsichtigt, gemeint",
+   "pos": "adjective",
+   "ipa": "ɪnˈtendɪd"
+  },
+  {
+   "id": "u2-082",
+   "en": "powerful",
+   "de": "mächtig, kräftig, stark",
+   "pos": "adjective",
+   "ipa": "ˈpaʊəfl"
+  },
+  {
+   "id": "u2-083",
+   "en": "lover",
+   "de": "Liebhaber/in",
+   "pos": "noun",
+   "ipa": "ˈlʌvə"
+  },
+  {
+   "id": "u2-084",
+   "en": "(to) be set in",
+   "de": "spielen in",
+   "pos": "verb",
+   "ipa": "set"
+  },
+  {
+   "id": "u2-085",
+   "en": "hilarious",
+   "de": "urkomisch, unheimlich witzig",
+   "pos": "adjective",
+   "ipa": "hɪˈleəriəs"
+  },
+  {
+   "id": "u2-086",
+   "en": "account",
+   "de": "Bericht, Schilderung, Darstellung",
+   "pos": "noun",
+   "ipa": "əˈkaʊnt"
+  },
+  {
+   "id": "u2-087",
+   "en": "emphasis",
+   "de": "Betonung, Hervorhebung",
+   "pos": "noun",
+   "ipa": "ˈemfəsɪs"
+  },
+  {
+   "id": "u2-088",
+   "en": "(to) emphasize",
+   "de": "betonen, hervorheben",
+   "pos": "verb",
+   "ipa": "ˈemfəsaɪz"
+  },
+  {
+   "id": "u2-089",
+   "en": "entertaining",
+   "de": "unterhaltsam, amüsant, kurzweilig",
+   "pos": "adjective",
+   "ipa": "ˌentəˈteɪnɪŋ"
+  },
+  {
+   "id": "u2-090",
+   "en": "read",
+   "de": "Lektüre",
+   "pos": "noun",
+   "ipa": "riːd"
+  },
+  {
+   "id": "u2-091",
+   "en": "enjoyable",
+   "de": "angenehm, unterhaltsam",
+   "pos": "adjective",
+   "ipa": "ɪnˈdʒɔɪəbl"
+  },
+  {
+   "id": "u2-092",
+   "en": "lifelike",
+   "de": "lebensecht, realistisch",
+   "pos": "adjective",
+   "ipa": "ˈlaɪflaɪk"
+  },
+  {
+   "id": "u2-093",
+   "en": "gripping",
+   "de": "spannend, fesselnd",
+   "pos": "adjective",
+   "ipa": "ˈɡrɪpɪŋ"
+  },
+  {
+   "id": "u2-094",
+   "en": "meaningful",
+   "de": "aussagekräftig",
+   "pos": "adjective",
+   "ipa": "ˈmiːnɪŋfl"
+  },
+  {
+   "id": "u2-095",
+   "en": "(to) quote",
+   "de": "zitieren",
+   "pos": "verb",
+   "ipa": "kwəʊt"
+  }
+ ],
+ "u2-part-c": [
+  {
+   "id": "u2-096",
+   "en": "diversity",
+   "de": "Vielfalt, Verschiedenartigkeit",
+   "pos": "noun",
+   "ipa": "daɪˈvɜːsəti"
+  },
+  {
+   "id": "u2-097",
+   "en": "display",
+   "de": "Ausstellung, Vorführung, Schau",
+   "pos": "noun",
+   "ipa": "dɪˈspleɪ"
+  },
+  {
+   "id": "u2-098",
+   "en": "(to) title",
+   "de": "betiteln, benennen",
+   "pos": "verb",
+   "ipa": "ˈtaɪtl"
+  },
+  {
+   "id": "u2-099",
+   "en": "harmony",
+   "de": "Harmonie, Eintracht",
+   "pos": "noun",
+   "ipa": "ˈhɑːməni"
+  },
+  {
+   "id": "u2-100",
+   "en": "(to) embrace",
+   "de": "annehmen, mit offenen Armen begrüßen; sich umarmen",
+   "pos": "verb",
+   "ipa": "ɪmˈbreɪs"
+  },
+  {
+   "id": "u2-101",
+   "en": "derogatory (fml)",
+   "de": "abfällig, abwertend",
+   "pos": "adjective",
+   "ipa": "dɪˈrɒɡətri"
+  },
+  {
+   "id": "u2-102",
+   "en": "stereotype",
+   "de": "Klischee(vorstellung), Stereotyp",
+   "pos": "noun",
+   "ipa": "ˈsteriətaɪp"
+  },
+  {
+   "id": "u2-103",
+   "en": "(to) be present",
+   "de": "vorhanden sein; anwesend sein",
+   "pos": "verb",
+   "ipa": "ˈpreznt"
+  },
+  {
+   "id": "u2-104",
+   "en": "(to) capture",
+   "de": "einfangen; auch im übertragenen Sinne",
+   "pos": "verb",
+   "ipa": "ˈkæptʃə"
+  },
+  {
+   "id": "u2-105",
+   "en": "(to) paste",
+   "de": "ankleben; einfügen (Computer)",
+   "pos": "verb",
+   "ipa": "peɪst"
+  },
+  {
+   "id": "u2-106",
+   "en": "(to) install",
+   "de": "installieren, einrichten",
+   "pos": "verb",
+   "ipa": "ɪnˈstɔːl"
+  },
+  {
+   "id": "u2-107",
+   "en": "(to) take a stand (on sth./against sth.)",
+   "de": "Stellung beziehen (zu etwas); ein Zeichen setzen",
+   "pos": "verb"
+  },
+  {
+   "id": "u2-108",
+   "en": "collective",
+   "de": "gemeinschaftlich, vereint",
+   "pos": "adjective",
+   "ipa": "kəˈlektɪv"
+  },
+  {
+   "id": "u2-109",
+   "en": "awareness",
+   "de": "Bewusstsein, Aufmerksamkeit",
+   "pos": "noun",
+   "ipa": "əˈweənəs"
+  },
+  {
+   "id": "u2-110",
+   "en": "flash mob",
+   "de": "Flashmob",
+   "pos": "noun"
+  },
+  {
+   "id": "u2-111",
+   "en": "(to) rise up, rose, risen",
+   "de": "sich erheben, aufstehen",
+   "pos": "verb"
+  },
+  {
+   "id": "u2-112",
+   "en": "(to) make a difference",
+   "de": "etwas bewirken, etwas bewegen",
+   "pos": "verb"
+  },
+  {
+   "id": "u2-113",
+   "en": "disruption",
+   "de": "Störung, Beeinträchtigung; Zusammenbruch",
+   "pos": "noun",
+   "ipa": "dɪsˈrʌpʃn"
+  },
+  {
+   "id": "u2-114",
+   "en": "(to) frighten sb.",
+   "de": "jm. Angst machen",
+   "pos": "verb",
+   "ipa": "ˈfraɪtn"
+  },
+  {
+   "id": "u2-115",
+   "en": "seldom",
+   "de": "selten",
+   "pos": "adverb",
+   "ipa": "ˈseldəm"
+  },
+  {
+   "id": "u2-116",
+   "en": "aim",
+   "de": "Ziel",
+   "pos": "noun",
+   "ipa": "eɪm"
+  },
+  {
+   "id": "u2-117",
+   "en": "crisis, pl crises",
+   "de": "Krise",
+   "pos": "noun",
+   "ipa": "ˈkraɪsɪs"
+  },
+  {
+   "id": "u2-118",
+   "en": "particular",
+   "de": "bestimmte(r, s), spezielle(r, s)",
+   "pos": "adjective",
+   "ipa": "pəˈtɪkjələ"
+  },
+  {
+   "id": "u2-119",
+   "en": "option",
+   "de": "Option, Wahl-Möglichkeit",
+   "pos": "noun",
+   "ipa": "ˈɒpʃn"
+  },
+  {
+   "id": "u2-120",
+   "en": "(to) be committed to sth.",
+   "de": "sich für etwas verpflichten, sich zu etwas bekennen",
+   "pos": "verb",
+   "ipa": "kəˈmɪtɪd"
+  },
+  {
+   "id": "u2-121",
+   "en": "convinced",
+   "de": "überzeugt",
+   "pos": "adjective",
+   "ipa": "kənˈvɪnst"
+  },
+  {
+   "id": "u2-122",
+   "en": "rarely",
+   "de": "selten; kaum je",
+   "pos": "adverb",
+   "ipa": "ˈreəli"
+  },
+  {
+   "id": "u2-123",
+   "en": "exercise (no pl)",
+   "de": "Bewegung, körperliches Training",
+   "pos": "noun",
+   "ipa": "ˈeksəsaɪz"
+  },
+  {
+   "id": "u2-124",
+   "en": "(to) refine",
+   "de": "verfeinern, weiterentwickeln",
+   "pos": "verb",
+   "ipa": "rɪˈfaɪn"
+  },
+  {
+   "id": "u2-125",
+   "en": "opener",
+   "de": "Eröffnung",
+   "pos": "noun",
+   "ipa": "ˈəʊpnə"
+  },
+  {
+   "id": "u2-126",
+   "en": "ironic",
+   "de": "ironisch",
+   "pos": "adjective",
+   "ipa": "aɪˈrɒnɪk"
+  },
+  {
+   "id": "u2-127",
+   "en": "dinosaur",
+   "de": "Dinosaurier",
+   "pos": "noun",
+   "ipa": "ˈdaɪnəsɔː"
+  },
+  {
+   "id": "u2-128",
+   "en": "the United Nations (UN)",
+   "de": "die Vereinten Nationen",
+   "pos": "noun",
+   "ipa": "juˌnaɪtɪd ˈneɪʃnz"
+  },
+  {
+   "id": "u2-129",
+   "en": "statistic",
+   "de": "statistische Tatsache, statistische Größe",
+   "pos": "noun",
+   "ipa": "stəˈtɪstɪk"
+  },
+  {
+   "id": "u2-130",
+   "en": "carbon",
+   "de": "Kohlenstoff",
+   "pos": "noun",
+   "ipa": "ˈkɑːbən"
+  },
+  {
+   "id": "u2-131",
+   "en": "(to) release",
+   "de": "abgeben, freisetzen",
+   "pos": "verb",
+   "ipa": "rɪˈliːs"
+  }
+ ],
+ "u3-introduction": [
+  {
+   "id": "u3-001",
+   "en": "technological",
+   "de": "technologisch",
+   "pos": "adjective",
+   "ipa": "ˌteknəˈlɒdʒɪkl"
+  },
+  {
+   "id": "u3-002",
+   "en": "progress (no pl)",
+   "de": "Fortschritt(e)",
+   "pos": "noun",
+   "ipa": "ˈprəʊɡres"
+  },
+  {
+   "id": "u3-003",
+   "en": "delivery",
+   "de": "Lieferung",
+   "pos": "noun",
+   "ipa": "dɪˈlɪvəri"
+  },
+  {
+   "id": "u3-004",
+   "en": "package",
+   "de": "Paket",
+   "pos": "noun",
+   "ipa": "ˈpækɪdʒ"
+  },
+  {
+   "id": "u3-005",
+   "en": "automation",
+   "de": "Automatisierung",
+   "pos": "noun",
+   "ipa": "ˌɔːtəˈmeɪʃn"
+  },
+  {
+   "id": "u3-006",
+   "en": "drone",
+   "de": "Drohne",
+   "pos": "noun",
+   "ipa": "drəʊn"
+  },
+  {
+   "id": "u3-007",
+   "en": "robot",
+   "de": "Roboter",
+   "pos": "noun",
+   "ipa": "ˈrəʊbɒt"
+  },
+  {
+   "id": "u3-008",
+   "en": "artificial",
+   "de": "künstlich, Kunst-",
+   "pos": "adjective",
+   "ipa": "ˌɑːtɪˈfɪʃl"
+  },
+  {
+   "id": "u3-009",
+   "en": "bee",
+   "de": "Biene",
+   "pos": "noun",
+   "ipa": "biː"
+  },
+  {
+   "id": "u3-010",
+   "en": "(to) pollinate",
+   "de": "bestäuben",
+   "pos": "verb",
+   "ipa": "ˈpɒləneɪt"
+  },
+  {
+   "id": "u3-011",
+   "en": "pollen",
+   "de": "Blütenstaub",
+   "pos": "noun",
+   "ipa": "ˈpɒlən"
+  },
+  {
+   "id": "u3-012",
+   "en": "production",
+   "de": "Produktion, Herstellung",
+   "pos": "noun",
+   "ipa": "prəˈdʌkʃn"
+  },
+  {
+   "id": "u3-013",
+   "en": "panel discussion",
+   "de": "Podiumsdiskussion",
+   "pos": "noun",
+   "ipa": "ˈpænl dɪˈskʌʃn"
+  }
+ ],
+ "u3-part-a": [
+  {
+   "id": "u3-014",
+   "en": "(to) exaggerate",
+   "de": "übertreiben",
+   "pos": "verb",
+   "ipa": "ɪɡˈzædʒəreɪt"
+  },
+  {
+   "id": "u3-015",
+   "en": "(to) be likely to do sth.",
+   "de": "wahrscheinlich etwas tun (werden)",
+   "pos": "verb",
+   "ipa": "ˈlaɪkli"
+  },
+  {
+   "id": "u3-016",
+   "en": "breakdown",
+   "de": "Zusammenbruch",
+   "pos": "noun",
+   "ipa": "ˈbreɪkdaʊn"
+  },
+  {
+   "id": "u3-017",
+   "en": "electricity",
+   "de": "Elektrizität, Strom",
+   "pos": "noun",
+   "ipa": "ɪˌlekˈtrɪsəti"
+  },
+  {
+   "id": "u3-018",
+   "en": "electric",
+   "de": "elektrisch",
+   "pos": "adjective",
+   "ipa": "ɪˈlektrɪk"
+  },
+  {
+   "id": "u3-019",
+   "en": "social networking",
+   "de": "Kommunikation über Online-Plattformen",
+   "pos": "noun",
+   "ipa": "ˌsəʊʃl ˈnetwɜːkɪŋ"
+  },
+  {
+   "id": "u3-020",
+   "en": "radical",
+   "de": "radikal",
+   "pos": "adjective",
+   "ipa": "ˈrædɪkl"
+  },
+  {
+   "id": "u3-021",
+   "en": "corporation",
+   "de": "(Handels-)Gesellschaft, Konzern; Körperschaft",
+   "pos": "noun",
+   "ipa": "ˌkɔːpəˈreɪʃn"
+  },
+  {
+   "id": "u3-022",
+   "en": "reality",
+   "de": "Realität, Wirklichkeit",
+   "pos": "noun",
+   "ipa": "riˈælɪti"
+  },
+  {
+   "id": "u3-023",
+   "en": "(to) claim",
+   "de": "angeben, behaupten",
+   "pos": "verb",
+   "ipa": "kleɪm"
+  },
+  {
+   "id": "u3-024",
+   "en": "obvious",
+   "de": "offensichtlich",
+   "pos": "adjective",
+   "ipa": "ˈɒbviəs"
+  },
+  {
+   "id": "u3-025",
+   "en": "radiologist",
+   "de": "Radiologe/-in",
+   "pos": "noun",
+   "ipa": "ˌreɪdiˈɒlədʒɪst"
+  },
+  {
+   "id": "u3-026",
+   "en": "(to) feature sth.",
+   "de": "featuren, über etwas berichten",
+   "pos": "verb",
+   "ipa": "ˈfiːtʃə"
+  },
+  {
+   "id": "u3-027",
+   "en": "elsewhere",
+   "de": "anderswo",
+   "pos": "adverb",
+   "ipa": "ˌelsˈweə"
+  },
+  {
+   "id": "u3-028",
+   "en": "fluent",
+   "de": "fließend, flüssig (Sprache)",
+   "pos": "adjective",
+   "ipa": "ˈfluːənt"
+  },
+  {
+   "id": "u3-029",
+   "en": "capacity",
+   "de": "Fähigkeit, Leistungsvermögen",
+   "pos": "noun",
+   "ipa": "kəˈpæsəti"
+  },
+  {
+   "id": "u3-030",
+   "en": "disconnection",
+   "de": "Abkopplung, Trennung",
+   "pos": "noun",
+   "ipa": "ˌdɪskəˈnekʃn"
+  },
+  {
+   "id": "u3-031",
+   "en": "(to) meditate",
+   "de": "meditieren",
+   "pos": "verb",
+   "ipa": "ˈmedɪteɪt"
+  },
+  {
+   "id": "u3-032",
+   "en": "basis, pl bases",
+   "de": "Basis, Grundlage",
+   "pos": "noun",
+   "ipa": "ˈbeɪsɪs, ˈbeɪsiːz"
+  },
+  {
+   "id": "u3-033",
+   "en": "brain",
+   "de": "Gehirn",
+   "pos": "noun",
+   "ipa": "breɪn"
+  },
+  {
+   "id": "u3-034",
+   "en": "(to) alter",
+   "de": "verändern, abändern",
+   "pos": "verb",
+   "ipa": "ˈɔːltə"
+  },
+  {
+   "id": "u3-035",
+   "en": "current",
+   "de": "aktuelle(r, s), gegenwärtige(r, s)",
+   "pos": "adjective",
+   "ipa": "ˈkʌrənt"
+  },
+  {
+   "id": "u3-036",
+   "en": "(to) generate",
+   "de": "generieren, erzeugen",
+   "pos": "verb",
+   "ipa": "ˈdʒenəreɪt"
+  },
+  {
+   "id": "u3-037",
+   "en": "misinformation (no pl)",
+   "de": "Fehlinformation(en), Falschinformation(en)",
+   "pos": "noun",
+   "ipa": "ˌmɪsɪnfəˈmeɪʃn"
+  },
+  {
+   "id": "u3-038",
+   "en": "toxic",
+   "de": "toxisch, schädlich",
+   "pos": "adjective",
+   "ipa": "ˈtɒksɪk"
+  },
+  {
+   "id": "u3-039",
+   "en": "database",
+   "de": "Datenbank",
+   "pos": "noun",
+   "ipa": "ˈdeɪtəbeɪs"
+  },
+  {
+   "id": "u3-040",
+   "en": "threat",
+   "de": "(Be-)Drohung",
+   "pos": "noun",
+   "ipa": "θret"
+  },
+  {
+   "id": "u3-041",
+   "en": "sentient",
+   "de": "empfindungsfähig",
+   "pos": "adjective",
+   "ipa": "ˈsentiənt, ˈsenʃnt"
+  },
+  {
+   "id": "u3-042",
+   "en": "collection",
+   "de": "Sammlung",
+   "pos": "noun",
+   "ipa": "kəˈlekʃn"
+  },
+  {
+   "id": "u3-043",
+   "en": "distinct",
+   "de": "verschieden, unterschiedlich; deutlich",
+   "pos": "adjective",
+   "ipa": "dɪˈstɪŋkt"
+  },
+  {
+   "id": "u3-044",
+   "en": "unqualified",
+   "de": "unqualifiziert",
+   "pos": "adjective",
+   "ipa": "ˌʌnˈkwɒlɪfaɪd"
+  },
+  {
+   "id": "u3-045",
+   "en": "morality",
+   "de": "Moral, Anstand, gute Sitten",
+   "pos": "noun",
+   "ipa": "məˈræləti"
+  },
+  {
+   "id": "u3-046",
+   "en": "physics",
+   "de": "Physik",
+   "pos": "noun",
+   "ipa": "ˈfɪzɪks"
+  },
+  {
+   "id": "u3-047",
+   "en": "vehicle",
+   "de": "Fahrzeug",
+   "pos": "noun",
+   "ipa": "ˈviːəkl"
+  },
+  {
+   "id": "u3-048",
+   "en": "traffic",
+   "de": "Verkehr",
+   "pos": "noun",
+   "ipa": "ˈtræfɪk"
+  },
+  {
+   "id": "u3-049",
+   "en": "(to) generalize",
+   "de": "verallgemeinern",
+   "pos": "verb",
+   "ipa": "ˈdʒenrəlaɪz"
+  },
+  {
+   "id": "u3-050",
+   "en": "a bunch of ... (infml)",
+   "de": "eine Menge ..., ein Bündel ...",
+   "pos": "phrase",
+   "ipa": "bʌntʃ"
+  },
+  {
+   "id": "u3-051",
+   "en": "sceptical",
+   "de": "skeptisch",
+   "pos": "adjective",
+   "ipa": "ˈskeptɪkl"
+  },
+  {
+   "id": "u3-052",
+   "en": "tight",
+   "de": "fest, eng; knapp, eng anliegend (Kleidung)",
+   "pos": "adjective",
+   "ipa": "taɪt"
+  },
+  {
+   "id": "u3-053",
+   "en": "regulation",
+   "de": "Vorschrift; Regulierung",
+   "pos": "noun",
+   "ipa": "ˌreɡjuˈleɪʃn"
+  },
+  {
+   "id": "u3-054",
+   "en": "unpredicted",
+   "de": "unvorhergesehen",
+   "pos": "adjective",
+   "ipa": "ˌʌnprɪˈdɪktɪd"
+  },
+  {
+   "id": "u3-055",
+   "en": "consequence",
+   "de": "Folge, Konsequenz",
+   "pos": "noun",
+   "ipa": "ˈkɒnsɪkwəns"
+  },
+  {
+   "id": "u3-056",
+   "en": "polarization",
+   "de": "Polarisierung",
+   "pos": "noun",
+   "ipa": "ˌpəʊləraɪˈzeɪʃn"
+  },
+  {
+   "id": "u3-057",
+   "en": "(to) stem from sth.",
+   "de": "von etwas herrühren; etwas entspringen",
+   "pos": "verb",
+   "ipa": "stem"
+  },
+  {
+   "id": "u3-058",
+   "en": "think tank",
+   "de": "Expertenkommission, Denkfabrik",
+   "pos": "noun",
+   "ipa": "ˈθɪŋk tæŋk"
+  },
+  {
+   "id": "u3-059",
+   "en": "potential",
+   "de": "potenziell, möglich",
+   "pos": "adjective",
+   "ipa": "pəˈtenʃl"
+  },
+  {
+   "id": "u3-060",
+   "en": "(to) have sb.'s best interests at heart",
+   "de": "jds. Bestes wollen",
+   "pos": "verb"
+  },
+  {
+   "id": "u3-061",
+   "en": "deliberate",
+   "de": "absichtlich, vorsätzlich",
+   "pos": "adjective",
+   "ipa": "dɪˈlɪbərət"
+  },
+  {
+   "id": "u3-062",
+   "en": "(to) last",
+   "de": "(an)dauern; halten",
+   "pos": "verb",
+   "ipa": "lɑːst"
+  },
+  {
+   "id": "u3-063",
+   "en": "strike",
+   "de": "Streik",
+   "pos": "noun",
+   "ipa": "straɪk"
+  },
+  {
+   "id": "u3-064",
+   "en": "sequence",
+   "de": "Abfolge, Reihenfolge",
+   "pos": "noun",
+   "ipa": "ˈsiːkwəns"
+  },
+  {
+   "id": "u3-065",
+   "en": "isle",
+   "de": "kleine Insel, Eiland",
+   "pos": "noun",
+   "ipa": "aɪl"
+  },
+  {
+   "id": "u3-066",
+   "en": "frequency",
+   "de": "Häufigkeit",
+   "pos": "noun",
+   "ipa": "ˈfriːkwənsi"
+  },
+  {
+   "id": "u3-067",
+   "en": "manner",
+   "de": "Art und Weise",
+   "pos": "noun",
+   "ipa": "ˈmænə"
+  },
+  {
+   "id": "u3-068",
+   "en": "(to) manage sth.",
+   "de": "etwas handhaben, bedienen; mit etwas umgehen",
+   "pos": "verb",
+   "ipa": "ˈmænɪdʒ"
+  },
+  {
+   "id": "u3-069",
+   "en": "(to) charge",
+   "de": "aufladen",
+   "pos": "verb",
+   "ipa": "tʃɑːdʒ"
+  },
+  {
+   "id": "u3-070",
+   "en": "(to) swipe",
+   "de": "am Touchscreen wischen; mit dem Finger streichen/fahren; Kreditkarte u. Ä. durchziehen",
+   "pos": "verb",
+   "ipa": "swaɪp"
+  },
+  {
+   "id": "u3-071",
+   "en": "button",
+   "de": "Knopf; Taste",
+   "pos": "noun",
+   "ipa": "ˈbʌtn"
+  },
+  {
+   "id": "u3-072",
+   "en": "icon",
+   "de": "Symbol, Icon",
+   "pos": "noun",
+   "ipa": "ˈaɪkɒn"
+  },
+  {
+   "id": "u3-073",
+   "en": "menu",
+   "de": "Menü (Computer)",
+   "pos": "noun",
+   "ipa": "ˈmenjuː"
+  },
+  {
+   "id": "u3-074",
+   "en": "search bar",
+   "de": "Suchfeld, Suchleiste (Computer)",
+   "pos": "noun",
+   "ipa": "ˈsɜːtʃ bɑː"
+  },
+  {
+   "id": "u3-075",
+   "en": "tab",
+   "de": "Tab, Reiter (Karteikarte, Browser)",
+   "pos": "noun",
+   "ipa": "tæb"
+  },
+  {
+   "id": "u3-076",
+   "en": "(to) navigate",
+   "de": "navigieren, steuern",
+   "pos": "verb",
+   "ipa": "ˈnævɪɡeɪt"
+  },
+  {
+   "id": "u3-077",
+   "en": "data",
+   "de": "Daten",
+   "pos": "noun",
+   "ipa": "ˈdeɪtə"
+  },
+  {
+   "id": "u3-078",
+   "en": "(to) download sth.",
+   "de": "etwas herunterladen",
+   "pos": "verb",
+   "ipa": "ˌdaʊnˈləʊd"
+  },
+  {
+   "id": "u3-079",
+   "en": "memory",
+   "de": "Speicher (Computer)",
+   "pos": "noun",
+   "ipa": "ˈmeməri"
+  },
+  {
+   "id": "u3-080",
+   "en": "(to) run, ran, run",
+   "de": "ausführen (Computerprogramm)",
+   "pos": "verb",
+   "ipa": "rʌn"
+  },
+  {
+   "id": "u3-081",
+   "en": "(to) browse",
+   "de": "durchstöbern; durchblättern; browsen, im Internet surfen",
+   "pos": "verb",
+   "ipa": "braʊz"
+  },
+  {
+   "id": "u3-082",
+   "en": "(to) customize",
+   "de": "anpassen, individuell einrichten",
+   "pos": "verb",
+   "ipa": "ˈkʌstəmaɪz"
+  },
+  {
+   "id": "u3-083",
+   "en": "settings (pl)",
+   "de": "Einstellungen",
+   "pos": "noun",
+   "ipa": "ˈsetɪŋz"
+  },
+  {
+   "id": "u3-084",
+   "en": "attachment",
+   "de": "Anhang (einer E-Mail)",
+   "pos": "noun",
+   "ipa": "əˈtætʃmənt"
+  },
+  {
+   "id": "u3-085",
+   "en": "friend request",
+   "de": "Freundschaftsanfrage",
+   "pos": "noun",
+   "ipa": "ˈfrend rɪˌkwest"
+  }
+ ],
+ "u3-part-b": [
+  {
+   "id": "u3-086",
+   "en": "feature article",
+   "de": "Sonderbericht, Sonderbeitrag",
+   "pos": "noun",
+   "ipa": "ˈfiːtʃər ˌɑːtɪkl"
+  },
+  {
+   "id": "u3-087",
+   "en": "(to) buzz off (infml)",
+   "de": "abschwirren, einen Abflug machen",
+   "pos": "verb",
+   "ipa": "ˌbʌz ˈɒf"
+  },
+  {
+   "id": "u3-088",
+   "en": "trap",
+   "de": "Falle",
+   "pos": "noun",
+   "ipa": "træp"
+  },
+  {
+   "id": "u3-089",
+   "en": "(to) sting, stung, stung",
+   "de": "stechen; brennen",
+   "pos": "verb",
+   "ipa": "stɪŋ, stʌŋ"
+  },
+  {
+   "id": "u3-090",
+   "en": "crop",
+   "de": "(Feld-)Frucht",
+   "pos": "noun",
+   "ipa": "krɒp"
+  },
+  {
+   "id": "u3-091",
+   "en": "colony",
+   "de": "Kolonie",
+   "pos": "noun",
+   "ipa": "ˈkɒləni"
+  },
+  {
+   "id": "u3-092",
+   "en": "factor",
+   "de": "Faktor",
+   "pos": "noun",
+   "ipa": "ˈfæktə"
+  },
+  {
+   "id": "u3-093",
+   "en": "use",
+   "de": "Gebrauch, Verwendung",
+   "pos": "noun",
+   "ipa": "juːs"
+  },
+  {
+   "id": "u3-094",
+   "en": "pesticide",
+   "de": "Schädlingsbekämpfungsmittel, Pestizid",
+   "pos": "noun",
+   "ipa": "ˈpestɪsaɪd"
+  },
+  {
+   "id": "u3-095",
+   "en": "varied",
+   "de": "abwechslungsreich; verschiedenartig, vielfältig",
+   "pos": "adjective",
+   "ipa": "ˈveərid"
+  },
+  {
+   "id": "u3-096",
+   "en": "diet",
+   "de": "Ernährungsweise, Speiseplan; Diät",
+   "pos": "noun",
+   "ipa": "ˈdaɪət"
+  },
+  {
+   "id": "u3-097",
+   "en": "(to) rely on sth.",
+   "de": "auf etwas angewiesen sein",
+   "pos": "verb",
+   "ipa": "rɪˈlaɪ"
+  },
+  {
+   "id": "u3-098",
+   "en": "parasite",
+   "de": "Parasit",
+   "pos": "noun",
+   "ipa": "ˈpærəsaɪt"
+  },
+  {
+   "id": "u3-099",
+   "en": "mite",
+   "de": "Milbe",
+   "pos": "noun",
+   "ipa": "maɪt"
+  },
+  {
+   "id": "u3-100",
+   "en": "(to) weaken",
+   "de": "schwächen",
+   "pos": "verb",
+   "ipa": "ˈwiːkən"
+  },
+  {
+   "id": "u3-101",
+   "en": "immune system",
+   "de": "Immunsystem",
+   "pos": "noun",
+   "ipa": "ɪˈmjuːn ˌsɪstəm"
+  },
+  {
+   "id": "u3-102",
+   "en": "(to) be prone to sth.",
+   "de": "anfällig sein für etwas; zu etwas neigen",
+   "pos": "verb",
+   "ipa": "prəʊn"
+  },
+  {
+   "id": "u3-103",
+   "en": "hibernation",
+   "de": "Winterschlaf",
+   "pos": "noun",
+   "ipa": "ˌhaɪbəˈneɪʃn"
+  },
+  {
+   "id": "u3-104",
+   "en": "habitat",
+   "de": "Lebensraum",
+   "pos": "noun",
+   "ipa": "ˈhæbɪtæt"
+  },
+  {
+   "id": "u3-105",
+   "en": "(to) shrink, shrank, shrunk",
+   "de": "schrumpfen",
+   "pos": "verb",
+   "ipa": "ʃrɪŋk, ʃræŋk, ʃrʌŋk"
+  },
+  {
+   "id": "u3-106",
+   "en": "(to) compensate",
+   "de": "kompensieren, ausgleichen; entschädigen",
+   "pos": "verb",
+   "ipa": "ˈkɒmpenseɪt"
+  },
+  {
+   "id": "u3-107",
+   "en": "worrying",
+   "de": "beunruhigend",
+   "pos": "adjective",
+   "ipa": "ˈwʌriɪŋ"
+  },
+  {
+   "id": "u3-108",
+   "en": "(to) lay, laid, laid",
+   "de": "legen",
+   "pos": "verb",
+   "ipa": "leɪ, leɪd"
+  },
+  {
+   "id": "u3-109",
+   "en": "(to) ensure",
+   "de": "gewährleisten, sicherstellen",
+   "pos": "verb",
+   "ipa": "ɪnˈʃʊə, ɪnˈʃɔː"
+  },
+  {
+   "id": "u3-110",
+   "en": "survival",
+   "de": "Überleben",
+   "pos": "noun",
+   "ipa": "səˈvaɪvl"
+  },
+  {
+   "id": "u3-111",
+   "en": "muesli",
+   "de": "Müsli",
+   "pos": "noun",
+   "ipa": "ˈmjuːzli"
+  },
+  {
+   "id": "u3-112",
+   "en": "(to) announce",
+   "de": "bekanntgeben; verkünden",
+   "pos": "verb",
+   "ipa": "əˈnaʊns"
+  },
+  {
+   "id": "u3-113",
+   "en": "generation",
+   "de": "Erzeugung",
+   "pos": "noun",
+   "ipa": "ˌdʒenəˈreɪʃn"
+  },
+  {
+   "id": "u3-114",
+   "en": "pilot",
+   "de": "Pilot/in",
+   "pos": "noun",
+   "ipa": "ˈpaɪlət"
+  },
+  {
+   "id": "u3-115",
+   "en": "overall",
+   "de": "Gesamt-; allgemeine(r, s)",
+   "pos": "adjective",
+   "ipa": "ˌəʊvərˈɔːl"
+  },
+  {
+   "id": "u3-116",
+   "en": "effectiveness",
+   "de": "Wirksamkeit, Effektivität",
+   "pos": "noun",
+   "ipa": "ɪˈfektɪvnəs"
+  },
+  {
+   "id": "u3-117",
+   "en": "disappearance",
+   "de": "Verschwinden; Aussterben",
+   "pos": "noun",
+   "ipa": "ˌdɪsəˈpɪərəns"
+  },
+  {
+   "id": "u3-118",
+   "en": "(to) damage",
+   "de": "beschädigen, schaden",
+   "pos": "verb",
+   "ipa": "ˈdæmɪdʒ"
+  },
+  {
+   "id": "u3-119",
+   "en": "infrastructure",
+   "de": "Infrastruktur",
+   "pos": "noun",
+   "ipa": "ˈɪnfrəstrʌktʃə"
+  },
+  {
+   "id": "u3-120",
+   "en": "polar bear",
+   "de": "Eisbär",
+   "pos": "noun",
+   "ipa": "ˈpəʊlə beə"
+  },
+  {
+   "id": "u3-121",
+   "en": "organic",
+   "de": "biologisch angebaut, Bio-",
+   "pos": "adjective",
+   "ipa": "ɔːˈɡænɪk"
+  },
+  {
+   "id": "u3-122",
+   "en": "concise",
+   "de": "knapp, kurz, prägnant",
+   "pos": "adjective",
+   "ipa": "kənˈsaɪs"
+  },
+  {
+   "id": "u3-123",
+   "en": "nightmare",
+   "de": "Albtraum",
+   "pos": "noun",
+   "ipa": "ˈnaɪtmeə"
+  },
+  {
+   "id": "u3-124",
+   "en": "(to) pinch",
+   "de": "kneifen",
+   "pos": "verb",
+   "ipa": "pɪntʃ"
+  },
+  {
+   "id": "u3-125",
+   "en": "viewer",
+   "de": "Zuschauer/in",
+   "pos": "noun",
+   "ipa": "ˈvjuːə"
+  }
+ ],
+ "u3-part-c": [
+  {
+   "id": "u3-126",
+   "en": "imagination",
+   "de": "Fantasie, Vorstellung(skraft)",
+   "pos": "noun",
+   "ipa": "ˌɪmædʒɪˈneɪʃn"
+  },
+  {
+   "id": "u3-127",
+   "en": "bookstore",
+   "de": "Buchladen, Buchhandlung",
+   "pos": "noun",
+   "ipa": "ˈbʊkʃɒp"
+  },
+  {
+   "id": "u3-128",
+   "en": "bankrupt",
+   "de": "bankrott",
+   "pos": "adjective",
+   "ipa": "ˈbæŋkrʌpt"
+  },
+  {
+   "id": "u3-129",
+   "en": "clerk",
+   "de": "Büro-Angestellte(r)",
+   "pos": "noun",
+   "ipa": "klɑːk"
+  },
+  {
+   "id": "u3-130",
+   "en": "for sale",
+   "de": "zum Verkauf, zu verkaufen",
+   "pos": "phrase",
+   "ipa": "seɪl"
+  },
+  {
+   "id": "u3-131",
+   "en": "identical",
+   "de": "identisch",
+   "pos": "adjective",
+   "ipa": "aɪˈdentɪkl"
+  },
+  {
+   "id": "u3-132",
+   "en": "alternative",
+   "de": "Alternative",
+   "pos": "adjective",
+   "ipa": "ɔːlˈtɜːnətɪv"
+  },
+  {
+   "id": "u3-133",
+   "en": "hypothetical",
+   "de": "hypothetisch",
+   "pos": "adjective",
+   "ipa": "ˌhaɪpəˈθetɪkl"
+  },
+  {
+   "id": "u3-134",
+   "en": "vertical",
+   "de": "vertikal, senkrecht",
+   "pos": "adjective",
+   "ipa": "ˈvɜːtɪkl"
+  },
+  {
+   "id": "u3-135",
+   "en": "civilization",
+   "de": "Zivilisation",
+   "pos": "noun",
+   "ipa": "ˌsɪvəlaɪˈzeɪʃn"
+  },
+  {
+   "id": "u3-136",
+   "en": "smart",
+   "de": "schlau, intelligent",
+   "pos": "adjective",
+   "ipa": "smɑːt"
+  },
+  {
+   "id": "u3-137",
+   "en": "ratio",
+   "de": "Größen-, Zahlen-Verhältnis",
+   "pos": "noun",
+   "ipa": "ˈreɪʃiəʊ"
+  },
+  {
+   "id": "u3-138",
+   "en": "(to) program",
+   "de": "programmieren",
+   "pos": "verb",
+   "ipa": "ˈprəʊɡræm"
+  },
+  {
+   "id": "u3-139",
+   "en": "band",
+   "de": "Gruppe, Bande, Gang",
+   "pos": "noun",
+   "ipa": "bænd"
+  },
+  {
+   "id": "u3-140",
+   "en": "(to) rule",
+   "de": "herrschen, beherrschen",
+   "pos": "verb",
+   "ipa": "ruːl"
+  },
+  {
+   "id": "u3-141",
+   "en": "immortality",
+   "de": "Unsterblichkeit, Unvergänglichkeit",
+   "pos": "noun",
+   "ipa": "ˌɪmɔːˈtæləti"
+  },
+  {
+   "id": "u3-142",
+   "en": "(to) put sth. (+ adv)",
+   "de": "etwas auf eine bestimmte Art ausdrücken, formulieren",
+   "pos": "verb"
+  },
+  {
+   "id": "u3-143",
+   "en": "(to) accomplish sth.",
+   "de": "etwas erreichen, vollbringen, bewirken",
+   "pos": "verb",
+   "ipa": "əˈkʌmplɪʃ"
+  },
+  {
+   "id": "u3-144",
+   "en": "charming",
+   "de": "charmant, bezaubernd",
+   "pos": "adjective",
+   "ipa": "ˈtʃɑːmɪŋ"
+  },
+  {
+   "id": "u3-145",
+   "en": "(to) glance (at)",
+   "de": "einen kurzen Blick werfen auf",
+   "pos": "verb",
+   "ipa": "ɡlɑːns"
+  },
+  {
+   "id": "u3-146",
+   "en": "(to) straighten sth.",
+   "de": "etwas gerade rücken, biegen; etwas strecken, straffen",
+   "pos": "verb",
+   "ipa": "ˈstreɪtn"
+  },
+  {
+   "id": "u3-147",
+   "en": "nuclear",
+   "de": "Kern-, Atom-",
+   "pos": "adjective",
+   "ipa": "ˈnjuːkliə"
+  },
+  {
+   "id": "u3-148",
+   "en": "anywhere",
+   "de": "überall, überallhin",
+   "pos": "adverb",
+   "ipa": "ˈeniweə"
+  },
+  {
+   "id": "u3-149",
+   "en": "analogy",
+   "de": "Analogie, Vergleich",
+   "pos": "noun",
+   "ipa": "əˈnælədʒi"
+  },
+  {
+   "id": "u3-150",
+   "en": "decent",
+   "de": "anständig; angemessen",
+   "pos": "adjective",
+   "ipa": "ˈdiːsnt"
+  },
+  {
+   "id": "u3-151",
+   "en": "physical",
+   "de": "physisch, körperlich",
+   "pos": "adjective",
+   "ipa": "ˈfɪzɪkl"
+  },
+  {
+   "id": "u3-152",
+   "en": "cushion",
+   "de": "Kissen",
+   "pos": "noun",
+   "ipa": "ˈkʊʃn"
+  },
+  {
+   "id": "u3-153",
+   "en": "loose",
+   "de": "lose, locker",
+   "pos": "adjective",
+   "ipa": "luːs"
+  },
+  {
+   "id": "u3-154",
+   "en": "romance",
+   "de": "Romantik, romantische Liebe",
+   "pos": "noun",
+   "ipa": "rəʊˈmæns"
+  },
+  {
+   "id": "u3-155",
+   "en": "romantic",
+   "de": "romantisch; Liebes-",
+   "pos": "adjective",
+   "ipa": "rəʊˈmæntɪk"
+  },
+  {
+   "id": "u3-156",
+   "en": "(to) occur to sb.",
+   "de": "jm. einfallen, in den Sinn kommen",
+   "pos": "verb",
+   "ipa": "əˈkɜː"
+  },
+  {
+   "id": "u3-157",
+   "en": "familiar (to sb. / with sth.)",
+   "de": "jm. / mit etwas vertraut",
+   "pos": "adjective",
+   "ipa": "fəˈmɪliə"
+  },
+  {
+   "id": "u3-158",
+   "en": "dozen",
+   "de": "Dutzend",
+   "pos": "noun",
+   "ipa": "ˈdʌzn"
+  },
+  {
+   "id": "u3-159",
+   "en": "somehow",
+   "de": "irgendwie",
+   "pos": "adverb",
+   "ipa": "ˈsʌmhaʊ"
+  },
+  {
+   "id": "u3-160",
+   "en": "cheek",
+   "de": "Wange",
+   "pos": "noun",
+   "ipa": "tʃiːk"
+  },
+  {
+   "id": "u3-161",
+   "en": "reasonable",
+   "de": "vernünftig, akzeptabel",
+   "pos": "adjective",
+   "ipa": "ˈriːznəbl"
+  },
+  {
+   "id": "u3-162",
+   "en": "sincerity",
+   "de": "Ernsthaftigkeit, Aufrichtigkeit",
+   "pos": "noun",
+   "ipa": "sɪnˈserəti"
+  },
+  {
+   "id": "u3-163",
+   "en": "sincere",
+   "de": "aufrichtig, ehrlich",
+   "pos": "adjective",
+   "ipa": "sɪnˈsɪə"
+  },
+  {
+   "id": "u3-164",
+   "en": "bright",
+   "de": "klug, gescheit, „hell\"",
+   "pos": "adjective",
+   "ipa": "braɪt"
+  },
+  {
+   "id": "u3-165",
+   "en": "beneath",
+   "de": "unterhalb von",
+   "pos": "preposition",
+   "ipa": "bɪˈniːθ"
+  },
+  {
+   "id": "u3-166",
+   "en": "addicted (to)",
+   "de": "süchtig nach, abhängig von",
+   "pos": "adjective",
+   "ipa": "əˈdɪktɪd"
+  },
+  {
+   "id": "u3-167",
+   "en": "straightforward",
+   "de": "einfach, klar ausgedrückt",
+   "pos": "adjective",
+   "ipa": "ˌstreɪtˈfɔːwəd"
+  },
+  {
+   "id": "u3-168",
+   "en": "(to) lose one's temper",
+   "de": "die Beherrschung verlieren",
+   "pos": "verb"
+  },
+  {
+   "id": "u3-169",
+   "en": "inner",
+   "de": "innere(r, s)",
+   "pos": "adjective",
+   "ipa": "ˈɪnə"
+  },
+  {
+   "id": "u3-170",
+   "en": "motivation",
+   "de": "Motivation",
+   "pos": "noun",
+   "ipa": "ˌməʊtɪˈveɪʃn"
+  },
+  {
+   "id": "u3-171",
+   "en": "(to) slam",
+   "de": "schlagen; zuknallen (Tür)",
+   "pos": "verb",
+   "ipa": "slæm"
+  },
+  {
+   "id": "u3-172",
+   "en": "surroundings (pl)",
+   "de": "Umgebung",
+   "pos": "noun",
+   "ipa": "səˈraʊndɪŋz"
+  },
+  {
+   "id": "u3-173",
+   "en": "(to) convey",
+   "de": "vermitteln, übermitteln",
+   "pos": "verb",
+   "ipa": "kənˈveɪ"
+  },
+  {
+   "id": "u3-174",
+   "en": "pace",
+   "de": "Tempo, Geschwindigkeit; Schritt",
+   "pos": "noun",
+   "ipa": "peɪs"
+  },
+  {
+   "id": "u3-175",
+   "en": "evidence (no pl)",
+   "de": "Nachweis, Beleg, Beweis",
+   "pos": "noun",
+   "ipa": "ˈevɪdəns"
+  },
+  {
+   "id": "u3-176",
+   "en": "sensitive",
+   "de": "einfühlsam, sensibel",
+   "pos": "adjective",
+   "ipa": "ˈsensətɪv"
+  },
+  {
+   "id": "u3-177",
+   "en": "stylistic",
+   "de": "stilistisch, Stil-",
+   "pos": "adjective",
+   "ipa": "staɪˈlɪstɪk"
+  },
+  {
+   "id": "u3-178",
+   "en": "completion",
+   "de": "Vervollständigung; Abschluss; Fertigstellung",
+   "pos": "noun",
+   "ipa": "kəmˈpliːʃn"
+  },
+  {
+   "id": "u3-179",
+   "en": "(to) activate",
+   "de": "aktivieren",
+   "pos": "verb",
+   "ipa": "ˈæktɪveɪt"
+  },
+  {
+   "id": "u3-180",
+   "en": "survey",
+   "de": "Umfrage, Studie",
+   "pos": "noun",
+   "ipa": "ˈsɜːveɪ"
+  },
+  {
+   "id": "u3-181",
+   "en": "(to) predict",
+   "de": "vorhersagen, voraussagen",
+   "pos": "verb",
+   "ipa": "prɪˈdɪkt"
+  },
+  {
+   "id": "u3-182",
+   "en": "(to) be concerned about sth.",
+   "de": "über/um/wegen etwas besorgt sein",
+   "pos": "verb",
+   "ipa": "kənˈsɜːnd"
+  },
+  {
+   "id": "u3-183",
+   "en": "despite",
+   "de": "trotz, obwohl",
+   "pos": "preposition",
+   "ipa": "dɪˈspaɪt"
+  },
+  {
+   "id": "u3-184",
+   "en": "(to) view oneself as sth.",
+   "de": "sich als jd./etwas betrachten",
+   "pos": "verb",
+   "ipa": "vjuː"
+  },
+  {
+   "id": "u3-185",
+   "en": "confident",
+   "de": "selbstsicher; zuversichtlich",
+   "pos": "adjective",
+   "ipa": "ˈkɒnfɪdənt"
+  },
+  {
+   "id": "u3-186",
+   "en": "overwhelming",
+   "de": "überwältigend",
+   "pos": "adjective",
+   "ipa": "ˌəʊvəˈwelmɪŋ"
+  },
+  {
+   "id": "u3-187",
+   "en": "(to) chair",
+   "de": "den Vorsitz führen, innehaben",
+   "pos": "verb",
+   "ipa": "tʃeə"
+  },
+  {
+   "id": "u3-188",
+   "en": "moderator",
+   "de": "Moderator/in",
+   "pos": "noun",
+   "ipa": "ˈmɒdəreɪtə"
+  },
+  {
+   "id": "u3-189",
+   "en": "(to) research",
+   "de": "recherchieren",
+   "pos": "verb",
+   "ipa": "rɪˈsɜːtʃ"
+  },
+  {
+   "id": "u3-190",
+   "en": "(to) ban sth.",
+   "de": "verbieten; für unzulässig erklären",
+   "pos": "verb",
+   "ipa": "bæn"
+  },
+  {
+   "id": "u3-191",
+   "en": "(to) concern sb.",
+   "de": "jn. betreffen, angehen; jn. beunruhigen",
+   "pos": "verb",
+   "ipa": "kənˈsɜːn"
+  },
+  {
+   "id": "u3-192",
+   "en": "aspect",
+   "de": "Aspekt, Gesichtspunkt",
+   "pos": "noun",
+   "ipa": "ˈæspekt"
+  },
+  {
+   "id": "u3-193",
+   "en": "(to) take sides",
+   "de": "Partei ergreifen",
+   "pos": "verb"
+  },
+  {
+   "id": "u3-194",
+   "en": "firmly",
+   "de": "bestimmt, entschieden, nachdrücklich",
+   "pos": "adverb",
+   "ipa": "ˈfɜːmli"
+  },
+  {
+   "id": "u3-195",
+   "en": "thorough",
+   "de": "gründlich, sorgfältig",
+   "pos": "adjective",
+   "ipa": "ˈθʌrə"
+  },
+  {
+   "id": "u3-196",
+   "en": "(to) rank sth.",
+   "de": "etwas einstufen, etwas anordnen",
+   "pos": "verb",
+   "ipa": "ræŋk"
+  },
+  {
+   "id": "u3-197",
+   "en": "counter-argument",
+   "de": "Gegenargument",
+   "pos": "noun",
+   "ipa": "ˈkaʊntər ˌɑːɡjumənt"
+  }
+ ]
+};
+
+</script>
+
+<script>
+/* =========================================================================
+   SPEICHER  –  localStorage mit Rückfallebene im Arbeitsspeicher
+   ========================================================================= */
+const Store = (function(){
+  let persistent = true, mem = {};
+  try{
+    localStorage.setItem("vt10:test","1");
+    localStorage.removeItem("vt10:test");
+  }catch(e){ persistent = false; }
+  return {
+    persistent,
+    get(k){
+      try{
+        if(persistent) return localStorage.getItem(k);
+        return (k in mem) ? mem[k] : null;
+      }catch(e){ return (k in mem) ? mem[k] : null; }
+    },
+    set(k,v){
+      try{ persistent ? localStorage.setItem(k,v) : (mem[k]=v); }
+      catch(e){ mem[k]=v; }
+    }
+  };
+})();
+
+const KEY = "vt10:progress";
+const INTERVALS = [0,1,2,4,8,16];      // Fach 1..5 -> Tage bis zur Wiedervorlage
+const DAY = 86400000;
+
+let progress = (function(){
+  try{ return JSON.parse(Store.get(KEY)) || {}; }catch(e){ return {}; }
+})();
+
+function save(){ Store.set(KEY, JSON.stringify(progress)); }
+
+function rec(dir, vid){
+  if(!progress[dir]) progress[dir] = {};
+  if(!progress[dir][vid]) progress[dir][vid] = {box:1, due:0};
+  return progress[dir][vid];
+}
+function isDue(r){ return Date.now() >= r.due; }
+
+function boxCounts(list, dir){
+  const c=[0,0,0,0,0];
+  for(const v of list) c[rec(dir,v.id).box-1]++;
+  return c;
+}
+function dueCount(list, dir){
+  return list.filter(v => isDue(rec(dir,v.id))).length;
+}
+
+/* Liefert die Vokabeln zu einer Auswahl. Neben den einzelnen Parts gibt es
+   zwei Sammel-IDs: "<unit>-all" fuer eine ganze Unit und "<jahrgang>-all"
+   fuer das ganze Buch. Der Lernstand haengt an der Vokabel, nicht an der
+   Auswahl - wer eine Unit am Stueck lernt, sieht denselben Fortschritt
+   auch in den einzelnen Parts. */
+function setOf(id){
+  if(SETS[id]) return SETS[id];
+  var m = /^(.+)-all$/.exec(id);
+  if(!m) return [];
+  var key = m[1];
+  var parts = TOPICS.filter(function(t){ return t.unit === key; });
+  if(!parts.length){
+    var yr = YEARS.filter(function(y){ return y.id === key; })[0];
+    if(yr) parts = TOPICS.filter(function(t){
+      return yr.units.some(function(u){ return u.id === t.unit; }); });
+  }
+  return parts.reduce(function(a,t){ return a.concat(SETS[t.id]); }, []);
+}
+function topicName(id){
+  var t = TOPICS.filter(function(x){ return x.id === id; })[0];
+  if(t) return t.unitName + " \u00b7 " + t.name;
+  var m = /^(.+)-all$/.exec(id);
+  if(m){
+    var u = TOPICS.filter(function(x){ return x.unit === m[1]; })[0];
+    if(u) return u.unitName + " \u2013 ganze Unit";
+    var y = YEARS.filter(function(x){ return x.id === m[1]; })[0];
+    if(y) return y.label + (y.book ? " (" + y.book + ")" : "") + " \u2013 alle Units";
+  }
+  return id;
+}
+
+/* -------------------------------------------------------------------------
+   Kurze Rueckmeldetoene. Erzeugt ueber die Web Audio API, damit die Datei
+   ohne Audiodateien auskommt: aufwaerts bei richtig, abwaerts bei falsch.
+   Abschaltbar, weil Ton im Klassenraum nicht immer erwuenscht ist.
+   ------------------------------------------------------------------------- */
+const Sfx = (function(){
+  let ctx = null, on = true;
+  try{ on = localStorage.getItem("vt10:sfx") !== "0"; }catch(e){}
+  function enabled(){ return on; }
+  function toggle(){
+    on = !on;
+    try{ localStorage.setItem("vt10:sfx", on ? "1" : "0"); }catch(e){}
+    if(on) play("ok");
+    return on;
+  }
+  function play(kind){
+    if(!on) return;
+    try{
+      if(!ctx){
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if(!AC) return;
+        ctx = new AC();
+      }
+      if(ctx.state === "suspended") ctx.resume();
+      const seq = kind === "ok"   ? [[660,0.02],[990,0.11]]
+                : kind === "near" ? [[560,0.02],[560,0.12]]
+                :                   [[300,0.02],[190,0.13]];
+      for(const [freq, at] of seq){
+        const t = ctx.currentTime + at;
+        const osc = ctx.createOscillator(), g = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(freq, t);
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(0.16, t + 0.012);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + 0.13);
+        osc.connect(g); g.connect(ctx.destination);
+        osc.start(t); osc.stop(t + 0.15);
+      }
+    }catch(e){}
+  }
+  function unlock(){
+    try{
+      if(!ctx){
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if(!AC) return;
+        ctx = new AC();
+      }
+      if(ctx.state === "suspended") ctx.resume();
+    }catch(e){}
+  }
+  ["pointerdown","keydown","touchstart"].forEach(ev =>
+    document.addEventListener(ev, unlock, {once:true, passive:true}));
+  return {play, toggle, enabled, unlock};
+})();
+
+/* =========================================================================
+   AUSSPRACHE  –  Web Speech API des Browsers, keine externe Anbindung
+   Nutzt die auf dem Gerät installierten Stimmen. Kein Konto, kein Schlüssel,
+   kein Datenversand. Verfügbarkeit und Qualität hängen vom Endgerät ab.
+   ========================================================================= */
+const Speech = (function(){
+  var synth = window.speechSynthesis;
+  if(!synth) return {available:false, say:function(){}, status:function(){ return "nicht unterstützt"; }};
+
+  var voice = null;
+  var last = "noch nichts abgespielt";
+
+  function pick(){
+    var vs = [];
+    try{ vs = synth.getVoices() || []; }catch(e){ return; }
+    vs = vs.filter(function(v){ return /^en/i.test(v.lang); });
+    if(!vs.length) return;                        // auf iOS anfangs leer
+    voice = vs.filter(function(v){ return /en[-_]GB/i.test(v.lang); })[0]
+         || vs.filter(function(v){ return /en[-_]US/i.test(v.lang); })[0]
+         || vs[0];
+  }
+  pick();
+  if(synth.addEventListener) synth.addEventListener("voiceschanged", pick);
+
+  return {
+    available:true,
+
+    /* Zaehlt die geladenen Stimmen und meldet, was zuletzt passiert ist. */
+    status:function(){
+      var n = 0;
+      try{ n = (synth.getVoices() || []).length; }catch(e){}
+      return n + " Stimmen geladen \u00b7 " + (voice ? "gewählt: " + voice.name + " (" + voice.lang + ")"
+                                                     : "keine englische Stimme gefunden")
+           + " \u00b7 zuletzt: " + last;
+    },
+
+    say:function(text, btn){
+      try{
+        // Laeuft schon etwas? Dann nur abbrechen und beenden. Niemals
+        // cancel() unmittelbar vor speak() aufrufen - iOS verschluckt sonst
+        // beides und bleibt stumm.
+        if(synth.speaking || synth.pending){
+          synth.cancel();
+          last = "abgebrochen";
+          if(btn) btn.classList.remove("on");
+          return;
+        }
+
+        // Stimmenliste im Moment des Antippens auffrischen; auf iOS ist sie
+        // beim Laden der Seite noch leer.
+        if(!voice) pick();
+
+        var u = new SpeechSynthesisUtterance(String(text).replace(/^to\s+/i, ""));
+        u.lang = "en-GB";
+        if(voice){ try{ u.voice = voice; u.lang = voice.lang || "en-GB"; }catch(e){} }
+        u.rate = 0.9;
+
+        last = "gestartet";
+        u.onstart = function(){ last = "spricht"; };
+        u.onend   = function(){ last = "fertig"; if(btn) btn.classList.remove("on"); };
+        u.onerror = function(ev){
+          last = "Fehler: " + ((ev && ev.error) ? ev.error : "unbekannt");
+          if(btn) btn.classList.remove("on");
+        };
+
+        if(btn) btn.classList.add("on");
+        synth.speak(u);                  // direkt aus der Nutzeraktion heraus
+        if(synth.paused){ try{ synth.resume(); }catch(e){} }
+      }catch(e){
+        last = "Ausnahme: " + e.message;
+        if(btn) btn.classList.remove("on");
+      }
+    }
+  };
+})();
+
+const SPK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+  <path d="M15.5 8.5a5 5 0 0 1 0 7"></path><path d="M18.5 5.5a9 9 0 0 1 0 13"></path></svg>`;
+
+function speakBtn(text){
+  if(!Speech.available) return "";
+  return `<button class="speak" data-say="${esc(text)}" title="Aussprache anhören"
+    aria-label="Aussprache von ${esc(text)} anhören">${SPK}</button>`;
+}
+
+/* =========================================================================
+   HILFSFUNKTIONEN
+   ========================================================================= */
+const shuffle = a => a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]);
+const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function normalise(s){
+  return s.toLowerCase().trim()
+    .replace(/^(to|the|a|an)\s+/,"")
+    .replace(/[.,;!?'"’]/g,"")
+    .replace(/\s+/g," ");
+}
+function distance(a,b){
+  const m=a.length,n=b.length,d=Array.from({length:m+1},(_,i)=>[i,...Array(n).fill(0)]);
+  for(let j=0;j<=n;j++) d[0][j]=j;
+  for(let i=1;i<=m;i++) for(let j=1;j<=n;j++)
+    d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));
+  return d[m][n];
+}
+function checkTyped(input, target){
+  const a=normalise(input), b=normalise(target);
+  if(!a) return "no";
+  if(a===b) return "ok";
+  // Mehrere zulässige Übersetzungen, durch Komma getrennt
+  if(b.split(",").map(s=>s.trim()).includes(a)) return "ok";
+  const tol = b.length > 6 ? 2 : 1;
+  return distance(a,b) <= tol ? "near" : "no";
+}
+function markExample(sentence, word){
+  const stem = word.replace(/^to\s+/i,"").split(/[\s/]/)[0].slice(0, Math.max(4, word.length-3));
+  const re = new RegExp("("+stem.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"\\w*)","i");
+  return esc(sentence).replace(re,"<b>$1</b>");
+}
+
+/* =========================================================================
+   ZUSTAND
+   ========================================================================= */
+const S = {
+  view:"home",
+  yearId:null,
+  topicId:null,
+  dir:"en2de",          // en2de | de2en
+  mode:"card",          // card | mc | type
+  onlyDue:true,
+  queue:[], i:0, revealed:false, answered:null, landed:null,
+  seen:0
+};
+const view = document.getElementById("view");
+const dirLabel = () => S.dir==="en2de" ? "EN → DE" : "DE → EN";
+const askSide  = v => S.dir==="en2de" ? v.en : v.de;
+const ansSide  = v => S.dir==="en2de" ? v.de : v.en;
+
+/* =========================================================================
+   STARTSEITE
+   ========================================================================= */
+function railFor(list){
+  const total = list.length;
+  const c = boxCounts(list, S.dir);
+  const known = c[2]+c[3]+c[4];
+  const filled = total ? Math.round(known/total*5) : 0;
+  return `<span class="minirail">${[0,1,2,3,4].map(k=>`<i class="${k<filled?"f":""}"></i>`).join("")}</span>`;
+}
+function countLabel(list){
+  const total = list.length;
+  if(!total) return "leer";
+  const due = dueCount(list, S.dir);
+  return (due ? `<span class="t-due">${due} f\u00e4llig</span> \u00b7 ` : "") + total + " Vok.";
+}
+function topicRow(id, label, list, cls){
+  return `<button class="topic ${cls||""}" data-topic="${id}">
+    <span class="t-row">
+      <span class="t-name">${esc(label)}</span>
+      <span class="t-count">${countLabel(list)}</span>
+    </span>
+    ${railFor(list)}
+  </button>`;
+}
+
+/* Startseite: nur die Jahrgaenge mit ihrem Lehrwerk. */
+function renderHome(){
+  let h = "";
+  for(const y of YEARS){
+    const list = setOf(y.id + "-all");
+    h += `<section class="yeargroup">
+      <div class="yearhead"><span class="tag">${esc(y.label)}</span>
+      ${y.book ? `<span class="name">${esc(y.book)}</span>` : ""}</div>
+      <button class="topic home-year" data-year="${y.id}">
+        <span class="t-row">
+          <span class="t-name">${esc(y.label)}</span>
+          <span class="t-count">${y.units.length} Units \u00b7 ${list.length} Vok.</span>
+        </span>
+        ${railFor(list)}
+      </button>
+    </section>`;
+  }
+  h += `<div class="emptyhint">W\u00e4hle einen Jahrgang. Der Fortschritt wird pro
+        Abfragerichtung (${dirLabel()}) getrennt gespeichert und bleibt auf diesem Ger\u00e4t.</div>`;
+  const grand = TOPICS.reduce((n,t) => n + (SETS[t.id] ? SETS[t.id].length : 0), 0);
+  h += `<button class="topic home-all" id="allBtn">
+    <span class="t-row">
+      <span class="t-name">Alle Vokabeln ansehen</span>
+      <span class="t-count">${grand} Eintr\u00e4ge</span>
+    </span>
+  </button>`;
+  h += `<button class="topic home-help" id="helpBtn">
+    <span class="t-row">
+      <span class="t-name">Anleitung</span>
+      <span class="t-count">So funktioniert die Seite</span>
+    </span>
+  </button>`;
+
+  view.innerHTML = h;
+  view.querySelectorAll("[data-year]").forEach(b =>
+    b.addEventListener("click", () => { S.yearId = b.dataset.year; S.view = "year"; render(); }));
+  const ab = document.getElementById("allBtn");
+  if(ab) ab.onclick = () => { S.view = "list"; render(); };
+  const hb = document.getElementById("helpBtn");
+  if(hb) hb.onclick = () => { S.view = "help"; render(); };
+  updateFoot();
+}
+
+/* Jahrgangsseite: pro Unit ein Abschnitt, darin die Parts als Zeilen,
+   dazu je eine Zeile fuer die ganze Unit und eine fuer das ganze Buch. */
+function renderYear(){
+  const y = YEARS.filter(x => x.id === S.yearId)[0] || YEARS[0];
+  let h = `<div class="sessionbar">
+      <button class="linkbtn" id="yback">\u2190 Jahrg\u00e4nge</button>
+      <div class="switches"><button class="switch" id="ydir">${dirLabel()}</button></div>
+    </div>`;
+
+  h += topicRow(y.id + "-all", "Alle Vokabeln des Buches", setOf(y.id + "-all"), "uall");
+
+  for(const u of y.units){
+    const parts = TOPICS.filter(t => t.unit === u.id);
+    if(!parts.length) continue;
+    h += `<details class="yeargroup ${u.id}">
+      <summary class="yearhead"><span class="tag">${esc(u.name.split(" \u2013 ")[0])}</span>
+      <span class="name">${esc(u.name.split(" \u2013 ").slice(1).join(" \u2013 "))}</span></summary>`;
+    h += topicRow(u.id + "-all", "Ganze Unit", setOf(u.id + "-all"), u.id);
+    for(const t of parts) h += topicRow(t.id, t.name, SETS[t.id], u.id);
+    h += `</details>`;
+  }
+
+  view.innerHTML = h;
+  document.getElementById("yback").onclick = () => { S.view = "home"; render(); };
+  document.getElementById("ydir").onclick = () => {
+    S.dir = S.dir === "en2de" ? "de2en" : "en2de"; render();
+  };
+  view.querySelectorAll("[data-topic]").forEach(b =>
+    b.addEventListener("click", () => startSession(b.dataset.topic)));
+  updateFoot();
+}
+
+/* =========================================================================
+   SITZUNG
+   ========================================================================= */
+function buildQueue(){
+  let all = setOf(S.topicId);
+  if(S.mode === "cloze") all = all.filter(hasCloze);
+  if(!all.length){ S.queue = []; S.i = 0; return; }
+  const pool = S.onlyDue ? all.filter(v=>isDue(rec(S.dir,v.id))) : all;
+  S.queue = shuffle(pool.length ? pool : all);
+  S.i = 0; S.revealed = false; S.answered = null;
+}
+function startSession(topicId){
+  S.topicId = topicId; S.view = "session"; S.seen = 0;
+  buildQueue(); render();
+}
+function current(){ return S.queue[S.i]; }
+
+/* Unit-Klasse der laufenden Sitzung: nur wenn die Auswahl zu genau einer
+   Unit gehoert. Beim ganzen Buch gibt es keine eindeutige Farbe. */
+function sessionUnit(){
+  const t = TOPICS.filter(x => x.id === S.topicId)[0];
+  if(t) return t.unit;
+  const m = /^(u\d+)-all$/.exec(S.topicId || "");
+  return m ? m[1] : "";
+}
+
+function renderSession(){
+  if(!S.queue.length){
+    view.innerHTML = `<div class="done"><h2>Keine Karten</h2>
+      <p>In dieser Auswahl gibt es für den Lückensatz-Modus noch keine Beispielsätze.
+         Nutze so lange „Tippen“.</p>
+      <div class="controls"><button class="primary" id="home">Zurück zur Übersicht</button></div></div>`;
+    document.getElementById("home").onclick = () => { S.view="year"; S.mode="card"; render(); };
+    return;
+  }
+  if(S.i >= S.queue.length){ renderDone(); return; }
+  const v = current();
+  const r = rec(S.dir, v.id);
+  const setNow = setOf(S.topicId);
+
+  const rail = [1,2,3,4,5].map(n=>{
+    const cls = (n===r.box?"here":"") + (S.landed===n?" land":"");
+    return `<div class="slot ${cls}"><div class="n">FACH ${n}</div>
+      <div class="c">${boxCounts(setNow,S.dir)[n-1]}</div>
+      <div class="iv">${n===1?"sofort":INTERVALS[n]+" d"}</div></div>`;
+  }).join("");
+
+  let body = `<div class="eyebrow ${sessionUnit()}">
+      <span>${esc(topicName(S.topicId))}</span>
+      <span>${S.i+1} / ${S.queue.length}</span>
+    </div>`;
+
+  if(S.mode === "card"){
+    body += promptBlock(v);
+    if(S.revealed){
+      body += answerBlock(v);
+    }
+    body += `<div class="spacer"></div>`;
+  }
+
+  if(S.mode === "mc"){
+    if(!S.options) S.options = shuffle([v, ...buildDistractors(v)]);
+    body += promptBlock(v) + `<div class="opts">`;
+    for(const o of S.options){
+      let cls = "";
+      if(S.answered){
+        if(o.id===v.id) cls = "right";
+        else if(o.id===S.answered) cls = "wrong";
+      }
+      body += `<button class="opt ${cls}" data-opt="${o.id}" ${S.answered?"disabled":""}>
+        ${esc(ansSide(o))}</button>`;
+    }
+    body += `</div>`;
+    if(S.answered) body += answerBlock(v, true);
+    body += `<div class="spacer"></div>`;
+  }
+
+  if(S.mode === "type"){
+    body += promptBlock(v) + `
+      <div class="typebox">
+        <input id="typeIn" placeholder="${S.dir==="en2de"?"Deutsche Bedeutung":"English word"}"
+               autocomplete="off" autocapitalize="off" spellcheck="false" ${S.answered?"disabled":""}>
+        <div class="verdict" id="verdict"></div>
+      </div>`;
+    if(S.answered) body += answerBlock(v, true);
+    body += `<div class="spacer"></div>`;
+  }
+
+  if(S.mode === "cloze"){
+    const cp = clozeParts(v);
+    body += '<div class="cloze">' + esc(cp.before)
+          + (S.answered ? '<b>' + esc(cp.word) + '</b>'
+                        : '<span class="gap">?</span>')
+          + (baseForm(v) ? '<span class="basef">(' + esc(baseForm(v)) + ')</span>' : "")
+          + esc(cp.after) + '</div>'
+          + '<div class="clue">gesucht: <span>' + esc(v.de) + '</span>'
+          + (v.pos ? ' \u00b7 ' + esc(v.pos) : "") + '</div>'
+          + '<div class="typebox">'
+          + '<input id="typeIn" placeholder="englisches Wort" autocomplete="off" '
+          + 'autocapitalize="off" spellcheck="false" ' + (S.answered ? "disabled" : "") + '>'
+          + '<div class="verdict" id="verdict"></div></div>';
+    if(S.answered) body += answerBlock(v, true);
+    body += '<div class="spacer"></div>';
+  }
+
+  const controls = S.revealed || S.answered
+    ? `<button class="rate again" data-rate="0">Nochmal<span>1</span></button>
+       <button class="rate hard"  data-rate="1">Unsicher<span>2</span></button>
+       <button class="rate good"  data-rate="2">Gewusst<span>3</span></button>`
+    : (S.mode==="card"
+        ? `<button class="primary" id="flip">Umdrehen <span style="opacity:.6">(Leertaste)</span></button>`
+        : ((S.mode==="type" || S.mode==="cloze")
+            ? `<button class="primary" id="submit">Prüfen (Enter)</button>` : ""));
+
+  view.innerHTML = `
+    <div class="sessionbar">
+      <button class="linkbtn" id="back">← Übersicht</button>
+      <div class="switches">
+        <button class="switch" data-mode="card" aria-pressed="${S.mode==="card"}">Karteikarte</button>
+        <button class="switch" data-mode="mc"   aria-pressed="${S.mode==="mc"}">Auswahl</button>
+        <button class="switch" data-mode="type" aria-pressed="${S.mode==="type"}">Tippen</button>
+        <button class="switch" data-mode="cloze" aria-pressed="${S.mode==="cloze"}">Lückensatz</button>
+        ${S.mode==="cloze" ? "" : `<button class="switch" id="dirBtn">${dirLabel()}</button>`}
+        <button class="switch" id="sfxBtn" aria-pressed="${Sfx.enabled()}"
+          title="Rückmeldetöne an- oder ausschalten">${Sfx.enabled() ? "Ton an" : "Ton aus"}</button>
+      </div>
+    </div>
+    <div class="rail ${sessionUnit()}">${rail}</div>
+    <div class="stage ${sessionUnit()}"><div class="vcard deal">${body}</div></div>
+    <div class="controls">${controls}</div>`;
+
+  bindSession();
+  const inp = document.getElementById("typeIn");
+  if(inp && !S.answered) inp.focus();
+  updateFoot();
+}
+
+/* Zerlegt den Beispielsatz in Teil vor der Vokabel, Vokabel, Teil danach.
+   Versucht zuerst die ganze Wendung, dann das erste Wort mit Endungen.
+   Gibt null zurueck, wenn die Vokabel im Satz nicht auffindbar ist. */
+function clozeParts(v){
+  var ex = v.example_en;
+  if(!ex) return null;
+  var core = String(v.en).replace(/\([^)]*\)/g, " ").split("/")[0];
+  core = core.replace(/^\s*to\s+/i, "").replace(/\s+/g, " ").trim();
+  if(!core) return null;
+  var esc0 = function(x){ return x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); };
+
+  var words = core.split(" ");
+  var tries = [];
+  if(words.length > 1){
+    tries.push(words.map(esc0).join("\\s+") + "\\w*");           // ganze Wendung
+    tries.push(esc0(words[words.length - 1]) + "\\w*");          // letztes Wort
+  }
+  var first = words[0];
+  tries.push(esc0(first.slice(0, Math.max(4, first.length - 3))) + "\\w*");
+
+  for(var i = 0; i < tries.length; i++){
+    var m = ex.match(new RegExp("(" + tries[i] + ")", "i"));
+    if(m && m.index !== undefined && m[1].length > 2){
+      return {before: ex.slice(0, m.index), word: m[1],
+              after: ex.slice(m.index + m[1].length), core: core};
+    }
+  }
+  return null;
+}
+
+function hasCloze(v){ return clozeParts(v) !== null; }
+
+/* Bei Verben steht die Grundform hinter der Luecke, damit klar ist, welche
+   Zeitform gesucht wird - so wie im Lehrwerk. */
+function baseForm(v){
+  if(!/verb/.test(v.pos || "")) return null;
+  let s = (v.en || "").replace(/\([^)]*\)/g, " ");
+  s = s.split(",")[0].split("/")[0];
+  s = s.replace(/\b(sb|sth)\.?\b/g, " ").replace(/\s+/g, " ").trim();
+  return s || null;
+}
+
+function promptBlock(v){
+  const englishAsked = S.dir === "en2de";
+  const phon = englishAsked && (v.ipa || Speech.available)
+    ? `<div class="phon">
+         ${v.ipa ? `<span class="ipa">/${esc(v.ipa)}/</span>` : ""}
+         ${speakBtn(v.en)}
+       </div>`
+    : "";
+  const sense = (v.sense_en && S.dir === "en2de")
+    ? `<div class="sense">${esc(v.sense_en)}</div>` : "";
+  return `<h2 class="prompt">${esc(askSide(v))}</h2>
+    <div class="pos">${esc(v.pos)}</div>${phon}${sense}`;
+}
+
+/* Distraktoren: erst die gepflegten Verwechslungskandidaten, dann Zufall
+   aus demselben Thema. Freie Paare bekommen eine synthetische ID. */
+function buildDistractors(v){
+  const out = [];
+  const set = setOf(S.topicId);
+  let n = 0;
+  for(const h of (v.distractor_hint || [])){
+    if(typeof h === "string"){
+      const found = set.find(x => x.id === h);
+      if(found && found.id !== v.id) out.push(found);
+    }else if(h && h.en && h.de){
+      out.push({id:"hint-"+v.id+"-"+(n++), en:h.en, de:h.de, pos:v.pos, hint:true});
+    }
+  }
+  const used = new Set([v.id, ...out.map(o=>o.id)]);
+  const rest = shuffle(set.filter(x => !used.has(x.id) && x.en !== v.en));
+  return [...out, ...rest].slice(0,3);
+}
+
+function answerBlock(v, compact){
+  const englishIsAnswer = S.dir === "de2en";
+  const phon = englishIsAnswer && (v.ipa || Speech.available)
+    ? `<div class="phon">
+         ${v.ipa ? `<span class="ipa">/${esc(v.ipa)}/</span>` : ""}
+         ${speakBtn(v.en)}
+       </div>`
+    : "";
+  return `<div class="answer">
+    ${compact ? "" : `<div class="de">${esc(ansSide(v))}</div>`}
+    ${phon}
+    ${v.collocations ? `<div class="coll">${esc(v.collocations)}</div>` : ""}
+    ${v.example_en ? `<div class="ex">${markExample(v.example_en, v.en)}
+      ${speakBtn(v.example_en)}</div>` : ""}
+  </div>`;
+}
+
+function bindSession(){
+  document.getElementById("back").onclick = () => { S.view="year"; S.options=null; render(); };
+  const sfxB = document.getElementById("sfxBtn");
+  if(sfxB) sfxB.onclick = () => { Sfx.toggle(); render(); };
+  const dirB = document.getElementById("dirBtn");
+  if(dirB) dirB.onclick = () => {
+    S.dir = S.dir==="en2de" ? "de2en" : "en2de";
+    S.options=null; buildQueue(); render();
+  };
+  view.querySelectorAll("[data-mode]").forEach(b => b.onclick = () => {
+    const was = S.mode;
+    S.mode = b.dataset.mode; S.revealed=false; S.answered=null; S.options=null;
+    if(was === "cloze" || S.mode === "cloze") buildQueue();
+    render();
+  });
+  const flip = document.getElementById("flip");
+  if(flip) flip.onclick = () => { S.revealed = true; render(); };
+
+  view.querySelectorAll("[data-opt]").forEach(b => b.onclick = () => {
+    S.answered = b.dataset.opt;
+    Sfx.play(b.dataset.opt === current().id ? "ok" : "no");
+    render();
+  });
+
+  const sub = document.getElementById("submit");
+  if(sub) sub.onclick = submitTyped;
+
+  view.querySelectorAll("[data-rate]").forEach(b =>
+    b.onclick = () => rate(Number(b.dataset.rate)));
+
+  view.querySelectorAll("[data-say]").forEach(b => b.onclick = ev => {
+    ev.stopPropagation();
+    Speech.say(b.dataset.say, b);
+  });
+}
+
+function submitTyped(){
+  const inp = document.getElementById("typeIn");
+  if(!inp) return;
+  const v = current();
+  let res;
+  if(S.mode === "cloze"){
+    const cp = clozeParts(v);
+    res = checkTyped(inp.value, cp.word);
+    if(res !== "ok") {
+      const alt = checkTyped(inp.value, cp.core);
+      if(alt === "ok" || (alt === "near" && res === "no")) res = alt;
+    }
+  }else{
+    res = checkTyped(inp.value, ansSide(v));
+  }
+  S.answered = res;
+  Sfx.play(res === "ok" ? "ok" : res === "near" ? "near" : "no");
+  render();
+  const el = document.getElementById("verdict");
+  if(el){
+    el.className = "verdict " + res;
+    const sol = S.mode === "cloze" ? clozeParts(v).word : ansSide(v);
+    el.innerHTML = res==="ok"   ? "Richtig."
+                 : res==="near" ? `Fast – Schreibweise prüfen.<span class="sol">${esc(sol)}</span>`
+                 :                `Noch nicht.<span class="sol">${esc(sol)}</span>`;
+  }
+}
+
+function rate(quality){
+  Sfx.play(quality === 0 ? "no" : quality === 1 ? "near" : "ok");
+  const v = current();
+  const r = rec(S.dir, v.id);
+  if(quality === 0)       r.box = 1;
+  else if(quality === 1)  r.box = Math.max(1, r.box - 1);
+  else                    r.box = Math.min(5, r.box + 1);
+  r.due = Date.now() + INTERVALS[r.box] * DAY;
+  save();
+  S.landed = r.box;
+  S.seen++;
+  S.i++; S.revealed=false; S.answered=null; S.options=null;
+  render();
+  setTimeout(()=>{ S.landed=null; }, 500);
+}
+
+function renderDone(){
+  const setNow = setOf(S.topicId);
+  const c = boxCounts(setNow, S.dir);
+  const total = setNow.length;
+  view.innerHTML = `<div class="done">
+    <h2>Durchgang beendet</h2>
+    <p>${S.seen} Karten bearbeitet · ${c[4]} von ${total} in Fach 5</p>
+    <div class="controls">
+      <button class="primary" id="again">Weiter üben</button>
+      <button id="home">Übersicht</button>
+    </div></div>`;
+  document.getElementById("again").onclick = () => {
+    S.onlyDue = false; buildQueue(); S.seen = 0; render();
+  };
+  document.getElementById("home").onclick = () => { S.view="year"; render(); };
+  updateFoot();
+}
+
+/* =========================================================================
+   ANLEITUNG
+   Reine Anzeige. Text bewusst kurz gehalten: Schuelerinnen und Schueler
+   lesen das einmal, danach nie wieder.
+   ========================================================================= */
+function renderHelp(){
+  var d = [];
+
+  d.push('<h2>Wofür ist diese Seite?</h2>');
+  d.push('<p class="lead">Zum Lernen des Englisch-Vokabulars aus deinem Schulbuch. Alle Wörter sind nach Unit und Part sortiert. Du kannst sie auf vier verschiedene Arten üben, und die Seite merkt sich, was du schon kannst.</p>');
+  d.push('<p>Es gibt keine Anmeldung und kein Passwort. Öffne einfach den Link.</p>');
+
+  d.push('<h2>Loslegen</h2>');
+  d.push('<ul>');
+  d.push('<li>Auf der Startseite den Jahrgang antippen, dann eine Unit, einen Part, eine ganze Unit oder das ganze Buch.</li>');
+  d.push('<li>Die erste Karte erscheint. Überlege, dann tippe auf <b>Umdrehen</b>.</li>');
+  d.push('<li>Bewerte ehrlich: <b>Nochmal</b>, <b>Unsicher</b> oder <b>Gewusst</b>.</li>');
+  d.push('<li>Die nächste Karte kommt automatisch.</li>');
+  d.push('</ul>');
+  d.push('<p>Zurück zur Übersicht kommst du jederzeit oben links.</p>');
+
+  d.push('<h2>Die fünf Fächer</h2>');
+  d.push('<p>Das ist der wichtigste Teil. Oben über der Karte siehst du fünf Fächer. Jede Vokabel steckt in einem davon.</p>');
+  d.push('<p>Eine neue Vokabel startet in Fach 1. Antwortest du richtig, rückt sie ein Fach weiter. Antwortest du falsch, fällt sie zurück in Fach 1. Je weiter oben eine Vokabel steht, desto seltener siehst du sie wieder:</p>');
+  d.push('<table><thead><tr><th>Fach</th><th>Du siehst die Vokabel wieder</th></tr></thead><tbody>'
+       + '<tr><td>1</td><td>sofort im selben Durchgang</td></tr>'
+       + '<tr><td>2</td><td>nach 1 Tag</td></tr>'
+       + '<tr><td>3</td><td>nach 2 Tagen</td></tr>'
+       + '<tr><td>4</td><td>nach 4 Tagen</td></tr>'
+       + '<tr><td>5</td><td>nach 8 Tagen</td></tr>'
+       + '</tbody></table>');
+  d.push('<p>Dadurch übst du automatisch genau das, was dir schwerfällt, und verschwendest keine Zeit mit Wörtern, die längst sitzen. Damit das funktioniert, solltest du lieber <b>jeden Tag zehn Minuten</b> üben als einmal pro Woche eine Stunde.</p>');
+  d.push('<p>Die Zahl in jedem Fach zeigt, wie viele Vokabeln der gewählten Auswahl gerade dort liegen. Ziel ist, alles nach Fach 5 zu bekommen.</p>');
+
+  d.push('<h2>Die vier Übungsarten</h2>');
+  d.push('<p>Oben rechts kannst du umschalten. Alle vier greifen auf dieselben Vokabeln und dasselbe Fächersystem zu.</p>');
+  d.push('<h3>Karteikarte</h3>');
+  d.push('<p>Wort ansehen, überlegen, umdrehen, selbst bewerten. Am schnellsten, aber du musst ehrlich zu dir sein.</p>');
+  d.push('<h3>Auswahl</h3>');
+  d.push('<p>Vier Antworten, eine ist richtig. Gut zum Aufwärmen. Achtung: Wiedererkennen ist leichter als Wissen.</p>');
+  d.push('<h3>Tippen</h3>');
+  d.push('<p>Du schreibst die Übersetzung. Kleine Tippfehler werden verziehen und als „Fast" angezeigt. Das ist die ehrlichste Übung für eine Klausur.</p>');
+  d.push('<h3>Lückensatz</h3>');
+  d.push('<p>Ein englischer Beispielsatz mit einer Lücke, darunter die deutsche Bedeutung. Du schreibst das fehlende englische Wort. Hier lernst du nicht nur die Vokabel, sondern auch, wie sie im Satz benutzt wird — genau das brauchst du beim Schreiben.</p>');
+
+  d.push('<h2>Abfragerichtung</h2>');
+  d.push('<p>Mit dem Knopf <code>EN → DE</code> schaltest du um. <b>EN → DE</b> heißt: Du siehst Englisch und sagst die deutsche Bedeutung. <b>DE → EN</b> ist die schwerere und für Klausuren wichtigere Richtung.</p>');
+  d.push('<p>Beide Richtungen haben getrennte Fächer. Eine Vokabel kann in der einen Richtung in Fach 5 stehen und in der anderen in Fach 1.</p>');
+
+  d.push('<h2>Aussprache</h2>');
+  d.push('<p>Neben dem englischen Wort stehen die Lautschrift und ein Lautsprecher-Symbol. Antippen liest das Wort vor. Am Beispielsatz gibt es ein zweites, kleineres Symbol für den ganzen Satz. Am Computer geht es auch mit der Taste <span class="kbd">S</span>.</p>');
+  d.push('<p>Die Stimme kommt von deinem Gerät und klingt je nach Handy unterschiedlich gut.</p>');
+  d.push('<p><button class="switch" id="sptest">Aussprache testen</button> '
+       + '<span id="spout" style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)"></span></p>');
+  d.push('<p class="lead" style="font-size:13.5px">Hörst du nichts, prüfe am iPhone den Stummschalter an der linken Gehäusekante. Bleibt es still, gib die Zeile neben dem Knopf an deine Lehrkraft weiter.</p>');
+
+  d.push('<h2>Tastatur am Computer</h2>');
+  d.push('<table><tbody>'
+       + '<tr><td><span class="kbd">Leertaste</span></td><td>Karte umdrehen</td></tr>'
+       + '<tr><td><span class="kbd">1</span> <span class="kbd">2</span> <span class="kbd">3</span></td><td>Nochmal / Unsicher / Gewusst</td></tr>'
+       + '<tr><td><span class="kbd">Enter</span></td><td>Eingabe prüfen</td></tr>'
+       + '<tr><td><span class="kbd">S</span></td><td>Aussprache abspielen</td></tr>'
+       + '</tbody></table>');
+
+  d.push('<h2>Dein Lernstand</h2>');
+  d.push('<div class="warnbox"><b>Wichtig:</b> Dein Fortschritt wird nur in dem Browser gespeichert, in dem du übst. Er wandert nicht zwischen Handy und Computer, und er verschwindet, wenn du die Browserdaten löschst.</div>');
+  d.push('<p>Ganz unten auf der Seite gibt es <b>Fortschritt sichern</b>. Damit lädst du eine kleine Datei herunter, die deinen Lernstand enthält. Mit <b>Fortschritt laden</b> spielst du sie wieder ein — zum Beispiel auf einem anderen Gerät oder nachdem du den Cache geleert hast. Die Datei enthält keine Vokabeln, nur Zahlen.</p>');
+  d.push('<p>Wenn du auf Nummer sicher gehen willst: einmal im Monat sichern und die Datei sich selbst per Mail schicken.</p>');
+
+  d.push('<h2>Alle Vokabeln nachschlagen</h2>');
+  d.push('<p>Auf der Startseite unten steht <b>Alle Vokabeln ansehen</b>. Dort findest du:</p>');
+  d.push('<ul>');
+  d.push('<li>ein <b>Suchfeld</b> — es durchsucht Englisch, Deutsch und die Beispielsätze;</li>');
+  d.push('<li>Schalter für <b>Beispielsätze</b> und <b>Lautschrift</b>;</li>');
+  d.push('<li><b>Drucken</b> — druckt genau die Parts, die du aufgeklappt hast, zweispaltig und ohne Bedienelemente. Auf dem Handy kannst du daraus ein PDF sichern.</li>');
+  d.push('</ul>');
+
+  d.push('<h2>Wenn etwas nicht geht</h2>');
+  d.push('<h3>Kein Ton bei der Aussprache</h3>');
+  d.push('<p>Prüfe am iPhone den Stummschalter an der linken Gehäusekante. Ist er auf stumm, bleibt auch die Sprachausgabe still.</p>');
+  d.push('<h3>Der Lernstand ist weg</h3>');
+  d.push('<p>Wahrscheinlich wurden die Browserdaten gelöscht, oder du hast die Seite über eine andere Adresse geöffnet. Für den Browser sind das zwei verschiedene Orte. Nutze immer denselben Link.</p>');
+  d.push('<h3>Die Seite bleibt leer</h3>');
+  d.push('<p>Lade sie neu. Kommt danach ein gelber Kasten mit einer Fehlermeldung, gib den Text an deine Lehrkraft weiter.</p>');
+
+  d.push('<div class="teacher">');
+  d.push('<h2>Für Kolleginnen und Kollegen</h2>');
+  d.push('<p>Die Seite läuft ohne Server, ohne Konten und ohne Datenbank. Es werden keine personenbezogenen Daten erhoben oder übertragen; der Lernstand bleibt ausschließlich im Browser des Geräts.</p>');
+  d.push('<p>In der Listenansicht gibt es zusätzlich einen <b>CSV-Export</b> der gerade sichtbaren Einträge — für Arbeitsblätter, Tests oder eigene Listen. Spalten: Unit/Part, en, de, pos, ipa, sense_en, example_en.</p>');
+  d.push('<p>Stichwörter und Übersetzungen folgen den Wortlisten des eingeführten Lehrwerks. Die Beispielsätze sind eigenständig formuliert. Die Lautschrift stammt aus dem offenen Datensatz ipa-dict (github.com/open-dict-data/ipa-dict): britische Aussprache aus en_UK, abgeleitet von ipacards (GPL 3.0), Lücken ergänzt aus en_US, abgeleitet von cmudict-ipa (MIT). Einzelne Einträge wurden von Hand ergänzt.</p>');
+  d.push('</div>');
+
+  view.innerHTML =
+      '<div class="sessionbar">'
+    +   '<button class="linkbtn" id="hback">\u2190 Startseite</button>'
+    +   '<div class="switches"><button class="switch" id="hprint">Drucken</button></div>'
+    + '</div>'
+    + '<div class="doc">' + d.join("") + '</div>';
+
+  document.getElementById("hback").onclick = function(){ S.view = "home"; render(); };
+  document.getElementById("hprint").onclick = function(){ try{ window.print(); }catch(e){} };
+
+  var st = document.getElementById("sptest"), out = document.getElementById("spout");
+  if(st && out){
+    st.onclick = function(){
+      Speech.say("This is a test of the pronunciation.");
+      out.textContent = Speech.status();
+      setTimeout(function(){ out.textContent = Speech.status(); }, 1200);
+    };
+    out.textContent = Speech.status();
+  }
+  updateFoot();
+}
+
+/* =========================================================================
+   LISTENANSICHT
+   Reine Anzeige: liest die Vokabeln, schreibt nichts und ruehrt den
+   Lernstand nicht an. Themen sind eingeklappt; die Suche oeffnet sie.
+   ========================================================================= */
+var LIST_PREFS = {ex:false, ipa:true};   // Beispielsaetze aus, Lautschrift an
+
+function renderList(){
+  var grand = 0, h = "";
+
+  for(var i = 0; i < TOPICS.length; i++){
+    var t = TOPICS[i];
+    var entries = SETS[t.id];
+    if(!entries || !entries.length) continue;
+    grand += entries.length;
+
+    h += '<details class="lsec ' + t.unit + '" data-sec="' + t.id + '"><summary>'
+       + '<span><span class="lyear ' + esc(t.unit) + '" style="background:var(--unit)">' + esc(t.unitName.split(" \u2013 ")[0]) + '</span>'
+       + esc(t.unitName.split(" \u2013 ").slice(1).join(" \u2013 ")) + ' \u00b7 ' + esc(t.name) + '</span>'
+       + '<span class="lnum">' + entries.length + '</span></summary><div class="lbody">';
+
+    for(var j = 0; j < entries.length; j++){
+      var e = entries[j];
+      var hay = (e.en + " " + e.de + " " + (e.pos||"") + " "
+               + (e.collocations||"") + " " + (e.example_en||"")).toLowerCase();
+      h += '<div class="vrow" data-s="' + esc(hay) + '">'
+         + '<div><span class="ven">' + esc(e.en) + '</span>'
+         + (e.pos ? '<span class="vpos">' + esc(e.pos) + '</span>' : "")
+         + (e.ipa ? '<span class="vipa">/' + esc(e.ipa) + '/</span>' : "")
+         + '</div>'
+         + '<div class="vde">' + esc(e.de)
+         + (e.sense_en ? '<span class="vsense">' + esc(e.sense_en) + '</span>' : "")
+         + '</div>'
+         + (e.example_en ? '<div class="vex">' + esc(e.example_en) + '</div>' : "")
+         + '</div>';
+    }
+    h += "</div></details>";
+  }
+
+  view.innerHTML =
+      '<div class="sessionbar">'
+    +   '<button class="linkbtn" id="lback">\u2190 Themen\u00fcbersicht</button>'
+    +   '<div class="switches">'
+    +     '<button class="switch" id="lex" aria-pressed="' + LIST_PREFS.ex + '">Beispiels\u00e4tze</button>'
+    +     '<button class="switch" id="lipa" aria-pressed="' + LIST_PREFS.ipa + '">Lautschrift</button>'
+    +     '<button class="switch" id="lopen">Alle aufklappen</button>'
+    +     '<button class="switch" id="lprint">Drucken</button>'
+    +     '<button class="switch" id="lcsv">CSV</button>'
+    +   '</div>'
+    + '</div>'
+    + '<div class="listctl">'
+    +   '<input type="search" id="lq" placeholder="Suchen \u2013 englisch, deutsch oder im Beispielsatz" '
+    +     'autocomplete="off" autocapitalize="off" spellcheck="false">'
+    + '</div>'
+    + '<div class="listcount" id="lcount">' + grand + ' Vokabeln in '
+    +   Object.keys(SETS).length + ' Themen \u00b7 Thema antippen zum \u00d6ffnen</div>'
+    + '<div class="vlist" id="vlist">' + h + '</div>'
+    + '<div class="noresult" id="lnone" hidden>Kein Treffer.</div>';
+
+  var box = document.getElementById("vlist");
+  applyListPrefs(box);
+
+  document.getElementById("lback").onclick = function(){ S.view = "home"; render(); };
+  document.getElementById("lex").onclick = function(){
+    LIST_PREFS.ex = !LIST_PREFS.ex;
+    this.setAttribute("aria-pressed", LIST_PREFS.ex);
+    applyListPrefs(box);
+  };
+  document.getElementById("lipa").onclick = function(){
+    LIST_PREFS.ipa = !LIST_PREFS.ipa;
+    this.setAttribute("aria-pressed", LIST_PREFS.ipa);
+    applyListPrefs(box);
+  };
+  document.getElementById("lopen").onclick = function(){
+    var secs = box.querySelectorAll("details.lsec");
+    var anyClosed = false;
+    for(var i = 0; i < secs.length; i++){ if(!secs[i].open) anyClosed = true; }
+    for(var k = 0; k < secs.length; k++){ secs[k].open = anyClosed; }
+    this.textContent = anyClosed ? "Alle zuklappen" : "Alle aufklappen";
+  };
+  document.getElementById("lprint").onclick = function(){
+    try{ window.print(); }catch(e){}
+  };
+  document.getElementById("lcsv").onclick = function(){ exportCsv(box); };
+
+  var q = document.getElementById("lq");
+  q.oninput = function(){ filterList(box, q.value); };
+
+  updateFoot();
+}
+
+/* Exportiert die gerade sichtbaren Zeilen als Tabelle (Tab-getrennt,
+   mit BOM, damit Excel die Umlaute richtig liest). */
+function exportCsv(box){
+  var cols = ["Thema","en","de","pos","ipa","collocations","example_en"];
+  var rows = [cols.join("\t")];
+  var n = 0;
+
+  for(var i = 0; i < TOPICS.length; i++){
+    var t = TOPICS[i];
+    var entries = SETS[t.id];
+    if(!entries) continue;
+    var sec = box.querySelector('details[data-sec="' + t.id + '"]');
+    if(!sec || sec.className.indexOf("off") !== -1) continue;
+    var domRows = sec.querySelectorAll(".vrow");
+
+    for(var j = 0; j < entries.length; j++){
+      if(domRows[j] && domRows[j].className.indexOf("off") !== -1) continue;
+      var e = entries[j];
+      var cell = function(x){ return String(x == null ? "" : x).replace(/[\t\r\n]+/g, " "); };
+      rows.push([t.unitName + " / " + t.name, e.en, e.de, e.pos || "", e.ipa || "",
+                 e.collocations || "", e.example_en || ""].map(cell).join("\t"));
+      n++;
+    }
+  }
+
+  if(!n){ alert("Nichts zu exportieren \u2013 die Suche liefert keine Treffer."); return; }
+  try{
+    var blob = new Blob(["\ufeff" + rows.join("\n")], {type:"text/csv;charset=utf-8"});
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "vokabeln.csv";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }catch(err){ alert("Der Export hat nicht funktioniert: " + err.message); }
+}
+
+function applyListPrefs(box){
+  box.className = "vlist" + (LIST_PREFS.ex ? "" : " hide-ex")
+                          + (LIST_PREFS.ipa ? "" : " hide-ipa");
+}
+
+function filterList(box, raw){
+  var term = String(raw || "").toLowerCase().trim();
+  var secs = box.querySelectorAll("details.lsec");
+  var hits = 0;
+
+  for(var i = 0; i < secs.length; i++){
+    var sec = secs[i];
+    var rows = sec.querySelectorAll(".vrow");
+    var shown = 0;
+    for(var j = 0; j < rows.length; j++){
+      var match = !term || rows[j].getAttribute("data-s").indexOf(term) !== -1;
+      rows[j].className = "vrow" + (match ? "" : " off");
+      if(match) shown++;
+    }
+    hits += shown;
+    sec.className = "lsec" + (shown ? "" : " off");
+    if(term) sec.open = shown > 0;
+  }
+
+  document.getElementById("lnone").hidden = !(term && hits === 0);
+  document.getElementById("lcount").textContent = term
+    ? hits + " Treffer f\u00fcr \u201e" + raw.trim() + "\u201c"
+    : box.querySelectorAll(".vrow").length + " Vokabeln in "
+      + Object.keys(SETS).length + " Themen \u00b7 Thema antippen zum \u00d6ffnen";
+}
+
+/* =========================================================================
+   TASTATUR
+   ========================================================================= */
+document.addEventListener("keydown", e => {
+  if(S.view !== "session") return;
+  const typing = document.activeElement && document.activeElement.id === "typeIn";
+  if(typing && e.key === "Enter"){ e.preventDefault(); submitTyped(); return; }
+  if(typing && !S.answered) return;
+  if((e.key === "s" || e.key === "S") && current()){
+    e.preventDefault(); Speech.say(current().en); return;
+  }
+  if(e.key === " " && S.mode === "card" && !S.revealed){
+    e.preventDefault(); S.revealed = true; render(); return;
+  }
+  if((S.revealed || S.answered) && ["1","2","3"].includes(e.key)){
+    e.preventDefault(); rate(Number(e.key) - 1);
+  }
+});
+
+/* =========================================================================
+   EXPORT / IMPORT
+   ========================================================================= */
+document.getElementById("exportBtn").onclick = () => {
+  const blob = new Blob([JSON.stringify(progress,null,1)],{type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "vokabelfortschritt.json";
+  a.click();
+  URL.revokeObjectURL(a.href);
+};
+document.getElementById("importBtn").onclick = () => document.getElementById("importFile").click();
+document.getElementById("importFile").onchange = ev => {
+  const f = ev.target.files[0]; if(!f) return;
+  const fr = new FileReader();
+  fr.onload = () => {
+    try{ progress = JSON.parse(fr.result); save(); render(); }
+    catch(e){ alert("Die Datei konnte nicht gelesen werden."); }
+  };
+  fr.readAsText(f);
+};
+
+function updateFoot(){
+  let done = 0, all = 0;
+  for(const t of TOPICS){
+    if(!SETS[t.id]) continue;
+    all += SETS[t.id].length;
+    done += boxCounts(SETS[t.id], S.dir).slice(2).reduce((a,b)=>a+b,0);
+  }
+  document.getElementById("footstat").textContent =
+    `${done}/${all} SICHER · ${dirLabel()}`;
+}
+
+/* =========================================================================
+   START
+   ========================================================================= */
+function render(){
+  if(S.view === "home") return renderHome();
+  if(S.view === "year") return renderYear();
+  if(S.view === "list") return renderList();
+  if(S.view === "help") return renderHelp();
+  return renderSession();
+}
+
+function showWarn(html){ document.getElementById("warn").innerHTML = html; }
+
+if(!Store.persistent){
+  showWarn(`<div class="warn"><b>Vorschau-Modus:</b> Dieser Browserkontext erlaubt keinen
+     dauerhaften Speicher. Der Fortschritt gilt nur fuer diese Sitzung. Lade die Datei
+     herunter und oeffne sie per Doppelklick \u2013 dort bleibt der Lernstand erhalten.</div>`);
+}
+
+try{
+  render();
+}catch(err){
+  showWarn('<div class="warn"><b>Beim Aufbau der Seite ist ein Fehler aufgetreten.</b><br>'
+    + '<span style="font-family:var(--mono);font-size:11px">' + err.message + '</span></div>');
+}
+</script>
