@@ -971,7 +971,7 @@ const SETS = {
    "de": "als etwas betrachtet werden; für etwas gehalten werden",
    "pos": "verb",
    "ipa": "kənˈsɪdəd",
-   "example_en": "Because he arrived late again, his behaviour was considered unacceptable by the team."
+   "example_en": "His actions were considered rude by most of his classmates."
   },
   {
    "id": "u1-059",
@@ -2187,7 +2187,7 @@ const SETS = {
    "de": "ganz gleich, ob; ganz gleich, was/wer/wie/...",
    "pos": "phrase",
    "ipa": "ˈmætə",
-   "example_en": "No matter if it rains or shines, the school trip will go ahead as planned."
+   "example_en": "No matter what happens, we will finish the project together."
   },
   {
    "id": "u2-016",
@@ -3020,7 +3020,7 @@ const SETS = {
    "de": "sich für etwas verpflichten, sich zu etwas bekennen",
    "pos": "verb",
    "ipa": "kəˈmɪtɪd",
-   "example_en": "Because the charity depends on donations, every volunteer stays fully committed to the cause."
+   "example_en": "The volunteers are committed to helping the local community."
   },
   {
    "id": "u2-121",
@@ -3232,7 +3232,7 @@ const SETS = {
    "de": "wahrscheinlich etwas tun (werden)",
    "pos": "verb",
    "ipa": "ˈlaɪkli",
-   "example_en": "Because temperatures keep rising, storms are likely to become more frequent."
+   "example_en": "Prices are likely to rise again next year."
   },
   {
    "id": "u3-016",
@@ -3512,7 +3512,7 @@ const SETS = {
    "de": "eine Menge ..., ein Bündel ...",
    "pos": "phrase",
    "ipa": "bʌntʃ",
-   "example_en": "Already this morning, a bunch of tourists were queuing outside the museum."
+   "example_en": "A bunch of students protested outside the parliament building."
   },
   {
    "id": "u3-051",
@@ -4569,7 +4569,7 @@ const SETS = {
    "de": "über/um/wegen etwas besorgt sein",
    "pos": "verb",
    "ipa": "kənˈsɜːnd",
-   "example_en": "Because screens are everywhere, parents are increasingly concerned about how much time teenagers spend online."
+   "example_en": "Parents are increasingly concerned about how much time teenagers spend online."
   },
   {
    "id": "u3-183",
@@ -4692,6 +4692,7 @@ const SETS = {
   }
  ]
 };
+
 
 
 </script>
@@ -5163,10 +5164,12 @@ function renderSession(){
 
   if(S.mode === "cloze"){
     const cp = clozeParts(v);
+    const bf = baseForm(v);
+    const showHint = bf && bf.trim().toLowerCase() !== String(cp.word).trim().toLowerCase();
     body += '<div class="cloze">' + esc(cp.before)
           + (S.answered ? '<b>' + esc(cp.word) + '</b>'
                         : '<span class="gap">?</span>')
-          + (baseForm(v) ? '<span class="basef">(' + esc(baseForm(v)) + ')</span>' : "")
+          + (!S.answered && showHint ? '<span class="basef">(' + esc(bf) + ')</span>' : "")
           + esc(cp.after) + '</div>'
           + '<div class="clue">gesucht: <span>' + esc(v.de) + '</span>'
           + (v.pos ? ' \u00b7 ' + esc(v.pos) : "") + '</div>'
@@ -5211,8 +5214,11 @@ function renderSession(){
 }
 
 /* Zerlegt den Beispielsatz in Teil vor der Vokabel, Vokabel, Teil danach.
-   Versucht zuerst die ganze Wendung, dann das erste Wort mit Endungen.
-   Gibt null zurueck, wenn die Vokabel im Satz nicht auffindbar ist. */
+   Sucht bevorzugt nach den bedeutungstragenden Woertern der Vokabel (nicht
+   nach Fuellwoertern wie "be", "to", "sb.", "sth." ...), damit bei Wendungen
+   wie "(to) be considered sth." wirklich "considered" markiert wird und
+   nicht ein zufaelliges Wort im Satz. Gibt null zurueck, wenn die Vokabel
+   im Beispielsatz nicht auffindbar ist. */
 function clozeParts(v){
   var ex = v.example_en;
   if(!ex) return null;
@@ -5220,15 +5226,32 @@ function clozeParts(v){
   core = core.replace(/^\s*to\s+/i, "").replace(/\s+/g, " ").trim();
   if(!core) return null;
   var esc0 = function(x){ return x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); };
+  var stripPunct = function(w){ return w.replace(/^[",.;:]+|[",.;:]+$/g, ""); };
+
+  var STOP = {"a":1,"an":1,"the":1,"to":1,"in":1,"on":1,"at":1,"of":1,"for":1,
+    "with":1,"about":1,"from":1,"by":1,"be":1,"is":1,"are":1,"was":1,"were":1,
+    "do":1,"does":1,"did":1,"and":1,"or":1,"but":1,"it":1,"its":1,"his":1,
+    "her":1,"their":1,"your":1,"one's":1,"someone's":1,"sb.":1,"sb":1,
+    "sth.":1,"sth":1,"no":1};
 
   var words = core.split(" ");
   var tries = [];
   if(words.length > 1){
     tries.push(words.map(esc0).join("\\s+") + "\\w*");           // ganze Wendung
-    tries.push(esc0(words[words.length - 1]) + "\\w*");          // letztes Wort
+  }
+
+  // bedeutungstragende Woerter zuerst versuchen (laengstes zuerst)
+  var content = words
+    .map(function(w){ return stripPunct(w); })
+    .filter(function(w){ return w.length > 1 && !STOP[w.toLowerCase()]; })
+    .sort(function(a, b){ return b.length - a.length; });
+  content.forEach(function(w){ tries.push(esc0(w) + "\\w*"); });
+
+  if(words.length > 1){
+    tries.push(esc0(stripPunct(words[words.length - 1])) + "\\w*"); // letztes Wort (Fallback)
   }
   var first = words[0];
-  tries.push(esc0(first.slice(0, Math.max(4, first.length - 3))) + "\\w*");
+  tries.push(esc0(first.slice(0, Math.max(4, first.length - 3))) + "\\w*"); // Wortstamm (Fallback)
 
   for(var i = 0; i < tries.length; i++){
     var m = ex.match(new RegExp("(" + tries[i] + ")", "i"));
@@ -5245,7 +5268,7 @@ function hasCloze(v){ return clozeParts(v) !== null; }
 /* Bei Verben steht die Grundform hinter der Luecke, damit klar ist, welche
    Zeitform gesucht wird - so wie im Lehrwerk. */
 function baseForm(v){
-  if(!/verb/.test(v.pos || "")) return null;
+  if(!/\bverb\b/.test(v.pos || "")) return null;
   let s = (v.en || "").replace(/\([^)]*\)/g, " ");
   s = s.split(",")[0].split("/")[0];
   s = s.replace(/\b(sb|sth)\.?\b/g, " ").replace(/\s+/g, " ").trim();
