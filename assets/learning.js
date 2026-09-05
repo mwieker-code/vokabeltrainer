@@ -113,6 +113,7 @@
   renderHome = function() {
     if(upper){
       originalHome();
+      view.insertAdjacentHTML('afterbegin','<a class="topic" href="analysis/" style="text-decoration:none"><span class="t-name">Analysis Skills · Stylistic &amp; Rhetorical Devices</span><br><span class="t-count">Learn · Practise · Write — 12 devices and four mini-analyses</span></a>');
       const oldDue=document.getElementById('dueBtn');if(oldDue)oldDue.remove();
       view.insertAdjacentHTML('afterbegin',dashboard());
     }else{
