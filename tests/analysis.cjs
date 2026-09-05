@@ -1,6 +1,6 @@
 const {JSDOM}=require('jsdom'),fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
-const root=path.join(__dirname,'../oberstufe/analysis');let checks=0;const ok=(v,m)=>{assert.ok(v,m);checks++;};
-function setup(seed){const dom=new JSDOM(fs.readFileSync(path.join(root,'index.html'),'utf8'),{runScripts:'outside-only',url:'https://example.org/oberstufe/analysis/'});if(seed)dom.window.localStorage.setItem('vt:analysis:v1',seed);for(const f of ['data.js','app.js'])dom.window.eval(fs.readFileSync(path.join(root,f),'utf8'));return dom;}
+const root=path.join(__dirname,'../all/analysis');let checks=0;const ok=(v,m)=>{assert.ok(v,m);checks++;};
+function setup(seed){const dom=new JSDOM(fs.readFileSync(path.join(root,'index.html'),'utf8'),{runScripts:'outside-only',url:'https://example.org/all/analysis/'});if(seed)dom.window.localStorage.setItem('vt:analysis:v1',seed);for(const f of ['data.js','app.js'])dom.window.eval(fs.readFileSync(path.join(root,f),'utf8'));return dom;}
 const dom=setup(),w=dom.window,d=w.document,data=w.ANALYSIS_DATA;
 ok(data.devices.length===12,'12 devices');ok(data.writing.length===4,'four writing tasks');
 for(const device of data.devices){ok(data.devices.some(x=>x.id===device.contrast),'contrast exists');ok(device.examples.length===3,'three variants');for(const e of device.examples){ok(e.length===3,'context quote explanation');ok(e[1].split('|').length===3,'highlight valid');}}

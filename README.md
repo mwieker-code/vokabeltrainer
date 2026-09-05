@@ -5,7 +5,8 @@ Statischer Englisch-Vokabeltrainer für Jahrgang 6, 9, 10 und Oberstufe. Die HTM
 ## Änderungen
 
 - Direkter Einstieg in die Units, ohne erneute Jahrgangsauswahl.
-- „Heute lernen“: bis zu zehn Wörter, bereits bearbeitete fällige Wörter vor neuen Wörtern.
+- Lernrunden beginnen direkt über Units und Themen; keine Rubrik „Heute lernen“.
+- Analysis Skills ist jahrgangsübergreifend unter `all/analysis/` erreichbar. Alte Links unter `oberstufe/analysis/` werden weitergeleitet.
 - Je unsicherem oder falschem Wort höchstens eine Wiederholung nach drei anderen Karten oder am Rundenende; maximal 20 Antworten bei zehn Wörtern.
 - Eingaben bleiben sichtbar; Unterschiede zur nächstliegenden Lösung werden markiert. Komma-, Semikolon- und Schrägstrich-Varianten sowie optionale Wortteile werden berücksichtigt.
 - Objektiv falsche Antworten können nicht als gewusst weitergestuft werden. Höchstens eine Beförderung pro Wort und Runde; nach einem Fehler bleibt es in dieser Runde in Fach 1.
@@ -24,6 +25,5 @@ Die Ordnerstruktur inklusive `assets/` vollständig beibehalten. Zum lokalen Sta
 - Vollständige sprachliche Prüfung der Vokabeldaten und Sonderformen. Die Antwortprüfung ist regelbasiert; freie Synonyme werden nicht automatisch verstanden.
 - Die bestehende automatische Lückenerkennung bleibt bestehen und sollte gesondert überarbeitet werden.
 - Zusätzliche Funktionen wie Testvorbereitung, teilbare Lernaufträge und Vokabelimport sind noch nicht umgesetzt.
-- Veröffentlichung der Änderungen im ursprünglichen GitHub-Repository.
 
 Die private Sites-Vorschau liegt auf einer anderen Adresse. Der Lernstand der bisherigen GitHub-Seite erscheint dort deshalb nicht automatisch; er kann über „Fortschritt sichern/laden“ übertragen werden.

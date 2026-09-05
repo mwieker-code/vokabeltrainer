@@ -97,38 +97,21 @@
     S.roundSource=topicId; S.topicId=topicId; S.onlyDue=true;
     S.view='session'; buildQueue(); render();
   };
-  function startToday(){S.roundSource='today';S.onlyDue=true;S.view='session';buildQueue();render();}
-  if(upper) startDueSession=startToday;
-
-  function dashboard(){
-    const words=allWords();
-    const due=words.filter(v=>isDue(record(v))).length;
-    const known=words.filter(v=>record(v).box>=3).length;
-    const year=upper?'Oberstufe':YEARS[0].label;
-    return '<section class="dashboard" aria-label="Heute lernen"><h2>'+safe(year)+' · Heute lernen</h2><p>'
-      +(due?'Starte mit bis zu 10 Wörtern. Schwierige Wörter wiederholst du am Ende oder nach einigen Karten.':'Alles für heute wiederholt. Du kannst eine freiwillige Übungsrunde starten.')
-      +'</p><div class="controls"><button class="primary" id="learnToday">'+(due?'10 Wörter lernen':'Freiwillig üben')+'</button><button class="quiet" id="homeDirection">'+dirLabel()+'</button></div><small>'
-      +due+' fällig oder neu · '+known+' von '+words.length+' in Fach 3–5</small></section>';
-  }
   renderHome = function() {
     if(upper){
       originalHome();
-      view.insertAdjacentHTML('afterbegin','<a class="topic" href="analysis/" style="text-decoration:none"><span class="t-name">Analysis Skills · Stylistic &amp; Rhetorical Devices</span><br><span class="t-count">Learn · Practise · Write — 12 devices and four mini-analyses</span></a>');
       const oldDue=document.getElementById('dueBtn');if(oldDue)oldDue.remove();
-      view.insertAdjacentHTML('afterbegin',dashboard());
+
     }else{
       S.yearId=YEARS[0].id;
       renderYear();
       const bar=view.querySelector('.sessionbar'); if(bar)bar.remove();
-      view.insertAdjacentHTML('afterbegin',dashboard()+'<h2 class="section-title">Deine Units</h2>');
+      view.insertAdjacentHTML('afterbegin','<h2 class="section-title">Deine Units</h2>');
       view.insertAdjacentHTML('beforeend','<div class="quicklinks"><button id="allBtn">Vokabeln nachschlagen</button><button id="helpBtn">So funktioniert’s</button></div>');
       document.getElementById('allBtn').onclick=()=>{S.view='list';render();};
       document.getElementById('helpBtn').onclick=()=>{S.view='help';render();};
     }
-    document.getElementById('learnToday').onclick=()=>{
-      const due=allWords().some(v=>isDue(record(v)));
-      S.roundSource='today';S.onlyDue=due;S.view='session';buildQueue();render();
-    };
+    view.insertAdjacentHTML('afterbegin','<div class="sessionbar"><button class="switch" id="homeDirection">'+dirLabel()+'</button></div>');
     document.getElementById('homeDirection').onclick=()=>{S.dir=S.dir==='en2de'?'de2en':'en2de';render();};
   };
   // All overview/back actions share the direct Unit dashboard.
@@ -202,7 +185,7 @@
   renderHelp = function(){
     originalHelp();
     const doc=view.querySelector('.doc');
-    if(doc)doc.insertAdjacentHTML('afterbegin','<h2>Die kurze Lernrunde</h2><p>„Heute lernen“ wählt bis zu zehn fällige oder neue Wörter. Bereits gelernte, fällige Wörter kommen zuerst. Du kannst auch eine Unit oder ein Thema auswählen. Unsichere und falsche Wörter erscheinen höchstens einmal zusätzlich in derselben Runde. Ein Wechsel der Übungsart startet eine neue kurze Runde.</p><p>Beim Tippen bleiben deine Eingabe und die Lösung sichtbar. Markierte Buchstaben zeigen Abweichungen. Falsche Antworten werden nicht als gewusst gespeichert, auch wenn du „Gewusst“ antippst.</p>');
+    if(doc)doc.insertAdjacentHTML('afterbegin','<h2>Die kurze Lernrunde</h2><p>Wähle eine Unit oder ein Thema für eine Runde mit bis zu zehn fälligen oder neuen Wörtern. Bereits gelernte, fällige Wörter kommen zuerst. Du kannst auch eine Unit oder ein Thema auswählen. Unsichere und falsche Wörter erscheinen höchstens einmal zusätzlich in derselben Runde. Ein Wechsel der Übungsart startet eine neue kurze Runde.</p><p>Beim Tippen bleiben deine Eingabe und die Lösung sichtbar. Markierte Buchstaben zeigen Abweichungen. Falsche Antworten werden nicht als gewusst gespeichert, auch wenn du „Gewusst“ antippst.</p>');
   };
   render();
 })();

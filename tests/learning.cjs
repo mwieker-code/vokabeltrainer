@@ -12,14 +12,14 @@ for(const folder of ['year6','year9','year10','oberstufe']){
  run(fs.readFileSync(path.join(root,'assets/learning.js'),'utf8'));
 
  const ok=(val,msg)=>{assert.ok(val,folder+': '+msg);count++;};
- ok(w.document.querySelector('#learnToday'),'dashboard exists');
+ ok(!w.document.querySelector('#learnToday'),'daily learning removed');
  ok(!w.document.querySelector('[data-year]'),'no duplicate year selection');
  for(const [answer,target] of [['Geschäft','Geschäft, Unternehmen'],['colonise','(to) colonize / colonise'],['apply for','(to) apply (for sth.)'],['Kumpel','Kumpel; Freund/in']])
   ok(run(`checkTyped(${JSON.stringify(answer)},${JSON.stringify(target)})`)==='ok','alternative '+answer);
  ok(run(`checkTyped('coastel','coastal')`)==='near','typo feedback');
  ok(run(`checkTyped('wrong','coastal')`)==='no','wrong feedback');
  ok(run(`checkTyped('','coastal')`)==='no','blank rejected');
- w.document.querySelector('#learnToday').click();
+ w.document.querySelector('[data-topic]').click();
  ok(run('S.queue.length')===10,'ten cards');
  ok(w.document.querySelector('.box-details'),'collapsible boxes');
  run('S.revealed=true; rate(0)');
@@ -42,7 +42,7 @@ for(const folder of ['year6','year9','year10','oberstufe']){
  ok(w.document.querySelector('#doneHome'),'round ends');
  ok(run('S.seen<=20'),'round bounded to twenty attempts');
  w.document.querySelector('#doneHome').click();
- ok(w.document.querySelector('#learnToday'),'back to dashboard');
+ ok(w.document.querySelector('[data-topic]'),'back to topic selection');
  // Existing progress record survives startup/renders; no renamed storage keys.
  const key=run('KEY');ok(w.localStorage.getItem(key),'progress saved under original key');
  const saved=JSON.parse(w.localStorage.getItem(key));
