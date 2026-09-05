@@ -55,6 +55,7 @@ body{
 .foot{margin-top:36px;font-family:var(--mono);font-size:11px;color:var(--ink-soft);
   text-align:center;letter-spacing:.03em}
 </style>
+<link rel="stylesheet" href="assets/learning.css">
 </head>
 <body>
 <div class="wrap">
@@ -62,8 +63,7 @@ body{
     <h1>Vokabeltrainer Englisch</h1>
     <div class="sub">Jahrgangs- und stufenbezogen</div>
   </div>
-  <div class="intro">W&auml;hle deinen Jahrgang oder deine Stufe. Jede Seite speichert deinen
-    Fortschritt getrennt und f&uuml;r sich, direkt in deinem Browser.</div>
+  <div class="intro">Wähle deinen Jahrgang und starte eine kurze Lernrunde. Dein Fortschritt bleibt in diesem Browser gespeichert.</div>
 
   <div id="cards"></div>
 
@@ -79,55 +79,34 @@ body{
    Farbcodes sind bewusst frei waehlbar, nur zur optischen Unterscheidung.
    ========================================================================= */
 const SITES = [
- {
-  "path": "year5/",
-  "name": "Year 5",
-  "meta": "Orientierungsstufe",
-  "desc": "Vokabular zum Lehrwerk der 5. Klasse.",
-  "color": "#6B5E3F"
- },
- {
-  "path": "year6/",
-  "name": "Year 6",
-  "meta": "Orientierungsstufe",
-  "desc": "Vokabular zum Lehrwerk der 6. Klasse.",
-  "color": "#2B5F8A"
- },
- {
-  "path": "year7/",
-  "name": "Year 7",
-  "meta": "Mittelstufe",
-  "desc": "Vokabular zum Lehrwerk der 7. Klasse.",
-  "color": "#B0472A"
- },
- {
-  "path": "year8/",
-  "name": "Year 8",
-  "meta": "Mittelstufe",
-  "desc": "Vokabular zum Lehrwerk der 8. Klasse.",
-  "color": "#5B7A2E"
- },
- {
-  "path": "year9/",
-  "name": "Year 9",
-  "meta": "Mittelstufe",
-  "desc": "Vokabular zum Lehrwerk der 9. Klasse.",
-  "color": "#C9761E"
- },
- {
-  "path": "year10/",
-  "name": "Year 10",
-  "meta": "Mittelstufe",
-  "desc": "Vokabular zum Lehrwerk der 10. Klasse.",
-  "color": "#7A5C9E"
- },
- {
-  "path": "oberstufe/",
-  "name": "Oberstufe",
-  "meta": "E-Jahrgang \u2013 Q2",
-  "desc": "Vokabular zu den Korridorthemen der gymnasialen Oberstufe.",
-  "color": "#3F7A4B"
- }
+  {
+    "path": "year6/",
+    "name": "Year 6",
+    "meta": "Orientierungsstufe",
+    "desc": "Vokabular zum Lehrwerk der 6. Klasse.",
+    "color": "#2B5F8A"
+  },
+  {
+    "path": "year9/",
+    "name": "Year 9",
+    "meta": "Mittelstufe",
+    "desc": "Vokabular zum Lehrwerk der 9. Klasse.",
+    "color": "#C9761E"
+  },
+  {
+    "path": "year10/",
+    "name": "Year 10",
+    "meta": "Mittelstufe",
+    "desc": "Vokabular zum Lehrwerk der 10. Klasse.",
+    "color": "#7A5C9E"
+  },
+  {
+    "path": "oberstufe/",
+    "name": "Oberstufe",
+    "meta": "E-Jahrgang – Q2",
+    "desc": "Vokabular zu den Korridorthemen der gymnasialen Oberstufe.",
+    "color": "#3F7A4B"
+  }
 ];
 
 function esc(s){

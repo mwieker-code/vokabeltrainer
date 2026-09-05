@@ -1,0 +1,12 @@
+{
+  "name": "vokabeltrainer",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "node tests/learning.cjs",
+    "build": "node build.cjs"
+  },
+  "devDependencies": {
+    "jsdom": "30.0.1"
+  }
+}

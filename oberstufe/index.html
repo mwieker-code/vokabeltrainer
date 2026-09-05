@@ -356,6 +356,7 @@ button.primary:hover{background:#0B4A54}
   *{animation:none!important;transition:none!important}
 }
 </style>
+<link rel="stylesheet" href="../assets/learning.css">
 
 <div class="wrap">
     <div class="masthead">
@@ -16045,7 +16046,7 @@ const Store = (function(){
 })();
 
 const KEY = "vt:progress";
-const INTERVALS = [0,1,2,4,8,16];      // Fach 1..5 -> Tage bis zur Wiedervorlage
+const INTERVALS = [0,0,1,2,4,8];      // Fach 1..5 -> Tage bis zur Wiedervorlage
 const DAY = 86400000;
 
 let progress = (function(){
@@ -16498,7 +16499,7 @@ function promptBlock(v){
   const englishAsked = S.dir === "en2de";
   const phon = englishAsked && (v.ipa || Speech.available)
     ? `<div class="phon">
-         ${v.ipa ? `<span class="ipa">/${esc(v.ipa)}/</span>` : ""}
+         ${v.ipa ? `<span class="ipa">/${esc(v.ipa.replace(/^\/|\/$/g, ""))}/</span>` : ""}
          ${speakBtn(v.en)}
        </div>`
     : "";
@@ -16529,7 +16530,7 @@ function answerBlock(v, compact){
   const englishIsAnswer = S.dir === "de2en";
   const phon = englishIsAnswer && (v.ipa || Speech.available)
     ? `<div class="phon">
-         ${v.ipa ? `<span class="ipa">/${esc(v.ipa)}/</span>` : ""}
+         ${v.ipa ? `<span class="ipa">/${esc(v.ipa.replace(/^\/|\/$/g, ""))}/</span>` : ""}
          ${speakBtn(v.en)}
        </div>`
     : "";
@@ -16660,7 +16661,7 @@ function renderHelp(){
   d.push('<p>Das ist der wichtigste Teil. Oben über der Karte siehst du fünf Fächer. Jede Vokabel steckt in einem davon.</p>');
   d.push('<p>Eine neue Vokabel startet in Fach 1. Antwortest du richtig, rückt sie ein Fach weiter. Antwortest du falsch, fällt sie zurück in Fach 1. Je weiter oben eine Vokabel steht, desto seltener siehst du sie wieder:</p>');
   d.push('<table><thead><tr><th>Fach</th><th>Du siehst die Vokabel wieder</th></tr></thead><tbody>'
-       + '<tr><td>1</td><td>sofort im selben Durchgang</td></tr>'
+       + '<tr><td>1</td><td>sofort; einmal zusätzlich im selben Durchgang</td></tr>'
        + '<tr><td>2</td><td>nach 1 Tag</td></tr>'
        + '<tr><td>3</td><td>nach 2 Tagen</td></tr>'
        + '<tr><td>4</td><td>nach 4 Tagen</td></tr>'
@@ -16780,7 +16781,7 @@ function renderList(){
       h += '<div class="vrow" data-s="' + esc(hay) + '">'
          + '<div><span class="ven">' + esc(e.en) + '</span>'
          + (e.pos ? '<span class="vpos">' + esc(e.pos) + '</span>' : "")
-         + (e.ipa ? '<span class="vipa">/' + esc(e.ipa) + '/</span>' : "")
+         + (e.ipa ? '<span class="vipa">/' + esc(e.ipa.replace(/^\/|\/$/g, "")) + '/</span>' : "")
          + '</div>'
          + '<div class="vde">' + esc(e.de) + '</div>'
          + (e.example_en ? '<div class="vex">' + esc(e.example_en) + '</div>' : "")
@@ -17074,3 +17075,5 @@ try{
     + '<span style="font-family:var(--mono);font-size:11px">' + err.message + '</span></div>');
 }
 </script>
+
+<script src="../assets/learning.js"></script>
