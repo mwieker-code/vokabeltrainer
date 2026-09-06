@@ -6,7 +6,7 @@ Statischer Englisch-Vokabeltrainer für Jahrgang 6, 9, 10 und Oberstufe. Die HTM
 
 - Direkter Einstieg in die Units, ohne erneute Jahrgangsauswahl.
 - Lernrunden beginnen direkt über Units und Themen; keine Rubrik „Heute lernen“.
-- Analysis Skills ist jahrgangsübergreifend unter `all/analysis/` erreichbar. Alte Links unter `oberstufe/analysis/` werden weitergeleitet.
+- Analysis Skills ist unter Oberstufe → ALL (Jahrgangsübergreifend) eingeordnet. Die Übungsadresse `all/analysis/` bleibt für bestehende Links und Lernstände erhalten.
 - Je unsicherem oder falschem Wort höchstens eine Wiederholung nach drei anderen Karten oder am Rundenende; maximal 20 Antworten bei zehn Wörtern.
 - Eingaben bleiben sichtbar; Unterschiede zur nächstliegenden Lösung werden markiert. Komma-, Semikolon- und Schrägstrich-Varianten sowie optionale Wortteile werden berücksichtigt.
 - Objektiv falsche Antworten können nicht als gewusst weitergestuft werden. Höchstens eine Beförderung pro Wort und Runde; nach einem Fehler bleibt es in dieser Runde in Fach 1.

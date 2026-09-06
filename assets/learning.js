@@ -101,6 +101,13 @@
     if(upper){
       originalHome();
       const oldDue=document.getElementById('dueBtn');if(oldDue)oldDue.remove();
+      const allGroup=Array.from(view.querySelectorAll('details.yeargroup')).find(el=>el.querySelector('.tag')?.textContent.trim()==='ALL');
+      if(allGroup){
+        allGroup.id='all';
+        allGroup.insertAdjacentHTML('beforeend','<a class="topic" href="../all/analysis/" style="text-decoration:none"><span class="t-name">Analysis Skills · Stylistic &amp; Rhetorical Devices</span><br><span class="t-count">Learn · Practise · Write</span></a>');
+        if(location.hash==='#all')allGroup.open=true;
+      }
+
 
     }else{
       S.yearId=YEARS[0].id;

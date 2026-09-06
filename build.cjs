@@ -12,7 +12,7 @@ for(const dir of ['', 'year6','year9','year10','oberstufe','oberstufe/analysis',
  for(const match of html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g))new vm.Script(match[1]);
  for(const match of html.replace(/<script[\s\S]*?<\/script>/g,'').matchAll(/(?:href|src)="([^"#]+)"/g)){
   if(/^(https?:|data:)/.test(match[1]))continue;
-  if(!fs.existsSync(path.resolve(out,dir,match[1])))throw new Error('Missing local link: '+match[1]);
+  if(!fs.existsSync(path.resolve(out,dir,match[1].split('#')[0])))throw new Error('Missing local link: '+match[1]);
  }
 }
 new vm.Script(fs.readFileSync(path.join(out,'assets/learning.js'),'utf8'));
