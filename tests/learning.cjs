@@ -14,7 +14,11 @@ for(const folder of ['year6','year9','year10','oberstufe']){
  const ok=(val,msg)=>{assert.ok(val,folder+': '+msg);count++;};
  ok(!w.document.querySelector('#learnToday'),'daily learning removed');
  ok(!w.document.querySelector('[data-year]'),'no duplicate year selection');
- if(folder==='oberstufe')ok(w.document.querySelector('#all a[href="../all/analysis/"]'),'analysis nested under upper-school ALL');
+ if(folder==='oberstufe'){
+  ok(w.document.querySelector('#all a[href="../all/analysis/"]'),'analysis nested under upper-school ALL');
+  ok(w.document.querySelector('#all').open,'ALL expanded on normal entry');
+  ok(w.document.querySelector('#all .ycount').textContent.startsWith('3 Themen'),'analysis included in topic count');
+ }
  else ok(!w.document.querySelector('a[href*="analysis/"]'),'analysis absent from other year groups');
  for(const [answer,target] of [['Geschäft','Geschäft, Unternehmen'],['colonise','(to) colonize / colonise'],['apply for','(to) apply (for sth.)'],['Kumpel','Kumpel; Freund/in']])
   ok(run(`checkTyped(${JSON.stringify(answer)},${JSON.stringify(target)})`)==='ok','alternative '+answer);
