@@ -8,3 +8,10 @@
 [data-group="time"]{--tile:#fff2d6;--edge:#936317}[data-group="irregular"]{--tile:#ece8fa;--edge:#6c51a0}[data-group="questions"]{--tile:#dff2eb;--edge:#28765a}[data-group="short"]{--tile:#e0f1f5;--edge:#26758a}[data-group="wh"]{--tile:#fbe6ed;--edge:#a34265}[data-group="negative"]{--tile:#ffecdf;--edge:#a15c2e}[data-group="repair"]{--tile:#eaf0d9;--edge:#61772a}[data-group="be"]{--tile:#e7eafa;--edge:#525fa0}
 [data-group] h2{color:var(--edge);margin-top:4px}[data-group] progress{display:block;height:12px;accent-color:var(--edge);margin:14px 0}[data-group] span{display:block;font-weight:600;margin-top:14px}.feedback-correct{background:#e4f3e8;border-color:#277344}.feedback-review{background:#fff0dc;border-color:#a56820}
 @media(prefers-reduced-motion:reduce){[data-group]{transition:none}[data-group]:hover{transform:none}}
+
+header{background:#e0edef;border:1px solid #bfd4d8;border-left:6px solid #0e5a66;border-radius:16px;padding:20px;align-items:center}
+header a{display:inline-flex;align-items:center;min-height:48px;background:#0e5a66;color:white;border-radius:10px;padding:10px 14px;font-weight:600;text-decoration:none}
+header span{font-size:14px;color:#3e5961}header a:hover{background:#093e48}
+a.topic[href="simple-past/"]{background:#dff1ed;border:1px solid #8bbdb2;border-left:6px solid #217963}
+a.topic[href="irregular-verbs/"]{background:#e3eefb;border:1px solid #99b8dd;border-left:6px solid #32679f}
+a.topic h2{color:#163e4b}a.topic:hover{box-shadow:0 5px 15px #163e4b15}
