@@ -1,6 +1,6 @@
 # Vokabeltrainer – kurze Lernrunden
 
-Statischer Englisch-Vokabeltrainer für Jahrgang 6, 9, 10 und Oberstufe. Die HTML-Seiten behalten ihre Vokabeldaten und ihre bestehenden lokalen Fortschrittsschlüssel. `assets/learning.js` und `assets/learning.css` ergänzen alle vier Trainingsseiten gemeinsam.
+Statischer Englisch-Vokabeltrainer für Jahrgang 5, 6, 9, 10 und Oberstufe. Die HTML-Seiten behalten ihre Vokabeldaten und ihre bestehenden lokalen Fortschrittsschlüssel. `assets/learning.js` und `assets/learning.css` ergänzen alle fünf Trainingsseiten gemeinsam.
 
 ## Änderungen
 
@@ -15,9 +15,9 @@ Statischer Englisch-Vokabeltrainer für Jahrgang 6, 9, 10 und Oberstufe. Die HTM
 
 ## Starten und prüfen
 
-Die Ordnerstruktur inklusive `assets/` vollständig beibehalten. Zum lokalen Start beispielsweise `python3 -m http.server 8765`, danach http://localhost:8765 öffnen. Für GitHub Pages die fünf HTML-Seiten und `assets/` gemeinsam übernehmen; die Sites-Konfiguration ist dafür nicht erforderlich.
+Die Ordnerstruktur inklusive `assets/` vollständig beibehalten. Zum lokalen Start beispielsweise `python3 -m http.server 8765`, danach http://localhost:8765 öffnen. Für GitHub Pages die sechs HTML-Seiten und `assets/` gemeinsam übernehmen; die Sites-Konfiguration ist dafür nicht erforderlich.
 
-`npm ci` installiert nur die Entwicklungsabhängigkeit für die Tests. `npm test` prüft die vier Varianten mit einem simulierten Dokument und Speicher. `npm run build` erzeugt `dist/` und prüft JavaScript-Syntax und lokale Verweise. Der Trainer selbst braucht keine installierten Pakete.
+`npm ci` installiert nur die Entwicklungsabhängigkeit für die Tests. `npm test` prüft die fünf Varianten mit einem simulierten Dokument und Speicher. `npm run build` erzeugt `dist/` und prüft JavaScript-Syntax und lokale Verweise. Der Trainer selbst braucht keine installierten Pakete.
 
 ## Noch offen
 
