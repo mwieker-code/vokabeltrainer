@@ -3,7 +3,7 @@ const vm=require('node:vm');
 const fs=require('fs'),path=require('path'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..');
 let count=0;
-for(const folder of ['year6','year9','year10','oberstufe']){
+for(const folder of ['year5','year6','year9','year10','oberstufe']){
  const html=fs.readFileSync(path.join(root,folder,'index.html'),'utf8');
  const dom=new JSDOM(html,{runScripts:'outside-only',url:'https://example.org/'+folder+'/'});
  const w=dom.window;w.scrollTo=()=>{};
