@@ -12,11 +12,30 @@
   const safe = value => esc(String(value == null ? '' : value));
   const home = () => { S.view = 'home'; S.options = null; render(); };
   S.roundSource = null;
-  S.roundLimit = 10;
+  S.roundLimit = Infinity;
+  S.scope = 'all';
   S.typedValue = '';
   S.retried = new Set();
   S.missed = new Set();
 
+  const sessionKey=KEY+':session:v1';
+  const wordKey=v=>topicFor.get(v)+'|'+v.id;
+  const wordMap=new Map(allWords().map(v=>[wordKey(v),v]));
+  function checkpoint(){
+    try{if(S.view!=='session'||!S.queue.length||S.i>=S.queue.length)return;
+      localStorage.setItem(sessionKey,JSON.stringify({source:S.roundSource,dir:S.dir,mode:S.mode,scope:S.scope,i:S.i,seen:S.seen,initial:S.initialCount,queue:S.queue.map(wordKey),retried:[...S.retried].map(wordKey),missed:[...S.missed].map(wordKey),answered:[...S.roundAnswered].map(wordKey)}));
+    }catch(e){}
+  }
+  function stored(){try{const x=JSON.parse(localStorage.getItem(sessionKey));return x&&Array.isArray(x.queue)&&x.queue.length&&x.queue.every(k=>wordMap.has(k))&&Number.isInteger(x.i)&&x.i>=0&&x.i<x.queue.length&&['all','short','due'].includes(x.scope)&&['en2de','de2en'].includes(x.dir)?x:null;}catch(e){return null;}}
+  function resume(){const x=stored();if(!x)return;S.roundSource=x.source;S.topicId=x.source;S.dir=x.dir;S.mode=x.mode;S.scope=x.scope;S.onlyDue=x.scope==='due';S.roundLimit=x.scope==='short'?10:Infinity;S.queue=x.queue.map(k=>wordMap.get(k));S.i=x.i;S.seen=x.seen;S.initialCount=x.initial;for(const [field,key] of [['retried','retried'],['missed','missed'],['roundAnswered','answered']])S[field]=new Set((x[key]||[]).map(k=>wordMap.get(k)).filter(Boolean));S.answered=null;S.revealed=false;S.options=null;S.typedValue='';S.view='session';render();}
+  function setup(topicId){
+    S.roundSource=topicId;S.topicId=topicId;
+    const words=upper?(SETS[topicId]||[]):setOf(topicId),due=words.filter(v=>isDue(record(v))).length;
+    view.innerHTML='<h2>Lernumfang wählen</h2><p>'+safe(TOPICS.find(t=>t.id===topicId)?.name||'Deine Auswahl')+'</p><div class="scope-options"><button class="topic primary" data-scope="all">Alles üben · '+words.length+' Vokabeln</button><button class="topic" data-scope="short">Kurze Runde · bis zu 10 Vokabeln</button><button class="topic" data-scope="due">Nur fällige Vokabeln · '+due+'</button></div><button id="setupBack">Zur Übersicht</button>';
+    document.getElementById('setupBack').onclick=home;
+    view.querySelectorAll('[data-scope]').forEach(b=>b.onclick=()=>{S.scope=b.dataset.scope;S.onlyDue=S.scope==='due';S.roundLimit=S.scope==='short'?10:Infinity;S.view='session';buildQueue();render();});
+  }
+  window.addEventListener('pagehide',checkpoint);
   // Split alternatives BEFORE removing punctuation. Keep both optional-word forms.
   function forms(target) {
     const parts = String(target).split(/\s*(?:[,;]|\s\/\s|\/)\s*/).filter(Boolean);
@@ -94,8 +113,7 @@
     S.retried=new Set(); S.missed=new Set(); S.roundAnswered=new Set();
   };
   startSession = function(topicId) {
-    S.roundSource=topicId; S.topicId=topicId; S.onlyDue=true;
-    S.view='session'; buildQueue(); render();
+    setup(topicId);
   };
   renderHome = function() {
     if(upper){
@@ -115,6 +133,7 @@
       document.getElementById('helpBtn').onclick=()=>{S.view='help';render();};
     }
     view.insertAdjacentHTML('afterbegin','<div class="sessionbar"><button class="switch" id="homeDirection">'+dirLabel()+'</button></div>');
+    if(stored()){view.insertAdjacentHTML('afterbegin','<button class="topic" id="resumeRound">Gespeicherte Runde fortsetzen</button>');document.getElementById('resumeRound').onclick=resume;}
     document.getElementById('homeDirection').onclick=()=>{S.dir=S.dir==='en2de'?'de2en':'en2de';render();};
   };
   // All overview/back actions share the direct Unit dashboard.
@@ -140,7 +159,7 @@
       S.missed.add(v);
       if(!S.retried.has(v)){
         S.retried.add(v);
-        S.queue.splice(Math.min(S.i+4,S.queue.length),0,v);
+        S.queue.push(v);
       }
     }
     save(); S.seen++;S.i++;S.revealed=false;S.answered=null;S.options=null;S.typedValue='';
@@ -155,8 +174,10 @@
     if(S.i>=S.queue.length){renderDone();return;}
     if(upper) S.topicId=topicFor.get(current());
     else if(S.roundSource==='today') S.topicId=YEARS[0].id+'-all';
+    checkpoint();
     originalSession();
-    const back=document.getElementById('back');if(back)back.onclick=home;
+    const back=document.getElementById('back');if(back)back.onclick=()=>{checkpoint();home();};
+    if(back){back.textContent='Später fortsetzen';}
     const rail=view.querySelector('.rail');
     if(rail){
       const details=document.createElement('details');details.className='box-details';
@@ -164,7 +185,7 @@
       rail.replaceWith(details);details.append(summary,rail);
     }
     const stage=view.querySelector('.stage');
-    if(stage)stage.insertAdjacentHTML('beforebegin','<div class="round-progress"><span>Kurze Runde · '+S.initialCount+' Wörter</span><span>'+S.i+' von '+S.queue.length+' Schritten erledigt</span><progress max="'+S.queue.length+'" value="'+S.i+'" aria-label="Fortschritt dieser Runde"></progress></div>');
+    if(stage)stage.insertAdjacentHTML('beforebegin','<div class="round-progress"><span>'+(S.i>=S.initialCount?'Fehlerwiederholung':S.scope==='short'?'Kurze Runde':S.scope==='due'?'Fällige Vokabeln':'Alles üben')+' · '+S.initialCount+' Wörter</span><span>'+(S.i>=S.initialCount?S.i-S.initialCount:S.i)+' von '+(S.i>=S.initialCount?S.queue.length-S.initialCount:S.initialCount)+' erledigt</span><progress max="'+S.queue.length+'" value="'+S.i+'" aria-label="Fortschritt dieser Runde"></progress></div>');
     for(const b of view.querySelectorAll('[data-mode]')) b.onclick=()=>{
       S.mode=b.dataset.mode;buildQueue();render();
     };
@@ -180,15 +201,16 @@
     }
   };
   renderDone = function() {
-    view.innerHTML='<div class="done"><div class="summary-number">'+S.initialCount+'</div><h2>Runde geschafft</h2><p>'+S.initialCount+' Wörter · '+S.seen+' Antworten<br>'+S.missed.size+' Wörter zum Weiterüben</p><div class="controls"><button class="primary" id="nextRound">Nächste kurze Runde</button><button id="doneHome">Zur Übersicht</button></div></div>';
+    try{localStorage.removeItem(sessionKey);}catch(e){}
+    view.innerHTML='<div class="done"><div class="summary-number">'+S.initialCount+'</div><h2>Runde geschafft</h2><p>'+S.initialCount+' Wörter · '+S.seen+' Antworten<br>'+S.missed.size+' Wörter zum Weiterüben</p><div class="controls"><button class="primary" id="nextRound">Lernumfang wählen</button><button id="doneHome">Zur Übersicht</button></div></div>';
     document.getElementById('doneHome').onclick=home;
-    document.getElementById('nextRound').onclick=()=>{buildQueue();render();};
+    document.getElementById('nextRound').onclick=()=>setup(S.roundSource);
     updateFoot();
   };
   renderHelp = function(){
     originalHelp();
     const doc=view.querySelector('.doc');
-    if(doc)doc.insertAdjacentHTML('afterbegin','<h2>Die kurze Lernrunde</h2><p>Wähle eine Unit oder ein Thema für eine Runde mit bis zu zehn fälligen oder neuen Wörtern. Bereits gelernte, fällige Wörter kommen zuerst. Du kannst auch eine Unit oder ein Thema auswählen. Unsichere und falsche Wörter erscheinen höchstens einmal zusätzlich in derselben Runde. Ein Wechsel der Übungsart startet eine neue kurze Runde.</p><p>Beim Tippen bleiben deine Eingabe und die Lösung sichtbar. Markierte Buchstaben zeigen Abweichungen. Falsche Antworten werden nicht als gewusst gespeichert, auch wenn du „Gewusst“ antippst.</p>');
+    if(doc)doc.insertAdjacentHTML('afterbegin','<h2>Dein Lernumfang</h2><p>Wähle einen Part, eine Unit oder ein Thema. Alles üben umfasst alle Wörter deiner Auswahl, auch bereits gelernte. Alternativ wählst du zehn Wörter oder nur fällige Vokabeln. Fehler werden nach dem ersten Durchgang einmal wiederholt. Mit Später fortsetzen speicherst du die Runde auf diesem Gerät. Ein Wechsel der Übungsart startet den gewählten Lernumfang neu.</p><p>Beim Tippen bleiben deine Eingabe und die Lösung sichtbar. Markierte Buchstaben zeigen Abweichungen. Falsche Antworten werden nicht als gewusst gespeichert, auch wenn du „Gewusst“ antippst.</p>');
   };
   render();
 })();

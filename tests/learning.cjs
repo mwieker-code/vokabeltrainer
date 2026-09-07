@@ -27,12 +27,13 @@ for(const folder of ['year5','year6','year9','year10','oberstufe']){
  ok(run(`checkTyped('wrong','coastal')`)==='no','wrong feedback');
  ok(run(`checkTyped('','coastal')`)==='no','blank rejected');
  w.document.querySelector('[data-topic]').click();
+ w.document.querySelector('[data-scope="short"]').click();
  ok(run('S.queue.length')===10,'ten cards');
  ok(w.document.querySelector('.box-details'),'collapsible boxes');
  run('S.revealed=true; rate(0)');
  ok(run('S.queue.length')===11,'one retry added');
- ok(run('S.queue[4]===S.queue[0]'),'retry after intervening cards');
- run('S.i=4;S.revealed=true;rate(0)');
+ ok(run('S.queue[10]===S.queue[0]'),'retry after initial pass');
+ run('S.i=10;S.revealed=true;rate(0)');
  ok(run('S.queue.length')===11,'retries bounded');
  // Restart, exercise typed answer persistence through a full redraw.
  run(`S.mode='type';buildQueue();render()`);
@@ -70,6 +71,17 @@ for(const folder of ['year5','year6','year9','year10','oberstufe']){
  run(`S.mode='cloze';S.onlyDue=false;buildQueue();render()`);
  ok(run('S.queue.every(hasCloze)'),'cloze only eligible words');
  ok(run('INTERVALS[1]===0 && INTERVALS[2]===1 && INTERVALS[5]===8'),'intervals match help');
+ run('S.mode="card";S.view="home";render()');
+ w.document.querySelector('[data-topic]').click();
+ w.document.querySelector('[data-scope="all"]').click();
+ ok(run('S.queue.length === (typeof YEARS === "undefined" ? SETS[S.roundSource].length : setOf(S.roundSource).length)'),'all includes future-due words');
+ run('S.mode="card";buildQueue();S.revealed=true;rate(2)');
+ const remaining=run('S.queue.map(v=>v.id).join(",")');
+ w.document.querySelector('#back').click();
+ ok(w.document.querySelector('#resumeRound'),'resume offered');
+ w.document.querySelector('#resumeRound').click();
+ ok(run('S.i===1'),'resume keeps position');
+ ok(run('S.queue.map(v=>v.id).join(",")')===remaining,'resume keeps order');
  dom.window.close();
  console.log(folder+' passed');
 }
