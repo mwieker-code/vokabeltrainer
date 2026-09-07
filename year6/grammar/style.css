@@ -15,3 +15,9 @@ header span{font-size:14px;color:#3e5961}header a:hover{background:#093e48}
 a.topic[href="simple-past/"]{background:#dff1ed;border:1px solid #8bbdb2;border-left:6px solid #217963}
 a.topic[href="irregular-verbs/"]{background:#e3eefb;border:1px solid #99b8dd;border-left:6px solid #32679f}
 a.topic h2{color:#163e4b}a.topic:hover{box-shadow:0 5px 15px #163e4b15}
+
+/* Local revision: one interface typeface, open header, purple Grammar identity. */
+:root{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+h1,h2,h3,.quote{font-family:inherit}h1{font-weight:700;letter-spacing:-.035em}h2{font-weight:600;letter-spacing:-.02em}.quote{font-size:22px}
+header{background:transparent;border:0;border-bottom:2px solid #d7cee5;border-radius:0;padding:4px 0 22px}header span{color:#68458a;letter-spacing:.04em}
+a.topic[href="simple-past/"]{background:#eee8f8;border-color:#cbbbe3;border-left-color:#7551a2}a.topic[href="simple-past/"] h2{color:#5d387f}

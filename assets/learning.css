@@ -32,3 +32,18 @@ button{min-height:44px}.switch{padding:10px 12px}.topic{padding:17px 18px;margin
 a.home-link,a.grammar-back{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:12px 16px;background:#0e5a66;color:#fff;border:2px solid #0e5a66;border-radius:10px;font:600 15px/1.4 var(--sans);text-decoration:none;white-space:normal}
 a.home-link:hover,a.grammar-back:hover{background:#093e48;border-color:#093e48}a.home-link:focus-visible,a.grammar-back:focus-visible{outline:3px solid #b96910;outline-offset:4px}
 @media(max-width:560px){.masthead{padding:20px}.masthead h1{font-size:29px}.masthead .home-link{width:100%;margin:0}}
+
+/* Local revision: typography separates the heading from navigation cards. */
+:root{--sans:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;--serif:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;--mono:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+.masthead{background:transparent;border:0;border-bottom:2px solid #c6d5d9;border-radius:0;padding:8px 0 24px;margin-bottom:28px;box-shadow:none}
+.masthead h1{color:#18323d;font-family:var(--sans);font-weight:700;font-size:clamp(30px,4vw,40px);letter-spacing:-.035em}
+.masthead .sub{color:#526670;font-size:16px;font-weight:400}
+.card .name,.topic .t-name,.section-title,.done h2{font-family:var(--sans)}
+.card .meta,.card .desc{font-family:var(--sans);font-size:14px;letter-spacing:0;text-transform:none}
+.grammar-tile{background:#eee8f8;border-color:#cbbbe3;border-left-color:#7551a2}.grammar-tile .t-name{color:#5d387f}.grammar-tile:hover{border-left-color:#5d387f;background:#e9e0f5}
+@media(max-width:560px){.masthead{padding:8px 0 20px}.masthead h1{font-size:30px}}
+
+/* Keep navigation labels readable in every interactive state. */
+a.home-link:hover,a.home-link:focus,a.home-link:active,a.grammar-back:hover,a.grammar-back:focus,a.grammar-back:active{color:#fff;background:#093e48;border-color:#093e48;text-decoration:none}
+
+.masthead h1 .title-accent{color:#0e6878}

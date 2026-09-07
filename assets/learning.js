@@ -11,6 +11,7 @@
   const record = v => upper ? rec(topicFor.get(v), S.dir, v.id) : rec(S.dir, v.id);
   const safe = value => esc(String(value == null ? '' : value));
   const home = () => { S.view = 'home'; S.options = null; render(); };
+  S.dir = 'de2en';
   S.roundSource = null;
   S.roundLimit = Infinity;
   S.scope = 'all';
