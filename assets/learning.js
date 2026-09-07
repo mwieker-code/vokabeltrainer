@@ -135,7 +135,7 @@
       document.getElementById('helpBtn').onclick=()=>{S.view='help';render();};
     }
     view.insertAdjacentHTML('afterbegin','<div class="sessionbar"><button class="switch" id="homeDirection">'+dirLabel()+'</button></div>');
-    if(stored()){view.insertAdjacentHTML('afterbegin','<button class="topic" id="resumeRound">Gespeicherte Runde fortsetzen</button>');document.getElementById('resumeRound').onclick=resume;}
+    if(stored()){const savedRound=stored();const name=TOPICS.find(t=>t.id===savedRound.source)?.name||savedRound.source;view.insertAdjacentHTML('afterbegin','<button class="topic" id="resumeRound">Runde fortsetzen · '+safe(name)+'<br><span class="t-count">'+savedRound.i+' von '+savedRound.queue.length+' Schritten · '+(savedRound.dir==='de2en'?'DE → EN':'EN → DE')+'</span></button>');document.getElementById('resumeRound').onclick=resume;}
     document.getElementById('homeDirection').onclick=()=>{S.dir=S.dir==='en2de'?'de2en':'en2de';render();};
   };
   // All overview/back actions share the direct Unit dashboard.

@@ -540,7 +540,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "saw"
         ],
-        "hint": "Some verbs have their own past form. Learn the base form and the past form together."
+        "hint": "This verb is irregular: see → saw. Do not add -ed."
       },
       {
         "id": "irregular-1",
@@ -548,7 +548,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "found"
         ],
-        "hint": "Some verbs have their own past form. Learn the base form and the past form together."
+        "hint": "This verb is irregular: find → found. Do not add -ed."
       },
       {
         "id": "irregular-2",
@@ -556,7 +556,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "took"
         ],
-        "hint": "Some verbs have their own past form. Learn the base form and the past form together."
+        "hint": "This verb is irregular: take → took. Do not add -ed."
       },
       {
         "id": "irregular-3",
@@ -564,7 +564,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "drank"
         ],
-        "hint": "Some verbs have their own past form. Learn the base form and the past form together."
+        "hint": "This verb is irregular: drink → drank. Do not add -ed."
       },
       {
         "id": "irregular-4",
@@ -572,7 +572,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "ate"
         ],
-        "hint": "Some verbs have their own past form. Learn the base form and the past form together."
+        "hint": "This verb is irregular: eat → ate. Do not add -ed."
       },
       {
         "id": "irregular-5",
@@ -580,7 +580,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "went"
         ],
-        "hint": "Some verbs have their own past form. Learn the base form and the past form together."
+        "hint": "This verb is irregular: go → went. Do not add -ed."
       },
       {
         "id": "irregular-6",
@@ -588,7 +588,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "wrote"
         ],
-        "hint": "Some verbs have their own past form. Learn the base form and the past form together."
+        "hint": "This verb is irregular: write → wrote. Do not add -ed."
       },
       {
         "id": "irregular-7",
@@ -596,7 +596,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "made"
         ],
-        "hint": "Some verbs have their own past form. Learn the base form and the past form together."
+        "hint": "This verb is irregular: make → made. Do not add -ed."
       },
       {
         "id": "irregular-8",
@@ -604,7 +604,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "came"
         ],
-        "hint": "Some verbs have their own past form. Learn the base form and the past form together."
+        "hint": "This verb is irregular: come → came. Do not add -ed."
       },
       {
         "id": "irregular-9",
@@ -612,7 +612,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "began"
         ],
-        "hint": "Some verbs have their own past form. Learn the base form and the past form together."
+        "hint": "This verb is irregular: begin → began. Do not add -ed."
       },
       {
         "id": "irregular-10",
@@ -620,7 +620,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "bought"
         ],
-        "hint": "Some verbs have their own past form. Learn the base form and the past form together."
+        "hint": "This verb is irregular: buy → bought. Do not add -ed."
       },
       {
         "id": "irregular-11",
@@ -628,7 +628,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "had"
         ],
-        "hint": "Some verbs have their own past form. Learn the base form and the past form together."
+        "hint": "This verb is irregular: have → had. Do not add -ed."
       },
       {
         "id": "irregular-12",
@@ -636,7 +636,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "ran"
         ],
-        "hint": "Some verbs have their own past form. Learn the base form and the past form together."
+        "hint": "This verb is irregular: run → ran. Do not add -ed."
       },
       {
         "id": "irregular-13",
@@ -644,7 +644,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "swam"
         ],
-        "hint": "Some verbs have their own past form. Learn the base form and the past form together."
+        "hint": "This verb is irregular: swim → swam. Do not add -ed."
       },
       {
         "id": "irregular-14",
@@ -652,7 +652,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "slept"
         ],
-        "hint": "Some verbs have their own past form. Learn the base form and the past form together."
+        "hint": "This verb is irregular: sleep → slept. Do not add -ed."
       },
       {
         "id": "irregular-15",
@@ -660,7 +660,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "gave"
         ],
-        "hint": "Some verbs have their own past form. Learn the base form and the past form together."
+        "hint": "This verb is irregular: give → gave. Do not add -ed."
       },
       {
         "id": "irregular-16",
@@ -668,7 +668,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "told"
         ],
-        "hint": "Some verbs have their own past form. Learn the base form and the past form together."
+        "hint": "This verb is irregular: tell → told. Do not add -ed."
       },
       {
         "id": "irregular-17",
@@ -676,7 +676,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "said"
         ],
-        "hint": "Some verbs have their own past form. Learn the base form and the past form together."
+        "hint": "This verb is irregular: say → said. Do not add -ed."
       },
       {
         "id": "irregular-18",
@@ -684,7 +684,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "heard"
         ],
-        "hint": "Some verbs have their own past form. Learn the base form and the past form together."
+        "hint": "This verb is irregular: hear → heard. Do not add -ed."
       },
       {
         "id": "irregular-19",
@@ -692,7 +692,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "sat"
         ],
-        "hint": "Some verbs have their own past form. Learn the base form and the past form together."
+        "hint": "This verb is irregular: sit → sat. Do not add -ed."
       },
       {
         "id": "irregular-20",
@@ -700,7 +700,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "stood"
         ],
-        "hint": "Some verbs have their own past form. Learn the base form and the past form together."
+        "hint": "This verb is irregular: stand → stood. Do not add -ed."
       },
       {
         "id": "irregular-21",
@@ -708,7 +708,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "read"
         ],
-        "hint": "Some verbs have their own past form. Learn the base form and the past form together."
+        "hint": "This verb is irregular: read → read. Do not add -ed."
       },
       {
         "id": "irregular-22",
@@ -716,7 +716,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "sent"
         ],
-        "hint": "Some verbs have their own past form. Learn the base form and the past form together."
+        "hint": "This verb is irregular: send → sent. Do not add -ed."
       },
       {
         "id": "irregular-23",
@@ -724,7 +724,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "left"
         ],
-        "hint": "Some verbs have their own past form. Learn the base form and the past form together."
+        "hint": "This verb is irregular: leave → left. Do not add -ed."
       },
       {
         "id": "irregular-24",
@@ -732,7 +732,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "brought"
         ],
-        "hint": "Some verbs have their own past form. Learn the base form and the past form together."
+        "hint": "This verb is irregular: bring → brought. Do not add -ed."
       },
       {
         "id": "irregular-25",
@@ -740,7 +740,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "caught"
         ],
-        "hint": "Some verbs have their own past form. Learn the base form and the past form together."
+        "hint": "This verb is irregular: catch → caught. Do not add -ed."
       },
       {
         "id": "irregular-26",
@@ -748,7 +748,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "taught"
         ],
-        "hint": "Some verbs have their own past form. Learn the base form and the past form together."
+        "hint": "This verb is irregular: teach → taught. Do not add -ed."
       },
       {
         "id": "irregular-27",
@@ -756,7 +756,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "thought"
         ],
-        "hint": "Some verbs have their own past form. Learn the base form and the past form together."
+        "hint": "This verb is irregular: think → thought. Do not add -ed."
       },
       {
         "id": "irregular-28",
@@ -764,7 +764,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "felt"
         ],
-        "hint": "Some verbs have their own past form. Learn the base form and the past form together."
+        "hint": "This verb is irregular: feel → felt. Do not add -ed."
       },
       {
         "id": "irregular-29",
@@ -772,7 +772,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "lost"
         ],
-        "hint": "Some verbs have their own past form. Learn the base form and the past form together."
+        "hint": "This verb is irregular: lose → lost. Do not add -ed."
       },
       {
         "id": "irregular-30",
@@ -780,7 +780,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "broke"
         ],
-        "hint": "Some verbs have their own past form. Learn the base form and the past form together."
+        "hint": "This verb is irregular: break → broke. Do not add -ed."
       },
       {
         "id": "irregular-31",
@@ -788,7 +788,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "chose"
         ],
-        "hint": "Some verbs have their own past form. Learn the base form and the past form together."
+        "hint": "This verb is irregular: choose → chose. Do not add -ed."
       }
     ]
   },
@@ -804,7 +804,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Did Mia watch the match?"
         ],
-        "hint": "For most verbs: Did + subject + base form. Did already shows the past. Do not add -ed or use went after did."
+        "hint": "Use did + subject + base form."
       },
       {
         "id": "questions-1",
@@ -812,7 +812,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Did they go by train?"
         ],
-        "hint": "For most verbs: Did + subject + base form. Did already shows the past. Do not add -ed or use went after did."
+        "hint": "Use did + subject + base form."
       },
       {
         "id": "questions-2",
@@ -820,7 +820,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Did you finish your drawing?"
         ],
-        "hint": "For most verbs: Did + subject + base form. Did already shows the past. Do not add -ed or use went after did."
+        "hint": "Use did + subject + base form."
       },
       {
         "id": "questions-3",
@@ -828,7 +828,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Did Leo eat the apple?"
         ],
-        "hint": "For most verbs: Did + subject + base form. Did already shows the past. Do not add -ed or use went after did."
+        "hint": "Use did + subject + base form."
       },
       {
         "id": "questions-4",
@@ -836,7 +836,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Did we win the game?"
         ],
-        "hint": "For most verbs: Did + subject + base form. Did already shows the past. Do not add -ed or use went after did."
+        "hint": "Use did + subject + base form."
       },
       {
         "id": "questions-5",
@@ -844,7 +844,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Did your friends arrive early?"
         ],
-        "hint": "For most verbs: Did + subject + base form. Did already shows the past. Do not add -ed or use went after did."
+        "hint": "Use did + subject + base form."
       },
       {
         "id": "questions-6",
@@ -852,7 +852,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Did Nora pack her bag?"
         ],
-        "hint": "For most verbs: Did + subject + base form. Did already shows the past. Do not add -ed or use went after did."
+        "hint": "Use did + subject + base form."
       },
       {
         "id": "questions-7",
@@ -860,7 +860,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Did the children build a snowman?"
         ],
-        "hint": "For most verbs: Did + subject + base form. Did already shows the past. Do not add -ed or use went after did."
+        "hint": "Use did + subject + base form."
       },
       {
         "id": "questions-8",
@@ -868,7 +868,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Did your dad cook dinner?"
         ],
-        "hint": "For most verbs: Did + subject + base form. Did already shows the past. Do not add -ed or use went after did."
+        "hint": "Use did + subject + base form."
       },
       {
         "id": "questions-9",
@@ -876,7 +876,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Did you ride your bike?"
         ],
-        "hint": "For most verbs: Did + subject + base form. Did already shows the past. Do not add -ed or use went after did."
+        "hint": "Use did + subject + base form."
       },
       {
         "id": "questions-10",
@@ -884,7 +884,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Did the class visit a castle?"
         ],
-        "hint": "For most verbs: Did + subject + base form. Did already shows the past. Do not add -ed or use went after did."
+        "hint": "Use did + subject + base form."
       },
       {
         "id": "questions-11",
@@ -892,7 +892,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Did Jack take a photo?"
         ],
-        "hint": "For most verbs: Did + subject + base form. Did already shows the past. Do not add -ed or use went after did."
+        "hint": "Use did + subject + base form."
       },
       {
         "id": "questions-12",
@@ -900,7 +900,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Did we meet our neighbours?"
         ],
-        "hint": "For most verbs: Did + subject + base form. Did already shows the past. Do not add -ed or use went after did."
+        "hint": "Use did + subject + base form."
       },
       {
         "id": "questions-13",
@@ -908,7 +908,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Did the dog find its toy?"
         ],
-        "hint": "For most verbs: Did + subject + base form. Did already shows the past. Do not add -ed or use went after did."
+        "hint": "Use did + subject + base form."
       },
       {
         "id": "questions-14",
@@ -916,7 +916,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Did they buy some apples?"
         ],
-        "hint": "For most verbs: Did + subject + base form. Did already shows the past. Do not add -ed or use went after did."
+        "hint": "Use did + subject + base form."
       },
       {
         "id": "questions-15",
@@ -924,7 +924,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Did I close the gate?"
         ],
-        "hint": "For most verbs: Did + subject + base form. Did already shows the past. Do not add -ed or use went after did."
+        "hint": "Use did + subject + base form."
       },
       {
         "id": "questions-16",
@@ -932,7 +932,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Did Luca write a poem?"
         ],
-        "hint": "For most verbs: Did + subject + base form. Did already shows the past. Do not add -ed or use went after did."
+        "hint": "Use did + subject + base form."
       },
       {
         "id": "questions-17",
@@ -940,7 +940,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Did your team play well?"
         ],
-        "hint": "For most verbs: Did + subject + base form. Did already shows the past. Do not add -ed or use went after did."
+        "hint": "Use did + subject + base form."
       },
       {
         "id": "questions-18",
@@ -948,7 +948,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Did the girls sing a song?"
         ],
-        "hint": "For most verbs: Did + subject + base form. Did already shows the past. Do not add -ed or use went after did."
+        "hint": "Use did + subject + base form."
       },
       {
         "id": "questions-19",
@@ -956,7 +956,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Did he drink the milk?"
         ],
-        "hint": "For most verbs: Did + subject + base form. Did already shows the past. Do not add -ed or use went after did."
+        "hint": "Use did + subject + base form."
       },
       {
         "id": "questions-20",
@@ -964,7 +964,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Did she make a kite?"
         ],
-        "hint": "For most verbs: Did + subject + base form. Did already shows the past. Do not add -ed or use went after did."
+        "hint": "Use did + subject + base form."
       },
       {
         "id": "questions-21",
@@ -972,7 +972,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Did you hear the bell?"
         ],
-        "hint": "For most verbs: Did + subject + base form. Did already shows the past. Do not add -ed or use went after did."
+        "hint": "Use did + subject + base form."
       },
       {
         "id": "questions-22",
@@ -980,7 +980,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Did the bus stop here?"
         ],
-        "hint": "For most verbs: Did + subject + base form. Did already shows the past. Do not add -ed or use went after did."
+        "hint": "Use did + subject + base form."
       },
       {
         "id": "questions-23",
@@ -988,7 +988,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Did we see the stars?"
         ],
-        "hint": "For most verbs: Did + subject + base form. Did already shows the past. Do not add -ed or use went after did."
+        "hint": "Use did + subject + base form."
       },
       {
         "id": "questions-24",
@@ -996,7 +996,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Did they bring their books?"
         ],
-        "hint": "For most verbs: Did + subject + base form. Did already shows the past. Do not add -ed or use went after did."
+        "hint": "Use did + subject + base form."
       },
       {
         "id": "questions-25",
@@ -1004,7 +1004,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Did Isla clean her room?"
         ],
-        "hint": "For most verbs: Did + subject + base form. Did already shows the past. Do not add -ed or use went after did."
+        "hint": "Use did + subject + base form."
       },
       {
         "id": "questions-26",
@@ -1012,7 +1012,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Did my brother drop his hat?"
         ],
-        "hint": "For most verbs: Did + subject + base form. Did already shows the past. Do not add -ed or use went after did."
+        "hint": "Use did + subject + base form."
       },
       {
         "id": "questions-27",
@@ -1020,7 +1020,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Did the pupils read the story?"
         ],
-        "hint": "For most verbs: Did + subject + base form. Did already shows the past. Do not add -ed or use went after did."
+        "hint": "Use did + subject + base form."
       },
       {
         "id": "questions-28",
@@ -1028,7 +1028,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Did you send the email?"
         ],
-        "hint": "For most verbs: Did + subject + base form. Did already shows the past. Do not add -ed or use went after did."
+        "hint": "Use did + subject + base form."
       },
       {
         "id": "questions-29",
@@ -1036,7 +1036,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Did we finish the puzzle?"
         ],
-        "hint": "For most verbs: Did + subject + base form. Did already shows the past. Do not add -ed or use went after did."
+        "hint": "Use did + subject + base form."
       },
       {
         "id": "questions-30",
@@ -1044,7 +1044,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Did the rabbit eat the carrot?"
         ],
-        "hint": "For most verbs: Did + subject + base form. Did already shows the past. Do not add -ed or use went after did."
+        "hint": "Use did + subject + base form."
       },
       {
         "id": "questions-31",
@@ -1052,7 +1052,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Did he wear his coat?"
         ],
-        "hint": "For most verbs: Did + subject + base form. Did already shows the past. Do not add -ed or use went after did."
+        "hint": "Use did + subject + base form."
       }
     ]
   },
@@ -1332,7 +1332,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Where did you stay?"
         ],
-        "hint": "Put Where, When, What, Why or How before did + subject + base form. These tasks ask about the place, time, object, reason or way."
+        "hint": "Put the question word first, then did + subject + base form."
       },
       {
         "id": "wh-1",
@@ -1340,7 +1340,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "When did the film start?"
         ],
-        "hint": "Put Where, When, What, Why or How before did + subject + base form. These tasks ask about the place, time, object, reason or way."
+        "hint": "Put the question word first, then did + subject + base form."
       },
       {
         "id": "wh-2",
@@ -1348,7 +1348,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "What did they eat?"
         ],
-        "hint": "Put Where, When, What, Why or How before did + subject + base form. These tasks ask about the place, time, object, reason or way."
+        "hint": "Put the question word first, then did + subject + base form."
       },
       {
         "id": "wh-3",
@@ -1356,7 +1356,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "How did Ava get home?"
         ],
-        "hint": "Put Where, When, What, Why or How before did + subject + base form. These tasks ask about the place, time, object, reason or way."
+        "hint": "Put the question word first, then did + subject + base form."
       },
       {
         "id": "wh-4",
@@ -1364,7 +1364,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Why did he leave?"
         ],
-        "hint": "Put Where, When, What, Why or How before did + subject + base form. These tasks ask about the place, time, object, reason or way."
+        "hint": "Put the question word first, then did + subject + base form."
       },
       {
         "id": "wh-5",
@@ -1372,7 +1372,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "What did you find?"
         ],
-        "hint": "Put Where, When, What, Why or How before did + subject + base form. These tasks ask about the place, time, object, reason or way."
+        "hint": "Put the question word first, then did + subject + base form."
       },
       {
         "id": "wh-6",
@@ -1380,7 +1380,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Where did they put the bags?"
         ],
-        "hint": "Put Where, When, What, Why or How before did + subject + base form. These tasks ask about the place, time, object, reason or way."
+        "hint": "Put the question word first, then did + subject + base form."
       },
       {
         "id": "wh-7",
@@ -1388,7 +1388,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "When did you wake up?"
         ],
-        "hint": "Put Where, When, What, Why or How before did + subject + base form. These tasks ask about the place, time, object, reason or way."
+        "hint": "Put the question word first, then did + subject + base form."
       },
       {
         "id": "wh-8",
@@ -1396,7 +1396,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "What did Lily draw?"
         ],
-        "hint": "Put Where, When, What, Why or How before did + subject + base form. These tasks ask about the place, time, object, reason or way."
+        "hint": "Put the question word first, then did + subject + base form."
       },
       {
         "id": "wh-9",
@@ -1404,7 +1404,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Why did the dog bark?"
         ],
-        "hint": "Put Where, When, What, Why or How before did + subject + base form. These tasks ask about the place, time, object, reason or way."
+        "hint": "Put the question word first, then did + subject + base form."
       },
       {
         "id": "wh-10",
@@ -1412,7 +1412,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "How did they travel to York?"
         ],
-        "hint": "Put Where, When, What, Why or How before did + subject + base form. These tasks ask about the place, time, object, reason or way."
+        "hint": "Put the question word first, then did + subject + base form."
       },
       {
         "id": "wh-11",
@@ -1420,7 +1420,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Where did Sam sit?"
         ],
-        "hint": "Put Where, When, What, Why or How before did + subject + base form. These tasks ask about the place, time, object, reason or way."
+        "hint": "Put the question word first, then did + subject + base form."
       },
       {
         "id": "wh-12",
@@ -1428,7 +1428,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "When did the lesson end?"
         ],
-        "hint": "Put Where, When, What, Why or How before did + subject + base form. These tasks ask about the place, time, object, reason or way."
+        "hint": "Put the question word first, then did + subject + base form."
       },
       {
         "id": "wh-13",
@@ -1436,7 +1436,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "What did you buy?"
         ],
-        "hint": "Put Where, When, What, Why or How before did + subject + base form. These tasks ask about the place, time, object, reason or way."
+        "hint": "Put the question word first, then did + subject + base form."
       },
       {
         "id": "wh-14",
@@ -1444,7 +1444,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Why did Mia cry?"
         ],
-        "hint": "Put Where, When, What, Why or How before did + subject + base form. These tasks ask about the place, time, object, reason or way."
+        "hint": "Put the question word first, then did + subject + base form."
       },
       {
         "id": "wh-15",
@@ -1452,7 +1452,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "How did he open the box?"
         ],
-        "hint": "Put Where, When, What, Why or How before did + subject + base form. These tasks ask about the place, time, object, reason or way."
+        "hint": "Put the question word first, then did + subject + base form."
       },
       {
         "id": "wh-16",
@@ -1460,7 +1460,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Where did the children swim?"
         ],
-        "hint": "Put Where, When, What, Why or How before did + subject + base form. These tasks ask about the place, time, object, reason or way."
+        "hint": "Put the question word first, then did + subject + base form."
       },
       {
         "id": "wh-17",
@@ -1468,7 +1468,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "When did your cousins arrive?"
         ],
-        "hint": "Put Where, When, What, Why or How before did + subject + base form. These tasks ask about the place, time, object, reason or way."
+        "hint": "Put the question word first, then did + subject + base form."
       },
       {
         "id": "wh-18",
@@ -1476,7 +1476,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "What did we forget?"
         ],
-        "hint": "Put Where, When, What, Why or How before did + subject + base form. These tasks ask about the place, time, object, reason or way."
+        "hint": "Put the question word first, then did + subject + base form."
       },
       {
         "id": "wh-19",
@@ -1484,7 +1484,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Why did they stop?"
         ],
-        "hint": "Put Where, When, What, Why or How before did + subject + base form. These tasks ask about the place, time, object, reason or way."
+        "hint": "Put the question word first, then did + subject + base form."
       },
       {
         "id": "wh-20",
@@ -1492,7 +1492,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "How did you make the cake?"
         ],
-        "hint": "Put Where, When, What, Why or How before did + subject + base form. These tasks ask about the place, time, object, reason or way."
+        "hint": "Put the question word first, then did + subject + base form."
       },
       {
         "id": "wh-21",
@@ -1500,7 +1500,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Where did she find her scarf?"
         ],
-        "hint": "Put Where, When, What, Why or How before did + subject + base form. These tasks ask about the place, time, object, reason or way."
+        "hint": "Put the question word first, then did + subject + base form."
       },
       {
         "id": "wh-22",
@@ -1508,7 +1508,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "When did the match begin?"
         ],
-        "hint": "Put Where, When, What, Why or How before did + subject + base form. These tasks ask about the place, time, object, reason or way."
+        "hint": "Put the question word first, then did + subject + base form."
       },
       {
         "id": "wh-23",
@@ -1516,7 +1516,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "What did Max say?"
         ],
-        "hint": "Put Where, When, What, Why or How before did + subject + base form. These tasks ask about the place, time, object, reason or way."
+        "hint": "Put the question word first, then did + subject + base form."
       },
       {
         "id": "wh-24",
@@ -1524,7 +1524,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Why did you choose this book?"
         ],
-        "hint": "Put Where, When, What, Why or How before did + subject + base form. These tasks ask about the place, time, object, reason or way."
+        "hint": "Put the question word first, then did + subject + base form."
       },
       {
         "id": "wh-25",
@@ -1532,7 +1532,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "How did the cat get inside?"
         ],
-        "hint": "Put Where, When, What, Why or How before did + subject + base form. These tasks ask about the place, time, object, reason or way."
+        "hint": "Put the question word first, then did + subject + base form."
       },
       {
         "id": "wh-26",
@@ -1540,7 +1540,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Where did they eat lunch?"
         ],
-        "hint": "Put Where, When, What, Why or How before did + subject + base form. These tasks ask about the place, time, object, reason or way."
+        "hint": "Put the question word first, then did + subject + base form."
       },
       {
         "id": "wh-27",
@@ -1548,7 +1548,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "When did you call your uncle?"
         ],
-        "hint": "Put Where, When, What, Why or How before did + subject + base form. These tasks ask about the place, time, object, reason or way."
+        "hint": "Put the question word first, then did + subject + base form."
       },
       {
         "id": "wh-28",
@@ -1556,7 +1556,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "What did the class learn?"
         ],
-        "hint": "Put Where, When, What, Why or How before did + subject + base form. These tasks ask about the place, time, object, reason or way."
+        "hint": "Put the question word first, then did + subject + base form."
       },
       {
         "id": "wh-29",
@@ -1564,7 +1564,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Why did he run away?"
         ],
-        "hint": "Put Where, When, What, Why or How before did + subject + base form. These tasks ask about the place, time, object, reason or way."
+        "hint": "Put the question word first, then did + subject + base form."
       },
       {
         "id": "wh-30",
@@ -1572,7 +1572,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "How did she break the cup?"
         ],
-        "hint": "Put Where, When, What, Why or How before did + subject + base form. These tasks ask about the place, time, object, reason or way."
+        "hint": "Put the question word first, then did + subject + base form."
       },
       {
         "id": "wh-31",
@@ -1580,7 +1580,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Where did you leave your shoes?"
         ],
-        "hint": "Put Where, When, What, Why or How before did + subject + base form. These tasks ask about the place, time, object, reason or way."
+        "hint": "Put the question word first, then did + subject + base form."
       }
     ]
   },
@@ -1596,7 +1596,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "We didn't walk to school."
         ],
-        "hint": "For most verbs: subject + didn’t (did not) + base form. Do not use the past form after didn’t."
+        "hint": "Use did not or didn’t, followed by the base form. For example: saw → didn’t see."
       },
       {
         "id": "negative-1",
@@ -1604,7 +1604,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "He didn't lose his phone."
         ],
-        "hint": "For most verbs: subject + didn’t (did not) + base form. Do not use the past form after didn’t."
+        "hint": "Use did not or didn’t, followed by the base form. For example: saw → didn’t see."
       },
       {
         "id": "negative-2",
@@ -1612,7 +1612,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "I didn't like the soup."
         ],
-        "hint": "For most verbs: subject + didn’t (did not) + base form. Do not use the past form after didn’t."
+        "hint": "Use did not or didn’t, followed by the base form. For example: saw → didn’t see."
       },
       {
         "id": "negative-3",
@@ -1620,7 +1620,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "They didn't see the moon."
         ],
-        "hint": "For most verbs: subject + didn’t (did not) + base form. Do not use the past form after didn’t."
+        "hint": "Use did not or didn’t, followed by the base form. For example: saw → didn’t see."
       },
       {
         "id": "negative-4",
@@ -1628,7 +1628,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Amy didn't do her homework."
         ],
-        "hint": "For most verbs: subject + didn’t (did not) + base form. Do not use the past form after didn’t."
+        "hint": "Use did not or didn’t, followed by the base form. For example: saw → didn’t see."
       },
       {
         "id": "negative-5",
@@ -1636,7 +1636,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "You didn't play the piano."
         ],
-        "hint": "For most verbs: subject + didn’t (did not) + base form. Do not use the past form after didn’t."
+        "hint": "Use did not or didn’t, followed by the base form. For example: saw → didn’t see."
       },
       {
         "id": "negative-6",
@@ -1644,7 +1644,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Nora didn't pack her bag."
         ],
-        "hint": "For most verbs: subject + didn’t (did not) + base form. Do not use the past form after didn’t."
+        "hint": "Use did not or didn’t, followed by the base form. For example: saw → didn’t see."
       },
       {
         "id": "negative-7",
@@ -1652,7 +1652,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "The children didn't build a snowman."
         ],
-        "hint": "For most verbs: subject + didn’t (did not) + base form. Do not use the past form after didn’t."
+        "hint": "Use did not or didn’t, followed by the base form. For example: saw → didn’t see."
       },
       {
         "id": "negative-8",
@@ -1660,7 +1660,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Your dad didn't cook dinner."
         ],
-        "hint": "For most verbs: subject + didn’t (did not) + base form. Do not use the past form after didn’t."
+        "hint": "Use did not or didn’t, followed by the base form. For example: saw → didn’t see."
       },
       {
         "id": "negative-9",
@@ -1668,7 +1668,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "You didn't ride your bike."
         ],
-        "hint": "For most verbs: subject + didn’t (did not) + base form. Do not use the past form after didn’t."
+        "hint": "Use did not or didn’t, followed by the base form. For example: saw → didn’t see."
       },
       {
         "id": "negative-10",
@@ -1676,7 +1676,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "The class didn't visit a castle."
         ],
-        "hint": "For most verbs: subject + didn’t (did not) + base form. Do not use the past form after didn’t."
+        "hint": "Use did not or didn’t, followed by the base form. For example: saw → didn’t see."
       },
       {
         "id": "negative-11",
@@ -1684,7 +1684,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Jack didn't take a photo."
         ],
-        "hint": "For most verbs: subject + didn’t (did not) + base form. Do not use the past form after didn’t."
+        "hint": "Use did not or didn’t, followed by the base form. For example: saw → didn’t see."
       },
       {
         "id": "negative-12",
@@ -1692,7 +1692,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "We didn't meet our neighbours."
         ],
-        "hint": "For most verbs: subject + didn’t (did not) + base form. Do not use the past form after didn’t."
+        "hint": "Use did not or didn’t, followed by the base form. For example: saw → didn’t see."
       },
       {
         "id": "negative-13",
@@ -1700,7 +1700,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "The dog didn't find its toy."
         ],
-        "hint": "For most verbs: subject + didn’t (did not) + base form. Do not use the past form after didn’t."
+        "hint": "Use did not or didn’t, followed by the base form. For example: saw → didn’t see."
       },
       {
         "id": "negative-14",
@@ -1708,7 +1708,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "They didn't buy some apples."
         ],
-        "hint": "For most verbs: subject + didn’t (did not) + base form. Do not use the past form after didn’t."
+        "hint": "Use did not or didn’t, followed by the base form. For example: saw → didn’t see."
       },
       {
         "id": "negative-15",
@@ -1716,7 +1716,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "I didn't close the gate."
         ],
-        "hint": "For most verbs: subject + didn’t (did not) + base form. Do not use the past form after didn’t."
+        "hint": "Use did not or didn’t, followed by the base form. For example: saw → didn’t see."
       },
       {
         "id": "negative-16",
@@ -1724,7 +1724,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Luca didn't write a poem."
         ],
-        "hint": "For most verbs: subject + didn’t (did not) + base form. Do not use the past form after didn’t."
+        "hint": "Use did not or didn’t, followed by the base form. For example: saw → didn’t see."
       },
       {
         "id": "negative-17",
@@ -1732,7 +1732,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Your team didn't play well."
         ],
-        "hint": "For most verbs: subject + didn’t (did not) + base form. Do not use the past form after didn’t."
+        "hint": "Use did not or didn’t, followed by the base form. For example: saw → didn’t see."
       },
       {
         "id": "negative-18",
@@ -1740,7 +1740,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "The girls didn't sing a song."
         ],
-        "hint": "For most verbs: subject + didn’t (did not) + base form. Do not use the past form after didn’t."
+        "hint": "Use did not or didn’t, followed by the base form. For example: saw → didn’t see."
       },
       {
         "id": "negative-19",
@@ -1748,7 +1748,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "He didn't drink the milk."
         ],
-        "hint": "For most verbs: subject + didn’t (did not) + base form. Do not use the past form after didn’t."
+        "hint": "Use did not or didn’t, followed by the base form. For example: saw → didn’t see."
       },
       {
         "id": "negative-20",
@@ -1756,7 +1756,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "She didn't make a kite."
         ],
-        "hint": "For most verbs: subject + didn’t (did not) + base form. Do not use the past form after didn’t."
+        "hint": "Use did not or didn’t, followed by the base form. For example: saw → didn’t see."
       },
       {
         "id": "negative-21",
@@ -1764,7 +1764,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "You didn't hear the bell."
         ],
-        "hint": "For most verbs: subject + didn’t (did not) + base form. Do not use the past form after didn’t."
+        "hint": "Use did not or didn’t, followed by the base form. For example: saw → didn’t see."
       },
       {
         "id": "negative-22",
@@ -1772,7 +1772,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "The bus didn't stop here."
         ],
-        "hint": "For most verbs: subject + didn’t (did not) + base form. Do not use the past form after didn’t."
+        "hint": "Use did not or didn’t, followed by the base form. For example: saw → didn’t see."
       },
       {
         "id": "negative-23",
@@ -1780,7 +1780,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "We didn't see the stars."
         ],
-        "hint": "For most verbs: subject + didn’t (did not) + base form. Do not use the past form after didn’t."
+        "hint": "Use did not or didn’t, followed by the base form. For example: saw → didn’t see."
       },
       {
         "id": "negative-24",
@@ -1788,7 +1788,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "They didn't bring their books."
         ],
-        "hint": "For most verbs: subject + didn’t (did not) + base form. Do not use the past form after didn’t."
+        "hint": "Use did not or didn’t, followed by the base form. For example: saw → didn’t see."
       },
       {
         "id": "negative-25",
@@ -1796,7 +1796,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "Isla didn't clean her room."
         ],
-        "hint": "For most verbs: subject + didn’t (did not) + base form. Do not use the past form after didn’t."
+        "hint": "Use did not or didn’t, followed by the base form. For example: saw → didn’t see."
       },
       {
         "id": "negative-26",
@@ -1804,7 +1804,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "My brother didn't drop his hat."
         ],
-        "hint": "For most verbs: subject + didn’t (did not) + base form. Do not use the past form after didn’t."
+        "hint": "Use did not or didn’t, followed by the base form. For example: saw → didn’t see."
       },
       {
         "id": "negative-27",
@@ -1812,7 +1812,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "The pupils didn't read the story."
         ],
-        "hint": "For most verbs: subject + didn’t (did not) + base form. Do not use the past form after didn’t."
+        "hint": "Use did not or didn’t, followed by the base form. For example: saw → didn’t see."
       },
       {
         "id": "negative-28",
@@ -1820,7 +1820,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "You didn't send the email."
         ],
-        "hint": "For most verbs: subject + didn’t (did not) + base form. Do not use the past form after didn’t."
+        "hint": "Use did not or didn’t, followed by the base form. For example: saw → didn’t see."
       },
       {
         "id": "negative-29",
@@ -1828,7 +1828,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "We didn't finish the puzzle."
         ],
-        "hint": "For most verbs: subject + didn’t (did not) + base form. Do not use the past form after didn’t."
+        "hint": "Use did not or didn’t, followed by the base form. For example: saw → didn’t see."
       },
       {
         "id": "negative-30",
@@ -1836,7 +1836,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "The rabbit didn't eat the carrot."
         ],
-        "hint": "For most verbs: subject + didn’t (did not) + base form. Do not use the past form after didn’t."
+        "hint": "Use did not or didn’t, followed by the base form. For example: saw → didn’t see."
       },
       {
         "id": "negative-31",
@@ -1844,7 +1844,7 @@ window.GRAMMAR_DATA = [
         "answers": [
           "He didn't wear his coat."
         ],
-        "hint": "For most verbs: subject + didn’t (did not) + base form. Do not use the past form after didn’t."
+        "hint": "Use did not or didn’t, followed by the base form. For example: saw → didn’t see."
       }
     ]
   },

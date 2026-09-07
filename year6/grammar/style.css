@@ -24,3 +24,4 @@ a.topic[href="simple-past/"]{background:#eee8f8;border-color:#cbbbe3;border-left
 
 /* Programmatically focused headings are reading targets, not controls. */
 h1[tabindex="-1"]:focus,h1[tabindex="-1"]:focus-visible{outline:none}
+.breadcrumb{display:flex;flex-wrap:wrap;gap:9px;align-items:center;font-size:14px;color:#526670;margin:16px 0 24px}.breadcrumb a{color:#0e5a66;text-underline-offset:3px}.breadcrumb a:focus-visible{outline:3px solid #b96910;outline-offset:3px}
