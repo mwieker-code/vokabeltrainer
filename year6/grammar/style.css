@@ -21,3 +21,6 @@ a.topic h2{color:#163e4b}a.topic:hover{box-shadow:0 5px 15px #163e4b15}
 h1,h2,h3,.quote{font-family:inherit}h1{font-weight:700;letter-spacing:-.035em}h2{font-weight:600;letter-spacing:-.02em}.quote{font-size:22px}
 header{background:transparent;border:0;border-bottom:2px solid #d7cee5;border-radius:0;padding:4px 0 22px}header span{color:#68458a;letter-spacing:.04em}
 a.topic[href="simple-past/"]{background:#eee8f8;border-color:#cbbbe3;border-left-color:#7551a2}a.topic[href="simple-past/"] h2{color:#5d387f}
+
+/* Programmatically focused headings are reading targets, not controls. */
+h1[tabindex="-1"]:focus,h1[tabindex="-1"]:focus-visible{outline:none}

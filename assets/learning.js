@@ -95,8 +95,9 @@
     S.typedValue=input.value;
     const target=S.mode==='cloze'?clozeParts(current()).word:ansSide(current());
     S.answered=checkTyped(S.typedValue,target);
-    if(typeof Sfx !== 'undefined') Sfx.play(S.answered==='ok'?'ok':S.answered==='near'?'near':'no');
+
     render();
+    window.LearningFeedback?.signal(S.answered);
   };
 
   buildQueue = function() {
@@ -163,6 +164,7 @@
         S.queue.push(v);
       }
     }
+    if(S.mode==='card')window.LearningFeedback?.signal(quality===2?'ok':quality===1?'near':'no');
     save(); S.seen++;S.i++;S.revealed=false;S.answered=null;S.options=null;S.typedValue='';
     render();
   };
@@ -176,7 +178,9 @@
     if(upper) S.topicId=topicFor.get(current());
     else if(S.roundSource==='today') S.topicId=YEARS[0].id+'-all';
     checkpoint();
+    if(typeof Sfx!=='undefined'){Sfx.play=kind=>window.LearningFeedback?.signal(kind);}
     originalSession();
+    document.getElementById('sfxBtn')?.remove();
     const back=document.getElementById('back');if(back)back.onclick=()=>{checkpoint();home();};
     if(back){back.textContent='Später fortsetzen';}
     const rail=view.querySelector('.rail');
@@ -207,6 +211,7 @@
     document.getElementById('doneHome').onclick=home;
     document.getElementById('nextRound').onclick=()=>setup(S.roundSource);
     updateFoot();
+    window.LearningFeedback?.tone('done');
   };
   renderHelp = function(){
     originalHelp();

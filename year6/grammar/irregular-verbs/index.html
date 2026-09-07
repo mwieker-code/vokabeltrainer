@@ -393,8 +393,8 @@ button.primary:hover{background:#0B4A54}
 }
 </style>
 
-<link rel="stylesheet" href="../../../assets/learning.css?v=20260907-approved">
-<link rel="stylesheet" href="style.css?v=20260907-approved">
+<link rel="stylesheet" href="../../../assets/learning.css?v=20260907-feedback">
+<link rel="stylesheet" href="style.css?v=20260907-feedback">
 <div class="wrap">
   <div class="masthead">
     <div>
@@ -1754,3 +1754,12 @@ catch(err){
 </script>
 
 </html>
+
+<link rel="stylesheet" href="../../../assets/feedback.css">
+<script src="../../../assets/feedback.js"></script>
+<script>
+(function(){
+ const originalSubmit=submitTyped;
+ submitTyped=function(){if(S.answered)return;originalSubmit();if(S.answered){const verdict=document.getElementById('verdict');const result=S.res?(S.res.includes('no')?'no':S.res.includes('near')?'near':'ok'):verdict?.textContent.includes('Fast')?'near':verdict?.textContent.includes('Richtig')?'ok':'no';window.LearningFeedback?.signal(result);}};
+})();
+</script>
