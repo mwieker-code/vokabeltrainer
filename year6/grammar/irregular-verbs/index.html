@@ -1,0 +1,1756 @@
+<!DOCTYPE html>
+<html lang="de">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Irregular Verbs – Orientierungs- und Mittelstufe</title>
+<script>
+/* Faengt Fehler ab, die sonst zu einer leeren Seite fuehren, und zeigt sie an. */
+window.onerror = function(msg, src, line, col){
+  try{
+    var box = document.getElementById("warn");
+    if(!box){
+      box = document.createElement("div");
+      box.id = "warn";
+      document.body.insertBefore(box, document.body.firstChild);
+    }
+    box.innerHTML = '<div class="warn"><b>Diese Seite laeuft in deinem Browser nicht.</b><br>'
+      + 'Wahrscheinlich ist er zu alt fuer eine der verwendeten Funktionen. '
+      + 'Bitte diesen Text weitergeben:<br><span style="font-family:monospace;font-size:11px">'
+      + String(msg) + ' (Zeile ' + line + ':' + col + ')</span></div>';
+  }catch(e){}
+  return false;
+};
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --ground:#EEF1F3;
+  --card:#FFFFFF;
+  --ink:#16232B;
+  --ink-soft:#5A6B75;
+  --rule:#D6DCE0;
+  --petrol:#0E5A66;
+  --amber:#C9761E;
+  --rust:#A8382A;
+  --moss:#3F7A4B;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Consolas,monospace;
+  --r:4px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--ground);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:760px;margin:0 auto;padding:24px 20px 64px}
+
+/* ---------- Kopfzeile ---------- */
+.masthead{display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+  border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:28px;flex-wrap:wrap}
+.masthead h1{font-family:var(--serif);font-weight:600;font-size:24px;margin:0;letter-spacing:-.01em}
+.masthead .sub{font-family:var(--mono);font-size:11px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-soft)}
+.masthead .logo{height:38px;width:auto;flex:0 0 auto;align-self:center}
+@media(max-width:560px){ .masthead .logo{height:30px} }
+@media print{ .masthead .logo{height:32px} }
+
+/* ---------- Startseite ---------- */
+.yeargroup{margin-bottom:34px}
+.yearhead{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.yearhead .tag{font-family:var(--mono);font-size:12px;background:var(--ink);color:var(--ground);
+  padding:2px 7px;border-radius:2px}
+.yearhead .name{font-family:var(--serif);font-size:17px;font-style:italic;color:var(--ink-soft)}
+
+.topic{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--rule);
+  border-left:3px solid var(--rule);border-radius:var(--r);padding:13px 15px;margin-bottom:8px;
+  cursor:pointer;font:inherit;color:inherit;transition:border-color .15s,transform .15s}
+.topic:hover{border-left-color:var(--petrol);transform:translateX(2px)}
+.topic:focus-visible{outline:2px solid var(--petrol);outline-offset:2px}
+.topic .t-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.topic .t-name{font-weight:500}
+.topic .t-count{font-family:var(--mono);font-size:12px;color:var(--ink-soft);white-space:nowrap}
+.topic .t-due{color:var(--amber)}
+.bar{height:6px;background:var(--rule);border-radius:3px;margin-top:10px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--petrol);border-radius:3px;
+  transition:width .35s ease}
+.bar i.full{background:var(--moss)}
+.t-prog{font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);
+  margin-top:6px;display:flex;justify-content:space-between;gap:8px}
+.seal{font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--moss);border:1px solid var(--moss);border-radius:2px;padding:1px 5px;
+  white-space:nowrap}
+
+/* ---------- Serie ---------- */
+.streak{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  background:var(--card);border:1px solid var(--rule);border-radius:var(--r);
+  padding:12px 14px;margin-bottom:16px;flex-wrap:wrap}
+.streak .big{font-family:var(--serif);font-size:23px;line-height:1.1}
+.streak .lab{font-family:var(--mono);font-size:10px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--ink-soft)}
+.streak .flame{font-size:15px;line-height:1;color:var(--moss)}
+.streak.cold .big{color:var(--ink-soft)}
+.streak .right{text-align:right}
+
+/* ---------- Abzeichen ---------- */
+.badges{background:var(--card);border:1px solid var(--rule);border-radius:var(--r);
+  padding:13px 14px;margin-bottom:16px}
+.badges h3{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink-soft);margin:0 0 9px;font-weight:400}
+.badgegrid{display:flex;flex-wrap:wrap;gap:7px}
+.badge{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--rule);
+  border-radius:2px;padding:4px 8px;font-size:12.5px;color:var(--ink-soft);background:var(--ground)}
+.badge.on{border-color:var(--moss);color:var(--ink);background:#EDF4EE}
+.badge .m{font-family:var(--mono);font-size:11px}
+
+/* ---------- Bestaetigung Fach 5 ---------- */
+.toast{background:#EDF4EE;border:1px solid var(--moss);border-radius:var(--r);
+  padding:9px 12px;margin-bottom:12px;font-size:13.5px;display:flex;align-items:center;gap:8px}
+.toast .m{font-family:var(--serif);font-size:15px}
+@media print{ .streak,.badges,.toast{display:none} }
+.minirail{display:flex;gap:2px;margin-top:9px}
+.minirail i{height:4px;flex:1;background:var(--rule);border-radius:1px}
+.minirail i.f{background:var(--petrol)}
+
+.emptyhint{background:var(--card);border:1px dashed var(--rule);border-radius:var(--r);
+  padding:14px 16px;color:var(--ink-soft);font-size:14px}
+
+/* ---------- Sitzung: Leitner-Schiene (Signature) ---------- */
+.rail{display:flex;gap:6px;margin-bottom:22px}
+.slot{flex:1;background:var(--card);border:1px solid var(--rule);border-radius:var(--r);
+  padding:7px 6px 6px;text-align:center;position:relative;transition:border-color .2s,background .2s}
+.slot .n{font-family:var(--mono);font-size:10px;color:var(--ink-soft);letter-spacing:.06em}
+.slot .c{font-family:var(--serif);font-size:19px;line-height:1.1;margin-top:1px}
+.slot .iv{font-family:var(--mono);font-size:9px;color:var(--ink-soft);margin-top:2px}
+.slot.here{border-color:var(--petrol);background:#E7F0F1}
+.slot.here::after{content:"";position:absolute;left:50%;bottom:-7px;width:8px;height:8px;
+  transform:translateX(-50%) rotate(45deg);background:#E7F0F1;
+  border-right:1px solid var(--petrol);border-bottom:1px solid var(--petrol)}
+.slot.land{animation:land .45s ease-out}
+@keyframes land{0%{transform:translateY(-6px)}60%{transform:translateY(2px)}100%{transform:none}}
+
+/* ---------- Karte ---------- */
+.stage{position:relative}
+.vcard{background:var(--card);border:1px solid var(--rule);border-radius:var(--r);
+  padding:30px 26px;min-height:250px;display:flex;flex-direction:column;
+  box-shadow:0 1px 0 var(--rule),0 6px 22px rgba(22,35,43,.06)}
+.vcard.deal{animation:deal .28s ease-out}
+@keyframes deal{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+.eyebrow{display:flex;justify-content:space-between;gap:12px;font-family:var(--mono);font-size:11px;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);
+  border-bottom:1px solid var(--rule);padding-bottom:8px;margin-bottom:20px}
+.prompt{font-family:var(--serif);font-size:38px;line-height:1.15;letter-spacing:-.015em;margin:0}
+.pos{font-family:var(--serif);font-style:italic;color:var(--ink-soft);font-size:15px;margin-top:5px}
+.phon{display:flex;align-items:center;gap:10px;margin-top:7px;flex-wrap:wrap}
+.ipa{font-family:var(--mono);font-size:13px;color:var(--ink-soft);letter-spacing:.01em}
+.speak{padding:5px 9px;line-height:0;border-color:var(--rule);color:var(--petrol)}
+.speak:hover{border-color:var(--petrol);background:#E7F0F1}
+.speak svg{width:15px;height:15px;display:block}
+.speak.on{background:var(--petrol);border-color:var(--petrol);color:#fff}
+.answer{margin-top:20px;padding-top:18px;border-top:1px solid var(--rule)}
+.answer .de{font-family:var(--serif);font-size:23px}
+.answer .coll{font-size:13px;color:var(--ink-soft);margin-top:8px}
+.answer .ex{font-family:var(--serif);font-style:italic;font-size:16px;margin-top:14px;
+  padding-left:12px;border-left:2px solid var(--petrol);color:#31434D}
+.answer .ex b{font-style:normal;font-weight:600;color:var(--ink);
+  box-shadow:inset 0 -.42em 0 rgba(14,90,102,.14)}
+.answer .ex .speak{margin-left:8px;vertical-align:middle;padding:4px 7px}
+.answer .ex .speak svg{width:13px;height:13px}
+.spacer{flex:1}
+
+/* ---------- Bedienelemente ---------- */
+.controls{margin-top:16px;display:flex;gap:8px;flex-wrap:wrap}
+button{font:inherit;cursor:pointer;border-radius:var(--r);border:1px solid var(--rule);
+  background:var(--card);color:var(--ink);padding:11px 15px;transition:background .15s,border-color .15s}
+button:hover{border-color:var(--ink-soft)}
+button:focus-visible{outline:2px solid var(--petrol);outline-offset:2px}
+button.primary{background:var(--petrol);border-color:var(--petrol);color:#fff;flex:1}
+button.primary:hover{background:#0B4A54}
+.rate{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 8px}
+.rate span{font-family:var(--mono);font-size:10px;color:var(--ink-soft);letter-spacing:.05em}
+.rate.again{border-color:var(--amber);color:var(--amber)}
+.rate.again:hover{background:#FBF2E6}
+.rate.hard{border-color:var(--ink-soft)}
+.rate.hard:hover{background:#EEF1F3}
+.rate.good{border-color:var(--moss);color:var(--moss)}
+.rate.good:hover{background:#EDF4EE}
+
+.opts{display:grid;gap:8px;margin-top:20px}
+.opt{text-align:left;padding:13px 15px;font-family:var(--serif);font-size:17px}
+.opt.right{border-color:var(--moss);background:#EDF4EE;color:var(--moss)}
+.opt.wrong{border-color:var(--amber);background:#FBF2E6;color:var(--amber)}
+.opt:disabled{cursor:default;opacity:1}
+
+.typebox{margin-top:20px}
+.typebox input{width:100%;font-family:var(--serif);font-size:22px;padding:12px 14px;
+  border:1px solid var(--rule);border-radius:var(--r);background:var(--ground);color:var(--ink)}
+.typebox input:focus{outline:2px solid var(--petrol);outline-offset:1px;background:var(--card)}
+.verdict{margin-top:12px;font-size:14px}
+.verdict.ok{color:var(--moss)}
+.verdict.near{color:var(--amber)}
+.verdict.no{color:var(--rust);font-weight:600}
+.verdict .mark{font-family:var(--mono);font-size:15px;margin-right:5px}
+.verdict .yours{font-family:var(--serif);font-size:15px;color:var(--ink-soft);
+  display:block;margin-top:3px;text-decoration:line-through;text-decoration-thickness:1px}
+.verdict .sol{font-family:var(--serif);font-size:18px;color:var(--ink);display:block;margin-top:3px}
+
+/* ---------- Kopf der Sitzung ---------- */
+.sessionbar{display:flex;justify-content:space-between;align-items:center;gap:12px;
+  margin-bottom:18px;flex-wrap:wrap}
+.linkbtn{background:none;border:none;padding:4px 0;color:var(--petrol);text-decoration:underline;
+  text-underline-offset:3px}
+.switches{display:flex;gap:6px;flex-wrap:wrap}
+.switch{font-family:var(--mono);font-size:11px;letter-spacing:.05em;padding:6px 9px;
+  text-transform:uppercase}
+.switch[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+
+/* ---------- Abschluss ---------- */
+.done{background:var(--card);border:1px solid var(--rule);border-radius:var(--r);padding:34px 26px;text-align:center}
+.done h2{font-family:var(--serif);font-weight:600;font-size:26px;margin:0 0 8px}
+.done p{color:var(--ink-soft);margin:0 0 20px}
+
+/* ---------- Fußzeile ---------- */
+.credit{margin-top:14px;padding-top:12px;border-top:1px solid var(--rule);
+  font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--ink-soft)}
+@media print{ .credit{display:none} }
+.foot{margin-top:40px;padding-top:14px;border-top:1px solid var(--rule);
+  display:flex;gap:16px;flex-wrap:wrap;align-items:center;
+  font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.04em}
+.foot button{padding:5px 9px;font-family:var(--mono);font-size:11px}
+.warn{background:#FBF2E6;border:1px solid var(--amber);color:#8A4E12;border-radius:var(--r);
+  padding:9px 12px;font-size:13px;margin-bottom:20px;line-height:1.4}
+
+/* ---------- Anleitung ---------- */
+.doc{background:var(--card);border:1px solid var(--rule);border-radius:var(--r);
+  padding:26px 26px 30px;max-width:640px}
+.doc h2{font-family:var(--serif);font-weight:600;font-size:21px;margin:34px 0 8px;
+  letter-spacing:-.01em}
+.doc h2:first-child{margin-top:0}
+.doc h3{font-family:var(--sans);font-weight:600;font-size:15px;margin:20px 0 5px}
+.doc p{margin:0 0 12px;font-size:15px}
+.doc ul{margin:0 0 12px;padding-left:20px;font-size:15px}
+.doc li{margin-bottom:5px}
+.doc .lead{color:var(--ink-soft)}
+.doc code{font-family:var(--mono);font-size:12.5px;background:var(--ground);
+  padding:1px 5px;border-radius:2px}
+.doc table{border-collapse:collapse;width:100%;margin:6px 0 14px;font-size:14px}
+.doc th,.doc td{text-align:left;padding:6px 10px;border-bottom:1px solid var(--rule)}
+.doc th{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--ink-soft);font-weight:500}
+.doc td:first-child{font-family:var(--mono);font-size:12.5px;white-space:nowrap}
+.kbd{font-family:var(--mono);font-size:11.5px;border:1px solid var(--rule);
+  border-bottom-width:2px;border-radius:3px;padding:1px 6px;background:var(--ground)}
+.doc .warnbox{background:#FBF2E6;border:1px solid var(--amber);border-radius:var(--r);
+  padding:12px 14px;font-size:14.5px;margin:0 0 14px;line-height:1.5}
+.doc .teacher{border-top:2px solid var(--ink);margin-top:36px;padding-top:18px}
+@media print{
+  .doc{border:none;padding:0;max-width:none}
+  .doc h2{page-break-after:avoid}
+}
+
+/* ---------- Lueckensatz ---------- */
+.cloze{font-family:var(--serif);font-size:22px;line-height:1.55;margin:0}
+.cloze .gap{display:inline-block;min-width:5.5em;border-bottom:2px solid var(--petrol);
+  text-align:center;color:var(--petrol);font-family:var(--mono);font-size:15px;
+  vertical-align:baseline;padding:0 4px}
+.cloze b{font-style:normal;font-weight:600;
+  box-shadow:inset 0 -.42em 0 rgba(14,90,102,.18)}
+.clue{font-family:var(--serif);font-size:16px;color:var(--ink-soft);margin-top:14px}
+.clue span{color:var(--ink)}
+
+/* ---------- Listenansicht ---------- */
+.listctl{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.listctl input[type=search]{flex:1;min-width:180px;font:inherit;font-size:15px;
+  padding:10px 13px;border:1px solid var(--rule);border-radius:var(--r);
+  background:var(--card);color:var(--ink);-webkit-appearance:none}
+.listctl input[type=search]:focus{outline:2px solid var(--petrol);outline-offset:1px}
+.listcount{font-family:var(--mono);font-size:11px;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--ink-soft);margin-bottom:16px}
+
+.lsec{background:var(--card);border:1px solid var(--rule);border-radius:var(--r);
+  margin-bottom:8px;overflow:hidden}
+.lsec > summary{cursor:pointer;padding:13px 15px;display:flex;justify-content:space-between;
+  align-items:baseline;gap:12px;list-style:none;font-weight:500}
+.lsec > summary::-webkit-details-marker{display:none}
+.lsec > summary:hover{background:var(--ground)}
+.lsec > summary .lyear{font-family:var(--mono);font-size:10px;letter-spacing:.08em;
+  background:var(--ink);color:var(--ground);border-radius:2px;padding:2px 6px;margin-right:9px}
+.lsec > summary .lnum{font-family:var(--mono);font-size:12px;color:var(--ink-soft);white-space:nowrap}
+.lsec[open] > summary{border-bottom:1px solid var(--rule)}
+.lbody{padding:4px 15px 12px}
+
+.vrow{display:grid;grid-template-columns:1fr 1fr;gap:4px 18px;
+  padding:9px 0;border-bottom:1px solid var(--ground);break-inside:avoid}
+.vrow:last-child{border-bottom:none}
+.ven{font-family:var(--serif);font-size:16px}
+.vipa{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin-left:7px;white-space:nowrap}
+.vpos{font-family:var(--serif);font-style:italic;font-size:12.5px;color:var(--ink-soft);margin-left:7px}
+.vde{font-size:14.5px}
+.vex{grid-column:1 / -1;font-family:var(--serif);font-style:italic;font-size:14px;
+  color:#31434D;padding-left:11px;border-left:2px solid var(--rule);margin-top:3px}
+.vlist.hide-ex .vex{display:none}
+.vlist.hide-ipa .vipa{display:none}
+.vrow.off{display:none}
+.lsec.off{display:none}
+.noresult{background:var(--card);border:1px dashed var(--rule);border-radius:var(--r);
+  padding:14px 16px;color:var(--ink-soft);font-size:14px}
+
+@media print{
+  body{background:#fff}
+  .wrap{max-width:none;padding:0}
+  .masthead{border-bottom:1px solid #000;margin-bottom:14px}
+  .sessionbar,.listctl,.foot,#warn,.listcount button{display:none!important}
+  .lsec{border:none;border-radius:0;margin:0 0 6mm;page-break-inside:auto}
+  .lsec + .lsec{page-break-before:always}
+  .lsec > summary{padding:0 0 4px;border-bottom:1px solid #000;font-size:14pt}
+  .lsec > summary .lnum{color:#000}
+  .lbody{padding:6px 0 0;columns:2;column-gap:10mm}
+  .vrow{grid-template-columns:1fr;gap:1px;padding:3px 0;
+    border-bottom:none;page-break-inside:avoid}
+  .ven{font-size:11pt}
+  .vde{font-size:10pt;color:#333}
+  .vipa{color:#555}
+  .vex{font-size:9.5pt;border-left:1px solid #999}
+}
+
+@media(max-width:560px){
+  .prompt{font-size:30px}
+  .slot .c{font-size:16px}
+  .slot .iv{display:none}
+  .vcard{padding:22px 18px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+
+/* ---------- Verbformen: Karte ---------- */
+.forms{display:grid;grid-template-columns:auto 1fr auto;gap:10px 14px;align-items:center;margin-top:4px}
+.forms .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink-soft);white-space:nowrap}
+.forms .frm{font-family:var(--serif);font-size:26px;line-height:1.1}
+.forms .frm .fipa{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);
+  display:block;margin-top:2px}
+.forms .speak{justify-self:end}
+.chain{margin-top:16px;display:flex;align-items:center;gap:9px;flex-wrap:wrap;
+  border-top:1px solid var(--rule);padding-top:14px}
+.chain .cw{font-family:var(--serif);font-size:17px;color:var(--ink-soft)}
+
+/* ---------- Zwei Eingabefelder ---------- */
+.twoin{display:grid;gap:12px;margin-top:20px}
+.twoin .fld label{font-family:var(--mono);font-size:10px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--ink-soft);display:block;margin-bottom:4px}
+.twoin input{width:100%;font-family:var(--serif);font-size:21px;padding:11px 13px;
+  border:1px solid var(--rule);border-radius:var(--r);background:var(--ground);color:var(--ink)}
+.twoin input:focus{outline:2px solid var(--petrol);outline-offset:1px;background:var(--card)}
+.twoin input.ok{border-color:var(--moss);background:#EDF4EE}
+.twoin input.near{border-color:var(--amber);background:#FBF2E6}
+.twoin input.no{border-color:var(--rust);border-width:2px;background:#F8EBE9;
+  color:var(--rust);text-decoration:line-through;text-decoration-thickness:1px}
+.twoin .fld.no > label{color:var(--rust)}
+.twoin .sol.no{color:var(--rust)}
+.twoin .sol.no b{color:var(--rust)}
+.shake{animation:shake .28s ease}
+@keyframes shake{
+  0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)}
+  75%{transform:translateX(4px)}
+}
+.twoin .sol{font-family:var(--serif);font-size:15px;color:var(--ink-soft);margin-top:4px}
+.twoin .sol b{font-style:normal;color:var(--ink)}
+
+/* ---------- Typ-Abzeichen ---------- */
+.typebadge{font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;
+  border:1px solid var(--rule);border-radius:2px;padding:2px 6px;color:var(--ink-soft)}
+.pattern{font-family:var(--mono);font-size:12px;color:var(--petrol);margin-top:6px;letter-spacing:.04em}
+
+/* ---------- Listenansicht: drei Spalten ---------- */
+.vrow3{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:2px 14px;
+  padding:8px 0;border-bottom:1px solid var(--ground);break-inside:avoid;align-items:baseline}
+.vrow3:last-child{border-bottom:none}
+.vrow3 .c1,.vrow3 .c2,.vrow3 .c3{font-family:var(--serif);font-size:15.5px}
+.vrow3 .c2,.vrow3 .c3{color:#31434D}
+.vrow3 .vde{font-size:14px}
+.vrow3 .vipa{display:block;margin-left:0}
+.vlist.hide-ipa .vipa{display:none}
+.lhead{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:14px;padding:6px 0;
+  border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:10px;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+@media(max-width:560px){
+  .vrow3,.lhead{grid-template-columns:1fr 1fr}
+  .forms .frm{font-size:22px}
+}
+@media print{
+  .vrow3,.lhead{grid-template-columns:1fr 1fr 1fr 1fr;font-size:10pt}
+  .lbody{columns:1}
+}
+</style>
+
+<link rel="stylesheet" href="../../../assets/learning.css">
+<link rel="stylesheet" href="style.css">
+<div class="wrap">
+  <div class="masthead">
+    <div>
+      <h1>Irregular Verbs</h1>
+      <div class="sub">simple past &amp; past participle</div>
+    </div>
+    <img class="logo" src="data:image/png;base64,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qKxGgmleJ6n7Vq5jUzm2oRjCUgJGQaGycPnll1OfPn1o06ZNzoO2aNEiatu2Lem6rqyBE0QQJ9HkT7j7qGkaHcWxoWN4r47q2CuLXeGkwaRJk6hfv35lTvibbrrJ+S4rK4u2bdvm/L9161aqWbMmuYXCK6+8Qm3btqWMjAzKzc2lDRs20MSJE+mcc86hjIwM6tSpE+3YsYPcD9tHH31EV1xxBdWuXZsyMzPpuuuuK3U+//nPf+jCCy8kv99PXbt2pZ07dzrbHDp0iG6++WY688wzKSMjg373u9/RsmXLqAyBQSkIFXr11VepRYsWVLNmTWrRogWtX7+eXnjhBcrKyiLDMKh9+/b02WefJRUU7733HvXo0YN0Xae6devSgAEDKFYQP/fcc3TmmWdShw4d6JtvvqFYYbR9+3a69tprKTMzkwzDKC8pRX23fPly6tKlC2VmZlKXLl2ixhMAffrpp3TVVVdR7dq16dRTT6WBAweWOvbQoUPpjDPOoMzMTGrSpAm9/fbbUds888wz1LBhQ+rUqRN9/vnn6e4vx4lcfwMAli5dSp07d6aaNWtSjx49ouYkALz//vt00UUXkc/no7p169LAgQMphrDI/UpE9MnceQm+j3ouli5dSh07diSfz0etWrWi6dOnl9rPPQ++/vrrUt8vWLCA8vPzKSMjg84//3x68cUXqaz7fuedd9KkSZMUkSlUL7Rp04bWr1+f0sR++OGH6bHHHnO2HTt2LA0bNixKEFx99dWO8HvqqacIAF155ZWOUHn66afJ3aWVc059+/alt956y/ls5MiRdM0110SdU7du3RyCePzxx6ljx47O9127dqWpU6c6/7/xxhs0cuRIKkOoUDItlTEWdR3jxo1zrmP79u0khcvvf//7hOO2detWql+/Pi1evNjZ7q233ooSkAsWLKBu3brRvn37CADuv/9+mjFjRqnx+eijj8rjmirzuz59+jjX9+STT0aNJwC65JJLogjkzjvvjLon3bp1cwtMLFiwgEaNGuX8P3/+fOrevTt99dVXznW5hXSy/RNdT69evZxzf+KJJ6hdu3bOdp9++ik1btyY3njjDeezf//735TMbVdeK68s6yZ2zl199dX04YcfEhBuNHn++efTv/71r6jx6tGjhzNeo0aNoldeecX5fvXq1XTeeefRunXrCAA++ugj6tq1KwGAx+OJOod7772X1qxZo8hKofohIyMj5Ym9adMm6ty5s7N9+/btYx+MUsfyer2lPqtXr17CfQoKCui0005LeF5uS6NBgwa0a9euVLXkpBpxPCEV7zpOOeWUhOfYs2dPWrBgASX6rY4dO9K3334btU2DBg2c/9NxyUa2pci5EgDp0iW/35/wODFCL+627uutW7cuffnll2Ues1OnTvTFF19EWcF169ZNef/ykkrPnj1p7ty5lOT6Ks0lWBZhJRvP9evXRxFtp06dHLKSOPXUU53/u3TpQitWrEg6d//85z/T3r17FVkpVE/UqFEjrkCNCPlSmmmTJk2c/xs1akQpaKMJP0sgkKM+HzBgALVr147OOussipCs8/2SJUvo7LPPpssuu4z+9Kc/0dq1aymReybZ75Xhdkv1MwcJSML5vHbt2m6Xl9sNllAgVtTCGjx4MLVv354aNmxIderUoWSEHXuMpUuXUoMGDah37970yCOPRK1/yutyu/QYY1GWZbL9E92rG264gdq2bUuNGzemWrVqRR23Vq1aKc2nNCL3KuwSLOsexhK4+7mLzEGKR15lKW+PPPKIIiqF6o2WLVsmcx+Ucjf84x//oFmzZtG9996bVAjE+yzmAU76wF955ZU0depUWr9+vePbjz3ut99+S48//jhdc801dMYZZ9Ds2bPTcgkiyTpXGUInoYAoywJzn0+ELMojENMSru7zv/LKK2nSpEm0YcMG95pZUgEbS+QHDx6kcePG0VVXXUX16tWjOXPmUBJFCKnuX9b19O/fn/7617/Shg0bnLngVnpSJaxULawka4ZlHsdN+mWNZ2ZmpvO5ey042fHincMtt9xCw4YNi2tdKihUGzz77LN00UUXURI3k4O1a9fSNddcQ4MGDSqlFccTrvEsqJjPkrpU4j3MydYW3MLALXTcWm1ZxyvD6kubsFq3bk0bNmxIuF/79u1p6dKllRLdl8gac9+beO5N9/dlkWQi8ty3bx+5yffCCy+kN998M+Vzj92/DDde1H2Nd+86duzorBUlmodpuFoTbpdA4Ug4xxcuXEiXXnqp83mbNm1iA4Wi0K5du0Tfk9sTMWvWLEVaCtUXPXv2pA4dOkQJzoKCArlwXWryn3322dShQ4dyC3W34CtLg3Vvk5+fTzNnziQA+OKLL+iOO+6IipZr3759VNDGlClTooSB+xz69+8fFZCxfPlyGSWZ8JzKY2H9+9//phYtWjjEvmnTJrrhhhuifmvhwoXUpEkTWr16NQHAxo0bqX///gnJJVXloqxzbdWqFb366qskLdPhw4dHnVMqbq4uXbrQkiVLosZcBgEAwJw5c+i8885zAnq2bdtGl19+ecr7A8AFF1xAf/vb3yjWIyCDN7755hu66667os593rx51Lp1ayc4Ztu2bTRgwIBS87hDhw708ssvVzSQBf3795fnAABYuXIlde3alWK9CO75uWLFCjr33HNp48aNzmdz586lZs2a0QcffEAAsHnz5qh5MG/ePGrevLkznuvXr3ePZ9Q5XnzxxTRlyhRFWgrVF5MnT6YLL7yQTjnlFNJ1nRo3bkxDhgyJq/0PGTKE/vSnP1XECkkqHN1a86effkpt2rQhwzCoZcuWUtg63z/55JPUpUsX0nWdGjRoQIMHD6bDhw+XqeEOHDiQTj31VKpduzZddtll9OGHH1Iyqy+N9bkozJ07l9q0aUNer5fatm1Lb775ZqncthdffJHOPfdc8nq91Llz51hhUykuQfc479ixg1q3bk2GYVB+fj69/vrrlK7b9IknnqDOnTuTYRh02mmn0Y033lhqn0mTJlHTpk3J7/dT+/btaeLEiWnt/8EHH1CrVq2Ic+4E4WzevJkuuOAC8nq9lJOTE+/cMXv2bGrRogX5/X5q3bo1rVixolQqwYYNGygvL498Ph/FBAGVUgIi5BMVxOIei4EDB9Jpp51Gfr+f+vbtS5s3b4763uPx0KBBg5y0izZt2jgKihtTpkyh5s2bk9/vpwsuuIAmT54ctc3LL79MrVq1Ir/fTzk5ORSJwo17v9q2bUsTJkxQpKWgkJOTQ3v27FEPg4LCcQ5VmknhpMbnn39OhmEgKytL1ZtRUFCEpaBw/GLOnDkYOHCgGggFBQUFBQUFBQUFBQUFBYWTCP8P6O837CxMcU4AAAAASUVORK5CYII=" alt="Thomas-Mann-Schule, Gymnasium der Hansestadt Lübeck">
+  </div>
+  <a class="home-link grammar-back" href="../">← Grammar</a>
+  <div id="warn"></div>
+  <div id="view"></div>
+  <div class="foot">
+    <span id="footstat"></span>
+    <button id="exportBtn">Fortschritt sichern</button>
+    <button id="importBtn">Fortschritt laden</button>
+    <input type="file" id="importFile" accept="application/json" hidden>
+  </div>
+  <div class="credit">Erstellt von Michael Wieker · Thomas-Mann-Schule Lübeck</div>
+</div>
+
+<script>
+/* =========================================================================
+   DATEN
+   Ein Verb = ein Feld:
+   [0] Grundform  [1] simple past  [2] past participle  [3] deutsche Bedeutung
+   [4] Lautschrift "grundform|past|participle" (leer, wo keine vorlag)
+   [5] Typ: same | sp-pp | base-pp | all
+   [6] Portion 1-3      [7] Satz im simple past      [8] Satz im present perfect
+   Die Luecke steht als ___ im Satz.
+   ========================================================================= */
+var VERBS = [
+
+/* ---- Typ 1: alle drei Formen gleich ---- */
+["cost","cost","cost","kosten","kɒst|kɒst|kɒst","same",2,"The school trip ___ 200 euros last year.","Tickets have ___ more since June."],
+["cut","cut","cut","schneiden","kʌt|kʌt|kʌt","same",1,"He ___ the bread before dinner.","She has ___ her hair very short."],
+["hit","hit","hit","schlagen, treffen","hɪt|hɪt|hɪt","same",2,"The ball ___ the window yesterday.","A storm has ___ the north coast."],
+["hurt","hurt","hurt","verletzen, sich weh tun","hɜːt|hɜːt|hɜːt","same",1,"I fell and ___ my knee.","My back has ___ since Monday."],
+["let","let","let","lassen","let|let|let","same",2,"My parents ___ me stay up late.","They have ___ us use the gym."],
+["put","put","put","legen, setzen, stellen","pʊt|pʊt|pʊt","same",1,"She ___ the keys on the table.","Someone has ___ a note in my bag."],
+["set up","set up","set up","erbauen, errichten","set ʌp|set ʌp|set ʌp","same",3,"They ___ a tent near the river.","The club has ___ a new website."],
+["upset","upset","upset","aus der Fassung bringen","ʌpˈset|ʌpˈset|ʌpˈset","same",3,"His answer ___ the whole class.","The news has ___ my grandmother."],
+
+/* ---- Typ 2: simple past und past participle gleich ---- */
+["bring","brought","brought","(mit)bringen","brɪŋ|brɔːt|brɔːt","sp-pp",1,"He ___ his guitar to the party.","I have ___ you a present."],
+["build","built","built","bauen","bɪld|bɪlt|bɪlt","sp-pp",2,"They ___ the bridge in 1998.","The city has ___ two new schools."],
+["burn","burnt","burnt","(ver)brennen","bɜːn|bɜːnt|bɜːnt","sp-pp",3,"I ___ the pizza again.","The candle has ___ all night."],
+["buy","bought","bought","kaufen","baɪ|bɔːt|bɔːt","sp-pp",1,"She ___ new shoes on Saturday.","We have ___ tickets for the concert."],
+["catch","caught","caught","fangen; mitbekommen","kætʃ|kɔːt|kɔːt","sp-pp",2,"The goalkeeper ___ the ball easily.","I have ___ a cold."],
+["feed","fed","fed","füttern","fiːd|fed|fed","sp-pp",3,"We ___ the ducks at the pond.","Has anybody ___ the cat?"],
+["feel","felt","felt","fühlen","fiːl|felt|felt","sp-pp",1,"He ___ tired after the match.","I have ___ better since yesterday."],
+["fight","fought","fought","kämpfen, sich streiten","faɪt|fɔːt|fɔːt","sp-pp",2,"The two brothers ___ over the remote.","They have ___ for better pay."],
+["find","found","found","finden","faɪnd|faʊnd|faʊnd","sp-pp",1,"We ___ a wallet in the park.","She has ___ a new job."],
+["get","got","got","holen, bekommen; werden","get|gɒt|gɒt","sp-pp",1,"I ___ a bike for my birthday.","It has ___ colder this week."],
+["hang","hung","hung","hängen","hæŋ|hʌŋ|hʌŋ","sp-pp",3,"She ___ the picture over her desk.","They have ___ flags in the hall."],
+["have","had","had","haben","hæv|hæd|hæd","sp-pp",1,"We ___ a test on Friday.","I have ___ this bag for years."],
+["hear","heard","heard","hören","hɪə|hɜːd|hɜːd","sp-pp",1,"I ___ a strange noise last night.","Have you ___ the news?"],
+["hold","held","held","halten","həʊld|held|held","sp-pp",2,"She ___ the door open for me.","He has ___ the record since 2019."],
+["keep","kept","kept","(auf)bewahren, behalten","kiːp|kept|kept","sp-pp",2,"He ___ the letter in a box.","I have ___ all her postcards."],
+["lead","led","led","(an)führen","liːd|led|led","sp-pp",3,"The teacher ___ us to the museum.","This path has ___ us the wrong way."],
+["learn","learnt","learnt","lernen","lɜːn|lɜːnt|lɜːnt","sp-pp",1,"We ___ the words for the test.","I have ___ a lot this year."],
+["leave","left","left","(ver)lassen","liːv|left|left","sp-pp",1,"The train ___ at eight o'clock.","She has ___ her jacket at school."],
+["lend","lent","lent","(ver)leihen","lend|lent|lent","sp-pp",3,"He ___ me his pen.","I have ___ my bike to Tom."],
+["lose","lost","lost","verlieren","||","sp-pp",1,"Our team ___ the game 3-1.","I have ___ my keys again."],
+["make","made","made","machen, tun","meɪk|meɪd|meɪd","sp-pp",1,"She ___ a cake for the party.","They have ___ a lot of noise."],
+["mean","meant","meant","bedeuten, meinen","miːn|ment|ment","sp-pp",2,"I ___ it as a joke.","What has he ___ by that?"],
+["meet","met","met","treffen","miːt|met|met","sp-pp",1,"We ___ at the bus stop.","I have never ___ his parents."],
+["pay","paid","paid","(be)zahlen","peɪ|peɪd|peɪd","sp-pp",2,"He ___ for the tickets.","We have already ___ the bill."],
+["read","read","read","lesen","riːd|red|red","sp-pp",1,"She ___ the whole book in a day.","I have ___ that article twice."],
+["say","said","said","sagen","seɪ|sed|sed","sp-pp",1,"He ___ nothing about the plan.","She has ___ sorry three times."],
+["sell","sold","sold","verkaufen","sel|səʊld|səʊld","sp-pp",2,"They ___ their old car.","The shop has ___ all the tickets."],
+["send","sent","sent","senden, verschicken","send|sent|sent","sp-pp",2,"I ___ her a message yesterday.","He has ___ us a postcard."],
+["shoot","shot","shot","schießen (auf)","ʃuːt|ʃɒt|ʃɒt","sp-pp",3,"He ___ at the goal and missed.","She has ___ two films in Ireland."],
+["sit","sat","sat","sitzen","sɪt|sæt|sæt","sp-pp",1,"We ___ in the front row.","He has ___ there all morning."],
+["sleep","slept","slept","schlafen","sliːp|slept|slept","sp-pp",1,"I ___ badly last night.","The baby has ___ for two hours."],
+["smell","smelt","smelt","riechen, duften","smel|smelt|smelt","sp-pp",3,"The kitchen ___ of fresh bread.","Something has ___ strange all day."],
+["spell","spelt","spelt","buchstabieren","spel|spelt|spelt","sp-pp",2,"She ___ her name for the teacher.","You have ___ my surname wrong."],
+["spend","spent","spent","ausgeben, verbringen","spend|spent|spent","sp-pp",2,"We ___ the summer in Wales.","I have ___ all my pocket money."],
+["spill","spilt","spilt","verschütten, auslaufen","spɪl|spɪlt|spɪlt","sp-pp",3,"He ___ juice on the carpet.","Someone has ___ water on my book."],
+["stand up","stood up","stood up","aufstehen","stænd|stʊd|stʊd","sp-pp",2,"The class ___ when he came in.","She has ___ for ten minutes."],
+["sting","stung","stung","stechen","stɪŋ|stʌŋ|stʌŋ","sp-pp",3,"A bee ___ me at the lake.","A wasp has ___ him on the arm."],
+["teach","taught","taught","unterrichten, beibringen","tiːtʃ|tɔːt|tɔːt","sp-pp",2,"Mr Brown ___ us French last year.","She has ___ at this school since 2010."],
+["tell","told","told","erzählen","tel|təʊld|təʊld","sp-pp",1,"She ___ us a funny story.","Nobody has ___ me the truth."],
+["think","thought","thought","(nach)denken, glauben","θɪŋk|θɔːt|θɔːt","sp-pp",1,"I ___ the film was boring.","We have ___ about your idea."],
+["understand","understood","understood","verstehen","ʌndəˈstænd|ʌndəˈstʊd|ʌndəˈstʊd","sp-pp",2,"Nobody ___ the last question.","I have never ___ this rule."],
+["win","won","won","gewinnen, siegen","wɪn|wʌn|wʌn","sp-pp",1,"Our school ___ the tournament.","She has ___ three medals."],
+
+/* ---- Typ 3: Grundform und past participle gleich ---- */
+["become","became","become","werden","bɪˈkʌm|bɪˈkeɪm|bɪˈkʌm","base-pp",2,"He ___ a teacher in 2015.","The town has ___ very popular."],
+["come","came","come","kommen","kʌm|keɪm|kʌm","base-pp",1,"She ___ home very late.","My cousins have ___ for the weekend."],
+["run","ran","run","laufen, rennen","rʌn|ræn|rʌn","base-pp",1,"He ___ to the bus stop.","I have ___ five kilometres today."],
+
+/* ---- Typ 4: alle drei Formen verschieden ---- */
+["be","was / were","been","sein","biː|wɒz / wɜː|biːn","all",1,"They ___ at the cinema yesterday.","I have ___ to London twice."],
+["beat","beat","beaten","schlagen, besiegen","biːt|biːt|ˈbiːtn","all",3,"We ___ them 2-0 on Saturday.","Nobody has ___ his record."],
+["begin","began","begun","beginnen, anfangen","||","all",2,"The film ___ at seven.","The lesson has already ___."],
+["bite","bit","bitten","beißen","baɪt|bɪt|ˈbɪtn","all",3,"The dog ___ him on the hand.","A mosquito has ___ my leg."],
+["blow out","blew out","blown out","auspusten","bləʊ|bluː|bləʊn","all",3,"She ___ the candles on her cake.","The wind has ___ the candle."],
+["break","broke","broken","(zer)brechen","breɪk|brəʊk|ˈbrəʊkən","all",1,"He ___ his arm at the skate park.","Someone has ___ the window."],
+["choose","chose","chosen","(aus)wählen","tʃuːz|tʃəʊz|ˈtʃəʊzn","all",2,"We ___ the blue one.","They have ___ a new captain."],
+["do","did","done","machen, tun","duː|dɪd|dʌn","all",1,"I ___ my homework after dinner.","Have you ___ the washing-up?"],
+["draw","drew","drawn","zeichnen","drɔː|druː|drɔːn","all",2,"She ___ a horse in art class.","He has ___ a map for us."],
+["drink","drank","drunk","trinken","drɪŋk|dræŋk|drʌŋk","all",1,"He ___ three glasses of water.","We have ___ all the lemonade."],
+["drive","drove","driven","fahren","draɪv|drəʊv|ˈdrɪvn","all",2,"My mum ___ us to school.","He has ___ this bus for years."],
+["eat","ate","eaten","essen","iːt|et|ˈiːtn","all",1,"We ___ pizza on Friday.","Who has ___ my sandwich?"],
+["fall","fell","fallen","fallen","fɔːl|fel|ˈfɔːlən","all",1,"She ___ off her bike.","Snow has ___ during the night."],
+["fly","flew","flown","fliegen","flaɪ|fluː|fləʊn","all",2,"The birds ___ south in October.","We have ___ to Spain twice."],
+["forget","forgot","forgotten","vergessen","fəˈget|fəˈgɒt|fəˈgɒtn","all",1,"I ___ my sports kit again.","She has ___ his name."],
+["freeze","froze","frozen","(ein)frieren","friːz|frəʊz|ˈfrəʊzn","all",3,"The lake ___ in January.","The water has ___ overnight."],
+["give","gave","given","geben","gɪv|geɪv|ˈgɪvn","all",1,"He ___ me a hand with the boxes.","They have ___ us more time."],
+["go","went","gone","gehen, fahren","gəʊ|went|gɒn","all",1,"We ___ to the beach on Sunday.","He has ___ to the doctor."],
+["grow","grew","grown","wachsen; anbauen","grəʊ|gruː|grəʊn","all",2,"The plant ___ ten centimetres.","You have ___ so much this year!"],
+["hide","hid","hidden","verstecken","||","all",3,"He ___ the present under his bed.","She has ___ the chocolate again."],
+["know","knew","known","kennen, wissen","nəʊ|njuː|nəʊn","all",1,"I ___ the answer immediately.","We have ___ each other since Year 5."],
+["lie","lay","lain","liegen","laɪ|leɪ|leɪn","all",3,"He ___ on the sofa all afternoon.","The book has ___ there for weeks."],
+["ride","rode","ridden","reiten, fahren","raɪd|rəʊd|ˈrɪdn","all",2,"She ___ her bike to the lake.","I have never ___ a horse."],
+["ring","rang","rung","klingeln; anrufen","rɪŋ|ræŋ|rʌŋ","all",2,"The bell ___ at half past one.","Nobody has ___ me back."],
+["rise","rose","risen","steigen, sich erheben","raɪz|rəʊz|ˈrɪzn","all",3,"The sun ___ at six this morning.","Prices have ___ again."],
+["see","saw","seen","sehen","siː|sɔː|siːn","all",1,"I ___ him at the station.","Have you ___ this film?"],
+["show","showed","shown","zeigen","ʃəʊ|ʃəʊd|ʃəʊn","all",2,"She ___ me her holiday photos.","He has ___ us the way."],
+["sing","sang","sung","singen","sɪŋ|sæŋ|sʌŋ","all",1,"The choir ___ two songs.","She has ___ in front of the school."],
+["sink","sank","sunk","sinken, untergehen","sɪŋk|sæŋk|sʌŋk","all",3,"The old boat ___ in a storm.","The ship has ___ near the island."],
+["speak","spoke","spoken","sprechen","spiːk|spəʊk|ˈspəʊkən","all",1,"He ___ to the teacher after class.","I have ___ to my parents about it."],
+["steal","stole","stolen","stehlen","stiːl|stəʊl|ˈstəʊlən","all",2,"Somebody ___ his phone on the bus.","They have ___ two bikes this week."],
+["swim","swam","swum","schwimmen","swɪm|swæm|swʌm","all",1,"We ___ in the lake last summer.","She has ___ twenty lengths."],
+["take","took","taken","nehmen","teɪk|tʊk|ˈteɪkən","all",1,"He ___ the wrong bus.","Somebody has ___ my pen."],
+["throw","threw","thrown","werfen","θrəʊ|θruː|θrəʊn","all",2,"She ___ the ball over the fence.","He has ___ away the box."],
+["wake up","woke up","woken up","aufwachen","weɪk|wəʊk|ˈwəʊkən","all",2,"I ___ at six this morning.","The noise has ___ the baby."],
+["wear","wore","worn","anhaben, tragen","weə|wɔː|wɔːn","all",2,"She ___ a red jacket yesterday.","He has ___ that shirt all week."],
+["write","wrote","written","schreiben","raɪt|rəʊt|ˈrɪtn","all",1,"He ___ a letter to his aunt.","I have ___ three emails today."]
+];
+
+/* =========================================================================
+   AUFBEREITUNG DER DATEN
+   ========================================================================= */
+var TYPE_NAME = {
+  "same":    "alle drei Formen gleich",
+  "sp-pp":   "simple past = past participle",
+  "base-pp": "Grundform = past participle",
+  "all":     "alle drei Formen verschieden"
+};
+var TYPE_MARK = {
+  "same":"\u25A0 \u25A0 \u25A0", "sp-pp":"\u25A0 \u25CF \u25CF",
+  "base-pp":"\u25A0 \u25CF \u25A0", "all":"\u25A0 \u25CF \u25B2"
+};
+
+var V = VERBS.map(function(a, i){
+  var ip = String(a[4]).split("|");
+  return {
+    id: "v-" + String(a[0]).replace(/\s+/g, "-"),
+    base: a[0], past: a[1], pp: a[2], de: a[3],
+    ipaBase: ip[0] || "", ipaPast: ip[1] || "", ipaPp: ip[2] || "",
+    type: a[5], level: a[6], sSp: a[7], sPp: a[8]
+  };
+});
+
+/* =========================================================================
+   VERNEINUNG UND FRAGE IM SIMPLE PAST
+   Die Saetze werden aus Bausteinen zusammengesetzt: Subjekt + Verb +
+   Ergaenzung + Zeitangabe. Dadurch wiederholt sich kaum ein Satz.
+   Die Ergaenzung steht pro Verb hier; sie ist bewusst ohne "his/her"
+   formuliert, damit sie zu jedem Subjekt passt.
+   ========================================================================= */
+var PHR = {
+"be":"at home","beat":"the other team","become":"really nervous","begin":"the exercise",
+"bite":"into the apple","blow out":"the candles","break":"the window","bring":"a present",
+"build":"a tent","burn":"the toast","buy":"the tickets","catch":"the early bus",
+"choose":"the blue one","come":"to the party","cost":"a lot of money","cut":"the bread",
+"do":"the washing-up","draw":"a map","drink":"the lemonade","drive":"to the coast",
+"eat":"anything at the party","fall":"off the wall","feed":"the ducks","feel":"well",
+"fight":"about the remote","find":"the keys","fly":"to Dublin","forget":"the homework",
+"freeze":"the leftovers","get":"a message","give":"an answer","go":"to the cinema",
+"grow":"tomatoes","hang":"the picture in the hall","have":"enough time","hear":"the alarm",
+"hide":"the chocolate","hit":"the ball","hold":"the door open","hurt":"anybody",
+"keep":"the receipt","know":"the answer","lead":"the group","learn":"the words",
+"leave":"before six","lend":"any money","let":"us in","lie":"on the sofa",
+"lose":"the match","make":"a plan","mean":"it seriously","meet":"at the station",
+"pay":"for the tickets","put":"the milk in the fridge","read":"the whole book",
+"ride":"a bike","ring":"the doorbell","rise":"early","run":"to the bus stop",
+"say":"anything","see":"the film","sell":"the old car","send":"a postcard",
+"set up":"the tent","shoot":"at the goal","show":"the photos","sing":"in the choir",
+"sink":"in the water","sit":"in the front row","sleep":"well","smell":"the smoke",
+"speak":"to the teacher","spell":"the name correctly","spend":"much money",
+"spill":"the juice","stand up":"in class","steal":"anything","sting":"anybody",
+"swim":"in the lake","take":"the early train","teach":"the class","tell":"the truth",
+"think":"about it","throw":"the ball","understand":"the question","upset":"anybody",
+"wake up":"before seven","wear":"a jacket","win":"the game","write":"a letter"
+};
+
+/* Subjekte mit Angabe, ob sie im Singular stehen (fuer was / were). */
+var SUBJ = [
+  {t:"Max", sg:true}, {t:"Lisa", sg:true}, {t:"my brother", sg:true},
+  {t:"the teacher", sg:true}, {t:"she", sg:true}, {t:"he", sg:true},
+  {t:"our neighbour", sg:true}, {t:"the goalkeeper", sg:true},
+  {t:"they", sg:false}, {t:"we", sg:false}, {t:"the children", sg:false},
+  {t:"my parents", sg:false}, {t:"Anna and Tom", sg:false}, {t:"you", sg:false}
+];
+/* "be" braucht eigene Ergaenzungen, sonst steht dauernd "at home". */
+var BE_PHR = ["at home","late for school","at the swimming pool","in the classroom",
+              "tired after the trip","on the bus","at the dentist's","in the same team",
+              "happy about the result","ready in time"];
+var TIMEW = ["yesterday","last weekend","last night","on Monday","last summer",
+             "after school","two weeks ago","last Friday","this morning",
+             "during the holidays","on Sunday","last year"];
+
+function pickOne(list){ return list[Math.floor(Math.random()*list.length)]; }
+
+/* Baut eine Aufgabe: kind = "neg" oder "q". */
+function buildNeg(v, kind){
+  var isBe0 = (v.base === "be");
+  var phrase = isBe0 ? pickOne(BE_PHR) : (PHR[v.base] || "");
+  var subj = pickOne(SUBJ);
+  var time = pickOne(TIMEW);
+  var isBe = (v.base === "be");
+  var rest = (phrase ? phrase + " " : "") + time;
+  var cue, sentence, answers;
+
+  if(kind === "neg"){
+    cue = "not / " + v.base;
+    sentence = subj.t + " ___ (" + cue + ") " + rest + ".";
+    answers = isBe
+      ? (subj.sg ? ["wasn't", "was not"] : ["weren't", "were not"])
+      : ["didn't " + v.base, "did not " + v.base];
+  }else{
+    cue = subj.t + " / " + v.base;
+    sentence = "___ (" + cue + ") " + rest + "?";
+    answers = isBe
+      ? (subj.sg ? ["was " + subj.t, "was " + subj.t]
+                 : ["were " + subj.t, "were " + subj.t])
+      : ["did " + subj.t + " " + v.base, "did " + subj.t + " " + v.base];
+  }
+  sentence = sentence.charAt(0).toUpperCase() + sentence.slice(1);
+  /* In der Frage steht die Luecke am Satzanfang, also gross geschrieben. */
+  var shown = (kind === "q") ? answers[0].charAt(0).toUpperCase() + answers[0].slice(1)
+                             : answers[0];
+  return {kind:kind, sentence:sentence, answers:answers, solution:shown,
+          subj:subj, isBe:isBe};
+}
+
+/* Vergleich fuer diesen Modus: Grossschreibung und Apostrophform egal. */
+function checkNeg(input, answers){
+  var a = String(input).toLowerCase().trim()
+            .replace(/[.?!]/g,"").replace(/[’´`]/g,"'").replace(/\s+/g," ");
+  var i;
+  for(i=0;i<answers.length;i++){ if(a === answers[i].toLowerCase()) return "ok"; }
+  /* Fehlender Apostroph: als Fluechtigkeitsfehler behandeln. */
+  var bare = function(x){ return x.replace(/'/g,""); };
+  for(i=0;i<answers.length;i++){
+    if(bare(a) === bare(answers[i].toLowerCase())) return "near";
+  }
+
+  /* "Fast" nur bei Tippfehlern. Ein falsches Hilfsverb (did statt didn't,
+     was statt were) ist ein Grammatikfehler und zaehlt als falsch. */
+  for(i=0;i<answers.length;i++){
+    var want = answers[i].toLowerCase().split(" ");
+    var got  = a.split(" ");
+    if(got[0] !== want[0]) continue;
+    if(distance(a, answers[i].toLowerCase()) <= 2) return "near";
+  }
+  return "no";
+}
+
+
+/* Startportionen. Die Reihenfolge bestimmt auch die Top-20-Auswahl. */
+var TOP20 = ["be","have","go","do","say","get","make","see","come","take",
+             "know","give","find","think","tell","write","eat","drink","run","sing"];
+
+var TOPICS = [
+  {id:"t-top20",  group:"Portionen", name:"Die 20 wichtigsten Verben",
+   pick:function(v){ return TOP20.indexOf(v.base) !== -1; }},
+  {id:"t-p1", group:"Portionen", name:"Portion 1 \u00b7 Grundwortschatz",
+   pick:function(v){ return v.level === 1; }},
+  {id:"t-p2", group:"Portionen", name:"Portion 2 \u00b7 Aufbau",
+   pick:function(v){ return v.level === 2; }},
+  {id:"t-p3", group:"Portionen", name:"Portion 3 \u00b7 Erweiterung",
+   pick:function(v){ return v.level === 3; }},
+
+  {id:"t-same",   group:"Muster", name:"Alle drei Formen gleich",
+   pick:function(v){ return v.type === "same"; }},
+  {id:"t-sppp",   group:"Muster", name:"simple past = past participle",
+   pick:function(v){ return v.type === "sp-pp"; }},
+  {id:"t-basepp", group:"Muster", name:"Grundform = past participle",
+   pick:function(v){ return v.type === "base-pp"; }},
+  {id:"t-all",    group:"Muster", name:"Alle drei Formen verschieden",
+   pick:function(v){ return v.type === "all"; }},
+
+  {id:"t-alle", group:"Alles", name:"Alle Verben gemischt",
+   pick:function(){ return true; }},
+
+  /* Eigener Uebungstyp: Verneinung und Frage. Eigener Lernstand, damit er
+     sich nicht mit dem Formentraining vermischt. */
+  {id:"t-neg", group:"Grammatik", name:"Verneinung und Fragen im simple past",
+   mode:"neg", suffix:"|neg",
+   pick:function(v){ return !!PHR[v.base]; }}
+];
+
+var SETS = {};
+TOPICS.forEach(function(t){
+  var list = V.filter(t.pick);
+  if(t.suffix){
+    /* eigene Kennung, damit der Lernstand getrennt gefuehrt wird */
+    list = list.map(function(v){
+      var c = {}; for(var k in v){ if(v.hasOwnProperty(k)) c[k] = v[k]; }
+      c.id = v.id + t.suffix;
+      return c;
+    });
+  }
+  SETS[t.id] = list;
+});
+function topicById(id){
+  return TOPICS.filter(function(t){ return t.id === id; })[0];
+}
+
+/* =========================================================================
+   SPEICHER  –  localStorage mit Rückfallebene im Arbeitsspeicher
+   ========================================================================= */
+var Store = (function(){
+  var persistent = true, mem = {};
+  try{ localStorage.setItem("iv:test","1"); localStorage.removeItem("iv:test"); }
+  catch(e){ persistent = false; }
+  return {
+    persistent: persistent,
+    get:function(k){
+      try{ if(persistent) return localStorage.getItem(k); return (k in mem) ? mem[k] : null; }
+      catch(e){ return (k in mem) ? mem[k] : null; }
+    },
+    set:function(k,v){
+      try{ persistent ? localStorage.setItem(k,v) : (mem[k]=v); }catch(e){ mem[k]=v; }
+    }
+  };
+})();
+
+var KEY = "iv:progress";
+var INTERVALS = [0,1,2,4,8,16];
+var DAY = 86400000;
+
+var progress = (function(){
+  try{ return JSON.parse(Store.get(KEY)) || {}; }catch(e){ return {}; }
+})();
+function save(){ Store.set(KEY, JSON.stringify(progress)); }
+
+/* -------------------------------------------------------------------------
+   SERIE. Gezaehlt werden Kalendertage, an denen mindestens eine Karte
+   bewertet wurde. Ein ausgelassener Tag setzt auf 1 zurueck - ohne Freischuss.
+   ------------------------------------------------------------------------- */
+var MKEY = "iv:meta";
+var meta = (function(){
+  var d = {streak:0, best:0, lastDay:"", today:0};
+  try{
+    var raw = JSON.parse(Store.get(MKEY));
+    if(raw && typeof raw === "object"){
+      d.streak = raw.streak || 0; d.best = raw.best || 0;
+      d.lastDay = raw.lastDay || ""; d.today = raw.today || 0;
+    }
+  }catch(e){}
+  return d;
+})();
+function saveMeta(){ Store.set(MKEY, JSON.stringify(meta)); }
+
+function dayStamp(offset){
+  var d = new Date();
+  if(offset) d.setDate(d.getDate() + offset);
+  return d.getFullYear() + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" + ("0"+d.getDate()).slice(-2);
+}
+/* Wer gestern zuletzt geuebt hat, behaelt die Serie noch bis Mitternacht. */
+function streakNow(){
+  if(meta.lastDay === dayStamp(0) || meta.lastDay === dayStamp(-1)) return meta.streak;
+  return 0;
+}
+function todayCount(){ return meta.lastDay === dayStamp(0) ? meta.today : 0; }
+
+function touchDay(){
+  var today = dayStamp(0);
+  if(meta.lastDay === today){ meta.today++; }
+  else{
+    meta.streak = (meta.lastDay === dayStamp(-1)) ? meta.streak + 1 : 1;
+    meta.lastDay = today; meta.today = 1;
+  }
+  if(meta.streak > meta.best) meta.best = meta.streak;
+  saveMeta();
+}
+
+/* Ein Set gilt als geschafft, wenn jedes Verb darin in Fach 5 liegt. */
+function isMastered(topicId){
+  var set = SETS[topicId];
+  if(!set.length) return false;
+  for(var i=0;i<set.length;i++){ if(rec(set[i].id).box !== 5) return false; }
+  return true;
+}
+
+/* Der Lernstand haengt am Verb, nicht am Set. Ein Verb, das in Portion 1
+   und im Muster-Set steckt, hat denselben Stand. */
+function rec(vid){
+  if(!progress[vid]) progress[vid] = {box:1, due:0};
+  return progress[vid];
+}
+function isDue(r){ return Date.now() >= r.due; }
+function boxCounts(topicId){
+  var c=[0,0,0,0,0];
+  SETS[topicId].forEach(function(v){ c[rec(v.id).box-1]++; });
+  return c;
+}
+function dueCount(topicId){
+  return SETS[topicId].filter(function(v){ return isDue(rec(v.id)); }).length;
+}
+
+
+/* =========================================================================
+   AUSSPRACHE  –  Web Speech API des Browsers, keine externe Anbindung
+   ========================================================================= */
+var Speech = (function(){
+  var synth = window.speechSynthesis;
+  if(!synth) return {available:false, say:function(){}, status:function(){ return "nicht unterstützt"; }};
+  var voice = null, last = "noch nichts abgespielt";
+
+  function pick(){
+    var vs = [];
+    try{ vs = synth.getVoices() || []; }catch(e){ return; }
+    vs = vs.filter(function(v){ return /^en/i.test(v.lang); });
+    if(!vs.length) return;
+    voice = vs.filter(function(v){ return /en[-_]GB/i.test(v.lang); })[0]
+         || vs.filter(function(v){ return /en[-_]US/i.test(v.lang); })[0]
+         || vs[0];
+  }
+  pick();
+  if(synth.addEventListener) synth.addEventListener("voiceschanged", pick);
+
+  return {
+    available:true,
+    status:function(){
+      var n = 0;
+      try{ n = (synth.getVoices() || []).length; }catch(e){}
+      return n + " Stimmen geladen \u00b7 " + (voice ? "gewählt: " + voice.name + " (" + voice.lang + ")"
+                                                    : "keine englische Stimme gefunden")
+           + " \u00b7 zuletzt: " + last;
+    },
+    say:function(text, btn){
+      try{
+        if(synth.speaking || synth.pending){
+          synth.cancel(); last = "abgebrochen";
+          if(btn) btn.classList.remove("on");
+          return;
+        }
+        if(!voice) pick();
+        var u = new SpeechSynthesisUtterance(String(text));
+        u.lang = "en-GB";
+        if(voice){ try{ u.voice = voice; u.lang = voice.lang || "en-GB"; }catch(e){} }
+        u.rate = 0.85;
+        last = "gestartet";
+        u.onstart = function(){ last = "spricht"; };
+        u.onend   = function(){ last = "fertig"; if(btn) btn.classList.remove("on"); };
+        u.onerror = function(ev){
+          last = "Fehler: " + ((ev && ev.error) ? ev.error : "unbekannt");
+          if(btn) btn.classList.remove("on");
+        };
+        if(btn) btn.classList.add("on");
+        synth.speak(u);
+        if(synth.paused){ try{ synth.resume(); }catch(e){} }
+      }catch(e){
+        last = "Ausnahme: " + e.message;
+        if(btn) btn.classList.remove("on");
+      }
+    }
+  };
+})();
+
+var SPK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"'
+  + ' stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+  + '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>'
+  + '<path d="M15.5 8.5a5 5 0 0 1 0 7"></path><path d="M18.5 5.5a9 9 0 0 1 0 13"></path></svg>';
+
+function speakBtn(text, label){
+  if(!Speech.available) return "";
+  return '<button class="speak" data-say="' + esc(text) + '" title="Aussprache anhören"'
+    + ' aria-label="Aussprache von ' + esc(label || text) + ' anhören">' + SPK + '</button>';
+}
+/* Die drei Formen am Stueck: go - went - gone. Der Sprechrhythmus ist der
+   halbe Lernweg, deshalb bekommt er einen eigenen Knopf. */
+function chainText(v){
+  return v.base + ", " + v.past.replace(" / ", " or ") + ", " + v.pp;
+}
+
+/* =========================================================================
+   HILFSFUNKTIONEN
+   ========================================================================= */
+function shuffle(a){
+  return a.map(function(x){ return [Math.random(), x]; })
+          .sort(function(p,q){ return p[0]-q[0]; })
+          .map(function(p){ return p[1]; });
+}
+function esc(s){
+  return String(s).replace(/[&<>"]/g, function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];
+  });
+}
+function normalise(s){
+  return String(s).toLowerCase().trim()
+    .replace(/^to\s+/,"").replace(/[.,;!?'"’]/g,"").replace(/\s+/g," ");
+}
+function distance(a,b){
+  var m=a.length,n=b.length,d=[],i,j;
+  for(i=0;i<=m;i++){ d[i]=[i]; }
+  for(j=0;j<=n;j++){ d[0][j]=j; }
+  for(i=1;i<=m;i++) for(j=1;j<=n;j++)
+    d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));
+  return d[m][n];
+}
+/* Zulaessige Nebenformen: burnt/burned usw. sind beide korrekt. */
+function variants(target){
+  var out = [], parts = [];
+  String(target).split("/").forEach(function(part){
+    var t = normalise(part);
+    if(!t) return;
+    parts.push(t);
+    out.push(t);
+    if(/nt$/.test(t))  out.push(t.replace(/nt$/, "ned"));
+    if(/lt$/.test(t))  out.push(t.replace(/lt$/, "lled"));
+    if(/ned$/.test(t)) out.push(t.replace(/ned$/, "nt"));
+  });
+  /* Bei Doppelformen wie "was / were" gilt auch die vollstaendige Nennung -
+     in beliebiger Reihenfolge und mit Schraegstrich, Komma oder "or". */
+  if(parts.length > 1){
+    out.push(parts.join(" "));
+    out.push(parts.slice().reverse().join(" "));
+  }
+  return out;
+}
+/* Trennzeichen zwischen Doppelformen vereinheitlichen, damit
+   "was/were", "was / were", "was, were" und "was or were" gleich behandelt werden. */
+function flatten(s){
+  return String(s).replace(/\s*[\/,;&+]+\s*/g, " ")
+                  .replace(/\s+or\s+/g, " ")
+                  .replace(/\s+und\s+/g, " ")
+                  .replace(/\s+/g, " ").trim();
+}
+function checkForm(input, target){
+  var a = flatten(normalise(flatten(input)));
+  if(!a) return "no";
+  var vs = variants(target);
+  if(vs.indexOf(a) !== -1) return "ok";
+  for(var i=0;i<vs.length;i++){
+    var tol = vs[i].length > 6 ? 2 : 1;
+    if(distance(a, vs[i]) <= tol) return "near";
+  }
+  return "no";
+}
+function markGap(sentence, form){
+  return esc(sentence).replace("___", '<b>' + esc(form) + '</b>');
+}
+
+/* =========================================================================
+   ZUSTAND
+   ========================================================================= */
+var S = {
+  view:"home", topicId:null,
+  mode:"forms",          // forms | card | cloze
+  showDe:true,
+  onlyDue:true,
+  queue:[], i:0, revealed:false, answered:null, landed:null, seen:0,
+  clozeTense:null, res:null, justSafe:null, task:null
+};
+var view = document.getElementById("view");
+
+/* =========================================================================
+   STARTSEITE
+   ========================================================================= */
+function renderHome(){
+  var groups = ["Portionen", "Muster", "Alles", "Grammatik"];
+  var names = {
+    "Portionen":"in Häppchen lernen",
+    "Muster":"nach Bauart sortiert",
+    "Alles":"alles zusammen",
+    "Grammatik":"die Formen anwenden"
+  };
+  var h = "";
+
+  var st = streakNow(), tc = todayCount();
+  h += '<div class="streak' + (st ? "" : " cold") + '">'
+     + '<div><div class="lab">Serie</div><div class="big">'
+     + (st ? '<span class="flame">\u25CF</span> ' + st + (st === 1 ? " Tag" : " Tage")
+           : "noch keine")
+     + '</div></div>'
+     + '<div class="right"><div class="lab">Heute \u00b7 Bestwert</div>'
+     + '<div class="big">' + tc + ' \u00b7 ' + meta.best + '</div></div></div>';
+
+  var earned = TOPICS.filter(function(t){ return isMastered(t.id); });
+  h += '<div class="badges"><h3>Abzeichen \u00b7 ' + earned.length + ' von ' + TOPICS.length + '</h3>'
+     + '<div class="badgegrid">'
+     + TOPICS.map(function(t){
+         var on = isMastered(t.id);
+         return '<span class="badge' + (on?" on":"") + '">'
+              + '<span class="m">' + (on ? "\u2713" : "\u25CB") + '</span>'
+              + esc(t.name) + '</span>';
+       }).join("")
+     + '</div></div>';
+
+  groups.forEach(function(g){
+    h += '<section class="yeargroup"><div class="yearhead">'
+       + '<span class="tag">' + esc(g.toUpperCase()) + '</span>'
+       + '<span class="name">' + esc(names[g]) + '</span></div>';
+    TOPICS.filter(function(t){ return t.group === g; }).forEach(function(t){
+      var total = SETS[t.id].length;
+      var due = dueCount(t.id);
+      var c = boxCounts(t.id);
+      var safe = c[4];
+      var pct = total ? Math.round(safe/total*100) : 0;
+      var done = isMastered(t.id);
+      h += '<button class="topic" data-topic="' + t.id + '"' + (total?"":" disabled") + '>'
+         + '<span class="t-row"><span class="t-name">' + esc(t.name)
+         + (done ? ' <span class="seal">geschafft</span>' : "") + '</span>'
+         + '<span class="t-count">' + (due ? '<span class="t-due">' + due + ' fällig</span> \u00b7 ' : "")
+         + total + ' Verben</span></span>'
+         + '<span class="bar"><i class="' + (done?"full":"") + '" style="width:' + pct + '%"></i></span>'
+         + '<span class="t-prog"><span>' + safe + ' von ' + total + ' sicher</span>'
+         + '<span>' + pct + ' %</span></span>'
+         + '</button>';
+    });
+    h += '</section>';
+  });
+
+  h += '<div class="emptyhint">Ein Verb behält seinen Lernstand, egal über welches Set du '
+     + 'es übst. Der Fortschritt bleibt auf diesem Gerät.</div>';
+
+  h += '<button class="topic" id="allBtn" style="border-left-color:var(--petrol)">'
+     + '<span class="t-row"><span class="t-name">Alle Verben nachschlagen</span>'
+     + '<span class="t-count">' + V.length + ' Einträge</span></span></button>';
+  h += '<button class="topic" id="helpBtn" style="border-left-color:var(--petrol)">'
+     + '<span class="t-row"><span class="t-name">Anleitung</span>'
+     + '<span class="t-count">So funktioniert die Seite</span></span></button>';
+
+  view.innerHTML = h;
+  Array.prototype.forEach.call(view.querySelectorAll("[data-topic]"), function(b){
+    b.addEventListener("click", function(){ startSession(b.getAttribute("data-topic")); });
+  });
+  var ab = document.getElementById("allBtn");
+  if(ab) ab.onclick = function(){ S.view = "list"; render(); };
+  var hb = document.getElementById("helpBtn");
+  if(hb) hb.onclick = function(){ S.view = "help"; render(); };
+  updateFoot();
+}
+
+/* =========================================================================
+   SITZUNG
+   ========================================================================= */
+/* Fuer den Grammatik-Modus wird zu jeder Karte ein neuer Satz gewuerfelt. */
+function newTask(){
+  S.clozeTense = Math.random() < 0.5 ? "sp" : "pp";
+  var t = topicById(S.topicId);
+  S.task = (t && t.mode === "neg" && S.queue.length && S.queue[S.i])
+    ? buildNeg(S.queue[S.i], Math.random() < 0.55 ? "neg" : "q")
+    : null;
+}
+
+function buildQueue(){
+  var all = SETS[S.topicId];
+  var pool = S.onlyDue ? all.filter(function(v){ return isDue(rec(v.id)); }) : all;
+  S.queue = shuffle(pool.length ? pool : all);
+  S.i = 0; S.revealed = false; S.answered = null; S.res = null;
+  newTask();
+}
+function startSession(topicId){
+  var t = topicById(topicId);
+  S.topicId = topicId; S.view = "session"; S.seen = 0; S.onlyDue = true; S.justSafe = null;
+  S.mode = (t && t.mode) ? t.mode : (S.mode === "neg" ? "forms" : S.mode);
+  buildQueue(); render();
+}
+function current(){ return S.queue[S.i]; }
+
+function formRow(label, form, ipa, showSpeak){
+  return '<span class="lbl">' + label + '</span>'
+       + '<span class="frm">' + esc(form)
+       + (ipa ? '<span class="fipa">/' + esc(ipa) + '/</span>' : "")
+       + '</span>'
+       + (showSpeak ? speakBtn(form.replace(" / ", " ... "), form) : "<span></span>");
+}
+
+function answerForms(v){
+  return '<div class="answer"><div class="forms">'
+       + formRow("Grundform", v.base, v.ipaBase, true)
+       + formRow("simple past", v.past, v.ipaPast, true)
+       + formRow("past participle", v.pp, v.ipaPp, true)
+       + '</div>'
+       + (S.showDe ? '<div class="coll">' + esc(v.de) + '</div>' : "")
+       + '<div class="chain"><span class="cw">' + esc(chainText(v)) + '</span>'
+       + speakBtn(chainText(v), "alle drei Formen") + '</div>'
+       + '</div>';
+}
+
+function renderSession(){
+  if(!S.queue.length){
+    view.innerHTML = '<div class="done"><h2>Keine Karten</h2>'
+      + '<p>Dieses Set ist leer.</p><div class="controls">'
+      + '<button class="primary" id="home">Übersicht</button></div></div>';
+    document.getElementById("home").onclick = function(){ S.view="home"; render(); };
+    return;
+  }
+  if(S.i >= S.queue.length){ renderDone(); return; }
+
+  var v = current();
+  var r = rec(v.id);
+  var topic = TOPICS.filter(function(t){ return t.id === S.topicId; })[0];
+  var counts = boxCounts(S.topicId);
+
+  var rail = [1,2,3,4,5].map(function(n){
+    var cls = (n===r.box?"here":"") + (S.landed===n?" land":"");
+    return '<div class="slot ' + cls + '"><div class="n">FACH ' + n + '</div>'
+         + '<div class="c">' + counts[n-1] + '</div>'
+         + '<div class="iv">' + (n===1?"sofort":INTERVALS[n]+" d") + '</div></div>';
+  }).join("");
+
+  var toast = S.justSafe
+    ? '<div class="toast"><span>\u2713</span><span>Sicher gelernt: <span class="m">'
+      + esc(chainText(S.justSafe)) + '</span></span></div>'
+    : "";
+
+  var body = '<div class="eyebrow"><span>' + esc(topic.name) + '</span>'
+           + '<span>' + (S.i+1) + ' / ' + S.queue.length + '</span></div>';
+
+  if(S.mode === "card"){
+    body += '<h2 class="prompt">' + esc(v.base) + '</h2>'
+          + '<div class="pos">' + (S.showDe ? esc(v.de) : "Grundform") + '</div>'
+          + '<div class="phon">'
+          + (v.ipaBase ? '<span class="ipa">/' + esc(v.ipaBase) + '/</span>' : "")
+          + speakBtn(v.base) + '</div>';
+    if(S.revealed) body += answerForms(v);
+    body += '<div class="spacer"></div>';
+  }
+
+  if(S.mode === "forms"){
+    body += '<h2 class="prompt">' + esc(v.base) + '</h2>'
+          + '<div class="pos">' + (S.showDe ? esc(v.de) : "Grundform") + '</div>'
+          + '<div class="phon">'
+          + (v.ipaBase ? '<span class="ipa">/' + esc(v.ipaBase) + '/</span>' : "")
+          + speakBtn(v.base)
+          + '<span class="typebadge">' + TYPE_MARK[v.type] + '</span></div>'
+          + '<div class="twoin">'
+          + '<div class="fld' + (S.res && S.res[0] === "no" ? " no" : "") + '">'
+          + '<label for="in1">simple past</label>'
+          + '<input id="in1" class="' + (S.res ? S.res[0] : "") + '" autocomplete="off" '
+          + 'autocapitalize="off" spellcheck="false"' + (S.answered ? " disabled" : "") + '>'
+          + (S.answered && S.res[0] !== "ok"
+              ? '<div class="sol' + (S.res[0] === "no" ? " no" : "") + '">'
+                + (S.res[0] === "no" ? "\u2717 richtig: " : "richtig: ")
+                + '<b>' + esc(v.past) + '</b></div>' : "")
+          + '</div>'
+          + '<div class="fld' + (S.res && S.res[1] === "no" ? " no" : "") + '">'
+          + '<label for="in2">past participle</label>'
+          + '<input id="in2" class="' + (S.res ? S.res[1] : "") + '" autocomplete="off" '
+          + 'autocapitalize="off" spellcheck="false"' + (S.answered ? " disabled" : "") + '>'
+          + (S.answered && S.res[1] !== "ok"
+              ? '<div class="sol' + (S.res[1] === "no" ? " no" : "") + '">'
+                + (S.res[1] === "no" ? "\u2717 richtig: " : "richtig: ")
+                + '<b>' + esc(v.pp) + '</b></div>' : "")
+          + '</div></div>';
+    if(S.answered) body += answerForms(v);
+    body += '<div class="spacer"></div>';
+  }
+
+  if(S.mode === "neg"){
+    var tk = S.task || buildNeg(v, "neg");
+    var parts = tk.sentence.split("___");
+    body += '<div class="cloze">'
+          + esc(parts[0])
+          + (S.answered ? '<b>' + esc(tk.solution) + '</b>' : '<span class="gap">?</span>')
+          + esc(parts[1] || "")
+          + '</div>'
+          + '<div class="clue">'
+          + (tk.kind === "neg" ? "verneinen" : "Frage bilden")
+          + ' \u00b7 simple past'
+          + (S.showDe ? ' \u00b7 ' + esc(v.de) : "") + '</div>'
+          + '<div class="typebox"><input id="in1" placeholder="'
+          + (tk.kind === "neg" ? "verneinte Form" : "Frageanfang")
+          + '" autocomplete="off" autocapitalize="off" spellcheck="false"'
+          + (S.answered ? " disabled" : "") + '>'
+          + '<div class="verdict" id="verdict"></div></div>';
+    if(S.answered) body += answerForms(v);
+    body += '<div class="spacer"></div>';
+  }
+
+  if(S.mode === "cloze"){
+    var isSp = S.clozeTense === "sp";
+    var sent = isSp ? v.sSp : v.sPp;
+    var target = isSp ? v.past : v.pp;
+    body += '<div class="cloze">'
+          + (S.answered ? markGap(sent, target)
+                        : esc(sent).replace("___", '<span class="gap">?</span>'))
+          + '</div>'
+          + '<div class="clue">gesucht: <span>' + esc(v.base) + '</span> \u00b7 '
+          + (isSp ? "simple past" : "past participle")
+          + (S.showDe ? ' \u00b7 ' + esc(v.de) : "") + '</div>'
+          + '<div class="typebox"><input id="in1" placeholder="fehlende Form" autocomplete="off" '
+          + 'autocapitalize="off" spellcheck="false"' + (S.answered ? " disabled" : "") + '>'
+          + '<div class="verdict" id="verdict"></div></div>';
+    if(S.answered) body += answerForms(v);
+    body += '<div class="spacer"></div>';
+  }
+
+  /* Wer getippt und danebengelegen hat, kann sich nicht selbst "Gewusst"
+     geben. Bei einem blossen Tippfehler ("Fast") bleibt der Knopf da.
+     In der Karteikarte gibt es keine Eingabe, dort bleibt alles offen. */
+  var wrong = S.answered && S.res && S.res.indexOf("no") !== -1;
+  var controls = (S.revealed || S.answered)
+    ? '<button class="rate again" data-rate="0">Nochmal<span>1</span></button>'
+    + '<button class="rate hard"  data-rate="1">Unsicher<span>2</span></button>'
+    + (wrong ? ''
+             : '<button class="rate good"  data-rate="2">Gewusst<span>3</span></button>')
+    : (S.mode === "card"
+        ? '<button class="primary" id="flip">Umdrehen <span style="opacity:.6">(Leertaste)</span></button>'
+        : '<button class="primary" id="submit">Prüfen (Enter)</button>');
+
+  view.innerHTML =
+      '<div class="sessionbar">'
+    +   '<button class="linkbtn" id="back">\u2190 Übersicht</button>'
+    +   '<div class="switches">'
+    +     (topic.mode ? '' :
+          '<button class="switch" data-mode="forms" aria-pressed="' + (S.mode==="forms") + '">Formen tippen</button>'
+    +     '<button class="switch" data-mode="card"  aria-pressed="' + (S.mode==="card")  + '">Karteikarte</button>'
+    +     '<button class="switch" data-mode="cloze" aria-pressed="' + (S.mode==="cloze") + '">Lückensatz</button>')
+    +     '<button class="switch" id="deBtn" aria-pressed="' + S.showDe + '">Deutsch</button>'
+    +   '</div>'
+    + '</div>'
+    + toast
+    + '<div class="rail">' + rail + '</div>'
+    + '<div class="stage"><div class="vcard deal">' + body + '</div></div>'
+    + '<div class="controls">' + controls + '</div>';
+
+  bindSession();
+  var inp = document.getElementById("in1");
+  if(inp && !S.answered) inp.focus();
+  if(S.res && S.res.indexOf("no") !== -1){
+    var card = view.querySelector(".vcard");
+    if(card){
+      card.classList.add("shake");
+      setTimeout(function(){ card.classList.remove("shake"); }, 320);
+    }
+  }
+  updateFoot();
+}
+
+function bindSession(){
+  document.getElementById("back").onclick = function(){ S.view="home"; render(); };
+
+  Array.prototype.forEach.call(view.querySelectorAll("[data-mode]"), function(b){
+    b.onclick = function(){
+      S.mode = b.getAttribute("data-mode");
+      S.revealed = false; S.answered = null; S.res = null;
+      newTask();
+      render();
+    };
+  });
+  var de = document.getElementById("deBtn");
+  if(de) de.onclick = function(){ S.showDe = !S.showDe; render(); };
+
+  var flip = document.getElementById("flip");
+  if(flip) flip.onclick = function(){ S.revealed = true; render(); };
+
+  var sub = document.getElementById("submit");
+  if(sub) sub.onclick = submitTyped;
+
+  Array.prototype.forEach.call(view.querySelectorAll("[data-rate]"), function(b){
+    b.onclick = function(){ rate(Number(b.getAttribute("data-rate"))); };
+  });
+  Array.prototype.forEach.call(view.querySelectorAll("[data-say]"), function(b){
+    b.onclick = function(ev){ ev.stopPropagation(); Speech.say(b.getAttribute("data-say"), b); };
+  });
+
+  var i1 = document.getElementById("in1"), i2 = document.getElementById("in2");
+  if(i1 && i2) i1.onkeydown = function(e){
+    if(e.key === "Enter"){ e.preventDefault(); i2.focus(); }
+  };
+}
+
+function submitTyped(){
+  var v = current();
+  if(S.mode === "forms"){
+    var a = document.getElementById("in1"), b = document.getElementById("in2");
+    if(!a || !b) return;
+    S.res = [checkForm(a.value, v.past), checkForm(b.value, v.pp)];
+    S.answered = true;
+    var va = a.value, vb = b.value;
+    render();
+    var a2 = document.getElementById("in1"), b2 = document.getElementById("in2");
+    if(a2) a2.value = va;
+    if(b2) b2.value = vb;
+    return;
+  }
+  var inp = document.getElementById("in1");
+  if(!inp) return;
+
+  if(S.mode === "neg"){
+    var tk = S.task;
+    var r0 = checkNeg(inp.value, tk.answers);
+    S.answered = true; S.res = [r0];
+    var typed = inp.value;
+    render();
+    var again = document.getElementById("in1");
+    if(again) again.value = typed;
+    var vd = document.getElementById("verdict");
+    if(vd){
+      vd.className = "verdict " + r0;
+      vd.innerHTML = r0 === "ok"
+        ? '<span class="mark">\u2713</span>Richtig.'
+        : r0 === "near"
+          ? '<span class="mark">\u2248</span>Fast \u2013 Schreibweise prüfen.'
+            + '<span class="sol">' + esc(tk.solution) + '</span>'
+          : '<span class="mark">\u2717</span>Falsch.'
+            + (typed.trim() ? '<span class="yours">' + esc(typed.trim()) + '</span>' : "")
+            + '<span class="sol">' + esc(tk.solution) + '</span>';
+    }
+    return;
+  }
+
+  var target = S.clozeTense === "sp" ? v.past : v.pp;
+  var given = inp.value;
+  var res = checkForm(inp.value, target);
+  S.answered = true; S.res = [res];
+  render();
+  var el = document.getElementById("verdict");
+  if(el){
+    el.className = "verdict " + res;
+    el.innerHTML = res === "ok"
+      ? '<span class="mark">\u2713</span>Richtig.'
+      : res === "near"
+        ? '<span class="mark">\u2248</span>Fast \u2013 Schreibweise prüfen.'
+          + '<span class="sol">' + esc(target) + '</span>'
+        : '<span class="mark">\u2717</span>Falsch.'
+          + (given.trim() ? '<span class="yours">' + esc(given.trim()) + '</span>' : "")
+          + '<span class="sol">' + esc(target) + '</span>';
+  }
+}
+
+function rate(quality){
+  var v = current();
+  var r = rec(v.id);
+  var before = r.box;
+  if(quality === 0)      r.box = 1;
+  else if(quality === 1) r.box = Math.max(1, r.box - 1);
+  else                   r.box = Math.min(5, r.box + 1);
+  r.due = Date.now() + INTERVALS[r.box] * DAY;
+  save();
+  touchDay();
+  S.justSafe = (r.box === 5 && before < 5) ? v : null;
+  S.landed = r.box; S.seen++;
+  S.i++; S.revealed = false; S.answered = null; S.res = null;
+  newTask();
+  render();
+  setTimeout(function(){ S.landed = null; }, 500);
+}
+
+function renderDone(){
+  var c = boxCounts(S.topicId);
+  var total = SETS[S.topicId].length;
+  view.innerHTML = '<div class="done"><h2>Durchgang beendet</h2>'
+    + '<p>' + S.seen + ' Verben bearbeitet \u00b7 ' + c[4] + ' von ' + total + ' in Fach 5</p>'
+    + '<div class="controls"><button class="primary" id="again">Weiter üben</button>'
+    + '<button id="home">Übersicht</button></div></div>';
+  document.getElementById("again").onclick = function(){
+    S.onlyDue = false; buildQueue(); S.seen = 0; render();
+  };
+  document.getElementById("home").onclick = function(){ S.view="home"; render(); };
+  updateFoot();
+}
+
+/* =========================================================================
+   ANLEITUNG
+   ========================================================================= */
+function renderHelp(){
+  var d = [];
+  d.push('<h2>Wofür ist diese Seite?</h2>');
+  d.push('<p class="lead">Zum Üben der unregelmäßigen Verben: Grundform, simple past und past participle. '
+       + 'Diese Formen brauchst du in jedem Schuljahr wieder \u2013 wer sie einmal sicher kann, spart sich viel Ärger.</p>');
+  d.push('<p>Es gibt keine Anmeldung und kein Passwort. Öffne einfach den Link.</p>');
+
+  d.push('<h2>Die Sets</h2>');
+  d.push('<p>Es gibt zwei Wege durch dieselben Verben:</p>');
+  d.push('<ul>');
+  d.push('<li><b>Portionen</b> \u2013 nach Wichtigkeit sortiert. Fang mit den 20 wichtigsten an.</li>');
+  d.push('<li><b>Muster</b> \u2013 nach Bauart sortiert. Hier siehst du, dass viele Verben demselben Schema folgen.</li>');
+  d.push('</ul>');
+  d.push('<table><thead><tr><th>Zeichen</th><th>Muster</th><th>Beispiel</th></tr></thead><tbody>'
+       + '<tr><td>' + TYPE_MARK["same"] + '</td><td>alle drei Formen gleich</td><td>cut \u2013 cut \u2013 cut</td></tr>'
+       + '<tr><td>' + TYPE_MARK["sp-pp"] + '</td><td>simple past = past participle</td><td>buy \u2013 bought \u2013 bought</td></tr>'
+       + '<tr><td>' + TYPE_MARK["base-pp"] + '</td><td>Grundform = past participle</td><td>come \u2013 came \u2013 come</td></tr>'
+       + '<tr><td>' + TYPE_MARK["all"] + '</td><td>alle drei verschieden</td><td>go \u2013 went \u2013 gone</td></tr>'
+       + '</tbody></table>');
+  d.push('<p>Ein Verb hat immer nur <b>einen</b> Lernstand. Übst du <code>go</code> über die Portion, '
+       + 'zählt das auch im Muster-Set.</p>');
+
+  d.push('<h2>Die drei Übungsarten</h2>');
+  d.push('<h3>Formen tippen</h3>');
+  d.push('<p>Du siehst die Grundform und schreibst simple past und past participle. Das ist die '
+       + 'wichtigste Übung \u2013 genau das wird in der Klassenarbeit verlangt. Mit <span class="kbd">Enter</span> '
+       + 'springst du vom ersten ins zweite Feld, mit <span class="kbd">Enter</span> im zweiten Feld prüfst du.</p>');
+  d.push('<h3>Karteikarte</h3>');
+  d.push('<p>Grundform ansehen, alle drei Formen im Kopf aufsagen, umdrehen, ehrlich bewerten.</p>');
+  d.push('<h3>Lückensatz</h3>');
+  d.push('<p>Ein englischer Satz mit einer Lücke. Darunter steht, welche Form gesucht ist. '
+       + 'Hier merkst du, <b>wann</b> man welche Form benutzt \u2013 nicht nur, wie sie heißt.</p>');
+  d.push('<p>Mit dem Schalter <b>Deutsch</b> blendest du die deutsche Bedeutung aus, wenn du sie nicht mehr brauchst.</p>');
+
+  d.push('<h2>Die fünf Fächer</h2>');
+  d.push('<p>Jedes Verb steckt in einem Fach. Richtig beantwortet rückt es ein Fach weiter, falsch fällt es zurück in Fach 1.</p>');
+  d.push('<table><thead><tr><th>Fach</th><th>Du siehst das Verb wieder</th></tr></thead><tbody>'
+       + '<tr><td>1</td><td>sofort im selben Durchgang</td></tr>'
+       + '<tr><td>2</td><td>nach 1 Tag</td></tr>'
+       + '<tr><td>3</td><td>nach 2 Tagen</td></tr>'
+       + '<tr><td>4</td><td>nach 4 Tagen</td></tr>'
+       + '<tr><td>5</td><td>nach 8 Tagen</td></tr>'
+       + '</tbody></table>');
+  d.push('<p>Lieber <b>jeden Tag zehn Minuten</b> als einmal pro Woche eine Stunde.</p>');
+  d.push('<p>Hast du getippt und lagst daneben, steht <i>Gewusst</i> nicht zur Auswahl \u2013 das Verb '
+       + 'kommt wieder. Bei einem reinen Tippfehler bleibt der Knopf da. In der Karteikarte, wo du nichts '
+       + 'eintippst, entscheidest du weiterhin selbst \u2013 sei dabei ehrlich zu dir.</p>');
+
+  d.push('<h2>Verneinung und Fragen im simple past</h2>');
+  d.push('<p>Das letzte Set auf der Übersicht übt etwas anderes als die übrigen: nicht die Formen '
+       + 'selbst, sondern ihren Gebrauch im verneinten Satz und in der Frage.</p>');
+  d.push('<p>Du siehst einen Satz mit einer Lücke. In der Klammer steht, was hineingehört:</p>');
+  d.push('<table><thead><tr><th>Aufgabe</th><th>Du schreibst</th></tr></thead><tbody>'
+       + '<tr><td>Max ___ (not / play) football yesterday.</td><td>didn\'t play</td></tr>'
+       + '<tr><td>___ (Max / play) football yesterday?</td><td>Did Max play</td></tr>'
+       + '<tr><td>They ___ (not / be) at home yesterday.</td><td>weren\'t</td></tr>'
+       + '<tr><td>___ (Lisa / be) at home yesterday?</td><td>Was Lisa</td></tr>'
+       + '</tbody></table>');
+  d.push('<h3>Die eine Regel, um die es geht</h3>');
+  d.push('<p>Nach <b>didn\'t</b> und nach <b>did</b> steht die <b>Grundform</b> \u2013 niemals das simple past. '
+       + 'Es heißt <i>didn\'t go</i>, nicht <i>didn\'t went</i>. Die Vergangenheit steckt schon im <i>did</i>, '
+       + 'sie muss nicht zweimal da sein.</p>');
+  d.push('<p>Nur <b>be</b> macht es anders: hier gibt es kein <i>did</i>. Du verneinst mit '
+       + '<i>wasn\'t</i> oder <i>weren\'t</i> und fragst mit <i>Was …?</i> oder <i>Were …?</i> \u2013 '
+       + 'je nachdem, ob das Subjekt Einzahl oder Mehrzahl ist.</p>');
+  d.push('<p><i>didn\'t play</i> und <i>did not play</i> sind beide richtig. Vergisst du nur den Apostroph, '
+       + 'zählt das als Flüchtigkeitsfehler. Ein falsches Hilfsverb dagegen \u2013 <i>did</i> statt <i>didn\'t</i>, '
+       + '<i>was</i> statt <i>were</i> \u2013 zählt als Fehler, denn das ist kein Vertippen.</p>');
+  d.push('<p>Die Sätze werden jedes Mal neu zusammengesetzt: anderes Subjekt, andere Zeitangabe. '
+       + 'Dasselbe Verb kommt also nie im gleichen Satz zurück.</p>');
+  d.push('<p>Dieses Set hat einen <b>eigenen Lernstand</b>. Ein Verb, das du beim Formentraining schon '
+       + 'in Fach 5 hast, fängt hier wieder bei Fach 1 an \u2013 es ist ja auch eine andere Fähigkeit.</p>');
+
+  d.push('<h2>Fortschritt, Abzeichen und Serie</h2>');
+
+  d.push('<h3>Der Balken unter jedem Set</h3>');
+  d.push('<p>Unter jedem Set steht ein Balken und daneben eine Zahl, zum Beispiel '
+       + '<i>14 von 42 sicher \u00b7 33 %</i>. Gezählt wird nur, was in <b>Fach 5</b> liegt \u2013 also '
+       + 'Verben, die du mehrfach hintereinander gewusst hast. Ein Verb, das du gerade zum ersten Mal '
+       + 'richtig hattest, zählt hier noch nicht mit.</p>');
+  d.push('<p>Der Balken bewegt sich deshalb langsam. Das ist Absicht: Er soll zeigen, was du '
+       + 'in zwei Wochen noch kannst, nicht was du heute einmal getroffen hast. Ist ein Set komplett, '
+       + 'wird der Balken grün.</p>');
+  d.push('<p>Erreicht ein Verb Fach 5, erscheint über der nächsten Karte kurz eine Bestätigung '
+       + 'mit allen drei Formen.</p>');
+
+  d.push('<h3>Die Abzeichen</h3>');
+  d.push('<p>Ganz oben auf der Übersicht siehst du neun Felder \u2013 eins für jedes Set. '
+       + 'Ein Häkchen bekommst du, wenn <b>alle</b> Verben dieses Sets in Fach 5 liegen. '
+       + 'Am Set selbst steht dann zusätzlich <i>geschafft</i>.</p>');
+  d.push('<p>Die Sets überschneiden sich. Wer die Portionen 1 bis 3 abgearbeitet hat, hat damit '
+       + 'automatisch auch die Muster-Abzeichen und am Ende das Abzeichen für alle Verben. Neun '
+       + 'Abzeichen heißt also nicht neunmal so viel Arbeit.</p>');
+  d.push('<p>Ein Abzeichen zeigt deinen Stand von <b>jetzt</b>. Rutscht ein Verb später wieder '
+       + 'zurück, weil du es vergessen hast, verschwindet das Häkchen \u2013 bis du das Verb wieder '
+       + 'auf Fach 5 gebracht hast. Am schnellsten zu holen: das Set mit den acht Verben, bei denen '
+       + 'alle drei Formen gleich sind.</p>');
+
+  d.push('<h3>Die Serie</h3>');
+  d.push('<p>Die Zahl links oben zählt die Tage <b>hintereinander</b>, an denen du geübt hast. '
+       + 'Eine einzige bearbeitete Karte reicht, um den Tag zu sichern \u2013 du musst nicht das ganze '
+       + 'Set schaffen. Rechts daneben stehen die Karten von heute und dein Bestwert.</p>');
+  d.push('<div class="warnbox"><b>Ein ausgelassener Tag setzt die Serie auf 1 zurück.</b> '
+       + 'Es gibt keinen Freischuss und keine Pause. Dein Bestwert bleibt aber für immer stehen, '
+       + 'und der Lernstand deiner Verben ist von der Serie völlig unabhängig \u2013 verloren geht '
+       + 'nur die Zahl, nicht das Gelernte.</div>');
+  d.push('<p>Ein neuer Tag beginnt um Mitternacht. Wer gestern Abend geübt hat, hat also den ganzen '
+       + 'heutigen Tag Zeit, die Serie fortzusetzen.</p>');
+  d.push('<p class="lead" style="font-size:13.5px">Nimm die Serie nicht zu ernst. Sie ist ein Anschubser, '
+       + 'keine Note. Wenn sie irgendwann reißt \u2013 im Urlaub, bei Krankheit \u2013 dann fang wieder '
+       + 'bei 1 an. Zehn Minuten an einem Dienstag im November sind mehr wert als jede Zahl.</p>');
+
+  d.push('<h3>Wo das alles gespeichert ist</h3>');
+  d.push('<p>Balken, Abzeichen und Serie liegen im Browser des Geräts, an dem du übst. Handy und '
+       + 'Computer zählen getrennt und wissen nichts voneinander. Über <b>Fortschritt sichern</b> ganz '
+       + 'unten bekommst du eine Datei, die beides enthält \u2013 Lernstand und Serie \u2013 und die du '
+       + 'auf einem anderen Gerät wieder laden kannst.</p>');
+
+  d.push('<h2>Aussprache</h2>');
+  d.push('<p>Neben jeder Form steht ein Lautsprecher-Symbol. Ganz unten auf der Karte gibt es zusätzlich '
+       + 'einen Knopf für alle drei Formen am Stück: <i>go, went, gone</i>. Sprich sie laut mit \u2013 '
+       + 'der Rhythmus hilft beim Behalten mehr als jedes Abschreiben. Am Computer geht es auch mit '
+       + '<span class="kbd">S</span>.</p>');
+  d.push('<p>Die Stimme kommt von deinem Gerät. Die Lautschrift daneben ist die verlässlichere Angabe.</p>');
+  d.push('<p><button class="switch" id="sptest">Aussprache testen</button> '
+       + '<span id="spout" style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)"></span></p>');
+  d.push('<p class="lead" style="font-size:13.5px">Hörst du nichts, prüfe am iPhone den Stummschalter an der '
+       + 'linken Gehäusekante. Bleibt es still, gib die Zeile neben dem Knopf an deine Lehrkraft weiter.</p>');
+
+  d.push('<h2>Tastatur am Computer</h2>');
+  d.push('<table><tbody>'
+       + '<tr><td><span class="kbd">Enter</span></td><td>nächstes Feld / prüfen</td></tr>'
+       + '<tr><td><span class="kbd">Leertaste</span></td><td>Karte umdrehen</td></tr>'
+       + '<tr><td><span class="kbd">1</span> <span class="kbd">2</span> <span class="kbd">3</span></td><td>Nochmal / Unsicher / Gewusst</td></tr>'
+       + '<tr><td><span class="kbd">S</span></td><td>alle drei Formen anhören</td></tr>'
+       + '</tbody></table>');
+
+  d.push('<h2>Dein Lernstand</h2>');
+  d.push('<div class="warnbox"><b>Wichtig:</b> Dein Fortschritt wird nur in dem Browser gespeichert, in dem du übst. '
+       + 'Er wandert nicht zwischen Handy und Computer und verschwindet, wenn du die Browserdaten löschst.</div>');
+  d.push('<p>Ganz unten gibt es <b>Fortschritt sichern</b> und <b>Fortschritt laden</b>. Die Datei enthält keine Verben, nur Zahlen.</p>');
+
+  d.push('<h2>Schreibweisen mit zwei Möglichkeiten</h2>');
+  d.push('<p>Bei <code>burn</code>, <code>learn</code>, <code>smell</code>, <code>spell</code> und <code>spill</code> sind beide '
+       + 'Formen richtig: <i>burnt</i> und <i>burned</i>. Die Seite akzeptiert beide.</p>');
+  d.push('<p>Bei <code>be</code> im simple past kannst du <i>was</i> schreiben, <i>were</i>, oder beides '
+       + 'zusammen \u2013 <i>was / were</i>, <i>was, were</i>, <i>was or were</i>. Alles wird als richtig gewertet.</p>');
+
+  d.push('<div class="teacher">');
+  d.push('<h2>Für Kolleginnen und Kollegen</h2>');
+  d.push('<p>Die Seite läuft ohne Server, ohne Konten und ohne Datenbank. Es werden keine personenbezogenen '
+       + 'Daten erhoben oder übertragen; der Lernstand bleibt im Browser des Geräts.</p>');
+  d.push('<p>Die Verbliste folgt der eingeführten Übersicht samt Lautschrift und Typ-Markierung. Die Einteilung in '
+       + 'Portionen ist eine Setzung nach Gebrauchshäufigkeit, kein Lehrwerksbezug \u2013 sie lässt sich im '
+       + 'Datenblock der Datei in einer Minute ändern (Feld 7 je Verb).</p>');
+  d.push('<p>Die Beispielsätze sind eigenständig formuliert und bewusst kurz gehalten. In der Listenansicht gibt es '
+       + 'einen CSV-Export der sichtbaren Zeilen für Arbeitsblätter und Tests.</p>');
+  d.push('</div>');
+
+  view.innerHTML =
+      '<div class="sessionbar">'
+    +   '<button class="linkbtn" id="hback">\u2190 Übersicht</button>'
+    +   '<div class="switches"><button class="switch" id="hprint">Drucken</button></div>'
+    + '</div>'
+    + '<div class="doc">' + d.join("") + '</div>';
+
+  document.getElementById("hback").onclick = function(){ S.view = "home"; render(); };
+  document.getElementById("hprint").onclick = function(){ try{ window.print(); }catch(e){} };
+
+  var st = document.getElementById("sptest"), out = document.getElementById("spout");
+  if(st && out){
+    st.onclick = function(){
+      Speech.say("go, went, gone");
+      out.textContent = Speech.status();
+      setTimeout(function(){ out.textContent = Speech.status(); }, 1200);
+    };
+    out.textContent = Speech.status();
+  }
+  updateFoot();
+}
+
+/* =========================================================================
+   LISTENANSICHT
+   ========================================================================= */
+var LIST_PREFS = {ipa:true};
+var LIST_ORDER = ["same","sp-pp","base-pp","all"];
+
+function renderList(){
+  var h = "";
+  LIST_ORDER.forEach(function(ty){
+    var entries = V.filter(function(v){ return v.type === ty; });
+    if(!entries.length) return;
+    h += '<details class="lsec" data-sec="' + ty + '"><summary>'
+       + '<span><span class="lyear">' + TYPE_MARK[ty] + '</span>' + esc(TYPE_NAME[ty]) + '</span>'
+       + '<span class="lnum">' + entries.length + '</span></summary><div class="lbody">'
+       + '<div class="lhead"><span>Grundform</span><span>simple past</span>'
+       + '<span>past participle</span><span>Deutsch</span></div>';
+    entries.forEach(function(e){
+      var hay = (e.base + " " + e.past + " " + e.pp + " " + e.de).toLowerCase();
+      h += '<div class="vrow3" data-s="' + esc(hay) + '">'
+         + '<span class="c1">' + esc(e.base)
+         + (e.ipaBase ? '<span class="vipa">/' + esc(e.ipaBase) + '/</span>' : "") + '</span>'
+         + '<span class="c2">' + esc(e.past)
+         + (e.ipaPast ? '<span class="vipa">/' + esc(e.ipaPast) + '/</span>' : "") + '</span>'
+         + '<span class="c3">' + esc(e.pp)
+         + (e.ipaPp ? '<span class="vipa">/' + esc(e.ipaPp) + '/</span>' : "") + '</span>'
+         + '<span class="vde">' + esc(e.de) + '</span>'
+         + '</div>';
+    });
+    h += '</div></details>';
+  });
+
+  view.innerHTML =
+      '<div class="sessionbar">'
+    +   '<button class="linkbtn" id="lback">\u2190 Übersicht</button>'
+    +   '<div class="switches">'
+    +     '<button class="switch" id="lipa" aria-pressed="' + LIST_PREFS.ipa + '">Lautschrift</button>'
+    +     '<button class="switch" id="lopen">Alle aufklappen</button>'
+    +     '<button class="switch" id="lprint">Drucken</button>'
+    +     '<button class="switch" id="lcsv">CSV</button>'
+    +   '</div>'
+    + '</div>'
+    + '<div class="listctl"><input type="search" id="lq" '
+    +   'placeholder="Suchen \u2013 Grundform, Form oder Bedeutung" '
+    +   'autocomplete="off" autocapitalize="off" spellcheck="false"></div>'
+    + '<div class="listcount" id="lcount">' + V.length + ' Verben in 4 Mustern \u00b7 Muster antippen zum Öffnen</div>'
+    + '<div class="vlist" id="vlist">' + h + '</div>'
+    + '<div class="noresult" id="lnone" hidden>Kein Treffer.</div>';
+
+  var box = document.getElementById("vlist");
+  applyListPrefs(box);
+
+  document.getElementById("lback").onclick = function(){ S.view = "home"; render(); };
+  document.getElementById("lipa").onclick = function(){
+    LIST_PREFS.ipa = !LIST_PREFS.ipa;
+    this.setAttribute("aria-pressed", LIST_PREFS.ipa);
+    applyListPrefs(box);
+  };
+  document.getElementById("lopen").onclick = function(){
+    var secs = box.querySelectorAll("details.lsec"), anyClosed = false, i;
+    for(i=0;i<secs.length;i++){ if(!secs[i].open) anyClosed = true; }
+    for(i=0;i<secs.length;i++){ secs[i].open = anyClosed; }
+    this.textContent = anyClosed ? "Alle zuklappen" : "Alle aufklappen";
+  };
+  document.getElementById("lprint").onclick = function(){ try{ window.print(); }catch(e){} };
+  document.getElementById("lcsv").onclick = function(){ exportCsv(box); };
+
+  var q = document.getElementById("lq");
+  q.oninput = function(){ filterList(box, q.value); };
+  updateFoot();
+}
+
+function applyListPrefs(box){
+  box.className = "vlist" + (LIST_PREFS.ipa ? "" : " hide-ipa");
+}
+
+function filterList(box, raw){
+  var term = String(raw || "").toLowerCase().trim();
+  var secs = box.querySelectorAll("details.lsec"), hits = 0, i, j;
+  for(i=0;i<secs.length;i++){
+    var rows = secs[i].querySelectorAll(".vrow3"), shown = 0;
+    for(j=0;j<rows.length;j++){
+      var match = !term || rows[j].getAttribute("data-s").indexOf(term) !== -1;
+      rows[j].style.display = match ? "" : "none";
+      if(match) shown++;
+    }
+    hits += shown;
+    secs[i].className = "lsec" + (shown ? "" : " off");
+    if(term) secs[i].open = shown > 0;
+  }
+  document.getElementById("lnone").hidden = !(term && hits === 0);
+  document.getElementById("lcount").textContent = term
+    ? hits + ' Treffer für \u201e' + raw.trim() + '\u201c'
+    : V.length + " Verben in 4 Mustern \u00b7 Muster antippen zum Öffnen";
+}
+
+function exportCsv(box){
+  var rows = [["Muster","Grundform","simple past","past participle","Deutsch",
+               "Lautschrift Grundform","Beispiel simple past","Beispiel present perfect"].join("\t")];
+  var n = 0;
+  LIST_ORDER.forEach(function(ty){
+    var sec = box.querySelector('details[data-sec="' + ty + '"]');
+    if(!sec || sec.className.indexOf("off") !== -1) return;
+    var domRows = sec.querySelectorAll(".vrow3");
+    var entries = V.filter(function(v){ return v.type === ty; });
+    entries.forEach(function(e, j){
+      if(domRows[j] && domRows[j].style.display === "none") return;
+      var cell = function(x){ return String(x == null ? "" : x).replace(/[\t\r\n]+/g, " "); };
+      rows.push([TYPE_NAME[ty], e.base, e.past, e.pp, e.de, e.ipaBase,
+                 e.sSp, e.sPp].map(cell).join("\t"));
+      n++;
+    });
+  });
+  if(!n){ alert("Nichts zu exportieren \u2013 die Suche liefert keine Treffer."); return; }
+  try{
+    var blob = new Blob(["\ufeff" + rows.join("\n")], {type:"text/csv;charset=utf-8"});
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "irregular-verbs.csv";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }catch(err){ alert("Der Export hat nicht funktioniert: " + err.message); }
+}
+
+/* =========================================================================
+   TASTATUR
+   ========================================================================= */
+document.addEventListener("keydown", function(e){
+  if(S.view !== "session") return;
+  var el = document.activeElement;
+  var typing = el && (el.id === "in1" || el.id === "in2");
+  if(typing && e.key === "Enter"){
+    if(el.id === "in1" && document.getElementById("in2")) return;   // wird lokal behandelt
+    e.preventDefault(); submitTyped(); return;
+  }
+  if(typing && !S.answered) return;
+  if((e.key === "s" || e.key === "S") && current()){
+    e.preventDefault(); Speech.say(chainText(current())); return;
+  }
+  if(e.key === " " && S.mode === "card" && !S.revealed){
+    e.preventDefault(); S.revealed = true; render(); return;
+  }
+  if((S.revealed || S.answered) && ["1","2","3"].indexOf(e.key) !== -1){
+    var blocked = S.answered && S.res && S.res.indexOf("no") !== -1;
+    if(e.key === "3" && blocked){ e.preventDefault(); return; }
+    e.preventDefault(); rate(Number(e.key) - 1);
+  }
+});
+
+/* =========================================================================
+   EXPORT / IMPORT
+   ========================================================================= */
+document.getElementById("exportBtn").onclick = function(){
+  var blob = new Blob([JSON.stringify({progress:progress, meta:meta},null,1)],
+                      {type:"application/json"});
+  var a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "irregular-verbs-fortschritt.json";
+  a.click();
+  URL.revokeObjectURL(a.href);
+};
+document.getElementById("importBtn").onclick = function(){
+  document.getElementById("importFile").click();
+};
+document.getElementById("importFile").onchange = function(ev){
+  var f = ev.target.files[0]; if(!f) return;
+  var fr = new FileReader();
+  fr.onload = function(){
+    try{
+      var d = JSON.parse(fr.result);
+      if(d && d.progress){                       /* neues Format */
+        progress = d.progress;
+        if(d.meta) meta = d.meta;
+      }else{                                     /* aeltere Sicherung */
+        progress = d;
+      }
+      save(); saveMeta(); render();
+    }
+    catch(e){ alert("Die Datei konnte nicht gelesen werden."); }
+  };
+  fr.readAsText(f);
+};
+
+function updateFoot(){
+  var done = 0;
+  V.forEach(function(v){ if(rec(v.id).box >= 3) done++; });
+  document.getElementById("footstat").textContent = done + "/" + V.length + " SICHER";
+}
+
+/* =========================================================================
+   START
+   ========================================================================= */
+function render(){
+  if(S.view === "home") return renderHome();
+  if(S.view === "list") return renderList();
+  if(S.view === "help") return renderHelp();
+  return renderSession();
+}
+function showWarn(html){ document.getElementById("warn").innerHTML = html; }
+
+if(!Store.persistent){
+  showWarn('<div class="warn"><b>Vorschau-Modus:</b> Dieser Browserkontext erlaubt keinen '
+    + 'dauerhaften Speicher. Der Fortschritt gilt nur fuer diese Sitzung. Lade die Datei '
+    + 'herunter und oeffne sie per Doppelklick \u2013 dort bleibt der Lernstand erhalten.</div>');
+}
+
+try{ render(); }
+catch(err){
+  showWarn('<div class="warn"><b>Beim Aufbau der Seite ist ein Fehler aufgetreten.</b><br>'
+    + '<span style="font-family:var(--mono);font-size:11px">' + err.message + '</span></div>');
+}
+</script>
+
+</html>

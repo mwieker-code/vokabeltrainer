@@ -1,0 +1,9 @@
+const fs=require('fs'),{JSDOM}=require('jsdom'),assert=require('node:assert/strict');
+const dir=__dirname+'/../year6/grammar/simple-past/';
+const dom=new JSDOM(fs.readFileSync(dir+'index.html','utf8'),{runScripts:'outside-only',url:'http://localhost/year6/grammar/simple-past/'}),w=dom.window,d=w.document;
+for(const f of ['data.js','app.js'])w.eval(fs.readFileSync(dir+f,'utf8'));
+let count=0;const ok=(x)=>{assert.ok(x);count++};
+const all=w.GRAMMAR_DATA.flatMap(g=>g.items);ok(new Set(all.map(q=>q.id)).size===all.length);
+for(const g of w.GRAMMAR_DATA){d.querySelector('[data-group="'+g.id+'"]').click();d.querySelector('#start').click();let n=0;while(d.querySelector('#form')){const q=all.find(q=>q.prompt===d.querySelector('.task').textContent);ok(q);d.querySelector('#answer').value=q.answers[0].replace("didn't",'did not').replace("wasn't",'was not').replace("weren't",'were not');d.querySelector('#form').dispatchEvent(new w.Event('submit',{cancelable:true}));ok(d.querySelector('#feedback strong').textContent==='Correct!');d.querySelector('#next').click();ok(++n<=6);}ok(d.querySelector('h2').textContent==='6 / 6 correct first time');d.querySelector('#home').click();}
+d.querySelector('#mixed').click();let n=0;while(d.querySelector('#reveal')){d.querySelector('#reveal').click();d.querySelector('#reveal').click();d.querySelector('#next').click();ok(++n<=12);}ok(n===12);ok(d.querySelector('h2').textContent==='0 / 6 correct first time');ok(w.localStorage.getItem('vt6:grammar:simple-past:v1'));
+console.log(count+' grammar checks passed; '+all.length+' original tasks.');

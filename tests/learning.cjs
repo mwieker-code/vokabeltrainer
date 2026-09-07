@@ -13,6 +13,7 @@ for(const folder of ['year5','year6','year9','year10','oberstufe']){
 
  const ok=(val,msg)=>{assert.ok(val,folder+': '+msg);count++;};
  ok(!w.document.querySelector('#learnToday'),'daily learning removed');
+ ok(!!w.document.querySelector('a[href="grammar/"]')===(folder==='year6'),'grammar belongs to Year 6 only');
  ok(!w.document.querySelector('[data-year]'),'no duplicate year selection');
  if(folder==='oberstufe'){
   ok(w.document.querySelector('#all a[href="../all/analysis/"]'),'analysis nested under upper-school ALL');

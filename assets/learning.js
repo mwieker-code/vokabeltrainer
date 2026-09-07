@@ -109,6 +109,7 @@
       renderYear();
       const bar=view.querySelector('.sessionbar'); if(bar)bar.remove();
       view.insertAdjacentHTML('afterbegin','<h2 class="section-title">Deine Units</h2>');
+      if(KEY==='vt6:progress')view.insertAdjacentHTML('beforeend','<a class="topic grammar-tile" href="grammar/"><span class="t-name">Grammar</span><br><span class="t-count">Hier kannst du Grammatik üben.</span></a>');
       view.insertAdjacentHTML('beforeend','<div class="quicklinks"><button id="allBtn">Vokabeln nachschlagen</button><button id="helpBtn">So funktioniert’s</button></div>');
       document.getElementById('allBtn').onclick=()=>{S.view='list';render();};
       document.getElementById('helpBtn').onclick=()=>{S.view='help';render();};
