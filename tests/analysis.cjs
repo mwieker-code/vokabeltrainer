@@ -12,6 +12,13 @@ for(const mode of ['terms','identify','distinguish','effect']){
  }
  ok(d.querySelector('#again'),'round completes');d.querySelector('#home').click();
 }
+// Overlapping techniques must receive an explanation rather than a false rejection.
+for(const [focus,term] of [['personification','metaphor'],['litotes','understatement'],['antithesis','parallelism']]){
+ const select=d.querySelector('#focus');select.value=focus;select.dispatchEvent(new w.Event('change'));
+ d.querySelector('[data-start="identify"]').click();d.querySelector('#term').value=term;d.querySelector('#form').dispatchEvent(new w.Event('submit',{cancelable:true}));
+ ok(d.querySelector('#feedback').textContent.includes('Your term describes a feature'),'alternative explained');
+ d.querySelector('#back').click();
+}
 const state=JSON.parse(w.localStorage.getItem('vt:analysis:v1'));ok(Object.keys(state.results).length>0,'results saved');
 d.querySelector('#write').click();for(const task of data.writing){d.querySelector('[data-write="'+task.id+'"]').click();d.querySelector('#compare').click();ok(!d.querySelector('#model .feedback'),'attempt before model');let draft=d.querySelector('#draft');draft.value='The writer uses evidence to present a supported interpretation. <script>alert(1)</script>';draft.dispatchEvent(new w.Event('input'));d.querySelector('#compare').click();ok(d.querySelector('#model .feedback'),'model after attempt');d.querySelector('[data-check]').click();d.querySelector('#back').click();}
 const backup=w.localStorage.getItem('vt:analysis:v1');const reloaded=setup(backup);reloaded.window.document.querySelector('#write').click();reloaded.window.document.querySelector('[data-write]').click();ok(reloaded.window.document.querySelector('#draft').value.includes('<script>'),'draft preserved and escaped');ok(reloaded.window.document.querySelector('[data-check]').checked,'checklist restored');

@@ -800,7 +800,7 @@ window.GRAMMAR_DATA = [
     "items": [
       {
         "id": "questions-0",
-        "prompt": "Write a question using all the words: Mia / watch / the match",
+        "prompt": "Write a question using all the words: Mia / watch / the match Keep the given subject.",
         "answers": [
           "Did Mia watch the match?"
         ],
@@ -808,7 +808,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "questions-1",
-        "prompt": "Write a question: they / go / by train",
+        "prompt": "Write a question: they / go / by train Keep the given subject.",
         "answers": [
           "Did they go by train?"
         ],
@@ -816,7 +816,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "questions-2",
-        "prompt": "Write a question: you / finish / your drawing",
+        "prompt": "Write a question: you / finish / your drawing Keep the given subject.",
         "answers": [
           "Did you finish your drawing?"
         ],
@@ -824,7 +824,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "questions-3",
-        "prompt": "Write a question: Leo / eat / the apple",
+        "prompt": "Write a question: Leo / eat / the apple Keep the given subject.",
         "answers": [
           "Did Leo eat the apple?"
         ],
@@ -832,7 +832,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "questions-4",
-        "prompt": "Write a question: we / win / the game",
+        "prompt": "Write a question: we / win / the game Keep the given subject.",
         "answers": [
           "Did we win the game?"
         ],
@@ -840,7 +840,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "questions-5",
-        "prompt": "Write a question: your friends / arrive / early",
+        "prompt": "Write a question: your friends / arrive / early Keep the given subject.",
         "answers": [
           "Did your friends arrive early?"
         ],
@@ -848,7 +848,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "questions-6",
-        "prompt": "Write a yes/no question: Nora / pack / her bag",
+        "prompt": "Write a yes/no question: Nora / pack / her bag Keep the given subject.",
         "answers": [
           "Did Nora pack her bag?"
         ],
@@ -856,7 +856,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "questions-7",
-        "prompt": "Write a yes/no question: the children / build / a snowman",
+        "prompt": "Write a yes/no question: the children / build / a snowman Keep the given subject.",
         "answers": [
           "Did the children build a snowman?"
         ],
@@ -864,7 +864,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "questions-8",
-        "prompt": "Write a yes/no question: your dad / cook / dinner",
+        "prompt": "Write a yes/no question: your dad / cook / dinner Keep the given subject.",
         "answers": [
           "Did your dad cook dinner?"
         ],
@@ -872,7 +872,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "questions-9",
-        "prompt": "Write a yes/no question: you / ride / your bike",
+        "prompt": "Write a yes/no question: you / ride / your bike Keep the given subject.",
         "answers": [
           "Did you ride your bike?"
         ],
@@ -880,7 +880,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "questions-10",
-        "prompt": "Write a yes/no question: the class / visit / a castle",
+        "prompt": "Write a yes/no question: the class / visit / a castle Keep the given subject.",
         "answers": [
           "Did the class visit a castle?"
         ],
@@ -888,7 +888,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "questions-11",
-        "prompt": "Write a yes/no question: Jack / take / a photo",
+        "prompt": "Write a yes/no question: Jack / take / a photo Keep the given subject.",
         "answers": [
           "Did Jack take a photo?"
         ],
@@ -896,7 +896,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "questions-12",
-        "prompt": "Write a yes/no question: we / meet / our neighbours",
+        "prompt": "Write a yes/no question: we / meet / our neighbours Keep the given subject.",
         "answers": [
           "Did we meet our neighbours?"
         ],
@@ -904,7 +904,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "questions-13",
-        "prompt": "Write a yes/no question: the dog / find / its toy",
+        "prompt": "Write a yes/no question: the dog / find / its toy Keep the given subject.",
         "answers": [
           "Did the dog find its toy?"
         ],
@@ -912,15 +912,16 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "questions-14",
-        "prompt": "Write a yes/no question: they / buy / some apples",
+        "prompt": "Write a yes/no question: they / buy / some apples Keep the given subject.",
         "answers": [
-          "Did they buy some apples?"
+          "Did they buy some apples?",
+          "Did they buy any apples?"
         ],
         "hint": "Use did + subject + base form."
       },
       {
         "id": "questions-15",
-        "prompt": "Write a yes/no question: I / close / the gate",
+        "prompt": "Write a yes/no question: I / close / the gate Keep the given subject.",
         "answers": [
           "Did I close the gate?"
         ],
@@ -928,7 +929,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "questions-16",
-        "prompt": "Write a yes/no question: Luca / write / a poem",
+        "prompt": "Write a yes/no question: Luca / write / a poem Keep the given subject.",
         "answers": [
           "Did Luca write a poem?"
         ],
@@ -936,7 +937,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "questions-17",
-        "prompt": "Write a yes/no question: your team / play / well",
+        "prompt": "Write a yes/no question: your team / play / well Keep the given subject.",
         "answers": [
           "Did your team play well?"
         ],
@@ -944,7 +945,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "questions-18",
-        "prompt": "Write a yes/no question: the girls / sing / a song",
+        "prompt": "Write a yes/no question: the girls / sing / a song Keep the given subject.",
         "answers": [
           "Did the girls sing a song?"
         ],
@@ -952,7 +953,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "questions-19",
-        "prompt": "Write a yes/no question: he / drink / the milk",
+        "prompt": "Write a yes/no question: he / drink / the milk Keep the given subject.",
         "answers": [
           "Did he drink the milk?"
         ],
@@ -960,7 +961,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "questions-20",
-        "prompt": "Write a yes/no question: she / make / a kite",
+        "prompt": "Write a yes/no question: she / make / a kite Keep the given subject.",
         "answers": [
           "Did she make a kite?"
         ],
@@ -968,7 +969,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "questions-21",
-        "prompt": "Write a yes/no question: you / hear / the bell",
+        "prompt": "Write a yes/no question: you / hear / the bell Keep the given subject.",
         "answers": [
           "Did you hear the bell?"
         ],
@@ -976,7 +977,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "questions-22",
-        "prompt": "Write a yes/no question: the bus / stop / here",
+        "prompt": "Write a yes/no question: the bus / stop / here Keep the given subject.",
         "answers": [
           "Did the bus stop here?"
         ],
@@ -984,7 +985,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "questions-23",
-        "prompt": "Write a yes/no question: we / see / the stars",
+        "prompt": "Write a yes/no question: we / see / the stars Keep the given subject.",
         "answers": [
           "Did we see the stars?"
         ],
@@ -992,7 +993,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "questions-24",
-        "prompt": "Write a yes/no question: they / bring / their books",
+        "prompt": "Write a yes/no question: they / bring / their books Keep the given subject.",
         "answers": [
           "Did they bring their books?"
         ],
@@ -1000,7 +1001,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "questions-25",
-        "prompt": "Write a yes/no question: Isla / clean / her room",
+        "prompt": "Write a yes/no question: Isla / clean / her room Keep the given subject.",
         "answers": [
           "Did Isla clean her room?"
         ],
@@ -1008,7 +1009,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "questions-26",
-        "prompt": "Write a yes/no question: my brother / drop / his hat",
+        "prompt": "Write a yes/no question: my brother / drop / his hat Keep the given subject.",
         "answers": [
           "Did my brother drop his hat?"
         ],
@@ -1016,7 +1017,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "questions-27",
-        "prompt": "Write a yes/no question: the pupils / read / the story",
+        "prompt": "Write a yes/no question: the pupils / read / the story Keep the given subject.",
         "answers": [
           "Did the pupils read the story?"
         ],
@@ -1024,7 +1025,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "questions-28",
-        "prompt": "Write a yes/no question: you / send / the email",
+        "prompt": "Write a yes/no question: you / send / the email Keep the given subject.",
         "answers": [
           "Did you send the email?"
         ],
@@ -1032,7 +1033,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "questions-29",
-        "prompt": "Write a yes/no question: we / finish / the puzzle",
+        "prompt": "Write a yes/no question: we / finish / the puzzle Keep the given subject.",
         "answers": [
           "Did we finish the puzzle?"
         ],
@@ -1040,7 +1041,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "questions-30",
-        "prompt": "Write a yes/no question: the rabbit / eat / the carrot",
+        "prompt": "Write a yes/no question: the rabbit / eat / the carrot Keep the given subject.",
         "answers": [
           "Did the rabbit eat the carrot?"
         ],
@@ -1048,7 +1049,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "questions-31",
-        "prompt": "Write a yes/no question: he / wear / his coat",
+        "prompt": "Write a yes/no question: he / wear / his coat Keep the given subject.",
         "answers": [
           "Did he wear his coat?"
         ],
@@ -1328,7 +1329,7 @@ window.GRAMMAR_DATA = [
     "items": [
       {
         "id": "wh-0",
-        "prompt": "Ask about the place. Use: where / you / stay",
+        "prompt": "Ask about the place. Use: where / you / stay Keep the given subject.",
         "answers": [
           "Where did you stay?"
         ],
@@ -1336,7 +1337,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "wh-1",
-        "prompt": "Ask about the time. Use: when / the film / start",
+        "prompt": "Ask about the time. Use: when / the film / start Keep the given subject.",
         "answers": [
           "When did the film start?"
         ],
@@ -1344,7 +1345,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "wh-2",
-        "prompt": "Ask about the food. Use: what / they / eat",
+        "prompt": "Ask about the food. Use: what / they / eat Keep the given subject.",
         "answers": [
           "What did they eat?"
         ],
@@ -1352,7 +1353,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "wh-3",
-        "prompt": "Ask about the journey. Use: how / Ava / get / home",
+        "prompt": "Ask about the journey. Use: how / Ava / get / home Keep the given subject.",
         "answers": [
           "How did Ava get home?"
         ],
@@ -1360,7 +1361,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "wh-4",
-        "prompt": "Ask about the reason. Use: why / he / leave",
+        "prompt": "Ask about the reason. Use: why / he / leave Keep the given subject.",
         "answers": [
           "Why did he leave?"
         ],
@@ -1368,7 +1369,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "wh-5",
-        "prompt": "Ask about the object. Use: what / you / find",
+        "prompt": "Ask about the object. Use: what / you / find Keep the given subject.",
         "answers": [
           "What did you find?"
         ],
@@ -1376,7 +1377,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "wh-6",
-        "prompt": "Build a question using these words: where / they / put / the bags",
+        "prompt": "Build a question using these words: where / they / put / the bags Keep the given subject.",
         "answers": [
           "Where did they put the bags?"
         ],
@@ -1384,7 +1385,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "wh-7",
-        "prompt": "Build a question using these words: when / you / wake up",
+        "prompt": "Build a question using these words: when / you / wake up Keep the given subject.",
         "answers": [
           "When did you wake up?"
         ],
@@ -1392,7 +1393,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "wh-8",
-        "prompt": "Build a question using these words: what / Lily / draw",
+        "prompt": "Build a question using these words: what / Lily / draw Keep the given subject.",
         "answers": [
           "What did Lily draw?"
         ],
@@ -1400,7 +1401,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "wh-9",
-        "prompt": "Build a question using these words: why / the dog / bark",
+        "prompt": "Build a question using these words: why / the dog / bark Keep the given subject.",
         "answers": [
           "Why did the dog bark?"
         ],
@@ -1408,7 +1409,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "wh-10",
-        "prompt": "Build a question using these words: how / they / travel / to York",
+        "prompt": "Build a question using these words: how / they / travel / to York Keep the given subject.",
         "answers": [
           "How did they travel to York?"
         ],
@@ -1416,7 +1417,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "wh-11",
-        "prompt": "Build a question using these words: where / Sam / sit",
+        "prompt": "Build a question using these words: where / Sam / sit Keep the given subject.",
         "answers": [
           "Where did Sam sit?"
         ],
@@ -1424,7 +1425,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "wh-12",
-        "prompt": "Build a question using these words: when / the lesson / end",
+        "prompt": "Build a question using these words: when / the lesson / end Keep the given subject.",
         "answers": [
           "When did the lesson end?"
         ],
@@ -1432,7 +1433,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "wh-13",
-        "prompt": "Build a question using these words: what / you / buy",
+        "prompt": "Build a question using these words: what / you / buy Keep the given subject.",
         "answers": [
           "What did you buy?"
         ],
@@ -1440,7 +1441,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "wh-14",
-        "prompt": "Build a question using these words: why / Mia / cry",
+        "prompt": "Build a question using these words: why / Mia / cry Keep the given subject.",
         "answers": [
           "Why did Mia cry?"
         ],
@@ -1448,7 +1449,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "wh-15",
-        "prompt": "Build a question using these words: how / he / open / the box",
+        "prompt": "Build a question using these words: how / he / open / the box Keep the given subject.",
         "answers": [
           "How did he open the box?"
         ],
@@ -1456,7 +1457,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "wh-16",
-        "prompt": "Build a question using these words: where / the children / swim",
+        "prompt": "Build a question using these words: where / the children / swim Keep the given subject.",
         "answers": [
           "Where did the children swim?"
         ],
@@ -1464,7 +1465,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "wh-17",
-        "prompt": "Build a question using these words: when / your cousins / arrive",
+        "prompt": "Build a question using these words: when / your cousins / arrive Keep the given subject.",
         "answers": [
           "When did your cousins arrive?"
         ],
@@ -1472,7 +1473,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "wh-18",
-        "prompt": "Build a question using these words: what / we / forget",
+        "prompt": "Build a question using these words: what / we / forget Keep the given subject.",
         "answers": [
           "What did we forget?"
         ],
@@ -1480,7 +1481,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "wh-19",
-        "prompt": "Build a question using these words: why / they / stop",
+        "prompt": "Build a question using these words: why / they / stop Keep the given subject.",
         "answers": [
           "Why did they stop?"
         ],
@@ -1488,7 +1489,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "wh-20",
-        "prompt": "Build a question using these words: how / you / make / the cake",
+        "prompt": "Build a question using these words: how / you / make / the cake Keep the given subject.",
         "answers": [
           "How did you make the cake?"
         ],
@@ -1496,7 +1497,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "wh-21",
-        "prompt": "Build a question using these words: where / she / find / her scarf",
+        "prompt": "Build a question using these words: where / she / find / her scarf Keep the given subject.",
         "answers": [
           "Where did she find her scarf?"
         ],
@@ -1504,7 +1505,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "wh-22",
-        "prompt": "Build a question using these words: when / the match / begin",
+        "prompt": "Build a question using these words: when / the match / begin Keep the given subject.",
         "answers": [
           "When did the match begin?"
         ],
@@ -1512,7 +1513,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "wh-23",
-        "prompt": "Build a question using these words: what / Max / say",
+        "prompt": "Build a question using these words: what / Max / say Keep the given subject.",
         "answers": [
           "What did Max say?"
         ],
@@ -1520,7 +1521,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "wh-24",
-        "prompt": "Build a question using these words: why / you / choose / this book",
+        "prompt": "Build a question using these words: why / you / choose / this book Keep the given subject.",
         "answers": [
           "Why did you choose this book?"
         ],
@@ -1528,7 +1529,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "wh-25",
-        "prompt": "Build a question using these words: how / the cat / get / inside",
+        "prompt": "Build a question using these words: how / the cat / get / inside Keep the given subject.",
         "answers": [
           "How did the cat get inside?"
         ],
@@ -1536,7 +1537,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "wh-26",
-        "prompt": "Build a question using these words: where / they / eat / lunch",
+        "prompt": "Build a question using these words: where / they / eat / lunch Keep the given subject.",
         "answers": [
           "Where did they eat lunch?"
         ],
@@ -1544,7 +1545,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "wh-27",
-        "prompt": "Build a question using these words: when / you / call / your uncle",
+        "prompt": "Build a question using these words: when / you / call / your uncle Keep the given subject.",
         "answers": [
           "When did you call your uncle?"
         ],
@@ -1552,7 +1553,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "wh-28",
-        "prompt": "Build a question using these words: what / the class / learn",
+        "prompt": "Build a question using these words: what / the class / learn Keep the given subject.",
         "answers": [
           "What did the class learn?"
         ],
@@ -1560,7 +1561,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "wh-29",
-        "prompt": "Build a question using these words: why / he / run / away",
+        "prompt": "Build a question using these words: why / he / run / away Keep the given subject.",
         "answers": [
           "Why did he run away?"
         ],
@@ -1568,7 +1569,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "wh-30",
-        "prompt": "Build a question using these words: how / she / break / the cup",
+        "prompt": "Build a question using these words: how / she / break / the cup Keep the given subject.",
         "answers": [
           "How did she break the cup?"
         ],
@@ -1576,7 +1577,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "wh-31",
-        "prompt": "Build a question using these words: where / you / leave / your shoes",
+        "prompt": "Build a question using these words: where / you / leave / your shoes Keep the given subject.",
         "answers": [
           "Where did you leave your shoes?"
         ],
@@ -1592,7 +1593,7 @@ window.GRAMMAR_DATA = [
     "items": [
       {
         "id": "negative-0",
-        "prompt": "Make this sentence negative: We walked to school.",
+        "prompt": "Make this sentence negative: We walked to school. Keep the given subject.",
         "answers": [
           "We didn't walk to school."
         ],
@@ -1600,7 +1601,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "negative-1",
-        "prompt": "Make this sentence negative: He lost his phone.",
+        "prompt": "Make this sentence negative: He lost his phone. Keep the given subject.",
         "answers": [
           "He didn't lose his phone."
         ],
@@ -1608,7 +1609,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "negative-2",
-        "prompt": "Make this sentence negative: I liked the soup.",
+        "prompt": "Make this sentence negative: I liked the soup. Keep the given subject.",
         "answers": [
           "I didn't like the soup."
         ],
@@ -1616,7 +1617,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "negative-3",
-        "prompt": "Make this sentence negative: They saw the moon.",
+        "prompt": "Make this sentence negative: They saw the moon. Keep the given subject.",
         "answers": [
           "They didn't see the moon."
         ],
@@ -1624,7 +1625,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "negative-4",
-        "prompt": "Make this sentence negative: Amy did her homework.",
+        "prompt": "Make this sentence negative: Amy did her homework. Keep the given subject.",
         "answers": [
           "Amy didn't do her homework."
         ],
@@ -1632,7 +1633,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "negative-5",
-        "prompt": "Make this sentence negative: You played the piano.",
+        "prompt": "Make this sentence negative: You played the piano. Keep the given subject.",
         "answers": [
           "You didn't play the piano."
         ],
@@ -1640,7 +1641,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "negative-6",
-        "prompt": "Make this sentence negative: Nora packed her bag.",
+        "prompt": "Make this sentence negative: Nora packed her bag. Keep the given subject.",
         "answers": [
           "Nora didn't pack her bag."
         ],
@@ -1648,7 +1649,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "negative-7",
-        "prompt": "Make this sentence negative: The children built a snowman.",
+        "prompt": "Make this sentence negative: The children built a snowman. Keep the given subject.",
         "answers": [
           "The children didn't build a snowman."
         ],
@@ -1656,7 +1657,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "negative-8",
-        "prompt": "Make this sentence negative: Your dad cooked dinner.",
+        "prompt": "Make this sentence negative: Your dad cooked dinner. Keep the given subject.",
         "answers": [
           "Your dad didn't cook dinner."
         ],
@@ -1664,7 +1665,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "negative-9",
-        "prompt": "Make this sentence negative: You rode your bike.",
+        "prompt": "Make this sentence negative: You rode your bike. Keep the given subject.",
         "answers": [
           "You didn't ride your bike."
         ],
@@ -1672,7 +1673,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "negative-10",
-        "prompt": "Make this sentence negative: The class visited a castle.",
+        "prompt": "Make this sentence negative: The class visited a castle. Keep the given subject.",
         "answers": [
           "The class didn't visit a castle."
         ],
@@ -1680,7 +1681,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "negative-11",
-        "prompt": "Make this sentence negative: Jack took a photo.",
+        "prompt": "Make this sentence negative: Jack took a photo. Keep the given subject.",
         "answers": [
           "Jack didn't take a photo."
         ],
@@ -1688,7 +1689,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "negative-12",
-        "prompt": "Make this sentence negative: We met our neighbours.",
+        "prompt": "Make this sentence negative: We met our neighbours. Keep the given subject.",
         "answers": [
           "We didn't meet our neighbours."
         ],
@@ -1696,7 +1697,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "negative-13",
-        "prompt": "Make this sentence negative: The dog found its toy.",
+        "prompt": "Make this sentence negative: The dog found its toy. Keep the given subject.",
         "answers": [
           "The dog didn't find its toy."
         ],
@@ -1704,15 +1705,16 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "negative-14",
-        "prompt": "Make this sentence negative: They bought some apples.",
+        "prompt": "Make this sentence negative: They bought some apples. Keep the given subject.",
         "answers": [
-          "They didn't buy some apples."
+          "They didn't buy some apples.",
+          "They didn't buy any apples."
         ],
         "hint": "Use did not or didn’t, followed by the base form. For example: saw → didn’t see."
       },
       {
         "id": "negative-15",
-        "prompt": "Make this sentence negative: I closed the gate.",
+        "prompt": "Make this sentence negative: I closed the gate. Keep the given subject.",
         "answers": [
           "I didn't close the gate."
         ],
@@ -1720,7 +1722,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "negative-16",
-        "prompt": "Make this sentence negative: Luca wrote a poem.",
+        "prompt": "Make this sentence negative: Luca wrote a poem. Keep the given subject.",
         "answers": [
           "Luca didn't write a poem."
         ],
@@ -1728,7 +1730,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "negative-17",
-        "prompt": "Make this sentence negative: Your team played well.",
+        "prompt": "Make this sentence negative: Your team played well. Keep the given subject.",
         "answers": [
           "Your team didn't play well."
         ],
@@ -1736,7 +1738,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "negative-18",
-        "prompt": "Make this sentence negative: The girls sang a song.",
+        "prompt": "Make this sentence negative: The girls sang a song. Keep the given subject.",
         "answers": [
           "The girls didn't sing a song."
         ],
@@ -1744,7 +1746,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "negative-19",
-        "prompt": "Make this sentence negative: He drank the milk.",
+        "prompt": "Make this sentence negative: He drank the milk. Keep the given subject.",
         "answers": [
           "He didn't drink the milk."
         ],
@@ -1752,7 +1754,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "negative-20",
-        "prompt": "Make this sentence negative: She made a kite.",
+        "prompt": "Make this sentence negative: She made a kite. Keep the given subject.",
         "answers": [
           "She didn't make a kite."
         ],
@@ -1760,7 +1762,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "negative-21",
-        "prompt": "Make this sentence negative: You heard the bell.",
+        "prompt": "Make this sentence negative: You heard the bell. Keep the given subject.",
         "answers": [
           "You didn't hear the bell."
         ],
@@ -1768,7 +1770,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "negative-22",
-        "prompt": "Make this sentence negative: The bus stopped here.",
+        "prompt": "Make this sentence negative: The bus stopped here. Keep the given subject.",
         "answers": [
           "The bus didn't stop here."
         ],
@@ -1776,7 +1778,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "negative-23",
-        "prompt": "Make this sentence negative: We saw the stars.",
+        "prompt": "Make this sentence negative: We saw the stars. Keep the given subject.",
         "answers": [
           "We didn't see the stars."
         ],
@@ -1784,7 +1786,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "negative-24",
-        "prompt": "Make this sentence negative: They brought their books.",
+        "prompt": "Make this sentence negative: They brought their books. Keep the given subject.",
         "answers": [
           "They didn't bring their books."
         ],
@@ -1792,7 +1794,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "negative-25",
-        "prompt": "Make this sentence negative: Isla cleaned her room.",
+        "prompt": "Make this sentence negative: Isla cleaned her room. Keep the given subject.",
         "answers": [
           "Isla didn't clean her room."
         ],
@@ -1800,7 +1802,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "negative-26",
-        "prompt": "Make this sentence negative: My brother dropped his hat.",
+        "prompt": "Make this sentence negative: My brother dropped his hat. Keep the given subject.",
         "answers": [
           "My brother didn't drop his hat."
         ],
@@ -1808,7 +1810,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "negative-27",
-        "prompt": "Make this sentence negative: The pupils read the story.",
+        "prompt": "Make this sentence negative: The pupils read the story. Keep the given subject.",
         "answers": [
           "The pupils didn't read the story."
         ],
@@ -1816,7 +1818,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "negative-28",
-        "prompt": "Make this sentence negative: You sent the email.",
+        "prompt": "Make this sentence negative: You sent the email. Keep the given subject.",
         "answers": [
           "You didn't send the email."
         ],
@@ -1824,7 +1826,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "negative-29",
-        "prompt": "Make this sentence negative: We finished the puzzle.",
+        "prompt": "Make this sentence negative: We finished the puzzle. Keep the given subject.",
         "answers": [
           "We didn't finish the puzzle."
         ],
@@ -1832,7 +1834,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "negative-30",
-        "prompt": "Make this sentence negative: The rabbit ate the carrot.",
+        "prompt": "Make this sentence negative: The rabbit ate the carrot. Keep the given subject.",
         "answers": [
           "The rabbit didn't eat the carrot."
         ],
@@ -1840,7 +1842,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "negative-31",
-        "prompt": "Make this sentence negative: He wore his coat.",
+        "prompt": "Make this sentence negative: He wore his coat. Keep the given subject.",
         "answers": [
           "He didn't wear his coat."
         ],
@@ -1970,7 +1972,8 @@ window.GRAMMAR_DATA = [
         "id": "repair-14",
         "prompt": "Fix: Did they bought some apples?",
         "answers": [
-          "Did they buy some apples?"
+          "Did they buy some apples?",
+          "Did they buy any apples?"
         ],
         "hint": "After did, use the base form."
       },
@@ -2136,7 +2139,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "be-2",
-        "prompt": "Make a question: She was at school.",
+        "prompt": "Make a question: She was at school. Keep the given subject.",
         "answers": [
           "Was she at school?"
         ],
@@ -2144,7 +2147,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "be-3",
-        "prompt": "Make a question: They were late.",
+        "prompt": "Make a question: They were late. Keep the given subject.",
         "answers": [
           "Were they late?"
         ],
@@ -2152,7 +2155,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "be-4",
-        "prompt": "Make this negative: He was hungry.",
+        "prompt": "Make this negative: He was hungry. Keep the given subject.",
         "answers": [
           "He wasn't hungry."
         ],
@@ -2160,7 +2163,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "be-5",
-        "prompt": "Make this negative: We were tired.",
+        "prompt": "Make this negative: We were tired. Keep the given subject.",
         "answers": [
           "We weren't tired."
         ],
@@ -2176,7 +2179,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "be-7",
-        "prompt": "Make a question: The library was closed.",
+        "prompt": "Make a question: The library was closed. Keep the given subject.",
         "answers": [
           "Was the library closed?"
         ],
@@ -2184,7 +2187,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "be-8",
-        "prompt": "Make this negative: The library was closed.",
+        "prompt": "Make this negative: The library was closed. Keep the given subject.",
         "answers": [
           "The library was not closed."
         ],
@@ -2200,7 +2203,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "be-10",
-        "prompt": "Make a question: Our shoes were wet.",
+        "prompt": "Make a question: Our shoes were wet. Keep the given subject.",
         "answers": [
           "Were our shoes wet?"
         ],
@@ -2208,7 +2211,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "be-11",
-        "prompt": "Make this negative: Our shoes were wet.",
+        "prompt": "Make this negative: Our shoes were wet. Keep the given subject.",
         "answers": [
           "Our shoes were not wet."
         ],
@@ -2224,7 +2227,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "be-13",
-        "prompt": "Make a question: You were very quiet.",
+        "prompt": "Make a question: You were very quiet. Keep the given subject.",
         "answers": [
           "Were you very quiet?"
         ],
@@ -2232,7 +2235,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "be-14",
-        "prompt": "Make this negative: You were very quiet.",
+        "prompt": "Make this negative: You were very quiet. Keep the given subject.",
         "answers": [
           "You were not very quiet."
         ],
@@ -2248,7 +2251,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "be-16",
-        "prompt": "Make a question: My grandma was at home.",
+        "prompt": "Make a question: My grandma was at home. Keep the given subject.",
         "answers": [
           "Was my grandma at home?"
         ],
@@ -2256,7 +2259,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "be-17",
-        "prompt": "Make this negative: My grandma was at home.",
+        "prompt": "Make this negative: My grandma was at home. Keep the given subject.",
         "answers": [
           "My grandma was not at home."
         ],
@@ -2272,7 +2275,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "be-19",
-        "prompt": "Make a question: The kittens were asleep.",
+        "prompt": "Make a question: The kittens were asleep. Keep the given subject.",
         "answers": [
           "Were the kittens asleep?"
         ],
@@ -2280,7 +2283,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "be-20",
-        "prompt": "Make this negative: The kittens were asleep.",
+        "prompt": "Make this negative: The kittens were asleep. Keep the given subject.",
         "answers": [
           "The kittens were not asleep."
         ],
@@ -2296,7 +2299,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "be-22",
-        "prompt": "Make a question: It was sunny.",
+        "prompt": "Make a question: It was sunny. Keep the given subject.",
         "answers": [
           "Was it sunny?"
         ],
@@ -2304,7 +2307,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "be-23",
-        "prompt": "Make this negative: It was sunny.",
+        "prompt": "Make this negative: It was sunny. Keep the given subject.",
         "answers": [
           "It was not sunny."
         ],
@@ -2320,7 +2323,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "be-25",
-        "prompt": "Make a question: I was excited.",
+        "prompt": "Make a question: I was excited. Keep the given subject.",
         "answers": [
           "Was I excited?"
         ],
@@ -2328,7 +2331,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "be-26",
-        "prompt": "Make this negative: I was excited.",
+        "prompt": "Make this negative: I was excited. Keep the given subject.",
         "answers": [
           "I was not excited."
         ],
@@ -2344,7 +2347,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "be-28",
-        "prompt": "Make a question: We were at the station.",
+        "prompt": "Make a question: We were at the station. Keep the given subject.",
         "answers": [
           "Were we at the station?"
         ],
@@ -2352,7 +2355,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "be-29",
-        "prompt": "Make this negative: We were at the station.",
+        "prompt": "Make this negative: We were at the station. Keep the given subject.",
         "answers": [
           "We were not at the station."
         ],
@@ -2368,7 +2371,7 @@ window.GRAMMAR_DATA = [
       },
       {
         "id": "be-31",
-        "prompt": "Make a question: His hands were dirty.",
+        "prompt": "Make a question: His hands were dirty. Keep the given subject.",
         "answers": [
           "Were his hands dirty?"
         ],

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "test": "node tests/learning.cjs && node tests/analysis.cjs && node tests/grammar.cjs",
+    "test": "node tests/learning.cjs && node tests/analysis.cjs && node tests/grammar.cjs && node tests/homework.cjs && node tests/editorial.cjs",
     "build": "node build.cjs"
   },
   "devDependencies": {

@@ -32,8 +32,16 @@
   function setup(topicId){
     S.roundSource=topicId;S.topicId=topicId;
     const words=upper?(SETS[topicId]||[]):setOf(topicId),due=words.filter(v=>isDue(record(v))).length;
-    view.innerHTML='<h2>Lernumfang wählen</h2><p>'+safe(TOPICS.find(t=>t.id===topicId)?.name||'Deine Auswahl')+'</p><div class="scope-options"><button class="topic primary" data-scope="all">Alles üben · '+words.length+' Vokabeln</button><button class="topic" data-scope="short">Kurze Runde · bis zu 10 Vokabeln</button><button class="topic" data-scope="due">Nur fällige Vokabeln · '+due+'</button></div><button id="setupBack">Zur Übersicht</button>';
+    view.innerHTML='<h2>Lernumfang wählen</h2><p>'+safe(TOPICS.find(t=>t.id===topicId)?.name||'Deine Auswahl')+'</p><div class="scope-options"><button class="topic primary" data-scope="all">Alles üben · '+words.length+' Vokabeln</button><button class="topic" data-scope="short">Kurze Runde · bis zu 10 Vokabeln</button><button class="topic" data-scope="due">Nur fällige Vokabeln · '+due+'</button></div><label for="linkScope">Lernumfang für den Hausaufgaben-Link</label><select id="linkScope"><option value="all">Alles üben</option><option value="short">Kurze Runde</option><option value="due">Nur fällige Vokabeln</option></select><button id="shareHomework">Hausaufgaben-Link anzeigen</button><div id="homeworkLink"></div><button id="setupBack">Zur Übersicht</button>';
     document.getElementById('setupBack').onclick=home;
+    const requested=new URLSearchParams(location.search).get('scope');
+    if(['all','short','due'].includes(requested))document.getElementById('linkScope').value=requested;
+    document.getElementById('shareHomework').onclick=()=>{
+      const u=new URL(location.href);u.search='';u.hash='';u.searchParams.set('topic',topicId);u.searchParams.set('scope',document.getElementById('linkScope').value);u.searchParams.set('dir',S.dir);
+      document.getElementById('homeworkLink').innerHTML='<label for="assignmentURL">Link kopieren und weitergeben</label><input id="assignmentURL" readonly style="width:100%"><p>Der Link enthält die Auswahl, keinen Lernstand. Fällige Wörter unterscheiden sich je nach Gerät.</p>';
+      const input=document.getElementById('assignmentURL');input.value=u.href;input.focus();input.select();
+    };
+    if(['all','short','due'].includes(requested))view.querySelectorAll('[data-scope]').forEach(b=>{b.classList.toggle('primary',b.dataset.scope===requested);});
     view.querySelectorAll('[data-scope]').forEach(b=>b.onclick=()=>{S.scope=b.dataset.scope;S.onlyDue=S.scope==='due';S.roundLimit=S.scope==='short'?10:Infinity;S.view='session';buildQueue();render();});
   }
   window.addEventListener('pagehide',checkpoint);
@@ -219,4 +227,9 @@
     if(doc)doc.insertAdjacentHTML('afterbegin','<h2>Dein Lernumfang</h2><p>Wähle einen Part, eine Unit oder ein Thema. Alles üben umfasst alle Wörter deiner Auswahl, auch bereits gelernte. Alternativ wählst du zehn Wörter oder nur fällige Vokabeln. Fehler werden nach dem ersten Durchgang einmal wiederholt. Mit Später fortsetzen speicherst du die Runde auf diesem Gerät. Ein Wechsel der Übungsart startet den gewählten Lernumfang neu.</p><p>Beim Tippen bleiben deine Eingabe und die Lösung sichtbar. Markierte Buchstaben zeigen Abweichungen. Falsche Antworten werden nicht als gewusst gespeichert, auch wenn du „Gewusst“ antippst.</p>');
   };
   render();
+  const assignment=new URLSearchParams(location.search),requestedTopic=assignment.get('topic');
+  if(requestedTopic&&(TOPICS.some(t=>t.id===requestedTopic)||(!upper&&YEARS.some(y=>y.id+'-all'===requestedTopic)))){
+    if(['de2en','en2de'].includes(assignment.get('dir')))S.dir=assignment.get('dir');
+    setup(requestedTopic);
+  }
 })();
