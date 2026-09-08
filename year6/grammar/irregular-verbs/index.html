@@ -1099,9 +1099,7 @@ function renderSession(){
   if(S.i >= S.queue.length){ renderDone(); return; }
 
   var v = current();
-  if(!v || !(S.answered || S.revealed))return;
-  if(S.res && S.res.indexOf('no')!==-1)quality=0;
-  else if(S.res && S.res.indexOf('near')!==-1)quality=Math.min(quality,1);
+  if(!v)return;
   var r = rec(v.id);
   var topic = TOPICS.filter(function(t){ return t.id === S.topicId; })[0];
   var counts = boxCounts(S.topicId);

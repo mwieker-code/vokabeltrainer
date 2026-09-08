@@ -5,5 +5,6 @@ for(const [target,wrong] of [['went','wened'],['built','builled'],['sent','sened
 check(w.checkForm('ran','run')==='no');check(w.checkNeg('did not went',['did not go',"didn't go"])==='no');
 check(w.V.find(v=>v.base==='beat').type==='base-past');check(w.V.find(v=>v.base==='stand up').sPp==='She has ___ to answer a question.');
 for(const v of w.V){check(v.sSp.split('___').length===2&&v.sPp.split('___').length===2);check(w.checkForm(v.past,v.past)==='ok');check(w.checkForm(v.pp,v.pp)==='ok');}
+for(const t of w.TOPICS){w.S.view='home';w.render();w.document.querySelector('[data-topic="'+t.id+'"]').click();check(!!w.document.querySelector('.vcard'));check(!!w.document.querySelector('#submit,#flip'));}
 w.startSession('t-top20');const v=w.current();w.S.answered=true;w.S.res=['no'];w.rate(2);check(w.rec(v.id).box===1);dom.window.close();
 console.log(n+' editorial regression checks passed.');
