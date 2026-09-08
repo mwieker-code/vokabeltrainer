@@ -37,6 +37,30 @@
     view.querySelectorAll('[data-scope]').forEach(b=>b.onclick=()=>{S.scope=b.dataset.scope;S.onlyDue=S.scope==='due';S.roundLimit=S.scope==='short'?10:Infinity;S.view='session';buildQueue();render();});
   }
   window.addEventListener('pagehide',checkpoint);
+  const originalList=renderList;
+  const csvSelected=new Set();
+  const csvRows=()=>TOPICS.flatMap(t=>(SETS[t.id]||[]).map((v,i)=>({key:t.id+':'+i,unit:(t.unitName?t.unitName+' · ':'')+t.name,en:v.en,de:v.de})));
+  function csvDownload(selected){
+    const rows=csvRows().filter(r=>!selected||csvSelected.has(r.key));
+    const quote=value=>'"'+String(value??'').replace(/"/g,'""')+'"';
+    const csv='\ufeff'+[['Unit','Englisch','Deutsch'],...rows.map(r=>[r.unit,r.en,r.de])].map(row=>row.map(quote).join(';')).join('\r\n');
+    const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+    const a=document.createElement('a');a.href=url;a.download=selected?'vokabeln-auswahl.csv':'vokabeln-alle.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  }
+  renderList=function(){
+    originalList();
+    const box=document.getElementById('vlist');if(!box)return;
+    const controls=document.createElement('section');controls.className='csv-controls';controls.hidden=true;
+    controls.innerHTML='<h2>CSV exportieren</h2><p>Drei Spalten: Unit, Englisch, Deutsch. Alle Vokabeln umfasst diesen Jahrgang, unabhängig vom Suchfilter.</p><div class="controls"><button id="csvAll">Alle Vokabeln exportieren</button><button id="csvSelected">Auswahl exportieren</button><button id="csvVisible">Sichtbare Treffer auswählen</button><button id="csvClear">Auswahl aufheben</button></div><p id="csvCount" role="status"></p>';
+    box.before(controls);
+    const update=()=>{document.getElementById('csvCount').textContent=csvSelected.size+' Vokabeln ausgewählt';document.getElementById('csvSelected').disabled=!csvSelected.size;};
+    box.querySelectorAll('[data-sec]').forEach(sec=>{const id=sec.dataset.sec;sec.querySelectorAll('.vrow').forEach((row,i)=>{const k=id+':'+i;const label=document.createElement('label');label.className='csv-check';label.hidden=true;const input=document.createElement('input');input.type='checkbox';input.checked=csvSelected.has(k);input.setAttribute('aria-label',(SETS[id]?.[i]?.en||'Vokabel')+' für CSV auswählen');input.dataset.csvKey=k;input.onchange=()=>{input.checked?csvSelected.add(k):csvSelected.delete(k);update();};label.append(input,document.createTextNode(' Für CSV auswählen'));row.append(label);});});
+    document.getElementById('lcsv').onclick=()=>{controls.hidden=!controls.hidden;box.querySelectorAll('.csv-check').forEach(el=>el.hidden=controls.hidden);};
+    document.getElementById('csvAll').onclick=()=>csvDownload(false);
+    document.getElementById('csvSelected').onclick=()=>csvDownload(true);
+    document.getElementById('csvVisible').onclick=()=>{box.querySelectorAll('details').forEach(sec=>{if(sec.hidden||sec.style.display==='none')return;sec.querySelectorAll('.vrow:not(.off) input[data-csv-key]').forEach(input=>{input.checked=true;csvSelected.add(input.dataset.csvKey);});sec.open=true;});update();};
+    document.getElementById('csvClear').onclick=()=>{csvSelected.clear();box.querySelectorAll('[data-csv-key]').forEach(input=>input.checked=false);update();};update();
+  };
   // Split alternatives BEFORE removing punctuation. Keep both optional-word forms.
   function forms(target) {
     const parts = String(target).split(/\s*(?:[,;]|\s\/\s|\/)\s*/).filter(Boolean);

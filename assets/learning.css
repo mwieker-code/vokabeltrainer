@@ -47,3 +47,14 @@ a.home-link:hover,a.grammar-back:hover{background:#093e48;border-color:#093e48}a
 a.home-link:hover,a.home-link:focus,a.home-link:active,a.grammar-back:hover,a.grammar-back:focus,a.grammar-back:active{color:#fff;background:#093e48;border-color:#093e48;text-decoration:none}
 
 .masthead h1 .title-accent{color:#0e6878}
+
+.csv-controls{background:#e5eff1;border:1px solid #b7cdd2;border-radius:12px;padding:20px;margin:18px 0}.csv-check{grid-column:1/-1;font-size:14px;display:flex;align-items:center;gap:8px;padding:8px 0}.csv-check[hidden],.csv-controls[hidden]{display:none}.csv-check input{width:20px;height:20px;accent-color:#0e5a66}@media print{.csv-controls,.csv-check{display:none!important}}
+
+/* Print only expanded vocabulary sections; collapsed sections must not
+   create boxes or forced page breaks in the PDF layout. */
+@media print{
+  .vlist .lsec:not([open]),.vlist .lsec[hidden],.vlist .vrow.off,.vlist .vrow3.off{display:none!important}
+  .vlist .lsec,.vlist .lsec + .lsec{page-break-before:auto;break-before:auto;page-break-after:auto;break-after:auto}
+  .vlist .lsec > summary{page-break-after:avoid;break-after:avoid}
+  .home-link,.grammar-back,.feedback-settings,.csv-controls,.csv-check{display:none!important}
+}
