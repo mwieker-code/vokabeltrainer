@@ -356,7 +356,7 @@ button.primary:hover{background:#0B4A54}
   *{animation:none!important;transition:none!important}
 }
 </style>
-<link rel="stylesheet" href="../assets/learning.css?v=20260908-export">
+<link rel="stylesheet" href="../assets/learning.css?v=20260908-help-navigation">
 
 <div class="wrap">
     <div class="masthead">
@@ -16657,14 +16657,14 @@ function renderHelp(){
   d.push('<h2>Loslegen</h2>');
   d.push('<ul>');
   d.push('<li>Auf der Startseite ein Thema antippen — oder <b>Heute fällig</b>, um alle überfälligen Karten aus allen Themen gemischt zu üben.</li>');
-  d.push('<li>Die erste Karte erscheint. Überlege, dann tippe auf <b>Umdrehen</b>.</li>');
+  d.push('<li>Wähle den Lernumfang: <b>Alles üben</b>, eine kurze Runde mit höchstens zehn Wörtern oder nur fällige Vokabeln. Danach startet die Übung.</li>');
   d.push('<li>Bewerte ehrlich: <b>Nochmal</b>, <b>Unsicher</b> oder <b>Gewusst</b>.</li>');
   d.push('<li>Die nächste Karte kommt automatisch.</li>');
   d.push('</ul>');
   d.push('<p>Zurück zur Übersicht kommst du jederzeit oben links.</p>');
 
   d.push('<h2>Die fünf Fächer</h2>');
-  d.push('<p>Das ist der wichtigste Teil. Oben über der Karte siehst du fünf Fächer. Jede Vokabel steckt in einem davon.</p>');
+  d.push('<p>Jede Vokabel steckt in einem von fünf Fächern. Die Fachübersicht kannst du während der Übung aufklappen.</p>');
   d.push('<p>Eine neue Vokabel startet in Fach 1. Antwortest du richtig, rückt sie ein Fach weiter. Antwortest du falsch, fällt sie zurück in Fach 1. Je weiter oben eine Vokabel steht, desto seltener siehst du sie wieder:</p>');
   d.push('<table><thead><tr><th>Fach</th><th>Du siehst die Vokabel wieder</th></tr></thead><tbody>'
        + '<tr><td>1</td><td>sofort; einmal zusätzlich im selben Durchgang</td></tr>'
@@ -16673,7 +16673,7 @@ function renderHelp(){
        + '<tr><td>4</td><td>nach 4 Tagen</td></tr>'
        + '<tr><td>5</td><td>nach 8 Tagen</td></tr>'
        + '</tbody></table>');
-  d.push('<p>Dadurch übst du automatisch genau das, was dir schwerfällt, und verschwendest keine Zeit mit Wörtern, die längst sitzen. Damit das funktioniert, solltest du lieber <b>jeden Tag zehn Minuten</b> üben als einmal pro Woche eine Stunde.</p>');
+  d.push('<p>Die Abstände bestimmen, wann eine Vokabel wieder fällig ist. Bei <b>Alles üben</b> werden auch noch nicht fällige Wörter abgefragt. Übe lieber <b>jeden Tag zehn Minuten</b> üben als einmal pro Woche eine Stunde.</p>');
   d.push('<p>Die Zahl in jedem Fach zeigt, wie viele Vokabeln dieses Themas gerade dort liegen. Ziel ist, alles nach Fach 5 zu bekommen.</p>');
 
   d.push('<h2>Die vier Übungsarten</h2>');
@@ -16683,12 +16683,12 @@ function renderHelp(){
   d.push('<h3>Auswahl</h3>');
   d.push('<p>Vier Antworten, eine ist richtig. Gut zum Aufwärmen. Achtung: Wiedererkennen ist leichter als Wissen.</p>');
   d.push('<h3>Tippen</h3>');
-  d.push('<p>Du schreibst die Übersetzung. Kleine Tippfehler werden verziehen und als „Fast" angezeigt. Das ist die ehrlichste Übung für eine Klausur.</p>');
+  d.push('<p>Du schreibst die Übersetzung. Kleine Abweichungen können als „Fast" erscheinen. Sie zählen nicht als vollständig richtig; deine Eingabe und die Lösung helfen dir beim Vergleichen.</p>');
   d.push('<h3>Lückensatz</h3>');
   d.push('<p>Ein englischer Beispielsatz mit einer Lücke, darunter die deutsche Bedeutung. Du schreibst das fehlende englische Wort. Hier lernst du nicht nur die Vokabel, sondern auch, wie sie im Satz benutzt wird — genau das brauchst du beim Schreiben.</p>');
 
   d.push('<h2>Abfragerichtung</h2>');
-  d.push('<p>Mit dem Knopf <code>EN → DE</code> schaltest du um. <b>EN → DE</b> heißt: Du siehst Englisch und sagst die deutsche Bedeutung. <b>DE → EN</b> ist die schwerere und für Klausuren wichtigere Richtung.</p>');
+  d.push('<p>Standardmäßig übst du <b>DE → EN</b>: Du siehst Deutsch und antwortest auf Englisch. Mit dem Richtungsknopf schaltest du um. <b>EN → DE</b> heißt: Du siehst Englisch und sagst die deutsche Bedeutung. <b>DE → EN</b> ist die schwerere und für Klausuren wichtigere Richtung.</p>');
   d.push('<p>Beide Richtungen haben getrennte Fächer. Eine Vokabel kann in der einen Richtung in Fach 5 stehen und in der anderen in Fach 1.</p>');
 
   d.push('<h2>Aussprache</h2>');
@@ -16696,7 +16696,7 @@ function renderHelp(){
   d.push('<p>Die Stimme kommt von deinem Gerät und klingt je nach Handy unterschiedlich gut. Die Lautschrift ist die verlässlichere Angabe.</p>');
   d.push('<p><button class="switch" id="sptest">Aussprache testen</button> '
        + '<span id="spout" style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)"></span></p>');
-  d.push('<p class="lead" style="font-size:13.5px">Hörst du nichts, prüfe am iPhone den Stummschalter an der linken Gehäusekante. Bleibt es still, gib die Zeile neben dem Knopf an deine Lehrkraft weiter.</p>');
+  d.push('<p class="lead" style="font-size:13.5px">Hörst du nichts, prüfe Lautstärke, Audioausgabe und die Spracheinstellungen deines Geräts. Bleibt es still, gib die Zeile neben dem Knopf an deine Lehrkraft weiter.</p>');
 
   d.push('<h2>Tastatur am Computer</h2>');
   d.push('<table><tbody>'
@@ -16712,11 +16712,11 @@ function renderHelp(){
   d.push('<p>Alternativ kannst du beim Laden auch eine JSON-Datei verwenden, falls du eine ältere Sicherung hast.</p>');
 
   d.push('<h2>Alle Vokabeln nachschlagen</h2>');
-  d.push('<p>Auf der Startseite unten steht <b>Alle Vokabeln ansehen</b>. Dort findest du:</p>');
+  d.push('<p>Auf der Jahrgangsübersicht findest du <b>Vokabeln nachschlagen</b>. Dort findest du:</p>');
   d.push('<ul>');
   d.push('<li>ein <b>Suchfeld</b> — es durchsucht Englisch, Deutsch und die Beispielsätze;</li>');
   d.push('<li>Schalter für <b>Beispielsätze</b> und <b>Lautschrift</b>;</li>');
-  d.push('<li><b>Drucken</b> — druckt genau die Themen, die du aufgeklappt hast, zweispaltig und ohne Bedienelemente. Auf dem Handy kannst du daraus ein PDF sichern.</li>');
+  d.push('<li><b>Drucken</b> — druckt die aufgeklappten Abschnitte und berücksichtigt den Suchfilter. Zugeklappte Abschnitte werden vollständig ausgelassen und erzeugen keine zusätzlichen leeren Seiten. Im Druckdialog kannst du auch als PDF speichern.</li>');
   d.push('</ul>');
 
   d.push('<h2>Schriftgröße</h2>');
@@ -16724,7 +16724,7 @@ function renderHelp(){
 
   d.push('<h2>Wenn etwas nicht geht</h2>');
   d.push('<h3>Kein Ton bei der Aussprache</h3>');
-  d.push('<p>Prüfe am iPhone den Stummschalter an der linken Gehäusekante. Ist er auf stumm, bleibt auch die Sprachausgabe still.</p>');
+  d.push('<p>Prüfe Lautstärke und Audioausgabe, zum Beispiel verbundene Kopfhörer. Die verfügbaren Stimmen hängen von Gerät und Browser ab. Nutze auch den Aussprache-Test oben.</p>');
   d.push('<h3>Der Lernstand ist weg</h3>');
   d.push('<p>Wahrscheinlich wurden die Browserdaten gelöscht, oder du hast die Seite über eine andere Adresse geöffnet. Für den Browser sind das zwei verschiedene Orte. Nutze immer denselben Link.</p>');
   d.push('<h3>Die Seite bleibt leer</h3>');
@@ -16732,8 +16732,8 @@ function renderHelp(){
 
   d.push('<div class="teacher">');
   d.push('<h2>Für Kolleginnen und Kollegen</h2>');
-  d.push('<p>Die Seite läuft ohne Server, ohne Konten und ohne Datenbank. Es werden keine personenbezogenen Daten erhoben oder übertragen; der Lernstand bleibt ausschließlich im Browser des Geräts.</p>');
-  d.push('<p>In der Listenansicht gibt es zusätzlich einen <b>CSV-Export</b> der gerade sichtbaren Einträge — für Arbeitsblätter, Tests oder eigene Listen. Spalten: Unit, Englisch, Deutsch. Wähle alle Vokabeln oder markiere einzelne Einträge für den Export.</p>');
+  d.push('<p>Die Website benötigt kein Lernkonto. Der Lernstand wird lokal im Browser gespeichert; es gibt keine automatische Synchronisierung zwischen Geräten.</p>');
+  d.push('<p>Mit <b>CSV</b> öffnest du die Exportauswahl. Du kannst alle Vokabeln dieses Jahrgangs oder nur ausgewählte Wörter exportieren. Die Datei enthält genau drei Spalten: <b>Unit, Englisch, Deutsch</b>. Für eine Auswahl markierst du einzelne Wörter oder übernimmst die sichtbaren Suchergebnisse. Der Export aller Wörter bleibt vom Suchfilter unabhängig.</p>');
   d.push('<p>Alle Übersetzungen, Kollokationen und Beispielsätze sind eigenständig formuliert. Die Auswahl der Stichwörter orientiert sich an den Korridorthemen und am eingeführten Lehrwerk.</p>');
   d.push('</div>');
 
@@ -17082,7 +17082,7 @@ try{
 }
 </script>
 
-<script src="../assets/learning.js?v=20260908-export"></script>
+<script src="../assets/learning.js?v=20260908-help-navigation"></script>
 
 <link rel="stylesheet" href="../assets/feedback.css">
 <script src="../assets/feedback.js"></script>

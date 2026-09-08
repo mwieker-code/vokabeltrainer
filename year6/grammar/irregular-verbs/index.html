@@ -393,7 +393,7 @@ button.primary:hover{background:#0B4A54}
 }
 </style>
 
-<link rel="stylesheet" href="../../../assets/learning.css?v=20260908-export">
+<link rel="stylesheet" href="../../../assets/learning.css?v=20260908-help-navigation">
 <link rel="stylesheet" href="style.css?v=20260908-review">
 <div class="wrap">
   <div class="masthead">
@@ -1387,15 +1387,16 @@ function renderHelp(){
        + '<tr><td>' + TYPE_MARK["same"] + '</td><td>alle drei Formen gleich</td><td>cut \u2013 cut \u2013 cut</td></tr>'
        + '<tr><td>' + TYPE_MARK["sp-pp"] + '</td><td>simple past = past participle</td><td>buy \u2013 bought \u2013 bought</td></tr>'
        + '<tr><td>' + TYPE_MARK["base-pp"] + '</td><td>Grundform = past participle</td><td>come \u2013 came \u2013 come</td></tr>'
+       + '<tr><td>' + TYPE_MARK["base-past"] + '</td><td>Grundform = simple past</td><td>beat – beat – beaten</td></tr>'
        + '<tr><td>' + TYPE_MARK["all"] + '</td><td>alle drei verschieden</td><td>go \u2013 went \u2013 gone</td></tr>'
        + '</tbody></table>');
-  d.push('<p>Ein Verb hat immer nur <b>einen</b> Lernstand. Übst du <code>go</code> über die Portion, '
+  d.push('<p>In den Formen-Sets teilen sich die Übungen <b>einen</b> Lernstand pro Verb. Verneinung und Fragen haben einen eigenen Lernstand. Übst du <code>go</code> über die Portion, '
        + 'zählt das auch im Muster-Set.</p>');
 
   d.push('<h2>Die drei Übungsarten</h2>');
   d.push('<h3>Formen tippen</h3>');
   d.push('<p>Du siehst die Grundform und schreibst simple past und past participle. Das ist die '
-       + 'wichtigste Übung \u2013 genau das wird in der Klassenarbeit verlangt. Mit <span class="kbd">Enter</span> '
+       + 'direkte Übung zum Abrufen beider Vergangenheitsformen. Mit <span class="kbd">Enter</span> '
        + 'springst du vom ersten ins zweite Feld, mit <span class="kbd">Enter</span> im zweiten Feld prüfst du.</p>');
   d.push('<h3>Karteikarte</h3>');
   d.push('<p>Grundform ansehen, alle drei Formen im Kopf aufsagen, umdrehen, ehrlich bewerten.</p>');
@@ -1407,7 +1408,7 @@ function renderHelp(){
   d.push('<h2>Die fünf Fächer</h2>');
   d.push('<p>Jedes Verb steckt in einem Fach. Richtig beantwortet rückt es ein Fach weiter, falsch fällt es zurück in Fach 1.</p>');
   d.push('<table><thead><tr><th>Fach</th><th>Du siehst das Verb wieder</th></tr></thead><tbody>'
-       + '<tr><td>1</td><td>sofort im selben Durchgang</td></tr>'
+       + '<tr><td>1</td><td>sofort wieder fällig; in einer neuen Runde</td></tr>'
        + '<tr><td>2</td><td>nach 1 Tag</td></tr>'
        + '<tr><td>3</td><td>nach 2 Tagen</td></tr>'
        + '<tr><td>4</td><td>nach 4 Tagen</td></tr>'
@@ -1415,7 +1416,7 @@ function renderHelp(){
        + '</tbody></table>');
   d.push('<p>Lieber <b>jeden Tag zehn Minuten</b> als einmal pro Woche eine Stunde.</p>');
   d.push('<p>Hast du getippt und lagst daneben, steht <i>Gewusst</i> nicht zur Auswahl \u2013 das Verb '
-       + 'kommt wieder. Bei einem reinen Tippfehler bleibt der Knopf da. In der Karteikarte, wo du nichts '
+       + 'kommt wieder. Auch ein Tippfehler zählt nicht als vollständig gewusst. In der Karteikarte, wo du nichts '
        + 'eintippst, entscheidest du weiterhin selbst \u2013 sei dabei ehrlich zu dir.</p>');
 
   d.push('<h2>Verneinung und Fragen im simple past</h2>');
@@ -1434,12 +1435,12 @@ function renderHelp(){
        + 'sie muss nicht zweimal da sein.</p>');
   d.push('<p>Nur <b>be</b> macht es anders: hier gibt es kein <i>did</i>. Du verneinst mit '
        + '<i>wasn\'t</i> oder <i>weren\'t</i> und fragst mit <i>Was …?</i> oder <i>Were …?</i> \u2013 '
-       + 'je nachdem, ob das Subjekt Einzahl oder Mehrzahl ist.</p>');
+       + '<b>was</b> bei I/he/she/it, <b>were</b> bei you/we/they. Auch bei einer einzelnen angesprochenen Person heißt es you were.</p>');
   d.push('<p><i>didn\'t play</i> und <i>did not play</i> sind beide richtig. Vergisst du nur den Apostroph, '
        + 'zählt das als Flüchtigkeitsfehler. Ein falsches Hilfsverb dagegen \u2013 <i>did</i> statt <i>didn\'t</i>, '
        + '<i>was</i> statt <i>were</i> \u2013 zählt als Fehler, denn das ist kein Vertippen.</p>');
   d.push('<p>Die Sätze werden jedes Mal neu zusammengesetzt: anderes Subjekt, andere Zeitangabe. '
-       + 'Dasselbe Verb kommt also nie im gleichen Satz zurück.</p>');
+       + 'Dabei können Kombinationen auch erneut vorkommen.</p>');
   d.push('<p>Dieses Set hat einen <b>eigenen Lernstand</b>. Ein Verb, das du beim Formentraining schon '
        + 'in Fach 5 hast, fängt hier wieder bei Fach 1 an \u2013 es ist ja auch eine andere Fähigkeit.</p>');
 
@@ -1451,18 +1452,18 @@ function renderHelp(){
        + 'Verben, die du mehrfach hintereinander gewusst hast. Ein Verb, das du gerade zum ersten Mal '
        + 'richtig hattest, zählt hier noch nicht mit.</p>');
   d.push('<p>Der Balken bewegt sich deshalb langsam. Das ist Absicht: Er soll zeigen, was du '
-       + 'in zwei Wochen noch kannst, nicht was du heute einmal getroffen hast. Ist ein Set komplett, '
+       + 'mehrfach gewusst und bis in Fach 5 gebracht hast. Ist ein Set komplett, '
        + 'wird der Balken grün.</p>');
   d.push('<p>Erreicht ein Verb Fach 5, erscheint über der nächsten Karte kurz eine Bestätigung '
        + 'mit allen drei Formen.</p>');
 
   d.push('<h3>Die Abzeichen</h3>');
-  d.push('<p>Ganz oben auf der Übersicht siehst du neun Felder \u2013 eins für jedes Set. '
+  d.push('<p>Ganz oben auf der Übersicht siehst du ein Feld pro Formen-Set \u2013 eins für jedes Set. '
        + 'Ein Häkchen bekommst du, wenn <b>alle</b> Verben dieses Sets in Fach 5 liegen. '
        + 'Am Set selbst steht dann zusätzlich <i>geschafft</i>.</p>');
   d.push('<p>Die Sets überschneiden sich. Wer die Portionen 1 bis 3 abgearbeitet hat, hat damit '
-       + 'automatisch auch die Muster-Abzeichen und am Ende das Abzeichen für alle Verben. Neun '
-       + 'Abzeichen heißt also nicht neunmal so viel Arbeit.</p>');
+       + 'automatisch auch die Muster-Abzeichen und am Ende das Abzeichen für alle Verben. Mehrere '
+       + 'Abzeichen bedeuten deshalb nicht, dass du jedes Verb für jedes Set neu lernen musst.</p>');
   d.push('<p>Ein Abzeichen zeigt deinen Stand von <b>jetzt</b>. Rutscht ein Verb später wieder '
        + 'zurück, weil du es vergessen hast, verschwindet das Häkchen \u2013 bis du das Verb wieder '
        + 'auf Fach 5 gebracht hast. Am schnellsten zu holen: das Set mit den acht Verben, bei denen '
@@ -1496,9 +1497,10 @@ function renderHelp(){
   d.push('<p>Die Stimme kommt von deinem Gerät. Die Lautschrift daneben ist die verlässlichere Angabe.</p>');
   d.push('<p><button class="switch" id="sptest">Aussprache testen</button> '
        + '<span id="spout" style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)"></span></p>');
-  d.push('<p class="lead" style="font-size:13.5px">Hörst du nichts, prüfe am iPhone den Stummschalter an der '
-       + 'linken Gehäusekante. Bleibt es still, gib die Zeile neben dem Knopf an deine Lehrkraft weiter.</p>');
+  d.push('<p class="lead" style="font-size:13.5px">Hörst du nichts, prüfe Lautstärke, Audioausgabe und die '
+       + 'Spracheinstellungen deines Geräts. Bleibt es still, gib die Zeile neben dem Knopf an deine Lehrkraft weiter.</p>');
 
+  d.push('<h2>Töne und Animationen</h2><p>Unten auf der Seite kannst du Töne und Animationen getrennt schalten. Rückmeldetöne sind anfangs aus. Die Aussprache über das Lautsprecher-Symbol ist davon unabhängig. Deine Einstellungen bleiben in diesem Browser gespeichert.</p>');
   d.push('<h2>Tastatur am Computer</h2>');
   d.push('<table><tbody>'
        + '<tr><td><span class="kbd">Enter</span></td><td>nächstes Feld / prüfen</td></tr>'

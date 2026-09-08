@@ -31,8 +31,8 @@
   function resume(){const x=stored();if(!x)return;S.roundSource=x.source;S.topicId=x.source;S.dir=x.dir;S.mode=x.mode;S.scope=x.scope;S.onlyDue=x.scope==='due';S.roundLimit=x.scope==='short'?10:Infinity;S.queue=x.queue.map(k=>wordMap.get(k));S.i=x.i;S.seen=x.seen;S.initialCount=x.initial;for(const [field,key] of [['retried','retried'],['missed','missed'],['roundAnswered','answered']])S[field]=new Set((x[key]||[]).map(k=>wordMap.get(k)).filter(Boolean));S.answered=null;S.revealed=false;S.options=null;S.typedValue='';S.view='session';render();}
   function setup(topicId){
     S.roundSource=topicId;S.topicId=topicId;
-    const words=upper?(SETS[topicId]||[]):setOf(topicId),due=words.filter(v=>isDue(record(v))).length;
-    view.innerHTML='<h2>Lernumfang wählen</h2><p>'+safe(TOPICS.find(t=>t.id===topicId)?.name||'Deine Auswahl')+'</p><div class="scope-options"><button class="topic primary" data-scope="all">Alles üben · '+words.length+' Vokabeln</button><button class="topic" data-scope="short">Kurze Runde · bis zu 10 Vokabeln</button><button class="topic" data-scope="due">Nur fällige Vokabeln · '+due+'</button></div><button id="setupBack">Zur Übersicht</button>';
+    const words=topicId==='today'?allWords():upper?(SETS[topicId]||[]):setOf(topicId),due=words.filter(v=>isDue(record(v))).length;
+    view.innerHTML='<h2>Lernumfang wählen</h2><p>'+safe(topicId==='today'?'Alle Themen':TOPICS.find(t=>t.id===topicId)?.name||'Deine Auswahl')+'</p><div class="scope-options"><button class="topic primary" data-scope="all">Alles üben · '+words.length+' Vokabeln</button><button class="topic" data-scope="short">Kurze Runde · bis zu 10 Vokabeln</button><button class="topic" data-scope="due">Nur fällige Vokabeln · '+due+'</button></div><button id="setupBack">Zur Übersicht</button>';
     document.getElementById('setupBack').onclick=home;
     view.querySelectorAll('[data-scope]').forEach(b=>b.onclick=()=>{S.scope=b.dataset.scope;S.onlyDue=S.scope==='due';S.roundLimit=S.scope==='short'?10:Infinity;S.view='session';buildQueue();render();});
   }
@@ -152,14 +152,19 @@
       S.yearId=YEARS[0].id;
       renderYear();
       const bar=view.querySelector('.sessionbar'); if(bar)bar.remove();
-      view.insertAdjacentHTML('afterbegin','<h2 class="section-title">Deine Units</h2>');
+      view.querySelector('.topic.uall')?.remove();
       if(KEY==='vt6:progress')view.insertAdjacentHTML('beforeend','<a class="topic grammar-tile" href="grammar/"><span class="t-name">Grammar</span><br><span class="t-count">Hier kannst du Grammatik üben.</span></a>');
       view.insertAdjacentHTML('beforeend','<div class="quicklinks"><button id="allBtn">Vokabeln nachschlagen</button><button id="helpBtn">So funktioniert’s</button></div>');
       document.getElementById('allBtn').onclick=()=>{S.view='list';render();};
       document.getElementById('helpBtn').onclick=()=>{S.view='help';render();};
     }
+    const listButton=document.getElementById('allBtn');
+    view.insertAdjacentHTML('afterbegin','<div class="unit-heading"><h2 class="section-title">'+(upper?'Deine Themen':'Deine Units')+'</h2><div class="unit-actions"><button class="browse-practice" id="practiceAcross"><span aria-hidden="true">↗</span> '+(upper?'Themenübergreifend üben':'Unitübergreifend üben')+'</button><button id="browseVocabulary">Vokabeln nachschlagen</button></div></div>');
+    document.getElementById('browseVocabulary').replaceWith(listButton);
+    listButton.className='browse-list';listButton.removeAttribute('style');listButton.textContent='Vokabeln nachschlagen';
+    document.getElementById('practiceAcross').onclick=()=>setup(upper?'today':YEARS[0].id+'-all');
     view.insertAdjacentHTML('afterbegin','<div class="sessionbar"><button class="switch" id="homeDirection">'+dirLabel()+'</button></div>');
-    if(stored()){const savedRound=stored();const name=TOPICS.find(t=>t.id===savedRound.source)?.name||savedRound.source;view.insertAdjacentHTML('afterbegin','<button class="topic" id="resumeRound">Runde fortsetzen · '+safe(name)+'<br><span class="t-count">'+savedRound.i+' von '+savedRound.queue.length+' Schritten · '+(savedRound.dir==='de2en'?'DE → EN':'EN → DE')+'</span></button>');document.getElementById('resumeRound').onclick=resume;}
+    if(stored()){const savedRound=stored();const name=TOPICS.find(t=>t.id===savedRound.source)?.name||(savedRound.source==='today'?'Alle Themen':'Alle Vokabeln');view.insertAdjacentHTML('afterbegin','<button class="topic" id="resumeRound">Runde fortsetzen · '+safe(name)+'<br><span class="t-count">'+savedRound.i+' von '+savedRound.queue.length+' Schritten · '+(savedRound.dir==='de2en'?'DE → EN':'EN → DE')+'</span></button>');document.getElementById('resumeRound').onclick=resume;}
     document.getElementById('homeDirection').onclick=()=>{S.dir=S.dir==='en2de'?'de2en':'en2de';render();};
   };
   // All overview/back actions share the direct Unit dashboard.
@@ -240,7 +245,7 @@
   renderHelp = function(){
     originalHelp();
     const doc=view.querySelector('.doc');
-    if(doc)doc.insertAdjacentHTML('afterbegin','<h2>Dein Lernumfang</h2><p>Wähle einen Part, eine Unit oder ein Thema. Alles üben umfasst alle Wörter deiner Auswahl, auch bereits gelernte. Alternativ wählst du zehn Wörter oder nur fällige Vokabeln. Fehler werden nach dem ersten Durchgang einmal wiederholt. Mit Später fortsetzen speicherst du die Runde auf diesem Gerät. Ein Wechsel der Übungsart startet den gewählten Lernumfang neu.</p><p>Beim Tippen bleiben deine Eingabe und die Lösung sichtbar. Markierte Buchstaben zeigen Abweichungen. Falsche Antworten werden nicht als gewusst gespeichert, auch wenn du „Gewusst“ antippst.</p>');
+    if(doc)doc.insertAdjacentHTML('afterbegin','<h2>Dein Lernumfang</h2><p>Wähle einen Part, eine Unit oder ein Thema. Alles üben umfasst alle Wörter deiner Auswahl, auch bereits gelernte. Alternativ wählst du höchstens zehn Wörter oder nur fällige Vokabeln. Fehler werden nach dem ersten Durchgang einmal wiederholt. Mit <b>Später fortsetzen</b> verlässt du die Runde. Auf der Jahrgangsübersicht kannst du sie im selben Browser fortsetzen. Pro Jahrgang wird eine Runde gespeichert; eine neue Runde ersetzt sie. Eine noch ungeprüfte Texteingabe wird nicht gespeichert. Ein Wechsel der Übungsart startet den gewählten Lernumfang neu.</p><p>Beim Tippen bleiben deine Eingabe und die Lösung sichtbar. Markierte Buchstaben zeigen Abweichungen. Falsche Antworten werden nicht als gewusst gespeichert, auch wenn du „Gewusst“ antippst.</p><h2>Töne und Animationen</h2><p>Unten auf der Seite kannst du Töne und Animationen getrennt ein- oder ausschalten. Töne sind anfangs ausgeschaltet. Die Einstellungen werden im Browser gespeichert. Die Aussprache über das Lautsprecher-Symbol funktioniert unabhängig vom Schalter für Rückmeldetöne. Bei reduzierter Bewegung in den Geräteeinstellungen werden Animationen unterdrückt.</p>');
   };
   render();
 })();

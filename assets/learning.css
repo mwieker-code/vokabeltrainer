@@ -58,3 +58,13 @@ a.home-link:hover,a.home-link:focus,a.home-link:active,a.grammar-back:hover,a.gr
   .vlist .lsec > summary{page-break-after:avoid;break-after:avoid}
   .home-link,.grammar-back,.feedback-settings,.csv-controls,.csv-check{display:none!important}
 }
+
+/* Compact overview actions keep the Unit selection in the foreground. */
+.unit-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:20px 0 24px}
+.unit-heading .section-title{margin:0}
+.unit-actions{display:flex;gap:10px;flex-wrap:wrap}
+.unit-actions button{font:inherit;font-size:14px;font-weight:600;border:1px solid #9bb9be;border-radius:10px;padding:11px 15px;min-height:44px;color:#234d56;background:transparent;cursor:pointer}
+.unit-actions .browse-practice{background:#e0eef0}
+.unit-actions button:hover{color:#173b43;background:#cee2e6;border-color:#527c85}
+.unit-actions button:focus-visible{outline:3px solid #327c8b;outline-offset:3px}
+@media(max-width:640px){.unit-heading{align-items:flex-start;flex-direction:column}.unit-actions{width:100%}.unit-actions button{flex:1 1 200px}}
