@@ -68,3 +68,5 @@ a.home-link:hover,a.home-link:focus,a.home-link:active,a.grammar-back:hover,a.gr
 .unit-actions button:hover{color:#173b43;background:#cee2e6;border-color:#527c85}
 .unit-actions button:focus-visible{outline:3px solid #327c8b;outline-offset:3px}
 @media(max-width:640px){.unit-heading{align-items:flex-start;flex-direction:column}.unit-actions{width:100%}.unit-actions button{flex:1 1 200px}}
+
+.csv-groups{border:1px solid #9bb9be;border-radius:10px;margin-top:16px;padding:16px}.csv-groups legend{font-weight:700}.csv-groups details{margin:10px 0}.csv-groups summary{cursor:pointer;font-weight:600;padding:8px}.csv-groups label{display:block;padding:8px 12px}.csv-groups input{margin-right:6px}

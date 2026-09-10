@@ -52,13 +52,32 @@
     const box=document.getElementById('vlist');if(!box)return;
     const controls=document.createElement('section');controls.className='csv-controls';controls.hidden=true;
     controls.innerHTML='<h2>CSV exportieren</h2><p>Drei Spalten: Unit, Englisch, Deutsch. Alle Vokabeln umfasst diesen Jahrgang, unabhängig vom Suchfilter.</p><div class="controls"><button id="csvAll">Alle Vokabeln exportieren</button><button id="csvSelected">Auswahl exportieren</button><button id="csvVisible">Sichtbare Treffer auswählen</button><button id="csvClear">Auswahl aufheben</button></div><p id="csvCount" role="status"></p>';
+    const groups=document.createElement('fieldset');groups.className='csv-groups';
+    groups.innerHTML='<legend>Units und Unterkategorien auswählen</legend><p>Diese Auswahl umfasst jeweils alle Wörter des Abschnitts, unabhängig vom Suchfilter. Ohne Suchbegriff wählt „Sichtbare Treffer auswählen“ nur Wörter aus aufgeklappten Abschnitten. Mit Suchbegriff werden Treffer aus allen Abschnitten ausgewählt.</p>';
+    const groupInputs=[];
+    const addGroup=(parent,title,topics)=>{
+      const label=document.createElement('label'),input=document.createElement('input');
+      input.type='checkbox';input.dataset.csvGroup=topics.map(t=>t.id).join(',');
+      const keys=topics.flatMap(t=>(SETS[t.id]||[]).map((v,i)=>t.id+':'+i));
+      input.onchange=()=>{keys.forEach(k=>input.checked?csvSelected.add(k):csvSelected.delete(k));update();};
+      label.append(input,document.createTextNode(' '+title));parent.append(label);groupInputs.push({input,keys});
+    };
+    const grouped=new Map();
+    TOPICS.forEach(t=>{const key=upper?t.year:t.unit;if(!grouped.has(key))grouped.set(key,[]);grouped.get(key).push(t);});
+    grouped.forEach(topics=>{
+      const section=document.createElement('details'),summary=document.createElement('summary');
+      summary.textContent=upper?(topics[0].yearName||topics[0].year):(topics[0].unitName||topics[0].unit);
+      section.append(summary);addGroup(section,upper?'Alle Themen dieser Gruppe':'Ganze Unit',topics);
+      topics.forEach(t=>addGroup(section,t.name,[t]));groups.append(section);
+    });
+    controls.append(groups);
     box.before(controls);
-    const update=()=>{document.getElementById('csvCount').textContent=csvSelected.size+' Vokabeln ausgewählt';document.getElementById('csvSelected').disabled=!csvSelected.size;};
+    const update=()=>{groupInputs.forEach(({input,keys})=>{const n=keys.filter(k=>csvSelected.has(k)).length;input.checked=keys.length>0&&n===keys.length;input.indeterminate=n>0&&n<keys.length;});box.querySelectorAll('[data-csv-key]').forEach(input=>input.checked=csvSelected.has(input.dataset.csvKey));document.getElementById('csvCount').textContent=csvSelected.size+' Vokabeln ausgewählt';document.getElementById('csvSelected').disabled=!csvSelected.size;};
     box.querySelectorAll('[data-sec]').forEach(sec=>{const id=sec.dataset.sec;sec.querySelectorAll('.vrow').forEach((row,i)=>{const k=id+':'+i;const label=document.createElement('label');label.className='csv-check';label.hidden=true;const input=document.createElement('input');input.type='checkbox';input.checked=csvSelected.has(k);input.setAttribute('aria-label',(SETS[id]?.[i]?.en||'Vokabel')+' für CSV auswählen');input.dataset.csvKey=k;input.onchange=()=>{input.checked?csvSelected.add(k):csvSelected.delete(k);update();};label.append(input,document.createTextNode(' Für CSV auswählen'));row.append(label);});});
     document.getElementById('lcsv').onclick=()=>{controls.hidden=!controls.hidden;box.querySelectorAll('.csv-check').forEach(el=>el.hidden=controls.hidden);};
     document.getElementById('csvAll').onclick=()=>csvDownload(false);
     document.getElementById('csvSelected').onclick=()=>csvDownload(true);
-    document.getElementById('csvVisible').onclick=()=>{box.querySelectorAll('details').forEach(sec=>{if(sec.hidden||sec.style.display==='none')return;sec.querySelectorAll('.vrow:not(.off) input[data-csv-key]').forEach(input=>{input.checked=true;csvSelected.add(input.dataset.csvKey);});sec.open=true;});update();};
+    document.getElementById('csvVisible').onclick=()=>{box.querySelectorAll('details').forEach(sec=>{if(sec.hidden||sec.style.display==='none'||(!document.getElementById('lq').value.trim()&&!sec.open))return;sec.querySelectorAll('.vrow:not(.off) input[data-csv-key]').forEach(input=>{input.checked=true;csvSelected.add(input.dataset.csvKey);});});update();};
     document.getElementById('csvClear').onclick=()=>{csvSelected.clear();box.querySelectorAll('[data-csv-key]').forEach(input=>input.checked=false);update();};update();
   };
   // Split alternatives BEFORE removing punctuation. Keep both optional-word forms.
