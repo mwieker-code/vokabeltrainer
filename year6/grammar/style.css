@@ -25,3 +25,9 @@ a.topic[href="simple-past/"]{background:#eee8f8;border-color:#cbbbe3;border-left
 /* Programmatically focused headings are reading targets, not controls. */
 h1[tabindex="-1"]:focus,h1[tabindex="-1"]:focus-visible{outline:none}
 .breadcrumb{display:flex;flex-wrap:wrap;gap:9px;align-items:center;font-size:14px;color:#526670;margin:16px 0 24px}.breadcrumb a{color:#0e5a66;text-underline-offset:3px}.breadcrumb a:focus-visible{outline:3px solid #b96910;outline-offset:3px}
+/* Separate the instruction, working material and supporting note. */
+.task .task-instruction{font-size:1rem;font-weight:500;margin:0 0 14px}
+.task .sentence-pieces{display:flex;flex-wrap:wrap;gap:10px;list-style:none;padding:0;margin:0 0 16px}
+.task .sentence-pieces li{background:#e4def6;color:#44306b;border:1px solid #c4b5df;border-radius:10px;padding:8px 14px;font-weight:700;overflow-wrap:anywhere}
+.task .task-material{background:#e6eff2;color:#183f4b;border-left:4px solid #558593;border-radius:6px;padding:14px 18px;font-weight:600;line-height:1.6;margin:0 0 16px;overflow-wrap:anywhere}
+.task .task-note{font-size:1rem;font-weight:400;color:#465c65;margin:8px 0 24px;line-height:1.5}
