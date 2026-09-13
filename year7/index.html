@@ -1,0 +1,5893 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vokabeltrainer Englisch – Year 7</title>
+<script>
+/* Faengt Fehler ab, die sonst zu einer leeren Seite fuehren, und zeigt sie an. */
+window.onerror = function(msg, src, line, col){
+  try{
+    var box = document.getElementById("warn");
+    if(!box){
+      box = document.createElement("div");
+      box.id = "warn";
+      document.body.insertBefore(box, document.body.firstChild);
+    }
+    box.innerHTML = '<div class="warn"><b>Diese Seite laeuft in deinem Browser nicht.</b><br>'
+      + 'Wahrscheinlich ist er zu alt fuer eine der verwendeten Funktionen. '
+      + 'Bitte diesen Text weitergeben:<br><span style="font-family:monospace;font-size:11px">'
+      + String(msg) + ' (Zeile ' + line + ':' + col + ')</span></div>';
+  }catch(e){}
+  return false;
+};
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --ground:#EEF1F3;
+  --card:#FFFFFF;
+  --ink:#16232B;
+  --ink-soft:#5A6B75;
+  --rule:#D6DCE0;
+  --petrol:#0E5A66;
+  --amber:#C9761E;
+  --moss:#3F7A4B;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Consolas,monospace;
+  --r:4px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--ground);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:760px;margin:0 auto;padding:24px 20px 64px}
+
+/* ---------- Kopfzeile ---------- */
+.masthead{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;
+  border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:28px;flex-wrap:wrap}
+.mhead-text{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;min-width:0}
+@media(max-width:560px){
+  .masthead{align-items:center}
+  .mhead-text{gap:2px;display:block}
+}
+.masthead h1{font-family:var(--serif);font-weight:600;font-size:24px;margin:0;letter-spacing:-.01em}
+.masthead .sub{font-family:var(--mono);font-size:11px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-soft)}
+.home-link{font-family:var(--mono);font-size:11px;letter-spacing:.04em;
+  text-transform:uppercase;color:var(--ink-soft);text-decoration:none;
+  white-space:nowrap;align-self:flex-end}
+.home-link:hover{color:var(--ink);text-decoration:underline}
+
+/* ---------- Unit-Farben (Variante A: Rand und Kopf) ---------- */
+/* Im Schwarz-Weiss-Druck traegt die Kachelbeschriftung die Unterscheidung,
+   nicht die Farbe. */
+.y7u1{--unit:#2B5F8A; --unit-bg:#E6EDF4; --unit-ink:#1B3C56}   /* Blau     */
+
+/* Hauptmenue: eigene, von den Units unabhaengige Farbgebung, damit
+   Jahrgang, Gesamtliste und Anleitung auf einen Blick auseinanderzuhalten
+   sind. */
+.home-year{--unit:#0E5A66; --unit-bg:#E4EFF1; --unit-ink:#083C45}   /* Petrol   */
+.home-all{--unit:#3F5E8A;  --unit-bg:#E7ECF4; --unit-ink:#24344F}   /* Blau     */
+.home-help{--unit:#6B5E3F; --unit-bg:#F1EEE4; --unit-ink:#463C24}   /* Sand     */
+.topic.home-year, .topic.home-all, .topic.home-help{
+  border-left-color:var(--unit); border-left-width:4px;
+  background:var(--unit-bg); border-top-color:transparent;
+  border-right-color:transparent; border-bottom-color:transparent}
+.topic.home-year .t-name, .topic.home-all .t-name, .topic.home-help .t-name{color:var(--unit-ink)}
+.topic.home-year .t-count, .topic.home-all .t-count, .topic.home-help .t-count{color:var(--unit)}
+.topic.home-year .minirail i.f{background:var(--unit)}
+.topic.home-year:hover, .topic.home-all:hover, .topic.home-help:hover{
+  border-color:transparent; border-left-color:var(--unit-ink)}
+@media print{
+  .topic.home-year, .topic.home-all, .topic.home-help{background:#fff;border:1px solid #000;border-left-width:4px}
+  .topic.home-year .t-name, .topic.home-all .t-name, .topic.home-help .t-name,
+  .topic.home-year .t-count, .topic.home-all .t-count, .topic.home-help .t-count{color:#000}
+}
+.y7u2{--unit:#B0472A; --unit-bg:#F5E7E1; --unit-ink:#6E2C1A}   /* Terrakotta */
+.y7u3{--unit:#5B7A2E; --unit-bg:#EBF0E1; --unit-ink:#374A1C}   /* Olive    */
+.y7u4{--unit:#7A5C9E; --unit-bg:#EEE8F3; --unit-ink:#4B3763}   /* Violett  */
+.uall{--unit:#16232B; --unit-bg:#ECEFF1; --unit-ink:#16232B}
+
+/* ---------- Startseite ---------- */
+.yeargroup{margin-bottom:34px}
+.yeargroup[class*="u"]{border:none;background:none}
+.yearhead{display:flex;align-items:center;gap:12px;margin-bottom:12px;cursor:pointer;list-style:none}
+.yearhead::-webkit-details-marker{display:none}
+.yearhead::after{content:"+";margin-left:auto;font-family:var(--mono);font-size:15px;
+  color:var(--unit,var(--ink-soft));flex:0 0 auto}
+details[open] > .yearhead::after{content:"\2212"}
+.yearhead .tag{font-family:var(--mono);font-size:12px;background:var(--unit,var(--ink));
+  color:#fff;padding:2px 7px;border-radius:2px}
+.yeargroup[class*="u"] .yearhead{border-bottom:1px solid var(--unit);padding-bottom:6px}
+.yeargroup[class*="u"] .yearhead .name{color:var(--unit)}
+.topic[class*="u"]{border-left-color:var(--unit);border-left-width:4px;
+  background:var(--unit-bg);border-top-color:transparent;
+  border-right-color:transparent;border-bottom-color:transparent}
+.topic[class*="u"] .t-name{color:var(--unit-ink)}
+.topic[class*="u"] .t-count{color:var(--unit)}
+.topic[class*="u"] .t-due{color:var(--unit-ink);font-weight:500}
+.topic[class*="u"] .minirail i{background:#fff}
+.topic[class*="u"] .minirail i.f{background:var(--unit)}
+.topic[class*="u"]:hover{border-color:transparent;border-left-color:var(--unit-ink)}
+@media print{
+  .topic[class*="u"]{background:#fff;border:1px solid #000;border-left-width:4px}
+  .topic[class*="u"] .t-name,
+  .topic[class*="u"] .t-count,
+  .topic[class*="u"] .t-due{color:#000}
+  .yearhead .tag{background:#000}
+  .yeargroup[class*="u"] .yearhead{border-bottom-color:#000}
+  .yeargroup[class*="u"] .yearhead .name{color:#000}
+}
+.yearhead .name{font-family:var(--serif);font-size:17px;font-style:italic;color:var(--ink-soft)}
+
+.topic{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--rule);
+  border-left:3px solid var(--rule);border-radius:var(--r);padding:13px 15px;margin-bottom:8px;
+  cursor:pointer;font:inherit;color:inherit;transition:border-color .15s,transform .15s}
+.topic:hover{border-left-color:var(--petrol);transform:translateX(2px)}
+.topic:focus-visible{outline:2px solid var(--petrol);outline-offset:2px}
+.topic .t-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.topic .t-name{font-weight:500}
+.topic .t-count{font-family:var(--mono);font-size:12px;color:var(--ink-soft);white-space:nowrap}
+.topic .t-due{color:var(--amber)}
+.minirail{display:flex;gap:2px;margin-top:9px}
+.minirail i{height:4px;flex:1;background:var(--rule);border-radius:1px}
+.minirail i.f{background:var(--petrol)}
+
+.emptyhint{background:var(--card);border:1px dashed var(--rule);border-radius:var(--r);
+  padding:14px 16px;color:var(--ink-soft);font-size:14px}
+
+/* ---------- Sitzung: Leitner-Schiene (Signature) ---------- */
+.rail{display:flex;gap:6px;margin-bottom:22px}
+.slot{flex:1;background:var(--card);border:1px solid var(--rule);border-radius:var(--r);
+  padding:7px 6px 6px;text-align:center;position:relative;transition:border-color .2s,background .2s}
+.slot .n{font-family:var(--mono);font-size:10px;color:var(--ink-soft);letter-spacing:.06em}
+.slot .c{font-family:var(--serif);font-size:19px;line-height:1.1;margin-top:1px}
+.slot .iv{font-family:var(--mono);font-size:9px;color:var(--ink-soft);margin-top:2px}
+.slot.here{border-color:var(--petrol);background:#E7F0F1}
+.slot.here::after{content:"";position:absolute;left:50%;bottom:-7px;width:8px;height:8px;
+  transform:translateX(-50%) rotate(45deg);background:#E7F0F1;
+  border-right:1px solid var(--petrol);border-bottom:1px solid var(--petrol)}
+.slot.land{animation:land .45s ease-out}
+@keyframes land{0%{transform:translateY(-6px)}60%{transform:translateY(2px)}100%{transform:none}}
+
+/* Unit-Farbe als Ortsangabe waehrend des Lernens: farbige Kante an der
+   Karte, farbige Kopfzeile, farbiges aktives Fach. Sonst nichts. */
+.stage[class*="u"] .vcard{border-top:3px solid var(--unit)}
+.eyebrow[class*="u"]{color:var(--unit);border-bottom-color:var(--unit)}
+.rail[class*="u"] .slot.here{border-color:var(--unit);background:var(--unit-bg)}
+.rail[class*="u"] .slot.here::after{background:var(--unit-bg);
+  border-right-color:var(--unit);border-bottom-color:var(--unit)}
+@media print{
+  .stage[class*="u"] .vcard{border-top-color:#000}
+  .eyebrow[class*="u"]{color:#000;border-bottom-color:#000}
+}
+
+/* ---------- Karte ---------- */
+.stage{position:relative}
+.vcard{background:var(--card);border:1px solid var(--rule);border-radius:var(--r);
+  padding:30px 26px;min-height:250px;display:flex;flex-direction:column;
+  box-shadow:0 1px 0 var(--rule),0 6px 22px rgba(22,35,43,.06)}
+.vcard.deal{animation:deal .28s ease-out}
+@keyframes deal{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+.eyebrow{display:flex;justify-content:space-between;gap:12px;font-family:var(--mono);font-size:11px;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);
+  border-bottom:1px solid var(--rule);padding-bottom:8px;margin-bottom:20px}
+.prompt{font-family:var(--serif);font-size:38px;line-height:1.15;letter-spacing:-.015em;margin:0}
+.pos{font-family:var(--serif);font-style:italic;color:var(--ink-soft);font-size:15px;margin-top:5px}
+.phon{display:flex;align-items:center;gap:10px;margin-top:7px;flex-wrap:wrap}
+.ipa{font-family:var(--mono);font-size:13px;color:var(--ink-soft);letter-spacing:.01em}
+.speak{padding:5px 9px;line-height:0;border-color:var(--rule);color:var(--petrol)}
+.speak:hover{border-color:var(--petrol);background:#E7F0F1}
+.speak svg{width:15px;height:15px;display:block}
+.speak.on{background:var(--petrol);border-color:var(--petrol);color:#fff}
+.answer{margin-top:20px;padding-top:18px;border-top:1px solid var(--rule)}
+.answer .de{font-family:var(--serif);font-size:23px}
+.answer .coll{font-size:13px;color:var(--ink-soft);margin-top:8px}
+.answer .ex{font-family:var(--serif);font-style:italic;font-size:16px;margin-top:14px;
+  padding-left:12px;border-left:2px solid var(--petrol);color:#31434D}
+.answer .ex b{font-style:normal;font-weight:600;color:var(--ink);
+  box-shadow:inset 0 -.42em 0 rgba(14,90,102,.14)}
+.answer .ex .speak{margin-left:8px;vertical-align:middle;padding:4px 7px}
+.answer .ex .speak svg{width:13px;height:13px}
+.spacer{flex:1}
+
+/* Hinweis, welche Bedeutung gemeint ist - nur bei Woertern, deren
+   Schulbuchliste zwei getrennte Bedeutungen nennt. */
+.sense{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--ink-soft);
+  margin-top:8px;padding-left:11px;border-left:2px solid var(--rule)}
+
+/* ---------- Bedienelemente ---------- */
+.controls{margin-top:16px;display:flex;gap:8px;flex-wrap:wrap}
+button{font:inherit;cursor:pointer;border-radius:var(--r);border:1px solid var(--rule);
+  background:var(--card);color:var(--ink);padding:11px 15px;transition:background .15s,border-color .15s}
+button:hover{border-color:var(--ink-soft)}
+button:focus-visible{outline:2px solid var(--petrol);outline-offset:2px}
+button.primary{background:var(--petrol);border-color:var(--petrol);color:#fff;flex:1}
+button.primary:hover{background:#0B4A54}
+.rate{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 8px}
+.rate span{font-family:var(--mono);font-size:10px;color:var(--ink-soft);letter-spacing:.05em}
+.rate.again{border-color:var(--amber);color:var(--amber)}
+.rate.again:hover{background:#FBF2E6}
+.rate.hard{border-color:var(--ink-soft)}
+.rate.hard:hover{background:#EEF1F3}
+.rate.good{border-color:var(--moss);color:var(--moss)}
+.rate.good:hover{background:#EDF4EE}
+
+.opts{display:grid;gap:8px;margin-top:20px}
+.opt{text-align:left;padding:13px 15px;font-family:var(--serif);font-size:17px}
+.opt.right{border-color:var(--moss);background:#EDF4EE;color:var(--moss)}
+.opt.wrong{border-color:var(--amber);background:#FBF2E6;color:var(--amber)}
+.opt:disabled{cursor:default;opacity:1}
+
+.typebox{margin-top:20px}
+.typebox input{width:100%;font-family:var(--serif);font-size:22px;padding:12px 14px;
+  border:1px solid var(--rule);border-radius:var(--r);background:var(--ground);color:var(--ink)}
+.typebox input:focus{outline:2px solid var(--petrol);outline-offset:1px;background:var(--card)}
+.verdict{margin-top:12px;font-size:14px}
+.verdict.ok{color:var(--moss)}
+.verdict.near{color:var(--amber)}
+.verdict.no{color:var(--amber)}
+.verdict .sol{font-family:var(--serif);font-size:18px;color:var(--ink);display:block;margin-top:3px}
+
+/* ---------- Kopf der Sitzung ---------- */
+.sessionbar{display:flex;justify-content:space-between;align-items:center;gap:12px;
+  margin-bottom:18px;flex-wrap:wrap}
+.linkbtn{background:none;border:none;padding:4px 0;color:var(--petrol);text-decoration:underline;
+  text-underline-offset:3px}
+.switches{display:flex;gap:6px;flex-wrap:wrap}
+.switch{font-family:var(--mono);font-size:11px;letter-spacing:.05em;padding:6px 9px;
+  text-transform:uppercase}
+.switch[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+
+/* ---------- Abschluss ---------- */
+.done{background:var(--card);border:1px solid var(--rule);border-radius:var(--r);padding:34px 26px;text-align:center}
+.done h2{font-family:var(--serif);font-weight:600;font-size:26px;margin:0 0 8px}
+.done p{color:var(--ink-soft);margin:0 0 20px}
+
+/* ---------- Fußzeile ---------- */
+.foot{margin-top:40px;padding-top:14px;border-top:1px solid var(--rule);
+  display:flex;gap:16px;flex-wrap:wrap;align-items:center;
+  font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.04em}
+.foot button{padding:5px 9px;font-family:var(--mono);font-size:11px}
+.warn{background:#FBF2E6;border:1px solid var(--amber);color:#8A4E12;border-radius:var(--r);
+  padding:9px 12px;font-size:13px;margin-bottom:20px;line-height:1.4}
+
+/* ---------- Anleitung ---------- */
+.doc{background:var(--card);border:1px solid var(--rule);border-radius:var(--r);
+  padding:26px 26px 30px;max-width:640px}
+.doc h2{font-family:var(--serif);font-weight:600;font-size:21px;margin:34px 0 8px;
+  letter-spacing:-.01em}
+.doc h2:first-child{margin-top:0}
+.doc h3{font-family:var(--sans);font-weight:600;font-size:15px;margin:20px 0 5px}
+.doc p{margin:0 0 12px;font-size:15px}
+.doc ul{margin:0 0 12px;padding-left:20px;font-size:15px}
+.doc li{margin-bottom:5px}
+.doc .lead{color:var(--ink-soft)}
+.doc code{font-family:var(--mono);font-size:12.5px;background:var(--ground);
+  padding:1px 5px;border-radius:2px}
+.doc table{border-collapse:collapse;width:100%;margin:6px 0 14px;font-size:14px}
+.doc th,.doc td{text-align:left;padding:6px 10px;border-bottom:1px solid var(--rule)}
+.doc th{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--ink-soft);font-weight:500}
+.doc td:first-child{font-family:var(--mono);font-size:12.5px;white-space:nowrap}
+.kbd{font-family:var(--mono);font-size:11.5px;border:1px solid var(--rule);
+  border-bottom-width:2px;border-radius:3px;padding:1px 6px;background:var(--ground)}
+.doc .warnbox{background:#FBF2E6;border:1px solid var(--amber);border-radius:var(--r);
+  padding:12px 14px;font-size:14.5px;margin:0 0 14px;line-height:1.5}
+.doc .teacher{border-top:2px solid var(--ink);margin-top:36px;padding-top:18px}
+@media print{
+  .doc{border:none;padding:0;max-width:none}
+  .doc h2{page-break-after:avoid}
+}
+
+/* ---------- Lueckensatz ---------- */
+.cloze{font-family:var(--serif);font-size:22px;line-height:1.55;margin:0}
+.cloze .gap{display:inline-block;min-width:5.5em;border-bottom:2px solid var(--petrol);
+  text-align:center;color:var(--petrol);font-family:var(--mono);font-size:15px;
+  vertical-align:baseline;padding:0 4px}
+.basef{font-family:var(--mono);font-size:14px;color:var(--ink-soft);margin-left:5px}
+.cloze b{font-style:normal;font-weight:600;
+  box-shadow:inset 0 -.42em 0 rgba(14,90,102,.18)}
+.clue{font-family:var(--serif);font-size:16px;color:var(--ink-soft);margin-top:14px}
+.clue span{color:var(--ink)}
+
+/* ---------- Listenansicht ---------- */
+.listctl{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.listctl input[type=search]{flex:1;min-width:180px;font:inherit;font-size:15px;
+  padding:10px 13px;border:1px solid var(--rule);border-radius:var(--r);
+  background:var(--card);color:var(--ink);-webkit-appearance:none}
+.listctl input[type=search]:focus{outline:2px solid var(--petrol);outline-offset:1px}
+.listcount{font-family:var(--mono);font-size:11px;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--ink-soft);margin-bottom:16px}
+
+.lsec{background:var(--card);border:1px solid var(--rule);border-radius:var(--r);
+  margin-bottom:8px;overflow:hidden}
+.lsec > summary{cursor:pointer;padding:13px 15px;display:flex;justify-content:space-between;
+  align-items:baseline;gap:12px;list-style:none;font-weight:500}
+.lsec > summary::-webkit-details-marker{display:none}
+.lsec > summary:hover{background:var(--ground)}
+.lsec > summary .lyear{font-family:var(--mono);font-size:10px;letter-spacing:.08em;
+  background:var(--ink);color:var(--ground);border-radius:2px;padding:2px 6px;margin-right:9px}
+.lsec > summary .lnum{font-family:var(--mono);font-size:12px;color:var(--ink-soft);white-space:nowrap}
+.lsec[open] > summary{border-bottom:1px solid var(--rule)}
+.lbody{padding:4px 15px 12px}
+
+.vrow{display:grid;grid-template-columns:1fr 1fr;gap:4px 18px;
+  padding:9px 0;border-bottom:1px solid var(--ground);break-inside:avoid}
+.vrow:last-child{border-bottom:none}
+.ven{font-family:var(--serif);font-size:16px}
+.vipa{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin-left:7px;white-space:nowrap}
+.vpos{font-family:var(--serif);font-style:italic;font-size:12.5px;color:var(--ink-soft);margin-left:7px}
+.vde{font-size:14.5px}
+.vsense{display:block;font-family:var(--serif);font-style:italic;font-size:13px;color:var(--ink-soft)}
+.vex{grid-column:1 / -1;font-family:var(--serif);font-style:italic;font-size:14px;
+  color:#31434D;padding-left:11px;border-left:2px solid var(--rule);margin-top:3px}
+.vlist.hide-ex .vex{display:none}
+.vlist.hide-ipa .vipa{display:none}
+.vrow.off{display:none}
+.lsec.off{display:none}
+.noresult{background:var(--card);border:1px dashed var(--rule);border-radius:var(--r);
+  padding:14px 16px;color:var(--ink-soft);font-size:14px}
+
+@media print{
+  body{background:#fff}
+  .wrap{max-width:none;padding:0}
+  .masthead{border-bottom:1px solid #000;margin-bottom:14px}
+  .sessionbar,.listctl,.foot,#warn,.listcount button{display:none!important}
+  .lsec{border:none;border-radius:0;margin:0 0 6mm;page-break-inside:auto}
+  .lsec + .lsec{page-break-before:always}
+  .lsec > summary{padding:0 0 4px;border-bottom:1px solid #000;font-size:14pt}
+  .lsec > summary .lnum{color:#000}
+  .lbody{padding:6px 0 0;columns:2;column-gap:10mm}
+  .vrow{grid-template-columns:1fr;gap:1px;padding:3px 0;
+    border-bottom:none;page-break-inside:avoid}
+  .ven{font-size:11pt}
+  .vde{font-size:10pt;color:#333}
+  .vipa{color:#555}
+  .vex{font-size:9.5pt;border-left:1px solid #999}
+}
+
+@media(max-width:560px){
+  .prompt{font-size:30px}
+  .slot .c{font-size:16px}
+  .slot .iv{display:none}
+  .vcard{padding:22px 18px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+.y7u5{--unit:#A36B1A;--unit-bg:#F5ECD9;--unit-ink:#63400F}
+</style>
+<link rel="stylesheet" href="../assets/learning.css?v=20260913-year7">
+
+<div class="wrap">
+    <div class="masthead">
+    <div class="mhead-text">
+      <h1>Vokabeltrainer <span class="title-accent">Englisch</span></h1>
+      <div class="sub">Mittelstufe · Lehrwerksvokabular</div>
+    </div>
+    <a class="home-link" href="../">&larr; Alle Jahrg&auml;nge</a>
+  </div>
+  <div id="warn"></div>
+  <div id="view"></div>
+  <div class="foot">
+    <span id="footstat"></span>
+    <button id="exportBtn">Fortschritt sichern</button>
+    <button id="importBtn">Fortschritt laden</button>
+    <input type="file" id="importFile" accept="application/json" hidden>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   VOKABELDATEN
+   Alles steckt in dieser Datei. Zum Aendern: Eintrag im passenden Thema
+   ergaenzen oder korrigieren. Pflichtfelder sind id, en, de, pos.
+   Optional: ipa, collocations, example_en, distractor_hint.
+   ========================================================================= */
+const YEARS = [
+ {
+  "id": "y7",
+  "label": "Year 7",
+  "book": "Access 3",
+  "units": [
+   {
+    "id": "y7u1",
+    "name": "Unit 1 – This is London"
+   },
+   {
+    "id": "y7u2",
+    "name": "Unit 2 – Welcome to Snowdonia"
+   },
+   {
+    "id": "y7u3",
+    "name": "Unit 3 – A weekend in Liverpool"
+   },
+   {
+    "id": "y7u4",
+    "name": "Unit 4 – My Trip to Ireland"
+   },
+   {
+    "id": "y7u5",
+    "name": "Unit 5 – Edinburgh and the Highlands"
+   }
+  ]
+ }
+];
+
+const TOPICS = [
+ {
+  "id": "y7u1-part-a",
+  "year": "7",
+  "yearName": "Mittelstufe",
+  "unit": "y7u1",
+  "unitName": "Unit 1 – This is London",
+  "name": "Part A"
+ },
+ {
+  "id": "y7u1-part-b",
+  "year": "7",
+  "yearName": "Mittelstufe",
+  "unit": "y7u1",
+  "unitName": "Unit 1 – This is London",
+  "name": "Part B"
+ },
+ {
+  "id": "y7u1-part-c",
+  "year": "7",
+  "yearName": "Mittelstufe",
+  "unit": "y7u1",
+  "unitName": "Unit 1 – This is London",
+  "name": "Part C"
+ },
+ {
+  "id": "y7u1-the-notting-hill-carnival-parade",
+  "year": "7",
+  "yearName": "Mittelstufe",
+  "unit": "y7u1",
+  "unitName": "Unit 1 – This is London",
+  "name": "The Notting Hill Carnival Parade"
+ },
+ {
+  "id": "y7u2-part-a",
+  "year": "7",
+  "yearName": "Mittelstufe",
+  "unit": "y7u2",
+  "unitName": "Unit 2 – Welcome to Snowdonia",
+  "name": "Part A"
+ },
+ {
+  "id": "y7u2-part-b",
+  "year": "7",
+  "yearName": "Mittelstufe",
+  "unit": "y7u2",
+  "unitName": "Unit 2 – Welcome to Snowdonia",
+  "name": "Part B"
+ },
+ {
+  "id": "y7u2-snowdonia-at-night",
+  "year": "7",
+  "yearName": "Mittelstufe",
+  "unit": "y7u2",
+  "unitName": "Unit 2 – Welcome to Snowdonia",
+  "name": "Snowdonia at Night"
+ },
+ {
+  "id": "y7u3-part-a",
+  "year": "7",
+  "yearName": "Mittelstufe",
+  "unit": "y7u3",
+  "unitName": "Unit 3 – A weekend in Liverpool",
+  "name": "Part A"
+ },
+ {
+  "id": "y7u3-part-b",
+  "year": "7",
+  "yearName": "Mittelstufe",
+  "unit": "y7u3",
+  "unitName": "Unit 3 – A weekend in Liverpool",
+  "name": "Part B"
+ },
+ {
+  "id": "y7u3-part-c",
+  "year": "7",
+  "yearName": "Mittelstufe",
+  "unit": "y7u3",
+  "unitName": "Unit 3 – A weekend in Liverpool",
+  "name": "Part C"
+ },
+ {
+  "id": "y7u3-part-d",
+  "year": "7",
+  "yearName": "Mittelstufe",
+  "unit": "y7u3",
+  "unitName": "Unit 3 – A weekend in Liverpool",
+  "name": "Part D"
+ },
+ {
+  "id": "y7u3-a-liverpool-hero",
+  "year": "7",
+  "yearName": "Mittelstufe",
+  "unit": "y7u3",
+  "unitName": "Unit 3 – A weekend in Liverpool",
+  "name": "A Liverpool Hero"
+ },
+ {
+  "id": "y7u4-introduction",
+  "year": "7",
+  "yearName": "Mittelstufe",
+  "unit": "y7u4",
+  "unitName": "Unit 4 – My Trip to Ireland",
+  "name": "Introduction"
+ },
+ {
+  "id": "y7u4-part-a",
+  "year": "7",
+  "yearName": "Mittelstufe",
+  "unit": "y7u4",
+  "unitName": "Unit 4 – My Trip to Ireland",
+  "name": "Part A"
+ },
+ {
+  "id": "y7u4-part-b",
+  "year": "7",
+  "yearName": "Mittelstufe",
+  "unit": "y7u4",
+  "unitName": "Unit 4 – My Trip to Ireland",
+  "name": "Part B"
+ },
+ {
+  "id": "y7u4-part-c",
+  "year": "7",
+  "yearName": "Mittelstufe",
+  "unit": "y7u4",
+  "unitName": "Unit 4 – My Trip to Ireland",
+  "name": "Part C"
+ },
+ {
+  "id": "y7u4-the-horse-ride",
+  "year": "7",
+  "yearName": "Mittelstufe",
+  "unit": "y7u4",
+  "unitName": "Unit 4 – My Trip to Ireland",
+  "name": "The Horse Ride"
+ },
+ {
+  "id": "y7u5-introduction",
+  "year": "7",
+  "yearName": "Mittelstufe",
+  "unit": "y7u5",
+  "unitName": "Unit 5 – Edinburgh and the Highlands",
+  "name": "Introduction"
+ },
+ {
+  "id": "y7u5-part-a",
+  "year": "7",
+  "yearName": "Mittelstufe",
+  "unit": "y7u5",
+  "unitName": "Unit 5 – Edinburgh and the Highlands",
+  "name": "Part A"
+ },
+ {
+  "id": "y7u5-part-b",
+  "year": "7",
+  "yearName": "Mittelstufe",
+  "unit": "y7u5",
+  "unitName": "Unit 5 – Edinburgh and the Highlands",
+  "name": "Part B"
+ },
+ {
+  "id": "y7u5-missing",
+  "year": "7",
+  "yearName": "Mittelstufe",
+  "unit": "y7u5",
+  "unitName": "Unit 5 – Edinburgh and the Highlands",
+  "name": "Missing"
+ }
+];
+
+const SETS = {
+ "y7u1-part-a": [
+  {
+   "id": "y7u1-part-a-001",
+   "en": "the best thing about ...",
+   "de": "das Beste an ...",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-002",
+   "en": "huge",
+   "de": "riesig, sehr groß",
+   "ipa": "hjuːdʒ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-003",
+   "en": "as soon as",
+   "de": "sobald, sowie",
+   "ipa": "əz ˈsuːn əz",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-004",
+   "en": "cathedral",
+   "de": "Kathedrale, Dom",
+   "ipa": "kəˈθiːdrəl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-005",
+   "en": "palace",
+   "de": "Palast, Schloss",
+   "ipa": "ˈpæləs",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-006",
+   "en": "Welsh",
+   "de": "walisisch",
+   "ipa": "welʃ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-007",
+   "en": "to reply (to)",
+   "de": "antworten (auf); erwidern, entgegnen",
+   "ipa": "rɪˈplaɪ",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-008",
+   "en": "Europe",
+   "de": "Europa",
+   "ipa": "ˈjʊərəp",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-009",
+   "en": "western",
+   "de": "westlich, West-",
+   "ipa": "ˈwestən",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-010",
+   "en": "I see.",
+   "de": "Aha! / Verstehe.",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-011",
+   "en": "lift",
+   "de": "Fahrstuhl, Aufzug",
+   "ipa": "lɪft",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-012",
+   "en": "amazing",
+   "de": "erstaunlich, unglaublich",
+   "ipa": "əˈmeɪzɪŋ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-013",
+   "en": "quite",
+   "de": "ziemlich; völlig, ganz",
+   "ipa": "kwaɪt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-014",
+   "en": "How do you know ...?",
+   "de": "Woher weißt/kennst du ...?",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-015",
+   "en": "post",
+   "de": "Posting (auf Blog), Blog-Eintrag",
+   "ipa": "pəʊst",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-016",
+   "en": "to add (to)",
+   "de": "hinzufügen, ergänzen, addieren (zu)",
+   "ipa": "æd",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-017",
+   "en": "carnival",
+   "de": "Karneval, Fasching",
+   "ipa": "ˈkɑːnɪvl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-018",
+   "en": "test",
+   "de": "Test",
+   "ipa": "test",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-019",
+   "en": "to be into sth.",
+   "de": "etwas mögen, auf etwas stehen",
+   "ipa": "",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-020",
+   "en": "to enjoy",
+   "de": "genießen",
+   "ipa": "ɪnˈdʒɔɪ",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-021",
+   "en": "by the way",
+   "de": "übrigens",
+   "ipa": "ˌbaɪ ðə ˈweɪ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-022",
+   "en": "south",
+   "de": "Süden; nach Süden; südlich",
+   "ipa": "saʊθ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-023",
+   "en": "darkness",
+   "de": "Dunkelheit, Finsternis",
+   "ipa": "ˈdɑːknəs",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-024",
+   "en": "clue",
+   "de": "(Lösungs-)Hinweis; Anhaltspunkt",
+   "ipa": "kluː",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-025",
+   "en": "skyline",
+   "de": "Skyline; Horizont",
+   "ipa": "ˈskaɪlaɪn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-026",
+   "en": "false",
+   "de": "falsch",
+   "ipa": "fɔːls",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-027",
+   "en": "to stay (at/with)",
+   "de": "(vorübergehend) wohnen, übernachten (in/bei)",
+   "ipa": "steɪ",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-028",
+   "en": "timetable",
+   "de": "Fahrplan",
+   "ipa": "ˈtaɪmteɪbl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-029",
+   "en": "restaurant",
+   "de": "Restaurant",
+   "ipa": "ˈrestrɒnt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-030",
+   "en": "gallery",
+   "de": "Galerie",
+   "ipa": "ˈɡæləri",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-031",
+   "en": "the Tube",
+   "de": "die U-Bahn (in London)",
+   "ipa": "tjuːb",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-032",
+   "en": "the underground",
+   "de": "die U-Bahn",
+   "ipa": "ˈʌndəɡraʊnd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-033",
+   "en": "to go together",
+   "de": "zusammenpassen, zueinander passen",
+   "ipa": "",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-034",
+   "en": "stress",
+   "de": "Betonung",
+   "ipa": "stres",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-035",
+   "en": "stress mark",
+   "de": "Betonungszeichen",
+   "ipa": "ˈstres mɑːk",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-036",
+   "en": "to stress",
+   "de": "betonen",
+   "ipa": "stres",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-037",
+   "en": "small talk",
+   "de": "Smalltalk (spontan geführtes Gespräch in umgangssprachlichem Ton)",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-038",
+   "en": "culture",
+   "de": "Kultur",
+   "ipa": "ˈkʌltʃə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-039",
+   "en": "to expect sth.",
+   "de": "etwas erwarten",
+   "ipa": "ɪkˈspekt",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-040",
+   "en": "to continue sth.",
+   "de": "etwas fortsetzen",
+   "ipa": "kənˈtɪnjuː",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-a-041",
+   "en": "queue",
+   "de": "Schlange, Reihe (wartender Menschen)",
+   "ipa": "kjuː",
+   "pos": "",
+   "example_en": ""
+  }
+ ],
+ "y7u1-part-b": [
+  {
+   "id": "y7u1-part-b-001",
+   "en": "attraction",
+   "de": "Attraktion; Anziehungspunkt",
+   "ipa": "əˈtrækʃn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-002",
+   "en": "natural history",
+   "de": "Naturkunde",
+   "ipa": "ˌnætʃrəl ˈhɪstri",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-003",
+   "en": "entry",
+   "de": "Eintritt, Zutritt",
+   "ipa": "ˈentri",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-004",
+   "en": "in fact",
+   "de": "eigentlich, in Wirklichkeit",
+   "ipa": "ɪn ˈfækt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-005",
+   "en": "fact",
+   "de": "Tatsache, Fakt",
+   "ipa": "fækt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-006",
+   "en": "to reserve",
+   "de": "reservieren, buchen",
+   "ipa": "rɪˈzɜːv",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-007",
+   "en": "step",
+   "de": "Stufe",
+   "ipa": "step",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-008",
+   "en": "chance",
+   "de": "Gelegenheit, Möglichkeit, Chance",
+   "ipa": "tʃɑːns",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-009",
+   "en": "during",
+   "de": "während",
+   "ipa": "ˈdjʊərɪŋ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-010",
+   "en": "to guard",
+   "de": "bewachen",
+   "ipa": "ɡɑːd",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-011",
+   "en": "raven",
+   "de": "Rabe",
+   "ipa": "ˈreɪvn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-012",
+   "en": "blood",
+   "de": "Blut",
+   "ipa": "blʌd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-013",
+   "en": "to be home to sth.",
+   "de": "Heimat sein für etwas; etwas beheimaten",
+   "ipa": "",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-014",
+   "en": "jewels",
+   "de": "Juwelen",
+   "ipa": "ˈdʒuːəlz",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-015",
+   "en": "education",
+   "de": "(Schul-, Aus-)Bildung; Erziehung",
+   "ipa": "ˌedʒuˈkeɪʃn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-016",
+   "en": "adult",
+   "de": "Erwachsene(r)",
+   "ipa": "ˈædʌlt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-017",
+   "en": "figure",
+   "de": "Zahl, Ziffer",
+   "ipa": "ˈfɪɡə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-018",
+   "en": "less (than)",
+   "de": "weniger (als)",
+   "ipa": "les",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-019",
+   "en": "tortoise",
+   "de": "(Land-)Schildkröte",
+   "ipa": "ˈtɔːtəs",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-020",
+   "en": "parliament",
+   "de": "Parlament",
+   "ipa": "ˈpɑːləmənt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-021",
+   "en": "at one time",
+   "de": "zur selben Zeit, gleichzeitig",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-022",
+   "en": "Christmas",
+   "de": "Weihnachten",
+   "ipa": "ˈkrɪsməs",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-023",
+   "en": "ticket office",
+   "de": "Fahrkartenschalter; Kasse (für den Verkauf von Eintrittskarten)",
+   "ipa": "ˈtɪkɪt ˌɒfɪs",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-024",
+   "en": "detail",
+   "de": "Detail, Einzelheit",
+   "ipa": "ˈdiːteɪl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-025",
+   "en": "a family of four",
+   "de": "eine vierköpfige Familie",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-026",
+   "en": "exact",
+   "de": "genau",
+   "ipa": "ɪɡˈzækt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-027",
+   "en": "linking word",
+   "de": "Bindewort",
+   "ipa": "ˈlɪŋkɪŋ wɜːd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-028",
+   "en": "to link",
+   "de": "verbinden, verknüpfen",
+   "ipa": "lɪŋk",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-029",
+   "en": "instead of",
+   "de": "anstelle von, statt",
+   "ipa": "ɪnˈsted əv",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-030",
+   "en": "worth",
+   "de": "wert",
+   "ipa": "wɜːθ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-031",
+   "en": "to roar",
+   "de": "brüllen",
+   "ipa": "rɔː",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-032",
+   "en": "feedback",
+   "de": "Rückmeldung, Feedback",
+   "ipa": "ˈfiːdbæk",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-033",
+   "en": "to improve",
+   "de": "verbessern; sich verbessern",
+   "ipa": "ɪmˈpruːv",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-034",
+   "en": "to react (to)",
+   "de": "reagieren (auf)",
+   "ipa": "riˈækt",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-035",
+   "en": "content",
+   "de": "Inhalt",
+   "ipa": "ˈkɒntent",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-036",
+   "en": "spelling",
+   "de": "Rechtschreibung; Schreibweise",
+   "ipa": "ˈspelɪŋ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-037",
+   "en": "to point sth. out (to sb.)",
+   "de": "(jn.) auf etwas hinweisen",
+   "ipa": "ˌpɔɪnt ˈaʊt",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-038",
+   "en": "line",
+   "de": "(U-Bahn-)Linie",
+   "ipa": "laɪn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-039",
+   "en": "eastbound",
+   "de": "Richtung Osten",
+   "ipa": "ˈiːstbaʊnd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-040",
+   "en": "to change",
+   "de": "umsteigen",
+   "ipa": "tʃeɪndʒ",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-041",
+   "en": "announcement",
+   "de": "Durchsage, Ansage",
+   "ipa": "əˈnaʊnsmənt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-b-042",
+   "en": "message",
+   "de": "Botschaft, Aussage",
+   "ipa": "ˈmesɪdʒ",
+   "pos": "",
+   "example_en": ""
+  }
+ ],
+ "y7u1-part-c": [
+  {
+   "id": "y7u1-part-c-001",
+   "en": "to be on",
+   "de": "eingeschaltet sein, an sein (Radio, Licht usw.); laufen, übertragen werden (Programm, Sendung)",
+   "ipa": "",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-c-002",
+   "en": "remote control (remote)",
+   "de": "Fernbedienung",
+   "ipa": "rɪˌməʊt kənˈtrəʊl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-c-003",
+   "en": "No way!",
+   "de": "Auf keinen Fall! / Kommt nicht in Frage!",
+   "ipa": "ˌnəʊ ˈweɪ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-c-004",
+   "en": "And anyway, ...",
+   "de": "Und überhaupt, ...",
+   "ipa": "ˈeniweɪ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-c-005",
+   "en": "while",
+   "de": "während",
+   "ipa": "waɪl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-c-006",
+   "en": "each other",
+   "de": "sich (gegenseitig), einander",
+   "ipa": "ˌiːtʃ ˈʌðə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-c-007",
+   "en": "pub",
+   "de": "Kneipe, Lokal",
+   "ipa": "pʌb",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-c-008",
+   "en": "towards the station/Mr Bell",
+   "de": "auf den Bahnhof/Mr Bell zu, in Richtung Bahnhof/Mr Bell",
+   "ipa": "təˈwɔːdz",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-c-009",
+   "en": "mate",
+   "de": "Kumpel, Freund",
+   "ipa": "meɪt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-c-010",
+   "en": "several",
+   "de": "mehrere, verschiedene",
+   "ipa": "ˈsevrəl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-c-011",
+   "en": "route",
+   "de": "Strecke, Route",
+   "ipa": "ruːt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-c-012",
+   "en": "speed",
+   "de": "Geschwindigkeit",
+   "ipa": "spiːd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-part-c-013",
+   "en": "It was a pity that ...",
+   "de": "Es war schade, dass ...",
+   "ipa": "ˈpɪti",
+   "pos": "",
+   "example_en": ""
+  }
+ ],
+ "y7u1-the-notting-hill-carnival-parade": [
+  {
+   "id": "y7u1-the-notting-hill-carnival-parade-001",
+   "en": "platform",
+   "de": "Bahnsteig, Gleis",
+   "ipa": "ˈplætfɔːm",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-the-notting-hill-carnival-parade-002",
+   "en": "to hold onto sth.",
+   "de": "sich an etwas festhalten",
+   "ipa": "həʊld",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-the-notting-hill-carnival-parade-003",
+   "en": "to scan sth. (for sth.)",
+   "de": "etwas (nach etwas) absuchen",
+   "ipa": "skæn",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-the-notting-hill-carnival-parade-004",
+   "en": "to fill",
+   "de": "füllen",
+   "ipa": "fɪl",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-the-notting-hill-carnival-parade-005",
+   "en": "pavement",
+   "de": "Gehweg, Bürgersteig",
+   "ipa": "ˈpeɪvmənt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-the-notting-hill-carnival-parade-006",
+   "en": "available",
+   "de": "erhältlich, verfügbar; erreichbar (am Telefon)",
+   "ipa": "əˈveɪləbl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-the-notting-hill-carnival-parade-007",
+   "en": "all around her",
+   "de": "überall um sie herum",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-the-notting-hill-carnival-parade-008",
+   "en": "whistle",
+   "de": "(Triller-)Pfeife",
+   "ipa": "ˈwɪsl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-the-notting-hill-carnival-parade-009",
+   "en": "to blow a whistle",
+   "de": "pfeifen (auf der Trillerpfeife)",
+   "ipa": "bləʊ",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-the-notting-hill-carnival-parade-010",
+   "en": "to panic",
+   "de": "in Panik geraten",
+   "ipa": "ˈpænɪk",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-the-notting-hill-carnival-parade-011",
+   "en": "to bend down",
+   "de": "sich hinunterbeugen, sich bücken",
+   "ipa": "bend",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-the-notting-hill-carnival-parade-012",
+   "en": "crowded",
+   "de": "voller Menschen, überfüllt",
+   "ipa": "ˈkraʊdɪd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-the-notting-hill-carnival-parade-013",
+   "en": "rope",
+   "de": "Seil",
+   "ipa": "rəʊp",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-the-notting-hill-carnival-parade-014",
+   "en": "wing",
+   "de": "Flügel",
+   "ipa": "wɪŋ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-the-notting-hill-carnival-parade-015",
+   "en": "rainbow",
+   "de": "Regenbogen",
+   "ipa": "ˈreɪnbəʊ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-the-notting-hill-carnival-parade-016",
+   "en": "dizzy",
+   "de": "schwindlig",
+   "ipa": "ˈdɪzi",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-the-notting-hill-carnival-parade-017",
+   "en": "to scream",
+   "de": "schreien",
+   "ipa": "skriːm",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-the-notting-hill-carnival-parade-018",
+   "en": "hip",
+   "de": "Hüfte",
+   "ipa": "hɪp",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-the-notting-hill-carnival-parade-019",
+   "en": "you",
+   "de": "man",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-the-notting-hill-carnival-parade-020",
+   "en": "rhythm",
+   "de": "Rhythmus",
+   "ipa": "ˈrɪðəm",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-the-notting-hill-carnival-parade-021",
+   "en": "to scare sb.",
+   "de": "jn. erschrecken; jm. Angst machen",
+   "ipa": "skeə",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-the-notting-hill-carnival-parade-022",
+   "en": "loudspeaker",
+   "de": "Lautsprecher; Megaphon",
+   "ipa": "ˌlaʊdˈspiːkə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-the-notting-hill-carnival-parade-023",
+   "en": "to mind",
+   "de": "etwas dagegen haben",
+   "ipa": "maɪnd",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-the-notting-hill-carnival-parade-024",
+   "en": "to rest",
+   "de": "ruhen, sich ausruhen",
+   "ipa": "rest",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u1-the-notting-hill-carnival-parade-025",
+   "en": "..., he said under his breath.",
+   "de": "..., sagte er flüsternd / murmelte er.",
+   "ipa": "breθ",
+   "pos": "",
+   "example_en": ""
+  }
+ ],
+ "y7u2-part-a": [
+  {
+   "id": "y7u2-part-a-001",
+   "en": "empty",
+   "de": "leer",
+   "ipa": "ˈempti",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-a-002",
+   "en": "scientist",
+   "de": "Naturwissenschaftler/in",
+   "ipa": "ˈsaɪəntɪst",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-a-003",
+   "en": "to study",
+   "de": "studieren; untersuchen, beobachten; lernen",
+   "ipa": "ˈstʌdi",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-a-004",
+   "en": "workshop",
+   "de": "Werkstatt",
+   "ipa": "ˈwɜːkʃɒp",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-a-005",
+   "en": "carpenter",
+   "de": "Tischler/in, Zimmerer/Zimmerin",
+   "ipa": "ˈkɑːpəntə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-a-006",
+   "en": "furniture",
+   "de": "Möbel",
+   "ipa": "ˈfɜːnɪtʃə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-a-007",
+   "en": "oil",
+   "de": "Öl",
+   "ipa": "ɔɪl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-a-008",
+   "en": "hammer",
+   "de": "Hammer",
+   "ipa": "ˈhæmə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-a-009",
+   "en": "a piece of ...",
+   "de": "ein Stück ...",
+   "ipa": "piːs",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-a-010",
+   "en": "to come over (to)",
+   "de": "herüberkommen (zu/nach), vorbeikommen (bei)",
+   "ipa": "",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-a-011",
+   "en": "to make fun of sb./sth.",
+   "de": "sich über jn./etwas lustig machen",
+   "ipa": "",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-a-012",
+   "en": "to give up",
+   "de": "aufgeben",
+   "ipa": "",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-a-013",
+   "en": "to cook",
+   "de": "kochen, zubereiten",
+   "ipa": "",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-a-014",
+   "en": "tonight",
+   "de": "heute Nacht, heute Abend",
+   "ipa": "təˈnaɪt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-a-015",
+   "en": "actor",
+   "de": "Schauspieler/in",
+   "ipa": "ˈæktə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-a-016",
+   "en": "painter",
+   "de": "Maler/in",
+   "ipa": "ˈpeɪntə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-a-017",
+   "en": "soldier",
+   "de": "Soldat/in",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-a-018",
+   "en": "architect",
+   "de": "Architekt/in",
+   "ipa": "ˈɑːkɪtekt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-a-019",
+   "en": "astronaut",
+   "de": "Astronaut/in",
+   "ipa": "ˈæstrənɔːt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-a-020",
+   "en": "engineer",
+   "de": "Ingenieur/in",
+   "ipa": "ˌendʒɪˈnɪə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-a-021",
+   "en": "hairdresser",
+   "de": "Friseur/in",
+   "ipa": "ˈheədresə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-a-022",
+   "en": "musician",
+   "de": "Musiker/in",
+   "ipa": "mjuˈzɪʃn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-a-023",
+   "en": "official",
+   "de": "Beamte(r), Beamtin",
+   "ipa": "əˈfɪʃl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-a-024",
+   "en": "government",
+   "de": "Regierung",
+   "ipa": "ˈɡʌvənmənt",
+   "pos": "",
+   "example_en": ""
+  }
+ ],
+ "y7u2-part-b": [
+  {
+   "id": "y7u2-part-b-001",
+   "en": "national",
+   "de": "national, National-",
+   "ipa": "ˈnæʃnəl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-002",
+   "en": "accident",
+   "de": "Unfall",
+   "ipa": "ˈæksɪdənt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-003",
+   "en": "altogether",
+   "de": "insgesamt, alles in allem",
+   "ipa": "ˌɔːltəˈɡeðə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-004",
+   "en": "hostel",
+   "de": "Herberge, Wohnheim",
+   "ipa": "ˈhɒstl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-005",
+   "en": "to wonder",
+   "de": "sich fragen, gern wissen wollen",
+   "ipa": "ˈwʌndə",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-006",
+   "en": "to pretend",
+   "de": "so tun, als ob",
+   "ipa": "prɪˈtend",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-007",
+   "en": "Me neither.",
+   "de": "Ich auch nicht.",
+   "ipa": "ˌnaɪðə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-008",
+   "en": "to go by",
+   "de": "vergehen, vorübergehen (Zeit)",
+   "ipa": "",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-009",
+   "en": "stupid",
+   "de": "dumm, blöd",
+   "ipa": "ˈstjuːpɪd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-010",
+   "en": "downstream",
+   "de": "flussabwärts",
+   "ipa": "ˌdaʊnˈstriːm",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-011",
+   "en": "edge",
+   "de": "Rand, Kante",
+   "ipa": "edʒ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-012",
+   "en": "to reach",
+   "de": "erreichen",
+   "ipa": "riːtʃ",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-013",
+   "en": "stick",
+   "de": "Stock",
+   "ipa": "stɪk",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-014",
+   "en": "to grab",
+   "de": "schnappen, packen",
+   "ipa": "ɡræb",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-015",
+   "en": "steep",
+   "de": "steil",
+   "ipa": "stiːp",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-016",
+   "en": "to sing along (with sb.)",
+   "de": "(mit jm.) mitsingen",
+   "ipa": "",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-017",
+   "en": "to join in (sth.)",
+   "de": "(bei etwas) mitmachen",
+   "ipa": "",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-018",
+   "en": "before long",
+   "de": "schon bald",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-019",
+   "en": "to tell sb. (not) to do sth.",
+   "de": "jn. auffordern, etwas (nicht) zu tun; jm. sagen, dass er/sie etwas (nicht) tun soll",
+   "ipa": "",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-020",
+   "en": "danger",
+   "de": "Gefahr",
+   "ipa": "ˈdeɪndʒə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-021",
+   "en": "warning",
+   "de": "Warnung",
+   "ipa": "ˈwɔːnɪŋ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-022",
+   "en": "head teacher",
+   "de": "Schulleiter/in",
+   "ipa": "ˌhed ˈtiːtʃə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-023",
+   "en": "to allow",
+   "de": "erlauben, zulassen",
+   "ipa": "əˈlaʊ",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-024",
+   "en": "topic sentence",
+   "de": "Satz, der in das Thema eines Absatzes einführt",
+   "ipa": "ˌtɒpɪk ˈsentəns",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-025",
+   "en": "to organize",
+   "de": "organisieren; ordnen",
+   "ipa": "ˈɔːɡənaɪz",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-026",
+   "en": "climb",
+   "de": "Aufstieg, Anstieg",
+   "ipa": "klaɪm",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-027",
+   "en": "summit",
+   "de": "Gipfel",
+   "ipa": "ˈsʌmɪt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-028",
+   "en": "to manage sth.",
+   "de": "etwas schaffen; etwas zustande bringen",
+   "ipa": "ˈmænɪdʒ",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-029",
+   "en": "real",
+   "de": "echt, wirklich",
+   "ipa": "ˈriːəl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-030",
+   "en": "downhill",
+   "de": "bergab",
+   "ipa": "ˌdaʊnˈhɪl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-031",
+   "en": "energy",
+   "de": "Energie, Kraft",
+   "ipa": "ˈenədʒi",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-032",
+   "en": "a total of ...",
+   "de": "eine Gesamtsumme von ...; insgesamt",
+   "ipa": "ˈtəʊtl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-033",
+   "en": "bar",
+   "de": "Riegel (Schokolade, Müsli), Tafel (Schokolade)",
+   "ipa": "bɑː",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-034",
+   "en": "hero, pl heroes",
+   "de": "Held/in",
+   "ipa": "ˈhɪərəʊ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-035",
+   "en": "to revise",
+   "de": "überarbeiten; (Lernstoff) wiederholen",
+   "ipa": "rɪˈvaɪz",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-036",
+   "en": "carrot",
+   "de": "Möhre, Karotte",
+   "ipa": "ˈkærət",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-037",
+   "en": "to delete",
+   "de": "löschen; streichen",
+   "ipa": "dɪˈliːt",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-038",
+   "en": "Shall I ...?",
+   "de": "Soll ich ...?",
+   "ipa": "ʃæl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-039",
+   "en": "to sigh",
+   "de": "seufzen",
+   "ipa": "saɪ",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-040",
+   "en": "stone",
+   "de": "Stein",
+   "ipa": "stəʊn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-041",
+   "en": "to seem (to be/do)",
+   "de": "(zu sein/zu tun) scheinen",
+   "ipa": "siːm",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-042",
+   "en": "to suppose",
+   "de": "annehmen, vermuten",
+   "ipa": "səˈpəʊz",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-043",
+   "en": "to miss",
+   "de": "vermissen",
+   "ipa": "mɪs",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-044",
+   "en": "actually",
+   "de": "eigentlich; übrigens; tatsächlich",
+   "ipa": "ˈæktʃuəli",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-045",
+   "en": "factory",
+   "de": "Fabrik",
+   "ipa": "ˈfæktri",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-046",
+   "en": "mine",
+   "de": "Bergwerk",
+   "ipa": "maɪn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-047",
+   "en": "coal",
+   "de": "Kohle",
+   "ipa": "kəʊl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-048",
+   "en": "headword",
+   "de": "Stichwort (im Wörterbuch)",
+   "ipa": "ˈhedwɜːd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-049",
+   "en": "part of speech",
+   "de": "Wortart",
+   "ipa": "ˌpɑːt əv ˈspiːtʃ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-050",
+   "en": "translation",
+   "de": "Übersetzung",
+   "ipa": "trænsˈleɪʃn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-part-b-051",
+   "en": "police",
+   "de": "Polizei",
+   "ipa": "pəˈliːs",
+   "pos": "",
+   "example_en": ""
+  }
+ ],
+ "y7u2-snowdonia-at-night": [
+  {
+   "id": "y7u2-snowdonia-at-night-001",
+   "en": "narrow",
+   "de": "schmal, eng",
+   "ipa": "ˈnærəʊ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-snowdonia-at-night-002",
+   "en": "to press",
+   "de": "drücken",
+   "ipa": "pres",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-snowdonia-at-night-003",
+   "en": "finally",
+   "de": "endlich, schließlich",
+   "ipa": "ˈfaɪnəli",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-snowdonia-at-night-004",
+   "en": "to be able to do sth.",
+   "de": "etwas tun können; fähig sein / in der Lage sein, etwas zu tun",
+   "ipa": "ˈeɪbl",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-snowdonia-at-night-005",
+   "en": "noisy",
+   "de": "laut, lärmend, voller Lärm",
+   "ipa": "ˈnɔɪzi",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-snowdonia-at-night-006",
+   "en": "to enter",
+   "de": "betreten, hineingehen in; eintreten",
+   "ipa": "ˈentə",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-snowdonia-at-night-007",
+   "en": "meal",
+   "de": "Mahlzeit, Essen",
+   "ipa": "miːl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-snowdonia-at-night-008",
+   "en": "to keep doing sth.",
+   "de": "etwas immer wieder / immer weiter tun; etwas ständig tun",
+   "ipa": "kiːp",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-snowdonia-at-night-009",
+   "en": "silently",
+   "de": "lautlos; schweigend",
+   "ipa": "ˈsaɪləntli",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-snowdonia-at-night-010",
+   "en": "corridor",
+   "de": "Gang, Korridor",
+   "ipa": "ˈkɒrɪdɔː",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-snowdonia-at-night-011",
+   "en": "star",
+   "de": "Stern",
+   "ipa": "stɑː",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-snowdonia-at-night-012",
+   "en": "magical",
+   "de": "zauberhaft, wundervoll; magisch",
+   "ipa": "ˈmædʒɪkl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-snowdonia-at-night-013",
+   "en": "to lie down",
+   "de": "sich hinlegen",
+   "ipa": "ˌlaɪ ˈdaʊn",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-snowdonia-at-night-014",
+   "en": "busy",
+   "de": "belebt, geschäftig, hektisch",
+   "ipa": "ˈbɪzi",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-snowdonia-at-night-015",
+   "en": "to clear",
+   "de": "räumen; abräumen",
+   "ipa": "klɪə",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-snowdonia-at-night-016",
+   "en": "breeze",
+   "de": "Brise",
+   "ipa": "briːz",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-snowdonia-at-night-017",
+   "en": "to have a look (at sth.)",
+   "de": "nachschauen; einen Blick auf etwas werfen",
+   "ipa": "",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-snowdonia-at-night-018",
+   "en": "to sit up",
+   "de": "sich aufsetzen",
+   "ipa": "",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-snowdonia-at-night-019",
+   "en": "wooden",
+   "de": "hölzern; Holz-",
+   "ipa": "ˈwʊdn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-snowdonia-at-night-020",
+   "en": "wide",
+   "de": "weit; breit",
+   "ipa": "waɪd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-snowdonia-at-night-021",
+   "en": "figure",
+   "de": "Figur, Gestalt",
+   "ipa": "ˈfɪɡə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-snowdonia-at-night-022",
+   "en": "note",
+   "de": "Note, Ton (Musik)",
+   "ipa": "nəʊt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-snowdonia-at-night-023",
+   "en": "such a ...",
+   "de": "so ein/e ...; solch ein/e ...",
+   "ipa": "sʌtʃ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-snowdonia-at-night-024",
+   "en": "to make sth. up",
+   "de": "sich etwas ausdenken",
+   "ipa": "",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-snowdonia-at-night-025",
+   "en": "to argue",
+   "de": "streiten; sich streiten",
+   "ipa": "ˈɑːɡjuː",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-snowdonia-at-night-026",
+   "en": "bite",
+   "de": "Biss, Bissen",
+   "ipa": "baɪt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-snowdonia-at-night-027",
+   "en": "office",
+   "de": "Büro",
+   "ipa": "ˈɒfɪs",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-snowdonia-at-night-028",
+   "en": "how to do sth.",
+   "de": "wie man etwas macht / machen kann / machen soll",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-snowdonia-at-night-029",
+   "en": "to behave",
+   "de": "sich verhalten, sich benehmen",
+   "ipa": "bɪˈheɪv",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-snowdonia-at-night-030",
+   "en": "mop",
+   "de": "Wischmopp",
+   "ipa": "mɒp",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-snowdonia-at-night-031",
+   "en": "to splash sb.",
+   "de": "jn. nass spritzen",
+   "ipa": "splæʃ",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-snowdonia-at-night-032",
+   "en": "punishment",
+   "de": "Bestrafung, Strafe",
+   "ipa": "ˈpʌnɪʃmənt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u2-snowdonia-at-night-033",
+   "en": "point of view",
+   "de": "Standpunkt",
+   "ipa": "ˌpɔɪnt əv ˈvjuː",
+   "pos": "",
+   "example_en": ""
+  }
+ ],
+ "y7u3-part-a": [
+  {
+   "id": "y7u3-part-a-001",
+   "en": "to explore",
+   "de": "erkunden, erforschen",
+   "ipa": "ɪkˈsplɔː",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-a-002",
+   "en": "cruise",
+   "de": "Kreuzfahrt, Schiffsreise, Bootsfahrt",
+   "ipa": "kruːz",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-a-003",
+   "en": "stuff",
+   "de": "Zeug, Kram",
+   "ipa": "stʌf",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-a-004",
+   "en": "difference",
+   "de": "Unterschied",
+   "ipa": "ˈdɪfrəns",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-a-005",
+   "en": "guidebook",
+   "de": "Reiseführer",
+   "ipa": "ˈɡaɪdbʊk",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-a-006",
+   "en": "opinion",
+   "de": "Meinung",
+   "ipa": "əˈpɪnjən",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-a-007",
+   "en": "to hang out",
+   "de": "abhängen, rumhängen",
+   "ipa": "ˌhæŋ ˈaʊt",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-a-008",
+   "en": "submarine",
+   "de": "U-Boot",
+   "ipa": "ˌsʌbməˈriːn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-a-009",
+   "en": "dock",
+   "de": "Hafen",
+   "ipa": "dɒk",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-a-010",
+   "en": "guys",
+   "de": "Leute",
+   "ipa": "ɡaɪz",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-a-011",
+   "en": "after that",
+   "de": "danach",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-a-012",
+   "en": "to think sth. of sth./sb.",
+   "de": "etwas von etwas/jm. halten",
+   "ipa": "",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-a-013",
+   "en": "crossword",
+   "de": "Kreuzworträtsel",
+   "ipa": "ˈkrɒswɜːd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-a-014",
+   "en": "factual",
+   "de": "sachlich, Sach-; faktisch; den Tatsachen entsprechend",
+   "ipa": "ˈfæktʃuəl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-a-015",
+   "en": "introduction",
+   "de": "Einleitung, Einführung",
+   "ipa": "ˌɪntrəˈdʌkʃn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-a-016",
+   "en": "body",
+   "de": "Hauptteil (eines Textes)",
+   "ipa": "ˈbɒdi",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-a-017",
+   "en": "conclusion",
+   "de": "Schluss(folgerung)",
+   "ipa": "kənˈkluːʒn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-a-018",
+   "en": "schedule",
+   "de": "(Zeit-)Plan, Programm",
+   "ipa": "ˈʃedjuːl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-a-019",
+   "en": "to get/have a day off",
+   "de": "einen Tag frei bekommen/haben",
+   "ipa": "ɒf",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-a-020",
+   "en": "to earn",
+   "de": "verdienen (Geld)",
+   "ipa": "ɜːn",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-a-021",
+   "en": "experience",
+   "de": "Erfahrung(en)",
+   "ipa": "ɪkˈspɪəriəns",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-a-022",
+   "en": "As John Lennon said ...",
+   "de": "Wie John Lennon (einmal) sagte ...",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-a-023",
+   "en": "to be born",
+   "de": "geboren sein/werden",
+   "ipa": "bɔːn",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-a-024",
+   "en": "to grow up",
+   "de": "erwachsen werden; aufwachsen",
+   "ipa": "ˌɡrəʊ ˈʌp",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-a-025",
+   "en": "to invent",
+   "de": "erfinden",
+   "ipa": "ɪnˈvent",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-a-026",
+   "en": "modern",
+   "de": "modern",
+   "ipa": "ˈmɒdn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-a-027",
+   "en": "success",
+   "de": "Erfolg",
+   "ipa": "səkˈses",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-a-028",
+   "en": "to perform",
+   "de": "auftreten (Künstler/in)",
+   "ipa": "pəˈfɔːm",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-a-029",
+   "en": "popular (with)",
+   "de": "populär, beliebt (bei)",
+   "ipa": "ˈpɒpjələ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-a-030",
+   "en": "monument (to)",
+   "de": "Denkmal, Monument (für/zum Gedenken an)",
+   "ipa": "ˈmɒnjʊmənt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-a-031",
+   "en": "a one-hour concert",
+   "de": "ein einstündiges Konzert",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  }
+ ],
+ "y7u3-part-b": [
+  {
+   "id": "y7u3-part-b-001",
+   "en": "banana",
+   "de": "Banane",
+   "ipa": "bəˈnɑːnə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-b-002",
+   "en": "proud (of)",
+   "de": "stolz (auf)",
+   "ipa": "praʊd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-b-003",
+   "en": "accent",
+   "de": "Akzent",
+   "ipa": "ˈæksənt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-b-004",
+   "en": "for hours/weeks/...",
+   "de": "seit Stunden/Wochen/...",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-b-005",
+   "en": "since 10 o'clock/last week/...",
+   "de": "seit 10 Uhr/letzter Woche/...",
+   "ipa": "sɪns",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-b-006",
+   "en": "support a team",
+   "de": "eine Mannschaft unterstützen; Fan einer Mannschaft sein",
+   "ipa": "səˈpɔːt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-b-007",
+   "en": "password",
+   "de": "Passwort",
+   "ipa": "ˈpɑːswɜːd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-b-008",
+   "en": "stadium",
+   "de": "Stadion",
+   "ipa": "ˈsteɪdiəm",
+   "pos": "",
+   "example_en": ""
+  }
+ ],
+ "y7u3-part-c": [
+  {
+   "id": "y7u3-part-c-001",
+   "en": "leader",
+   "de": "Leiter/in",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-c-002",
+   "en": "to lead",
+   "de": "führen, leiten",
+   "ipa": "liːd",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-c-003",
+   "en": "on board",
+   "de": "an Bord",
+   "ipa": "bɔːd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-c-004",
+   "en": "scarf, pl scarves",
+   "de": "Schal",
+   "ipa": "skɑːf",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-c-005",
+   "en": "like",
+   "de": "als ob",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-c-006",
+   "en": "to photograph",
+   "de": "fotografieren",
+   "ipa": "ˈfəʊtəɡrɑːf",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-c-007",
+   "en": "public",
+   "de": "öffentliche(r, s)",
+   "ipa": "ˈpʌblɪk",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-c-008",
+   "en": "(the) public",
+   "de": "die Öffentlichkeit",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-c-009",
+   "en": "absolutely",
+   "de": "völlig, absolut",
+   "ipa": "ˈæbsəluːtli",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-c-010",
+   "en": "for ages",
+   "de": "seit einer Ewigkeit, ewig lange",
+   "ipa": "ˈeɪdʒɪz",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-c-011",
+   "en": "polite",
+   "de": "höflich",
+   "ipa": "pəˈlaɪt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-c-012",
+   "en": "impolite",
+   "de": "unhöflich",
+   "ipa": "ˌɪmpəˈlaɪt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-c-013",
+   "en": "to remember sth.",
+   "de": "an etwas denken; sich etwas merken",
+   "ipa": "",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-c-014",
+   "en": "law",
+   "de": "Gesetz",
+   "ipa": "lɔː",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-c-015",
+   "en": "to publish",
+   "de": "veröffentlichen, verlegen",
+   "ipa": "ˈpʌblɪʃ",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-c-016",
+   "en": "social media",
+   "de": "soziale Medien",
+   "ipa": "ˌsəʊʃl ˈmiːdiə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-c-017",
+   "en": "permission",
+   "de": "Erlaubnis",
+   "ipa": "pəˈmɪʃn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-c-018",
+   "en": "situation",
+   "de": "Situation",
+   "ipa": "ˌsɪtʃuˈeɪʃn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-c-019",
+   "en": "focus",
+   "de": "Mittelpunkt, Schwerpunkt",
+   "ipa": "ˈfəʊkəs",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-c-020",
+   "en": "nurse",
+   "de": "Krankenschwester, Krankenpfleger",
+   "ipa": "nɜːs",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-c-021",
+   "en": "exchange",
+   "de": "Austausch",
+   "ipa": "ɪksˈtʃeɪndʒ",
+   "pos": "",
+   "example_en": ""
+  }
+ ],
+ "y7u3-part-d": [
+  {
+   "id": "y7u3-part-d-001",
+   "en": "to score",
+   "de": "Treffer erzielen, Tor schießen",
+   "ipa": "skɔː",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-d-002",
+   "en": "score",
+   "de": "Spielstand; Punktestand",
+   "ipa": "skɔː",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-d-003",
+   "en": "final",
+   "de": "letzte(r, s), End-",
+   "ipa": "ˈfaɪnl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-d-004",
+   "en": "result",
+   "de": "Ergebnis, Resultat",
+   "ipa": "rɪˈzʌlt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-d-005",
+   "en": "as a result",
+   "de": "folglich",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-d-006",
+   "en": "emotion",
+   "de": "Gefühl, Emotion",
+   "ipa": "ɪˈməʊʃn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-d-007",
+   "en": "including",
+   "de": "einschließlich; darunter (auch)",
+   "ipa": "ɪnˈkluːdɪŋ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-d-008",
+   "en": "goalkeeper",
+   "de": "Torwart, Torfrau",
+   "ipa": "ˈɡəʊlkiːpə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-d-009",
+   "en": "referee",
+   "de": "Schiedsrichter/in",
+   "ipa": "ˌrefəˈriː",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-d-010",
+   "en": "pitch",
+   "de": "(Sport-)Platz, Spielfeld",
+   "ipa": "pɪtʃ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-d-011",
+   "en": "free kick",
+   "de": "Freistoß",
+   "ipa": "ˌfriː ˈkɪk",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-d-012",
+   "en": "to pronounce",
+   "de": "aussprechen",
+   "ipa": "prəˈnaʊns",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-d-013",
+   "en": "to order",
+   "de": "ordnen",
+   "ipa": "ˈɔːdə",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-d-014",
+   "en": "to structure",
+   "de": "strukturieren, gliedern",
+   "ipa": "ˈstrʌktʃə",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-d-015",
+   "en": "equipment",
+   "de": "Ausrüstung",
+   "ipa": "ɪˈkwɪpmənt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-d-016",
+   "en": "nature",
+   "de": "Natur",
+   "ipa": "ˈneɪtʃə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-d-017",
+   "en": "bully",
+   "de": "(Schul-)Tyrann",
+   "ipa": "ˈbʊli",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-d-018",
+   "en": "to solve",
+   "de": "lösen",
+   "ipa": "sɒlv",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-part-d-019",
+   "en": "slow motion",
+   "de": "Zeitlupe",
+   "ipa": "ˌsləʊ ˈməʊʃn",
+   "pos": "",
+   "example_en": ""
+  }
+ ],
+ "y7u3-a-liverpool-hero": [
+  {
+   "id": "y7u3-a-liverpool-hero-001",
+   "en": "it was no different",
+   "de": "es war nicht anders",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-a-liverpool-hero-002",
+   "en": "canal",
+   "de": "Kanal",
+   "ipa": "kəˈnæl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-a-liverpool-hero-003",
+   "en": "to shine",
+   "de": "scheinen (Sonne)",
+   "ipa": "ʃaɪn",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-a-liverpool-hero-004",
+   "en": "laughter",
+   "de": "Gelächter",
+   "ipa": "ˈlɑːftə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-a-liverpool-hero-005",
+   "en": "surface",
+   "de": "Oberfläche",
+   "ipa": "ˈsɜːfɪs",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-a-liverpool-hero-006",
+   "en": "to burn",
+   "de": "brennen; verbrennen",
+   "ipa": "bɜːn",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-a-liverpool-hero-007",
+   "en": "to drown",
+   "de": "ertrinken",
+   "ipa": "draʊn",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-a-liverpool-hero-008",
+   "en": "nowhere",
+   "de": "nirgendwo; nirgendwohin",
+   "ipa": "ˈnəʊweə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-a-liverpool-hero-009",
+   "en": "to dive in",
+   "de": "hineinspringen",
+   "ipa": "ˌdaɪv ˈɪn",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-a-liverpool-hero-010",
+   "en": "dry",
+   "de": "trocken",
+   "ipa": "draɪ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-a-liverpool-hero-011",
+   "en": "to save sb. from sth.",
+   "de": "jn. von/vor etwas retten",
+   "ipa": "ˈseɪv",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-a-liverpool-hero-012",
+   "en": "to marry sb.",
+   "de": "jn. heiraten",
+   "ipa": "ˈmæri",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-a-liverpool-hero-013",
+   "en": "career",
+   "de": "Karriere",
+   "ipa": "kəˈrɪə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-a-liverpool-hero-014",
+   "en": "sailor",
+   "de": "Seemann, Matrose, Matrosin",
+   "ipa": "ˈseɪlə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-a-liverpool-hero-015",
+   "en": "body",
+   "de": "Leiche",
+   "ipa": "ˈbɒdi",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-a-liverpool-hero-016",
+   "en": "local",
+   "de": "örtlich, Lokal-; am/vom Ort",
+   "ipa": "ˈləʊkl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-a-liverpool-hero-017",
+   "en": "to spread",
+   "de": "(sich) ausbreiten, verbreiten",
+   "ipa": "spred",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-a-liverpool-hero-018",
+   "en": "funeral",
+   "de": "Trauerfeier",
+   "ipa": "ˈfjuːnərəl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-a-liverpool-hero-019",
+   "en": "to take place",
+   "de": "stattfinden",
+   "ipa": "ˌteɪk ˈpleɪs",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u3-a-liverpool-hero-020",
+   "en": "to name",
+   "de": "(be)nennen",
+   "ipa": "neɪm",
+   "pos": "verb",
+   "example_en": ""
+  }
+ ],
+ "y7u4-introduction": [
+  {
+   "id": "y7u4-introduction-001",
+   "en": "impression",
+   "de": "Eindruck",
+   "ipa": "ɪmˈpreʃn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-introduction-002",
+   "en": "march",
+   "de": "Marsch, Demonstration",
+   "ipa": "mɑːtʃ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-introduction-003",
+   "en": "to wave (at sb.)",
+   "de": "(jm. zu)winken",
+   "ipa": "weɪv",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-introduction-004",
+   "en": "northern",
+   "de": "nördlich, Nord-",
+   "ipa": "ˈnɔːðən",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-introduction-005",
+   "en": "speed limit",
+   "de": "Geschwindigkeitsbegrenzung, -beschränkung",
+   "ipa": "ˈspiːd ˌlɪmɪt",
+   "pos": "",
+   "example_en": ""
+  }
+ ],
+ "y7u4-part-a": [
+  {
+   "id": "y7u4-part-a-001",
+   "en": "giant",
+   "de": "Riese",
+   "ipa": "ˈdʒaɪənt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-a-002",
+   "en": "coffee",
+   "de": "Kaffee",
+   "ipa": "ˈkɒfi",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-a-003",
+   "en": "wonder",
+   "de": "Wunder",
+   "ipa": "ˈwʌndə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-a-004",
+   "en": "cliff",
+   "de": "Klippe",
+   "ipa": "klɪf",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-a-005",
+   "en": "column",
+   "de": "Säule",
+   "ipa": "ˈkɒləm",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-a-006",
+   "en": "to rise up",
+   "de": "aufragen, emporragen (Berge, Säulen, Türme, ... )",
+   "ipa": "ˌraɪz ˈʌp",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-a-007",
+   "en": "nearly",
+   "de": "fast, beinahe",
+   "ipa": "ˈnɪəli",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-a-008",
+   "en": "to form",
+   "de": "bilden, formen",
+   "ipa": "fɔːm",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-a-009",
+   "en": "challenge",
+   "de": "Herausforderung",
+   "ipa": "ˈtʃælɪndʒ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-a-010",
+   "en": "to challenge sb. (to sth.)",
+   "de": "jn. herausfordern (zu etwas)",
+   "ipa": "ˈtʃælɪndʒ",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-a-011",
+   "en": "to bet",
+   "de": "wetten",
+   "ipa": "bet",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-a-012",
+   "en": "to build",
+   "de": "bauen",
+   "ipa": "bɪld",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-a-013",
+   "en": "to be left",
+   "de": "übrig sein",
+   "ipa": "left",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-a-014",
+   "en": "legend",
+   "de": "Legende, Sage",
+   "ipa": "ˈledʒənd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-a-015",
+   "en": "curious",
+   "de": "wissbegierig, neugierig",
+   "ipa": "ˈkjʊəriəs",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-a-016",
+   "en": "passport",
+   "de": "(Reise-)Pass",
+   "ipa": "ˈpɑːspɔːt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-a-017",
+   "en": "ID card",
+   "de": "Personalausweis",
+   "ipa": "ˌaɪ ˈdiː kɑːd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-a-018",
+   "en": "airport",
+   "de": "Flughafen",
+   "ipa": "ˈeəpɔːt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-a-019",
+   "en": "safe",
+   "de": "sicher, in Sicherheit",
+   "ipa": "seɪf",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-a-020",
+   "en": "to keep",
+   "de": "halten; behalten",
+   "ipa": "kiːp",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-a-021",
+   "en": "god, God",
+   "de": "Gott",
+   "ipa": "ɡɒd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-a-022",
+   "en": "goddess",
+   "de": "Göttin",
+   "ipa": "ˈɡɒdes",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-a-023",
+   "en": "wedding",
+   "de": "Hochzeit, Trauung",
+   "ipa": "ˈwedɪŋ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-a-024",
+   "en": "king",
+   "de": "König",
+   "ipa": "kɪŋ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-a-025",
+   "en": "normal",
+   "de": "normal",
+   "ipa": "ˈnɔːməl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-a-026",
+   "en": "immediately",
+   "de": "sofort",
+   "ipa": "ɪˈmiːdiətli",
+   "pos": "",
+   "example_en": ""
+  }
+ ],
+ "y7u4-part-b": [
+  {
+   "id": "y7u4-part-b-001",
+   "en": "border",
+   "de": "Grenze",
+   "ipa": "ˈbɔːdə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-b-002",
+   "en": "euro (€)",
+   "de": "Euro",
+   "ipa": "ˈjʊərəʊ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-b-003",
+   "en": "pound",
+   "de": "Pfund",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-b-004",
+   "en": "pence",
+   "de": "Pence",
+   "ipa": "pens",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-b-005",
+   "en": "fifty p / fifty pence",
+   "de": "fünfzig Pence",
+   "ipa": "piː",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-b-006",
+   "en": "one pound / a pound",
+   "de": "ein Pfund",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-b-007",
+   "en": "two pounds fifty",
+   "de": "zwei Pfund fünfzig",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-b-008",
+   "en": "fifty cents",
+   "de": "fünfzig Cent",
+   "ipa": "sents",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-b-009",
+   "en": "one euro / a euro",
+   "de": "ein Euro",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-b-010",
+   "en": "two euros fifty",
+   "de": "zwei Euro fünfzig",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-b-011",
+   "en": "to change",
+   "de": "wechseln, umtauschen (Geld)",
+   "ipa": "tʃeɪndʒ",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-b-012",
+   "en": "letterbox",
+   "de": "Briefkasten",
+   "ipa": "ˈletəbɒks",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-b-013",
+   "en": "suit",
+   "de": "Anzug",
+   "ipa": "suːt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-b-014",
+   "en": "to smoke",
+   "de": "rauchen",
+   "ipa": "sməʊk",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-b-015",
+   "en": "pipe",
+   "de": "(Tabaks-)Pfeife",
+   "ipa": "paɪp",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-b-016",
+   "en": "pot",
+   "de": "Gefäß; Topf",
+   "ipa": "pɒt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-b-017",
+   "en": "What else can you do?",
+   "de": "Was kannst du (sonst) noch tun?",
+   "ipa": "els",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-b-018",
+   "en": "service",
+   "de": "Gottesdienst",
+   "ipa": "ˈsɜːvɪs",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-b-019",
+   "en": "by 8 pm",
+   "de": "bis (spätestens) 20 Uhr",
+   "ipa": "baɪ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-b-020",
+   "en": "to have a shower",
+   "de": "(sich) duschen",
+   "ipa": "ˈʃaʊə",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-b-021",
+   "en": "to share sth.",
+   "de": "(sich) etwas teilen",
+   "ipa": "",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-b-022",
+   "en": "the Atlantic (Ocean)",
+   "de": "der Atlantik, der Atlantische Ozean",
+   "ipa": "ətˈlæntɪk",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-b-023",
+   "en": "advantage",
+   "de": "Vorteil",
+   "ipa": "ədˈvɑːntɪdʒ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-b-024",
+   "en": "disadvantage",
+   "de": "Nachteil",
+   "ipa": "ˌdɪsədˈvɑːntɪdʒ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-b-025",
+   "en": "beginning",
+   "de": "Anfang, Beginn",
+   "ipa": "bɪˈɡɪnɪŋ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-b-026",
+   "en": "guest",
+   "de": "Gast",
+   "ipa": "ɡest",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-b-027",
+   "en": "facial expression",
+   "de": "Gesichtsausdruck, Mimik",
+   "ipa": "ˌfeɪʃl ɪkˈspreʃn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-b-028",
+   "en": "interaction",
+   "de": "Interaktion, Umgang",
+   "ipa": "ˌɪntərˈækʃn",
+   "pos": "",
+   "example_en": ""
+  }
+ ],
+ "y7u4-part-c": [
+  {
+   "id": "y7u4-part-c-001",
+   "en": "owner",
+   "de": "Besitzer/in",
+   "ipa": "ˈəʊnə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-002",
+   "en": "weird",
+   "de": "seltsam, komisch",
+   "ipa": "wɪəd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-003",
+   "en": "to stare (at sb./sth.)",
+   "de": "(jn./etwas an)starren",
+   "ipa": "steə",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-004",
+   "en": "to joke",
+   "de": "scherzen, Witze machen",
+   "ipa": "",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-005",
+   "en": "sense of humour",
+   "de": "(Sinn für) Humor",
+   "ipa": "ˌsens əv ˈhjuːmə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-006",
+   "en": "to survive",
+   "de": "überleben",
+   "ipa": "səˈvaɪv",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-007",
+   "en": "argument",
+   "de": "Streit, Auseinandersetzung",
+   "ipa": "ˈɑːɡjumənt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-008",
+   "en": "to be starving",
+   "de": "einen Riesenhunger haben",
+   "ipa": "ˈstɑːvɪŋ",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-009",
+   "en": "to unpack",
+   "de": "auspacken",
+   "ipa": "ˌʌnˈpæk",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-010",
+   "en": "rude",
+   "de": "unhöflich; unverschämt",
+   "ipa": "ruːd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-011",
+   "en": "trail",
+   "de": "Weg, Pfad",
+   "ipa": "treɪl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-012",
+   "en": "stream",
+   "de": "Bach",
+   "ipa": "striːm",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-013",
+   "en": "ashes",
+   "de": "Asche (sterbliche Überreste)",
+   "ipa": "ˈæʃɪz",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-014",
+   "en": "boyfriend",
+   "de": "Freund",
+   "ipa": "ˈbɔɪfrend",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-015",
+   "en": "girlfriend",
+   "de": "Freundin",
+   "ipa": "ˈɡɜːlfrend",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-016",
+   "en": "to welcome sb. (to)",
+   "de": "jn. begrüßen (in), jn. willkommen heißen (in)",
+   "ipa": "ˈwelkəm",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-017",
+   "en": "regional",
+   "de": "regional",
+   "ipa": "ˈriːdʒənl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-018",
+   "en": "standard",
+   "de": "Standard; Standard-",
+   "ipa": "ˈstændəd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-019",
+   "en": "capital",
+   "de": "Hauptstadt",
+   "ipa": "ˈkæpɪtl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-020",
+   "en": "crown",
+   "de": "Krone",
+   "ipa": "kraʊn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-021",
+   "en": "currency",
+   "de": "Währung",
+   "ipa": "ˈkʌrənsi",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-022",
+   "en": "the EU (the European Union)",
+   "de": "die Europäische Union",
+   "ipa": "ˌiː ˈjuː",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-023",
+   "en": "nation",
+   "de": "Nation, Volk",
+   "ipa": "ˈneɪʃn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-024",
+   "en": "peace",
+   "de": "Friede, Frieden",
+   "ipa": "piːs",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-025",
+   "en": "population",
+   "de": "Bevölkerung, Einwohner(zahl)",
+   "ipa": "ˌpɒpjuˈleɪʃn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-026",
+   "en": "president",
+   "de": "Präsident/in",
+   "ipa": "ˈprezɪdənt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-027",
+   "en": "republic",
+   "de": "Republik",
+   "ipa": "rɪˈpʌblɪk",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-028",
+   "en": "state",
+   "de": "Staat",
+   "ipa": "steɪt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-029",
+   "en": "coordinator",
+   "de": "Koordinator/in",
+   "ipa": "kəʊˈɔːdɪneɪtə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-030",
+   "en": "layout",
+   "de": "Layout, Gestaltung",
+   "ipa": "ˈleɪaʊt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-031",
+   "en": "editor",
+   "de": "Redakteur/in; Herausgeber/in",
+   "ipa": "ˈedɪtə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-032",
+   "en": "research",
+   "de": "Recherche, Forschung(en)",
+   "ipa": "rɪˈsɜːtʃ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-033",
+   "en": "to suggest sth. (to sb.)",
+   "de": "(jm.) etwas vorschlagen",
+   "ipa": "səˈdʒest",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-034",
+   "en": "discussion",
+   "de": "Diskussion",
+   "ipa": "dɪˈskʌʃn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-part-c-035",
+   "en": "decision",
+   "de": "Entscheidung",
+   "ipa": "dɪˈsɪʒn",
+   "pos": "",
+   "example_en": ""
+  }
+ ],
+ "y7u4-the-horse-ride": [
+  {
+   "id": "y7u4-the-horse-ride-001",
+   "en": "stable",
+   "de": "(Pferde-, Kuh)Stall",
+   "ipa": "ˈsteɪbl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-the-horse-ride-002",
+   "en": "choice",
+   "de": "Wahl; Auswahl",
+   "ipa": "tʃɔɪs",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-the-horse-ride-003",
+   "en": "reins",
+   "de": "Zügel",
+   "ipa": "reɪnz",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-the-horse-ride-004",
+   "en": "ditch",
+   "de": "Graben",
+   "ipa": "dɪtʃ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-the-horse-ride-005",
+   "en": "beyond",
+   "de": "jenseits (von), über ... hinaus/hinweg",
+   "ipa": "bɪˈjɒnd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-the-horse-ride-006",
+   "en": "straight",
+   "de": "direkt, geradewegs",
+   "ipa": "streɪt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-the-horse-ride-007",
+   "en": "shallow",
+   "de": "flach, nicht tief",
+   "ipa": "ˈʃæləʊ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-the-horse-ride-008",
+   "en": "What's up?",
+   "de": "Was gibt's? / Was ist los?",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-the-horse-ride-009",
+   "en": "just as good/bad/...",
+   "de": "genauso gut/schlecht/...",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-the-horse-ride-010",
+   "en": "to gallop",
+   "de": "galoppieren",
+   "ipa": "ˈɡæləp",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-the-horse-ride-011",
+   "en": "distance",
+   "de": "Ferne; Entfernung",
+   "ipa": "ˈdɪstəns",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-the-horse-ride-012",
+   "en": "below",
+   "de": "unten, darunter; unter, unterhalb (von)",
+   "ipa": "bɪˈləʊ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-the-horse-ride-013",
+   "en": "above",
+   "de": "oben, darüber; über, oberhalb (von)",
+   "ipa": "əˈbʌv",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-the-horse-ride-014",
+   "en": "jolt",
+   "de": "Ruck, Stoß",
+   "ipa": "dʒəʊlt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-the-horse-ride-015",
+   "en": "saddle",
+   "de": "Sattel",
+   "ipa": "ˈsædl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-the-horse-ride-016",
+   "en": "to slip",
+   "de": "(aus)rutschen",
+   "ipa": "slɪp",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-the-horse-ride-017",
+   "en": "butter",
+   "de": "Butter",
+   "ipa": "ˈbʌtə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-the-horse-ride-018",
+   "en": "to sink",
+   "de": "sinken",
+   "ipa": "sɪŋk",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-the-horse-ride-019",
+   "en": "to stretch sth. out",
+   "de": "ausstrecken",
+   "ipa": "stretʃ",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-the-horse-ride-020",
+   "en": "direction",
+   "de": "Richtung",
+   "ipa": "dəˈrekʃn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-the-horse-ride-021",
+   "en": "to dial",
+   "de": "wählen (Telefonnummer)",
+   "ipa": "ˈdaɪəl",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-the-horse-ride-022",
+   "en": "to recognize",
+   "de": "erkennen",
+   "ipa": "ˈrekəɡnaɪz",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-the-horse-ride-023",
+   "en": "tide",
+   "de": "Gezeiten, Ebbe und Flut",
+   "ipa": "taɪd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-the-horse-ride-024",
+   "en": "signal",
+   "de": "Signal, Zeichen",
+   "ipa": "ˈsɪɡnəl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-the-horse-ride-025",
+   "en": "calm",
+   "de": "ruhig",
+   "ipa": "kɑːm",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-the-horse-ride-026",
+   "en": "to teach",
+   "de": "unterrichten, lehren",
+   "ipa": "tiːtʃ",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-the-horse-ride-027",
+   "en": "thought",
+   "de": "Gedanke",
+   "ipa": "θɔːt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-the-horse-ride-028",
+   "en": "motor",
+   "de": "Motor",
+   "ipa": "ˈməʊtə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u4-the-horse-ride-029",
+   "en": "truck (BE also: lorry)",
+   "de": "Lastwagen, LKW",
+   "ipa": "trʌk",
+   "pos": "",
+   "example_en": ""
+  }
+ ],
+ "y7u5-introduction": [
+  {
+   "id": "y7u5-introduction-001",
+   "en": "the Highlands",
+   "de": "das schottische Hochland",
+   "ipa": "ˈhaɪləndz",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-introduction-002",
+   "en": "atmosphere",
+   "de": "Atmosphäre; Stimmung",
+   "ipa": "ˈætməsfɪə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-introduction-003",
+   "en": "romantic",
+   "de": "romantisch; Liebes-",
+   "ipa": "rəʊˈmæntɪk",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-introduction-004",
+   "en": "sunset",
+   "de": "Sonnenuntergang",
+   "ipa": "ˈsʌnset",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-introduction-005",
+   "en": "bagpiper",
+   "de": "Dudelsackpfeifer/in, Dudelsackspieler/in, Sackpfeifer/in",
+   "ipa": "ˈbæɡpaɪpə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-introduction-006",
+   "en": "bagpipes",
+   "de": "Dudelsack, Sackpfeife",
+   "ipa": "ˈbæɡpaɪps",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-introduction-007",
+   "en": "sheepdog",
+   "de": "Hütehund",
+   "ipa": "ˈʃiːpdɒɡ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-introduction-008",
+   "en": "trials",
+   "de": "Turnier, Wettkampf",
+   "ipa": "ˈtraɪəlz",
+   "pos": "",
+   "example_en": ""
+  }
+ ],
+ "y7u5-part-a": [
+  {
+   "id": "y7u5-part-a-001",
+   "en": "portion",
+   "de": "Portion",
+   "ipa": "ˈpɔːʃn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-a-002",
+   "en": "Help yourself.",
+   "de": "Greif zu! / Bedien dich!",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-a-003",
+   "en": "I didn't enjoy myself.",
+   "de": "Ich habe mich nicht amüsiert. / Ich hatte keinen Spaß.",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-a-004",
+   "en": "to relax",
+   "de": "sich entspannen, sich ausruhen",
+   "ipa": "rɪˈlæks",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-a-005",
+   "en": "upset",
+   "de": "aufgebracht, gekränkt, mitgenommen",
+   "ipa": "ˌʌpˈset",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-a-006",
+   "en": "jealous (of)",
+   "de": "neidisch (auf); eifersüchtig (auf)",
+   "ipa": "ˈdʒeləs",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-a-007",
+   "en": "to control",
+   "de": "kontrollieren, beherrschen; unter Kontrolle halten/bekommen",
+   "ipa": "kənˈtrəʊl",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-a-008",
+   "en": "movement",
+   "de": "Bewegung",
+   "ipa": "ˈmuːvmənt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-a-009",
+   "en": "serious",
+   "de": "ernst; ernsthaft",
+   "ipa": "ˈsɪəriəs",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-a-010",
+   "en": "to protect sb./sth. (from sb./sth.)",
+   "de": "jn./etwas (be)schützen (vor jm./etwas)",
+   "ipa": "prəˈtekt",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-a-011",
+   "en": "comfortable",
+   "de": "bequem; angenehm",
+   "ipa": "ˈkʌmftəbl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-a-012",
+   "en": "judge",
+   "de": "Richter/in",
+   "ipa": "dʒʌdʒ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-a-013",
+   "en": "to escape",
+   "de": "fliehen",
+   "ipa": "ɪˈskeɪp",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-a-014",
+   "en": "escape",
+   "de": "Flucht",
+   "ipa": "ɪˈskeɪp",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-a-015",
+   "en": "split screen",
+   "de": "geteilter Bildschirm; Bildschirm(auf)teilung",
+   "ipa": "ˌsplɪt ˈskriːn",
+   "pos": "",
+   "example_en": ""
+  }
+ ],
+ "y7u5-part-b": [
+  {
+   "id": "y7u5-part-b-001",
+   "en": "flock of sheep/goats",
+   "de": "Schafen-/Ziegenherde",
+   "ipa": "flɒk",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-b-002",
+   "en": "comment",
+   "de": "Bemerkung, Kommentar",
+   "ipa": "ˈkɒment",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-b-003",
+   "en": "royal",
+   "de": "königlich",
+   "ipa": "ˈrɔɪəl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-b-004",
+   "en": "complicated",
+   "de": "kompliziert",
+   "ipa": "ˈkɒmplɪkeɪtɪd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-b-005",
+   "en": "to prefer sth. (to sth.)",
+   "de": "etwas (einer anderen Sache) vorziehen; etwas lieber tun (als etwas)",
+   "ipa": "prɪˈfɜː",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-b-006",
+   "en": "purse; wallet",
+   "de": "Portemonnaie, Geldbörse",
+   "ipa": "pɜːs]; [ˈwɒlɪt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-b-007",
+   "en": "wee",
+   "de": "klein",
+   "ipa": "wiː",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-b-008",
+   "en": "Get lost!",
+   "de": "Verzieh dich!",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-b-009",
+   "en": "to make a fuss about sth.",
+   "de": "großen Wirbel um etwas machen",
+   "ipa": "fʌs",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-b-010",
+   "en": "dishwasher",
+   "de": "Geschirrspüler",
+   "ipa": "ˈdɪʃwɒʃə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-b-011",
+   "en": "typical (of)",
+   "de": "typisch (für)",
+   "ipa": "ˈtɪpɪkl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-b-012",
+   "en": "volcano",
+   "de": "Vulkan",
+   "ipa": "vɒlˈkeɪnəʊ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-b-013",
+   "en": "army",
+   "de": "Armee",
+   "ipa": "ˈɑːmi",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-b-014",
+   "en": "originally",
+   "de": "ursprünglich",
+   "ipa": "əˈrɪdʒənəli",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-b-015",
+   "en": "material",
+   "de": "Material, Stoff",
+   "ipa": "məˈtɪəriəl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-b-016",
+   "en": "well-known",
+   "de": "bekannt, wohlbekannt",
+   "ipa": "ˌwelˈnəʊn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-b-017",
+   "en": "classical",
+   "de": "klassisch",
+   "ipa": "ˈklæsɪkl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-b-018",
+   "en": "flute",
+   "de": "Querflöte",
+   "ipa": "fluːt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-b-019",
+   "en": "trumpet",
+   "de": "Trompete",
+   "ipa": "ˈtrʌmpɪt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-b-020",
+   "en": "violin",
+   "de": "Violine, Geige",
+   "ipa": "ˌvaɪəˈlɪn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-b-021",
+   "en": "summary",
+   "de": "Zusammenfassung",
+   "ipa": "ˈsʌməri",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-b-022",
+   "en": "to sum sth. up",
+   "de": "etwas zusammenfassen",
+   "ipa": "ˌsʌm ˈʌp",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-b-023",
+   "en": "tradition",
+   "de": "Tradition",
+   "ipa": "trəˈdɪʃn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-b-024",
+   "en": "search (for)",
+   "de": "Durchsuchung; Suche (nach)",
+   "ipa": "sɜːtʃ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-b-025",
+   "en": "term",
+   "de": "Ausdruck, Begriff",
+   "ipa": "tɜːm",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-b-026",
+   "en": "unusual",
+   "de": "ungewöhnlich",
+   "ipa": "ʌnˈjuːʒuəl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-b-027",
+   "en": "usual",
+   "de": "gewöhnlich, üblich",
+   "ipa": "ˈjuːʒuəl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-b-028",
+   "en": "to interest sb.",
+   "de": "jn. interessieren",
+   "ipa": "ˈɪntrəst",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-b-029",
+   "en": "heading",
+   "de": "Überschrift",
+   "ipa": "ˈhedɪŋ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-b-030",
+   "en": "digital",
+   "de": "digital",
+   "ipa": "ˈdɪdʒɪtl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-b-031",
+   "en": "slide",
+   "de": "Folie (bei Präsentationen mit Computerprogramm)",
+   "ipa": "slaɪd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-part-b-032",
+   "en": "to fit",
+   "de": "passen",
+   "ipa": "fɪt",
+   "pos": "verb",
+   "example_en": ""
+  }
+ ],
+ "y7u5-missing": [
+  {
+   "id": "y7u5-missing-001",
+   "en": "missing",
+   "de": "verschollen, vermisst",
+   "ipa": "ˈmɪsɪŋ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-missing-002",
+   "en": "heather",
+   "de": "Heide(kraut)",
+   "ipa": "ˈheðə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-missing-003",
+   "en": "tension",
+   "de": "Spannung, Anspannung",
+   "ipa": "ˈtenʃn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-missing-004",
+   "en": "whistle",
+   "de": "Pfiff",
+   "ipa": "ˈwɪsl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-missing-005",
+   "en": "to race",
+   "de": "rasen",
+   "ipa": "reɪs",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-missing-006",
+   "en": "in horror",
+   "de": "entsetzt",
+   "ipa": "ˈhɒrə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-missing-007",
+   "en": "noise",
+   "de": "Geräusch; Lärm",
+   "ipa": "nɔɪz",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-missing-008",
+   "en": "to reach over",
+   "de": "die Hand ausstrecken",
+   "ipa": "ˌriːtʃ ˈəʊvə",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-missing-009",
+   "en": "to beat",
+   "de": "schlagen; besiegen",
+   "ipa": "biːt",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-missing-010",
+   "en": "to read sb.'s mind",
+   "de": "jemandes Gedanken lesen",
+   "ipa": "maɪnd",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-missing-011",
+   "en": "shepherd",
+   "de": "Schäfer/in, Schafhirte/-hirtin",
+   "ipa": "ˈʃepəd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-missing-012",
+   "en": "to burst into tears",
+   "de": "in Tränen ausbrechen",
+   "ipa": "bɜːst",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-missing-013",
+   "en": "volunteer",
+   "de": "Freiwillige(r), Ehrenamtliche(r)",
+   "ipa": "ˌvɒlənˈtɪə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-missing-014",
+   "en": "gently",
+   "de": "behutsam, sanft",
+   "ipa": "ˈdʒentli",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-missing-015",
+   "en": "awake",
+   "de": "wach",
+   "ipa": "əˈweɪk",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-missing-016",
+   "en": "to knock (on sth.)",
+   "de": "(an)klopfen (an etwas)",
+   "ipa": "nɒk",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-missing-017",
+   "en": "memorial",
+   "de": "Denkmal; Gedenk-",
+   "ipa": "məˈmɔːriəl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y7u5-missing-018",
+   "en": "in second place",
+   "de": "auf dem zweiten Platz; an zweiter Stelle",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  }
+ ]
+};
+</script>
+
+<script>
+/* =========================================================================
+   SPEICHER  –  localStorage mit Rückfallebene im Arbeitsspeicher
+   ========================================================================= */
+const Store = (function(){
+  let persistent = true, mem = {};
+  try{
+    localStorage.setItem("vt7:test","1");
+    localStorage.removeItem("vt7:test");
+  }catch(e){ persistent = false; }
+  return {
+    persistent,
+    get(k){
+      try{
+        if(persistent) return localStorage.getItem(k);
+        return (k in mem) ? mem[k] : null;
+      }catch(e){ return (k in mem) ? mem[k] : null; }
+    },
+    set(k,v){
+      try{ persistent ? localStorage.setItem(k,v) : (mem[k]=v); }
+      catch(e){ mem[k]=v; }
+    }
+  };
+})();
+
+const KEY = "vt7:progress";
+const INTERVALS = [0,0,1,2,4,8];      // Fach 1..5 -> Tage bis zur Wiedervorlage
+const DAY = 86400000;
+
+let progress = (function(){
+  try{ return JSON.parse(Store.get(KEY)) || {}; }catch(e){ return {}; }
+})();
+
+function save(){ Store.set(KEY, JSON.stringify(progress)); }
+
+function rec(dir, vid){
+  if(!progress[dir]) progress[dir] = {};
+  if(!progress[dir][vid]) progress[dir][vid] = {box:1, due:0};
+  return progress[dir][vid];
+}
+function isDue(r){ return Date.now() >= r.due; }
+
+function boxCounts(list, dir){
+  const c=[0,0,0,0,0];
+  for(const v of list) c[rec(dir,v.id).box-1]++;
+  return c;
+}
+function dueCount(list, dir){
+  return list.filter(v => isDue(rec(dir,v.id))).length;
+}
+
+/* Liefert die Vokabeln zu einer Auswahl. Neben den einzelnen Parts gibt es
+   zwei Sammel-IDs: "<unit>-all" fuer eine ganze Unit und "<jahrgang>-all"
+   fuer das ganze Buch. Der Lernstand haengt an der Vokabel, nicht an der
+   Auswahl - wer eine Unit am Stueck lernt, sieht denselben Fortschritt
+   auch in den einzelnen Parts. */
+function setOf(id){
+  if(SETS[id]) return SETS[id];
+  var m = /^(.+)-all$/.exec(id);
+  if(!m) return [];
+  var key = m[1];
+  var parts = TOPICS.filter(function(t){ return t.unit === key; });
+  if(!parts.length){
+    var yr = YEARS.filter(function(y){ return y.id === key; })[0];
+    if(yr) parts = TOPICS.filter(function(t){
+      return yr.units.some(function(u){ return u.id === t.unit; }); });
+  }
+  return parts.reduce(function(a,t){ return a.concat(SETS[t.id]); }, []);
+}
+function topicName(id){
+  var t = TOPICS.filter(function(x){ return x.id === id; })[0];
+  if(t) return t.unitName + " \u00b7 " + t.name;
+  var m = /^(.+)-all$/.exec(id);
+  if(m){
+    var u = TOPICS.filter(function(x){ return x.unit === m[1]; })[0];
+    if(u) return u.unitName + " \u2013 ganze Unit";
+    var y = YEARS.filter(function(x){ return x.id === m[1]; })[0];
+    if(y) return y.label + " (" + y.book + ") \u2013 alle Units";
+  }
+  return id;
+}
+
+/* -------------------------------------------------------------------------
+   Kurze Rueckmeldetoene. Erzeugt ueber die Web Audio API, damit die Datei
+   ohne Audiodateien auskommt: aufwaerts bei richtig, abwaerts bei falsch.
+   Abschaltbar, weil Ton im Klassenraum nicht immer erwuenscht ist.
+   ------------------------------------------------------------------------- */
+const Sfx = (function(){
+  let ctx = null, on = true;
+  try{ on = localStorage.getItem("vt7:sfx") !== "0"; }catch(e){}
+  function enabled(){ return on; }
+  function toggle(){
+    on = !on;
+    try{ localStorage.setItem("vt7:sfx", on ? "1" : "0"); }catch(e){}
+    if(on) play("ok");
+    return on;
+  }
+  function play(kind){
+    if(!on) return;
+    try{
+      if(!ctx){
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if(!AC) return;
+        ctx = new AC();
+      }
+      if(ctx.state === "suspended") ctx.resume();
+      const seq = kind === "ok"   ? [[660,0.02],[990,0.11]]
+                : kind === "near" ? [[560,0.02],[560,0.12]]
+                :                   [[300,0.02],[190,0.13]];
+      for(const [freq, at] of seq){
+        const t = ctx.currentTime + at;
+        const osc = ctx.createOscillator(), g = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(freq, t);
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(0.16, t + 0.012);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + 0.13);
+        osc.connect(g); g.connect(ctx.destination);
+        osc.start(t); osc.stop(t + 0.15);
+      }
+    }catch(e){}
+  }
+  function unlock(){
+    try{
+      if(!ctx){
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if(!AC) return;
+        ctx = new AC();
+      }
+      if(ctx.state === "suspended") ctx.resume();
+    }catch(e){}
+  }
+  ["pointerdown","keydown","touchstart"].forEach(ev =>
+    document.addEventListener(ev, unlock, {once:true, passive:true}));
+  return {play, toggle, enabled, unlock};
+})();
+
+/* =========================================================================
+   AUSSPRACHE  –  Web Speech API des Browsers, keine externe Anbindung
+   Nutzt die auf dem Gerät installierten Stimmen. Kein Konto, kein Schlüssel,
+   kein Datenversand. Verfügbarkeit und Qualität hängen vom Endgerät ab.
+   ========================================================================= */
+const Speech = (function(){
+  var synth = window.speechSynthesis;
+  if(!synth) return {available:false, say:function(){}, status:function(){ return "nicht unterstützt"; }};
+
+  var voice = null;
+  var last = "noch nichts abgespielt";
+
+  function pick(){
+    var vs = [];
+    try{ vs = synth.getVoices() || []; }catch(e){ return; }
+    vs = vs.filter(function(v){ return /^en/i.test(v.lang); });
+    if(!vs.length) return;                        // auf iOS anfangs leer
+    voice = vs.filter(function(v){ return /en[-_]GB/i.test(v.lang); })[0]
+         || vs.filter(function(v){ return /en[-_]US/i.test(v.lang); })[0]
+         || vs[0];
+  }
+  pick();
+  if(synth.addEventListener) synth.addEventListener("voiceschanged", pick);
+
+  return {
+    available:true,
+
+    /* Zaehlt die geladenen Stimmen und meldet, was zuletzt passiert ist. */
+    status:function(){
+      var n = 0;
+      try{ n = (synth.getVoices() || []).length; }catch(e){}
+      return n + " Stimmen geladen \u00b7 " + (voice ? "gewählt: " + voice.name + " (" + voice.lang + ")"
+                                                     : "keine englische Stimme gefunden")
+           + " \u00b7 zuletzt: " + last;
+    },
+
+    say:function(text, btn){
+      try{
+        // Laeuft schon etwas? Dann nur abbrechen und beenden. Niemals
+        // cancel() unmittelbar vor speak() aufrufen - iOS verschluckt sonst
+        // beides und bleibt stumm.
+        if(synth.speaking || synth.pending){
+          synth.cancel();
+          last = "abgebrochen";
+          if(btn) btn.classList.remove("on");
+          return;
+        }
+
+        // Stimmenliste im Moment des Antippens auffrischen; auf iOS ist sie
+        // beim Laden der Seite noch leer.
+        if(!voice) pick();
+
+        var u = new SpeechSynthesisUtterance(String(text).replace(/^to\s+/i, ""));
+        u.lang = "en-GB";
+        if(voice){ try{ u.voice = voice; u.lang = voice.lang || "en-GB"; }catch(e){} }
+        u.rate = 0.9;
+
+        last = "gestartet";
+        u.onstart = function(){ last = "spricht"; };
+        u.onend   = function(){ last = "fertig"; if(btn) btn.classList.remove("on"); };
+        u.onerror = function(ev){
+          last = "Fehler: " + ((ev && ev.error) ? ev.error : "unbekannt");
+          if(btn) btn.classList.remove("on");
+        };
+
+        if(btn) btn.classList.add("on");
+        synth.speak(u);                  // direkt aus der Nutzeraktion heraus
+        if(synth.paused){ try{ synth.resume(); }catch(e){} }
+      }catch(e){
+        last = "Ausnahme: " + e.message;
+        if(btn) btn.classList.remove("on");
+      }
+    }
+  };
+})();
+
+const SPK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+  <path d="M15.5 8.5a5 5 0 0 1 0 7"></path><path d="M18.5 5.5a9 9 0 0 1 0 13"></path></svg>`;
+
+function speakBtn(text){
+  if(!Speech.available) return "";
+  return `<button class="speak" data-say="${esc(text)}" title="Aussprache anhören"
+    aria-label="Aussprache von ${esc(text)} anhören">${SPK}</button>`;
+}
+
+/* =========================================================================
+   HILFSFUNKTIONEN
+   ========================================================================= */
+const shuffle = a => a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]);
+const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function normalise(s){
+  return s.toLowerCase().trim()
+    .replace(/^(to|the|a|an)\s+/,"")
+    .replace(/[.,;!?'"’]/g,"")
+    .replace(/\s+/g," ");
+}
+function distance(a,b){
+  const m=a.length,n=b.length,d=Array.from({length:m+1},(_,i)=>[i,...Array(n).fill(0)]);
+  for(let j=0;j<=n;j++) d[0][j]=j;
+  for(let i=1;i<=m;i++) for(let j=1;j<=n;j++)
+    d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));
+  return d[m][n];
+}
+function checkTyped(input, target){
+  const a=normalise(input), b=normalise(target);
+  if(!a) return "no";
+  if(a===b) return "ok";
+  // Mehrere zulässige Übersetzungen, durch Komma getrennt
+  if(b.split(",").map(s=>s.trim()).includes(a)) return "ok";
+  const tol = b.length > 6 ? 2 : 1;
+  return distance(a,b) <= tol ? "near" : "no";
+}
+function markExample(sentence, word){
+  const stem = word.replace(/^to\s+/i,"").split(/[\s/]/)[0].slice(0, Math.max(4, word.length-3));
+  const re = new RegExp("("+stem.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"\\w*)","i");
+  return esc(sentence).replace(re,"<b>$1</b>");
+}
+
+/* =========================================================================
+   ZUSTAND
+   ========================================================================= */
+const S = {
+  view:"home",
+  yearId:null,
+  topicId:null,
+  dir:"en2de",          // en2de | de2en
+  mode:"card",          // card | mc | type
+  onlyDue:true,
+  queue:[], i:0, revealed:false, answered:null, landed:null,
+  seen:0
+};
+const view = document.getElementById("view");
+const dirLabel = () => S.dir==="en2de" ? "EN → DE" : "DE → EN";
+const askSide  = v => S.dir==="en2de" ? v.en : v.de;
+const ansSide  = v => S.dir==="en2de" ? v.de : v.en;
+
+/* =========================================================================
+   STARTSEITE
+   ========================================================================= */
+function railFor(list){
+  const total = list.length;
+  const c = boxCounts(list, S.dir);
+  const known = c[2]+c[3]+c[4];
+  const filled = total ? Math.round(known/total*5) : 0;
+  return `<span class="minirail">${[0,1,2,3,4].map(k=>`<i class="${k<filled?"f":""}"></i>`).join("")}</span>`;
+}
+function countLabel(list){
+  const total = list.length;
+  if(!total) return "leer";
+  const due = dueCount(list, S.dir);
+  return (due ? `<span class="t-due">${due} f\u00e4llig</span> \u00b7 ` : "") + total + " Vok.";
+}
+function topicRow(id, label, list, cls){
+  return `<button class="topic ${cls||""}" data-topic="${id}">
+    <span class="t-row">
+      <span class="t-name">${esc(label)}</span>
+      <span class="t-count">${countLabel(list)}</span>
+    </span>
+    ${railFor(list)}
+  </button>`;
+}
+
+/* Startseite: nur die Jahrgaenge mit ihrem Lehrwerk. */
+function renderHome(){
+  let h = "";
+  for(const y of YEARS){
+    const list = setOf(y.id + "-all");
+    h += `<section class="yeargroup">
+      <div class="yearhead"><span class="tag">${esc(y.label)}</span>
+      <span class="name">${esc(y.book)}</span></div>
+      <button class="topic home-year" data-year="${y.id}">
+        <span class="t-row">
+          <span class="t-name">${esc(y.label)}</span>
+          <span class="t-count">${y.units.length} Units \u00b7 ${list.length} Vok.</span>
+        </span>
+        ${railFor(list)}
+      </button>
+    </section>`;
+  }
+  h += `<div class="emptyhint">W\u00e4hle einen Jahrgang. Der Fortschritt wird pro
+        Abfragerichtung (${dirLabel()}) getrennt gespeichert und bleibt auf diesem Ger\u00e4t.</div>`;
+  const grand = TOPICS.reduce((n,t) => n + (SETS[t.id] ? SETS[t.id].length : 0), 0);
+  h += `<button class="topic home-all" id="allBtn">
+    <span class="t-row">
+      <span class="t-name">Alle Vokabeln ansehen</span>
+      <span class="t-count">${grand} Eintr\u00e4ge</span>
+    </span>
+  </button>`;
+  h += `<button class="topic home-help" id="helpBtn">
+    <span class="t-row">
+      <span class="t-name">Anleitung</span>
+      <span class="t-count">So funktioniert die Seite</span>
+    </span>
+  </button>`;
+
+  view.innerHTML = h;
+  view.querySelectorAll("[data-year]").forEach(b =>
+    b.addEventListener("click", () => { S.yearId = b.dataset.year; S.view = "year"; render(); }));
+  const ab = document.getElementById("allBtn");
+  if(ab) ab.onclick = () => { S.view = "list"; render(); };
+  const hb = document.getElementById("helpBtn");
+  if(hb) hb.onclick = () => { S.view = "help"; render(); };
+  updateFoot();
+}
+
+/* Jahrgangsseite: pro Unit ein Abschnitt, darin die Parts als Zeilen,
+   dazu je eine Zeile fuer die ganze Unit und eine fuer das ganze Buch. */
+function renderYear(){
+  const y = YEARS.filter(x => x.id === S.yearId)[0] || YEARS[0];
+  let h = `<div class="sessionbar">
+      <button class="linkbtn" id="yback">\u2190 Jahrg\u00e4nge</button>
+      <div class="switches"><button class="switch" id="ydir">${dirLabel()}</button></div>
+    </div>`;
+
+  h += topicRow(y.id + "-all", "Alle Vokabeln des Buches", setOf(y.id + "-all"), "uall");
+
+  for(const u of y.units){
+    const parts = TOPICS.filter(t => t.unit === u.id);
+    if(!parts.length) continue;
+    h += `<details class="yeargroup ${u.id}">
+      <summary class="yearhead"><span class="tag">${esc(u.name.split(" \u2013 ")[0])}</span>
+      <span class="name">${esc(u.name.split(" \u2013 ").slice(1).join(" \u2013 "))}</span></summary>`;
+    h += topicRow(u.id + "-all", "Ganze Unit", setOf(u.id + "-all"), u.id);
+    for(const t of parts) h += topicRow(t.id, t.name, SETS[t.id], u.id);
+    h += `</details>`;
+  }
+
+  view.innerHTML = h;
+  document.getElementById("yback").onclick = () => { S.view = "home"; render(); };
+  document.getElementById("ydir").onclick = () => {
+    S.dir = S.dir === "en2de" ? "de2en" : "en2de"; render();
+  };
+  view.querySelectorAll("[data-topic]").forEach(b =>
+    b.addEventListener("click", () => startSession(b.dataset.topic)));
+  updateFoot();
+}
+
+/* =========================================================================
+   SITZUNG
+   ========================================================================= */
+function buildQueue(){
+  let all = setOf(S.topicId);
+  if(S.mode === "cloze") all = all.filter(hasCloze);
+  if(!all.length){ S.queue = []; S.i = 0; return; }
+  const pool = S.onlyDue ? all.filter(v=>isDue(rec(S.dir,v.id))) : all;
+  S.queue = shuffle(pool.length ? pool : all);
+  S.i = 0; S.revealed = false; S.answered = null;
+}
+function startSession(topicId){
+  S.topicId = topicId; S.view = "session"; S.seen = 0;
+  buildQueue(); render();
+}
+function current(){ return S.queue[S.i]; }
+
+/* Unit-Klasse der laufenden Sitzung: nur wenn die Auswahl zu genau einer
+   Unit gehoert. Beim ganzen Buch gibt es keine eindeutige Farbe. */
+function sessionUnit(){
+  const t = TOPICS.filter(x => x.id === S.topicId)[0];
+  if(t) return t.unit;
+  const m = /^(u\d+)-all$/.exec(S.topicId || "");
+  return m ? m[1] : "";
+}
+
+function renderSession(){
+  if(!S.queue.length){
+    view.innerHTML = `<div class="done"><h2>Keine Karten</h2>
+      <p>In dieser Auswahl gibt es für den Lückensatz-Modus noch keine Beispielsätze.
+         Nutze so lange „Tippen“.</p>
+      <div class="controls"><button class="primary" id="home">Zurück zur Übersicht</button></div></div>`;
+    document.getElementById("home").onclick = () => { S.view="year"; S.mode="card"; render(); };
+    return;
+  }
+  if(S.i >= S.queue.length){ renderDone(); return; }
+  const v = current();
+  const r = rec(S.dir, v.id);
+  const setNow = setOf(S.topicId);
+
+  const rail = [1,2,3,4,5].map(n=>{
+    const cls = (n===r.box?"here":"") + (S.landed===n?" land":"");
+    return `<div class="slot ${cls}"><div class="n">FACH ${n}</div>
+      <div class="c">${boxCounts(setNow,S.dir)[n-1]}</div>
+      <div class="iv">${n===1?"sofort":INTERVALS[n]+" d"}</div></div>`;
+  }).join("");
+
+  let body = `<div class="eyebrow ${sessionUnit()}">
+      <span>${esc(topicName(S.topicId))}</span>
+      <span>${S.i+1} / ${S.queue.length}</span>
+    </div>`;
+
+  if(S.mode === "card"){
+    body += promptBlock(v);
+    if(S.revealed){
+      body += answerBlock(v);
+    }
+    body += `<div class="spacer"></div>`;
+  }
+
+  if(S.mode === "mc"){
+    if(!S.options) S.options = shuffle([v, ...buildDistractors(v)]);
+    body += promptBlock(v) + `<div class="opts">`;
+    for(const o of S.options){
+      let cls = "";
+      if(S.answered){
+        if(o.id===v.id) cls = "right";
+        else if(o.id===S.answered) cls = "wrong";
+      }
+      body += `<button class="opt ${cls}" data-opt="${o.id}" ${S.answered?"disabled":""}>
+        ${esc(ansSide(o))}</button>`;
+    }
+    body += `</div>`;
+    if(S.answered) body += answerBlock(v, true);
+    body += `<div class="spacer"></div>`;
+  }
+
+  if(S.mode === "type"){
+    body += promptBlock(v) + `
+      <div class="typebox">
+        <input id="typeIn" placeholder="${S.dir==="en2de"?"Deutsche Bedeutung":"English word"}"
+               autocomplete="off" autocapitalize="off" spellcheck="false" ${S.answered?"disabled":""}>
+        <div class="verdict" id="verdict"></div>
+      </div>`;
+    if(S.answered) body += answerBlock(v, true);
+    body += `<div class="spacer"></div>`;
+  }
+
+  if(S.mode === "cloze"){
+    const cp = clozeParts(v);
+    body += '<div class="cloze">' + esc(cp.before)
+          + (S.answered ? '<b>' + esc(cp.word) + '</b>'
+                        : '<span class="gap">?</span>')
+          + (baseForm(v) ? '<span class="basef">(' + esc(baseForm(v)) + ')</span>' : "")
+          + esc(cp.after) + '</div>'
+          + '<div class="clue">gesucht: <span>' + esc(v.de) + '</span>'
+          + (v.pos ? ' \u00b7 ' + esc(v.pos) : "") + '</div>'
+          + '<div class="typebox">'
+          + '<input id="typeIn" placeholder="englisches Wort" autocomplete="off" '
+          + 'autocapitalize="off" spellcheck="false" ' + (S.answered ? "disabled" : "") + '>'
+          + '<div class="verdict" id="verdict"></div></div>';
+    if(S.answered) body += answerBlock(v, true);
+    body += '<div class="spacer"></div>';
+  }
+
+  const controls = S.revealed || S.answered
+    ? `<button class="rate again" data-rate="0">Nochmal<span>1</span></button>
+       <button class="rate hard"  data-rate="1">Unsicher<span>2</span></button>
+       <button class="rate good"  data-rate="2">Gewusst<span>3</span></button>`
+    : (S.mode==="card"
+        ? `<button class="primary" id="flip">Umdrehen <span style="opacity:.6">(Leertaste)</span></button>`
+        : ((S.mode==="type" || S.mode==="cloze")
+            ? `<button class="primary" id="submit">Prüfen (Enter)</button>` : ""));
+
+  view.innerHTML = `
+    <div class="sessionbar">
+      <button class="linkbtn" id="back">← Übersicht</button>
+      <div class="switches">
+        <button class="switch" data-mode="card" aria-pressed="${S.mode==="card"}">Karteikarte</button>
+        <button class="switch" data-mode="mc"   aria-pressed="${S.mode==="mc"}">Auswahl</button>
+        <button class="switch" data-mode="type" aria-pressed="${S.mode==="type"}">Tippen</button>
+        ${S.mode==="cloze" ? "" : `<button class="switch" id="dirBtn">${dirLabel()}</button>`}
+        <button class="switch" id="sfxBtn" aria-pressed="${Sfx.enabled()}"
+          title="Rückmeldetöne an- oder ausschalten">${Sfx.enabled() ? "Ton an" : "Ton aus"}</button>
+      </div>
+    </div>
+    <div class="rail ${sessionUnit()}">${rail}</div>
+    <div class="stage ${sessionUnit()}"><div class="vcard deal">${body}</div></div>
+    <div class="controls">${controls}</div>`;
+
+  bindSession();
+  const inp = document.getElementById("typeIn");
+  if(inp && !S.answered) inp.focus();
+  updateFoot();
+}
+
+/* Zerlegt den Beispielsatz in Teil vor der Vokabel, Vokabel, Teil danach.
+   Versucht zuerst die ganze Wendung, dann das erste Wort mit Endungen.
+   Gibt null zurueck, wenn die Vokabel im Satz nicht auffindbar ist. */
+function clozeParts(v){
+  var ex = v.example_en;
+  if(!ex) return null;
+  var core = String(v.en).replace(/\([^)]*\)/g, " ").split("/")[0];
+  core = core.replace(/^\s*to\s+/i, "").replace(/\s+/g, " ").trim();
+  if(!core) return null;
+  var esc0 = function(x){ return x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); };
+
+  var words = core.split(" ");
+  var tries = [];
+  if(words.length > 1){
+    tries.push(words.map(esc0).join("\\s+") + "\\w*");           // ganze Wendung
+    tries.push(esc0(words[words.length - 1]) + "\\w*");          // letztes Wort
+  }
+  var first = words[0];
+  tries.push(esc0(first.slice(0, Math.max(4, first.length - 3))) + "\\w*");
+
+  for(var i = 0; i < tries.length; i++){
+    var m = ex.match(new RegExp("(" + tries[i] + ")", "i"));
+    if(m && m.index !== undefined && m[1].length > 2){
+      return {before: ex.slice(0, m.index), word: m[1],
+              after: ex.slice(m.index + m[1].length), core: core};
+    }
+  }
+  return null;
+}
+
+function hasCloze(v){ return clozeParts(v) !== null; }
+
+/* Bei Verben steht die Grundform hinter der Luecke, damit klar ist, welche
+   Zeitform gesucht wird - so wie im Lehrwerk. */
+function baseForm(v){
+  if(!/verb/.test(v.pos || "")) return null;
+  let s = (v.en || "").replace(/\([^)]*\)/g, " ");
+  s = s.split(",")[0].split("/")[0];
+  s = s.replace(/\b(sb|sth)\.?\b/g, " ").replace(/\s+/g, " ").trim();
+  return s || null;
+}
+
+function promptBlock(v){
+  const englishAsked = S.dir === "en2de";
+  const phon = englishAsked && (v.ipa || Speech.available)
+    ? `<div class="phon">
+         ${v.ipa ? `<span class="ipa">/${esc(v.ipa.replace(/^\/|\/$/g, ""))}/</span>` : ""}
+         ${speakBtn(v.en)}
+       </div>`
+    : "";
+  const sense = (v.sense_en && S.dir === "en2de")
+    ? `<div class="sense">${esc(v.sense_en)}</div>` : "";
+  return `<h2 class="prompt">${esc(askSide(v))}</h2>
+    <div class="pos">${esc(v.pos)}</div>${phon}${sense}`;
+}
+
+/* Distraktoren: erst die gepflegten Verwechslungskandidaten, dann Zufall
+   aus demselben Thema. Freie Paare bekommen eine synthetische ID. */
+function buildDistractors(v){
+  const out = [];
+  const set = setOf(S.topicId);
+  let n = 0;
+  for(const h of (v.distractor_hint || [])){
+    if(typeof h === "string"){
+      const found = set.find(x => x.id === h);
+      if(found && found.id !== v.id) out.push(found);
+    }else if(h && h.en && h.de){
+      out.push({id:"hint-"+v.id+"-"+(n++), en:h.en, de:h.de, pos:v.pos, hint:true});
+    }
+  }
+  const used = new Set([v.id, ...out.map(o=>o.id)]);
+  const rest = shuffle(set.filter(x => !used.has(x.id) && x.en !== v.en));
+  return [...out, ...rest].slice(0,3);
+}
+
+function answerBlock(v, compact){
+  const englishIsAnswer = S.dir === "de2en";
+  const phon = englishIsAnswer && (v.ipa || Speech.available)
+    ? `<div class="phon">
+         ${v.ipa ? `<span class="ipa">/${esc(v.ipa.replace(/^\/|\/$/g, ""))}/</span>` : ""}
+         ${speakBtn(v.en)}
+       </div>`
+    : "";
+  return `<div class="answer">
+    ${compact ? "" : `<div class="de">${esc(ansSide(v))}</div>`}
+    ${phon}
+    ${v.collocations ? `<div class="coll">${esc(v.collocations)}</div>` : ""}
+    ${v.example_en ? `<div class="ex">${markExample(v.example_en, v.en)}
+      ${speakBtn(v.example_en)}</div>` : ""}
+  </div>`;
+}
+
+function bindSession(){
+  document.getElementById("back").onclick = () => { S.view="year"; S.options=null; render(); };
+  const sfxB = document.getElementById("sfxBtn");
+  if(sfxB) sfxB.onclick = () => { Sfx.toggle(); render(); };
+  const dirB = document.getElementById("dirBtn");
+  if(dirB) dirB.onclick = () => {
+    S.dir = S.dir==="en2de" ? "de2en" : "en2de";
+    S.options=null; buildQueue(); render();
+  };
+  view.querySelectorAll("[data-mode]").forEach(b => b.onclick = () => {
+    const was = S.mode;
+    S.mode = b.dataset.mode; S.revealed=false; S.answered=null; S.options=null;
+    if(was === "cloze" || S.mode === "cloze") buildQueue();
+    render();
+  });
+  const flip = document.getElementById("flip");
+  if(flip) flip.onclick = () => { S.revealed = true; render(); };
+
+  view.querySelectorAll("[data-opt]").forEach(b => b.onclick = () => {
+    S.answered = b.dataset.opt;
+    Sfx.play(b.dataset.opt === current().id ? "ok" : "no");
+    render();
+  });
+
+  const sub = document.getElementById("submit");
+  if(sub) sub.onclick = submitTyped;
+
+  view.querySelectorAll("[data-rate]").forEach(b =>
+    b.onclick = () => rate(Number(b.dataset.rate)));
+
+  view.querySelectorAll("[data-say]").forEach(b => b.onclick = ev => {
+    ev.stopPropagation();
+    Speech.say(b.dataset.say, b);
+  });
+}
+
+function submitTyped(){
+  const inp = document.getElementById("typeIn");
+  if(!inp) return;
+  const v = current();
+  let res;
+  if(S.mode === "cloze"){
+    const cp = clozeParts(v);
+    res = checkTyped(inp.value, cp.word);
+    if(res !== "ok") {
+      const alt = checkTyped(inp.value, cp.core);
+      if(alt === "ok" || (alt === "near" && res === "no")) res = alt;
+    }
+  }else{
+    res = checkTyped(inp.value, ansSide(v));
+  }
+  S.answered = res;
+  Sfx.play(res === "ok" ? "ok" : res === "near" ? "near" : "no");
+  render();
+  const el = document.getElementById("verdict");
+  if(el){
+    el.className = "verdict " + res;
+    const sol = S.mode === "cloze" ? clozeParts(v).word : ansSide(v);
+    el.innerHTML = res==="ok"   ? "Richtig."
+                 : res==="near" ? `Fast – Schreibweise prüfen.<span class="sol">${esc(sol)}</span>`
+                 :                `Noch nicht.<span class="sol">${esc(sol)}</span>`;
+  }
+}
+
+function rate(quality){
+  Sfx.play(quality === 0 ? "no" : quality === 1 ? "near" : "ok");
+  const v = current();
+  const r = rec(S.dir, v.id);
+  if(quality === 0)       r.box = 1;
+  else if(quality === 1)  r.box = Math.max(1, r.box - 1);
+  else                    r.box = Math.min(5, r.box + 1);
+  r.due = Date.now() + INTERVALS[r.box] * DAY;
+  save();
+  S.landed = r.box;
+  S.seen++;
+  S.i++; S.revealed=false; S.answered=null; S.options=null;
+  render();
+  setTimeout(()=>{ S.landed=null; }, 500);
+}
+
+function renderDone(){
+  const setNow = setOf(S.topicId);
+  const c = boxCounts(setNow, S.dir);
+  const total = setNow.length;
+  view.innerHTML = `<div class="done">
+    <h2>Durchgang beendet</h2>
+    <p>${S.seen} Karten bearbeitet · ${c[4]} von ${total} in Fach 5</p>
+    <div class="controls">
+      <button class="primary" id="again">Weiter üben</button>
+      <button id="home">Übersicht</button>
+    </div></div>`;
+  document.getElementById("again").onclick = () => {
+    S.onlyDue = false; buildQueue(); S.seen = 0; render();
+  };
+  document.getElementById("home").onclick = () => { S.view="year"; render(); };
+  updateFoot();
+}
+
+/* =========================================================================
+   ANLEITUNG
+   Reine Anzeige. Text bewusst kurz gehalten: Schuelerinnen und Schueler
+   lesen das einmal, danach nie wieder.
+   ========================================================================= */
+function renderHelp(){
+  var d = [];
+
+  d.push('<h2>Wofür ist diese Seite?</h2>');
+  d.push('<p class="lead">Zum Lernen des Englisch-Vokabulars aus deinem Schulbuch. Alle Wörter sind nach Unit und Part sortiert. Du kannst sie auf drei verschiedene Arten üben, und die Seite merkt sich, was du schon kannst.</p>');
+  d.push('<p>Es gibt keine Anmeldung und kein Passwort. Öffne einfach den Link.</p>');
+
+  d.push('<h2>Loslegen</h2>');
+  d.push('<ul>');
+  d.push('<li>Auf der Startseite den Jahrgang wählen. Dann eine Unit oder einen Part antippen.</li>');
+  d.push('<li>Wähle den Lernumfang: <b>Alles üben</b>, eine kurze Runde mit höchstens zehn Wörtern oder nur fällige Vokabeln. Danach startet die Übung.</li>');
+  d.push('<li>Bewerte ehrlich: <b>Nochmal</b>, <b>Unsicher</b> oder <b>Gewusst</b>.</li>');
+  d.push('<li>Die nächste Karte kommt automatisch.</li>');
+  d.push('</ul>');
+  d.push('<p>Zurück zur Übersicht kommst du jederzeit oben links.</p>');
+
+  d.push('<h2>Die fünf Fächer</h2>');
+  d.push('<p>Jede Vokabel steckt in einem von fünf Fächern. Die Fachübersicht kannst du während der Übung aufklappen.</p>');
+  d.push('<p>Eine neue Vokabel startet in Fach 1. Antwortest du richtig, rückt sie ein Fach weiter. Antwortest du falsch, fällt sie zurück in Fach 1. Je weiter oben eine Vokabel steht, desto seltener siehst du sie wieder:</p>');
+  d.push('<table><thead><tr><th>Fach</th><th>Du siehst die Vokabel wieder</th></tr></thead><tbody>'
+       + '<tr><td>1</td><td>sofort; einmal zusätzlich im selben Durchgang</td></tr>'
+       + '<tr><td>2</td><td>nach 1 Tag</td></tr>'
+       + '<tr><td>3</td><td>nach 2 Tagen</td></tr>'
+       + '<tr><td>4</td><td>nach 4 Tagen</td></tr>'
+       + '<tr><td>5</td><td>nach 8 Tagen</td></tr>'
+       + '</tbody></table>');
+  d.push('<p>Die Abstände bestimmen, wann eine Vokabel wieder fällig ist. Bei <b>Alles üben</b> werden auch noch nicht fällige Wörter abgefragt. Übe lieber <b>jeden Tag zehn Minuten</b> üben als einmal pro Woche eine Stunde.</p>');
+  d.push('<p>Die Zahl in jedem Fach zeigt, wie viele Vokabeln der gewählten Auswahl gerade dort liegen. Ziel ist, alles nach Fach 5 zu bekommen.</p>');
+
+  d.push('<h2>Die drei Übungsarten</h2>');
+  d.push('<p>Oben rechts kannst du umschalten. Alle drei greifen auf dieselben Vokabeln und dasselbe Fächersystem zu.</p>');
+  d.push('<h3>Karteikarte</h3>');
+  d.push('<p>Wort ansehen, überlegen, umdrehen, selbst bewerten. Am schnellsten, aber du musst ehrlich zu dir sein.</p>');
+  d.push('<h3>Auswahl</h3>');
+  d.push('<p>Vier Antworten, eine ist richtig. Gut zum Aufwärmen. Achtung: Wiedererkennen ist leichter als Wissen.</p>');
+  d.push('<h3>Tippen</h3>');
+  d.push('<p>Du schreibst die Übersetzung. Kleine Abweichungen können als „Fast" erscheinen. Sie zählen nicht als vollständig richtig; deine Eingabe und die Lösung helfen dir beim Vergleichen.</p>');
+  d.push('<p>Diese Wortlisten enthalten keine Beispielsätze. Lückensatzübungen werden ergänzt, sobald passende Beispielsätze vorliegen.</p>');
+
+  d.push('<h2>Abfragerichtung</h2>');
+  d.push('<p>Standardmäßig übst du <b>DE → EN</b>: Du siehst Deutsch und antwortest auf Englisch. Mit dem Richtungsknopf schaltest du um. <b>EN → DE</b> heißt: Du siehst Englisch und sagst die deutsche Bedeutung. <b>DE → EN</b> ist die schwerere und für Klausuren wichtigere Richtung.</p>');
+  d.push('<p>Beide Richtungen haben getrennte Fächer. Eine Vokabel kann in der einen Richtung in Fach 5 stehen und in der anderen in Fach 1.</p>');
+
+  d.push('<h2>Aussprache</h2>');
+  d.push('<p>Neben dem englischen Wort stehen die Lautschrift und ein Lautsprecher-Symbol. Antippen liest das Wort vor. Am Beispielsatz gibt es ein zweites, kleineres Symbol für den ganzen Satz. Am Computer geht es auch mit der Taste <span class="kbd">S</span>.</p>');
+  d.push('<p>Die Stimme kommt von deinem Gerät und klingt je nach Handy unterschiedlich gut.</p>');
+  d.push('<p><button class="switch" id="sptest">Aussprache testen</button> '
+       + '<span id="spout" style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)"></span></p>');
+  d.push('<p class="lead" style="font-size:13.5px">Hörst du nichts, prüfe Lautstärke, Audioausgabe und die Spracheinstellungen deines Geräts. Bleibt es still, gib die Zeile neben dem Knopf an deine Lehrkraft weiter.</p>');
+
+  d.push('<h2>Tastatur am Computer</h2>');
+  d.push('<table><tbody>'
+       + '<tr><td><span class="kbd">Leertaste</span></td><td>Karte umdrehen</td></tr>'
+       + '<tr><td><span class="kbd">1</span> <span class="kbd">2</span> <span class="kbd">3</span></td><td>Nochmal / Unsicher / Gewusst</td></tr>'
+       + '<tr><td><span class="kbd">Enter</span></td><td>Eingabe prüfen</td></tr>'
+       + '<tr><td><span class="kbd">S</span></td><td>Aussprache abspielen</td></tr>'
+       + '</tbody></table>');
+
+  d.push('<h2>Dein Lernstand</h2>');
+  d.push('<div class="warnbox"><b>Wichtig:</b> Dein Fortschritt wird nur in dem Browser gespeichert, in dem du übst. Er wandert nicht zwischen Handy und Computer, und er verschwindet, wenn du die Browserdaten löschst.</div>');
+  d.push('<p>Ganz unten auf der Seite gibt es <b>Fortschritt sichern</b>. Damit lädst du eine kleine Datei herunter, die deinen Lernstand enthält. Mit <b>Fortschritt laden</b> spielst du sie wieder ein — zum Beispiel auf einem anderen Gerät oder nachdem du den Cache geleert hast. Die Sicherung enthält deinen Lernstand, aber keine gespeicherte Übungsrunde und keine Ton- oder Anzeigeeinstellungen.</p>');
+  d.push('<p>Wenn du auf Nummer sicher gehen willst: einmal im Monat sichern und die Datei sich selbst per Mail schicken.</p>');
+
+  d.push('<h2>Alle Vokabeln nachschlagen</h2>');
+  d.push('<p>Auf der Jahrgangsübersicht findest du <b>Vokabeln nachschlagen</b>. Dort findest du:</p>');
+  d.push('<ul>');
+  d.push('<li>ein <b>Suchfeld</b> — es durchsucht Englisch, Deutsch und die Beispielsätze;</li>');
+  d.push('<li>Schalter für <b>Beispielsätze</b> und <b>Lautschrift</b>;</li>');
+  d.push('<li><b>Drucken</b> — druckt die aufgeklappten Abschnitte und berücksichtigt den Suchfilter. Zugeklappte Abschnitte werden vollständig ausgelassen und erzeugen keine zusätzlichen leeren Seiten. Im Druckdialog kannst du auch als PDF speichern.</li>');
+  d.push('</ul>');
+
+  d.push('<h2>Wenn etwas nicht geht</h2>');
+  d.push('<h3>Kein Ton bei der Aussprache</h3>');
+  d.push('<p>Prüfe Lautstärke und Audioausgabe, zum Beispiel verbundene Kopfhörer. Die verfügbaren Stimmen hängen von Gerät und Browser ab. Nutze auch den Aussprache-Test oben.</p>');
+  d.push('<h3>Der Lernstand ist weg</h3>');
+  d.push('<p>Wahrscheinlich wurden die Browserdaten gelöscht, oder du hast die Seite über eine andere Adresse geöffnet. Für den Browser sind das zwei verschiedene Orte. Nutze immer denselben Link.</p>');
+  d.push('<h3>Die Seite bleibt leer</h3>');
+  d.push('<p>Lade sie neu. Kommt danach ein gelber Kasten mit einer Fehlermeldung, gib den Text an deine Lehrkraft weiter.</p>');
+
+  d.push('<div class="teacher">');
+  d.push('<h2>Für Kolleginnen und Kollegen</h2>');
+  d.push('<p>Die Website benötigt kein Lernkonto. Der Lernstand wird lokal im Browser gespeichert; es gibt keine automatische Synchronisierung zwischen Geräten.</p>');
+  d.push('<p>Mit <b>CSV</b> öffnest du die Exportauswahl. Du kannst alle Vokabeln dieses Jahrgangs oder nur ausgewählte Wörter exportieren. Die Datei enthält genau drei Spalten: <b>Unit, Englisch, Deutsch</b>. Für eine Auswahl markierst du einzelne Wörter oder übernimmst die sichtbaren Suchergebnisse. Der Export aller Wörter bleibt vom Suchfilter unabhängig.</p>');
+  d.push('<p>Stichwörter und Übersetzungen folgen den Wortlisten des eingeführten Lehrwerks. Für Year 7 wurden die fünf bereitgestellten Unit-Wortlisten übernommen; Lautschrift ist nur vorhanden, soweit sie dort angegeben ist. </p>');
+  d.push('</div>');
+
+  view.innerHTML =
+      '<div class="sessionbar">'
+    +   '<button class="linkbtn" id="hback">\u2190 Startseite</button>'
+    +   '<div class="switches"><button class="switch" id="hprint">Drucken</button></div>'
+    + '</div>'
+    + '<div class="doc">' + d.join("") + '</div>';
+
+  document.getElementById("hback").onclick = function(){ S.view = "home"; render(); };
+  document.getElementById("hprint").onclick = function(){ try{ window.print(); }catch(e){} };
+
+  var st = document.getElementById("sptest"), out = document.getElementById("spout");
+  if(st && out){
+    st.onclick = function(){
+      Speech.say("This is a test of the pronunciation.");
+      out.textContent = Speech.status();
+      setTimeout(function(){ out.textContent = Speech.status(); }, 1200);
+    };
+    out.textContent = Speech.status();
+  }
+  updateFoot();
+}
+
+/* =========================================================================
+   LISTENANSICHT
+   Reine Anzeige: liest die Vokabeln, schreibt nichts und ruehrt den
+   Lernstand nicht an. Themen sind eingeklappt; die Suche oeffnet sie.
+   ========================================================================= */
+var LIST_PREFS = {ex:false, ipa:true};   // Beispielsaetze aus, Lautschrift an
+
+function renderList(){
+  var grand = 0, h = "";
+
+  for(var i = 0; i < TOPICS.length; i++){
+    var t = TOPICS[i];
+    var entries = SETS[t.id];
+    if(!entries || !entries.length) continue;
+    grand += entries.length;
+
+    h += '<details class="lsec ' + t.unit + '" data-sec="' + t.id + '"><summary>'
+       + '<span><span class="lyear ' + esc(t.unit) + '" style="background:var(--unit)">' + esc(t.unitName.split(" \u2013 ")[0]) + '</span>'
+       + esc(t.unitName.split(" \u2013 ").slice(1).join(" \u2013 ")) + ' \u00b7 ' + esc(t.name) + '</span>'
+       + '<span class="lnum">' + entries.length + '</span></summary><div class="lbody">';
+
+    for(var j = 0; j < entries.length; j++){
+      var e = entries[j];
+      var hay = (e.en + " " + e.de + " " + (e.pos||"") + " "
+               + (e.collocations||"") + " " + (e.example_en||"")).toLowerCase();
+      h += '<div class="vrow" data-s="' + esc(hay) + '">'
+         + '<div><span class="ven">' + esc(e.en) + '</span>'
+         + (e.pos ? '<span class="vpos">' + esc(e.pos) + '</span>' : "")
+         + (e.ipa ? '<span class="vipa">/' + esc(e.ipa.replace(/^\/|\/$/g, "")) + '/</span>' : "")
+         + '</div>'
+         + '<div class="vde">' + esc(e.de)
+         + (e.sense_en ? '<span class="vsense">' + esc(e.sense_en) + '</span>' : "")
+         + '</div>'
+         + (e.example_en ? '<div class="vex">' + esc(e.example_en) + '</div>' : "")
+         + '</div>';
+    }
+    h += "</div></details>";
+  }
+
+  view.innerHTML =
+      '<div class="sessionbar">'
+    +   '<button class="linkbtn" id="lback">\u2190 Themen\u00fcbersicht</button>'
+    +   '<div class="switches">'
+    +     '<button class="switch" id="lex" aria-pressed="' + LIST_PREFS.ex + '">Beispiels\u00e4tze</button>'
+    +     '<button class="switch" id="lipa" aria-pressed="' + LIST_PREFS.ipa + '">Lautschrift</button>'
+    +     '<button class="switch" id="lopen">Alle aufklappen</button>'
+    +     '<button class="switch" id="lprint">Drucken</button>'
+    +     '<button class="switch" id="lcsv">CSV</button>'
+    +   '</div>'
+    + '</div>'
+    + '<div class="listctl">'
+    +   '<input type="search" id="lq" placeholder="Suchen \u2013 englisch, deutsch oder im Beispielsatz" '
+    +     'autocomplete="off" autocapitalize="off" spellcheck="false">'
+    + '</div>'
+    + '<div class="listcount" id="lcount">' + grand + ' Vokabeln in '
+    +   Object.keys(SETS).length + ' Themen \u00b7 Thema antippen zum \u00d6ffnen</div>'
+    + '<div class="vlist" id="vlist">' + h + '</div>'
+    + '<div class="noresult" id="lnone" hidden>Kein Treffer.</div>';
+
+  var box = document.getElementById("vlist");
+  applyListPrefs(box);
+
+  document.getElementById("lback").onclick = function(){ S.view = "home"; render(); };
+  document.getElementById("lex").onclick = function(){
+    LIST_PREFS.ex = !LIST_PREFS.ex;
+    this.setAttribute("aria-pressed", LIST_PREFS.ex);
+    applyListPrefs(box);
+  };
+  document.getElementById("lipa").onclick = function(){
+    LIST_PREFS.ipa = !LIST_PREFS.ipa;
+    this.setAttribute("aria-pressed", LIST_PREFS.ipa);
+    applyListPrefs(box);
+  };
+  document.getElementById("lopen").onclick = function(){
+    var secs = box.querySelectorAll("details.lsec");
+    var anyClosed = false;
+    for(var i = 0; i < secs.length; i++){ if(!secs[i].open) anyClosed = true; }
+    for(var k = 0; k < secs.length; k++){ secs[k].open = anyClosed; }
+    this.textContent = anyClosed ? "Alle zuklappen" : "Alle aufklappen";
+  };
+  document.getElementById("lprint").onclick = function(){
+    try{ window.print(); }catch(e){}
+  };
+  document.getElementById("lcsv").onclick = function(){ exportCsv(box); };
+
+  var q = document.getElementById("lq");
+  q.oninput = function(){ filterList(box, q.value); };
+
+  updateFoot();
+}
+
+/* Exportiert die gerade sichtbaren Zeilen als Tabelle (Tab-getrennt,
+   mit BOM, damit Excel die Umlaute richtig liest). */
+function exportCsv(box){
+  var cols = ["Thema","en","de","pos","ipa","collocations","example_en"];
+  var rows = [cols.join("\t")];
+  var n = 0;
+
+  for(var i = 0; i < TOPICS.length; i++){
+    var t = TOPICS[i];
+    var entries = SETS[t.id];
+    if(!entries) continue;
+    var sec = box.querySelector('details[data-sec="' + t.id + '"]');
+    if(!sec || sec.className.indexOf("off") !== -1) continue;
+    var domRows = sec.querySelectorAll(".vrow");
+
+    for(var j = 0; j < entries.length; j++){
+      if(domRows[j] && domRows[j].className.indexOf("off") !== -1) continue;
+      var e = entries[j];
+      var cell = function(x){ return String(x == null ? "" : x).replace(/[\t\r\n]+/g, " "); };
+      rows.push([t.unitName + " / " + t.name, e.en, e.de, e.pos || "", e.ipa || "",
+                 e.collocations || "", e.example_en || ""].map(cell).join("\t"));
+      n++;
+    }
+  }
+
+  if(!n){ alert("Nichts zu exportieren \u2013 die Suche liefert keine Treffer."); return; }
+  try{
+    var blob = new Blob(["\ufeff" + rows.join("\n")], {type:"text/csv;charset=utf-8"});
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "vokabeln.csv";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }catch(err){ alert("Der Export hat nicht funktioniert: " + err.message); }
+}
+
+function applyListPrefs(box){
+  box.className = "vlist" + (LIST_PREFS.ex ? "" : " hide-ex")
+                          + (LIST_PREFS.ipa ? "" : " hide-ipa");
+}
+
+function filterList(box, raw){
+  var term = String(raw || "").toLowerCase().trim();
+  var secs = box.querySelectorAll("details.lsec");
+  var hits = 0;
+
+  for(var i = 0; i < secs.length; i++){
+    var sec = secs[i];
+    var rows = sec.querySelectorAll(".vrow");
+    var shown = 0;
+    for(var j = 0; j < rows.length; j++){
+      var match = !term || rows[j].getAttribute("data-s").indexOf(term) !== -1;
+      rows[j].className = "vrow" + (match ? "" : " off");
+      if(match) shown++;
+    }
+    hits += shown;
+    sec.className = "lsec" + (shown ? "" : " off");
+    if(term) sec.open = shown > 0;
+  }
+
+  document.getElementById("lnone").hidden = !(term && hits === 0);
+  document.getElementById("lcount").textContent = term
+    ? hits + " Treffer f\u00fcr \u201e" + raw.trim() + "\u201c"
+    : box.querySelectorAll(".vrow").length + " Vokabeln in "
+      + Object.keys(SETS).length + " Themen \u00b7 Thema antippen zum \u00d6ffnen";
+}
+
+/* =========================================================================
+   TASTATUR
+   ========================================================================= */
+document.addEventListener("keydown", e => {
+  if(S.view !== "session") return;
+  const typing = document.activeElement && document.activeElement.id === "typeIn";
+  if(typing && e.key === "Enter"){ e.preventDefault(); submitTyped(); return; }
+  if(typing && !S.answered) return;
+  if((e.key === "s" || e.key === "S") && current()){
+    e.preventDefault(); Speech.say(current().en); return;
+  }
+  if(e.key === " " && S.mode === "card" && !S.revealed){
+    e.preventDefault(); S.revealed = true; render(); return;
+  }
+  if((S.revealed || S.answered) && ["1","2","3"].includes(e.key)){
+    e.preventDefault(); rate(Number(e.key) - 1);
+  }
+});
+
+/* =========================================================================
+   EXPORT / IMPORT
+   ========================================================================= */
+document.getElementById("exportBtn").onclick = () => {
+  const blob = new Blob([JSON.stringify(progress,null,1)],{type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "vokabelfortschritt.json";
+  a.click();
+  URL.revokeObjectURL(a.href);
+};
+document.getElementById("importBtn").onclick = () => document.getElementById("importFile").click();
+document.getElementById("importFile").onchange = ev => {
+  const f = ev.target.files[0]; if(!f) return;
+  const fr = new FileReader();
+  fr.onload = () => {
+    try{ progress = JSON.parse(fr.result); save(); render(); }
+    catch(e){ alert("Die Datei konnte nicht gelesen werden."); }
+  };
+  fr.readAsText(f);
+};
+
+function updateFoot(){
+  let done = 0, all = 0;
+  for(const t of TOPICS){
+    if(!SETS[t.id]) continue;
+    all += SETS[t.id].length;
+    done += boxCounts(SETS[t.id], S.dir).slice(2).reduce((a,b)=>a+b,0);
+  }
+  document.getElementById("footstat").textContent =
+    `${done}/${all} SICHER · ${dirLabel()}`;
+}
+
+/* =========================================================================
+   START
+   ========================================================================= */
+function render(){
+  if(S.view === "home") return renderHome();
+  if(S.view === "year") return renderYear();
+  if(S.view === "list") return renderList();
+  if(S.view === "help") return renderHelp();
+  return renderSession();
+}
+
+function showWarn(html){ document.getElementById("warn").innerHTML = html; }
+
+if(!Store.persistent){
+  showWarn(`<div class="warn"><b>Vorschau-Modus:</b> Dieser Browserkontext erlaubt keinen
+     dauerhaften Speicher. Der Fortschritt gilt nur fuer diese Sitzung. Lade die Datei
+     herunter und oeffne sie per Doppelklick \u2013 dort bleibt der Lernstand erhalten.</div>`);
+}
+
+try{
+  render();
+}catch(err){
+  showWarn('<div class="warn"><b>Beim Aufbau der Seite ist ein Fehler aufgetreten.</b><br>'
+    + '<span style="font-family:var(--mono);font-size:11px">' + err.message + '</span></div>');
+}
+</script>
+
+<script src="../assets/learning.js?v=20260913-year7"></script>
+
+<link rel="stylesheet" href="../assets/feedback.css">
+<script src="../assets/feedback.js"></script>
