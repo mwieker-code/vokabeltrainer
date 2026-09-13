@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Vokabeltrainer Englisch – Year 7</title>
+<title>Vokabeltrainer Englisch – Year 8</title>
 <script>
 /* Faengt Fehler ab, die sonst zu einer leeren Seite fuehren, und zeigt sie an. */
 window.onerror = function(msg, src, line, col){
@@ -70,7 +70,7 @@ body{
 /* ---------- Unit-Farben (Variante A: Rand und Kopf) ---------- */
 /* Im Schwarz-Weiss-Druck traegt die Kachelbeschriftung die Unterscheidung,
    nicht die Farbe. */
-.y7u1{--unit:#2B5F8A; --unit-bg:#E6EDF4; --unit-ink:#1B3C56}   /* Blau     */
+.y8u1{--unit:#2B5F8A; --unit-bg:#E6EDF4; --unit-ink:#1B3C56}   /* Blau     */
 
 /* Hauptmenue: eigene, von den Units unabhaengige Farbgebung, damit
    Jahrgang, Gesamtliste und Anleitung auf einen Blick auseinanderzuhalten
@@ -92,9 +92,9 @@ body{
   .topic.home-year .t-name, .topic.home-all .t-name, .topic.home-help .t-name,
   .topic.home-year .t-count, .topic.home-all .t-count, .topic.home-help .t-count{color:#000}
 }
-.y7u2{--unit:#B0472A; --unit-bg:#F5E7E1; --unit-ink:#6E2C1A}   /* Terrakotta */
-.y7u3{--unit:#5B7A2E; --unit-bg:#EBF0E1; --unit-ink:#374A1C}   /* Olive    */
-.y7u4{--unit:#7A5C9E; --unit-bg:#EEE8F3; --unit-ink:#4B3763}   /* Violett  */
+.y8u2{--unit:#B0472A; --unit-bg:#F5E7E1; --unit-ink:#6E2C1A}   /* Terrakotta */
+.y8u3{--unit:#5B7A2E; --unit-bg:#EBF0E1; --unit-ink:#374A1C}   /* Olive    */
+.y8u4{--unit:#7A5C9E; --unit-bg:#EEE8F3; --unit-ink:#4B3763}   /* Violett  */
 .uall{--unit:#16232B; --unit-bg:#ECEFF1; --unit-ink:#16232B}
 
 /* ---------- Startseite ---------- */
@@ -366,9 +366,9 @@ button.primary:hover{background:#0B4A54}
 @media(prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}
 }
-.y7u5{--unit:#A36B1A;--unit-bg:#F5ECD9;--unit-ink:#63400F}
+.y8u5{--unit:#A36B1A;--unit-bg:#F5ECD9;--unit-ink:#63400F}
 </style>
-<link rel="stylesheet" href="../assets/learning.css?v=20260913-year7">
+<link rel="stylesheet" href="../assets/learning.css?v=20260913-year8">
 
 <div class="wrap">
     <div class="masthead">
@@ -397,29 +397,25 @@ button.primary:hover{background:#0B4A54}
    ========================================================================= */
 const YEARS = [
  {
-  "id": "y7",
-  "label": "Year 7",
+  "id": "y8",
+  "label": "Year 8",
   "book": "",
   "units": [
    {
-    "id": "y7u1",
-    "name": "Unit 1 – This is London"
+    "id": "y8u1",
+    "name": "Unit 1 – New York"
    },
    {
-    "id": "y7u2",
-    "name": "Unit 2 – Welcome to Snowdonia"
+    "id": "y8u2",
+    "name": "Unit 2 – New Orleans"
    },
    {
-    "id": "y7u3",
-    "name": "Unit 3 – A weekend in Liverpool"
+    "id": "y8u3",
+    "name": "Unit 3 – California"
    },
    {
-    "id": "y7u4",
-    "name": "Unit 4 – My Trip to Ireland"
-   },
-   {
-    "id": "y7u5",
-    "name": "Unit 5 – Edinburgh and the Highlands"
+    "id": "y8u4",
+    "name": "Unit 4 – South Dakota"
    }
   ]
  }
@@ -427,4406 +423,3700 @@ const YEARS = [
 
 const TOPICS = [
  {
-  "id": "y7u1-part-a",
-  "year": "7",
+  "id": "y8u1-introduction",
+  "year": "8",
   "yearName": "Mittelstufe",
-  "unit": "y7u1",
-  "unitName": "Unit 1 – This is London",
-  "name": "Part A"
- },
- {
-  "id": "y7u1-part-b",
-  "year": "7",
-  "yearName": "Mittelstufe",
-  "unit": "y7u1",
-  "unitName": "Unit 1 – This is London",
-  "name": "Part B"
- },
- {
-  "id": "y7u1-part-c",
-  "year": "7",
-  "yearName": "Mittelstufe",
-  "unit": "y7u1",
-  "unitName": "Unit 1 – This is London",
-  "name": "Part C"
- },
- {
-  "id": "y7u1-the-notting-hill-carnival-parade",
-  "year": "7",
-  "yearName": "Mittelstufe",
-  "unit": "y7u1",
-  "unitName": "Unit 1 – This is London",
-  "name": "The Notting Hill Carnival Parade"
- },
- {
-  "id": "y7u2-part-a",
-  "year": "7",
-  "yearName": "Mittelstufe",
-  "unit": "y7u2",
-  "unitName": "Unit 2 – Welcome to Snowdonia",
-  "name": "Part A"
- },
- {
-  "id": "y7u2-part-b",
-  "year": "7",
-  "yearName": "Mittelstufe",
-  "unit": "y7u2",
-  "unitName": "Unit 2 – Welcome to Snowdonia",
-  "name": "Part B"
- },
- {
-  "id": "y7u2-snowdonia-at-night",
-  "year": "7",
-  "yearName": "Mittelstufe",
-  "unit": "y7u2",
-  "unitName": "Unit 2 – Welcome to Snowdonia",
-  "name": "Snowdonia at Night"
- },
- {
-  "id": "y7u3-part-a",
-  "year": "7",
-  "yearName": "Mittelstufe",
-  "unit": "y7u3",
-  "unitName": "Unit 3 – A weekend in Liverpool",
-  "name": "Part A"
- },
- {
-  "id": "y7u3-part-b",
-  "year": "7",
-  "yearName": "Mittelstufe",
-  "unit": "y7u3",
-  "unitName": "Unit 3 – A weekend in Liverpool",
-  "name": "Part B"
- },
- {
-  "id": "y7u3-part-c",
-  "year": "7",
-  "yearName": "Mittelstufe",
-  "unit": "y7u3",
-  "unitName": "Unit 3 – A weekend in Liverpool",
-  "name": "Part C"
- },
- {
-  "id": "y7u3-part-d",
-  "year": "7",
-  "yearName": "Mittelstufe",
-  "unit": "y7u3",
-  "unitName": "Unit 3 – A weekend in Liverpool",
-  "name": "Part D"
- },
- {
-  "id": "y7u3-a-liverpool-hero",
-  "year": "7",
-  "yearName": "Mittelstufe",
-  "unit": "y7u3",
-  "unitName": "Unit 3 – A weekend in Liverpool",
-  "name": "A Liverpool Hero"
- },
- {
-  "id": "y7u4-introduction",
-  "year": "7",
-  "yearName": "Mittelstufe",
-  "unit": "y7u4",
-  "unitName": "Unit 4 – My Trip to Ireland",
+  "unit": "y8u1",
+  "unitName": "Unit 1 – New York",
   "name": "Introduction"
  },
  {
-  "id": "y7u4-part-a",
-  "year": "7",
+  "id": "y8u1-part-a",
+  "year": "8",
   "yearName": "Mittelstufe",
-  "unit": "y7u4",
-  "unitName": "Unit 4 – My Trip to Ireland",
+  "unit": "y8u1",
+  "unitName": "Unit 1 – New York",
   "name": "Part A"
  },
  {
-  "id": "y7u4-part-b",
-  "year": "7",
+  "id": "y8u1-part-b",
+  "year": "8",
   "yearName": "Mittelstufe",
-  "unit": "y7u4",
-  "unitName": "Unit 4 – My Trip to Ireland",
+  "unit": "y8u1",
+  "unitName": "Unit 1 – New York",
   "name": "Part B"
  },
  {
-  "id": "y7u4-part-c",
-  "year": "7",
+  "id": "y8u1-part-c",
+  "year": "8",
   "yearName": "Mittelstufe",
-  "unit": "y7u4",
-  "unitName": "Unit 4 – My Trip to Ireland",
+  "unit": "y8u1",
+  "unitName": "Unit 1 – New York",
   "name": "Part C"
  },
  {
-  "id": "y7u4-the-horse-ride",
-  "year": "7",
+  "id": "y8u2-introduction",
+  "year": "8",
   "yearName": "Mittelstufe",
-  "unit": "y7u4",
-  "unitName": "Unit 4 – My Trip to Ireland",
-  "name": "The Horse Ride"
- },
- {
-  "id": "y7u5-introduction",
-  "year": "7",
-  "yearName": "Mittelstufe",
-  "unit": "y7u5",
-  "unitName": "Unit 5 – Edinburgh and the Highlands",
+  "unit": "y8u2",
+  "unitName": "Unit 2 – New Orleans",
   "name": "Introduction"
  },
  {
-  "id": "y7u5-part-a",
-  "year": "7",
+  "id": "y8u2-part-a",
+  "year": "8",
   "yearName": "Mittelstufe",
-  "unit": "y7u5",
-  "unitName": "Unit 5 – Edinburgh and the Highlands",
+  "unit": "y8u2",
+  "unitName": "Unit 2 – New Orleans",
   "name": "Part A"
  },
  {
-  "id": "y7u5-part-b",
-  "year": "7",
+  "id": "y8u2-part-b",
+  "year": "8",
   "yearName": "Mittelstufe",
-  "unit": "y7u5",
-  "unitName": "Unit 5 – Edinburgh and the Highlands",
+  "unit": "y8u2",
+  "unitName": "Unit 2 – New Orleans",
   "name": "Part B"
  },
  {
-  "id": "y7u5-missing",
-  "year": "7",
+  "id": "y8u2-part-c",
+  "year": "8",
   "yearName": "Mittelstufe",
-  "unit": "y7u5",
-  "unitName": "Unit 5 – Edinburgh and the Highlands",
-  "name": "Missing"
+  "unit": "y8u2",
+  "unitName": "Unit 2 – New Orleans",
+  "name": "Part C"
+ },
+ {
+  "id": "y8u3-introduction",
+  "year": "8",
+  "yearName": "Mittelstufe",
+  "unit": "y8u3",
+  "unitName": "Unit 3 – California",
+  "name": "Introduction"
+ },
+ {
+  "id": "y8u3-part-a",
+  "year": "8",
+  "yearName": "Mittelstufe",
+  "unit": "y8u3",
+  "unitName": "Unit 3 – California",
+  "name": "Part A"
+ },
+ {
+  "id": "y8u3-part-b",
+  "year": "8",
+  "yearName": "Mittelstufe",
+  "unit": "y8u3",
+  "unitName": "Unit 3 – California",
+  "name": "Part B"
+ },
+ {
+  "id": "y8u3-part-c",
+  "year": "8",
+  "yearName": "Mittelstufe",
+  "unit": "y8u3",
+  "unitName": "Unit 3 – California",
+  "name": "Part C"
+ },
+ {
+  "id": "y8u4-introduction",
+  "year": "8",
+  "yearName": "Mittelstufe",
+  "unit": "y8u4",
+  "unitName": "Unit 4 – South Dakota",
+  "name": "Introduction"
+ },
+ {
+  "id": "y8u4-part-a",
+  "year": "8",
+  "yearName": "Mittelstufe",
+  "unit": "y8u4",
+  "unitName": "Unit 4 – South Dakota",
+  "name": "Part A"
+ },
+ {
+  "id": "y8u4-part-b",
+  "year": "8",
+  "yearName": "Mittelstufe",
+  "unit": "y8u4",
+  "unitName": "Unit 4 – South Dakota",
+  "name": "Part B"
+ },
+ {
+  "id": "y8u4-part-c",
+  "year": "8",
+  "yearName": "Mittelstufe",
+  "unit": "y8u4",
+  "unitName": "Unit 4 – South Dakota",
+  "name": "Part C"
  }
 ];
 
 const SETS = {
- "y7u1-part-a": [
+ "y8u1-introduction": [
   {
-   "id": "y7u1-part-a-001",
-   "en": "the best thing about ...",
-   "de": "das Beste an ...",
-   "ipa": "",
+   "id": "y8u1-introduction-001",
+   "en": "subway (AE)",
+   "de": "U-Bahn",
+   "ipa": "ˈsʌbweɪ",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u1-part-a-002",
-   "en": "huge",
-   "de": "riesig, sehr groß",
-   "ipa": "hjuːdʒ",
+   "id": "y8u1-introduction-002",
+   "en": "central",
+   "de": "zentral, Zentral-, Mittel-",
+   "ipa": "ˈsentrəl",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u1-part-a-003",
-   "en": "as soon as",
-   "de": "sobald, sowie",
-   "ipa": "əz ˈsuːn əz",
+   "id": "y8u1-introduction-003",
+   "en": "avenue",
+   "de": "Allee, Boulevard",
+   "ipa": "ˈævənjuː",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u1-part-a-004",
-   "en": "cathedral",
-   "de": "Kathedrale, Dom",
-   "ipa": "kəˈθiːdrəl",
+   "id": "y8u1-introduction-004",
+   "en": "statue",
+   "de": "Statue",
+   "ipa": "ˈstætʃuː",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u1-part-a-005",
-   "en": "palace",
-   "de": "Palast, Schloss",
-   "ipa": "ˈpæləs",
+   "id": "y8u1-introduction-005",
+   "en": "liberty",
+   "de": "Freiheit",
+   "ipa": "ˈlɪbəti",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u1-part-a-006",
-   "en": "Welsh",
-   "de": "walisisch",
-   "ipa": "welʃ",
+   "id": "y8u1-introduction-006",
+   "en": "square",
+   "de": "Platz (in der Stadt)",
+   "ipa": "skweə",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u1-part-a-007",
-   "en": "to reply (to)",
-   "de": "antworten (auf); erwidern, entgegnen",
-   "ipa": "rɪˈplaɪ",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-008",
-   "en": "Europe",
-   "de": "Europa",
-   "ipa": "ˈjʊərəp",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-009",
-   "en": "western",
-   "de": "westlich, West-",
-   "ipa": "ˈwestən",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-010",
-   "en": "I see.",
-   "de": "Aha! / Verstehe.",
-   "ipa": "",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-011",
-   "en": "lift",
-   "de": "Fahrstuhl, Aufzug",
-   "ipa": "lɪft",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-012",
-   "en": "amazing",
-   "de": "erstaunlich, unglaublich",
-   "ipa": "əˈmeɪzɪŋ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-013",
-   "en": "quite",
-   "de": "ziemlich; völlig, ganz",
-   "ipa": "kwaɪt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-014",
-   "en": "How do you know ...?",
-   "de": "Woher weißt/kennst du ...?",
-   "ipa": "",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-015",
-   "en": "post",
-   "de": "Posting (auf Blog), Blog-Eintrag",
-   "ipa": "pəʊst",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-016",
-   "en": "to add (to)",
-   "de": "hinzufügen, ergänzen, addieren (zu)",
-   "ipa": "æd",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-017",
-   "en": "carnival",
-   "de": "Karneval, Fasching",
-   "ipa": "ˈkɑːnɪvl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-018",
-   "en": "test",
-   "de": "Test",
-   "ipa": "test",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-019",
-   "en": "to be into sth.",
-   "de": "etwas mögen, auf etwas stehen",
-   "ipa": "",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-020",
-   "en": "to enjoy",
-   "de": "genießen",
-   "ipa": "ɪnˈdʒɔɪ",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-021",
-   "en": "by the way",
-   "de": "übrigens",
-   "ipa": "ˌbaɪ ðə ˈweɪ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-022",
-   "en": "south",
-   "de": "Süden; nach Süden; südlich",
-   "ipa": "saʊθ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-023",
-   "en": "darkness",
-   "de": "Dunkelheit, Finsternis",
-   "ipa": "ˈdɑːknəs",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-024",
-   "en": "clue",
-   "de": "(Lösungs-)Hinweis; Anhaltspunkt",
-   "ipa": "kluː",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-025",
-   "en": "skyline",
-   "de": "Skyline; Horizont",
-   "ipa": "ˈskaɪlaɪn",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-026",
-   "en": "false",
-   "de": "falsch",
-   "ipa": "fɔːls",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-027",
-   "en": "to stay (at/with)",
-   "de": "(vorübergehend) wohnen, übernachten (in/bei)",
-   "ipa": "steɪ",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-028",
-   "en": "timetable",
-   "de": "Fahrplan",
-   "ipa": "ˈtaɪmteɪbl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-029",
-   "en": "restaurant",
-   "de": "Restaurant",
-   "ipa": "ˈrestrɒnt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-030",
-   "en": "gallery",
-   "de": "Galerie",
-   "ipa": "ˈɡæləri",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-031",
-   "en": "the Tube",
-   "de": "die U-Bahn (in London)",
-   "ipa": "tjuːb",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-032",
-   "en": "the underground",
-   "de": "die U-Bahn",
-   "ipa": "ˈʌndəɡraʊnd",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-033",
-   "en": "to go together",
-   "de": "zusammenpassen, zueinander passen",
-   "ipa": "",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-034",
-   "en": "stress",
-   "de": "Betonung",
-   "ipa": "stres",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-035",
-   "en": "stress mark",
-   "de": "Betonungszeichen",
-   "ipa": "ˈstres mɑːk",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-036",
-   "en": "to stress",
-   "de": "betonen",
-   "ipa": "stres",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-037",
-   "en": "small talk",
-   "de": "Smalltalk (spontan geführtes Gespräch in umgangssprachlichem Ton)",
-   "ipa": "",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-038",
-   "en": "culture",
-   "de": "Kultur",
-   "ipa": "ˈkʌltʃə",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-039",
-   "en": "to expect sth.",
-   "de": "etwas erwarten",
-   "ipa": "ɪkˈspekt",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-040",
-   "en": "to continue sth.",
-   "de": "etwas fortsetzen",
-   "ipa": "kənˈtɪnjuː",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-a-041",
-   "en": "queue",
-   "de": "Schlange, Reihe (wartender Menschen)",
-   "ipa": "kjuː",
+   "id": "y8u1-introduction-007",
+   "en": "metal",
+   "de": "Metall; Metall-",
+   "ipa": "ˈmetl",
    "pos": "",
    "example_en": ""
   }
  ],
- "y7u1-part-b": [
+ "y8u1-part-a": [
   {
-   "id": "y7u1-part-b-001",
-   "en": "attraction",
-   "de": "Attraktion; Anziehungspunkt",
-   "ipa": "əˈtrækʃn",
+   "id": "y8u1-part-a-001",
+   "en": "newspaper (also: paper)",
+   "de": "Zeitung",
+   "ipa": "ˈnjuːspeɪpə",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u1-part-b-002",
-   "en": "natural history",
-   "de": "Naturkunde",
-   "ipa": "ˌnætʃrəl ˈhɪstri",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-003",
-   "en": "entry",
-   "de": "Eintritt, Zutritt",
-   "ipa": "ˈentri",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-004",
-   "en": "in fact",
-   "de": "eigentlich, in Wirklichkeit",
-   "ipa": "ɪn ˈfækt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-005",
-   "en": "fact",
-   "de": "Tatsache, Fakt",
-   "ipa": "fækt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-006",
-   "en": "to reserve",
-   "de": "reservieren, buchen",
-   "ipa": "rɪˈzɜːv",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-007",
-   "en": "step",
-   "de": "Stufe",
-   "ipa": "step",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-008",
-   "en": "chance",
-   "de": "Gelegenheit, Möglichkeit, Chance",
-   "ipa": "tʃɑːns",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-009",
-   "en": "during",
-   "de": "während",
-   "ipa": "ˈdjʊərɪŋ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-010",
-   "en": "to guard",
-   "de": "bewachen",
-   "ipa": "ɡɑːd",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-011",
-   "en": "raven",
-   "de": "Rabe",
-   "ipa": "ˈreɪvn",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-012",
-   "en": "blood",
-   "de": "Blut",
-   "ipa": "blʌd",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-013",
-   "en": "to be home to sth.",
-   "de": "Heimat sein für etwas; etwas beheimaten",
-   "ipa": "",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-014",
-   "en": "jewels",
-   "de": "Juwelen",
-   "ipa": "ˈdʒuːəlz",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-015",
-   "en": "education",
-   "de": "(Schul-, Aus-)Bildung; Erziehung",
-   "ipa": "ˌedʒuˈkeɪʃn",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-016",
-   "en": "adult",
-   "de": "Erwachsene(r)",
-   "ipa": "ˈædʌlt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-017",
-   "en": "figure",
-   "de": "Zahl, Ziffer",
-   "ipa": "ˈfɪɡə",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-018",
-   "en": "less (than)",
-   "de": "weniger (als)",
-   "ipa": "les",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-019",
-   "en": "tortoise",
-   "de": "(Land-)Schildkröte",
-   "ipa": "ˈtɔːtəs",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-020",
-   "en": "parliament",
-   "de": "Parlament",
-   "ipa": "ˈpɑːləmənt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-021",
-   "en": "at one time",
-   "de": "zur selben Zeit, gleichzeitig",
-   "ipa": "",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-022",
-   "en": "Christmas",
-   "de": "Weihnachten",
-   "ipa": "ˈkrɪsməs",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-023",
-   "en": "ticket office",
-   "de": "Fahrkartenschalter; Kasse (für den Verkauf von Eintrittskarten)",
-   "ipa": "ˈtɪkɪt ˌɒfɪs",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-024",
-   "en": "detail",
-   "de": "Detail, Einzelheit",
-   "ipa": "ˈdiːteɪl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-025",
-   "en": "a family of four",
-   "de": "eine vierköpfige Familie",
-   "ipa": "",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-026",
-   "en": "exact",
-   "de": "genau",
-   "ipa": "ɪɡˈzækt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-027",
-   "en": "linking word",
-   "de": "Bindewort",
-   "ipa": "ˈlɪŋkɪŋ wɜːd",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-028",
-   "en": "to link",
-   "de": "verbinden, verknüpfen",
-   "ipa": "lɪŋk",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-029",
-   "en": "instead of",
-   "de": "anstelle von, statt",
-   "ipa": "ɪnˈsted əv",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-030",
-   "en": "worth",
-   "de": "wert",
-   "ipa": "wɜːθ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-031",
-   "en": "to roar",
-   "de": "brüllen",
-   "ipa": "rɔː",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-032",
-   "en": "feedback",
-   "de": "Rückmeldung, Feedback",
-   "ipa": "ˈfiːdbæk",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-033",
-   "en": "to improve",
-   "de": "verbessern; sich verbessern",
-   "ipa": "ɪmˈpruːv",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-034",
-   "en": "to react (to)",
-   "de": "reagieren (auf)",
-   "ipa": "riˈækt",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-035",
-   "en": "content",
-   "de": "Inhalt",
-   "ipa": "ˈkɒntent",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-036",
-   "en": "spelling",
-   "de": "Rechtschreibung; Schreibweise",
-   "ipa": "ˈspelɪŋ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-037",
-   "en": "to point sth. out (to sb.)",
-   "de": "(jn.) auf etwas hinweisen",
-   "ipa": "ˌpɔɪnt ˈaʊt",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-038",
-   "en": "line",
-   "de": "(U-Bahn-)Linie",
-   "ipa": "laɪn",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-039",
-   "en": "eastbound",
-   "de": "Richtung Osten",
-   "ipa": "ˈiːstbaʊnd",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-040",
-   "en": "to change",
-   "de": "umsteigen",
-   "ipa": "tʃeɪndʒ",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-041",
-   "en": "announcement",
-   "de": "Durchsage, Ansage",
-   "ipa": "əˈnaʊnsmənt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-b-042",
-   "en": "message",
-   "de": "Botschaft, Aussage",
-   "ipa": "ˈmesɪdʒ",
-   "pos": "",
-   "example_en": ""
-  }
- ],
- "y7u1-part-c": [
-  {
-   "id": "y7u1-part-c-001",
-   "en": "to be on",
-   "de": "eingeschaltet sein, an sein (Radio, Licht usw.); laufen, übertragen werden (Programm, Sendung)",
-   "ipa": "",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-c-002",
-   "en": "remote control (remote)",
-   "de": "Fernbedienung",
-   "ipa": "rɪˌməʊt kənˈtrəʊl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-c-003",
-   "en": "No way!",
-   "de": "Auf keinen Fall! / Kommt nicht in Frage!",
-   "ipa": "ˌnəʊ ˈweɪ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-c-004",
-   "en": "And anyway, ...",
-   "de": "Und überhaupt, ...",
-   "ipa": "ˈeniweɪ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-c-005",
-   "en": "while",
-   "de": "während",
-   "ipa": "waɪl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-c-006",
-   "en": "each other",
-   "de": "sich (gegenseitig), einander",
-   "ipa": "ˌiːtʃ ˈʌðə",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-c-007",
-   "en": "pub",
-   "de": "Kneipe, Lokal",
-   "ipa": "pʌb",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-c-008",
-   "en": "towards the station/Mr Bell",
-   "de": "auf den Bahnhof/Mr Bell zu, in Richtung Bahnhof/Mr Bell",
-   "ipa": "təˈwɔːdz",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-c-009",
-   "en": "mate",
-   "de": "Kumpel, Freund",
-   "ipa": "meɪt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-c-010",
-   "en": "several",
-   "de": "mehrere, verschiedene",
-   "ipa": "ˈsevrəl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-c-011",
-   "en": "route",
-   "de": "Strecke, Route",
-   "ipa": "ruːt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-c-012",
-   "en": "speed",
-   "de": "Geschwindigkeit",
-   "ipa": "spiːd",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-part-c-013",
-   "en": "It was a pity that ...",
-   "de": "Es war schade, dass ...",
-   "ipa": "ˈpɪti",
-   "pos": "",
-   "example_en": ""
-  }
- ],
- "y7u1-the-notting-hill-carnival-parade": [
-  {
-   "id": "y7u1-the-notting-hill-carnival-parade-001",
-   "en": "platform",
-   "de": "Bahnsteig, Gleis",
-   "ipa": "ˈplætfɔːm",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-the-notting-hill-carnival-parade-002",
-   "en": "to hold onto sth.",
-   "de": "sich an etwas festhalten",
-   "ipa": "həʊld",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-the-notting-hill-carnival-parade-003",
-   "en": "to scan sth. (for sth.)",
-   "de": "etwas (nach etwas) absuchen",
-   "ipa": "skæn",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-the-notting-hill-carnival-parade-004",
-   "en": "to fill",
-   "de": "füllen",
-   "ipa": "fɪl",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-the-notting-hill-carnival-parade-005",
-   "en": "pavement",
-   "de": "Gehweg, Bürgersteig",
-   "ipa": "ˈpeɪvmənt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-the-notting-hill-carnival-parade-006",
-   "en": "available",
-   "de": "erhältlich, verfügbar; erreichbar (am Telefon)",
-   "ipa": "əˈveɪləbl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-the-notting-hill-carnival-parade-007",
-   "en": "all around her",
-   "de": "überall um sie herum",
-   "ipa": "",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-the-notting-hill-carnival-parade-008",
-   "en": "whistle",
-   "de": "(Triller-)Pfeife",
-   "ipa": "ˈwɪsl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-the-notting-hill-carnival-parade-009",
-   "en": "to blow a whistle",
-   "de": "pfeifen (auf der Trillerpfeife)",
-   "ipa": "bləʊ",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-the-notting-hill-carnival-parade-010",
-   "en": "to panic",
-   "de": "in Panik geraten",
-   "ipa": "ˈpænɪk",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-the-notting-hill-carnival-parade-011",
-   "en": "to bend down",
-   "de": "sich hinunterbeugen, sich bücken",
-   "ipa": "bend",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-the-notting-hill-carnival-parade-012",
-   "en": "crowded",
-   "de": "voller Menschen, überfüllt",
-   "ipa": "ˈkraʊdɪd",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-the-notting-hill-carnival-parade-013",
-   "en": "rope",
-   "de": "Seil",
-   "ipa": "rəʊp",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-the-notting-hill-carnival-parade-014",
-   "en": "wing",
-   "de": "Flügel",
-   "ipa": "wɪŋ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-the-notting-hill-carnival-parade-015",
-   "en": "rainbow",
-   "de": "Regenbogen",
-   "ipa": "ˈreɪnbəʊ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-the-notting-hill-carnival-parade-016",
-   "en": "dizzy",
-   "de": "schwindlig",
-   "ipa": "ˈdɪzi",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-the-notting-hill-carnival-parade-017",
-   "en": "to scream",
-   "de": "schreien",
-   "ipa": "skriːm",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-the-notting-hill-carnival-parade-018",
-   "en": "hip",
-   "de": "Hüfte",
-   "ipa": "hɪp",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-the-notting-hill-carnival-parade-019",
-   "en": "you",
-   "de": "man",
-   "ipa": "",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-the-notting-hill-carnival-parade-020",
-   "en": "rhythm",
-   "de": "Rhythmus",
-   "ipa": "ˈrɪðəm",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-the-notting-hill-carnival-parade-021",
-   "en": "to scare sb.",
-   "de": "jn. erschrecken; jm. Angst machen",
-   "ipa": "skeə",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-the-notting-hill-carnival-parade-022",
-   "en": "loudspeaker",
-   "de": "Lautsprecher; Megaphon",
-   "ipa": "ˌlaʊdˈspiːkə",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-the-notting-hill-carnival-parade-023",
-   "en": "to mind",
-   "de": "etwas dagegen haben",
-   "ipa": "maɪnd",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-the-notting-hill-carnival-parade-024",
-   "en": "to rest",
-   "de": "ruhen, sich ausruhen",
-   "ipa": "rest",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u1-the-notting-hill-carnival-parade-025",
-   "en": "..., he said under his breath.",
-   "de": "..., sagte er flüsternd / murmelte er.",
-   "ipa": "breθ",
-   "pos": "",
-   "example_en": ""
-  }
- ],
- "y7u2-part-a": [
-  {
-   "id": "y7u2-part-a-001",
-   "en": "empty",
-   "de": "leer",
-   "ipa": "ˈempti",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-a-002",
-   "en": "scientist",
-   "de": "Naturwissenschaftler/in",
-   "ipa": "ˈsaɪəntɪst",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-a-003",
-   "en": "to study",
-   "de": "studieren; untersuchen, beobachten; lernen",
-   "ipa": "ˈstʌdi",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-a-004",
-   "en": "workshop",
-   "de": "Werkstatt",
-   "ipa": "ˈwɜːkʃɒp",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-a-005",
-   "en": "carpenter",
-   "de": "Tischler/in, Zimmerer/Zimmerin",
-   "ipa": "ˈkɑːpəntə",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-a-006",
-   "en": "furniture",
-   "de": "Möbel",
-   "ipa": "ˈfɜːnɪtʃə",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-a-007",
-   "en": "oil",
-   "de": "Öl",
-   "ipa": "ɔɪl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-a-008",
-   "en": "hammer",
-   "de": "Hammer",
-   "ipa": "ˈhæmə",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-a-009",
-   "en": "a piece of ...",
-   "de": "ein Stück ...",
-   "ipa": "piːs",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-a-010",
-   "en": "to come over (to)",
-   "de": "herüberkommen (zu/nach), vorbeikommen (bei)",
-   "ipa": "",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-a-011",
-   "en": "to make fun of sb./sth.",
-   "de": "sich über jn./etwas lustig machen",
-   "ipa": "",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-a-012",
-   "en": "to give up",
-   "de": "aufgeben",
-   "ipa": "",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-a-013",
-   "en": "to cook",
-   "de": "kochen, zubereiten",
-   "ipa": "",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-a-014",
-   "en": "tonight",
-   "de": "heute Nacht, heute Abend",
-   "ipa": "təˈnaɪt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-a-015",
-   "en": "actor",
-   "de": "Schauspieler/in",
-   "ipa": "ˈæktə",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-a-016",
-   "en": "painter",
-   "de": "Maler/in",
-   "ipa": "ˈpeɪntə",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-a-017",
-   "en": "soldier",
-   "de": "Soldat/in",
-   "ipa": "",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-a-018",
-   "en": "architect",
-   "de": "Architekt/in",
-   "ipa": "ˈɑːkɪtekt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-a-019",
-   "en": "astronaut",
-   "de": "Astronaut/in",
-   "ipa": "ˈæstrənɔːt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-a-020",
-   "en": "engineer",
-   "de": "Ingenieur/in",
-   "ipa": "ˌendʒɪˈnɪə",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-a-021",
-   "en": "hairdresser",
-   "de": "Friseur/in",
-   "ipa": "ˈheədresə",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-a-022",
-   "en": "musician",
-   "de": "Musiker/in",
-   "ipa": "mjuˈzɪʃn",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-a-023",
-   "en": "official",
-   "de": "Beamte(r), Beamtin",
-   "ipa": "əˈfɪʃl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-a-024",
-   "en": "government",
-   "de": "Regierung",
-   "ipa": "ˈɡʌvənmənt",
-   "pos": "",
-   "example_en": ""
-  }
- ],
- "y7u2-part-b": [
-  {
-   "id": "y7u2-part-b-001",
-   "en": "national",
-   "de": "national, National-",
-   "ipa": "ˈnæʃnəl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-002",
-   "en": "accident",
-   "de": "Unfall",
-   "ipa": "ˈæksɪdənt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-003",
-   "en": "altogether",
-   "de": "insgesamt, alles in allem",
-   "ipa": "ˌɔːltəˈɡeðə",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-004",
-   "en": "hostel",
-   "de": "Herberge, Wohnheim",
-   "ipa": "ˈhɒstl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-005",
-   "en": "to wonder",
-   "de": "sich fragen, gern wissen wollen",
-   "ipa": "ˈwʌndə",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-006",
-   "en": "to pretend",
-   "de": "so tun, als ob",
-   "ipa": "prɪˈtend",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-007",
-   "en": "Me neither.",
-   "de": "Ich auch nicht.",
-   "ipa": "ˌnaɪðə",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-008",
-   "en": "to go by",
-   "de": "vergehen, vorübergehen (Zeit)",
-   "ipa": "",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-009",
-   "en": "stupid",
-   "de": "dumm, blöd",
-   "ipa": "ˈstjuːpɪd",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-010",
-   "en": "downstream",
-   "de": "flussabwärts",
-   "ipa": "ˌdaʊnˈstriːm",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-011",
-   "en": "edge",
-   "de": "Rand, Kante",
-   "ipa": "edʒ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-012",
-   "en": "to reach",
-   "de": "erreichen",
-   "ipa": "riːtʃ",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-013",
-   "en": "stick",
-   "de": "Stock",
-   "ipa": "stɪk",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-014",
-   "en": "to grab",
-   "de": "schnappen, packen",
-   "ipa": "ɡræb",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-015",
-   "en": "steep",
-   "de": "steil",
-   "ipa": "stiːp",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-016",
-   "en": "to sing along (with sb.)",
-   "de": "(mit jm.) mitsingen",
-   "ipa": "",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-017",
-   "en": "to join in (sth.)",
-   "de": "(bei etwas) mitmachen",
-   "ipa": "",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-018",
-   "en": "before long",
-   "de": "schon bald",
-   "ipa": "",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-019",
-   "en": "to tell sb. (not) to do sth.",
-   "de": "jn. auffordern, etwas (nicht) zu tun; jm. sagen, dass er/sie etwas (nicht) tun soll",
-   "ipa": "",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-020",
-   "en": "danger",
-   "de": "Gefahr",
-   "ipa": "ˈdeɪndʒə",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-021",
-   "en": "warning",
-   "de": "Warnung",
-   "ipa": "ˈwɔːnɪŋ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-022",
-   "en": "head teacher",
-   "de": "Schulleiter/in",
-   "ipa": "ˌhed ˈtiːtʃə",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-023",
-   "en": "to allow",
-   "de": "erlauben, zulassen",
-   "ipa": "əˈlaʊ",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-024",
-   "en": "topic sentence",
-   "de": "Satz, der in das Thema eines Absatzes einführt",
-   "ipa": "ˌtɒpɪk ˈsentəns",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-025",
-   "en": "to organize",
-   "de": "organisieren; ordnen",
-   "ipa": "ˈɔːɡənaɪz",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-026",
-   "en": "climb",
-   "de": "Aufstieg, Anstieg",
-   "ipa": "klaɪm",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-027",
-   "en": "summit",
-   "de": "Gipfel",
-   "ipa": "ˈsʌmɪt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-028",
-   "en": "to manage sth.",
-   "de": "etwas schaffen; etwas zustande bringen",
-   "ipa": "ˈmænɪdʒ",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-029",
-   "en": "real",
-   "de": "echt, wirklich",
-   "ipa": "ˈriːəl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-030",
-   "en": "downhill",
-   "de": "bergab",
-   "ipa": "ˌdaʊnˈhɪl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-031",
-   "en": "energy",
-   "de": "Energie, Kraft",
-   "ipa": "ˈenədʒi",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-032",
-   "en": "a total of ...",
-   "de": "eine Gesamtsumme von ...; insgesamt",
-   "ipa": "ˈtəʊtl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-033",
-   "en": "bar",
-   "de": "Riegel (Schokolade, Müsli), Tafel (Schokolade)",
-   "ipa": "bɑː",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-034",
-   "en": "hero, pl heroes",
-   "de": "Held/in",
-   "ipa": "ˈhɪərəʊ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-035",
-   "en": "to revise",
-   "de": "überarbeiten; (Lernstoff) wiederholen",
-   "ipa": "rɪˈvaɪz",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-036",
-   "en": "carrot",
-   "de": "Möhre, Karotte",
-   "ipa": "ˈkærət",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-037",
-   "en": "to delete",
-   "de": "löschen; streichen",
-   "ipa": "dɪˈliːt",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-038",
-   "en": "Shall I ...?",
-   "de": "Soll ich ...?",
-   "ipa": "ʃæl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-039",
-   "en": "to sigh",
-   "de": "seufzen",
-   "ipa": "saɪ",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-040",
-   "en": "stone",
-   "de": "Stein",
-   "ipa": "stəʊn",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-041",
-   "en": "to seem (to be/do)",
-   "de": "(zu sein/zu tun) scheinen",
-   "ipa": "siːm",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-042",
-   "en": "to suppose",
-   "de": "annehmen, vermuten",
-   "ipa": "səˈpəʊz",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-043",
-   "en": "to miss",
-   "de": "vermissen",
-   "ipa": "mɪs",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-044",
-   "en": "actually",
-   "de": "eigentlich; übrigens; tatsächlich",
-   "ipa": "ˈæktʃuəli",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-045",
-   "en": "factory",
-   "de": "Fabrik",
-   "ipa": "ˈfæktri",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-046",
-   "en": "mine",
-   "de": "Bergwerk",
-   "ipa": "maɪn",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-047",
-   "en": "coal",
-   "de": "Kohle",
-   "ipa": "kəʊl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-048",
-   "en": "headword",
-   "de": "Stichwort (im Wörterbuch)",
-   "ipa": "ˈhedwɜːd",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-049",
-   "en": "part of speech",
-   "de": "Wortart",
-   "ipa": "ˌpɑːt əv ˈspiːtʃ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-050",
-   "en": "translation",
-   "de": "Übersetzung",
-   "ipa": "trænsˈleɪʃn",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-part-b-051",
-   "en": "police",
-   "de": "Polizei",
-   "ipa": "pəˈliːs",
-   "pos": "",
-   "example_en": ""
-  }
- ],
- "y7u2-snowdonia-at-night": [
-  {
-   "id": "y7u2-snowdonia-at-night-001",
-   "en": "narrow",
-   "de": "schmal, eng",
-   "ipa": "ˈnærəʊ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-snowdonia-at-night-002",
-   "en": "to press",
-   "de": "drücken",
-   "ipa": "pres",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-snowdonia-at-night-003",
-   "en": "finally",
-   "de": "endlich, schließlich",
-   "ipa": "ˈfaɪnəli",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-snowdonia-at-night-004",
-   "en": "to be able to do sth.",
-   "de": "etwas tun können; fähig sein / in der Lage sein, etwas zu tun",
-   "ipa": "ˈeɪbl",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-snowdonia-at-night-005",
-   "en": "noisy",
-   "de": "laut, lärmend, voller Lärm",
-   "ipa": "ˈnɔɪzi",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-snowdonia-at-night-006",
-   "en": "to enter",
-   "de": "betreten, hineingehen in; eintreten",
-   "ipa": "ˈentə",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-snowdonia-at-night-007",
-   "en": "meal",
-   "de": "Mahlzeit, Essen",
-   "ipa": "miːl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-snowdonia-at-night-008",
-   "en": "to keep doing sth.",
-   "de": "etwas immer wieder / immer weiter tun; etwas ständig tun",
-   "ipa": "kiːp",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-snowdonia-at-night-009",
-   "en": "silently",
-   "de": "lautlos; schweigend",
-   "ipa": "ˈsaɪləntli",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-snowdonia-at-night-010",
-   "en": "corridor",
-   "de": "Gang, Korridor",
-   "ipa": "ˈkɒrɪdɔː",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-snowdonia-at-night-011",
-   "en": "star",
-   "de": "Stern",
-   "ipa": "stɑː",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-snowdonia-at-night-012",
-   "en": "magical",
-   "de": "zauberhaft, wundervoll; magisch",
-   "ipa": "ˈmædʒɪkl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-snowdonia-at-night-013",
-   "en": "to lie down",
-   "de": "sich hinlegen",
-   "ipa": "ˌlaɪ ˈdaʊn",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-snowdonia-at-night-014",
-   "en": "busy",
-   "de": "belebt, geschäftig, hektisch",
-   "ipa": "ˈbɪzi",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-snowdonia-at-night-015",
-   "en": "to clear",
-   "de": "räumen; abräumen",
-   "ipa": "klɪə",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-snowdonia-at-night-016",
-   "en": "breeze",
-   "de": "Brise",
-   "ipa": "briːz",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-snowdonia-at-night-017",
-   "en": "to have a look (at sth.)",
-   "de": "nachschauen; einen Blick auf etwas werfen",
-   "ipa": "",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-snowdonia-at-night-018",
-   "en": "to sit up",
-   "de": "sich aufsetzen",
-   "ipa": "",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-snowdonia-at-night-019",
-   "en": "wooden",
-   "de": "hölzern; Holz-",
-   "ipa": "ˈwʊdn",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-snowdonia-at-night-020",
-   "en": "wide",
-   "de": "weit; breit",
-   "ipa": "waɪd",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-snowdonia-at-night-021",
-   "en": "figure",
-   "de": "Figur, Gestalt",
-   "ipa": "ˈfɪɡə",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-snowdonia-at-night-022",
-   "en": "note",
-   "de": "Note, Ton (Musik)",
-   "ipa": "nəʊt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-snowdonia-at-night-023",
-   "en": "such a ...",
-   "de": "so ein/e ...; solch ein/e ...",
-   "ipa": "sʌtʃ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-snowdonia-at-night-024",
-   "en": "to make sth. up",
-   "de": "sich etwas ausdenken",
-   "ipa": "",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-snowdonia-at-night-025",
-   "en": "to argue",
-   "de": "streiten; sich streiten",
-   "ipa": "ˈɑːɡjuː",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-snowdonia-at-night-026",
-   "en": "bite",
-   "de": "Biss, Bissen",
-   "ipa": "baɪt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-snowdonia-at-night-027",
-   "en": "office",
-   "de": "Büro",
-   "ipa": "ˈɒfɪs",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-snowdonia-at-night-028",
-   "en": "how to do sth.",
-   "de": "wie man etwas macht / machen kann / machen soll",
-   "ipa": "",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-snowdonia-at-night-029",
-   "en": "to behave",
-   "de": "sich verhalten, sich benehmen",
-   "ipa": "bɪˈheɪv",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-snowdonia-at-night-030",
-   "en": "mop",
-   "de": "Wischmopp",
-   "ipa": "mɒp",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-snowdonia-at-night-031",
-   "en": "to splash sb.",
-   "de": "jn. nass spritzen",
-   "ipa": "splæʃ",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-snowdonia-at-night-032",
-   "en": "punishment",
-   "de": "Bestrafung, Strafe",
-   "ipa": "ˈpʌnɪʃmənt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u2-snowdonia-at-night-033",
-   "en": "point of view",
-   "de": "Standpunkt",
-   "ipa": "ˌpɔɪnt əv ˈvjuː",
-   "pos": "",
-   "example_en": ""
-  }
- ],
- "y7u3-part-a": [
-  {
-   "id": "y7u3-part-a-001",
-   "en": "to explore",
-   "de": "erkunden, erforschen",
-   "ipa": "ɪkˈsplɔː",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-a-002",
-   "en": "cruise",
-   "de": "Kreuzfahrt, Schiffsreise, Bootsfahrt",
-   "ipa": "kruːz",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-a-003",
-   "en": "stuff",
-   "de": "Zeug, Kram",
-   "ipa": "stʌf",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-a-004",
-   "en": "difference",
-   "de": "Unterschied",
-   "ipa": "ˈdɪfrəns",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-a-005",
-   "en": "guidebook",
-   "de": "Reiseführer",
-   "ipa": "ˈɡaɪdbʊk",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-a-006",
-   "en": "opinion",
-   "de": "Meinung",
-   "ipa": "əˈpɪnjən",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-a-007",
-   "en": "to hang out",
-   "de": "abhängen, rumhängen",
-   "ipa": "ˌhæŋ ˈaʊt",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-a-008",
-   "en": "submarine",
-   "de": "U-Boot",
-   "ipa": "ˌsʌbməˈriːn",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-a-009",
-   "en": "dock",
-   "de": "Hafen",
-   "ipa": "dɒk",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-a-010",
-   "en": "guys",
-   "de": "Leute",
-   "ipa": "ɡaɪz",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-a-011",
-   "en": "after that",
-   "de": "danach",
-   "ipa": "",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-a-012",
-   "en": "to think sth. of sth./sb.",
-   "de": "etwas von etwas/jm. halten",
-   "ipa": "",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-a-013",
-   "en": "crossword",
-   "de": "Kreuzworträtsel",
-   "ipa": "ˈkrɒswɜːd",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-a-014",
-   "en": "factual",
-   "de": "sachlich, Sach-; faktisch; den Tatsachen entsprechend",
-   "ipa": "ˈfæktʃuəl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-a-015",
-   "en": "introduction",
-   "de": "Einleitung, Einführung",
-   "ipa": "ˌɪntrəˈdʌkʃn",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-a-016",
-   "en": "body",
-   "de": "Hauptteil (eines Textes)",
-   "ipa": "ˈbɒdi",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-a-017",
-   "en": "conclusion",
-   "de": "Schluss(folgerung)",
-   "ipa": "kənˈkluːʒn",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-a-018",
-   "en": "schedule",
-   "de": "(Zeit-)Plan, Programm",
-   "ipa": "ˈʃedjuːl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-a-019",
-   "en": "to get/have a day off",
-   "de": "einen Tag frei bekommen/haben",
-   "ipa": "ɒf",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-a-020",
-   "en": "to earn",
-   "de": "verdienen (Geld)",
-   "ipa": "ɜːn",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-a-021",
-   "en": "experience",
-   "de": "Erfahrung(en)",
-   "ipa": "ɪkˈspɪəriəns",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-a-022",
-   "en": "As John Lennon said ...",
-   "de": "Wie John Lennon (einmal) sagte ...",
-   "ipa": "",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-a-023",
-   "en": "to be born",
-   "de": "geboren sein/werden",
-   "ipa": "bɔːn",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-a-024",
-   "en": "to grow up",
-   "de": "erwachsen werden; aufwachsen",
-   "ipa": "ˌɡrəʊ ˈʌp",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-a-025",
-   "en": "to invent",
-   "de": "erfinden",
-   "ipa": "ɪnˈvent",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-a-026",
-   "en": "modern",
-   "de": "modern",
-   "ipa": "ˈmɒdn",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-a-027",
-   "en": "success",
-   "de": "Erfolg",
-   "ipa": "səkˈses",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-a-028",
-   "en": "to perform",
-   "de": "auftreten (Künstler/in)",
-   "ipa": "pəˈfɔːm",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-a-029",
-   "en": "popular (with)",
-   "de": "populär, beliebt (bei)",
-   "ipa": "ˈpɒpjələ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-a-030",
-   "en": "monument (to)",
-   "de": "Denkmal, Monument (für/zum Gedenken an)",
-   "ipa": "ˈmɒnjʊmənt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-a-031",
-   "en": "a one-hour concert",
-   "de": "ein einstündiges Konzert",
-   "ipa": "",
-   "pos": "",
-   "example_en": ""
-  }
- ],
- "y7u3-part-b": [
-  {
-   "id": "y7u3-part-b-001",
-   "en": "banana",
-   "de": "Banane",
-   "ipa": "bəˈnɑːnə",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-b-002",
-   "en": "proud (of)",
-   "de": "stolz (auf)",
-   "ipa": "praʊd",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-b-003",
-   "en": "accent",
-   "de": "Akzent",
-   "ipa": "ˈæksənt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-b-004",
-   "en": "for hours/weeks/...",
-   "de": "seit Stunden/Wochen/...",
-   "ipa": "",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-b-005",
-   "en": "since 10 o'clock/last week/...",
-   "de": "seit 10 Uhr/letzter Woche/...",
-   "ipa": "sɪns",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-b-006",
-   "en": "support a team",
-   "de": "eine Mannschaft unterstützen; Fan einer Mannschaft sein",
-   "ipa": "səˈpɔːt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-b-007",
-   "en": "password",
-   "de": "Passwort",
-   "ipa": "ˈpɑːswɜːd",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-b-008",
-   "en": "stadium",
-   "de": "Stadion",
-   "ipa": "ˈsteɪdiəm",
-   "pos": "",
-   "example_en": ""
-  }
- ],
- "y7u3-part-c": [
-  {
-   "id": "y7u3-part-c-001",
-   "en": "leader",
-   "de": "Leiter/in",
-   "ipa": "",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-c-002",
-   "en": "to lead",
-   "de": "führen, leiten",
-   "ipa": "liːd",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-c-003",
-   "en": "on board",
-   "de": "an Bord",
-   "ipa": "bɔːd",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-c-004",
-   "en": "scarf, pl scarves",
-   "de": "Schal",
-   "ipa": "skɑːf",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-c-005",
-   "en": "like",
-   "de": "als ob",
-   "ipa": "",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-c-006",
-   "en": "to photograph",
-   "de": "fotografieren",
-   "ipa": "ˈfəʊtəɡrɑːf",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-c-007",
-   "en": "public",
-   "de": "öffentliche(r, s)",
-   "ipa": "ˈpʌblɪk",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-c-008",
-   "en": "(the) public",
-   "de": "die Öffentlichkeit",
-   "ipa": "",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-c-009",
-   "en": "absolutely",
-   "de": "völlig, absolut",
-   "ipa": "ˈæbsəluːtli",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-c-010",
-   "en": "for ages",
-   "de": "seit einer Ewigkeit, ewig lange",
-   "ipa": "ˈeɪdʒɪz",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-c-011",
-   "en": "polite",
-   "de": "höflich",
-   "ipa": "pəˈlaɪt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-c-012",
-   "en": "impolite",
-   "de": "unhöflich",
-   "ipa": "ˌɪmpəˈlaɪt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-c-013",
-   "en": "to remember sth.",
-   "de": "an etwas denken; sich etwas merken",
-   "ipa": "",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-c-014",
-   "en": "law",
-   "de": "Gesetz",
-   "ipa": "lɔː",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-c-015",
-   "en": "to publish",
-   "de": "veröffentlichen, verlegen",
-   "ipa": "ˈpʌblɪʃ",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-c-016",
-   "en": "social media",
-   "de": "soziale Medien",
-   "ipa": "ˌsəʊʃl ˈmiːdiə",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-c-017",
-   "en": "permission",
-   "de": "Erlaubnis",
-   "ipa": "pəˈmɪʃn",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-c-018",
-   "en": "situation",
-   "de": "Situation",
-   "ipa": "ˌsɪtʃuˈeɪʃn",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-c-019",
-   "en": "focus",
-   "de": "Mittelpunkt, Schwerpunkt",
-   "ipa": "ˈfəʊkəs",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-c-020",
-   "en": "nurse",
-   "de": "Krankenschwester, Krankenpfleger",
-   "ipa": "nɜːs",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-c-021",
-   "en": "exchange",
-   "de": "Austausch",
-   "ipa": "ɪksˈtʃeɪndʒ",
-   "pos": "",
-   "example_en": ""
-  }
- ],
- "y7u3-part-d": [
-  {
-   "id": "y7u3-part-d-001",
-   "en": "to score",
-   "de": "Treffer erzielen, Tor schießen",
-   "ipa": "skɔː",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-d-002",
-   "en": "score",
-   "de": "Spielstand; Punktestand",
-   "ipa": "skɔː",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-d-003",
-   "en": "final",
-   "de": "letzte(r, s), End-",
-   "ipa": "ˈfaɪnl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-d-004",
-   "en": "result",
-   "de": "Ergebnis, Resultat",
-   "ipa": "rɪˈzʌlt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-d-005",
-   "en": "as a result",
-   "de": "folglich",
-   "ipa": "",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-d-006",
-   "en": "emotion",
-   "de": "Gefühl, Emotion",
-   "ipa": "ɪˈməʊʃn",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-d-007",
-   "en": "including",
-   "de": "einschließlich; darunter (auch)",
-   "ipa": "ɪnˈkluːdɪŋ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-d-008",
-   "en": "goalkeeper",
-   "de": "Torwart, Torfrau",
-   "ipa": "ˈɡəʊlkiːpə",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-d-009",
-   "en": "referee",
-   "de": "Schiedsrichter/in",
-   "ipa": "ˌrefəˈriː",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-d-010",
-   "en": "pitch",
-   "de": "(Sport-)Platz, Spielfeld",
-   "ipa": "pɪtʃ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-d-011",
-   "en": "free kick",
-   "de": "Freistoß",
-   "ipa": "ˌfriː ˈkɪk",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-d-012",
-   "en": "to pronounce",
-   "de": "aussprechen",
-   "ipa": "prəˈnaʊns",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-d-013",
-   "en": "to order",
-   "de": "ordnen",
-   "ipa": "ˈɔːdə",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-d-014",
-   "en": "to structure",
-   "de": "strukturieren, gliedern",
-   "ipa": "ˈstrʌktʃə",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-d-015",
-   "en": "equipment",
-   "de": "Ausrüstung",
-   "ipa": "ɪˈkwɪpmənt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-d-016",
-   "en": "nature",
-   "de": "Natur",
-   "ipa": "ˈneɪtʃə",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-d-017",
-   "en": "bully",
-   "de": "(Schul-)Tyrann",
-   "ipa": "ˈbʊli",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-d-018",
-   "en": "to solve",
-   "de": "lösen",
-   "ipa": "sɒlv",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-part-d-019",
-   "en": "slow motion",
-   "de": "Zeitlupe",
-   "ipa": "ˌsləʊ ˈməʊʃn",
-   "pos": "",
-   "example_en": ""
-  }
- ],
- "y7u3-a-liverpool-hero": [
-  {
-   "id": "y7u3-a-liverpool-hero-001",
-   "en": "it was no different",
-   "de": "es war nicht anders",
-   "ipa": "",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-a-liverpool-hero-002",
-   "en": "canal",
-   "de": "Kanal",
-   "ipa": "kəˈnæl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-a-liverpool-hero-003",
-   "en": "to shine",
-   "de": "scheinen (Sonne)",
-   "ipa": "ʃaɪn",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-a-liverpool-hero-004",
-   "en": "laughter",
-   "de": "Gelächter",
-   "ipa": "ˈlɑːftə",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-a-liverpool-hero-005",
-   "en": "surface",
-   "de": "Oberfläche",
-   "ipa": "ˈsɜːfɪs",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-a-liverpool-hero-006",
-   "en": "to burn",
-   "de": "brennen; verbrennen",
-   "ipa": "bɜːn",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-a-liverpool-hero-007",
-   "en": "to drown",
-   "de": "ertrinken",
-   "ipa": "draʊn",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-a-liverpool-hero-008",
-   "en": "nowhere",
-   "de": "nirgendwo; nirgendwohin",
-   "ipa": "ˈnəʊweə",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-a-liverpool-hero-009",
-   "en": "to dive in",
-   "de": "hineinspringen",
-   "ipa": "ˌdaɪv ˈɪn",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-a-liverpool-hero-010",
-   "en": "dry",
-   "de": "trocken",
-   "ipa": "draɪ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-a-liverpool-hero-011",
-   "en": "to save sb. from sth.",
-   "de": "jn. von/vor etwas retten",
-   "ipa": "ˈseɪv",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-a-liverpool-hero-012",
-   "en": "to marry sb.",
-   "de": "jn. heiraten",
-   "ipa": "ˈmæri",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-a-liverpool-hero-013",
-   "en": "career",
-   "de": "Karriere",
-   "ipa": "kəˈrɪə",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-a-liverpool-hero-014",
-   "en": "sailor",
-   "de": "Seemann, Matrose, Matrosin",
-   "ipa": "ˈseɪlə",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-a-liverpool-hero-015",
-   "en": "body",
-   "de": "Leiche",
-   "ipa": "ˈbɒdi",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-a-liverpool-hero-016",
-   "en": "local",
-   "de": "örtlich, Lokal-; am/vom Ort",
-   "ipa": "ˈləʊkl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-a-liverpool-hero-017",
-   "en": "to spread",
-   "de": "(sich) ausbreiten, verbreiten",
-   "ipa": "spred",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-a-liverpool-hero-018",
-   "en": "funeral",
-   "de": "Trauerfeier",
-   "ipa": "ˈfjuːnərəl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u3-a-liverpool-hero-019",
-   "en": "to take place",
-   "de": "stattfinden",
-   "ipa": "ˌteɪk ˈpleɪs",
+   "id": "y8u1-part-a-002",
+   "en": "to crash",
+   "de": "abstürzen (Flugzeug; Computer)",
+   "ipa": "kræʃ",
    "pos": "verb",
    "example_en": ""
   },
   {
-   "id": "y7u3-a-liverpool-hero-020",
-   "en": "to name",
-   "de": "(be)nennen",
-   "ipa": "neɪm",
-   "pos": "verb",
-   "example_en": ""
-  }
- ],
- "y7u4-introduction": [
-  {
-   "id": "y7u4-introduction-001",
-   "en": "impression",
-   "de": "Eindruck",
-   "ipa": "ɪmˈpreʃn",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-introduction-002",
-   "en": "march",
-   "de": "Marsch, Demonstration",
-   "ipa": "mɑːtʃ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-introduction-003",
-   "en": "to wave (at sb.)",
-   "de": "(jm. zu)winken",
-   "ipa": "weɪv",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-introduction-004",
-   "en": "northern",
-   "de": "nördlich, Nord-",
-   "ipa": "ˈnɔːðən",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-introduction-005",
-   "en": "speed limit",
-   "de": "Geschwindigkeitsbegrenzung, -beschränkung",
-   "ipa": "ˈspiːd ˌlɪmɪt",
-   "pos": "",
-   "example_en": ""
-  }
- ],
- "y7u4-part-a": [
-  {
-   "id": "y7u4-part-a-001",
-   "en": "giant",
-   "de": "Riese",
-   "ipa": "ˈdʒaɪənt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-a-002",
-   "en": "coffee",
-   "de": "Kaffee",
-   "ipa": "ˈkɒfi",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-a-003",
-   "en": "wonder",
-   "de": "Wunder",
-   "ipa": "ˈwʌndə",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-a-004",
-   "en": "cliff",
-   "de": "Klippe",
-   "ipa": "klɪf",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-a-005",
-   "en": "column",
-   "de": "Säule",
-   "ipa": "ˈkɒləm",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-a-006",
-   "en": "to rise up",
-   "de": "aufragen, emporragen (Berge, Säulen, Türme, ... )",
-   "ipa": "ˌraɪz ˈʌp",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-a-007",
-   "en": "nearly",
-   "de": "fast, beinahe",
-   "ipa": "ˈnɪəli",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-a-008",
-   "en": "to form",
-   "de": "bilden, formen",
-   "ipa": "fɔːm",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-a-009",
-   "en": "challenge",
-   "de": "Herausforderung",
-   "ipa": "ˈtʃælɪndʒ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-a-010",
-   "en": "to challenge sb. (to sth.)",
-   "de": "jn. herausfordern (zu etwas)",
-   "ipa": "ˈtʃælɪndʒ",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-a-011",
-   "en": "to bet",
-   "de": "wetten",
-   "ipa": "bet",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-a-012",
-   "en": "to build",
-   "de": "bauen",
-   "ipa": "bɪld",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-a-013",
-   "en": "to be left",
-   "de": "übrig sein",
-   "ipa": "left",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-a-014",
-   "en": "legend",
-   "de": "Legende, Sage",
-   "ipa": "ˈledʒənd",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-a-015",
-   "en": "curious",
-   "de": "wissbegierig, neugierig",
-   "ipa": "ˈkjʊəriəs",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-a-016",
-   "en": "passport",
-   "de": "(Reise-)Pass",
-   "ipa": "ˈpɑːspɔːt",
+   "id": "y8u1-part-a-003",
+   "en": "within",
+   "de": "innerhalb (von)",
+   "ipa": "wɪˈðɪn",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u4-part-a-017",
-   "en": "ID card",
-   "de": "Personalausweis",
-   "ipa": "ˌaɪ ˈdiː kɑːd",
+   "id": "y8u1-part-a-004",
+   "en": "terrorist",
+   "de": "terroristische(r, s); Terrorist/in",
+   "ipa": "ˈterərɪst",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u4-part-a-018",
-   "en": "airport",
-   "de": "Flughafen",
-   "ipa": "ˈeəpɔːt",
+   "id": "y8u1-part-a-005",
+   "en": "network",
+   "de": "Netz, Netzwerk",
+   "ipa": "ˈnetwɜːk",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u4-part-a-019",
-   "en": "safe",
-   "de": "sicher, in Sicherheit",
-   "ipa": "seɪf",
+   "id": "y8u1-part-a-006",
+   "en": "attack",
+   "de": "Angriff",
+   "ipa": "əˈtæk",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u4-part-a-020",
-   "en": "to keep",
-   "de": "halten; behalten",
-   "ipa": "kiːp",
+   "id": "y8u1-part-a-007",
+   "en": "to force your way into sth.",
+   "de": "sich in etwas eindrängen",
+   "ipa": "fɔːs",
    "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-a-021",
-   "en": "god, God",
-   "de": "Gott",
-   "ipa": "ɡɒd",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-a-022",
-   "en": "goddess",
-   "de": "Göttin",
-   "ipa": "ˈɡɒdes",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-a-023",
-   "en": "wedding",
-   "de": "Hochzeit, Trauung",
-   "ipa": "ˈwedɪŋ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-a-024",
-   "en": "king",
-   "de": "König",
-   "ipa": "kɪŋ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-a-025",
-   "en": "normal",
-   "de": "normal",
-   "ipa": "ˈnɔːməl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-a-026",
-   "en": "immediately",
-   "de": "sofort",
-   "ipa": "ɪˈmiːdiətli",
-   "pos": "",
-   "example_en": ""
-  }
- ],
- "y7u4-part-b": [
-  {
-   "id": "y7u4-part-b-001",
-   "en": "border",
-   "de": "Grenze",
-   "ipa": "ˈbɔːdə",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-b-002",
-   "en": "euro (€)",
-   "de": "Euro",
-   "ipa": "ˈjʊərəʊ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-b-003",
-   "en": "pound",
-   "de": "Pfund",
-   "ipa": "",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-b-004",
-   "en": "pence",
-   "de": "Pence",
-   "ipa": "pens",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-b-005",
-   "en": "fifty p / fifty pence",
-   "de": "fünfzig Pence",
-   "ipa": "piː",
-   "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u4-part-b-006",
-   "en": "one pound / a pound",
-   "de": "ein Pfund",
-   "ipa": "",
+   "id": "y8u1-part-a-008",
+   "en": "control",
+   "de": "Kontrolle",
+   "ipa": "kənˈtrəʊl",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u4-part-b-007",
-   "en": "two pounds fifty",
-   "de": "zwei Pfund fünfzig",
-   "ipa": "",
+   "id": "y8u1-part-a-009",
+   "en": "target",
+   "de": "Ziel, Zielscheibe",
+   "ipa": "ˈtɑːɡɪt",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u4-part-b-008",
-   "en": "fifty cents",
-   "de": "fünfzig Cent",
-   "ipa": "sents",
+   "id": "y8u1-part-a-010",
+   "en": "brave",
+   "de": "mutig, tapfer",
+   "ipa": "breɪv",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u4-part-b-009",
-   "en": "one euro / a euro",
-   "de": "ein Euro",
-   "ipa": "",
+   "id": "y8u1-part-a-011",
+   "en": "thousand",
+   "de": "tausend; Tausend",
+   "ipa": "ˈθaʊznd",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u4-part-b-010",
-   "en": "two euros fifty",
-   "de": "zwei Euro fünfzig",
-   "ipa": "",
+   "id": "y8u1-part-a-012",
+   "en": "floor",
+   "de": "Geschoss, Etage, Stockwerk",
+   "ipa": "flɔː",
    "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-b-011",
-   "en": "to change",
-   "de": "wechseln, umtauschen (Geld)",
-   "ipa": "tʃeɪndʒ",
-   "pos": "verb",
    "example_en": ""
   },
   {
-   "id": "y7u4-part-b-012",
-   "en": "letterbox",
-   "de": "Briefkasten",
-   "ipa": "ˈletəbɒks",
+   "id": "y8u1-part-a-013",
+   "en": "death",
+   "de": "Tod",
+   "ipa": "deθ",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u4-part-b-013",
-   "en": "suit",
-   "de": "Anzug",
-   "ipa": "suːt",
+   "id": "y8u1-part-a-014",
+   "en": "skyscraper",
+   "de": "Wolkenkratzer",
+   "ipa": "ˈskaɪskreɪpə",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u4-part-b-014",
-   "en": "to smoke",
-   "de": "rauchen",
-   "ipa": "sməʊk",
+   "id": "y8u1-part-a-015",
+   "en": "to collapse",
+   "de": "einstürzen; zusammenbrechen",
+   "ipa": "kəˈlæps",
    "pos": "verb",
    "example_en": ""
   },
   {
-   "id": "y7u4-part-b-015",
-   "en": "pipe",
-   "de": "(Tabaks-)Pfeife",
-   "ipa": "paɪp",
+   "id": "y8u1-part-a-016",
+   "en": "thick",
+   "de": "dick",
+   "ipa": "θɪk",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u4-part-b-016",
-   "en": "pot",
-   "de": "Gefäß; Topf",
-   "ipa": "pɒt",
+   "id": "y8u1-part-a-017",
+   "en": "dust",
+   "de": "Staub",
+   "ipa": "dʌst",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u4-part-b-017",
-   "en": "What else can you do?",
-   "de": "Was kannst du (sonst) noch tun?",
-   "ipa": "els",
+   "id": "y8u1-part-a-018",
+   "en": "emergency",
+   "de": "Notfall, Not-",
+   "ipa": "ɪˈmɜːdʒənsi",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u4-part-b-018",
+   "id": "y8u1-part-a-019",
    "en": "service",
-   "de": "Gottesdienst",
+   "de": "Dienst, Service",
    "ipa": "ˈsɜːvɪs",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u4-part-b-019",
-   "en": "by 8 pm",
-   "de": "bis (spätestens) 20 Uhr",
-   "ipa": "baɪ",
+   "id": "y8u1-part-a-020",
+   "en": "neighborhood (AE) / neighbourhood (BE)",
+   "de": "Viertel, Gegend, Umgebung; Nachbarschaft",
+   "ipa": "ˈneɪbəhʊd",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u4-part-b-020",
-   "en": "to have a shower",
-   "de": "(sich) duschen",
-   "ipa": "ˈʃaʊə",
+   "id": "y8u1-part-a-021",
+   "en": "as if",
+   "de": "als ob",
+   "ipa": "æz ˈɪf",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-a-022",
+   "en": "to stick",
+   "de": "bleiben; kleben",
+   "ipa": "stɪk",
    "pos": "verb",
    "example_en": ""
   },
   {
-   "id": "y7u4-part-b-021",
-   "en": "to share sth.",
-   "de": "(sich) etwas teilen",
+   "id": "y8u1-part-a-023",
+   "en": "mind",
+   "de": "Verstand, Sinn, Geist",
+   "ipa": "maɪnd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-a-024",
+   "en": "to be alive",
+   "de": "leben, am Leben sein",
+   "ipa": "əˈlaɪv",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-a-025",
+   "en": "image",
+   "de": "Bild, Abbild; Vorstellung",
+   "ipa": "ˈɪmɪdʒ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-a-026",
+   "en": "historic",
+   "de": "historisch (geschichtlich bedeutsam)",
+   "ipa": "hɪˈstɒrɪk",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-a-027",
+   "en": "high school",
+   "de": "(USA) Schule für 14- bis 18-Jährige",
+   "ipa": "ˈhaɪ skuːl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-a-028",
+   "en": "locker",
+   "de": "Schließfach, Spind",
+   "ipa": "ˈlɒkə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-a-029",
+   "en": "backpack (BE also: rucksack)",
+   "de": "Rucksack",
+   "ipa": "ˈbækpæk",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-a-030",
+   "en": "shot",
+   "de": "Aufnahme, Foto; (Film) Einstellung, Szene",
+   "ipa": "ʃɒt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-a-031",
+   "en": "block",
+   "de": "(Häuser-, Wohn-)Block",
+   "ipa": "blɒk",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-a-032",
+   "en": "anniversary",
+   "de": "Jahrestag",
+   "ipa": "ˌænɪˈvɜːsəri",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-a-033",
+   "en": "rose",
+   "de": "Rose",
+   "ipa": "rəʊz",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-a-034",
+   "en": "to roar",
+   "de": "tosen, dröhnen",
+   "ipa": "rɔː",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-a-035",
+   "en": "foot, pl feet",
+   "de": "Fuß (Längenmaß; ca. 30 cm)",
+   "ipa": "fʊt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-a-036",
+   "en": "to lean",
+   "de": "sich lehnen; sich beugen",
+   "ipa": "liːn",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-a-037",
+   "en": "inch",
+   "de": "Zoll (Längenmaß; 2,54 cm)",
+   "ipa": "ɪntʃ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-a-038",
+   "en": "to arrest",
+   "de": "verhaften, festnehmen",
+   "ipa": "əˈrest",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-a-039",
+   "en": "to bury",
+   "de": "begraben, beerdigen",
+   "ipa": "ˈberi",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-a-040",
+   "en": "cemetery",
+   "de": "Friedhof",
+   "ipa": "BE: ˈsemetri, AE: ˈseməteri",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-a-041",
+   "en": "I'd better ... (= I had better ...)",
+   "de": "Ich sollte lieber ...",
    "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-a-042",
+   "en": "I guess ...",
+   "de": "Ich nehme an, ... / Ich denke, ...",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-a-043",
+   "en": "way",
+   "de": "Art und Weise",
+   "ipa": "weɪ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-a-044",
+   "en": "to have sth. in common",
+   "de": "etwas miteinander gemein haben",
+   "ipa": "ˈkɒmən",
    "pos": "verb",
    "example_en": ""
   },
   {
-   "id": "y7u4-part-b-022",
-   "en": "the Atlantic (Ocean)",
-   "de": "der Atlantik, der Atlantische Ozean",
-   "ipa": "ətˈlæntɪk",
+   "id": "y8u1-part-a-045",
+   "en": "fall (AE)",
+   "de": "Herbst",
+   "ipa": "fɔːl",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u4-part-b-023",
-   "en": "advantage",
-   "de": "Vorteil",
-   "ipa": "ədˈvɑːntɪdʒ",
+   "id": "y8u1-part-a-046",
+   "en": "leaf, pl leaves",
+   "de": "Blatt",
+   "ipa": "liːf",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u4-part-b-024",
-   "en": "disadvantage",
-   "de": "Nachteil",
-   "ipa": "ˌdɪsədˈvɑːntɪdʒ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-b-025",
-   "en": "beginning",
-   "de": "Anfang, Beginn",
-   "ipa": "bɪˈɡɪnɪŋ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-b-026",
-   "en": "guest",
-   "de": "Gast",
-   "ipa": "ɡest",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-b-027",
-   "en": "facial expression",
-   "de": "Gesichtsausdruck, Mimik",
-   "ipa": "ˌfeɪʃl ɪkˈspreʃn",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-b-028",
-   "en": "interaction",
-   "de": "Interaktion, Umgang",
-   "ipa": "ˌɪntərˈækʃn",
+   "id": "y8u1-part-a-047",
+   "en": "colourful",
+   "de": "bunt, farbenfreudig",
+   "ipa": "ˈkʌləfl",
    "pos": "",
    "example_en": ""
   }
  ],
- "y7u4-part-c": [
+ "y8u1-part-b": [
   {
-   "id": "y7u4-part-c-001",
-   "en": "owner",
-   "de": "Besitzer/in",
-   "ipa": "ˈəʊnə",
+   "id": "y8u1-part-b-001",
+   "en": "mood",
+   "de": "Laune, Stimmung",
+   "ipa": "muːd",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u4-part-c-002",
-   "en": "weird",
-   "de": "seltsam, komisch",
-   "ipa": "wɪəd",
+   "id": "y8u1-part-b-002",
+   "en": "crazy",
+   "de": "verrückt",
+   "ipa": "ˈkreɪzi",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u4-part-c-003",
-   "en": "to stare (at sb./sth.)",
-   "de": "(jn./etwas an)starren",
-   "ipa": "steə",
+   "id": "y8u1-part-b-003",
+   "en": "weirdo",
+   "de": "Spinner/in",
+   "ipa": "ˈwɪədəʊ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-b-004",
+   "en": "to be keen on sth.",
+   "de": "wild auf etwas sein",
+   "ipa": "kiːn",
    "pos": "verb",
    "example_en": ""
   },
   {
-   "id": "y7u4-part-c-004",
-   "en": "to joke",
-   "de": "scherzen, Witze machen",
+   "id": "y8u1-part-b-005",
+   "en": "to be keen on doing sth.",
+   "de": "wild darauf sein, etwas zu tun",
    "ipa": "",
    "pos": "verb",
    "example_en": ""
   },
   {
-   "id": "y7u4-part-c-005",
-   "en": "sense of humour",
-   "de": "(Sinn für) Humor",
-   "ipa": "ˌsens əv ˈhjuːmə",
+   "id": "y8u1-part-b-006",
+   "en": "pigeon",
+   "de": "(Stadt-)Taube",
+   "ipa": "ˈpɪdʒɪn",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u4-part-c-006",
-   "en": "to survive",
-   "de": "überleben",
-   "ipa": "səˈvaɪv",
+   "id": "y8u1-part-b-007",
+   "en": "insulted",
+   "de": "beleidigt",
+   "ipa": "ɪnˈsʌltɪd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-b-008",
+   "en": "suggestion",
+   "de": "Vorschlag",
+   "ipa": "səˈdʒestʃən",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-b-009",
+   "en": "move",
+   "de": "Zug (bei Brettspielen)",
+   "ipa": "muːv",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-b-010",
+   "en": "legendary",
+   "de": "legendär, berühmt",
+   "ipa": "ˈledʒəndri",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-b-011",
+   "en": "Ladies and gentlemen",
+   "de": "Meine Damen und Herren / Sehr geehrte Damen und Herren",
+   "ipa": "ˌleɪdiz ən ˈdʒentlmən",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-b-012",
+   "en": "timer",
+   "de": "Zeitmesser",
+   "ipa": "ˈtaɪmə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-b-013",
+   "en": "to click",
+   "de": "klicken",
+   "ipa": "klɪk",
    "pos": "verb",
    "example_en": ""
   },
   {
-   "id": "y7u4-part-c-007",
-   "en": "argument",
-   "de": "Streit, Auseinandersetzung",
-   "ipa": "ˈɑːɡjumənt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-c-008",
-   "en": "to be starving",
-   "de": "einen Riesenhunger haben",
-   "ipa": "ˈstɑːvɪŋ",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-c-009",
-   "en": "to unpack",
-   "de": "auspacken",
-   "ipa": "ˌʌnˈpæk",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-c-010",
-   "en": "rude",
-   "de": "unhöflich; unverschämt",
-   "ipa": "ruːd",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-c-011",
-   "en": "trail",
-   "de": "Weg, Pfad",
-   "ipa": "treɪl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-c-012",
-   "en": "stream",
-   "de": "Bach",
-   "ipa": "striːm",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-c-013",
-   "en": "ashes",
-   "de": "Asche (sterbliche Überreste)",
-   "ipa": "ˈæʃɪz",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-c-014",
-   "en": "boyfriend",
-   "de": "Freund",
-   "ipa": "ˈbɔɪfrend",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-c-015",
-   "en": "girlfriend",
-   "de": "Freundin",
-   "ipa": "ˈɡɜːlfrend",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-c-016",
-   "en": "to welcome sb. (to)",
-   "de": "jn. begrüßen (in), jn. willkommen heißen (in)",
-   "ipa": "ˈwelkəm",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-c-017",
-   "en": "regional",
-   "de": "regional",
-   "ipa": "ˈriːdʒənl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-c-018",
-   "en": "standard",
-   "de": "Standard; Standard-",
-   "ipa": "ˈstændəd",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-c-019",
-   "en": "capital",
-   "de": "Hauptstadt",
-   "ipa": "ˈkæpɪtl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-c-020",
-   "en": "crown",
-   "de": "Krone",
-   "ipa": "kraʊn",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-c-021",
-   "en": "currency",
-   "de": "Währung",
-   "ipa": "ˈkʌrənsi",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-c-022",
-   "en": "the EU (the European Union)",
-   "de": "die Europäische Union",
-   "ipa": "ˌiː ˈjuː",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-c-023",
-   "en": "nation",
-   "de": "Nation, Volk",
-   "ipa": "ˈneɪʃn",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-c-024",
-   "en": "peace",
-   "de": "Friede, Frieden",
-   "ipa": "piːs",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-c-025",
-   "en": "population",
-   "de": "Bevölkerung, Einwohner(zahl)",
-   "ipa": "ˌpɒpjuˈleɪʃn",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-c-026",
-   "en": "president",
-   "de": "Präsident/in",
-   "ipa": "ˈprezɪdənt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-c-027",
-   "en": "republic",
-   "de": "Republik",
-   "ipa": "rɪˈpʌblɪk",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-c-028",
-   "en": "state",
-   "de": "Staat",
-   "ipa": "steɪt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-c-029",
-   "en": "coordinator",
-   "de": "Koordinator/in",
-   "ipa": "kəʊˈɔːdɪneɪtə",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-c-030",
-   "en": "layout",
-   "de": "Layout, Gestaltung",
-   "ipa": "ˈleɪaʊt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-c-031",
-   "en": "editor",
-   "de": "Redakteur/in; Herausgeber/in",
-   "ipa": "ˈedɪtə",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-c-032",
-   "en": "research",
-   "de": "Recherche, Forschung(en)",
-   "ipa": "rɪˈsɜːtʃ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-c-033",
-   "en": "to suggest sth. (to sb.)",
-   "de": "(jm.) etwas vorschlagen",
-   "ipa": "səˈdʒest",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-c-034",
-   "en": "discussion",
-   "de": "Diskussion",
-   "ipa": "dɪˈskʌʃn",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-part-c-035",
-   "en": "decision",
-   "de": "Entscheidung",
-   "ipa": "dɪˈsɪʒn",
+   "id": "y8u1-part-b-014",
+   "en": "glad",
+   "de": "froh, dankbar",
+   "ipa": "ɡlæd",
    "pos": "",
    "example_en": ""
   }
  ],
- "y7u4-the-horse-ride": [
+ "y8u1-part-c": [
   {
-   "id": "y7u4-the-horse-ride-001",
-   "en": "stable",
-   "de": "(Pferde-, Kuh)Stall",
-   "ipa": "ˈsteɪbl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-the-horse-ride-002",
-   "en": "choice",
-   "de": "Wahl; Auswahl",
-   "ipa": "tʃɔɪs",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-the-horse-ride-003",
-   "en": "reins",
-   "de": "Zügel",
-   "ipa": "reɪnz",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-the-horse-ride-004",
-   "en": "ditch",
-   "de": "Graben",
-   "ipa": "dɪtʃ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-the-horse-ride-005",
-   "en": "beyond",
-   "de": "jenseits (von), über ... hinaus/hinweg",
-   "ipa": "bɪˈjɒnd",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-the-horse-ride-006",
-   "en": "straight",
-   "de": "direkt, geradewegs",
-   "ipa": "streɪt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-the-horse-ride-007",
-   "en": "shallow",
-   "de": "flach, nicht tief",
-   "ipa": "ˈʃæləʊ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-the-horse-ride-008",
-   "en": "What's up?",
-   "de": "Was gibt's? / Was ist los?",
+   "id": "y8u1-part-c-001",
+   "en": "to take a walk (especially AE)",
+   "de": "spazieren gehen, einen Spaziergang machen",
    "ipa": "",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-the-horse-ride-009",
-   "en": "just as good/bad/...",
-   "de": "genauso gut/schlecht/...",
-   "ipa": "",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-the-horse-ride-010",
-   "en": "to gallop",
-   "de": "galoppieren",
-   "ipa": "ˈɡæləp",
    "pos": "verb",
    "example_en": ""
   },
   {
-   "id": "y7u4-the-horse-ride-011",
-   "en": "distance",
-   "de": "Ferne; Entfernung",
-   "ipa": "ˈdɪstəns",
+   "id": "y8u1-part-c-002",
+   "en": "track",
+   "de": "(Bahn-)Gleis",
+   "ipa": "træk",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u4-the-horse-ride-012",
-   "en": "below",
-   "de": "unten, darunter; unter, unterhalb (von)",
-   "ipa": "bɪˈləʊ",
+   "id": "y8u1-part-c-003",
+   "en": "railroad (AE), railway (BE)",
+   "de": "Eisenbahn",
+   "ipa": "ˈreɪlrəʊd",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u4-the-horse-ride-013",
-   "en": "above",
-   "de": "oben, darüber; über, oberhalb (von)",
-   "ipa": "əˈbʌv",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-the-horse-ride-014",
-   "en": "jolt",
-   "de": "Ruck, Stoß",
-   "ipa": "dʒəʊlt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-the-horse-ride-015",
-   "en": "saddle",
-   "de": "Sattel",
-   "ipa": "ˈsædl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-the-horse-ride-016",
-   "en": "to slip",
-   "de": "(aus)rutschen",
-   "ipa": "slɪp",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-the-horse-ride-017",
-   "en": "butter",
-   "de": "Butter",
-   "ipa": "ˈbʌtə",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-the-horse-ride-018",
-   "en": "to sink",
-   "de": "sinken",
-   "ipa": "sɪŋk",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-the-horse-ride-019",
-   "en": "to stretch sth. out",
-   "de": "ausstrecken",
-   "ipa": "stretʃ",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-the-horse-ride-020",
-   "en": "direction",
-   "de": "Richtung",
-   "ipa": "dəˈrekʃn",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-the-horse-ride-021",
-   "en": "to dial",
-   "de": "wählen (Telefonnummer)",
-   "ipa": "ˈdaɪəl",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-the-horse-ride-022",
-   "en": "to recognize",
-   "de": "erkennen",
-   "ipa": "ˈrekəɡnaɪz",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-the-horse-ride-023",
-   "en": "tide",
-   "de": "Gezeiten, Ebbe und Flut",
-   "ipa": "taɪd",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-the-horse-ride-024",
-   "en": "signal",
-   "de": "Signal, Zeichen",
-   "ipa": "ˈsɪɡnəl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-the-horse-ride-025",
-   "en": "calm",
-   "de": "ruhig",
-   "ipa": "kɑːm",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-the-horse-ride-026",
-   "en": "to teach",
-   "de": "unterrichten, lehren",
-   "ipa": "tiːtʃ",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-the-horse-ride-027",
-   "en": "thought",
-   "de": "Gedanke",
-   "ipa": "θɔːt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-the-horse-ride-028",
-   "en": "motor",
-   "de": "Motor",
-   "ipa": "ˈməʊtə",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u4-the-horse-ride-029",
+   "id": "y8u1-part-c-004",
    "en": "truck (BE also: lorry)",
    "de": "Lastwagen, LKW",
    "ipa": "trʌk",
    "pos": "",
    "example_en": ""
+  },
+  {
+   "id": "y8u1-part-c-005",
+   "en": "frozen",
+   "de": "tiefgekühlt",
+   "ipa": "ˈfrəʊzn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-c-006",
+   "en": "turkey",
+   "de": "Pute, Truthahn",
+   "ipa": "ˈtɜːki",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-c-007",
+   "en": "to tear sth. down",
+   "de": "etwas abreißen",
+   "ipa": "ˌteə ˈdaʊn",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-c-008",
+   "en": "if",
+   "de": "ob",
+   "ipa": "ɪf",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-c-009",
+   "en": "space",
+   "de": "Platz, Raum",
+   "ipa": "speɪs",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-c-010",
+   "en": "the men whose homes ...",
+   "de": "die Männer, deren Wohnungen ...",
+   "ipa": "huːz",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-c-011",
+   "en": "to protest",
+   "de": "protestieren",
+   "ipa": "prəˈtest] (AE also: [ˈprəʊtest])",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-c-012",
+   "en": "protest",
+   "de": "Protest",
+   "ipa": "ˈprəʊtest",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-c-013",
+   "en": "even though",
+   "de": "auch wenn; obwohl",
+   "ipa": "ˌiːvn ˈðəʊ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-c-014",
+   "en": "practical",
+   "de": "praktisch",
+   "ipa": "ˈpræktɪkl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-c-015",
+   "en": "roller coaster",
+   "de": "Achterbahn",
+   "ipa": "ˈrəʊlə kəʊstə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-c-016",
+   "en": "to create",
+   "de": "schaffen, erschaffen, kreieren",
+   "ipa": "kriˈeɪt",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-c-017",
+   "en": "shrub",
+   "de": "Strauch, Busch",
+   "ipa": "ʃrʌb",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-c-018",
+   "en": "to bloom",
+   "de": "blühen",
+   "ipa": "bluːm",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-c-019",
+   "en": "seed",
+   "de": "Samen",
+   "ipa": "siːd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-c-020",
+   "en": "lawn",
+   "de": "Rasen",
+   "ipa": "lɔːn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-c-021",
+   "en": "work of art",
+   "de": "Kunstwerk",
+   "ipa": "ˌwɜːk əv ˈɑːt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-c-022",
+   "en": "performance",
+   "de": "Aufführung, Vorstellung, Auftritt",
+   "ipa": "pəˈfɔːməns",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-c-023",
+   "en": "awesome (especially AE, infml)",
+   "de": "klasse, großartig",
+   "ipa": "ˈɔːsəm",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-c-024",
+   "en": "council",
+   "de": "Ausschuss; Rat (Stadtrat, Gemeinderat u. Ä.)",
+   "ipa": "ˈkaʊnsl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-c-025",
+   "en": "unfortunately",
+   "de": "leider, unglücklicherweise",
+   "ipa": "ʌnˈfɔːtʃənətli",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-c-026",
+   "en": "type (of)",
+   "de": "Art, Sorte, Typ",
+   "ipa": "taɪp",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-c-027",
+   "en": "to report",
+   "de": "berichten",
+   "ipa": "rɪˈpɔːt",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-c-028",
+   "en": "to cover",
+   "de": "behandeln, abdecken",
+   "ipa": "ˈkʌvə",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-c-029",
+   "en": "to include",
+   "de": "einschließen; beinhalten",
+   "ipa": "ɪnˈkluːd",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-c-030",
+   "en": "to deal with sth.",
+   "de": "sich mit etwas beschäftigen; von etwas handeln",
+   "ipa": "diːl",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u1-part-c-031",
+   "en": "immigrant",
+   "de": "Einwanderer/Einwanderin",
+   "ipa": "ˈɪmɪɡrənt",
+   "pos": "",
+   "example_en": ""
   }
  ],
- "y7u5-introduction": [
+ "y8u2-introduction": [
   {
-   "id": "y7u5-introduction-001",
-   "en": "the Highlands",
-   "de": "das schottische Hochland",
-   "ipa": "ˈhaɪləndz",
+   "id": "y8u2-introduction-001",
+   "en": "to remind sb.",
+   "de": "jn. erinnern",
+   "ipa": "rɪˈmaɪnd",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-introduction-002",
+   "en": "Mardi Gras",
+   "de": "Faschingsdienstag; Karnevalsfeiern in New Orleans",
+   "ipa": "ˌmɑːdi ˈɡrɑː",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u5-introduction-002",
-   "en": "atmosphere",
-   "de": "Atmosphäre; Stimmung",
-   "ipa": "ˈætməsfɪə",
+   "id": "y8u2-introduction-003",
+   "en": "brass band",
+   "de": "Blaskapelle",
+   "ipa": "ˌbrɑːs ˈbænd",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u5-introduction-003",
-   "en": "romantic",
-   "de": "romantisch; Liebes-",
-   "ipa": "rəʊˈmæntɪk",
-   "pos": "",
+   "id": "y8u2-introduction-004",
+   "en": "to flood",
+   "de": "überfluten, überschwemmen",
+   "ipa": "flʌd",
+   "pos": "verb",
    "example_en": ""
   },
   {
-   "id": "y7u5-introduction-004",
-   "en": "sunset",
-   "de": "Sonnenuntergang",
-   "ipa": "ˈsʌnset",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-introduction-005",
-   "en": "bagpiper",
-   "de": "Dudelsackpfeifer/in, Dudelsackspieler/in, Sackpfeifer/in",
-   "ipa": "ˈbæɡpaɪpə",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-introduction-006",
-   "en": "bagpipes",
-   "de": "Dudelsack, Sackpfeife",
-   "ipa": "ˈbæɡpaɪps",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-introduction-007",
-   "en": "sheepdog",
-   "de": "Hütehund",
-   "ipa": "ˈʃiːpdɒɡ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-introduction-008",
-   "en": "trials",
-   "de": "Turnier, Wettkampf",
-   "ipa": "ˈtraɪəlz",
-   "pos": "",
-   "example_en": ""
-  }
- ],
- "y7u5-part-a": [
-  {
-   "id": "y7u5-part-a-001",
-   "en": "portion",
-   "de": "Portion",
-   "ipa": "ˈpɔːʃn",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-part-a-002",
-   "en": "Help yourself.",
-   "de": "Greif zu! / Bedien dich!",
+   "id": "y8u2-introduction-005",
+   "en": "flood",
+   "de": "Flut, Überschwemmung",
    "ipa": "",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u5-part-a-003",
-   "en": "I didn't enjoy myself.",
-   "de": "Ich habe mich nicht amüsiert. / Ich hatte keinen Spaß.",
+   "id": "y8u2-introduction-006",
+   "en": "hurricane",
+   "de": "Hurrikan, Orkan",
+   "ipa": "ˈhʌrɪkən",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-introduction-007",
+   "en": "alligator",
+   "de": "Alligator",
+   "ipa": "ˈælɪɡeɪtə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-introduction-008",
+   "en": "swamp",
+   "de": "Sumpf",
+   "ipa": "swɒmp",
+   "pos": "",
+   "example_en": ""
+  }
+ ],
+ "y8u2-part-a": [
+  {
+   "id": "y8u2-part-a-001",
+   "en": "degree",
+   "de": "Grad",
+   "ipa": "dɪˈɡriː",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-002",
+   "en": "Celsius (C)",
+   "de": "Celsius",
+   "ipa": "ˈselsiəs",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-003",
+   "en": "Fahrenheit (F)",
+   "de": "Fahrenheit",
+   "ipa": "ˈfærənhaɪt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-004",
+   "en": "palm tree",
+   "de": "Palme",
+   "ipa": "ˈpɑːm triː",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-005",
+   "en": "kinda (= kind of)",
+   "de": "irgendwie",
+   "ipa": "ˈkaɪndə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-006",
+   "en": "tropical",
+   "de": "tropisch, Tropen-",
+   "ipa": "ˈtrɒpɪkl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-007",
+   "en": "downtown (AE)",
+   "de": "im Zentrum",
+   "ipa": "ˈdaʊntaʊn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-008",
+   "en": "head for sth.",
+   "de": "auf etwas zusteuern/zugehen/zufahren",
+   "ipa": "hed",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-009",
+   "en": "balcony",
+   "de": "Balkon",
+   "ipa": "ˈbælkəni",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-010",
+   "en": "style",
+   "de": "Stil",
+   "ipa": "staɪl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-011",
+   "en": "disgusting",
+   "de": "ekelhaft, widerlich",
+   "ipa": "dɪsˈɡʌstɪŋ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-012",
+   "en": "chicken",
+   "de": "Huhn; (Brat-)Hähnchen",
+   "ipa": "ˈtʃɪkɪn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-013",
+   "en": "buck (= dollar)",
+   "de": "Dollar",
+   "ipa": "bʌk",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-014",
+   "en": "to recommend sth. (to sb.)",
+   "de": "(jm.) etwas empfehlen",
+   "ipa": "ˌrekəˈmend",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-015",
+   "en": "stew",
+   "de": "Eintopf",
+   "ipa": "stjuː",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-016",
+   "en": "sausage",
+   "de": "Wurst, Würstchen",
+   "ipa": "ˈsɒsɪdʒ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-017",
+   "en": "shrimp",
+   "de": "Garnele",
+   "ipa": "ʃrɪmp",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-018",
+   "en": "Thanksgiving",
+   "de": "Erntedankfest",
+   "ipa": "θæŋksˈɡɪvɪŋ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-019",
+   "en": "habit",
+   "de": "(An-)Gewohnheit",
+   "ipa": "ˈhæbɪt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-020",
+   "en": "to block",
+   "de": "blockieren, sperren",
+   "ipa": "blɒk",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-021",
+   "en": "advice",
+   "de": "Rat, Ratschlag, Ratschläge",
+   "ipa": "ədˈvaɪs",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-022",
+   "en": "timeline",
+   "de": "Zeitstrahl, Zeitleiste",
+   "ipa": "ˈtaɪmlaɪn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-023",
+   "en": "embarrassed",
+   "de": "verlegen; peinlich berührt",
+   "ipa": "ɪmˈbærəst",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-024",
+   "en": "to embarrass sb.",
+   "de": "jn. in Verlegenheit bringen",
+   "ipa": "ɪmˈbærəs",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-025",
+   "en": "dish",
+   "de": "Gericht (Speise)",
+   "ipa": "dɪʃ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-026",
+   "en": "herb",
+   "de": "(Gewürz-)Kraut",
+   "ipa": "hɜːb",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-027",
+   "en": "spice",
+   "de": "Gewürz",
+   "ipa": "spaɪs",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-028",
+   "en": "ingredient",
+   "de": "Zutat",
+   "ipa": "ɪnˈɡriːdiənt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-029",
+   "en": "to combine",
+   "de": "kombinieren, verbinden",
+   "ipa": "kəmˈbaɪn",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-030",
+   "en": "Native American",
+   "de": "amerikanischer Ureinwohner / amerikanische Ureinwohnerin",
+   "ipa": "ˌneɪtɪv əˈmerɪkən",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-031",
+   "en": "dairy products",
+   "de": "Milchprodukte, Molkereiprodukte",
+   "ipa": "ˈdeəri ˈprɒdʌkts",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-032",
+   "en": "beef",
+   "de": "Rindfleisch",
+   "ipa": "biːf",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-033",
+   "en": "pork",
+   "de": "Schweinefleisch",
+   "ipa": "pɔːk",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-034",
+   "en": "tinned",
+   "de": "Dosen-; in Dosen",
+   "ipa": "tɪnd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-035",
+   "en": "powder",
+   "de": "Pulver",
+   "ipa": "ˈpaʊdə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-036",
+   "en": "to bake",
+   "de": "backen",
+   "ipa": "beɪk",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-037",
+   "en": "to boil",
+   "de": "kochen; zum Kochen bringen",
+   "ipa": "bɔɪl",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-038",
+   "en": "to fry",
+   "de": "braten (in der Pfanne)",
+   "ipa": "fraɪ",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-039",
+   "en": "to roast",
+   "de": "braten (im Backofen)",
+   "ipa": "rəʊst",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-040",
+   "en": "frying pan",
+   "de": "Bratpfanne",
+   "ipa": "ˈfraɪɪŋ pæn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-041",
+   "en": "saucepan",
+   "de": "Kochtopf, Stieltopf",
+   "ipa": "ˈsɔːspæn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-042",
+   "en": "oven",
+   "de": "Backofen",
+   "ipa": "ˈʌvn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-043",
+   "en": "vegetarian",
+   "de": "Vegetarier/in; vegetarisch",
+   "ipa": "ˌvedʒəˈteəriən",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-044",
+   "en": "bitter",
+   "de": "bitter",
+   "ipa": "ˈbɪtə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-045",
+   "en": "hot",
+   "de": "scharf (gewürzt)",
+   "ipa": "hɒt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-046",
+   "en": "sour",
+   "de": "sauer, säuerlich",
+   "ipa": "ˈsaʊə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-047",
+   "en": "spicy",
+   "de": "würzig, pikant",
+   "ipa": "ˈspaɪsi",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-048",
+   "en": "to fancy sth.",
+   "de": "Lust auf etwas/zu etwas haben",
+   "ipa": "ˈfænsi",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-049",
+   "en": "relevant (to sth.)",
+   "de": "relevant, wichtig (für etwas)",
+   "ipa": "ˈreləvənt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-a-050",
+   "en": "allergic (to sth.)",
+   "de": "allergisch (gegen etwas)",
+   "ipa": "əˈlɜːdʒɪk",
+   "pos": "",
+   "example_en": ""
+  }
+ ],
+ "y8u2-part-b": [
+  {
+   "id": "y8u2-part-b-001",
+   "en": "to tune",
+   "de": "stimmen (Instrument)",
+   "ipa": "tjuːn",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-b-002",
+   "en": "to tighten",
+   "de": "spannen, festziehen, nachziehen",
+   "ipa": "ˈtaɪtn",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-b-003",
+   "en": "string",
+   "de": "Saite",
+   "ipa": "strɪŋ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-b-004",
+   "en": "closet (AE)",
+   "de": "Wandschrank (oft begehbar)",
+   "ipa": "ˈklɒzɪt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-b-005",
+   "en": "I would have screamed too.",
+   "de": "Ich hätte auch geschrien.",
    "ipa": "",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u5-part-a-004",
-   "en": "to relax",
-   "de": "sich entspannen, sich ausruhen",
-   "ipa": "rɪˈlæks",
+   "id": "y8u2-part-b-006",
+   "en": "slavery",
+   "de": "Sklaverei",
+   "ipa": "ˈsleɪvəri",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-b-007",
+   "en": "slave",
+   "de": "Sklave, Sklavin",
+   "ipa": "sleɪv",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-b-008",
+   "en": "to belong to sb.",
+   "de": "jm. gehören; zu jm. gehören",
+   "ipa": "bɪˈlɒŋ",
    "pos": "verb",
    "example_en": ""
   },
   {
-   "id": "y7u5-part-a-005",
-   "en": "upset",
-   "de": "aufgebracht, gekränkt, mitgenommen",
-   "ipa": "ˌʌpˈset",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-part-a-006",
-   "en": "jealous (of)",
-   "de": "neidisch (auf); eifersüchtig (auf)",
-   "ipa": "ˈdʒeləs",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-part-a-007",
-   "en": "to control",
-   "de": "kontrollieren, beherrschen; unter Kontrolle halten/bekommen",
-   "ipa": "kənˈtrəʊl",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-part-a-008",
-   "en": "movement",
-   "de": "Bewegung",
-   "ipa": "ˈmuːvmənt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-part-a-009",
-   "en": "serious",
-   "de": "ernst; ernsthaft",
-   "ipa": "ˈsɪəriəs",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-part-a-010",
-   "en": "to protect sb./sth. (from sb./sth.)",
-   "de": "jn./etwas (be)schützen (vor jm./etwas)",
-   "ipa": "prəˈtekt",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-part-a-011",
-   "en": "comfortable",
-   "de": "bequem; angenehm",
-   "ipa": "ˈkʌmftəbl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-part-a-012",
-   "en": "judge",
-   "de": "Richter/in",
-   "ipa": "dʒʌdʒ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-part-a-013",
-   "en": "to escape",
-   "de": "fliehen",
-   "ipa": "ɪˈskeɪp",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-part-a-014",
-   "en": "escape",
-   "de": "Flucht",
-   "ipa": "ɪˈskeɪp",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-part-a-015",
-   "en": "split screen",
-   "de": "geteilter Bildschirm; Bildschirm(auf)teilung",
-   "ipa": "ˌsplɪt ˈskriːn",
-   "pos": "",
-   "example_en": ""
-  }
- ],
- "y7u5-part-b": [
-  {
-   "id": "y7u5-part-b-001",
-   "en": "flock of sheep/goats",
-   "de": "Schafen-/Ziegenherde",
-   "ipa": "flɒk",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-part-b-002",
-   "en": "comment",
-   "de": "Bemerkung, Kommentar",
-   "ipa": "ˈkɒment",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-part-b-003",
-   "en": "royal",
-   "de": "königlich",
-   "ipa": "ˈrɔɪəl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-part-b-004",
-   "en": "complicated",
-   "de": "kompliziert",
-   "ipa": "ˈkɒmplɪkeɪtɪd",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-part-b-005",
-   "en": "to prefer sth. (to sth.)",
-   "de": "etwas (einer anderen Sache) vorziehen; etwas lieber tun (als etwas)",
-   "ipa": "prɪˈfɜː",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-part-b-006",
-   "en": "purse; wallet",
-   "de": "Portemonnaie, Geldbörse",
-   "ipa": "pɜːs]; [ˈwɒlɪt",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-part-b-007",
-   "en": "wee",
-   "de": "klein",
-   "ipa": "wiː",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-part-b-008",
-   "en": "Get lost!",
-   "de": "Verzieh dich!",
+   "id": "y8u2-part-b-009",
+   "en": "great-grandfather / great-grandmother",
+   "de": "Urgroßvater / Urgroßmutter",
    "ipa": "",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u5-part-b-009",
-   "en": "to make a fuss about sth.",
-   "de": "großen Wirbel um etwas machen",
-   "ipa": "fʌs",
+   "id": "y8u2-part-b-010",
+   "en": "porch",
+   "de": "Veranda (AE); Vorbau, Vordach (BE)",
+   "ipa": "pɔːtʃ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-b-011",
+   "en": "honey",
+   "de": "Honig; Schatz, Schätzchen",
+   "ipa": "ˈhʌni",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-b-012",
+   "en": "he killed the alligator himself",
+   "de": "er hat den Alligator selbst getötet",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-b-013",
+   "en": "jewellery / jewelry",
+   "de": "Schmuck",
+   "ipa": "ˈdʒuːəlri",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-b-014",
+   "en": "pile",
+   "de": "Stapel, Haufen",
+   "ipa": "paɪl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-b-015",
+   "en": "segregation",
+   "de": "Trennung (nach Hautfarbe, Religion oder Geschlecht)",
+   "ipa": "ˌseɡrɪˈɡeɪʃn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-b-016",
+   "en": "to be afraid (of sth./sb.)",
+   "de": "Angst haben (vor etwas/jm.)",
+   "ipa": "əˈfreɪd",
    "pos": "verb",
    "example_en": ""
   },
   {
-   "id": "y7u5-part-b-010",
-   "en": "dishwasher",
-   "de": "Geschirrspüler",
-   "ipa": "ˈdɪʃwɒʃə",
+   "id": "y8u2-part-b-017",
+   "en": "civil rights",
+   "de": "Bürgerrechte",
+   "ipa": "ˌsɪvl ˈraɪts",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u5-part-b-011",
-   "en": "typical (of)",
-   "de": "typisch (für)",
-   "ipa": "ˈtɪpɪkl",
+   "id": "y8u2-part-b-018",
+   "en": "diner (AE)",
+   "de": "(kleines, preiswertes) Restaurant",
+   "ipa": "ˈdaɪnə",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u5-part-b-012",
-   "en": "volcano",
-   "de": "Vulkan",
-   "ipa": "vɒlˈkeɪnəʊ",
+   "id": "y8u2-part-b-019",
+   "en": "counter (AE)",
+   "de": "Arbeitsplatte; Küchentheke",
+   "ipa": "ˈkaʊntə",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u5-part-b-013",
-   "en": "army",
-   "de": "Armee",
-   "ipa": "ˈɑːmi",
+   "id": "y8u2-part-b-020",
+   "en": "in the 1960s",
+   "de": "in den 60er-Jahren",
+   "ipa": "ˌnaɪntiːn ˈsɪkstiz",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u5-part-b-014",
-   "en": "originally",
-   "de": "ursprünglich",
-   "ipa": "əˈrɪdʒənəli",
+   "id": "y8u2-part-b-021",
+   "en": "movie theater (AE)",
+   "de": "Kino",
+   "ipa": "ˈmuːvi θɪətə",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u5-part-b-015",
-   "en": "material",
-   "de": "Material, Stoff",
-   "ipa": "məˈtɪəriəl",
+   "id": "y8u2-part-b-022",
+   "en": "movie",
+   "de": "Film",
+   "ipa": "ˈmuːvi",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u5-part-b-016",
-   "en": "well-known",
-   "de": "bekannt, wohlbekannt",
-   "ipa": "ˌwelˈnəʊn",
+   "id": "y8u2-part-b-023",
+   "en": "streetcar / tram",
+   "de": "Straßenbahn",
+   "ipa": "ˈstriːtkɑː",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u5-part-b-017",
-   "en": "classical",
-   "de": "klassisch",
-   "ipa": "ˈklæsɪkl",
+   "id": "y8u2-part-b-024",
+   "en": "all over the city / the world",
+   "de": "in der ganzen Stadt / auf der ganzen Welt",
+   "ipa": "",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u5-part-b-018",
-   "en": "flute",
-   "de": "Querflöte",
-   "ipa": "fluːt",
+   "id": "y8u2-part-b-025",
+   "en": "discrimination (against)",
+   "de": "Diskriminierung (von)",
+   "ipa": "dɪˌskrɪmɪˈneɪʃn",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u5-part-b-019",
-   "en": "trumpet",
-   "de": "Trompete",
-   "ipa": "ˈtrʌmpɪt",
+   "id": "y8u2-part-b-026",
+   "en": "both ... and ...",
+   "de": "sowohl ... als auch ...",
+   "ipa": "bəʊθ",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u5-part-b-020",
-   "en": "violin",
-   "de": "Violine, Geige",
-   "ipa": "ˌvaɪəˈlɪn",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-part-b-021",
-   "en": "summary",
-   "de": "Zusammenfassung",
-   "ipa": "ˈsʌməri",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-part-b-022",
-   "en": "to sum sth. up",
-   "de": "etwas zusammenfassen",
-   "ipa": "ˌsʌm ˈʌp",
+   "id": "y8u2-part-b-027",
+   "en": "to stand up (for/against sth./sb.)",
+   "de": "eintreten/sich einsetzen (für/gegen etwas/jn.)",
+   "ipa": "ˌstænd ˈʌp",
    "pos": "verb",
    "example_en": ""
   },
   {
-   "id": "y7u5-part-b-023",
-   "en": "tradition",
-   "de": "Tradition",
-   "ipa": "trəˈdɪʃn",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-part-b-024",
-   "en": "search (for)",
-   "de": "Durchsuchung; Suche (nach)",
-   "ipa": "sɜːtʃ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-part-b-025",
-   "en": "term",
-   "de": "Ausdruck, Begriff",
-   "ipa": "tɜːm",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-part-b-026",
-   "en": "unusual",
-   "de": "ungewöhnlich",
-   "ipa": "ʌnˈjuːʒuəl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-part-b-027",
-   "en": "usual",
-   "de": "gewöhnlich, üblich",
-   "ipa": "ˈjuːʒuəl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-part-b-028",
-   "en": "to interest sb.",
-   "de": "jn. interessieren",
-   "ipa": "ˈɪntrəst",
+   "id": "y8u2-part-b-028",
+   "en": "to beat sb. up",
+   "de": "jn. zusammenschlagen",
+   "ipa": "",
    "pos": "verb",
    "example_en": ""
   },
   {
-   "id": "y7u5-part-b-029",
-   "en": "heading",
-   "de": "Überschrift",
-   "ipa": "ˈhedɪŋ",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-part-b-030",
-   "en": "digital",
-   "de": "digital",
-   "ipa": "ˈdɪdʒɪtl",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-part-b-031",
-   "en": "slide",
-   "de": "Folie (bei Präsentationen mit Computerprogramm)",
-   "ipa": "slaɪd",
-   "pos": "",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-part-b-032",
-   "en": "to fit",
-   "de": "passen",
-   "ipa": "fɪt",
+   "id": "y8u2-part-b-029",
+   "en": "to murder",
+   "de": "morden, ermorden",
+   "ipa": "ˈmɜːdə",
    "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-b-030",
+   "en": "courage",
+   "de": "Mut, Courage",
+   "ipa": "ˈkʌrɪdʒ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-b-031",
+   "en": "to speak out",
+   "de": "den Mund aufmachen; sich (kritisch) äußern",
+   "ipa": "",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-b-032",
+   "en": "to call sb. names",
+   "de": "jn. beschimpfen, jm. Schimpfwörter nachrufen",
+   "ipa": "",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-b-033",
+   "en": "prejudice (against)",
+   "de": "Vorurteil (gegen), Voreingenommenheit (gegenüber)",
+   "ipa": "ˈpredʒədɪs",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-b-034",
+   "en": "generation",
+   "de": "Generation",
+   "ipa": "ˌdʒenəˈreɪʃn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-b-035",
+   "en": "system",
+   "de": "System",
+   "ipa": "ˈsɪstəm",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-b-036",
+   "en": "complete",
+   "de": "vollständig, komplett",
+   "ipa": "kəmˈpliːt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-b-037",
+   "en": "to complete",
+   "de": "abschließen, vollenden; vervollständigen",
+   "ipa": "kəmˈpliːt",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-b-038",
+   "en": "native speaker",
+   "de": "Muttersprachler/in",
+   "ipa": "ˌneɪtɪv ˈspiːkə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-b-039",
+   "en": "pattern",
+   "de": "Muster",
+   "ipa": "ˈpætn",
+   "pos": "",
    "example_en": ""
   }
  ],
- "y7u5-missing": [
+ "y8u2-part-c": [
   {
-   "id": "y7u5-missing-001",
-   "en": "missing",
-   "de": "verschollen, vermisst",
-   "ipa": "ˈmɪsɪŋ",
+   "id": "y8u2-part-c-001",
+   "en": "cook",
+   "de": "Koch, Köchin",
+   "ipa": "kʊk",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u5-missing-002",
-   "en": "heather",
-   "de": "Heide(kraut)",
-   "ipa": "ˈheðə",
+   "id": "y8u2-part-c-002",
+   "en": "oval",
+   "de": "oval",
+   "ipa": "ˈəʊvl",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u5-missing-003",
-   "en": "tension",
-   "de": "Spannung, Anspannung",
-   "ipa": "ˈtenʃn",
+   "id": "y8u2-part-c-003",
+   "en": "cranberry",
+   "de": "Preiselbeere",
+   "ipa": "ˈkrænbəri",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u5-missing-004",
-   "en": "whistle",
-   "de": "Pfiff",
-   "ipa": "ˈwɪsl",
+   "id": "y8u2-part-c-004",
+   "en": "sauce",
+   "de": "Soße",
+   "ipa": "sɔːs",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u5-missing-005",
-   "en": "to race",
-   "de": "rasen",
-   "ipa": "reɪs",
+   "id": "y8u2-part-c-005",
+   "en": "pumpkin",
+   "de": "Kürbis",
+   "ipa": "ˈpʌmpkɪn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-c-006",
+   "en": "pie",
+   "de": "Obstkuchen; Pastete",
+   "ipa": "paɪ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-c-007",
+   "en": "impatient",
+   "de": "ungeduldig",
+   "ipa": "ɪmˈpeɪʃnt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-c-008",
+   "en": "leather",
+   "de": "Leder",
+   "ipa": "ˈleðə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-c-009",
+   "en": "a little",
+   "de": "ein bisschen, ein wenig, etwas",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-c-010",
+   "en": "to flash through sb.'s mind",
+   "de": "jm. durch den Kopf schießen",
+   "ipa": "flæʃ",
    "pos": "verb",
    "example_en": ""
   },
   {
-   "id": "y7u5-missing-006",
-   "en": "in horror",
-   "de": "entsetzt",
-   "ipa": "ˈhɒrə",
+   "id": "y8u2-part-c-011",
+   "en": "fairly",
+   "de": "ziemlich",
+   "ipa": "ˈfeəli",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u5-missing-007",
-   "en": "noise",
-   "de": "Geräusch; Lärm",
-   "ipa": "nɔɪz",
+   "id": "y8u2-part-c-012",
+   "en": "to hunt",
+   "de": "jagen",
+   "ipa": "hʌnt",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-c-013",
+   "en": "line",
+   "de": "Leine, (Angel-)Schnur",
+   "ipa": "laɪn",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u5-missing-008",
-   "en": "to reach over",
-   "de": "die Hand ausstrecken",
-   "ipa": "ˌriːtʃ ˈəʊvə",
+   "id": "y8u2-part-c-014",
+   "en": "hook",
+   "de": "Haken",
+   "ipa": "hʊk",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-c-015",
+   "en": "sharp",
+   "de": "scharf",
+   "ipa": "ʃɑːp",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-c-016",
+   "en": "to shoot",
+   "de": "schießen; erschießen",
+   "ipa": "ʃuːt",
    "pos": "verb",
    "example_en": ""
   },
   {
-   "id": "y7u5-missing-009",
-   "en": "to beat",
-   "de": "schlagen; besiegen",
-   "ipa": "biːt",
+   "id": "y8u2-part-c-017",
+   "en": "awfully",
+   "de": "furchtbar, außerordentlich",
+   "ipa": "ˈɔːfli",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-c-018",
+   "en": "cruel",
+   "de": "grausam",
+   "ipa": "ˈkruːl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-c-019",
+   "en": "harmonica",
+   "de": "Mundharmonika",
+   "ipa": "hɑːˈmɒnɪkə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-c-020",
+   "en": "strict",
+   "de": "streng",
+   "ipa": "strɪkt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-c-021",
+   "en": "limited",
+   "de": "beschränkt, begrenzt",
+   "ipa": "ˈlɪmɪtɪd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-c-022",
+   "en": "to skim a text",
+   "de": "einen Text überfliegen",
+   "ipa": "skɪm",
    "pos": "verb",
    "example_en": ""
   },
   {
-   "id": "y7u5-missing-010",
-   "en": "to read sb.'s mind",
-   "de": "jemandes Gedanken lesen",
+   "id": "y8u2-part-c-023",
+   "en": "sub-heading",
+   "de": "Zwischenüberschrift; Kapitelüberschrift",
+   "ipa": "ˈsʌbˌhedɪŋ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-c-024",
+   "en": "graphics",
+   "de": "Grafiken",
+   "ipa": "ˈɡræfɪks",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-c-025",
+   "en": "totally",
+   "de": "völlig, total",
+   "ipa": "ˈtəʊtəli",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u2-part-c-026",
+   "en": "narrator",
+   "de": "Erzähler/in; Sprecher/in",
+   "ipa": "nəˈreɪtə",
+   "pos": "",
+   "example_en": ""
+  }
+ ],
+ "y8u3-introduction": [
+  {
+   "id": "y8u3-introduction-001",
+   "en": "desert",
+   "de": "Wüste",
+   "ipa": "ˈdezət",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-introduction-002",
+   "en": "contrast",
+   "de": "Kontrast, Gegensatz",
+   "ipa": "ˈkɒntrɑːst",
+   "pos": "",
+   "example_en": ""
+  }
+ ],
+ "y8u3-part-a": [
+  {
+   "id": "y8u3-part-a-001",
+   "en": "marine",
+   "de": "Meeres-",
+   "ipa": "məˈriːn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-a-002",
+   "en": "reserve",
+   "de": "Schutzgebiet, Reservat",
+   "ipa": "rɪˈzɜːv",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-a-003",
+   "en": "the week before",
+   "de": "die Woche zuvor; in der Woche davor",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-a-004",
+   "en": "parking lot / car park",
+   "de": "Parkplatz",
+   "ipa": "ˈpɑːkɪŋ lɒt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-a-005",
+   "en": "a couple",
+   "de": "ein Paar; ein paar",
+   "ipa": "ˈkʌpl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-a-006",
+   "en": "foreign",
+   "de": "fremd, ausländisch",
+   "ipa": "ˈfɒrən",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-a-007",
+   "en": "to stretch",
+   "de": "sich dehnen, sich strecken",
+   "ipa": "stretʃ",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-a-008",
+   "en": "motel",
+   "de": "Motel",
+   "ipa": "məʊˈtel",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-a-009",
+   "en": "to complain",
+   "de": "sich beschweren, sich beklagen",
+   "ipa": "kəmˈpleɪn",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-a-010",
+   "en": "Sorry?",
+   "de": "Wie bitte?",
+   "ipa": "ˈsɒri",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-a-011",
+   "en": "to give sb. directions",
+   "de": "jm. den Weg beschreiben",
+   "ipa": "dəˈrekʃnz",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-a-012",
+   "en": "to spot sb./sth.",
+   "de": "jn./etwas entdecken, erblicken",
+   "ipa": "spɒt",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-a-013",
+   "en": "shell",
+   "de": "Muschel(schale)",
+   "ipa": "ʃel",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-a-014",
+   "en": "wildlife",
+   "de": "Tierwelt, frei lebende Tiere",
+   "ipa": "ˈwaɪldlaɪf",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-a-015",
+   "en": "Mr. Miller / Mrs. Miller",
+   "de": "Herr Miller / Frau Miller",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-a-016",
+   "en": "to arrange",
+   "de": "organisieren, vereinbaren",
+   "ipa": "əˈreɪndʒ",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-a-017",
+   "en": "hostess",
+   "de": "Gastgeberin",
+   "ipa": "ˈhəʊstəs",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-a-018",
+   "en": "social",
+   "de": "sozial, Sozial-, gesellschaftlich",
+   "ipa": "ˈsəʊʃl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-a-019",
+   "en": "to look out for sb./sth.",
+   "de": "nach jm./etwas Ausschau halten",
+   "ipa": "",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-a-020",
+   "en": "stranger",
+   "de": "Fremde(r), Unbekannte(r)",
+   "ipa": "ˈstreɪndʒə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-a-021",
+   "en": "saying",
+   "de": "Sprichwort, Redensart",
+   "ipa": "ˈseɪɪŋ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-a-022",
+   "en": "separately",
+   "de": "einzeln, separat",
+   "ipa": "ˈseprətli",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-a-023",
+   "en": "common",
+   "de": "häufig; weit verbreitet",
+   "ipa": "ˈkɒmən",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-a-024",
+   "en": "prediction",
+   "de": "Vorhersage, Voraussage",
+   "ipa": "prɪˈdɪkʃn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-a-025",
+   "en": "to cycle",
+   "de": "Rad fahren",
+   "ipa": "ˈsaɪkl",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-a-026",
+   "en": "machine",
+   "de": "Maschine, Gerät",
+   "ipa": "məˈʃiːn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-a-027",
+   "en": "can",
+   "de": "Dose",
+   "ipa": "kæn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-a-028",
+   "en": "to squash sth.",
+   "de": "etwas zerdrücken, zerquetschen",
+   "ipa": "skwɒʃ",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-a-029",
+   "en": "trash can / rubbish bin",
+   "de": "Mülltonne, Abfalleimer",
+   "ipa": "ˈtræʃ kæn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-a-030",
+   "en": "necessary",
+   "de": "notwendig, nötig",
+   "ipa": "ˈnesəsəri",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-a-031",
+   "en": "depressing",
+   "de": "deprimierend",
+   "ipa": "dɪˈpresɪŋ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-a-032",
+   "en": "lively",
+   "de": "lebendig, lebhaft",
+   "ipa": "ˈlaɪvli",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-a-033",
+   "en": "relaxed",
+   "de": "entspannt",
+   "ipa": "rɪˈlækst",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-a-034",
+   "en": "tough",
+   "de": "(knall)hart, schwierig",
+   "ipa": "tʌf",
+   "pos": "",
+   "example_en": ""
+  }
+ ],
+ "y8u3-part-b": [
+  {
+   "id": "y8u3-part-b-001",
+   "en": "noon",
+   "de": "Mittag",
+   "ipa": "nuːn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-b-002",
+   "en": "to be about to do sth.",
+   "de": "im Begriff sein, etwas zu tun",
+   "ipa": "",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-b-003",
+   "en": "afterwards",
+   "de": "nachher, danach",
+   "ipa": "ˈɑːftəwədz",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-b-004",
+   "en": "footstep",
+   "de": "Schritt",
+   "ipa": "ˈfʊtstep",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-b-005",
+   "en": "autograph",
+   "de": "Autogramm",
+   "ipa": "ˈɔːtəɡrɑːf",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-b-006",
+   "en": "she feels faint",
+   "de": "ihr ist schwindelig",
+   "ipa": "feɪnt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-b-007",
+   "en": "VIP (very important person)",
+   "de": "Prominente(r)",
+   "ipa": "ˌviː aɪ ˈpiː",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-b-008",
+   "en": "to reveal",
+   "de": "offenbaren, preisgeben, verraten",
+   "ipa": "rɪˈviːl",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-b-009",
+   "en": "wildfire",
+   "de": "Waldbrand, Buschbrand",
+   "ipa": "ˈwaɪldfaɪə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-b-010",
+   "en": "canyon",
+   "de": "Cañon",
+   "ipa": "ˈkænjən",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-b-011",
+   "en": "limousine",
+   "de": "Luxuslimousine, Straßenkreuzer",
+   "ipa": "ˌlɪməˈziːn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-b-012",
+   "en": "advertisement",
+   "de": "Werbespot, Werbung; Anzeige",
+   "ipa": "ədˈvɜːtɪsmənt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-b-013",
+   "en": "process",
+   "de": "Prozess, Vorgang",
+   "ipa": "ˈprəʊses",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-b-014",
+   "en": "script",
+   "de": "Drehbuch; Manuskript",
+   "ipa": "skrɪpt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-b-015",
+   "en": "grade (AE)",
+   "de": "Jahrgangsstufe, Klasse",
+   "ipa": "ɡreɪd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-b-016",
+   "en": "to tutor sb.",
+   "de": "jn. unterrichten, jm. Stunden geben",
+   "ipa": "ˈtjuːtə",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-b-017",
+   "en": "to set sth. up",
+   "de": "etwas errichten, aufbauen; arrangieren",
+   "ipa": "set",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-b-018",
+   "en": "take",
+   "de": "Einstellung, Take (beim Film)",
+   "ipa": "teɪk",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-b-019",
+   "en": "to switch",
+   "de": "wechseln",
+   "ipa": "swɪtʃ",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-b-020",
+   "en": "to pat",
+   "de": "tätscheln",
+   "ipa": "pæt",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-b-021",
+   "en": "cute",
+   "de": "niedlich, süß",
+   "ipa": "kjuːt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-b-022",
+   "en": "season (AE)",
+   "de": "Staffel (einer Fernsehserie)",
+   "ipa": "ˈsiːzn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-b-023",
+   "en": "episode",
+   "de": "Episode",
+   "ipa": "ˈepɪsəʊd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-b-024",
+   "en": "exotic",
+   "de": "exotisch",
+   "ipa": "ɪɡˈzɒtɪk",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-b-025",
+   "en": "for sure",
+   "de": "klar; ganz bestimmt",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-b-026",
+   "en": "definitely",
+   "de": "sicher, bestimmt",
+   "ipa": "ˈdefɪnətli",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-b-027",
+   "en": "to be free",
+   "de": "frei haben",
+   "ipa": "",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-b-028",
+   "en": "How's it going?",
+   "de": "Wie geht's? / Wie läuft's?",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-b-029",
+   "en": "for a change",
+   "de": "zur Abwechslung",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  }
+ ],
+ "y8u3-part-c": [
+  {
+   "id": "y8u3-part-c-001",
+   "en": "celebrity",
+   "de": "Berühmtheit (berühmte Person)",
+   "ipa": "səˈlebrəti",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-002",
+   "en": "flame",
+   "de": "Flamme",
+   "ipa": "fleɪm",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-003",
+   "en": "shiny",
+   "de": "glänzend",
+   "ipa": "ˈʃaɪni",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-004",
+   "en": "unstoppable",
+   "de": "unaufhaltsam, unaufhaltbar",
+   "ipa": "ʌnˈstɒpəbl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-005",
+   "en": "to go viral",
+   "de": "sich wie ein Virus/Lauffeuer verbreiten",
+   "ipa": "ˈvaɪrəl",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-006",
+   "en": "security",
+   "de": "Sicherheit, Sicherheits-",
+   "ipa": "sɪˈkjʊərəti",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-007",
+   "en": "guard",
+   "de": "Wachposten, Wache",
+   "ipa": "ɡɑːd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-008",
+   "en": "environment",
+   "de": "Umwelt",
+   "ipa": "ɪnˈvaɪrənmənt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-009",
+   "en": "quote / quotation",
+   "de": "Zitat",
+   "ipa": "kwəʊt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-010",
+   "en": "Ms Miller",
+   "de": "Frau Miller",
+   "ipa": "mɪz",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-011",
+   "en": "discovery",
+   "de": "Entdeckung",
+   "ipa": "dɪˈskʌvəri",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-012",
+   "en": "to discover",
+   "de": "entdecken; herausfinden",
+   "ipa": "dɪˈskʌvə",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-013",
+   "en": "channel",
+   "de": "Kanal, Sender",
+   "ipa": "ˈtʃænl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-014",
+   "en": "the latest",
+   "de": "das Neueste",
+   "ipa": "ˈleɪtɪst",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-015",
+   "en": "Stay posted.",
+   "de": "Bleib(t) auf dem Laufenden!",
+   "ipa": "ˈpəʊstɪd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-016",
+   "en": "disappointed (with)",
+   "de": "enttäuscht (von)",
+   "ipa": "ˌdɪsəˈpɔɪntɪd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-017",
+   "en": "reaction (to)",
+   "de": "Reaktion (auf)",
+   "ipa": "riˈækʃn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-018",
+   "en": "to evacuate",
+   "de": "evakuieren",
+   "ipa": "ɪˈvækjueɪt",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-019",
+   "en": "resident",
+   "de": "Bewohner/in, Anwohner/in",
+   "ipa": "ˈrezɪdənt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-020",
+   "en": "power",
+   "de": "Energie, Strom; Kraft, Macht",
+   "ipa": "ˈpaʊə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-021",
+   "en": "to be cut off from sth.",
+   "de": "von etwas abgeschnitten sein",
+   "ipa": "",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-022",
+   "en": "burnt",
+   "de": "verbrannt",
+   "ipa": "bɜːnt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-023",
+   "en": "mph",
+   "de": "Meilen pro Stunde",
+   "ipa": "ˌem piː ˈeɪtʃ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-024",
+   "en": "cause",
+   "de": "Ursache",
+   "ipa": "kɔːz",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-025",
+   "en": "to cause",
+   "de": "verursachen",
+   "ipa": "kɔːz",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-026",
+   "en": "illegal",
+   "de": "illegal, ungesetzlich",
+   "ipa": "ɪˈliːɡl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-027",
+   "en": "campfire",
+   "de": "Lagerfeuer",
+   "ipa": "ˈkæmpfaɪə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-028",
+   "en": "to investigate",
+   "de": "(polizeilich) untersuchen; ermitteln",
+   "ipa": "ɪnˈvestɪɡeɪt",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-029",
+   "en": "firefighter",
+   "de": "Feuerwehrmann/-frau",
+   "ipa": "ˈfaɪəfaɪtə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-030",
+   "en": "helicopter",
+   "de": "Hubschrauber, Helikopter",
+   "ipa": "ˈhelɪkɒptə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-031",
+   "en": "My heart goes out to ...",
+   "de": "Ich fühle mit ... / Mein Mitgefühl gilt ...",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-032",
+   "en": "drought",
+   "de": "Dürre, Trockenheit",
+   "ipa": "draʊt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-033",
+   "en": "frequent",
+   "de": "häufig",
+   "ipa": "ˈfriːkwənt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-034",
+   "en": "more and more frequent / beautiful",
+   "de": "immer häufiger / schöner",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-035",
+   "en": "expert",
+   "de": "Experte/Expertin",
+   "ipa": "ˈekspɜːt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-036",
+   "en": "climate",
+   "de": "Klima",
+   "ipa": "ˈklaɪmət",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-037",
+   "en": "link",
+   "de": "Link, Verknüpfung, Verbindung",
+   "ipa": "lɪŋk",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-038",
+   "en": "cigarette",
+   "de": "Zigarette",
+   "ipa": "ˌsɪɡəˈret",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-039",
+   "en": "permit",
+   "de": "Genehmigung, Erlaubnis(schein)",
+   "ipa": "ˈpɜːmɪt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-040",
+   "en": "effect (on)",
+   "de": "(Aus-)Wirkung (auf)",
+   "ipa": "ɪˈfekt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-041",
+   "en": "to compare",
+   "de": "vergleichen",
+   "ipa": "kəmˈpeə",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-042",
+   "en": "emotional",
+   "de": "emotional; gefühlsbetont",
+   "ipa": "ɪˈməʊʃnl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-043",
+   "en": "neutral",
+   "de": "neutral",
+   "ipa": "ˈnjuːtrəl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-044",
+   "en": "location",
+   "de": "Ort, Standort; Drehort",
+   "ipa": "ləʊˈkeɪʃn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-045",
+   "en": "fame",
+   "de": "Ruhm",
+   "ipa": "feɪm",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-046",
+   "en": "synonym",
+   "de": "Synonym",
+   "ipa": "ˈsɪnənɪm",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-047",
+   "en": "antonym",
+   "de": "Antonym",
+   "ipa": "ˈæntənɪm",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-048",
+   "en": "opposite",
+   "de": "Gegenteil",
+   "ipa": "ˈɒpəzɪt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-049",
+   "en": "prefix",
+   "de": "Präfix, Vorsilbe",
+   "ipa": "ˈpriːfɪks",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-050",
+   "en": "dramatic",
+   "de": "dramatisch",
+   "ipa": "drəˈmætɪk",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-051",
+   "en": "outline",
+   "de": "Gliederung",
+   "ipa": "ˈaʊtlaɪn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-052",
+   "en": "possible",
+   "de": "möglich",
+   "ipa": "ˈpɒsəbl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-053",
+   "en": "to experience",
+   "de": "erfahren, erleben",
+   "ipa": "ɪkˈspɪəriəns",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-054",
+   "en": "catchy",
+   "de": "eingängig (Melodie, Slogan)",
+   "ipa": "ˈkætʃi",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-055",
+   "en": "to round sth. off (with sth.)",
+   "de": "etwas (mit etwas) abschließen",
+   "ipa": "",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-056",
+   "en": "to mention",
+   "de": "erwähnen",
+   "ipa": "ˈmenʃn",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-057",
+   "en": "supply",
+   "de": "Vorrat; Versorgung, Lieferung",
+   "ipa": "səˈplaɪ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u3-part-c-058",
+   "en": "excerpt (from)",
+   "de": "Auszug (aus)",
+   "ipa": "ˈeksɜːpt",
+   "pos": "",
+   "example_en": ""
+  }
+ ],
+ "y8u4-introduction": [
+  {
+   "id": "y8u4-introduction-001",
+   "en": "impressive",
+   "de": "beeindruckend",
+   "ipa": "ɪmˈpresɪv",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-introduction-002",
+   "en": "vast",
+   "de": "riesig",
+   "ipa": "vɑːst",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-introduction-003",
+   "en": "sculpture",
+   "de": "Skulptur",
+   "ipa": "ˈskʌlptʃə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-introduction-004",
+   "en": "reservation (also: rez)",
+   "de": "Reservat, Reservation",
+   "ipa": "ˌrezəˈveɪʃn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-introduction-005",
+   "en": "prairie",
+   "de": "Prärie, Grasland",
+   "ipa": "ˈpreəri",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-introduction-006",
+   "en": "region",
+   "de": "Region",
+   "ipa": "ˈriːdʒən",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-introduction-007",
+   "en": "to carve",
+   "de": "meißeln; schnitzen",
+   "ipa": "kɑːv",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-introduction-008",
+   "en": "bison, pl bison",
+   "de": "Amerikanischer Bison",
+   "ipa": "ˈbaɪsn",
+   "pos": "",
+   "example_en": ""
+  }
+ ],
+ "y8u4-part-a": [
+  {
+   "id": "y8u4-part-a-001",
+   "en": "to slap",
+   "de": "knallen, klatschen",
+   "ipa": "slæp",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-002",
+   "en": "to appreciate sb./sth.",
+   "de": "etwas schätzen, zu schätzen wissen",
+   "ipa": "əˈpriːʃieɪt",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-003",
+   "en": "wheel (steering wheel)",
+   "de": "Lenkrad",
+   "ipa": "wiːl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-004",
+   "en": "to honk",
+   "de": "hupen",
+   "ipa": "hɒŋk",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-005",
+   "en": "coach",
+   "de": "Trainer/in",
+   "ipa": "kəʊtʃ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-006",
+   "en": "rodeo",
+   "de": "Rodeo",
+   "ipa": "ˈrəʊdiəʊ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-007",
+   "en": "final",
+   "de": "Finale, Endspiel",
+   "ipa": "ˈfaɪnl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-008",
+   "en": "No wonder ...",
+   "de": "Kein Wunder ...",
+   "ipa": "ˈwʌndə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-009",
+   "en": "water fountain / drinking fountain",
+   "de": "Trinkbrunnen",
+   "ipa": "ˈfaʊntən",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-010",
+   "en": "to tuck",
+   "de": "stecken, klemmen",
+   "ipa": "tʌk",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-011",
+   "en": "to advise sb. to do sth.",
+   "de": "jm. raten, etwas zu tun",
+   "ipa": "ədˈvaɪz",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-012",
+   "en": "technique",
+   "de": "Technik, Methode",
+   "ipa": "tekˈniːk",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-013",
+   "en": "excellent",
+   "de": "ausgezeichnet, hervorragend",
+   "ipa": "ˈeksələnt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-014",
+   "en": "to speed up",
+   "de": "beschleunigen, schneller werden",
+   "ipa": "ˌspiːd ˈʌp",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-015",
+   "en": "to qualify",
+   "de": "sich qualifizieren",
+   "ipa": "ˈkwɒlɪfaɪ",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-016",
+   "en": "it takes practice",
+   "de": "es erfordert Übung",
+   "ipa": "ˈpræktɪs",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-017",
+   "en": "somewhere",
+   "de": "irgendwo, irgendwohin",
+   "ipa": "ˈsʌmweə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-018",
+   "en": "apart",
+   "de": "auseinander, voneinander entfernt",
+   "ipa": "əˈpɑːt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-019",
+   "en": "to notice",
+   "de": "merken, bemerken",
+   "ipa": "ˈnəʊtɪs",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-020",
+   "en": "whether",
+   "de": "ob",
+   "ipa": "ˈweðə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-021",
+   "en": "to divide (into)",
+   "de": "(sich) teilen (in), (sich) aufteilen (in)",
+   "ipa": "dɪˈvaɪd",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-022",
+   "en": "period (AE)",
+   "de": "Unterrichtsstunde, Schulstunde",
+   "ipa": "ˈpɪəriəd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-023",
+   "en": "register",
+   "de": "Klassenbuch; Register, Verzeichnis",
+   "ipa": "ˈredʒɪstə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-024",
+   "en": "driver's license / driving licence",
+   "de": "Führerschein, Fahrerlaubnis",
+   "ipa": "ˈdraɪvəz ˌlaɪsns",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-025",
+   "en": "basic",
+   "de": "elementar, Grund-",
+   "ipa": "ˈbeɪsɪk",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-026",
+   "en": "literature",
+   "de": "Literatur",
+   "ipa": "ˈlɪtrətʃə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-027",
+   "en": "social studies",
+   "de": "Sozialkunde",
+   "ipa": "ˌsəʊʃl ˈstʌdiz",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-028",
+   "en": "assignment",
+   "de": "Aufgabe, Arbeitsauftrag",
+   "ipa": "əˈsaɪnmənt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-029",
+   "en": "to pass",
+   "de": "bestehen (Test, Prüfung)",
+   "ipa": "pɑːs",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-030",
+   "en": "grade / mark",
+   "de": "(Schul-)Note, Zensur",
+   "ipa": "ɡreɪd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-031",
+   "en": "to fail",
+   "de": "nicht bestehen; durchfallen",
+   "ipa": "feɪl",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-032",
+   "en": "extra",
+   "de": "zusätzlich",
+   "ipa": "ˈekstrə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-033",
+   "en": "to attend a course",
+   "de": "einen Kurs besuchen",
+   "ipa": "əˈtend",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-034",
+   "en": "session",
+   "de": "Sitzung, Einheit",
+   "ipa": "ˈseʃn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-035",
+   "en": "property",
+   "de": "Eigentum",
+   "ipa": "ˈprɒpəti",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-036",
+   "en": "to take care of sth.",
+   "de": "sich um etwas kümmern",
+   "ipa": "keə",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-037",
+   "en": "for this reason",
+   "de": "aus diesem Grund",
+   "ipa": "ˈriːzn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-038",
+   "en": "to steal",
+   "de": "stehlen",
+   "ipa": "stiːl",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-039",
+   "en": "at any time",
+   "de": "jederzeit, zu jeder Zeit",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-040",
+   "en": "grounds",
+   "de": "Gelände",
+   "ipa": "ɡraʊndz",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-041",
+   "en": "principal",
+   "de": "Schulleiter/in",
+   "ipa": "ˈprɪnsəpl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-042",
+   "en": "position",
+   "de": "Platz, Position",
+   "ipa": "pəˈzɪʃn",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-043",
+   "en": "to come up to sb.",
+   "de": "auf jn. zukommen",
+   "ipa": "",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-a-044",
+   "en": "state",
+   "de": "Zustand",
+   "ipa": "steɪt",
+   "pos": "",
+   "example_en": ""
+  }
+ ],
+ "y8u4-part-b": [
+  {
+   "id": "y8u4-part-b-001",
+   "en": "flat",
+   "de": "flach, eben",
+   "ipa": "flæt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-b-002",
+   "en": "wheat",
+   "de": "Weizen",
+   "ipa": "wiːt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-b-003",
+   "en": "to borrow sth. (from sb.)",
+   "de": "sich etwas (aus)leihen",
+   "ipa": "ˈbɒrəʊ",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-b-004",
+   "en": "to lend sb. sth.",
+   "de": "jm. etwas leihen",
+   "ipa": "lend",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-b-005",
+   "en": "helpful",
+   "de": "hilfreich",
+   "ipa": "ˈhelpfl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-b-006",
+   "en": "college",
+   "de": "Hochschule",
+   "ipa": "ˈkɒlɪdʒ",
+   "pos": "",
+   "example_en": ""
+  }
+ ],
+ "y8u4-part-c": [
+  {
+   "id": "y8u4-part-c-001",
+   "en": "to attract",
+   "de": "anziehen, anlocken",
+   "ipa": "əˈtrækt",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-c-002",
+   "en": "more than in any other place",
+   "de": "mehr als an jedem anderen Ort",
+   "ipa": "",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-c-003",
+   "en": "giant",
+   "de": "riesig, Riesen-",
+   "ipa": "ˈdʒaɪənt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-c-004",
+   "en": "patriotism",
+   "de": "Patriotismus",
+   "ipa": "ˈpeɪtriətɪzəm",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-c-005",
+   "en": "taxpayer",
+   "de": "Steuerzahler/in",
+   "ipa": "ˈtækspɛɪə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-c-006",
+   "en": "tax",
+   "de": "(die) Steuer",
+   "ipa": "tæks",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-c-007",
+   "en": "however",
+   "de": "aber; allerdings; jedoch",
+   "ipa": "haʊˈevə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-c-008",
+   "en": "sacred",
+   "de": "heilig",
+   "ipa": "ˈseɪkrɪd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-c-009",
+   "en": "extremely",
+   "de": "äußerst, höchst",
+   "ipa": "ɪkˈstriːmli",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-c-010",
+   "en": "offensive",
+   "de": "beleidigend, Anstoß erregend",
+   "ipa": "əˈfensɪv",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-c-011",
+   "en": "to spray",
+   "de": "(be)sprühen, sprayen",
+   "ipa": "spreɪ",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-c-012",
+   "en": "graffiti",
+   "de": "Graffiti",
+   "ipa": "ɡrəˈfiːti",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-c-013",
+   "en": "wonderful",
+   "de": "wunderbar",
+   "ipa": "ˈwʌndəfl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-c-014",
+   "en": "hardly",
+   "de": "kaum",
+   "ipa": "ˈhɑːdli",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-c-015",
+   "en": "surprising",
+   "de": "überraschend",
+   "ipa": "səˈpraɪzɪŋ",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-c-016",
+   "en": "surprise",
+   "de": "Überraschung",
+   "ipa": "səˈpraɪz",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-c-017",
+   "en": "to be dedicated to",
+   "de": "gewidmet sein",
+   "ipa": "ˈdedɪkeɪtɪd",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-c-018",
+   "en": "granite",
+   "de": "Granit",
+   "ipa": "ˈɡrænɪt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-c-019",
+   "en": "to gaze",
+   "de": "blicken, starren",
+   "ipa": "ɡeɪz",
+   "pos": "verb",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-c-020",
+   "en": "ceremony",
+   "de": "Zeremonie",
+   "ipa": "ˈserəməni",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-c-021",
+   "en": "national anthem",
+   "de": "Nationalhymne",
+   "ipa": "ˌnæʃnəl ˈænθəm",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-c-022",
+   "en": "floodlight",
+   "de": "Flutlicht(lampe)",
+   "ipa": "ˈflʌdlaɪt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-c-023",
+   "en": "cloudless",
+   "de": "wolkenlos",
+   "ipa": "ˈklaʊdləs",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-c-024",
+   "en": "pride (in sth.)",
+   "de": "Stolz (auf etwas)",
+   "ipa": "praɪd",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-c-025",
+   "en": "whenever",
+   "de": "wann (auch) immer; egal, wann",
+   "ipa": "ˌwenˈevə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-c-026",
+   "en": "glum(ly)",
+   "de": "niedergeschlagen",
+   "ipa": "ɡlʌm",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-c-027",
+   "en": "insult (to)",
+   "de": "Beleidigung (für)",
+   "ipa": "ˈɪnsʌlt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-c-028",
+   "en": "not (...) any longer",
+   "de": "nicht länger; nicht mehr",
+   "ipa": "ˈlɒŋɡə",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-c-029",
+   "en": "to change your mind",
+   "de": "es sich anders überlegen",
    "ipa": "maɪnd",
    "pos": "verb",
    "example_en": ""
   },
   {
-   "id": "y7u5-missing-011",
-   "en": "shepherd",
-   "de": "Schäfer/in, Schafhirte/-hirtin",
-   "ipa": "ˈʃepəd",
+   "id": "y8u4-part-c-030",
+   "en": "suffix",
+   "de": "Suffix, Nachsilbe",
+   "ipa": "ˈsʌfɪks",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u5-missing-012",
-   "en": "to burst into tears",
-   "de": "in Tränen ausbrechen",
-   "ipa": "bɜːst",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-missing-013",
-   "en": "volunteer",
-   "de": "Freiwillige(r), Ehrenamtliche(r)",
-   "ipa": "ˌvɒlənˈtɪə",
+   "id": "y8u4-part-c-031",
+   "en": "exam",
+   "de": "Prüfung",
+   "ipa": "ɪɡˈzæm",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u5-missing-014",
-   "en": "gently",
-   "de": "behutsam, sanft",
-   "ipa": "ˈdʒentli",
+   "id": "y8u4-part-c-032",
+   "en": "abstract",
+   "de": "abstrakt",
+   "ipa": "ˈæbstrækt",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u5-missing-015",
-   "en": "awake",
-   "de": "wach",
-   "ipa": "əˈweɪk",
+   "id": "y8u4-part-c-033",
+   "en": "concrete",
+   "de": "konkret",
+   "ipa": "ˈkɒŋkriːt",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u5-missing-016",
-   "en": "to knock (on sth.)",
-   "de": "(an)klopfen (an etwas)",
-   "ipa": "nɒk",
-   "pos": "verb",
-   "example_en": ""
-  },
-  {
-   "id": "y7u5-missing-017",
-   "en": "memorial",
-   "de": "Denkmal; Gedenk-",
-   "ipa": "məˈmɔːriəl",
+   "id": "y8u4-part-c-034",
+   "en": "certain",
+   "de": "bestimmte(r, s), gewisse(r, s)",
+   "ipa": "ˈsɜːtn",
    "pos": "",
    "example_en": ""
   },
   {
-   "id": "y7u5-missing-018",
-   "en": "in second place",
-   "de": "auf dem zweiten Platz; an zweiter Stelle",
-   "ipa": "",
+   "id": "y8u4-part-c-035",
+   "en": "bilingual",
+   "de": "zweisprachig",
+   "ipa": "baɪˈlɪŋɡwəl",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-c-036",
+   "en": "relationship",
+   "de": "Beziehung, Verhältnis",
+   "ipa": "rɪˈleɪʃnʃɪp",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-c-037",
+   "en": "long shot",
+   "de": "Totale, Totalaufnahme",
+   "ipa": "ˈlɒŋ ʃɒt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-c-038",
+   "en": "medium shot",
+   "de": "Halbtotale",
+   "ipa": "ˈmiːdiəm ʃɒt",
+   "pos": "",
+   "example_en": ""
+  },
+  {
+   "id": "y8u4-part-c-039",
+   "en": "close-up",
+   "de": "Nahaufnahme",
+   "ipa": "ˈkləʊsˌʌp",
    "pos": "",
    "example_en": ""
   }
@@ -4841,8 +4131,8 @@ const SETS = {
 const Store = (function(){
   let persistent = true, mem = {};
   try{
-    localStorage.setItem("vt7:test","1");
-    localStorage.removeItem("vt7:test");
+    localStorage.setItem("vt8:test","1");
+    localStorage.removeItem("vt8:test");
   }catch(e){ persistent = false; }
   return {
     persistent,
@@ -4859,7 +4149,7 @@ const Store = (function(){
   };
 })();
 
-const KEY = "vt7:progress";
+const KEY = "vt8:progress";
 const INTERVALS = [0,0,1,2,4,8];      // Fach 1..5 -> Tage bis zur Wiedervorlage
 const DAY = 86400000;
 
@@ -4923,11 +4213,11 @@ function topicName(id){
    ------------------------------------------------------------------------- */
 const Sfx = (function(){
   let ctx = null, on = true;
-  try{ on = localStorage.getItem("vt7:sfx") !== "0"; }catch(e){}
+  try{ on = localStorage.getItem("vt8:sfx") !== "0"; }catch(e){}
   function enabled(){ return on; }
   function toggle(){
     on = !on;
-    try{ localStorage.setItem("vt7:sfx", on ? "1" : "0"); }catch(e){}
+    try{ localStorage.setItem("vt8:sfx", on ? "1" : "0"); }catch(e){}
     if(on) play("ok");
     return on;
   }
@@ -5625,7 +4915,7 @@ function renderHelp(){
   d.push('<h2>Für Kolleginnen und Kollegen</h2>');
   d.push('<p>Die Website benötigt kein Lernkonto. Der Lernstand wird lokal im Browser gespeichert; es gibt keine automatische Synchronisierung zwischen Geräten.</p>');
   d.push('<p>Mit <b>CSV</b> öffnest du die Exportauswahl. Du kannst alle Vokabeln dieses Jahrgangs oder nur ausgewählte Wörter exportieren. Die Datei enthält genau drei Spalten: <b>Unit, Englisch, Deutsch</b>. Für eine Auswahl markierst du einzelne Wörter oder übernimmst die sichtbaren Suchergebnisse. Der Export aller Wörter bleibt vom Suchfilter unabhängig.</p>');
-  d.push('<p>Stichwörter und Übersetzungen folgen den Wortlisten des eingeführten Lehrwerks. Für Year 7 wurden die fünf bereitgestellten Unit-Wortlisten übernommen; Lautschrift ist nur vorhanden, soweit sie dort angegeben ist. </p>');
+  d.push('<p>Stichwörter und Übersetzungen folgen den Wortlisten des eingeführten Lehrwerks. Für Year 8 wurden die vier bereitgestellten Unit-Wortlisten übernommen; Lautschrift ist nur vorhanden, soweit sie dort angegeben ist. </p>');
   d.push('</div>');
 
   view.innerHTML =
@@ -5887,7 +5177,7 @@ try{
 }
 </script>
 
-<script src="../assets/learning.js?v=20260913-year7"></script>
+<script src="../assets/learning.js?v=20260913-year8"></script>
 
 <link rel="stylesheet" href="../assets/feedback.css">
 <script src="../assets/feedback.js"></script>

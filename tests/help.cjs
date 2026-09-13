@@ -1,5 +1,5 @@
 const vm=require('vm'),fs=require('fs'),{JSDOM}=require('jsdom'),assert=require('assert');
-for(const folder of ['year5','year6','year9','year10','oberstufe','year6/grammar/irregular-verbs']){
+for(const folder of ['year8','year5','year6','year9','year10','oberstufe','year6/grammar/irregular-verbs']){
  const html=fs.readFileSync(folder+'/index.html','utf8');
  const dom=new JSDOM(html,{runScripts:'outside-only',url:'https://example.org/'+folder+'/'});
  const ctx=dom.getInternalVMContext();
