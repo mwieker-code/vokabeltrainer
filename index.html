@@ -56,6 +56,7 @@ body{
   text-align:center;letter-spacing:.03em}
 </style>
 <link rel="stylesheet" href="assets/learning.css?v=20260908-export">
+<link rel="stylesheet" href="assets/menu-preview.css?v=20260914-design">
 </head>
 <body>
 <div class="wrap">
@@ -63,7 +64,7 @@ body{
     <h1>Vokabeltrainer <span class="title-accent">Englisch</span></h1>
     <div class="sub">Jahrgangs- und stufenbezogen</div>
   </div>
-  <div class="intro">Wähle deinen Jahrgang und wähle, was du üben möchtest. Dein Fortschritt bleibt in diesem Browser gespeichert.</div>
+  <div class="intro">Wähle deinen Jahrgang und entdecke, was du schon kannst. Dein Fortschritt bleibt in diesem Browser gespeichert.</div>
 
   <div id="cards"></div>
 
@@ -136,10 +137,21 @@ function esc(s){
   }[c]));
 }
 
+const MENU_ART = {
+ 'year5/':'M12 18Q28 12 40 20Q52 12 68 18V62Q52 56 40 64Q28 56 12 62ZM40 20V64M20 28H31M20 38H31M49 28H60M49 38H60',
+ 'year6/':'M18 18H62V52H42L28 64V52H18ZM27 30H53M27 40H46',
+ 'year7/':'M8 64L29 22L46 51L58 31L74 64ZM20 40L29 22L39 40M12 71H70',
+ 'year8/':'M40 10A30 30 0 1 0 40 70A30 30 0 1 0 40 10M10 40H70M40 10Q15 40 40 70Q65 40 40 10M16 23H64M16 57H64',
+ 'year9/':'M40 9L68 24V56L40 71L12 56V24ZM40 9V71M12 24L40 40L68 24M12 56L40 40L68 56',
+ 'year10/':'M13 64V43H25V64M34 64V31H46V64M55 64V17H67V64M10 22L31 12L47 18L68 7M56 7H68V19',
+ 'oberstufe/':'M8 29L40 12L72 29L40 46ZM20 36V54Q40 68 60 54V36M72 29V55'
+};
+function menuArt(path){return '<svg class="menu-art" aria-hidden="true" viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="'+MENU_ART[path]+'"/></svg>';}
 function render(){
   const box = document.getElementById("cards");
   box.innerHTML = SITES.map(s => `
     <a class="card" style="--unit:${esc(s.color || "#5A6B75")}" href="${esc(s.path)}">
+      ${menuArt(s.path)}<span class="menu-arrow" aria-hidden="true">→</span>
       <div class="row">
         <span class="name">${esc(s.name)}</span>
         <span class="meta">${esc(s.meta || "")}</span>
