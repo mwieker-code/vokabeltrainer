@@ -366,6 +366,7 @@ button.primary:hover{background:#0B4A54}
 @media(prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}
 }
+.y10u-linking{--unit:#527F78;--unit-bg:#E5F0ED;--unit-ink:#284C46}
 </style>
 <link rel="stylesheet" href="../assets/learning.css?v=20260910-csv-units">
 
@@ -411,6 +412,10 @@ const YEARS = [
    {
     "id": "u3",
     "name": "Unit 3 – How is the world changing?"
+   },
+   {
+    "id": "y10u-linking",
+    "name": "Skills – Linking words"
    }
   ]
  }
@@ -504,6 +509,14 @@ const TOPICS = [
   "unit": "u3",
   "unitName": "Unit 3 – How is the world changing?",
   "name": "Part C"
+ },
+ {
+  "id": "y10-linking-words",
+  "year": "10",
+  "yearName": "Mittelstufe",
+  "unit": "y10u-linking",
+  "unitName": "Skills – Linking words",
+  "name": "Linking words"
  }
 ];
 
@@ -4691,6 +4704,848 @@ const SETS = {
    "pos": "noun",
    "ipa": "ˈkaʊntər ˌɑːɡjumənt",
    "example_en": "He offered a strong counter-argument during the debate."
+  }
+ ],
+ "y10-linking-words": [
+  {
+   "id": "y10-linking-words-001",
+   "en": "however",
+   "de": "jedoch, allerdings",
+   "pos": "adverb",
+   "ipa": "haʊˈevə",
+   "example_en": "The team trained harder than ever before the final. However, they lost by a wide margin.",
+   "distractor_hint": [
+    "lnk-02",
+    "lnk-03"
+   ]
+  },
+  {
+   "id": "y10-linking-words-002",
+   "en": "nevertheless",
+   "de": "dennoch, trotzdem",
+   "pos": "adverb",
+   "ipa": "ˌnevəðəˈles",
+   "example_en": "The evidence against the theory kept piling up. Nevertheless, a few scientists refused to abandon it.",
+   "distractor_hint": [
+    "lnk-01",
+    "lnk-03"
+   ]
+  },
+  {
+   "id": "y10-linking-words-003",
+   "en": "nonetheless",
+   "de": "dennoch, nichtsdestotrotz",
+   "pos": "adverb",
+   "ipa": "ˌnʌnðəˈles",
+   "example_en": "Ticket prices had tripled since last year. Nonetheless, the stadium sold out within an hour.",
+   "distractor_hint": [
+    "lnk-01",
+    "lnk-02"
+   ]
+  },
+  {
+   "id": "y10-linking-words-004",
+   "en": "on the other hand",
+   "de": "andererseits",
+   "pos": "phrase",
+   "collocations": "on the one hand … on the other hand",
+   "example_en": "On the one hand, working from home saves commuting time. On the other hand, it can make people feel isolated.",
+   "distractor_hint": [
+    "lnk-05"
+   ]
+  },
+  {
+   "id": "y10-linking-words-005",
+   "en": "in contrast (to sth.)",
+   "de": "im Gegensatz (zu etwas)",
+   "pos": "phrase",
+   "ipa": "ˈkɒntrɑːst",
+   "example_en": "Rural areas saw house prices fall. In contrast, prices in the capital kept climbing.",
+   "distractor_hint": [
+    "lnk-06",
+    "lnk-04"
+   ]
+  },
+  {
+   "id": "y10-linking-words-006",
+   "en": "by contrast",
+   "de": "im Gegensatz dazu",
+   "pos": "phrase",
+   "ipa": "kɒntrɑːst",
+   "example_en": "The first half of the film is slow and quiet. By contrast, the second half barely pauses for breath.",
+   "distractor_hint": [
+    "lnk-05"
+   ]
+  },
+  {
+   "id": "y10-linking-words-007",
+   "en": "on the contrary",
+   "de": "ganz im Gegenteil",
+   "pos": "phrase",
+   "ipa": "ˈkɒntrəri",
+   "example_en": "He did not seem disappointed by the result. On the contrary, he looked relieved.",
+   "distractor_hint": [
+    "lnk-08"
+   ]
+  },
+  {
+   "id": "y10-linking-words-008",
+   "en": "quite the opposite",
+   "de": "ganz im Gegenteil",
+   "pos": "phrase",
+   "ipa": "ˈɒpəzɪt",
+   "example_en": "People assumed the merger would cost jobs. Quite the opposite happened: the workforce doubled.",
+   "distractor_hint": [
+    "lnk-07"
+   ]
+  },
+  {
+   "id": "y10-linking-words-009",
+   "en": "whereas",
+   "de": "während, wohingegen",
+   "pos": "conjunction",
+   "ipa": "weərˈæz",
+   "example_en": "The northern regions rely heavily on tourism, whereas the south depends on manufacturing.",
+   "distractor_hint": [
+    "lnk-10"
+   ]
+  },
+  {
+   "id": "y10-linking-words-010",
+   "en": "while",
+   "de": "während, wohingegen",
+   "pos": "conjunction",
+   "ipa": "waɪl",
+   "example_en": "While some passengers complained loudly, most simply waited in silence.",
+   "distractor_hint": [
+    "lnk-09"
+   ]
+  },
+  {
+   "id": "y10-linking-words-011",
+   "en": "despite (sth.)",
+   "de": "trotz (einer Sache)",
+   "pos": "preposition",
+   "ipa": "dɪˈspaɪt",
+   "collocations": "despite the rain",
+   "example_en": "Despite months of preparation, the launch had to be delayed at the last minute.",
+   "distractor_hint": [
+    "lnk-12"
+   ]
+  },
+  {
+   "id": "y10-linking-words-012",
+   "en": "in spite of (sth.)",
+   "de": "trotz (einer Sache)",
+   "pos": "phrase",
+   "ipa": "ɪn ˈspaɪt əv",
+   "example_en": "In spite of the warnings, hundreds of people still climbed the mountain that day.",
+   "distractor_hint": [
+    "lnk-11"
+   ]
+  },
+  {
+   "id": "y10-linking-words-013",
+   "en": "although",
+   "de": "obwohl",
+   "pos": "conjunction",
+   "ipa": "ɔːlˈðəʊ",
+   "example_en": "Although the restaurant had only opened a week earlier, it was already fully booked.",
+   "distractor_hint": [
+    "lnk-14"
+   ]
+  },
+  {
+   "id": "y10-linking-words-014",
+   "en": "even though",
+   "de": "obwohl, obgleich",
+   "pos": "conjunction",
+   "ipa": "ˈiːvn ðəʊ",
+   "example_en": "Even though she had never given a speech before, she sounded completely at ease.",
+   "distractor_hint": [
+    "lnk-13"
+   ]
+  },
+  {
+   "id": "y10-linking-words-015",
+   "en": "yet",
+   "de": "dennoch, und doch",
+   "pos": "conjunction",
+   "ipa": "jet",
+   "example_en": "The plan looked impossible on paper, yet it worked exactly as intended.",
+   "distractor_hint": [
+    "lnk-16"
+   ]
+  },
+  {
+   "id": "y10-linking-words-016",
+   "en": "still",
+   "de": "dennoch, trotzdem",
+   "pos": "adverb",
+   "ipa": "stɪl",
+   "example_en": "He knew the risks involved. Still, he decided to go ahead with the expedition.",
+   "distractor_hint": [
+    "lnk-15"
+   ]
+  },
+  {
+   "id": "y10-linking-words-017",
+   "en": "admittedly",
+   "de": "zugegebenermaßen",
+   "pos": "adverb",
+   "ipa": "ədˈmɪtɪdli",
+   "example_en": "Admittedly, the plan has its flaws, but no better alternative has been proposed so far.",
+   "distractor_hint": [
+    "lnk-18"
+   ]
+  },
+  {
+   "id": "y10-linking-words-018",
+   "en": "arguably",
+   "de": "wohl, man könnte sagen",
+   "pos": "adverb",
+   "ipa": "ˈɑːɡjuəbli",
+   "example_en": "The final chapter is, arguably, the weakest part of an otherwise excellent book.",
+   "distractor_hint": [
+    "lnk-17"
+   ]
+  },
+  {
+   "id": "y10-linking-words-019",
+   "en": "furthermore",
+   "de": "des Weiteren, außerdem",
+   "pos": "adverb",
+   "ipa": "ˈfɜːðəmɔː",
+   "example_en": "The bridge is closed for repairs until March. Furthermore, the diversion adds an extra twenty minutes.",
+   "distractor_hint": [
+    "lnk-20",
+    "lnk-21"
+   ]
+  },
+  {
+   "id": "y10-linking-words-020",
+   "en": "moreover",
+   "de": "überdies, darüber hinaus",
+   "pos": "adverb",
+   "ipa": "mɔːrˈəʊvə",
+   "example_en": "The report was published two years late. Moreover, key data had simply been left out.",
+   "distractor_hint": [
+    "lnk-19",
+    "lnk-25"
+   ]
+  },
+  {
+   "id": "y10-linking-words-021",
+   "en": "in addition (to sth.)",
+   "de": "zusätzlich (zu etwas)",
+   "pos": "phrase",
+   "ipa": "əˈdɪʃn",
+   "example_en": "In addition to the entrance fee, visitors now have to pay for parking.",
+   "distractor_hint": [
+    "lnk-22",
+    "lnk-19"
+   ]
+  },
+  {
+   "id": "y10-linking-words-022",
+   "en": "additionally",
+   "de": "zusätzlich",
+   "pos": "adverb",
+   "ipa": "əˈdɪʃənəli",
+   "example_en": "The flat comes with a small garden. Additionally, tenants have access to a shared roof terrace.",
+   "distractor_hint": [
+    "lnk-21"
+   ]
+  },
+  {
+   "id": "y10-linking-words-023",
+   "en": "besides (sth.)",
+   "de": "außerdem, abgesehen davon",
+   "pos": "preposition",
+   "ipa": "bɪˈsaɪdz",
+   "example_en": "Besides the obvious cost savings, the new system is also far more reliable.",
+   "distractor_hint": [
+    "lnk-24"
+   ]
+  },
+  {
+   "id": "y10-linking-words-024",
+   "en": "apart from (sth.)",
+   "de": "abgesehen von (etwas)",
+   "pos": "phrase",
+   "ipa": "əˈpɑːt frəm",
+   "example_en": "Apart from a few scratches, the car survived the accident remarkably well.",
+   "distractor_hint": [
+    "lnk-23"
+   ]
+  },
+  {
+   "id": "y10-linking-words-025",
+   "en": "what is more",
+   "de": "was noch hinzukommt, obendrein",
+   "pos": "phrase",
+   "example_en": "The hotel was fully booked. What is more, the only alternative was an hour's drive away.",
+   "distractor_hint": [
+    "lnk-20"
+   ]
+  },
+  {
+   "id": "y10-linking-words-026",
+   "en": "not only … but also",
+   "de": "nicht nur …, sondern auch",
+   "pos": "phrase",
+   "example_en": "The new policy is not only expensive but also unlikely to solve the problem it targets."
+  },
+  {
+   "id": "y10-linking-words-027",
+   "en": "because",
+   "de": "weil",
+   "pos": "conjunction",
+   "ipa": "bɪˈkɒz",
+   "example_en": "The match was postponed because the pitch had flooded overnight.",
+   "distractor_hint": [
+    "lnk-28"
+   ]
+  },
+  {
+   "id": "y10-linking-words-028",
+   "en": "since (reason)",
+   "de": "da, weil",
+   "pos": "conjunction",
+   "ipa": "sɪns",
+   "example_en": "Since the museum was free that day, the queue stretched around the block.",
+   "distractor_hint": [
+    "lnk-27",
+    "lnk-29"
+   ]
+  },
+  {
+   "id": "y10-linking-words-029",
+   "en": "as (reason)",
+   "de": "da, weil",
+   "pos": "conjunction",
+   "ipa": "æz",
+   "example_en": "As the deadline had already passed, the committee refused to consider the application.",
+   "distractor_hint": [
+    "lnk-28"
+   ]
+  },
+  {
+   "id": "y10-linking-words-030",
+   "en": "due to (sth.)",
+   "de": "aufgrund (einer Sache)",
+   "pos": "phrase",
+   "ipa": "djuː tə",
+   "example_en": "The flight was cancelled due to a technical fault discovered during inspection.",
+   "distractor_hint": [
+    "lnk-31"
+   ]
+  },
+  {
+   "id": "y10-linking-words-031",
+   "en": "owing to (sth.)",
+   "de": "aufgrund, wegen (einer Sache)",
+   "pos": "phrase",
+   "ipa": "ˈəʊɪŋ tə",
+   "example_en": "Owing to a shortage of staff, the library will close two hours early this week.",
+   "distractor_hint": [
+    "lnk-30"
+   ]
+  },
+  {
+   "id": "y10-linking-words-032",
+   "en": "given that",
+   "de": "angesichts der Tatsache, dass",
+   "pos": "phrase",
+   "ipa": "ˈɡɪvən ðət",
+   "example_en": "Given that the forecast predicted storms all week, the festival organisers moved the event indoors."
+  },
+  {
+   "id": "y10-linking-words-033",
+   "en": "therefore",
+   "de": "daher, deshalb",
+   "pos": "adverb",
+   "ipa": "ˈðeəfɔː",
+   "example_en": "The witness could not be located. Therefore, the trial was postponed until further notice.",
+   "distractor_hint": [
+    "lnk-34",
+    "lnk-35"
+   ]
+  },
+  {
+   "id": "y10-linking-words-034",
+   "en": "thus",
+   "de": "somit, folglich",
+   "pos": "adverb",
+   "ipa": "ðʌs",
+   "example_en": "Both parties refused to compromise, thus prolonging a dispute that had already lasted a decade.",
+   "distractor_hint": [
+    "lnk-33",
+    "lnk-35"
+   ]
+  },
+  {
+   "id": "y10-linking-words-035",
+   "en": "hence",
+   "de": "daher, folglich",
+   "pos": "adverb",
+   "ipa": "hens",
+   "example_en": "The harvest failed for the third year running, hence the sharp rise in food prices.",
+   "distractor_hint": [
+    "lnk-33",
+    "lnk-34"
+   ]
+  },
+  {
+   "id": "y10-linking-words-036",
+   "en": "consequently",
+   "de": "folglich, infolgedessen",
+   "pos": "adverb",
+   "ipa": "ˈkɒnsɪkwəntli",
+   "example_en": "The factory had ignored the safety report for months. Consequently, the fire spread far faster than it should have.",
+   "distractor_hint": [
+    "lnk-37"
+   ]
+  },
+  {
+   "id": "y10-linking-words-037",
+   "en": "as a result",
+   "de": "infolgedessen, als Ergebnis",
+   "pos": "phrase",
+   "ipa": "rɪˈzʌlt",
+   "example_en": "Two key suppliers went bankrupt last year. As a result, prices across the industry have risen sharply.",
+   "distractor_hint": [
+    "lnk-36",
+    "lnk-38"
+   ]
+  },
+  {
+   "id": "y10-linking-words-038",
+   "en": "for this reason",
+   "de": "aus diesem Grund",
+   "pos": "phrase",
+   "example_en": "The area floods almost every winter. For this reason, no new houses have been approved there since 2015.",
+   "distractor_hint": [
+    "lnk-37"
+   ]
+  },
+  {
+   "id": "y10-linking-words-039",
+   "en": "because of this",
+   "de": "deswegen, aus diesem Grund",
+   "pos": "phrase",
+   "example_en": "The bridge had not been inspected in over a decade. Because of this, engineers ordered it closed immediately.",
+   "distractor_hint": [
+    "lnk-38"
+   ]
+  },
+  {
+   "id": "y10-linking-words-040",
+   "en": "so (result)",
+   "de": "also, deshalb",
+   "pos": "conjunction",
+   "ipa": "səʊ",
+   "example_en": "The last train had already left, so they had no choice but to wait until morning."
+  },
+  {
+   "id": "y10-linking-words-041",
+   "en": "first of all",
+   "de": "zunächst einmal, zuallererst",
+   "pos": "phrase",
+   "example_en": "First of all, thank the interviewer for their time before you answer a single question.",
+   "distractor_hint": [
+    "lnk-42"
+   ]
+  },
+  {
+   "id": "y10-linking-words-042",
+   "en": "to begin with",
+   "de": "zunächst, zu Beginn",
+   "pos": "phrase",
+   "ipa": "bɪˈɡɪn wɪð",
+   "example_en": "To begin with, the plan seemed straightforward; only later did the complications appear.",
+   "distractor_hint": [
+    "lnk-41"
+   ]
+  },
+  {
+   "id": "y10-linking-words-043",
+   "en": "secondly",
+   "de": "zweitens",
+   "pos": "adverb",
+   "ipa": "ˈsekəndli",
+   "example_en": "Firstly, the design was too expensive to manufacture. Secondly, it failed every safety test."
+  },
+  {
+   "id": "y10-linking-words-044",
+   "en": "subsequently",
+   "de": "anschließend, in der Folge",
+   "pos": "adverb",
+   "ipa": "ˈsʌbsɪkwəntli",
+   "example_en": "The company denied the allegations at first. It subsequently admitted that the reports were accurate.",
+   "distractor_hint": [
+    "lnk-45"
+   ]
+  },
+  {
+   "id": "y10-linking-words-045",
+   "en": "afterwards",
+   "de": "danach, im Anschluss",
+   "pos": "adverb",
+   "ipa": "ˈɑːftəwədz",
+   "example_en": "The negotiations lasted late into the night. Afterwards, neither side would comment on what had been agreed.",
+   "distractor_hint": [
+    "lnk-44"
+   ]
+  },
+  {
+   "id": "y10-linking-words-046",
+   "en": "previously",
+   "de": "zuvor, vorher",
+   "pos": "adverb",
+   "ipa": "ˈpriːviəsli",
+   "example_en": "The building had previously served as a warehouse before it was converted into flats."
+  },
+  {
+   "id": "y10-linking-words-047",
+   "en": "meanwhile",
+   "de": "währenddessen, unterdessen",
+   "pos": "adverb",
+   "ipa": "ˈmiːnwaɪl",
+   "example_en": "The rescue team searched the eastern slope. Meanwhile, a second group approached from the valley below."
+  },
+  {
+   "id": "y10-linking-words-048",
+   "en": "eventually",
+   "de": "schließlich, letztendlich",
+   "pos": "adverb",
+   "ipa": "ɪˈventʃuəli",
+   "example_en": "The talks dragged on for three years. Eventually, both governments signed the agreement in Geneva.",
+   "distractor_hint": [
+    "lnk-49"
+   ]
+  },
+  {
+   "id": "y10-linking-words-049",
+   "en": "ultimately",
+   "de": "letztlich, im Endeffekt",
+   "pos": "adverb",
+   "ipa": "ˈʌltɪmətli",
+   "example_en": "The reviewers raised several concerns, but ultimately recommended the drug for approval.",
+   "distractor_hint": [
+    "lnk-48"
+   ]
+  },
+  {
+   "id": "y10-linking-words-050",
+   "en": "finally",
+   "de": "schließlich, zuletzt",
+   "pos": "adverb",
+   "ipa": "ˈfaɪnəli",
+   "example_en": "After four rounds of interviews, they finally offered her the position."
+  },
+  {
+   "id": "y10-linking-words-051",
+   "en": "last but not least",
+   "de": "nicht zuletzt, last but not least",
+   "pos": "phrase",
+   "example_en": "Last but not least, I would like to thank the volunteers who made this event possible."
+  },
+  {
+   "id": "y10-linking-words-052",
+   "en": "for example",
+   "de": "zum Beispiel",
+   "pos": "phrase",
+   "ipa": "ɪɡˈzɑːmpl",
+   "example_en": "Several countries have raised the retirement age; Germany, for example, did so in 2012.",
+   "distractor_hint": [
+    "lnk-53"
+   ]
+  },
+  {
+   "id": "y10-linking-words-053",
+   "en": "for instance",
+   "de": "zum Beispiel, etwa",
+   "pos": "phrase",
+   "ipa": "ˈɪnstəns",
+   "example_en": "Some habits are surprisingly hard to break. Giving up caffeine, for instance, can take months.",
+   "distractor_hint": [
+    "lnk-52"
+   ]
+  },
+  {
+   "id": "y10-linking-words-054",
+   "en": "such as",
+   "de": "wie zum Beispiel, etwa",
+   "pos": "phrase",
+   "ipa": "sʌtʃ æz",
+   "example_en": "Several European capitals, such as Vienna and Copenhagen, now offer free public transport for children.",
+   "distractor_hint": [
+    "lnk-55"
+   ]
+  },
+  {
+   "id": "y10-linking-words-055",
+   "en": "namely",
+   "de": "nämlich",
+   "pos": "adverb",
+   "ipa": "ˈneɪmli",
+   "example_en": "Only one candidate met every requirement, namely the one with a decade of teaching experience.",
+   "distractor_hint": [
+    "lnk-54"
+   ]
+  },
+  {
+   "id": "y10-linking-words-056",
+   "en": "in particular",
+   "de": "insbesondere, vor allem",
+   "pos": "phrase",
+   "ipa": "pəˈtɪkjələ",
+   "example_en": "Coastal towns, in particular, are struggling to cope with the rise in sea levels.",
+   "distractor_hint": [
+    "lnk-57"
+   ]
+  },
+  {
+   "id": "y10-linking-words-057",
+   "en": "notably",
+   "de": "insbesondere, namentlich",
+   "pos": "adverb",
+   "ipa": "ˈnəʊtəbli",
+   "example_en": "Several members raised objections, most notably the treasurer, who refused to sign the budget.",
+   "distractor_hint": [
+    "lnk-56"
+   ]
+  },
+  {
+   "id": "y10-linking-words-058",
+   "en": "in fact",
+   "de": "tatsächlich, in der Tat",
+   "pos": "phrase",
+   "ipa": "fækt",
+   "example_en": "Critics predicted the film would flop. In fact, it became the highest-grossing release of the year.",
+   "distractor_hint": [
+    "lnk-59"
+   ]
+  },
+  {
+   "id": "y10-linking-words-059",
+   "en": "indeed",
+   "de": "tatsächlich, in der Tat",
+   "pos": "adverb",
+   "ipa": "ɪnˈdiːd",
+   "example_en": "The results were surprising, and indeed several researchers asked to see the raw data again.",
+   "distractor_hint": [
+    "lnk-58"
+   ]
+  },
+  {
+   "id": "y10-linking-words-060",
+   "en": "above all",
+   "de": "vor allem, in erster Linie",
+   "pos": "phrase",
+   "ipa": "əˈbʌv ɔːl",
+   "example_en": "The programme needs more funding, more staff and, above all, more time.",
+   "distractor_hint": [
+    "lnk-61"
+   ]
+  },
+  {
+   "id": "y10-linking-words-061",
+   "en": "most importantly",
+   "de": "vor allem, am wichtigsten",
+   "pos": "phrase",
+   "ipa": "ɪmˈpɔːtntli",
+   "example_en": "The device is lighter, cheaper and, most importantly, far easier to repair.",
+   "distractor_hint": [
+    "lnk-60"
+   ]
+  },
+  {
+   "id": "y10-linking-words-062",
+   "en": "in conclusion",
+   "de": "abschließend, zusammenfassend",
+   "pos": "phrase",
+   "ipa": "kənˈkluːʒn",
+   "example_en": "In conclusion, the study found no clear link between the two factors.",
+   "distractor_hint": [
+    "lnk-63"
+   ]
+  },
+  {
+   "id": "y10-linking-words-063",
+   "en": "to sum up",
+   "de": "um es zusammenzufassen",
+   "pos": "phrase",
+   "ipa": "sʌm ʌp",
+   "example_en": "To sum up, the project met its targets but ran well over budget.",
+   "distractor_hint": [
+    "lnk-62",
+    "lnk-64"
+   ]
+  },
+  {
+   "id": "y10-linking-words-064",
+   "en": "overall",
+   "de": "insgesamt, alles in allem",
+   "pos": "adverb",
+   "ipa": "ˌəʊvərˈɔːl",
+   "example_en": "Some sessions ran late and one speaker cancelled, but overall the conference was a success.",
+   "distractor_hint": [
+    "lnk-65"
+   ]
+  },
+  {
+   "id": "y10-linking-words-065",
+   "en": "all in all",
+   "de": "alles in allem",
+   "pos": "phrase",
+   "ipa": "ɔːl ɪn ɔːl",
+   "example_en": "The weather was poor for two of the five days, but all in all it was a memorable trip.",
+   "distractor_hint": [
+    "lnk-64"
+   ]
+  },
+  {
+   "id": "y10-linking-words-066",
+   "en": "in short",
+   "de": "kurz gesagt",
+   "pos": "phrase",
+   "example_en": "The report is thorough, well argued and, in short, worth reading in full.",
+   "distractor_hint": [
+    "lnk-67"
+   ]
+  },
+  {
+   "id": "y10-linking-words-067",
+   "en": "in brief",
+   "de": "kurz gefasst",
+   "pos": "phrase",
+   "ipa": "briːf",
+   "example_en": "In brief, the committee recommends approving the plan with three minor changes.",
+   "distractor_hint": [
+    "lnk-66"
+   ]
+  },
+  {
+   "id": "y10-linking-words-068",
+   "en": "provided that",
+   "de": "vorausgesetzt, dass",
+   "pos": "conjunction",
+   "ipa": "prəˈvaɪdɪd ðət",
+   "example_en": "You may reschedule the exam, provided that you inform the office at least a week in advance.",
+   "distractor_hint": [
+    "lnk-69"
+   ]
+  },
+  {
+   "id": "y10-linking-words-069",
+   "en": "as long as",
+   "de": "solange, sofern",
+   "pos": "conjunction",
+   "ipa": "əz ˈlɒŋ æz",
+   "example_en": "Children are welcome at the event, as long as they are accompanied by an adult.",
+   "distractor_hint": [
+    "lnk-68"
+   ]
+  },
+  {
+   "id": "y10-linking-words-070",
+   "en": "unless",
+   "de": "es sei denn, sofern nicht",
+   "pos": "conjunction",
+   "ipa": "ənˈles",
+   "example_en": "The flight will not be refunded unless the airline cancels it themselves."
+  },
+  {
+   "id": "y10-linking-words-071",
+   "en": "otherwise",
+   "de": "andernfalls, sonst",
+   "pos": "adverb",
+   "ipa": "ˈʌðəwaɪz",
+   "example_en": "Please confirm your seat by Friday; otherwise it will be given to someone on the waiting list."
+  },
+  {
+   "id": "y10-linking-words-072",
+   "en": "in case (of sth.)",
+   "de": "falls, für den Fall (einer Sache)",
+   "pos": "phrase",
+   "collocations": "in case of emergency",
+   "example_en": "Keep a copy of the document at home, in case the original gets lost in the post."
+  },
+  {
+   "id": "y10-linking-words-073",
+   "en": "similarly",
+   "de": "ähnlich, in ähnlicher Weise",
+   "pos": "adverb",
+   "ipa": "ˈsɪmɪləli",
+   "example_en": "House prices fell sharply in the north of the country. Similarly, rents dropped in most rural areas.",
+   "distractor_hint": [
+    "lnk-74"
+   ]
+  },
+  {
+   "id": "y10-linking-words-074",
+   "en": "likewise (linking)",
+   "de": "ebenso, gleichermaßen",
+   "pos": "adverb",
+   "ipa": "ˈlaɪkwaɪz",
+   "example_en": "The first witness described the car as dark blue. Likewise, the second witness recalled the same colour.",
+   "distractor_hint": [
+    "lnk-73"
+   ]
+  },
+  {
+   "id": "y10-linking-words-075",
+   "en": "in the same way",
+   "de": "auf die gleiche Weise, ebenso",
+   "pos": "phrase",
+   "example_en": "Older employees were offered retraining. In the same way, new staff received a full induction programme."
+  },
+  {
+   "id": "y10-linking-words-076",
+   "en": "equally",
+   "de": "ebenso, gleichermaßen",
+   "pos": "adverb",
+   "ipa": "ˈiːkwəli",
+   "example_en": "The first draft was too long. The second version was equally difficult to follow."
+  },
+  {
+   "id": "y10-linking-words-077",
+   "en": "conversely",
+   "de": "umgekehrt",
+   "pos": "adverb",
+   "ipa": "kənˈvɜːsli",
+   "example_en": "Warmer winters mean less snowfall in the mountains. Conversely, they can bring heavier rain to the coast."
+  },
+  {
+   "id": "y10-linking-words-078",
+   "en": "in other words",
+   "de": "mit anderen Worten",
+   "pos": "phrase",
+   "ipa": "ˈʌðə wɜːdz",
+   "example_en": "The scheme is not compulsory; in other words, no one can be forced to take part.",
+   "distractor_hint": [
+    "lnk-79"
+   ]
+  },
+  {
+   "id": "y10-linking-words-079",
+   "en": "that is to say",
+   "de": "das heißt, sprich",
+   "pos": "phrase",
+   "example_en": "The measure applies only to new buildings, that is to say, anything constructed after 2020.",
+   "distractor_hint": [
+    "lnk-78"
+   ]
+  },
+  {
+   "id": "y10-linking-words-080",
+   "en": "in (the) light of",
+   "de": "angesichts, vor dem Hintergrund",
+   "ipa": "",
+   "pos": "",
+   "example_en": "In light of this new evidence, the police are reopening the case."
   }
  ]
 };
