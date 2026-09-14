@@ -6159,7 +6159,7 @@ function renderHelp(){
   d.push('<p>Zurück zur Übersicht kommst du jederzeit oben links.</p>');
 
   d.push('<h2>Die fünf Fächer</h2>');
-  d.push('<p>Jede Vokabel steckt in einem von fünf Fächern. Die Fachübersicht kannst du während der Übung aufklappen.</p>');
+  d.push('<p>Jede Vokabel steckt in einem von fünf Fächern. Die Fachübersicht ist während der Übung standardmäßig geöffnet. Du kannst sie bei Bedarf zuklappen.</p>');
   d.push('<p>Eine neue Vokabel startet in Fach 1. Antwortest du richtig, rückt sie ein Fach weiter. Antwortest du falsch, fällt sie zurück in Fach 1. Je weiter oben eine Vokabel steht, desto seltener siehst du sie wieder:</p>');
   d.push('<table><thead><tr><th>Fach</th><th>Du siehst die Vokabel wieder</th></tr></thead><tbody>'
        + '<tr><td>1</td><td>sofort; einmal zusätzlich im selben Durchgang</td></tr>'
@@ -6213,14 +6213,6 @@ function renderHelp(){
   d.push('<li>Schalter für <b>Beispielsätze</b> und <b>Lautschrift</b>;</li>');
   d.push('<li><b>Drucken</b> — druckt die aufgeklappten Abschnitte und berücksichtigt den Suchfilter. Zugeklappte Abschnitte werden vollständig ausgelassen und erzeugen keine zusätzlichen leeren Seiten. Im Druckdialog kannst du auch als PDF speichern.</li>');
   d.push('</ul>');
-
-  d.push('<h2>Wenn etwas nicht geht</h2>');
-  d.push('<h3>Kein Ton bei der Aussprache</h3>');
-  d.push('<p>Prüfe Lautstärke und Audioausgabe, zum Beispiel verbundene Kopfhörer. Die verfügbaren Stimmen hängen von Gerät und Browser ab. Nutze auch den Aussprache-Test oben.</p>');
-  d.push('<h3>Der Lernstand ist weg</h3>');
-  d.push('<p>Wahrscheinlich wurden die Browserdaten gelöscht, oder du hast die Seite über eine andere Adresse geöffnet. Für den Browser sind das zwei verschiedene Orte. Nutze immer denselben Link.</p>');
-  d.push('<h3>Die Seite bleibt leer</h3>');
-  d.push('<p>Lade sie neu. Kommt danach ein gelber Kasten mit einer Fehlermeldung, gib den Text an deine Lehrkraft weiter.</p>');
 
   d.push('<div class="teacher">');
   d.push('<h2>Für Kolleginnen und Kollegen</h2>');
@@ -6488,7 +6480,7 @@ try{
 }
 </script>
 
-<script src="../assets/learning.js?v=20260910-csv-units"></script>
+<script src="../assets/learning.js?v=20260914-open-boxes"></script>
 
 <link rel="stylesheet" href="../assets/feedback.css">
 <script src="../assets/feedback.js"></script>

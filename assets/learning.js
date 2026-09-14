@@ -233,8 +233,8 @@
     if(back){back.textContent='Später fortsetzen';}
     const rail=view.querySelector('.rail');
     if(rail){
-      const details=document.createElement('details');details.className='box-details';
-      const summary=document.createElement('summary');summary.textContent='Deine fünf Lernfächer ansehen';
+      const details=document.createElement('details');details.className='box-details';details.open=true;
+      const summary=document.createElement('summary');summary.textContent='Deine fünf Lernfächer';
       rail.replaceWith(details);details.append(summary,rail);
     }
     const stage=view.querySelector('.stage');
