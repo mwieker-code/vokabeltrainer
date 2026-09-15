@@ -15,3 +15,17 @@ body{background:#f3f6f2}
 @media(max-width:620px){.wrap{padding-top:24px}#cards{grid-template-columns:1fr;gap:14px}#cards .card{min-height:170px;padding:22px 100px 22px 20px}#cards .name{font-size:25px}#cards .card:last-child{grid-column:auto}}
 @media(prefers-reduced-motion:reduce){#cards .card{transition:none}}
 @media print{#cards .card{box-shadow:none;break-inside:avoid}}
+
+/* Compact phone portrait menu; retain the spacious landscape layout. */
+@media(max-width:620px) and (orientation:portrait){
+ .wrap{padding:18px 14px 24px}
+ #cards{gap:9px;margin-top:18px}
+ #cards .card,#cards .card:last-child{min-height:70px;padding:14px 68px 14px 16px;border-radius:14px}
+ #cards .row{flex-direction:row;align-items:center;gap:6px 12px;flex-wrap:wrap}
+ #cards .name{font-size:21px;line-height:1.25}
+ #cards .meta{font-size:11px;padding:3px 6px}
+ #cards .desc{display:none}
+ #cards .menu-art{width:36px;height:36px;right:16px;top:50%;transform:translateY(-50%)}
+ #cards .menu-arrow{display:none}
+ .foot{margin-top:20px}
+}
