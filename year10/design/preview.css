@@ -1,0 +1,33 @@
+/* Year 7 design preview: local to this year. */
+body{background:#f3f6f2}
+.yeargroup[class*="u"]{border:1px solid color-mix(in srgb,var(--unit) 24%,white);background:var(--unit-bg);border-radius:20px;margin:0 0 18px;padding:0;overflow:hidden;box-shadow:0 4px 16px #173e4510}
+.yeargroup[class*="u"] .yearhead{position:relative;min-height:126px;margin:0;padding:25px 150px 25px 24px;border:0;display:flex;flex-wrap:wrap;align-content:center;gap:10px 16px;background-image:var(--place-art);background-position:right 45px center;background-size:90px;background-repeat:no-repeat}
+.yeargroup .yearhead .tag{border-radius:7px;padding:5px 10px;font:600 13px/1.3 inherit}
+.yeargroup .yearhead .name{font-family:inherit;font-style:normal;font-size:22px;font-weight:700;line-height:1.3;color:var(--unit-ink)!important;flex:1 1 300px}
+.yeargroup .yearhead::after{position:absolute;right:17px;top:48px;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#ffffffb3;font:600 20px/1 sans-serif}
+.yeargroup .yearhead:hover{background-color:#ffffff42}
+.yeargroup .yearhead:focus-visible{outline:3px solid var(--unit);outline-offset:-5px}
+.yeargroup[open] .yearhead{border-bottom:1px solid #ffffffb3}
+.yeargroup .topic{width:calc(100% - 32px);margin:10px 16px;background:#fffffff0;border:1px solid #ffffff;border-left:4px solid var(--unit);border-radius:12px;padding:15px 17px}
+.yeargroup .topic:last-child{margin-bottom:16px}
+.yeargroup .topic:hover{background:white;border-color:var(--unit);transform:none}
+.box-details{background:#fff;border:1px solid #d5e2df;border-radius:16px;padding:14px;margin:18px 0}
+.box-details summary{font-weight:650;color:#284e4c}
+.rail{gap:8px;margin-top:14px}
+.rail .slot{border-radius:10px;background:#f0f5f3}
+.stage .vcard{border:1px solid #cedfda;border-top:5px solid var(--unit,#417f79);border-radius:22px;box-shadow:0 8px 24px #173e4510;background:#fff}
+.round-progress{padding:12px 4px;color:#355754}
+.scope-options .topic{border-radius:14px;padding:20px}
+.scope-options .topic.primary{background:#e3efec;color:#214c45;border-color:#6a978b}
+@media(max-width:600px){.yeargroup[class*="u"] .yearhead{padding:20px 104px 20px 18px;background-size:58px;background-position:right 38px center;min-height:130px}.yeargroup .yearhead .name{font-size:19px}.yeargroup .yearhead::after{right:10px}.yeargroup .t-row{flex-wrap:wrap;gap:6px}.rail{gap:4px}.box-details{padding:9px}}
+@media print{body{background:white}.yeargroup[class*="u"]{box-shadow:none;background:white}.yeargroup[class*="u"] .yearhead{background-image:none}}
+
+@media(max-width:620px) and (orientation:portrait){.yeargroup[class*="u"] .yearhead{min-height:100px;padding:16px 98px 16px 16px;background-size:52px;background-position:right 35px center}.yeargroup .yearhead .name{font-size:18px;flex-basis:100%}.yeargroup[class*="u"]{margin-bottom:12px}}
+
+.u1{--place-art:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Cpath%20d%3D%22M35%2028A15%2015%200%201%200%2065%2028A15%2015%200%201%200%2035%2028M22%2085V72Q22%2052%2050%2052Q78%2052%2078%2072V85Z%22%20fill%3D%22none%22%20stroke%3D%22%23476d70%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E")}
+
+.u2{--place-art:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Cpath%20d%3D%22M40%2029A10%2010%200%201%200%2060%2029A10%2010%200%201%200%2040%2029M29%2080V64Q50%2040%2071%2064V80M14%2035A8%208%200%201%200%2030%2035A8%208%200%201%200%2014%2035M8%2073V60Q16%2048%2027%2054M70%2035A8%208%200%201%200%2086%2035A8%208%200%201%200%2070%2035M92%2073V60Q84%2048%2073%2054%22%20fill%3D%22none%22%20stroke%3D%22%23476d70%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E")}
+
+.u3{--place-art:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Cpath%20d%3D%22M50%2010A40%2040%200%201%200%2050%2090A40%2040%200%201%200%2050%2010M10%2050H90M50%2010Q18%2050%2050%2090Q82%2050%2050%2010M19%2026H81M19%2074H81%22%20fill%3D%22none%22%20stroke%3D%22%23476d70%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E")}
+
+.y10u-linking{--place-art:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Cpath%20d%3D%22M42%2032L52%2022Q75%208%2082%2032Q87%2044%2072%2053L62%2060M58%2068L48%2078Q25%2092%2018%2068Q13%2056%2028%2047L38%2040M35%2065L65%2035%22%20fill%3D%22none%22%20stroke%3D%22%23476d70%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E")}

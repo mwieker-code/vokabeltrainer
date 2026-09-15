@@ -1,0 +1,15 @@
+body{background:#f3f6f2}
+#view>.yeargroup{border:1px solid #cfdbd8;background:#eaf0ed;border-radius:18px;overflow:hidden;margin:0 0 20px;box-shadow:0 4px 16px #173e4510}
+#view>.yeargroup>summary{padding:22px;margin:0;display:flex;align-items:center;gap:14px;flex-wrap:wrap;cursor:pointer}
+#view>.yeargroup>summary .tag{font-family:inherit;border-radius:7px;padding:5px 10px;font-weight:650}
+#view>.yeargroup>summary .name{font-family:inherit;font-style:normal;font-weight:650;font-size:21px}
+#view>.yeargroup>summary .ycount{font-family:inherit;font-size:12px}
+#view>.yeargroup .topic{width:calc(100% - 32px);margin:10px 16px;border-radius:12px;padding:18px;border:1px solid #ffffffb0;border-left:4px solid currentColor}
+#view>.yeargroup .topic:last-child{margin-bottom:16px}
+#view>.yeargroup .topic:hover{box-shadow:0 3px 12px #173e4515;transform:none}
+#view>.yeargroup .topic .t-name{font-family:inherit;font-weight:600;line-height:1.5}
+.box-details{background:white;border:1px solid #d5e2df;border-radius:16px;padding:14px;margin:18px 0}
+.box-details summary{font-weight:650;color:#284e4c}
+.rail{gap:8px;margin-top:14px}.rail .slot{border-radius:10px;background:#f0f5f3}
+.stage .vcard{border:1px solid #cedfda;border-top:5px solid #417f79;border-radius:22px;box-shadow:0 8px 24px #173e4510}
+@media(max-width:620px){#view>.yeargroup>summary{padding:16px;gap:8px}#view>.yeargroup>summary .name{font-size:18px}#view>.yeargroup .topic{padding:14px}.t-row{flex-wrap:wrap;gap:8px}.rail{gap:4px}}
