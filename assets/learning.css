@@ -72,3 +72,19 @@ a.home-link:hover,a.home-link:focus,a.home-link:active,a.grammar-back:hover,a.gr
 .csv-groups{border:1px solid #9bb9be;border-radius:10px;margin-top:16px;padding:16px}.csv-groups legend{font-weight:700}.csv-groups details{margin:10px 0}.csv-groups summary{cursor:pointer;font-weight:600;padding:8px}.csv-groups label{display:block;padding:8px 12px}.csv-groups input{margin-right:6px}
 
 .test-prompt-dialog{width:min(760px,94vw);max-height:90vh;overflow:auto;border:1px solid #9bb9be;border-radius:18px;padding:24px;color:#18343e;background:white;font-family:inherit}.test-prompt-dialog::backdrop{background:#17333d88}.test-prompt-dialog fieldset{margin:18px 0;padding:16px;border:1px solid #c3d5d8;border-radius:10px}.test-prompt-dialog label{display:block;margin:10px 0}.test-prompt-dialog input[type=number]{width:110px;padding:10px;font:inherit}.test-prompt-dialog textarea{width:100%;font:14px/1.5 monospace;padding:12px;box-sizing:border-box}.test-prompt-dialog #promptError{color:#982e22}.test-prompt-dialog #promptResult{margin-top:24px}.test-prompt-dialog h2{font-size:22px}
+
+/* Vocabulary selection shared by all year groups. */
+.selection-bar{position:sticky;bottom:12px;z-index:5;background:#fff;border:1px solid #9bb9be;border-radius:16px;padding:16px;box-shadow:0 4px 22px #173e4530;margin-top:18px}.selection-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.selection-actions button{padding:10px 14px;border-radius:9px}.selection-unit{font-size:18px;font-weight:650;display:flex;align-items:center;gap:12px;margin:28px 0 12px}.direct-selection{margin-right:12px}.selecting input[type=checkbox]{width:20px;height:20px;accent-color:#286f72;cursor:pointer}
+@media screen{
+#vlist.selecting .vrow{grid-template-columns:32px minmax(0,1fr) minmax(0,1fr);padding:9px 0;align-items:start}
+#vlist.selecting .vrow .csv-check{position:static;grid-column:1;grid-row:1;margin:0;padding:2px 0;align-self:start}
+#vlist.selecting .vrow .csv-check input{margin:0;flex-shrink:0}
+#vlist.selecting .vrow>div:not(.vde):not(.vex){grid-column:2;min-width:0;overflow-wrap:anywhere}
+#vlist.selecting .vrow>.vde{grid-column:3;min-width:0;overflow-wrap:anywhere}
+#vlist.selecting .vrow>.vex{grid-column:2/-1}
+}
+@media screen and (max-width:600px){
+#vlist.selecting .vrow{grid-template-columns:28px minmax(0,1fr);column-gap:10px}
+#vlist.selecting .vrow>.vde{grid-column:2}
+}
+.selection-hidden{display:none!important}[hidden]{display:none!important}@media print{.selection-bar,.direct-selection,.selection-unit{display:none!important}}
