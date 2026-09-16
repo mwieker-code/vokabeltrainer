@@ -295,7 +295,6 @@ button.primary:hover{background:#0B4A54}
 .cloze .gap{display:inline-block;min-width:5.5em;border-bottom:2px solid var(--petrol);
   text-align:center;color:var(--petrol);font-family:var(--mono);font-size:15px;
   vertical-align:baseline;padding:0 4px}
-.basef{font-family:var(--mono);font-size:14px;color:var(--ink-soft);margin-left:5px}
 .cloze b{font-style:normal;font-weight:600;
   box-shadow:inset 0 -.42em 0 rgba(14,90,102,.18)}
 .clue{font-family:var(--serif);font-size:16px;color:var(--ink-soft);margin-top:14px}
@@ -3303,7 +3302,7 @@ const SETS = {
    "de": "Realität, Wirklichkeit",
    "pos": "noun",
    "ipa": "riˈælɪti",
-   "example_en": "Virtual reality can feel almost like actual reality."
+   "example_en": "Virtual reality can make you feel as if you are in another world."
   },
   {
    "id": "u3-023",
@@ -3904,7 +3903,7 @@ const SETS = {
    "de": "auf etwas angewiesen sein",
    "pos": "verb",
    "ipa": "rɪˈlaɪ",
-   "example_en": "Bees rely on flowers for food, and flowers also rely on bees to spread pollen."
+   "example_en": "Bees rely on flowers for food."
   },
   {
    "id": "u3-098",
@@ -6021,12 +6020,9 @@ function renderSession(){
 
   if(S.mode === "cloze"){
     const cp = clozeParts(v);
-    const bf = baseForm(v);
-    const showHint = bf && bf.trim().toLowerCase() !== String(cp.word).trim().toLowerCase();
     body += '<div class="cloze">' + esc(cp.before)
           + (S.answered ? '<b>' + esc(cp.word) + '</b>'
                         : '<span class="gap">?</span>')
-          + (!S.answered && showHint ? '<span class="basef">(' + esc(bf) + ')</span>' : "")
           + esc(cp.after) + '</div>'
           + '<div class="clue">gesucht: <span>' + esc(v.de) + '</span>'
           + (v.pos ? ' \u00b7 ' + esc(v.pos) : "") + '</div>'
@@ -6080,7 +6076,7 @@ function clozeParts(v){
   var ex = v.example_en;
   if(!ex) return null;
   var core = String(v.en).replace(/\([^)]*\)/g, " ").split("/")[0];
-  core = core.replace(/^\s*to\s+/i, "").replace(/\s+/g, " ").trim();
+  core = core.replace(/^\s*to\s+/i, "").replace(/\.{2,}|…/g, " ").replace(/\s+/g, " ").trim().replace(/[.!?]$/, "");
   if(!core) return null;
   var esc0 = function(x){ return x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); };
   var stripPunct = function(w){ return w.replace(/^[",.;:]+|[",.;:]+$/g, ""); };
@@ -6111,7 +6107,7 @@ function clozeParts(v){
   tries.push(esc0(first.slice(0, Math.max(4, first.length - 3))) + "\\w*"); // Wortstamm (Fallback)
 
   for(var i = 0; i < tries.length; i++){
-    var m = ex.match(new RegExp("(" + tries[i] + ")", "i"));
+    var m = ex.match(new RegExp("\\b(" + tries[i] + ")", "i"));
     if(m && m.index !== undefined && m[1].length > 2){
       return {before: ex.slice(0, m.index), word: m[1],
               after: ex.slice(m.index + m[1].length), core: core};
@@ -6121,16 +6117,6 @@ function clozeParts(v){
 }
 
 function hasCloze(v){ return clozeParts(v) !== null; }
-
-/* Bei Verben steht die Grundform hinter der Luecke, damit klar ist, welche
-   Zeitform gesucht wird - so wie im Lehrwerk. */
-function baseForm(v){
-  if(!/\bverb\b/.test(v.pos || "")) return null;
-  let s = (v.en || "").replace(/\([^)]*\)/g, " ");
-  s = s.split(",")[0].split("/")[0];
-  s = s.replace(/\b(sb|sth)\.?\b/g, " ").replace(/\s+/g, " ").trim();
-  return s || null;
-}
 
 function promptBlock(v){
   const englishAsked = S.dir === "en2de";
@@ -6623,7 +6609,7 @@ try{
 }
 </script>
 
-<script src="../assets/learning.js?v=20260915-test-prompt"></script>
+<script src="../assets/learning.js?v=20260916-selection-cloze"></script>
 
 <link rel="stylesheet" href="../assets/feedback.css">
 <script src="../assets/feedback.js"></script>

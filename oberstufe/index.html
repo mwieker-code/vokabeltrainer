@@ -2102,7 +2102,7 @@ const SETS = {
    "de": "vorhersagen",
    "pos": "verb",
    "ipa": "prɪˈdɪkt",
-   "example_en": "Everyone who predicted the collapse also predicted four that never came."
+   "example_en": "The economist predicted the collapse months before it happened."
   },
   {
    "id": "dig-168",
@@ -2313,7 +2313,7 @@ const SETS = {
    "de": "zweifellos",
    "pos": "adverb",
    "ipa": "ʌnˈdaʊtɪdli",
-   "example_en": "The technology is undoubtedly useful and undoubtedly oversold."
+   "example_en": "The technology is undoubtedly useful, although it has its limits."
   },
   {
    "id": "dig-193",
@@ -2921,7 +2921,7 @@ const SETS = {
    "pos": "noun",
    "ipa": "feɪθ",
    "collocations": "to have faith in sth.",
-   "example_en": "Faith in the institution fell faster than faith in the people running it."
+   "example_en": "Public faith in the institution fell after the scandal."
   },
   {
    "id": "dig-266",
@@ -3880,7 +3880,7 @@ const SETS = {
    "pos": "noun",
    "ipa": "rɪˈdʌkʃn",
    "collocations": "a reduction in sth.",
-   "example_en": "A reduction on paper is not the same as a reduction in the air.",
+   "example_en": "The new policy led to a significant reduction in air pollution.",
    "distractor_hint": [
     "sus-24"
    ]
@@ -5147,7 +5147,7 @@ const SETS = {
    "pos": "noun",
    "ipa": "ˈmændeɪt",
    "collocations": "to have a mandate to do sth.",
-   "example_en": "The mission had a mandate to observe and no mandate to act."
+   "example_en": "The mission had a mandate to observe the election."
   },
   {
    "id": "int-12",
@@ -9487,7 +9487,7 @@ const SETS = {
    "de": "legale(r) / illegale(r) Einwanderer(in)",
    "pos": "noun",
    "ipa": "ɪˈliːɡl",
-   "example_en": "Newspapers write illegal immigrant; campaigners argue no person can be illegal."
+   "example_en": "The report described him as a legal immigrant with permission to work."
   },
   {
    "id": "mig-09",
@@ -9996,7 +9996,7 @@ const SETS = {
    "pos": "noun",
    "ipa": "iˈkwɒləti",
    "collocations": "equality before the law",
-   "example_en": "Equality before the law says nothing about equality at the interview."
+   "example_en": "Equality before the law is a fundamental democratic principle."
   },
   {
    "id": "mig-62",
@@ -10362,7 +10362,7 @@ const SETS = {
    "de": "Kopftuch",
    "pos": "noun",
    "ipa": "ˈhedskɑːf",
-   "example_en": "The debate about the headscarf is rarely about the headscarf."
+   "example_en": "She chose to wear a headscarf as an expression of her faith."
   },
   {
    "id": "lif-23",
@@ -10990,7 +10990,7 @@ const SETS = {
    "pos": "noun",
    "ipa": "kənˈfɔːməti",
    "collocations": "pressure towards conformity",
-   "example_en": "Every youth culture claims nonconformity and produces its own conformity."
+   "example_en": "The school encouraged conformity rather than independent thinking."
   },
   {
    "id": "tee-13",
@@ -11121,7 +11121,7 @@ const SETS = {
    "pos": "verb",
    "ipa": "rɪˈbel",
    "collocations": "to rebel against convention",
-   "example_en": "They rebel against rules their parents once rebelled against too."
+   "example_en": "Some teenagers rebel against rules they consider unfair."
   },
   {
    "id": "tee-28",
@@ -11631,7 +11631,7 @@ const SETS = {
    "pos": "noun",
    "ipa": "məˈtʃʊərəti",
    "collocations": "to reach maturity",
-   "example_en": "Sexual maturity and emotional maturity do not arrive together.",
+   "example_en": "Young people reach sexual maturity at different ages.",
    "distractor_hint": [
     "tee-21"
    ]
@@ -12681,7 +12681,7 @@ const SETS = {
    "de": "jdn. befördern",
    "pos": "verb",
    "ipa": "prəˈməʊt",
-   "example_en": "Fewer women are promoted into the roles that decide who gets promoted."
+   "example_en": "More women were promoted into senior roles last year."
   },
   {
    "id": "gen-14",
@@ -17524,7 +17524,7 @@ function clozeParts(v){
   var ex = v.example_en;
   if(!ex) return null;
   var core = String(v.en).replace(/\([^)]*\)/g, " ").split("/")[0];
-  core = core.replace(/^\s*to\s+/i, "").replace(/\s+/g, " ").trim();
+  core = core.replace(/^\s*to\s+/i, "").replace(/\.{2,}|…/g, " ").replace(/\s+/g, " ").trim().replace(/[.!?]$/, "");
   if(!core) return null;
   var esc0 = function(x){ return x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); };
 
@@ -17538,7 +17538,7 @@ function clozeParts(v){
   tries.push(esc0(first.slice(0, Math.max(4, first.length - 3))) + "\\w*");
 
   for(var i = 0; i < tries.length; i++){
-    var m = ex.match(new RegExp("(" + tries[i] + ")", "i"));
+    var m = ex.match(new RegExp("\\b(" + tries[i] + ")", "i"));
     if(m && m.index !== undefined && m[1].length > 2){
       return {before: ex.slice(0, m.index), word: m[1],
               after: ex.slice(m.index + m[1].length), core: core};
@@ -18122,7 +18122,7 @@ try{
 }
 </script>
 
-<script src="../assets/learning.js?v=20260915-test-prompt"></script>
+<script src="../assets/learning.js?v=20260916-selection-cloze"></script>
 
 <link rel="stylesheet" href="../assets/feedback.css">
 <script src="../assets/feedback.js"></script>

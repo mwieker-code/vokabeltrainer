@@ -133,6 +133,36 @@ ${JSON.stringify(rows.map(r=>({Unit:r.unit,Englisch:r.en,Deutsch:r.de})),null,2)
     document.getElementById('csvSelected').onclick=()=>csvDownload(true);
     document.getElementById('csvVisible').onclick=()=>{box.querySelectorAll('details').forEach(sec=>{if(sec.hidden||sec.style.display==='none'||(!document.getElementById('lq').value.trim()&&!sec.open))return;sec.querySelectorAll('.vrow:not(.off) input[data-csv-key]').forEach(input=>{input.checked=true;csvSelected.add(input.dataset.csvKey);});});update();};
     document.getElementById('csvClear').onclick=()=>{csvSelected.clear();box.querySelectorAll('[data-csv-key]').forEach(input=>input.checked=false);update();};update();
+    if(KEY==='vt8:progress'){
+      controls.hidden=true;
+      const toggle=document.getElementById('lcsv');toggle.textContent='Vokabeln auswählen';toggle.setAttribute('aria-expanded','false');
+      const bar=document.createElement('section');bar.className='selection-bar';bar.hidden=true;
+      bar.innerHTML='<strong id="selectionCount" role="status"></strong><div class="selection-actions"><button id="selectionReview">Auswahl ansehen</button><button id="selectionClear">Aufheben</button><button id="selectionHits" hidden></button><button id="selectionCSV">CSV herunterladen</button><button id="selectionPrompt" class="primary">Test-Prompt erstellen</button></div>';
+      box.after(bar);let active=false,review=false;const headings=[];
+      const check=(parent,title,keys)=>{const label=document.createElement('label');label.className='direct-selection';label.hidden=true;const input=document.createElement('input');input.type='checkbox';input.setAttribute('aria-label',title);label.append(input);label.addEventListener('click',e=>e.stopPropagation());input.onchange=()=>{keys.forEach(k=>input.checked?csvSelected.add(k):csvSelected.delete(k));refresh();};parent.prepend(label);headings.push({input,keys});};
+      const units=new Map();TOPICS.forEach(t=>{if(!units.has(t.unit))units.set(t.unit,[]);units.get(t.unit).push(t);});
+      units.forEach(topics=>{const first=box.querySelector('[data-sec="'+topics[0].id+'"]');const heading=document.createElement('div');heading.className='selection-unit';heading.textContent=topics[0].unitName;first.before(heading);check(heading,'Ganze '+topics[0].unitName,topics.flatMap(t=>(SETS[t.id]||[]).map((_,i)=>t.id+':'+i)));});
+      box.querySelectorAll('[data-sec]').forEach(sec=>check(sec.querySelector('summary'),'Abschnitt '+TOPICS.find(t=>t.id===sec.dataset.sec).name,[...sec.querySelectorAll('[data-csv-key]')].map(i=>i.dataset.csvKey)));
+      box.querySelectorAll('.csv-check').forEach(label=>{label.lastChild.textContent='';label.closest('.vrow').prepend(label);label.querySelector('input').addEventListener('change',()=>refresh());});
+      const q=document.getElementById('lq');const filter=q.oninput;
+      function refresh(){
+        update();headings.forEach(({input,keys})=>{const n=keys.filter(k=>csvSelected.has(k)).length;input.checked=n===keys.length&&n>0;input.indeterminate=n>0&&n<keys.length;});
+        bar.querySelector('#selectionCount').textContent=csvSelected.size+' Vokabeln ausgewählt';
+        ['selectionCSV','selectionPrompt','selectionReview','selectionClear'].forEach(id=>bar.querySelector('#'+id).disabled=!csvSelected.size);
+        bar.querySelector('#selectionReview').textContent=review?'Zur gesamten Liste':'Auswahl ansehen';bar.querySelector('#selectionReview').disabled=false;
+        box.querySelectorAll('.vrow').forEach(row=>{row.classList.toggle('selection-hidden',review&&!csvSelected.has(row.querySelector('[data-csv-key]').dataset.csvKey));});
+        box.querySelectorAll('[data-sec]').forEach(sec=>{sec.classList.toggle('selection-hidden',review&&![...sec.querySelectorAll('[data-csv-key]')].some(i=>csvSelected.has(i.dataset.csvKey)));if(review)sec.open=true;});
+        box.querySelectorAll('.selection-unit').forEach(h=>{h.hidden=!active||review||!!q.value.trim();});
+        const hits=[...box.querySelectorAll('.vrow:not(.off) [data-csv-key]')];const hitButton=bar.querySelector('#selectionHits');hitButton.hidden=!q.value.trim()||review;hitButton.textContent='Alle '+hits.length+' Suchtreffer auswählen';hitButton.disabled=!hits.length;
+      }
+      toggle.onclick=()=>{active=!active;review=false;bar.hidden=!active;toggle.textContent=active?'Auswahl beenden':'Vokabeln auswählen';toggle.setAttribute('aria-expanded',String(active));box.classList.toggle('selecting',active);box.querySelectorAll('.csv-check,.direct-selection').forEach(el=>el.hidden=!active);refresh();};
+      q.oninput=()=>{review=false;filter.call(q);refresh();};
+      bar.querySelector('#selectionReview').onclick=()=>{review=!review;if(review){q.value='';filter.call(q);}refresh();};
+      bar.querySelector('#selectionClear').onclick=()=>{csvSelected.clear();refresh();};
+      bar.querySelector('#selectionHits').onclick=()=>{box.querySelectorAll('.vrow:not(.off) [data-csv-key]').forEach(i=>csvSelected.add(i.dataset.csvKey));refresh();};
+      bar.querySelector('#selectionCSV').onclick=()=>csvDownload(true);bar.querySelector('#selectionPrompt').onclick=testPromptDialog;
+      refresh();
+    }
   };
   // Split alternatives BEFORE removing punctuation. Keep both optional-word forms.
   function forms(target) {
