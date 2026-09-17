@@ -88,3 +88,13 @@ a.home-link:hover,a.home-link:focus,a.home-link:active,a.grammar-back:hover,a.gr
 #vlist.selecting .vrow>.vde{grid-column:2}
 }
 .selection-hidden{display:none!important}[hidden]{display:none!important}@media print{.selection-bar,.direct-selection,.selection-unit{display:none!important}}
+
+/* Test prompt options. */
+#promptAllocation>label{display:grid;grid-template-columns:minmax(0,1fr) 100px;align-items:center;gap:12px}
+#promptAllocation input[type=number]{width:100%;margin:0}
+#promptTense{display:block;width:100%;padding:12px;border:1px solid #9bb9be;border-radius:8px;font:inherit;background:white;color:#18323d}
+.selection-files{margin-top:12px;border-top:1px solid #d5e2df;padding-top:10px}
+.selection-files summary{cursor:pointer;font-weight:600}
+.selection-files label{display:block;margin:12px 0}
+.selection-files input{max-width:100%;padding:8px;font:inherit}
+#selectionFileStatus{display:block;margin-top:8px}
