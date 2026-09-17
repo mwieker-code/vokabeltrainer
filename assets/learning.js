@@ -214,6 +214,7 @@ ${JSON.stringify(rows.map(r=>({Unit:r.unit,Englisch:r.en,Deutsch:r.de})),null,2)
         const hits=[...box.querySelectorAll('.vrow:not(.off) [data-csv-key]')];const hitButton=bar.querySelector('#selectionHits');hitButton.hidden=!q.value.trim()||review;hitButton.textContent='Alle '+hits.length+' Suchtreffer auswählen';hitButton.disabled=!hits.length;
       }
       toggle.onclick=()=>{active=!active;review=false;bar.hidden=!active;toggle.textContent=active?'Auswahl beenden':'Vokabeln auswählen';toggle.setAttribute('aria-expanded',String(active));box.classList.toggle('selecting',active);box.querySelectorAll('.csv-check,.direct-selection').forEach(el=>el.hidden=!active);refresh();};
+      ['lex','lipa'].forEach(id=>document.getElementById(id)?.addEventListener('click',()=>box.classList.toggle('selecting',active)));
       q.oninput=()=>{review=false;filter.call(q);refresh();};
       bar.querySelector('#selectionReview').onclick=()=>{review=!review;if(review){q.value='';filter.call(q);}refresh();};
       bar.querySelector('#selectionClear').onclick=()=>{csvSelected.clear();refresh();};

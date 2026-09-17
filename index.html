@@ -55,8 +55,8 @@ body{
 .foot{margin-top:36px;font-family:var(--mono);font-size:11px;color:var(--ink-soft);
   text-align:center;letter-spacing:.03em}
 </style>
-<link rel="stylesheet" href="assets/learning.css?v=20260908-export">
-<link rel="stylesheet" href="assets/menu-preview.css?v=20260915-mobile">
+<link rel="stylesheet" href="assets/learning.css?v=20260917-examples-menu">
+<link rel="stylesheet" href="assets/menu-preview.css?v=20260917-examples-menu">
 </head>
 <body>
 <div class="wrap">
@@ -64,7 +64,6 @@ body{
     <h1>Vokabeltrainer <span class="title-accent">Englisch</span></h1>
     <div class="sub">Jahrgangs- und stufenbezogen</div>
   </div>
-  
 
   <div id="cards"></div>
 
@@ -85,49 +84,49 @@ const SITES = [
     "name": "Year 5",
     "meta": "Orientierungsstufe",
     "desc": "Vokabular zum Lehrwerk der 5. Klasse.",
-    "color": "#2B5F8A"
+    "color": "#2459A6"
   },
   {
     "path": "year6/",
     "name": "Year 6",
     "meta": "Orientierungsstufe",
     "desc": "Vokabular zum Lehrwerk der 6. Klasse.",
-    "color": "#2B5F8A"
+    "color": "#AC2865"
   },
   {
     "path": "year7/",
     "name": "Year 7",
     "meta": "Mittelstufe",
     "desc": "Vokabular zum Lehrwerk der 7. Klasse.",
-    "color": "#5B7A2E"
+    "color": "#7448A3"
   },
   {
     "path": "year8/",
     "name": "Year 8",
     "meta": "Mittelstufe",
     "desc": "Vokabular zum Lehrwerk der 8. Klasse.",
-    "color": "#A36B1A"
+    "color": "#007C83"
   },
   {
     "path": "year9/",
     "name": "Year 9",
     "meta": "Mittelstufe",
     "desc": "Vokabular zum Lehrwerk der 9. Klasse.",
-    "color": "#C9761E"
+    "color": "#B5482A"
   },
   {
     "path": "year10/",
     "name": "Year 10",
     "meta": "Mittelstufe",
     "desc": "Vokabular zum Lehrwerk der 10. Klasse.",
-    "color": "#7A5C9E"
+    "color": "#357341"
   },
   {
     "path": "oberstufe/",
     "name": "Oberstufe",
     "meta": "E-Jahrgang – Q2",
     "desc": "Vokabular zu den Korridorthemen der gymnasialen Oberstufe.",
-    "color": "#3F7A4B"
+    "color": "#193F50"
   }
 ];
 
@@ -138,12 +137,12 @@ function esc(s){
 }
 
 const MENU_ART = {
- 'year5/':'M12 18Q28 12 40 20Q52 12 68 18V62Q52 56 40 64Q28 56 12 62ZM40 20V64M20 28H31M20 38H31M49 28H60M49 38H60',
- 'year6/':'M18 18H62V52H42L28 64V52H18ZM27 30H53M27 40H46',
- 'year7/':'M8 64L29 22L46 51L58 31L74 64ZM20 40L29 22L39 40M12 71H70',
- 'year8/':'M40 10A30 30 0 1 0 40 70A30 30 0 1 0 40 10M10 40H70M40 10Q15 40 40 70Q65 40 40 10M16 23H64M16 57H64',
- 'year9/':'M40 9L68 24V56L40 71L12 56V24ZM40 9V71M12 24L40 40L68 24M12 56L40 40L68 56',
- 'year10/':'M13 64V43H25V64M34 64V31H46V64M55 64V17H67V64M10 22L31 12L47 18L68 7M56 7H68V19',
+ 'year5/':'M8 68H72M13 68V34H27M53 34H67V68M27 68V27L40 16L53 27V68M35 68V53H45V68M40 16V6H53V13H40M18 43H22M18 53H22M58 43H62M58 53H62M35 35H45V44H35Z',
+ 'year6/':'M56 40A16 16 0 1 0 24 40A16 16 0 1 0 56 40M40 7V16M40 64V73M7 40H16M64 40H73M17 17L23 23M57 57L63 63M17 63L23 57M57 23L63 17',
+ 'year7/':'M24 73H56M28 73V28H52V73M25 28H55L49 20H31ZM33 20L40 7L47 20M40 7V3M48 39A8 8 0 1 0 32 39A8 8 0 1 0 48 39M40 34V39L44 42M34 53V65M40 53V65M46 53V65M27 49H53',
+ 'year8/':'M7 18L18 21L30 22L40 22L42 18L47 20L48 26L52 25L55 28L60 26L63 21L67 21L70 15L73 18L71 26L66 30L65 36L60 42L57 45L57 52L61 61L59 66L54 62L51 53L45 51L40 53L35 51L32 57L28 55L24 47L18 45L14 43L10 36L6 28Z',
+ 'year9/':'M7 66Q23 62 29 47Q31 40 40 36L47 27L47 16L51 7L54 21L61 12L59 26L68 31L66 35L57 36L51 45L58 49L65 46M51 45L46 52Q57 58 55 64L68 69L51 70L40 60L33 69H22L32 59L32 51Q22 66 7 66ZM61 30L61 30',
+ 'year10/':'M48 28A8 8 0 1 0 32 28A8 8 0 1 0 48 28M23 37A6 6 0 1 0 11 37A6 6 0 1 0 23 37M69 37A6 6 0 1 0 57 37A6 6 0 1 0 69 37M27 58V50Q27 40 40 40Q53 40 53 50V58ZM8 59V53Q8 46 17 46H22M58 46H63Q72 46 72 53V59M14 22Q40 0 66 22M15 67Q40 80 65 67',
  'oberstufe/':'M8 29L40 12L72 29L40 46ZM20 36V54Q40 68 60 54V36M72 29V55'
 };
 function menuArt(path){return '<svg class="menu-art" aria-hidden="true" viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="'+MENU_ART[path]+'"/></svg>';}
