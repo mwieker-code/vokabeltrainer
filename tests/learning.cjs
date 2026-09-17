@@ -3,7 +3,7 @@ const vm=require('node:vm');
 const fs=require('fs'),path=require('path'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..');
 let count=0;
-for(const folder of ['year8','year5','year6','year9','year10','oberstufe']){
+for(const folder of ['year5','year7','year8','year6','year9','year10','oberstufe']){
  const html=fs.readFileSync(path.join(root,folder,'index.html'),'utf8');
  const dom=new JSDOM(html,{runScripts:'outside-only',url:'https://example.org/'+folder+'/'});
  const w=dom.window;w.scrollTo=()=>{};
@@ -29,7 +29,7 @@ for(const folder of ['year8','year5','year6','year9','year10','oberstufe']){
  w.document.querySelector('[data-topic]').click();
  w.document.querySelector('[data-scope="short"]').click();
  ok(run('S.queue.length')===10,'ten cards');
- ok(w.document.querySelector('.box-details'),'collapsible boxes');
+ ok(w.document.querySelector('.box-details').open,'learning boxes open by default');
  run('S.revealed=true; rate(0)');
  ok(run('S.queue.length')===11,'one retry added');
  ok(run('S.queue[10]===S.queue[0]'),'retry after initial pass');
@@ -40,11 +40,19 @@ for(const folder of ['year8','year5','year6','year9','year10','oberstufe']){
  let input=w.document.querySelector('#typeIn');input.value='completely wrong';
  w.document.querySelector('#submit').click();
  ok(w.document.querySelector('#typeIn').value==='completely wrong','entered answer preserved');
- ok(w.document.querySelector('.correction mark'),'differences highlighted');
+ ok(w.document.querySelector('.correction-input strong').textContent==='completely wrong','wrong answer shown verbatim');
+ ok(w.document.querySelector('.correction-solution strong').textContent===run('ansSide(current())'),'full solution shown for different answer');
+ ok(!w.document.querySelector('.correction mark'),'unrelated words are not compared character by character');
  run('render()');
  ok(w.document.querySelector('.correction'),'feedback survives rerender');
  run('rate(2)');
  ok(run('S.queue.length')===11,'wrong cannot be rated known');
+ // Use a known vocabulary item for a deterministic insertion-error check.
+ const original=run('JSON.stringify(current())');
+ run(`Object.assign(current(),{en:'school',de:'Schule',pos:'noun'});S.dir='de2en';S.answered=null;render();`);
+ input=w.document.querySelector('#typeIn');input.value='schol';w.document.querySelector('#submit').click();
+ ok(w.document.querySelector('.correction mark'),'near answer differences highlighted');
+ run('Object.assign(current(),'+original+')');
  // End-to-end finite round and next action.
  run(`while(S.i<S.queue.length){S.revealed=true;S.answered='no';rate(0);}`);
  ok(w.document.querySelector('#doneHome'),'round ends');

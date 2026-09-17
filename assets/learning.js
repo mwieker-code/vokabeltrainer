@@ -171,15 +171,17 @@ ${JSON.stringify(rows.map(r=>({Unit:r.unit,Englisch:r.en,Deutsch:r.de})),null,2)
       const bar=document.createElement('section');bar.className='selection-bar';bar.hidden=true;
       bar.innerHTML='<strong id="selectionCount" role="status"></strong><div class="selection-actions"><button id="selectionReview">Auswahl ansehen</button><button id="selectionClear">Aufheben</button><button id="selectionHits" hidden></button><button id="selectionCSV">CSV herunterladen</button><button id="selectionPrompt" class="primary">Test-Prompt erstellen</button></div>';
       box.after(bar);let active=false,review=false;const headings=[];
-      if(KEY==='vt8:progress'){
+      {
+        const selectionYear=Number(KEY.match(/^vt(\d+):/)?.[1])||'oberstufe';
+        const selectionLabel=selectionYear==='oberstufe'?'Oberstufe':'Year '+selectionYear;
         const saved=document.createElement('details');saved.className='selection-files';
         saved.innerHTML='<summary>Auswahl speichern / laden</summary><label>Auswahlname <input id="selectionName" placeholder="z. B. Unit 2 – Test"></label><button id="selectionSave" type="button">Auswahl speichern</button><button id="selectionLoad" type="button">Auswahl laden</button><input id="selectionFile" type="file" accept=".json,application/json" hidden><span id="selectionFileStatus" role="status"></span>';
         bar.append(saved);
         saved.querySelector('#selectionSave').onclick=()=>{
           const rows=csvRows().filter(r=>csvSelected.has(r.key)),status=saved.querySelector('#selectionFileStatus');
           if(!rows.length){status.textContent='Bitte zuerst Vokabeln auswählen.';return;}
-          const name=saved.querySelector('#selectionName').value.trim()||'Year 8 – Vokabelauswahl';
-          const file={format:'vokabeltrainer-selection',version:1,year:8,name,words:rows};
+          const name=saved.querySelector('#selectionName').value.trim()||selectionLabel+' – Vokabelauswahl';
+          const file={format:'vokabeltrainer-selection',version:1,year:selectionYear,name,words:rows};
           const url=URL.createObjectURL(new Blob([JSON.stringify(file,null,2)],{type:'application/json'}));
           const a=document.createElement('a');a.href=url;a.download=name.replace(/[^a-z0-9äöüß_-]/gi,'-').slice(0,80)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);status.textContent='Auswahl als Datei gespeichert. Du kannst sie später laden oder weitergeben.';
         };
@@ -189,7 +191,7 @@ ${JSON.stringify(rows.map(r=>({Unit:r.unit,Englisch:r.en,Deutsch:r.de})),null,2)
           try{
             if(file.size>1000000)throw Error('Die Datei ist zu groß.');
             const data=JSON.parse(await file.text());
-            if(data.format!=='vokabeltrainer-selection'||data.version!==1||data.year!==8||typeof data.name!=='string'||!Array.isArray(data.words)||!data.words.length)throw Error('Bitte eine gespeicherte Year-8-Auswahl laden.');
+            if(data.format!=='vokabeltrainer-selection'||data.version!==1||data.year!==selectionYear||typeof data.name!=='string'||!Array.isArray(data.words)||!data.words.length)throw Error('Bitte eine gespeicherte Auswahl für '+selectionLabel+' laden.');
             const current=csvRows(),keys=new Set();
             for(const r of data.words){const match=current.find(v=>r&&v.unit===r.unit&&v.en===r.en&&v.de===r.de);if(!match)throw Error('Einträge passen nicht zum aktuellen Vokabular. Die bisherige Auswahl bleibt erhalten.');keys.add(match.key);}
             csvSelected.clear();keys.forEach(k=>csvSelected.add(k));saved.querySelector('#selectionName').value=data.name;review=false;q.value='';filter.call(q);refresh();status.textContent=keys.size+' Vokabeln geladen. Die vorherige Auswahl wurde ersetzt.';
@@ -246,9 +248,12 @@ ${JSON.stringify(rows.map(r=>({Unit:r.unit,Englisch:r.en,Deutsch:r.de})),null,2)
 
   // Levenshtein alignment marks substitutions, insertions and deletions on both sides.
   function comparison(input, target) {
-    const a = Array.from(normalise(input));
+    const a = Array.from(String(input).trim());
     const candidates = forms(target);
-    const b = Array.from(candidates.sort((x,y) => distance(a.join(''),x)-distance(a.join(''),y))[0] || target);
+    const closest=candidates.sort((x,y) => distance(normalise(input),x)-distance(normalise(input),y))[0] || target;
+    const near=checkTyped(input,target)==='near';
+    if(!near)return '<div class="correction"><div class="correction-input"><small>Deine Antwort</small><strong>'+safe(input)+'</strong></div><div class="correction-solution"><small>Richtige Lösung</small><strong>'+safe(target)+'</strong></div></div>';
+    const b = Array.from(closest);
     const d = Array.from({length:a.length+1}, (_,i) => [i]);
     for(let j=0;j<=b.length;j++) d[0][j]=j;
     for(let i=1;i<=a.length;i++) for(let j=1;j<=b.length;j++)
@@ -261,7 +266,7 @@ ${JSON.stringify(rows.map(r=>({Unit:r.unit,Englisch:r.en,Deutsch:r.de})),null,2)
       else if(i&&d[i][j]===d[i-1][j]+1){left.unshift(mark(a[--i]));}
       else{right.unshift(mark(b[--j]));}
     }
-    return '<div class="correction"><div><small>Deine Schreibweise</small><strong>'+left.join('')+'</strong></div><div><small>Passende Lösung</small><strong>'+right.join('')+'</strong></div></div>';
+    return '<div class="correction"><div class="correction-input"><small>Deine Antwort</small><strong>'+left.join('')+'</strong></div><div class="correction-solution"><small>Richtige Schreibweise</small><strong>'+right.join('')+'</strong></div></div><p class="correction-note">Markiert sind abweichende oder fehlende Zeichen.</p>';
   }
   function feedback() {
     const input = document.getElementById('typeIn');
@@ -273,7 +278,7 @@ ${JSON.stringify(rows.map(r=>({Unit:r.unit,Englisch:r.en,Deutsch:r.de})),null,2)
     el.setAttribute('role','status');
     el.innerHTML = (S.answered==='ok' ? 'Richtig.' : S.answered==='near' ? 'Fast – schau dir die markierten Buchstaben an.' : (S.retried.has(current()) ? 'Noch nicht. Dieses Wort bleibt zum Weiterüben fällig.' : 'Noch nicht. Dieses Wort kommt in der Runde noch einmal.'))
       + (S.answered==='ok' ? '' : comparison(S.typedValue,solution))
-      + (S.answered==='ok' ? '' : '<p>Vollständiger Eintrag: '+safe(solution)+'</p>');
+      + (S.answered==='near' ? '<p>Vollständiger Eintrag: '+safe(solution)+'</p>' : '');
   }
   submitTyped = function() {
     const input = document.getElementById('typeIn');
