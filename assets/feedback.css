@@ -1,5 +1,29 @@
 .feedback-settings{display:flex;flex-wrap:wrap;gap:10px;margin:24px 0}.feedback-settings button{font:500 14px/1.5 system-ui,sans-serif;min-height:44px;border:1px solid #9ab4bc;border-radius:9px;background:#fff;color:#18323d;padding:8px 14px;cursor:pointer}.feedback-settings button[aria-pressed="true"]{background:#e0efeb;border-color:#357562}.feedback-settings button:focus-visible{outline:3px solid #bd781e;outline-offset:3px}
-.feedback-motion .feedback-ok{animation:feedback-good .45s ease-out}.feedback-motion .feedback-near,.feedback-motion .feedback-no{animation:feedback-review .45s ease-out}
-@keyframes feedback-good{from{box-shadow:0 0 0 5px #52a47480}to{box-shadow:0 0 0 0 transparent}}@keyframes feedback-review{from{box-shadow:0 0 0 5px #d7a24770}to{box-shadow:0 0 0 0 transparent}}
+.vcard,#feedback,.panel{position:relative}
+.feedback-motion .feedback-ok{animation:feedback-good .55s cubic-bezier(.2,.8,.3,1)}
+.feedback-motion .feedback-near{animation:feedback-near .45s ease-out}
+.feedback-motion .feedback-no{animation:feedback-bad .5s cubic-bezier(.2,.8,.3,1)}
+@keyframes feedback-good{
+  0%{transform:scale(1);box-shadow:0 0 0 0 rgba(63,122,75,0)}
+  30%{transform:scale(1.05);box-shadow:0 0 0 13px rgba(63,122,75,.55)}
+  55%{transform:scale(.98)}
+  100%{transform:scale(1);box-shadow:0 0 0 0 rgba(63,122,75,0)}
+}
+@keyframes feedback-near{from{box-shadow:0 0 0 6px rgba(201,118,30,.5)}to{box-shadow:0 0 0 0 transparent}}
+@keyframes feedback-bad{
+  0%,100%{transform:translateX(0) rotate(0);box-shadow:0 0 0 0 rgba(180,66,60,0)}
+  15%{transform:translateX(-10px) rotate(-1.2deg);box-shadow:0 0 0 13px rgba(180,66,60,.5)}
+  35%{transform:translateX(9px) rotate(1.2deg)}
+  55%{transform:translateX(-7px) rotate(-.8deg)}
+  75%{transform:translateX(5px) rotate(.6deg);box-shadow:0 0 0 0 rgba(180,66,60,0)}
+  90%{transform:translateX(-2px)}
+}
+.confetti-piece{position:absolute;top:50%;left:50%;width:7px;height:7px;border-radius:2px;
+  transform:translate(-50%,-50%);animation:confetti-fly .75s cubic-bezier(.15,.7,.3,1) forwards;
+  pointer-events:none;z-index:5}
+@keyframes confetti-fly{
+  0%{transform:translate(-50%,-50%) rotate(0deg);opacity:1}
+  100%{transform:translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) rotate(var(--rot));opacity:0}
+}
 html:not(.feedback-motion) *,html:not(.feedback-motion) *::before,html:not(.feedback-motion) *::after{animation:none!important;transition:none!important}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}@media print{.feedback-settings{display:none}}
