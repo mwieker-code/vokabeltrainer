@@ -564,19 +564,72 @@ ${JSON.stringify(rows.map(r=>({Unit:r.unit,Englisch:r.en,Deutsch:r.de})),null,2)
     }
     return at > words.length ? null : picked;
   }
-  function assignmentUrl(dir){
+  const topicById = new Map(TOPICS.map(t => [t.id, t]));
+  /* Woher stammt das Vokabular? Bei den Jahrgängen die Unit, in der
+     Oberstufe das Themenfeld - dort gibt es keine Units. */
+  function sourcesOf(words){
+    const seen = new Set(), out = [];
+    for(const v of words){
+      const t = topicById.get(topicFor.get(v));
+      if(!t) continue;
+      const label = t.unitName || t.yearName || t.unit || t.year;
+      if(label && !seen.has(label)){ seen.add(label); out.push(label); }
+    }
+    return out;
+  }
+  function sourceLabel(list){
+    if(!list.length) return '';
+    if(list.length <= 3) return list.join(', ');
+    return list.slice(0, 2).join(', ') + ' und ' + (list.length - 2) + ' weitere';
+  }
+  function stamp(date){
+    const pad = n => (n < 10 ? '0' : '') + n;
+    return date.getFullYear() + pad(date.getMonth() + 1) + pad(date.getDate());
+  }
+  function readableDate(text){
+    if(!/^\d{8}$/.test(text)) return '';
+    const y = +text.slice(0, 4), m = +text.slice(4, 6), d = +text.slice(6, 8);
+    if(m < 1 || m > 12 || d < 1 || d > 31) return '';
+    const pad = n => (n < 10 ? '0' : '') + n;
+    return pad(d) + '.' + pad(m) + '.' + y;
+  }
+  function assignmentUrl(dir, name, date){
     const url = new URL(location.href);
     url.search = ''; url.hash = '';
     url.searchParams.set('auftrag', fingerprint() + encodeSelection());
     if(dir) url.searchParams.set('r', dir);
+    if(name) url.searchParams.set('n', name.slice(0, 80));
+    if(date) url.searchParams.set('d', date);
     return url.href;
+  }
+  /* Bildschirmfüllend, damit die Klasse den Code vom Board abscannen kann.
+     Eigener Dialog, weil er über dem bereits offenen Dialog liegen muss. */
+  function showQrFullscreen(url, caption){
+    const code = window.QR && window.QR.svg ? window.QR.svg(url) : null;
+    if(!code) return;
+    const big = document.createElement('dialog');
+    big.className = 'qr-fullscreen';
+    big.innerHTML = '<div class="qr-fullscreen-inner">'
+      + '<div class="qr-fullscreen-code">' + code + '</div>'
+      + '<p class="qr-fullscreen-title"></p>'
+      + '<button type="button" class="qr-fullscreen-close">Schließen (Esc)</button></div>';
+    big.querySelector('.qr-fullscreen-title').textContent = caption || 'Lernauftrag scannen';
+    document.body.append(big);
+    big.addEventListener('close', () => big.remove());
+    big.querySelector('.qr-fullscreen-close').onclick = () => big.close();
+    big.showModal();
   }
   function assignmentDialog(){
     if(!csvSelected.size) return;
     const dialog = document.createElement('dialog');
     dialog.className = 'test-prompt-dialog assignment-dialog';
+    const today = stamp(new Date());
     dialog.innerHTML = '<h2>Hausaufgaben-Link</h2>'
-      + '<p>' + csvSelected.size + ' ausgewählte Vokabeln. Der Link enthält nur diese Auswahl, keinen Lernstand.</p>'
+      + '<p>' + csvSelected.size + ' ausgewählte Vokabeln aus ' + safe(sourceLabel(sourcesOf(selectedWords())))
+      + '. Der Link enthält nur diese Auswahl, keinen Lernstand.</p>'
+      + '<label for="assignmentName">Name des Auftrags</label>'
+      + '<input id="assignmentName" maxlength="80" placeholder="z. B. Vokabeltest Unit 3">'
+      + '<p class="assignment-hint">Datiert auf ' + readableDate(today) + ' – das Datum reist im Link mit.</p>'
       + '<label for="assignmentDir">Abfragerichtung</label>'
       + '<select id="assignmentDir"><option value="">Schüler wählt selbst</option>'
       + '<option value="de2en">DE → EN (produktiv)</option>'
@@ -585,6 +638,7 @@ ${JSON.stringify(rows.map(r=>({Unit:r.unit,Englisch:r.en,Deutsch:r.de})),null,2)
       + '<input id="assignmentURL" readonly>'
       + '<p><button type="button" id="assignmentCopy">Link kopieren</button> '
       + '<button type="button" id="assignmentCopyQR">QR-Code kopieren</button> '
+      + '<button type="button" id="assignmentBigQR">Groß anzeigen</button> '
       + '<span id="assignmentStatus" role="status"></span></p>'
       + '<div id="assignmentQR" class="assignment-qr"></div>'
       + '<p id="assignmentQRNote"></p>'
@@ -594,7 +648,8 @@ ${JSON.stringify(rows.map(r=>({Unit:r.unit,Englisch:r.en,Deutsch:r.de})),null,2)
     const field = dialog.querySelector('#assignmentURL');
     const note = dialog.querySelector('#assignmentQRNote');
     function refresh(){
-      const url = assignmentUrl(dialog.querySelector('#assignmentDir').value);
+      const url = assignmentUrl(dialog.querySelector('#assignmentDir').value,
+        dialog.querySelector('#assignmentName').value.trim(), today);
       field.value = url;
       const box = dialog.querySelector('#assignmentQR');
       const code = window.QR ? window.QR.svg(url) : null;
@@ -606,6 +661,11 @@ ${JSON.stringify(rows.map(r=>({Unit:r.unit,Englisch:r.en,Deutsch:r.de})),null,2)
       dialog.querySelector('#assignmentStatus').textContent = '';
     }
     dialog.querySelector('#assignmentDir').onchange = refresh;
+    dialog.querySelector('#assignmentName').oninput = refresh;
+    dialog.querySelector('#assignmentBigQR').onclick = () => {
+      const name = dialog.querySelector('#assignmentName').value.trim();
+      showQrFullscreen(field.value, [name, readableDate(today)].filter(Boolean).join(' · '));
+    };
     dialog.querySelector('#assignmentCopy').onclick = async () => {
       const status = dialog.querySelector('#assignmentStatus');
       try{ await navigator.clipboard.writeText(field.value); status.textContent = 'Link kopiert.'; }
@@ -645,7 +705,13 @@ ${JSON.stringify(rows.map(r=>({Unit:r.unit,Englisch:r.en,Deutsch:r.de})),null,2)
     if(!words || !words.length){ assignment = {stale: true}; return; }
     const dir = params.get('r');
     assignmentWords = words;
-    assignment = {count: words.length, dir: ['de2en', 'en2de'].includes(dir) ? dir : null};
+    assignment = {
+      count: words.length,
+      dir: ['de2en', 'en2de'].includes(dir) ? dir : null,
+      name: [...(params.get('n') || '')].filter(ch => ch.charCodeAt(0) >= 32).join('').slice(0, 80),
+      date: readableDate(params.get('d') || ''),
+      sources: sourceLabel(sourcesOf(words))
+    };
     if(assignment.dir) S.dir = assignment.dir;
   }
   function assignmentBanner(){
@@ -656,10 +722,13 @@ ${JSON.stringify(rows.map(r=>({Unit:r.unit,Englisch:r.en,Deutsch:r.de})),null,2)
         + '<span>Dieser Link passt nicht mehr zum aktuellen Vokabular. Bitte deine Lehrkraft um einen neuen Link.</span></div>');
       return;
     }
+    const details = [assignment.count + ' Vokabeln'];
+    if(assignment.sources) details.push(assignment.sources);
+    if(assignment.dir) details.push(assignment.dir === 'de2en' ? 'DE → EN' : 'EN → DE');
+    if(assignment.date) details.push('gestellt am ' + assignment.date);
     view.insertAdjacentHTML('afterbegin', '<div class="assignment-banner">'
-      + '<strong>Lernauftrag</strong>'
-      + '<span>' + assignment.count + ' Vokabeln'
-      + (assignment.dir ? ' · ' + (assignment.dir === 'de2en' ? 'DE → EN' : 'EN → DE') : '') + '</span>'
+      + '<strong>' + (assignment.name ? safe(assignment.name) : 'Lernauftrag') + '</strong>'
+      + '<span>' + safe(details.join(' · ')) + '</span>'
       + '<button class="primary" id="assignmentStart">Los geht’s</button>'
       + '<button id="assignmentHide">Ausblenden</button></div>');
     document.getElementById('assignmentStart').onclick = () => setup('assignment');
