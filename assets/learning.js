@@ -338,8 +338,18 @@ ${JSON.stringify(rows.map(r=>({Unit:r.unit,Englisch:r.en,Deutsch:r.de})),null,2)
     document.getElementById('browseVocabulary').replaceWith(listButton);
     listButton.className='browse-list';listButton.removeAttribute('style');listButton.textContent='Vokabeln nachschlagen';
     document.getElementById('practiceAcross').onclick=()=>setup(upper?'today':YEARS[0].id+'-all');
-    view.insertAdjacentHTML('afterbegin','<div class="sessionbar"><button class="switch" id="homeDirection">'+dirLabel()+'</button></div>');
-    if(stored()){const savedRound=stored();const name=TOPICS.find(t=>t.id===savedRound.source)?.name||(savedRound.source==='today'?'Alle Themen':'Alle Vokabeln');view.insertAdjacentHTML('afterbegin','<button class="topic" id="resumeRound">Runde fortsetzen · '+safe(name)+'<br><span class="t-count">'+savedRound.i+' von '+savedRound.queue.length+' Schritten · '+(savedRound.dir==='de2en'?'DE → EN':'EN → DE')+'</span></button>');document.getElementById('resumeRound').onclick=resume;}
+    /* Fortsetzen und Richtung teilen sich eine Zeile. Auf dem Telefon
+       stehen sie nebeneinander und sparen einen ganzen Streifen ueber der
+       Unit-Liste; am Rechner bleiben sie untereinander wie bisher. */
+    const savedRound=stored();
+    const roundName=savedRound?(TOPICS.find(t=>t.id===savedRound.source)?.name||(savedRound.source==='today'?'Alle Themen':'Alle Vokabeln')):'';
+    view.insertAdjacentHTML('afterbegin','<div class="sessionbar homebar">'
+      +(savedRound?'<button class="topic home-resume" id="resumeRound">'
+        +'<span class="resume-title">Runde fortsetzen · '+safe(roundName)+'</span>'
+        +'<span class="t-count">'+savedRound.i+' von '+savedRound.queue.length+' Schritten'
+        +'<span class="t-dir"> · '+(savedRound.dir==='de2en'?'DE → EN':'EN → DE')+'</span></span></button>':'')
+      +'<button class="switch" id="homeDirection">'+dirLabel()+'</button></div>');
+    if(savedRound)document.getElementById('resumeRound').onclick=resume;
     document.getElementById('homeDirection').onclick=()=>{S.dir=S.dir==='en2de'?'de2en':'en2de';render();};
     assignmentList();
     assignmentBanner();

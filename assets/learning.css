@@ -66,6 +66,25 @@ a.home-link:hover,a.home-link:focus,a.home-link:active,a.grammar-back:hover,a.gr
 }
 @media print{.masthead .brandmark{width:38px;height:38px}}
 
+/* ==== ENGE BILDSCHIRME ================================================
+   Auf dem Telefon stehen Fortsetzen-Knopf und Richtungsschalter in einer
+   Zeile statt uebereinander. So beginnt die Unit-Liste deutlich weiter
+   oben. Am Rechner aendert sich nichts. */
+.homebar{display:block}
+.homebar .home-resume{width:100%}
+.homebar .resume-title{display:block}
+.homebar .home-resume .t-count{display:block;margin-top:2px}
+@media(max-width:560px){
+  .homebar{display:flex;flex-wrap:nowrap;align-items:stretch;gap:9px;margin-bottom:14px}
+  .homebar .home-resume{flex:1 1 auto;min-width:0;margin-bottom:0;padding:11px 13px}
+  /* Der Titel bleibt einzeilig und wird notfalls abgeschnitten, damit der
+     Knopf nicht in die Hoehe waechst. */
+  .homebar .resume-title{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .homebar .home-resume .t-count{font-size:11px}
+  .homebar .home-resume .t-dir{display:none}   /* steht direkt daneben im Schalter */
+  .homebar .switch{flex:0 0 auto;align-self:stretch;white-space:nowrap;padding:8px 12px}
+}
+
 .csv-controls{background:#e5eff1;border:1px solid #b7cdd2;border-radius:12px;padding:20px;margin:18px 0}.csv-check{grid-column:1/-1;font-size:14px;display:flex;align-items:center;gap:8px;padding:8px 0}.csv-check[hidden],.csv-controls[hidden]{display:none}.csv-check input{width:20px;height:20px;accent-color:#0e5a66}@media print{.csv-controls,.csv-check{display:none!important}}
 
 /* Print only expanded vocabulary sections; collapsed sections must not
