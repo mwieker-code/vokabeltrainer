@@ -157,3 +157,24 @@ body.beamer-open{overflow:hidden}
 .pv-blitz-missed{margin:14px 0 0;padding:0;list-style:none;display:grid;gap:6px}
 .pv-blitz-missed li{background:var(--ground);border-radius:8px;padding:8px 12px;font-size:14px;text-align:left}
 @media(max-width:560px){.pv-blitz-time{font-size:22px}}
+/* Gemerkte Lernaufträge auf der Übersicht */
+.assignment-saved{margin:0 0 22px}
+.assignment-saved .section-title{margin:0 0 10px}
+.assignment-card{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin:0 0 10px;
+  padding:14px 16px;background:#fff;border:1px solid var(--rule);border-left:5px solid #6a978b;border-radius:12px}
+.assignment-card-main{flex:1 1 260px;display:flex;flex-direction:column;gap:4px}
+.assignment-card-main strong{font-size:16.5px}
+.assignment-card-meta{color:#345c56;font-size:14px}
+.assignment-progress{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin:4px 0 0}
+.assignment-bar{flex:1 1 160px;max-width:260px;height:10px;border-radius:6px;background:#dde7e6;
+  border:1px solid #9bb9be;overflow:hidden}
+.assignment-bar-fill{display:block;height:100%;background:#0e5a66}
+.assignment-progress-text{color:#18323d;font-size:14px}
+.assignment-card-stale{margin:4px 0 0;color:#8a3d24;font-size:14px}
+.assignment-card-actions{display:flex;flex-wrap:wrap;gap:10px}
+.assignment-card-actions button{min-height:44px;padding:10px 16px;border:1px solid #9bb9be;
+  border-radius:9px;background:#fff;color:#18323d;font:600 15px var(--sans);cursor:pointer}
+.assignment-card-actions button.primary{background:#0e5a66;border-color:#0e5a66;color:#fff}
+.assignment-card-actions button:focus-visible{outline:3px solid #bd781e;outline-offset:3px}
+@media(max-width:560px){.assignment-card-actions{width:100%}.assignment-card-actions button{flex:1 1 auto}}
+@media print{.assignment-saved{display:none}}
