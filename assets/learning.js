@@ -30,7 +30,7 @@
   function stored(){try{const x=JSON.parse(localStorage.getItem(sessionKey));return x&&Array.isArray(x.queue)&&x.queue.length&&x.queue.every(k=>wordMap.has(k))&&Number.isInteger(x.i)&&x.i>=0&&x.i<x.queue.length&&['all','short','due'].includes(x.scope)&&['en2de','de2en'].includes(x.dir)?x:null;}catch(e){return null;}}
   function resume(){const x=stored();if(!x)return;if(x.source==='assignment'&&!assignmentWords.length)assignmentWords=x.queue.map(k=>wordMap.get(k)).filter(Boolean);S.roundSource=x.source;S.topicId=x.source;S.dir=x.dir;S.mode=x.mode;S.scope=x.scope;S.onlyDue=x.scope==='due';S.roundLimit=x.scope==='short'?10:Infinity;S.queue=x.queue.map(k=>wordMap.get(k));S.i=x.i;S.seen=x.seen;S.initialCount=x.initial;for(const [field,key] of [['retried','retried'],['missed','missed'],['roundAnswered','answered']])S[field]=new Set((x[key]||[]).map(k=>wordMap.get(k)).filter(Boolean));S.answered=null;S.revealed=false;S.options=null;S.typedValue='';S.view='session';render();}
   const wordsFor=topicId=>(topicId==='today'?allWords():topicId==='assignment'?assignmentWords:upper?(SETS[topicId]||[]):setOf(topicId)).filter(v=>v.en&&v.en.trim());
-  const topicLabel=topicId=>topicId==='today'?'Alle Themen':topicId==='assignment'?'Lernauftrag':(TOPICS.find(t=>t.id===topicId)?.name||'Deine Auswahl');
+  const topicLabel=topicId=>topicId==='today'?'Alle Themen':topicId==='assignment'?((assignment&&assignment.name)||'Lernauftrag'):(TOPICS.find(t=>t.id===topicId)?.name||'Deine Auswahl');
   function setup(topicId){
     S.roundSource=topicId;S.topicId=topicId;
     const words=wordsFor(topicId),due=words.filter(v=>isDue(record(v))).length;
@@ -341,6 +341,7 @@ ${JSON.stringify(rows.map(r=>({Unit:r.unit,Englisch:r.en,Deutsch:r.de})),null,2)
     view.insertAdjacentHTML('afterbegin','<div class="sessionbar"><button class="switch" id="homeDirection">'+dirLabel()+'</button></div>');
     if(stored()){const savedRound=stored();const name=TOPICS.find(t=>t.id===savedRound.source)?.name||(savedRound.source==='today'?'Alle Themen':'Alle Vokabeln');view.insertAdjacentHTML('afterbegin','<button class="topic" id="resumeRound">Runde fortsetzen · '+safe(name)+'<br><span class="t-count">'+savedRound.i+' von '+savedRound.queue.length+' Schritten · '+(savedRound.dir==='de2en'?'DE → EN':'EN → DE')+'</span></button>');document.getElementById('resumeRound').onclick=resume;}
     document.getElementById('homeDirection').onclick=()=>{S.dir=S.dir==='en2de'?'de2en':'en2de';render();};
+    assignmentList();
     assignmentBanner();
   };
   // All overview/back actions share the direct Unit dashboard.
@@ -710,12 +711,20 @@ ${JSON.stringify(rows.map(r=>({Unit:r.unit,Englisch:r.en,Deutsch:r.de})),null,2)
       dir: ['de2en', 'en2de'].includes(dir) ? dir : null,
       name: [...(params.get('n') || '')].filter(ch => ch.charCodeAt(0) >= 32).join('').slice(0, 80),
       date: readableDate(params.get('d') || ''),
-      sources: sourceLabel(sourcesOf(words))
+      sources: sourceLabel(sourcesOf(words)),
+      payload: raw.slice(4)
     };
     if(assignment.dir) S.dir = assignment.dir;
+    rememberAssignment({
+      payload: assignment.payload, fp: raw.slice(0, 4), name: assignment.name,
+      date: assignment.date, dir: assignment.dir, sources: assignment.sources,
+      count: words.length, seen: Date.now()
+    });
   }
   function assignmentBanner(){
-    if(!assignment || assignmentHidden) return;
+    /* Nur für frisch geöffnete Links: gemerkte Aufträge stehen als Karte
+       in der Liste und würden sonst doppelt erscheinen. */
+    if(!assignment || assignmentHidden || assignment.saved) return;
     if(assignment.stale){
       view.insertAdjacentHTML('afterbegin', '<div class="assignment-banner stale">'
         + '<strong>Lernauftrag nicht mehr gültig</strong>'
@@ -733,6 +742,94 @@ ${JSON.stringify(rows.map(r=>({Unit:r.unit,Englisch:r.en,Deutsch:r.de})),null,2)
       + '<button id="assignmentHide">Ausblenden</button></div>');
     document.getElementById('assignmentStart').onclick = () => setup('assignment');
     document.getElementById('assignmentHide').onclick = () => { assignmentHidden = true; render(); };
+  }
+
+  /* =========================================================================
+     GEMERKTE LERNAUFTRÄGE – ein geöffneter Link wird lokal abgelegt, damit
+     die Klasse ihn später ohne erneutes Scannen wiederfindet. Gespeichert
+     wird nur der Auftrag selbst; der Fortschritt wird jedes Mal frisch aus
+     den vorhandenen Fachständen berechnet und braucht keinen Speicher.
+     ========================================================================= */
+  const assignmentsKey = KEY + ':assignments:v1';
+  const SAFE_BOX = 4;                        // Fach 4 und 5 gelten als sicher
+  const MAX_SAVED = 20;
+
+  function loadAssignments(){
+    try{
+      const list = JSON.parse(localStorage.getItem(assignmentsKey));
+      return Array.isArray(list) ? list.filter(a => a && typeof a.payload === 'string') : [];
+    }catch(e){ return []; }
+  }
+  function saveAssignments(list){
+    try{ localStorage.setItem(assignmentsKey, JSON.stringify(list.slice(0, MAX_SAVED))); }catch(e){}
+  }
+  const sameAssignment = (a, b) => a.payload === b.payload && (a.name || '') === (b.name || '') && (a.date || '') === (b.date || '');
+  function rememberAssignment(entry){
+    const list = loadAssignments().filter(a => !sameAssignment(a, entry));
+    list.unshift(entry);
+    saveAssignments(list);
+  }
+  function forgetAssignment(entry){
+    saveAssignments(loadAssignments().filter(a => !sameAssignment(a, entry)));
+  }
+  /* Wie record(), aber mit frei wählbarer Richtung: der Auftrag kann eine
+     andere Richtung vorgeben als die gerade eingestellte. */
+  const recordIn = (v, dir) => upper ? rec(topicFor.get(v), dir, v.id) : rec(dir, v.id);
+  const safeCount = (words, dir) => words.reduce((n, v) => n + (recordIn(v, dir).box >= SAFE_BOX ? 1 : 0), 0);
+  const assignmentWordsOf = entry => (entry.fp === fingerprint() ? (decodeSelection(entry.payload) || []) : []).filter(v => v.en && v.en.trim());
+
+  function assignmentList(){
+    const saved = loadAssignments();
+    if(!saved.length) return;
+    const open = assignment && !assignment.stale && !assignmentHidden && !assignment.saved ? assignment.payload : null;
+    const cards = [];
+    saved.forEach((entry, index) => {
+      if(entry.payload === open) return;     // steht bereits als Banner oben
+      const words = assignmentWordsOf(entry);
+      const details = [(words.length || entry.count || 0) + ' Vokabeln'];
+      if(entry.sources) details.push(entry.sources);
+      if(entry.dir) details.push(entry.dir === 'de2en' ? 'DE \u2192 EN' : 'EN \u2192 DE');
+      if(entry.date) details.push('gestellt am ' + entry.date);
+      let body;
+      if(!words.length){
+        body = '<p class="assignment-card-stale">Dieser Auftrag passt nicht mehr zum aktuellen Vokabular. '
+          + 'Bitte deine Lehrkraft um einen neuen Link.</p>';
+      }else{
+        const done = safeCount(words, ['de2en', 'en2de'].includes(entry.dir) ? entry.dir : S.dir);
+        const percent = Math.round(done / words.length * 100);
+        body = '<p class="assignment-progress">'
+          + '<span class="assignment-bar" role="img" aria-label="' + percent + ' Prozent sicher">'
+          + '<span class="assignment-bar-fill" style="width:' + percent + '%"></span></span>'
+          + '<span class="assignment-progress-text">' + done + ' von ' + words.length + ' Wörtern sitzen sicher</span></p>';
+      }
+      const action = words.length ? '<button class="primary" data-assignment-start="' + index + '">Weiterüben</button>' : '';
+      cards.push('<div class="assignment-card">'
+        + '<div class="assignment-card-main">'
+        + '<strong>' + safe(entry.name || 'Lernauftrag') + '</strong>'
+        + '<span class="assignment-card-meta">' + safe(details.join(' \u00b7 ')) + '</span>'
+        + body + '</div>'
+        + '<div class="assignment-card-actions">' + action
+        + '<button data-assignment-forget="' + index + '">Entfernen</button></div></div>');
+    });
+    if(!cards.length) return;
+    view.insertAdjacentHTML('afterbegin', '<section class="assignment-saved">'
+      + '<h2 class="section-title">Meine Lernaufträge</h2>' + cards.join('') + '</section>');
+    view.querySelectorAll('[data-assignment-start]').forEach(button => button.onclick = () => {
+      const entry = saved[+button.dataset.assignmentStart];
+      const words = assignmentWordsOf(entry);
+      if(!words.length) return;
+      assignmentWords = words;
+      assignment = {
+        count: words.length, dir: entry.dir || null, name: entry.name,
+        date: entry.date, sources: entry.sources, payload: entry.payload, saved: true
+      };
+      if(entry.dir) S.dir = entry.dir;
+      setup('assignment');
+    });
+    view.querySelectorAll('[data-assignment-forget]').forEach(button => button.onclick = () => {
+      forgetAssignment(saved[+button.dataset.assignmentForget]);
+      render();
+    });
   }
 
   /* =========================================================================
