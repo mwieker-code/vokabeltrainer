@@ -708,7 +708,7 @@ ${JSON.stringify(rows.map(r=>({Unit:r.unit,Englisch:r.en,Deutsch:r.de})),null,2)
     assignment = {
       count: words.length,
       dir: ['de2en', 'en2de'].includes(dir) ? dir : null,
-      name: (params.get('n') || '').replace(/[ -]/g, '').slice(0, 80),
+      name: [...(params.get('n') || '')].filter(ch => ch.charCodeAt(0) >= 32).join('').slice(0, 80),
       date: readableDate(params.get('d') || ''),
       sources: sourceLabel(sourcesOf(words))
     };
