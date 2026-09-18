@@ -99,6 +99,23 @@ a.home-link:hover,a.home-link:focus,a.home-link:active,a.grammar-back:hover,a.gr
 .selection-files input{max-width:100%;padding:8px;font:inherit}
 #selectionFileStatus{display:block;margin-top:8px}
 
+/* Lernauftrag: teacher-shared selection link and the pupil-facing banner. */
+.assignment-dialog select,.assignment-dialog input{display:block;width:100%;padding:11px;margin:6px 0 4px;
+  border:1px solid #9bb9be;border-radius:8px;font:inherit;background:#fff;color:#18323d;box-sizing:border-box}
+.assignment-qr{margin:14px 0;max-width:230px}
+.assignment-qr svg{width:100%;height:auto;display:block;border:1px solid var(--rule);border-radius:8px}
+.assignment-banner{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin:0 0 20px;padding:16px 18px;
+  background:#e3efec;border:1px solid #6a978b;border-left:5px solid #0e5a66;border-radius:12px}
+.assignment-banner strong{font-size:17px}
+.assignment-banner span{color:#345c56;font-size:14.5px}
+.assignment-banner button{margin-left:auto;min-height:44px;padding:10px 16px;border:1px solid #9bb9be;
+  border-radius:9px;background:#fff;color:#18323d;font:600 15px var(--sans);cursor:pointer}
+.assignment-banner button+button{margin-left:0}
+.assignment-banner button.primary{background:#0e5a66;border-color:#0e5a66;color:#fff}
+.assignment-banner.stale{background:#f8ece7;border-color:#c98f7a;border-left-color:#b4573c;flex-direction:column;align-items:flex-start}
+@media(max-width:560px){.assignment-banner button{margin-left:0;flex:1 1 auto}}
+@media print{.assignment-banner{display:none}}
+
 /* Beamer-Modus: project selected vocabulary in large type for whole-class work. */
 body.beamer-open{overflow:hidden}
 .beamer{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;background:var(--card);color:var(--ink)}

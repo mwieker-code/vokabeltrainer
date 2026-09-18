@@ -28,13 +28,13 @@
     }catch(e){}
   }
   function stored(){try{const x=JSON.parse(localStorage.getItem(sessionKey));return x&&Array.isArray(x.queue)&&x.queue.length&&x.queue.every(k=>wordMap.has(k))&&Number.isInteger(x.i)&&x.i>=0&&x.i<x.queue.length&&['all','short','due'].includes(x.scope)&&['en2de','de2en'].includes(x.dir)?x:null;}catch(e){return null;}}
-  function resume(){const x=stored();if(!x)return;S.roundSource=x.source;S.topicId=x.source;S.dir=x.dir;S.mode=x.mode;S.scope=x.scope;S.onlyDue=x.scope==='due';S.roundLimit=x.scope==='short'?10:Infinity;S.queue=x.queue.map(k=>wordMap.get(k));S.i=x.i;S.seen=x.seen;S.initialCount=x.initial;for(const [field,key] of [['retried','retried'],['missed','missed'],['roundAnswered','answered']])S[field]=new Set((x[key]||[]).map(k=>wordMap.get(k)).filter(Boolean));S.answered=null;S.revealed=false;S.options=null;S.typedValue='';S.view='session';render();}
-  const wordsFor=topicId=>(topicId==='today'?allWords():upper?(SETS[topicId]||[]):setOf(topicId)).filter(v=>v.en&&v.en.trim());
-  const topicLabel=topicId=>topicId==='today'?'Alle Themen':(TOPICS.find(t=>t.id===topicId)?.name||'Deine Auswahl');
+  function resume(){const x=stored();if(!x)return;if(x.source==='assignment'&&!assignmentWords.length)assignmentWords=x.queue.map(k=>wordMap.get(k)).filter(Boolean);S.roundSource=x.source;S.topicId=x.source;S.dir=x.dir;S.mode=x.mode;S.scope=x.scope;S.onlyDue=x.scope==='due';S.roundLimit=x.scope==='short'?10:Infinity;S.queue=x.queue.map(k=>wordMap.get(k));S.i=x.i;S.seen=x.seen;S.initialCount=x.initial;for(const [field,key] of [['retried','retried'],['missed','missed'],['roundAnswered','answered']])S[field]=new Set((x[key]||[]).map(k=>wordMap.get(k)).filter(Boolean));S.answered=null;S.revealed=false;S.options=null;S.typedValue='';S.view='session';render();}
+  const wordsFor=topicId=>(topicId==='today'?allWords():topicId==='assignment'?assignmentWords:upper?(SETS[topicId]||[]):setOf(topicId)).filter(v=>v.en&&v.en.trim());
+  const topicLabel=topicId=>topicId==='today'?'Alle Themen':topicId==='assignment'?'Lernauftrag':(TOPICS.find(t=>t.id===topicId)?.name||'Deine Auswahl');
   function setup(topicId){
     S.roundSource=topicId;S.topicId=topicId;
-    const words=topicId==='today'?allWords():upper?(SETS[topicId]||[]):setOf(topicId),due=words.filter(v=>isDue(record(v))).length;
-    view.innerHTML='<h2>Lernumfang wählen</h2><p>'+safe(topicId==='today'?'Alle Themen':TOPICS.find(t=>t.id===topicId)?.name||'Deine Auswahl')+'</p><div class="scope-options"><button class="topic primary" data-scope="all">Alles üben · '+words.length+' Vokabeln</button><button class="topic" data-scope="short">Kurze Runde · bis zu 10 Vokabeln</button><button class="topic" data-scope="due">Nur fällige Vokabeln · '+due+'</button></div><button id="setupBack">Zur Übersicht</button>';
+    const words=wordsFor(topicId),due=words.filter(v=>isDue(record(v))).length;
+    view.innerHTML='<h2>Lernumfang wählen</h2><p>'+safe(topicLabel(topicId))+'</p><div class="scope-options"><button class="topic primary" data-scope="all">Alles üben · '+words.length+' Vokabeln</button><button class="topic" data-scope="short">Kurze Runde · bis zu 10 Vokabeln</button><button class="topic" data-scope="due">Nur fällige Vokabeln · '+due+'</button></div><button id="setupBack">Zur Übersicht</button>';
     document.getElementById('setupBack').onclick=home;
     view.querySelectorAll('[data-scope]').forEach(b=>b.onclick=()=>{S.scope=b.dataset.scope;S.onlyDue=S.scope==='due';S.roundLimit=S.scope==='short'?10:Infinity;S.view='session';buildQueue();render();});
     if(words.length){
@@ -177,7 +177,7 @@ ${JSON.stringify(rows.map(r=>({Unit:r.unit,Englisch:r.en,Deutsch:r.de})),null,2)
       controls.hidden=true;
       const toggle=document.getElementById('lcsv');toggle.textContent='Vokabeln auswählen';toggle.setAttribute('aria-expanded','false');
       const bar=document.createElement('section');bar.className='selection-bar';bar.hidden=true;
-      bar.innerHTML='<strong id="selectionCount" role="status"></strong><div class="selection-actions"><button id="selectionReview">Auswahl ansehen</button><button id="selectionClear">Aufheben</button><button id="selectionHits" hidden></button><button id="selectionCSV">CSV herunterladen</button><button id="selectionBeamer">Beamer-Modus</button><button id="selectionPrompt" class="primary">Test-Prompt erstellen</button></div>';
+      bar.innerHTML='<strong id="selectionCount" role="status"></strong><div class="selection-actions"><button id="selectionReview">Auswahl ansehen</button><button id="selectionClear">Aufheben</button><button id="selectionHits" hidden></button><button id="selectionCSV">CSV herunterladen</button><button id="selectionBeamer">Beamer-Modus</button><button id="selectionAssignment">Hausaufgaben-Link</button><button id="selectionPrompt" class="primary">Test-Prompt erstellen</button></div>';
       box.after(bar);let active=false,review=false;const headings=[];
       {
         const selectionYear=Number(KEY.match(/^vt(\d+):/)?.[1])||'oberstufe';
@@ -216,7 +216,7 @@ ${JSON.stringify(rows.map(r=>({Unit:r.unit,Englisch:r.en,Deutsch:r.de})),null,2)
       function refresh(){
         update();headings.forEach(({input,keys})=>{const n=keys.filter(k=>csvSelected.has(k)).length;input.checked=n===keys.length&&n>0;input.indeterminate=n>0&&n<keys.length;});
         bar.querySelector('#selectionCount').textContent=csvSelected.size+' Vokabeln ausgewählt';
-        ['selectionCSV','selectionBeamer','selectionPrompt','selectionReview','selectionClear'].forEach(id=>bar.querySelector('#'+id).disabled=!csvSelected.size);
+        ['selectionCSV','selectionBeamer','selectionAssignment','selectionPrompt','selectionReview','selectionClear'].forEach(id=>bar.querySelector('#'+id).disabled=!csvSelected.size);
         bar.querySelector('#selectionReview').textContent=review?'Zur gesamten Liste':'Auswahl ansehen';bar.querySelector('#selectionReview').disabled=false;
         box.querySelectorAll('.vrow').forEach(row=>{row.classList.toggle('selection-hidden',review&&!csvSelected.has(row.querySelector('[data-csv-key]').dataset.csvKey));});
         box.querySelectorAll('[data-sec]').forEach(sec=>{sec.classList.toggle('selection-hidden',review&&![...sec.querySelectorAll('[data-csv-key]')].some(i=>csvSelected.has(i.dataset.csvKey)));if(review)sec.open=true;});
@@ -229,7 +229,7 @@ ${JSON.stringify(rows.map(r=>({Unit:r.unit,Englisch:r.en,Deutsch:r.de})),null,2)
       bar.querySelector('#selectionReview').onclick=()=>{review=!review;if(review){q.value='';filter.call(q);}refresh();};
       bar.querySelector('#selectionClear').onclick=()=>{csvSelected.clear();refresh();};
       bar.querySelector('#selectionHits').onclick=()=>{box.querySelectorAll('.vrow:not(.off) [data-csv-key]').forEach(i=>csvSelected.add(i.dataset.csvKey));refresh();};
-      bar.querySelector('#selectionCSV').onclick=()=>csvDownload(true);bar.querySelector('#selectionBeamer').onclick=openBeamer;bar.querySelector('#selectionPrompt').onclick=testPromptDialog;
+      bar.querySelector('#selectionCSV').onclick=()=>csvDownload(true);bar.querySelector('#selectionBeamer').onclick=openBeamer;bar.querySelector('#selectionAssignment').onclick=assignmentDialog;bar.querySelector('#selectionPrompt').onclick=testPromptDialog;
       refresh();
     }
   };
@@ -301,7 +301,7 @@ ${JSON.stringify(rows.map(r=>({Unit:r.unit,Englisch:r.en,Deutsch:r.de})),null,2)
 
   buildQueue = function() {
     const source = S.roundSource || S.topicId;
-    let words = source==='today' ? allWords() : upper ? (SETS[source] || []) : setOf(source);
+    let words = source==='today' ? allWords() : source==='assignment' ? assignmentWords : upper ? (SETS[source] || []) : setOf(source);
     if(S.mode==='cloze') words=words.filter(hasCloze);
     const due=words.filter(v=>isDue(record(v)));
     const pool=S.onlyDue?due:words;
@@ -341,6 +341,7 @@ ${JSON.stringify(rows.map(r=>({Unit:r.unit,Englisch:r.en,Deutsch:r.de})),null,2)
     view.insertAdjacentHTML('afterbegin','<div class="sessionbar"><button class="switch" id="homeDirection">'+dirLabel()+'</button></div>');
     if(stored()){const savedRound=stored();const name=TOPICS.find(t=>t.id===savedRound.source)?.name||(savedRound.source==='today'?'Alle Themen':'Alle Vokabeln');view.insertAdjacentHTML('afterbegin','<button class="topic" id="resumeRound">Runde fortsetzen · '+safe(name)+'<br><span class="t-count">'+savedRound.i+' von '+savedRound.queue.length+' Schritten · '+(savedRound.dir==='de2en'?'DE → EN':'EN → DE')+'</span></button>');document.getElementById('resumeRound').onclick=resume;}
     document.getElementById('homeDirection').onclick=()=>{S.dir=S.dir==='en2de'?'de2en':'en2de';render();};
+    assignmentBanner();
   };
   // All overview/back actions share the direct Unit dashboard.
   if(!upper) renderYear = (function(original){return function(){
@@ -380,7 +381,7 @@ ${JSON.stringify(rows.map(r=>({Unit:r.unit,Englisch:r.en,Deutsch:r.de})),null,2)
     }
     if(S.i>=S.queue.length){renderDone();return;}
     if(upper) S.topicId=topicFor.get(current());
-    else if(S.roundSource==='today') S.topicId=YEARS[0].id+'-all';
+    else if(S.roundSource==='today'||S.roundSource==='assignment') S.topicId=YEARS[0].id+'-all';
     checkpoint();
     if(typeof Sfx!=='undefined'){Sfx.play=kind=>window.LearningFeedback?.signal(kind);}
     originalSession();
@@ -485,6 +486,166 @@ ${JSON.stringify(rows.map(r=>({Unit:r.unit,Englisch:r.en,Deutsch:r.de})),null,2)
     render();
   }
   /* =========================================================================
+     LERNAUFTRAG  –  eine Vokabelauswahl als Link weitergeben.
+     Der Link trägt die Auswahl selbst (Bitmaske über alle Wörter des
+     Jahrgangs, lauflängenkodiert) und eine Prüfsumme des Vokabulars. Ändert
+     sich die Wortliste, wird der Link abgelehnt statt stillschweigend die
+     falschen Wörter zu laden. Kein Lernstand, keine personenbezogenen Daten.
+     ========================================================================= */
+  const B64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+  let assignment = null, assignmentWords = [], assignmentHidden = false;
+
+  function toB64(bytes){
+    let out = '';
+    for(let i = 0; i < bytes.length; i += 3){
+      const a = bytes[i], b = bytes[i + 1], c = bytes[i + 2];
+      out += B64[a >> 2];
+      out += B64[((a & 3) << 4) | ((b === undefined ? 0 : b) >> 4)];
+      if(b === undefined) break;
+      out += B64[((b & 15) << 2) | ((c === undefined ? 0 : c) >> 6)];
+      if(c === undefined) break;
+      out += B64[c & 63];
+    }
+    return out;
+  }
+  function fromB64(text){
+    const bytes = []; let buf = 0, bits = 0;
+    for(const ch of text){
+      const v = B64.indexOf(ch);
+      if(v < 0) return null;
+      buf = (buf << 6) | v; bits += 6;
+      if(bits >= 8){ bits -= 8; bytes.push((buf >> bits) & 0xff); }
+    }
+    return bytes;
+  }
+  /* Prüfsumme über die Wort-Kennungen: unempfindlich gegen Tippfehler-
+     korrekturen im Text, empfindlich gegen neue, entfernte oder
+     umsortierte Wörter - also genau dort, wo die Indizes verrutschen. */
+  function fingerprint(){
+    let h = 0x811c9dc5;
+    for(const v of allWords()){
+      const id = String(v.id || '');
+      for(let i = 0; i < id.length; i++){ h ^= id.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
+      h ^= 0x2c; h = Math.imul(h, 0x01000193) >>> 0;
+    }
+    return toB64([(h >>> 16) & 0xff, (h >>> 8) & 0xff, h & 0xff]);
+  }
+  function encodeSelection(){
+    const runs = []; let cur = 0, len = 0;
+    for(const t of TOPICS){
+      const set = SETS[t.id] || [];
+      for(let i = 0; i < set.length; i++){
+        const bit = csvSelected.has(t.id + ':' + i) ? 1 : 0;
+        if(bit === cur) len++; else { runs.push(len); cur = bit; len = 1; }
+      }
+    }
+    if(cur === 1) runs.push(len);            // schließende Null-Strecke entfällt
+    const bytes = [];
+    for(const run of runs){
+      let n = run;
+      do { const b = n & 0x7f; n = Math.floor(n / 128); bytes.push(n ? (b | 0x80) : b); } while(n);
+    }
+    return toB64(bytes);
+  }
+  function decodeSelection(payload){
+    const bytes = fromB64(payload);
+    if(!bytes) return null;
+    const runs = []; let n = 0, shift = 0;
+    for(const b of bytes){
+      n += (b & 0x7f) * Math.pow(2, shift);
+      if(b & 0x80) shift += 7; else { runs.push(n); n = 0; shift = 0; }
+    }
+    if(shift) return null;                   // abgeschnittene Zahl
+    const words = allWords(), picked = [];
+    let at = 0, on = 0;
+    for(const run of runs){
+      if(on) for(let k = 0; k < run; k++){ if(at + k < words.length) picked.push(words[at + k]); }
+      at += run; on ^= 1;
+    }
+    return at > words.length ? null : picked;
+  }
+  function assignmentUrl(dir){
+    const url = new URL(location.href);
+    url.search = ''; url.hash = '';
+    url.searchParams.set('auftrag', fingerprint() + encodeSelection());
+    if(dir) url.searchParams.set('r', dir);
+    return url.href;
+  }
+  function assignmentDialog(){
+    if(!csvSelected.size) return;
+    const dialog = document.createElement('dialog');
+    dialog.className = 'test-prompt-dialog assignment-dialog';
+    dialog.innerHTML = '<h2>Hausaufgaben-Link</h2>'
+      + '<p>' + csvSelected.size + ' ausgewählte Vokabeln. Der Link enthält nur diese Auswahl, keinen Lernstand.</p>'
+      + '<label for="assignmentDir">Abfragerichtung</label>'
+      + '<select id="assignmentDir"><option value="">Schüler wählt selbst</option>'
+      + '<option value="de2en">DE → EN (produktiv)</option>'
+      + '<option value="en2de">EN → DE</option></select>'
+      + '<label for="assignmentURL">Link</label>'
+      + '<input id="assignmentURL" readonly>'
+      + '<p><button type="button" id="assignmentCopy">Link kopieren</button> '
+      + '<span id="assignmentStatus" role="status"></span></p>'
+      + '<div id="assignmentQR" class="assignment-qr"></div>'
+      + '<p id="assignmentQRNote"></p>'
+      + '<p><button type="button" id="assignmentClose">Schließen</button></p>';
+    document.body.append(dialog);
+    dialog.addEventListener('close', () => dialog.remove());
+    const field = dialog.querySelector('#assignmentURL');
+    const note = dialog.querySelector('#assignmentQRNote');
+    function refresh(){
+      const url = assignmentUrl(dialog.querySelector('#assignmentDir').value);
+      field.value = url;
+      const box = dialog.querySelector('#assignmentQR');
+      const code = window.QR ? window.QR.svg(url) : null;
+      box.innerHTML = code || '';
+      note.textContent = code
+        ? 'QR-Code zum Ausdrucken auf dem Arbeitsblatt – abfotografieren öffnet den Lernauftrag.'
+        : 'Für diese Auswahl ist der Link zu lang für einen QR-Code. Der Link selbst funktioniert weiterhin. '
+          + 'Tipp: Ganze Units oder Parts ergeben sehr kurze Links, einzeln verstreute Wörter dagegen lange.';
+      dialog.querySelector('#assignmentStatus').textContent = '';
+    }
+    dialog.querySelector('#assignmentDir').onchange = refresh;
+    dialog.querySelector('#assignmentCopy').onclick = async () => {
+      const status = dialog.querySelector('#assignmentStatus');
+      try{ await navigator.clipboard.writeText(field.value); status.textContent = 'Kopiert.'; }
+      catch(e){ field.focus(); field.select(); status.textContent = 'Bitte manuell kopieren – der Link ist markiert.'; }
+    };
+    dialog.querySelector('#assignmentClose').onclick = () => dialog.close();
+    refresh();
+    dialog.showModal();
+  }
+  function readAssignment(){
+    let params;
+    try{ params = new URLSearchParams(location.search); }catch(e){ return; }
+    const raw = params.get('auftrag');
+    if(!raw || raw.length < 5) return;
+    if(raw.slice(0, 4) !== fingerprint()){ assignment = {stale: true}; return; }
+    const words = decodeSelection(raw.slice(4));
+    if(!words || !words.length){ assignment = {stale: true}; return; }
+    const dir = params.get('r');
+    assignmentWords = words;
+    assignment = {count: words.length, dir: ['de2en', 'en2de'].includes(dir) ? dir : null};
+    if(assignment.dir) S.dir = assignment.dir;
+  }
+  function assignmentBanner(){
+    if(!assignment || assignmentHidden) return;
+    if(assignment.stale){
+      view.insertAdjacentHTML('afterbegin', '<div class="assignment-banner stale">'
+        + '<strong>Lernauftrag nicht mehr gültig</strong>'
+        + '<span>Dieser Link passt nicht mehr zum aktuellen Vokabular. Bitte deine Lehrkraft um einen neuen Link.</span></div>');
+      return;
+    }
+    view.insertAdjacentHTML('afterbegin', '<div class="assignment-banner">'
+      + '<strong>Lernauftrag</strong>'
+      + '<span>' + assignment.count + ' Vokabeln'
+      + (assignment.dir ? ' · ' + (assignment.dir === 'de2en' ? 'DE → EN' : 'EN → DE') : '') + '</span>'
+      + '<button class="primary" id="assignmentStart">Los geht’s</button>'
+      + '<button id="assignmentHide">Ausblenden</button></div>');
+    document.getElementById('assignmentStart').onclick = () => setup('assignment');
+    document.getElementById('assignmentHide').onclick = () => { assignmentHidden = true; render(); };
+  }
+
+  /* =========================================================================
      BEAMER-MODUS  –  ausgewählte Vokabeln groß projizieren, etwa zum
      Chorsprechen oder für eine Vertretungsstunde. Liegt als Overlay über
      der Listenansicht und rührt den Lernstand nicht an.
@@ -569,5 +730,6 @@ ${JSON.stringify(rows.map(r=>({Unit:r.unit,Englisch:r.en,Deutsch:r.de})),null,2)
     document.getElementById('pvHome').onclick=exitBlitz;
   }
 
+  readAssignment();
   render();
 })();
