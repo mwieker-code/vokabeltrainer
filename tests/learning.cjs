@@ -17,7 +17,7 @@ for(const folder of ['year5','year7','year8','year6','year9','year10','oberstufe
  ok(!w.document.querySelector('[data-year]'),'no duplicate year selection');
  if(folder==='oberstufe'){
   ok(w.document.querySelector('#all a[href="../all/analysis/"]'),'analysis nested under upper-school ALL');
-  ok(w.document.querySelector('#all').open,'ALL expanded on normal entry');
+  ok(!w.document.querySelector('#all').open,'ALL collapsed until opened');
   ok(w.document.querySelector('#all .ycount').textContent.startsWith('3 Themen'),'analysis included in topic count');
  }
  else ok(!w.document.querySelector('a[href*="analysis/"]'),'analysis absent from other year groups');
