@@ -2,6 +2,9 @@
   "name": "vokabeltrainer",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=22.13.0"
+  },
   "scripts": {
     "test": "node tests/learning.cjs && node tests/cloze.cjs && node tests/selection.cjs && node tests/selection-files.cjs && node tests/csv.cjs && node tests/examples.cjs && node tests/help.cjs && node tests/prompt.cjs && node tests/prompt-pilot.cjs && node tests/analysis.cjs && node tests/grammar.cjs && node tests/editorial.cjs",
     "build": "node build.cjs"
