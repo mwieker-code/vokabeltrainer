@@ -584,6 +584,7 @@ ${JSON.stringify(rows.map(r=>({Unit:r.unit,Englisch:r.en,Deutsch:r.de})),null,2)
       + '<label for="assignmentURL">Link</label>'
       + '<input id="assignmentURL" readonly>'
       + '<p><button type="button" id="assignmentCopy">Link kopieren</button> '
+      + '<button type="button" id="assignmentCopyQR">QR-Code kopieren</button> '
       + '<span id="assignmentStatus" role="status"></span></p>'
       + '<div id="assignmentQR" class="assignment-qr"></div>'
       + '<p id="assignmentQRNote"></p>'
@@ -607,8 +608,28 @@ ${JSON.stringify(rows.map(r=>({Unit:r.unit,Englisch:r.en,Deutsch:r.de})),null,2)
     dialog.querySelector('#assignmentDir').onchange = refresh;
     dialog.querySelector('#assignmentCopy').onclick = async () => {
       const status = dialog.querySelector('#assignmentStatus');
-      try{ await navigator.clipboard.writeText(field.value); status.textContent = 'Kopiert.'; }
+      try{ await navigator.clipboard.writeText(field.value); status.textContent = 'Link kopiert.'; }
       catch(e){ field.focus(); field.select(); status.textContent = 'Bitte manuell kopieren – der Link ist markiert.'; }
+    };
+    /* Als Bild in die Zwischenablage, damit der Code direkt in ein
+       Arbeitsblatt eingefügt werden kann. Der Blob wird als Zusage
+       übergeben, weil manche Browser sonst die Nutzeraktion verlieren. */
+    dialog.querySelector('#assignmentCopyQR').onclick = async () => {
+      const status = dialog.querySelector('#assignmentStatus');
+      if(!dialog.querySelector('#assignmentQR svg')){
+        status.textContent = 'Für diese Auswahl gibt es keinen QR-Code – bitte den Link verwenden.'; return;
+      }
+      const code = window.QR && window.QR.canvas ? window.QR.canvas(field.value) : null;
+      if(!code){ status.textContent = 'Dieser Browser kann den Code nicht als Bild erzeugen – bitte den Link verwenden.'; return; }
+      try{
+        if(!window.ClipboardItem || !navigator.clipboard || !navigator.clipboard.write) throw new Error('nicht unterstützt');
+        await navigator.clipboard.write([new window.ClipboardItem({
+          'image/png': new Promise(done => code.toBlob(done, 'image/png'))
+        })]);
+        status.textContent = 'QR-Code kopiert – im Arbeitsblatt einfügen.';
+      }catch(e){
+        status.textContent = 'Dieser Browser erlaubt kein Kopieren von Bildern. Rechtsklick auf den Code oder den Link verwenden.';
+      }
     };
     dialog.querySelector('#assignmentClose').onclick = () => dialog.close();
     refresh();

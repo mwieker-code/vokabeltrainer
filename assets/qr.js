@@ -288,5 +288,25 @@ function svg(text, options){
     + '<path d="' + path + '" fill="#000"/></svg>';
 }
 
-window.QR = {matrix, svg};
+/* Zeichnet denselben Code auf ein Canvas - nur für die Zwischenablage, wo
+   Programme wie Word ein Rasterbild erwarten. Liefert null, wenn der Browser
+   kein Canvas bereitstellt. */
+function canvas(text, options){
+  const grid = matrix(text);
+  if(!grid) return null;
+  const quiet = (options && options.quiet) || 4;
+  const scale = (options && options.scale) || Math.max(4, Math.ceil(640 / (grid.length + quiet * 2)));
+  const side = (grid.length + quiet * 2) * scale;
+  const el = document.createElement('canvas');
+  el.width = side; el.height = side;
+  const ctx = el.getContext && el.getContext('2d');
+  if(!ctx) return null;
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, side, side);
+  ctx.fillStyle = '#000';
+  for(let r = 0; r < grid.length; r++) for(let c = 0; c < grid.length; c++)
+    if(grid[r][c]) ctx.fillRect((c + quiet) * scale, (r + quiet) * scale, scale, scale);
+  return el;
+}
+
+window.QR = {matrix, svg, canvas};
 })();
