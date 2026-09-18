@@ -17274,7 +17274,7 @@ function renderHome(){
       if(!SETS[t.id]) return n;
       return n + SETS[t.id].filter(v => isDue(rec(t.id, S.dir, v.id))).length;
     }, 0);
-    h += `<details class="yeargroup" style="color:${yc}" ${y === "ALL" ? 'id="all" open' : ""}>
+    h += `<details class="yeargroup" style="color:${yc}" ${y === "ALL" ? 'id="all"' : ""}>
       <summary>
         <span class="tag" style="background:${yc}">${y}</span>
         <span class="name">${esc(group[0].yearName)}</span>
