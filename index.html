@@ -218,8 +218,7 @@ function biliLevel(level){
 function renderBili(){
   const box = document.getElementById("bili");
   const open = biliOpen.has('bili');
-  box.innerHTML = '<h2 class="bili-heading">' + esc(BILI.name) + '</h2>'
-    + '<div class="bili-acc" style="--unit:' + esc(BILI.color) + '">'
+  box.innerHTML = '<div class="bili-acc" style="--unit:' + esc(BILI.color) + '">'
     + '<button type="button" class="bili-head" data-bili="bili" aria-expanded="' + open + '">'
     + biliArt('bili') + '<span class="bili-name">' + esc(BILI.name) + '</span>'
     + '<span class="bili-meta">' + esc(BILI.meta) + '</span>'
