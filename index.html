@@ -160,6 +160,7 @@ function menuArt(path){return '<svg class="menu-art" aria-hidden="true" viewBox=
    ========================================================================= */
 const BILI = {
   "name": "Bilingualer Unterricht",
+  "shortName": "Bili",
   "meta": "Sachfachvokabular",
   "color": "#6B4226",
   "subjects": [
@@ -224,7 +225,9 @@ function renderBili(){
   const open = biliOpen.has('bili');
   box.innerHTML = '<div class="bili-acc" style="--unit:' + esc(BILI.color) + '">'
     + '<button type="button" class="bili-head" data-bili="bili" aria-expanded="' + open + '">'
-    + biliArt('bili') + '<span class="bili-name">' + esc(BILI.name) + '</span>'
+    + biliArt('bili')
+    + '<span class="bili-name"><span class="bili-long">' + esc(BILI.name) + '</span>'
+    + '<span class="bili-short">' + esc(BILI.shortName) + '</span></span>'
     + '<span class="bili-meta">' + esc(BILI.meta) + '</span>'
     + '<span class="bili-chev" aria-hidden="true">\u203a</span></button>'
     + (open ? '<div class="bili-body">' + BILI.subjects.map(function(subject){

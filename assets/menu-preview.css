@@ -66,8 +66,19 @@ a.bili-level:focus-visible{outline:3px solid var(--unit);outline-offset:3px}
 .bili-level-go{font-size:18px;color:var(--unit)}
 .bili-pill{font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:999px;white-space:nowrap;
   background:#EDE7DC;color:#6B5320;border:1px solid #D8C9A8}
+.bili-short{display:none}
+/* Auf dem Telefon heisst der Bereich kurz "Bili". So traegt er dieselbe
+   Schriftgroesse und dieselbe Kachelhoehe wie die Jahrgangskacheln
+   darueber, statt sich mit dem langen Namen davon abzuheben. */
 @media(max-width:620px){.bili-levels{grid-template-columns:1fr}
-  .bili-head{padding:15px 16px;gap:10px}.bili-name{font-size:19px}.bili-art{width:28px;height:28px}
+  .bili-long{display:none}.bili-short{display:inline}
+  .bili-head{padding:15px 16px;gap:10px}
+  .bili-acc .bili-acc .bili-name{font-size:19px}
+  .bili-art{width:30px;height:30px}
   .bili-body{padding:12px 14px 16px}}
+@media(max-width:620px) and (orientation:portrait){
+  #bili>.bili-acc{border-radius:14px}
+  #bili>.bili-acc>.bili-head{min-height:68px;padding:14px 16px;gap:12px}  /* plus 1px Rahmen oben und unten = 70px wie die Kacheln */
+  #bili>.bili-acc>.bili-head .bili-art{width:36px;height:36px}}
 @media(prefers-reduced-motion:reduce){.bili-chev,a.bili-level{transition:none}}
 @media print{.bili-acc{break-inside:avoid;box-shadow:none}}
