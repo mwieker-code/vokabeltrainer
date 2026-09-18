@@ -55,9 +55,17 @@ body{
 
 .foot{margin-top:36px;font-family:var(--mono);font-size:11px;color:var(--ink-soft);
   text-align:center;letter-spacing:.03em}
+
+/* Kurzform des Bili-Bereichs auf dem Telefon. Bewusst hier und nicht in
+   der ausgelagerten CSS-Datei: Beschriftung und Regel gehoeren zusammen. */
+.bili-short{display:none}
+@media(max-width:620px){
+  .bili-long{display:none}
+  .bili-short{display:inline}
+}
 </style>
-<link rel="stylesheet" href="assets/learning.css?v=20260918-english-basecamp">
-<link rel="stylesheet" href="assets/menu-preview.css?v=20260918-english-basecamp">
+<link rel="stylesheet" href="assets/learning.css?v=20260919-bili-kurz">
+<link rel="stylesheet" href="assets/menu-preview.css?v=20260919-bili-kurz">
 </head>
 <body>
 <div class="wrap">
