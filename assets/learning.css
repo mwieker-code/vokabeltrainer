@@ -46,7 +46,25 @@ a.home-link:hover,a.grammar-back:hover{background:#093e48;border-color:#093e48}a
 /* Keep navigation labels readable in every interactive state. */
 a.home-link:hover,a.home-link:focus,a.home-link:active,a.grammar-back:hover,a.grammar-back:focus,a.grammar-back:active{color:#fff;background:#093e48;border-color:#093e48;text-decoration:none}
 
-.masthead h1 .title-accent{color:#0e6878}
+/* ==== MARKE: English Basecamp =========================================
+   Wortmarke, Bildmarke und Markenfarbe stehen hier an genau einer Stelle
+   und gelten fuer die Startseite wie fuer alle Jahrgangsseiten. Auf dem
+   Telefon faellt die Bildmarke kleiner aus, damit die Kopfzeile nicht die
+   halbe erste Bildschirmseite einnimmt. */
+:root{--brand:#0E6878}
+.masthead{display:flex;align-items:center;justify-content:flex-start;gap:18px}
+.masthead .brandmark{flex:0 0 auto;color:var(--brand);display:block}
+.masthead h1{font-family:var(--serif);font-weight:600;letter-spacing:-.02em;line-height:1.02;
+  font-size:clamp(34px,8.5vw,52px)}
+.masthead h1 .title-accent{color:var(--brand);font-weight:700}
+.masthead .sub{font-size:12.5px;letter-spacing:.07em}
+.masthead .home-link{margin-left:auto}
+@media(max-width:560px){
+  .masthead{gap:13px}
+  .masthead .brandmark{width:56px;height:56px}
+  .masthead h1{font-size:clamp(28px,7.5vw,38px)}
+}
+@media print{.masthead .brandmark{width:38px;height:38px}}
 
 .csv-controls{background:#e5eff1;border:1px solid #b7cdd2;border-radius:12px;padding:20px;margin:18px 0}.csv-check{grid-column:1/-1;font-size:14px;display:flex;align-items:center;gap:8px;padding:8px 0}.csv-check[hidden],.csv-controls[hidden]{display:none}.csv-check input{width:20px;height:20px;accent-color:#0e5a66}@media print{.csv-controls,.csv-check{display:none!important}}
 

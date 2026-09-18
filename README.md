@@ -1,6 +1,6 @@
-# Vokabeltrainer – kurze Lernrunden
+# English Basecamp – kurze Lernrunden
 
-Statischer Englisch-Vokabeltrainer für Jahrgang 5, 6, 9, 10 und Oberstufe. Die HTML-Seiten behalten ihre Vokabeldaten und ihre bestehenden lokalen Fortschrittsschlüssel. `assets/learning.js` und `assets/learning.css` ergänzen alle fünf Trainingsseiten gemeinsam.
+Statischer Englisch-Trainer für Jahrgang 5, 6, 9, 10 und Oberstufe. Die HTML-Seiten behalten ihre Vokabeldaten und ihre bestehenden lokalen Fortschrittsschlüssel. `assets/learning.js` und `assets/learning.css` ergänzen alle fünf Trainingsseiten gemeinsam.
 
 ## Änderungen
 
