@@ -177,7 +177,7 @@ ${JSON.stringify(rows.map(r=>({Unit:r.unit,Englisch:r.en,Deutsch:r.de})),null,2)
       controls.hidden=true;
       const toggle=document.getElementById('lcsv');toggle.textContent='Vokabeln auswählen';toggle.setAttribute('aria-expanded','false');
       const bar=document.createElement('section');bar.className='selection-bar';bar.hidden=true;
-      bar.innerHTML='<strong id="selectionCount" role="status"></strong><div class="selection-actions"><button id="selectionReview">Auswahl ansehen</button><button id="selectionClear">Aufheben</button><button id="selectionHits" hidden></button><button id="selectionCSV">CSV herunterladen</button><button id="selectionPrompt" class="primary">Test-Prompt erstellen</button></div>';
+      bar.innerHTML='<strong id="selectionCount" role="status"></strong><div class="selection-actions"><button id="selectionReview">Auswahl ansehen</button><button id="selectionClear">Aufheben</button><button id="selectionHits" hidden></button><button id="selectionCSV">CSV herunterladen</button><button id="selectionBeamer">Beamer-Modus</button><button id="selectionPrompt" class="primary">Test-Prompt erstellen</button></div>';
       box.after(bar);let active=false,review=false;const headings=[];
       {
         const selectionYear=Number(KEY.match(/^vt(\d+):/)?.[1])||'oberstufe';
@@ -216,7 +216,7 @@ ${JSON.stringify(rows.map(r=>({Unit:r.unit,Englisch:r.en,Deutsch:r.de})),null,2)
       function refresh(){
         update();headings.forEach(({input,keys})=>{const n=keys.filter(k=>csvSelected.has(k)).length;input.checked=n===keys.length&&n>0;input.indeterminate=n>0&&n<keys.length;});
         bar.querySelector('#selectionCount').textContent=csvSelected.size+' Vokabeln ausgewählt';
-        ['selectionCSV','selectionPrompt','selectionReview','selectionClear'].forEach(id=>bar.querySelector('#'+id).disabled=!csvSelected.size);
+        ['selectionCSV','selectionBeamer','selectionPrompt','selectionReview','selectionClear'].forEach(id=>bar.querySelector('#'+id).disabled=!csvSelected.size);
         bar.querySelector('#selectionReview').textContent=review?'Zur gesamten Liste':'Auswahl ansehen';bar.querySelector('#selectionReview').disabled=false;
         box.querySelectorAll('.vrow').forEach(row=>{row.classList.toggle('selection-hidden',review&&!csvSelected.has(row.querySelector('[data-csv-key]').dataset.csvKey));});
         box.querySelectorAll('[data-sec]').forEach(sec=>{sec.classList.toggle('selection-hidden',review&&![...sec.querySelectorAll('[data-csv-key]')].some(i=>csvSelected.has(i.dataset.csvKey)));if(review)sec.open=true;});
@@ -229,7 +229,7 @@ ${JSON.stringify(rows.map(r=>({Unit:r.unit,Englisch:r.en,Deutsch:r.de})),null,2)
       bar.querySelector('#selectionReview').onclick=()=>{review=!review;if(review){q.value='';filter.call(q);}refresh();};
       bar.querySelector('#selectionClear').onclick=()=>{csvSelected.clear();refresh();};
       bar.querySelector('#selectionHits').onclick=()=>{box.querySelectorAll('.vrow:not(.off) [data-csv-key]').forEach(i=>csvSelected.add(i.dataset.csvKey));refresh();};
-      bar.querySelector('#selectionCSV').onclick=()=>csvDownload(true);bar.querySelector('#selectionPrompt').onclick=testPromptDialog;
+      bar.querySelector('#selectionCSV').onclick=()=>csvDownload(true);bar.querySelector('#selectionBeamer').onclick=openBeamer;bar.querySelector('#selectionPrompt').onclick=testPromptDialog;
       refresh();
     }
   };
@@ -484,6 +484,78 @@ ${JSON.stringify(rows.map(r=>({Unit:r.unit,Englisch:r.en,Deutsch:r.de})),null,2)
     pv.i++;
     render();
   }
+  /* =========================================================================
+     BEAMER-MODUS  –  ausgewählte Vokabeln groß projizieren, etwa zum
+     Chorsprechen oder für eine Vertretungsstunde. Liegt als Overlay über
+     der Listenansicht und rührt den Lernstand nicht an.
+     ========================================================================= */
+  function selectedWords(){
+    const out=[];
+    for(const t of TOPICS)(SETS[t.id]||[]).forEach((v,i)=>{ if(csvSelected.has(t.id+':'+i))out.push(v); });
+    return out;
+  }
+  function openBeamer(){
+    const words=selectedWords();
+    if(!words.length)return;
+    const bm={order:words.slice(),i:0,revealed:false,dir:'en2de'};
+    const el=document.createElement('div');
+    el.className='beamer';
+    el.setAttribute('role','dialog');
+    el.setAttribute('aria-modal','true');
+    el.setAttribute('aria-label','Beamer-Modus');
+    document.body.append(el);
+    document.body.classList.add('beamer-open');
+
+    const current=()=>bm.order[bm.i];
+    const ask=v=>bm.dir==='en2de'?v.en:v.de;
+    const answer=v=>bm.dir==='en2de'?v.de:v.en;
+
+    function draw(){
+      const v=current();
+      const showIpa=bm.dir==='en2de'&&v.ipa;
+      el.innerHTML='<div class="beamer-bar">'
+        +'<button type="button" id="bmDir">'+(bm.dir==='en2de'?'EN → DE':'DE → EN')+'</button>'
+        +'<button type="button" id="bmShuffle">Mischen</button>'
+        +(Speech.available?'<button type="button" id="bmSay">Aussprache</button>':'')
+        +'<button type="button" id="bmFull">Vollbild</button>'
+        +'<span class="beamer-count">'+(bm.i+1)+' / '+bm.order.length+'</span>'
+        +'<button type="button" id="bmClose">Schließen</button></div>'
+        +'<div class="beamer-stage" id="bmStage">'
+        +'<div class="beamer-word">'+safe(ask(v))+'</div>'
+        +(showIpa?'<div class="beamer-ipa">['+safe(v.ipa)+']</div>':'')
+        +(bm.revealed?'<div class="beamer-answer">'+safe(answer(v))+'</div>':'')
+        +(bm.revealed&&v.example_en?'<div class="beamer-example">'+safe(v.example_en)+'</div>':'')
+        +'</div>'
+        +'<div class="beamer-hint">Leertaste oder Klick: aufdecken und weiter · ← → blättern · Esc: schließen</div>';
+      el.querySelector('#bmStage').onclick=advance;
+      el.querySelector('#bmDir').onclick=()=>{bm.dir=bm.dir==='en2de'?'de2en':'en2de';bm.revealed=false;draw();};
+      el.querySelector('#bmShuffle').onclick=()=>{bm.order=shuffle(bm.order);bm.i=0;bm.revealed=false;draw();};
+      el.querySelector('#bmSay')?.addEventListener('click',()=>Speech.say(current().en));
+      el.querySelector('#bmFull').onclick=()=>{
+        if(document.fullscreenElement)document.exitFullscreen?.();
+        else el.requestFullscreen?.();
+      };
+      el.querySelector('#bmClose').onclick=close;
+    }
+    function advance(){ if(!bm.revealed){bm.revealed=true;} else if(bm.i<bm.order.length-1){bm.i++;bm.revealed=false;} draw(); }
+    function step(delta){ const next=bm.i+delta; if(next<0||next>=bm.order.length)return; bm.i=next; bm.revealed=false; draw(); }
+    function onKey(e){
+      if(e.key==='Escape'){ e.preventDefault(); e.stopPropagation(); close(); return; }
+      if(e.key===' '){ e.preventDefault(); e.stopPropagation(); advance(); return; }
+      if(e.key==='ArrowRight'){ e.preventDefault(); e.stopPropagation(); step(1); return; }
+      if(e.key==='ArrowLeft'){ e.preventDefault(); e.stopPropagation(); step(-1); return; }
+      if(e.key==='s'||e.key==='S'){ e.preventDefault(); e.stopPropagation(); Speech.say(current().en); }
+    }
+    function close(){
+      document.removeEventListener('keydown',onKey,true);
+      if(document.fullscreenElement)document.exitFullscreen?.();
+      document.body.classList.remove('beamer-open');
+      el.remove();
+    }
+    document.addEventListener('keydown',onKey,true);
+    draw();
+  }
+
   function renderBlitzDone(){
     const pv=S.pv;
     const uniqueMissed=[...new Map(pv.missed.map(v=>[v.id,v])).values()].slice(0,12);

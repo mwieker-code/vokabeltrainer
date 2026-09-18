@@ -99,6 +99,24 @@ a.home-link:hover,a.home-link:focus,a.home-link:active,a.grammar-back:hover,a.gr
 .selection-files input{max-width:100%;padding:8px;font:inherit}
 #selectionFileStatus{display:block;margin-top:8px}
 
+/* Beamer-Modus: project selected vocabulary in large type for whole-class work. */
+body.beamer-open{overflow:hidden}
+.beamer{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;background:var(--card);color:var(--ink)}
+.beamer-bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--rule)}
+.beamer-bar button{min-height:44px;padding:10px 14px;border:1px solid #9bb9be;border-radius:9px;background:var(--card);color:var(--ink);font:600 15px var(--sans);cursor:pointer}
+.beamer-bar button:hover{border-color:var(--petrol);background:var(--ground)}
+.beamer-bar button:focus-visible{outline:3px solid var(--petrol);outline-offset:2px}
+.beamer-count{margin-left:auto;font-family:var(--mono);font-size:16px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.beamer-stage{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:20px;padding:24px 20px;text-align:center;cursor:pointer}
+.beamer-word{font-family:var(--serif);font-weight:600;font-size:clamp(38px,11vw,150px);line-height:1.05;overflow-wrap:anywhere}
+.beamer-ipa{font-family:var(--mono);font-size:clamp(16px,3vw,32px);color:var(--ink-soft)}
+.beamer-answer{font-family:var(--serif);font-weight:600;font-size:clamp(30px,8vw,110px);line-height:1.1;color:var(--petrol);overflow-wrap:anywhere}
+.beamer-example{font-size:clamp(15px,2.4vw,28px);line-height:1.4;color:var(--ink-soft);max-width:40ch}
+.beamer-hint{padding:12px 18px;border-top:1px solid var(--rule);font-size:14px;color:var(--ink-soft);text-align:center}
+@media(max-width:560px){.beamer-hint{font-size:12.5px}.beamer-count{margin-left:0}}
+@media print{.beamer{display:none!important}}
+
 /* Blitzrunde: 60-second time attack, independent of the spaced-repetition boxes. */
 .preview-modes{margin-top:10px}
 .preview-modes .pv-blitz-start{width:100%;text-align:left;background:#fdf3e7;border-color:#c9761e}
