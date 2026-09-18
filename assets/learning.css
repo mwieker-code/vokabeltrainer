@@ -98,3 +98,15 @@ a.home-link:hover,a.home-link:focus,a.home-link:active,a.grammar-back:hover,a.gr
 .selection-files label{display:block;margin:12px 0}
 .selection-files input{max-width:100%;padding:8px;font:inherit}
 #selectionFileStatus{display:block;margin-top:8px}
+
+/* Blitzrunde: 60-second time attack, independent of the spaced-repetition boxes. */
+.preview-modes{margin-top:10px}
+.preview-modes .pv-blitz-start{width:100%;text-align:left;background:#fdf3e7;border-color:#c9761e}
+.preview-modes .pv-blitz-start:hover{background:#f9e7cf;border-color:#a85c14}
+.pv-tag{opacity:.85;cursor:default}
+.pv-blitz-bar{display:flex;justify-content:space-between;align-items:center;margin:0 0 16px;font-family:var(--mono);font-size:15px}
+.pv-blitz-time{font-size:28px;font-weight:700;color:#c9761e;font-variant-numeric:tabular-nums}
+.pv-blitz-score{color:var(--ink-soft)}
+.pv-blitz-missed{margin:14px 0 0;padding:0;list-style:none;display:grid;gap:6px}
+.pv-blitz-missed li{background:var(--ground);border-radius:8px;padding:8px 12px;font-size:14px;text-align:left}
+@media(max-width:560px){.pv-blitz-time{font-size:22px}}

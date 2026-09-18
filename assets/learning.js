@@ -29,12 +29,20 @@
   }
   function stored(){try{const x=JSON.parse(localStorage.getItem(sessionKey));return x&&Array.isArray(x.queue)&&x.queue.length&&x.queue.every(k=>wordMap.has(k))&&Number.isInteger(x.i)&&x.i>=0&&x.i<x.queue.length&&['all','short','due'].includes(x.scope)&&['en2de','de2en'].includes(x.dir)?x:null;}catch(e){return null;}}
   function resume(){const x=stored();if(!x)return;S.roundSource=x.source;S.topicId=x.source;S.dir=x.dir;S.mode=x.mode;S.scope=x.scope;S.onlyDue=x.scope==='due';S.roundLimit=x.scope==='short'?10:Infinity;S.queue=x.queue.map(k=>wordMap.get(k));S.i=x.i;S.seen=x.seen;S.initialCount=x.initial;for(const [field,key] of [['retried','retried'],['missed','missed'],['roundAnswered','answered']])S[field]=new Set((x[key]||[]).map(k=>wordMap.get(k)).filter(Boolean));S.answered=null;S.revealed=false;S.options=null;S.typedValue='';S.view='session';render();}
+  const wordsFor=topicId=>(topicId==='today'?allWords():upper?(SETS[topicId]||[]):setOf(topicId)).filter(v=>v.en&&v.en.trim());
+  const topicLabel=topicId=>topicId==='today'?'Alle Themen':(TOPICS.find(t=>t.id===topicId)?.name||'Deine Auswahl');
   function setup(topicId){
     S.roundSource=topicId;S.topicId=topicId;
     const words=topicId==='today'?allWords():upper?(SETS[topicId]||[]):setOf(topicId),due=words.filter(v=>isDue(record(v))).length;
     view.innerHTML='<h2>Lernumfang wählen</h2><p>'+safe(topicId==='today'?'Alle Themen':TOPICS.find(t=>t.id===topicId)?.name||'Deine Auswahl')+'</p><div class="scope-options"><button class="topic primary" data-scope="all">Alles üben · '+words.length+' Vokabeln</button><button class="topic" data-scope="short">Kurze Runde · bis zu 10 Vokabeln</button><button class="topic" data-scope="due">Nur fällige Vokabeln · '+due+'</button></div><button id="setupBack">Zur Übersicht</button>';
     document.getElementById('setupBack').onclick=home;
     view.querySelectorAll('[data-scope]').forEach(b=>b.onclick=()=>{S.scope=b.dataset.scope;S.onlyDue=S.scope==='due';S.roundLimit=S.scope==='short'?10:Infinity;S.view='session';buildQueue();render();});
+    if(words.length){
+      const wrap=document.createElement('div');wrap.className='preview-modes';
+      wrap.innerHTML='<button class="topic pv-blitz-start" id="startBlitz">Blitzrunde – 60 Sekunden<br><span class="t-count">So viele Vokabeln wie möglich in einer Minute</span></button>';
+      view.querySelector('.scope-options').after(wrap);
+      document.getElementById('startBlitz').onclick=()=>startBlitz(topicId);
+    }
   }
   window.addEventListener('pagehide',checkpoint);
   const originalList=renderList;
@@ -412,7 +420,82 @@ ${JSON.stringify(rows.map(r=>({Unit:r.unit,Englisch:r.en,Deutsch:r.de})),null,2)
   renderHelp = function(){
     originalHelp();
     const doc=view.querySelector('.doc');
-    if(doc)doc.insertAdjacentHTML('afterbegin','<h2>Dein Lernumfang</h2><p>Wähle einen Part, eine Unit oder ein Thema. Alles üben umfasst alle Wörter deiner Auswahl, auch bereits gelernte. Alternativ wählst du höchstens zehn Wörter oder nur fällige Vokabeln. Fehler werden nach dem ersten Durchgang einmal wiederholt. Mit <b>Später fortsetzen</b> verlässt du die Runde. Auf der Jahrgangsübersicht kannst du sie im selben Browser fortsetzen. Pro Jahrgang wird eine Runde gespeichert; eine neue Runde ersetzt sie. Eine noch ungeprüfte Texteingabe wird nicht gespeichert. Ein Wechsel der Übungsart startet den gewählten Lernumfang neu.</p><p>Beim Tippen bleiben deine Eingabe und die Lösung sichtbar. Markierte Buchstaben zeigen Abweichungen. Falsche Antworten werden nicht als gewusst gespeichert, auch wenn du „Gewusst“ antippst.</p><h2>Töne und Animationen</h2><p>Unten auf der Seite kannst du Töne und Animationen getrennt ein- oder ausschalten. Töne sind anfangs ausgeschaltet. Die Einstellungen werden im Browser gespeichert. Die Aussprache über das Lautsprecher-Symbol funktioniert unabhängig vom Schalter für Rückmeldetöne. Bei reduzierter Bewegung in den Geräteeinstellungen werden Animationen unterdrückt.</p>');
+    if(doc)doc.insertAdjacentHTML('afterbegin','<h2>Dein Lernumfang</h2><p>Wähle einen Part, eine Unit oder ein Thema. Alles üben umfasst alle Wörter deiner Auswahl, auch bereits gelernte. Alternativ wählst du höchstens zehn Wörter, nur fällige Vokabeln oder die Blitzrunde. Fehler werden nach dem ersten Durchgang einmal wiederholt. Mit <b>Später fortsetzen</b> verlässt du die Runde. Auf der Jahrgangsübersicht kannst du sie im selben Browser fortsetzen. Pro Jahrgang wird eine Runde gespeichert; eine neue Runde ersetzt sie. Eine noch ungeprüfte Texteingabe wird nicht gespeichert. Ein Wechsel der Übungsart startet den gewählten Lernumfang neu.</p><p>Beim Tippen bleiben deine Eingabe und die Lösung sichtbar. Markierte Buchstaben zeigen Abweichungen. Falsche Antworten werden nicht als gewusst gespeichert, auch wenn du „Gewusst“ antippst.</p><h2>Blitzrunde</h2><p>60 Sekunden gegen die Zeit: Du siehst die deutsche Bedeutung und tippst das englische Wort, so schnell du kannst. Falsche oder ausgelassene Wörter werden am Ende aufgelistet. Die Blitzrunde zählt nicht auf deine fünf Lernfächer ein; dein normaler Lernstand bleibt unberührt.</p><h2>Töne und Animationen</h2><p>Unten auf der Seite kannst du Töne und Animationen getrennt ein- oder ausschalten. Töne sind anfangs ausgeschaltet. Die Einstellungen werden im Browser gespeichert. Die Aussprache über das Lautsprecher-Symbol funktioniert unabhängig vom Schalter für Rückmeldetöne. Bei reduzierter Bewegung in den Geräteeinstellungen werden Animationen unterdrückt.</p>');
   };
+
+  /* =========================================================================
+     BLITZRUNDE  –  60-second time attack, independent of the spaced-
+     repetition boxes and saved progress. Session-only.
+     ========================================================================= */
+  const baseRender=render;
+  render=function(){
+    if(S.view==='pvblitz')return renderBlitz();
+    return baseRender();
+  };
+  function exitBlitz(){ stopBlitzTimer(); S.pv=null; home(); }
+  function startBlitz(topicId){
+    const pool=wordsFor(topicId);
+    if(!pool.length)return;
+    S.pv={topicId,pool,queue:shuffle(pool),i:0,correct:0,wrong:0,missed:[],timeLeft:60,done:false,timer:null};
+    S.view='pvblitz';
+    render();
+    S.pv.timer=setInterval(()=>{
+      const pv=S.pv;if(!pv)return;
+      pv.timeLeft--;
+      const el=document.getElementById('pvTimeLeft');
+      if(el)el.textContent=pv.timeLeft+'s';
+      if(pv.timeLeft<=0){clearInterval(pv.timer);pv.timer=null;pv.done=true;render();}
+    },1000);
+  }
+  function stopBlitzTimer(){ if(S.pv&&S.pv.timer){clearInterval(S.pv.timer);S.pv.timer=null;} }
+  function blitzCurrent(){
+    const pv=S.pv;
+    if(pv.i>=pv.queue.length)pv.queue=pv.queue.concat(shuffle(pv.pool));
+    return pv.queue[pv.i];
+  }
+  function renderBlitz(){
+    const pv=S.pv;
+    if(!pv){S.view='home';return render();}
+    if(pv.done){renderBlitzDone();return;}
+    const v=blitzCurrent();
+    view.innerHTML='<div class="sessionbar"><button class="linkbtn" id="pvBack">← Übersicht</button>'
+      +'<div class="switches"><span class="switch pv-tag" aria-disabled="true">Blitzrunde</span></div></div>'
+      +'<div class="pv-blitz-bar"><span class="pv-blitz-time" id="pvTimeLeft" role="timer" aria-live="off">'+pv.timeLeft+'s</span>'
+      +'<span class="pv-blitz-score" role="status">'+pv.correct+' richtig</span></div>'
+      +'<div class="stage"><div class="vcard deal"><h2 class="prompt">'+safe(v.de)+'</h2>'
+      +'<div class="typebox"><input id="pvTypeIn" placeholder="English word" aria-label="Englische Übersetzung" '
+      +'autocomplete="off" autocapitalize="off" spellcheck="false"></div></div></div>';
+    document.getElementById('pvBack').onclick=exitBlitz;
+    const input=document.getElementById('pvTypeIn');
+    if(input){
+      input.focus();
+      input.onkeydown=e=>{ if(e.key==='Enter'){ e.preventDefault(); blitzSubmit(); } };
+    }
+  }
+  function blitzSubmit(){
+    const pv=S.pv;
+    if(!pv||pv.done)return;
+    const input=document.getElementById('pvTypeIn');
+    if(!input||!input.value.trim())return;
+    const v=blitzCurrent();
+    const res=checkTyped(input.value,v.en);
+    if(res==='ok')pv.correct++; else { pv.wrong++; pv.missed.push(v); }
+    window.LearningFeedback?.signal(res);
+    pv.i++;
+    render();
+  }
+  function renderBlitzDone(){
+    const pv=S.pv;
+    const uniqueMissed=[...new Map(pv.missed.map(v=>[v.id,v])).values()].slice(0,12);
+    const missedList=uniqueMissed.length
+      ? '<ul class="pv-blitz-missed">'+uniqueMissed.map(v=>'<li><b>'+safe(v.en)+'</b> – '+safe(v.de)+'</li>').join('')+'</ul>'
+      : '';
+    view.innerHTML='<div class="done"><div class="summary-number">'+pv.correct+'</div><h2>Blitzrunde vorbei</h2>'
+      +'<p>'+pv.correct+' richtig, '+pv.wrong+' falsch in 60 Sekunden</p>'+missedList
+      +'<div class="controls"><button class="primary" id="pvAgain">Nochmal</button><button id="pvHome">Zur Übersicht</button></div></div>';
+    document.getElementById('pvAgain').onclick=()=>startBlitz(pv.topicId);
+    document.getElementById('pvHome').onclick=exitBlitz;
+  }
+
   render();
 })();
