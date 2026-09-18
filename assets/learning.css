@@ -59,6 +59,12 @@ a.home-link:hover,a.home-link:focus,a.home-link:active,a.grammar-back:hover,a.gr
 .masthead h1 .title-accent{color:var(--brand);font-weight:700}
 .masthead .sub{font-size:12.5px;letter-spacing:.07em}
 .masthead .home-link{margin-left:auto}
+/* Titel und Unterzeile stehen untereinander, wie auf der Startseite. Nur so
+   passen Bildmarke, Schriftzug und der Weg zurueck in eine Zeile: der
+   Inhaltsbereich ist 860px breit, nebeneinander braeuchte die Kopfzeile bis
+   zu 1005px. */
+.masthead .mhead-text{display:block}
+.masthead .sub{margin-top:4px}
 @media(max-width:560px){
   .masthead{gap:13px}
   .masthead .brandmark{width:56px;height:56px}
