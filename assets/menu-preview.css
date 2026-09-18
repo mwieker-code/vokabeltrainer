@@ -74,9 +74,17 @@ a.bili-level:focus-visible{outline:3px solid var(--unit);outline-offset:3px}
   .bili-acc .bili-acc .bili-name{font-size:19px}
   .bili-art{width:30px;height:30px}
   .bili-body{padding:12px 14px 16px}}
+/* Auf dem Telefon im Hochformat sitzt die Kachel auf denselben Werten wie
+   die Jahrgangskacheln darueber: Name links, Beschriftung rechtsbuendig,
+   Symbol am rechten Rand. Der Pfeil entfaellt hier, weil die Kacheln an
+   dieser Stelle auch keinen tragen. */
 @media(max-width:620px) and (orientation:portrait){
   #bili>.bili-acc{border-radius:14px}
-  #bili>.bili-acc>.bili-head{min-height:68px;padding:14px 16px;gap:12px}  /* plus 1px Rahmen oben und unten = 70px wie die Kacheln */
-  #bili>.bili-acc>.bili-head .bili-art{width:36px;height:36px}}
+  #bili>.bili-acc>.bili-head{position:relative;min-height:68px;padding:14px 68px 14px 16px;gap:12px}
+  /* plus 1px Rahmen oben und unten = 70px wie die Kacheln */
+  #bili>.bili-acc>.bili-head .bili-art{position:absolute;right:16px;top:50%;transform:translateY(-50%);
+    width:36px;height:36px}
+  #bili>.bili-acc>.bili-head .bili-meta{margin-left:auto}
+  #bili>.bili-acc>.bili-head .bili-chev{display:none}}
 @media(prefers-reduced-motion:reduce){.bili-chev,a.bili-level{transition:none}}
 @media print{.bili-acc{break-inside:avoid;box-shadow:none}}
