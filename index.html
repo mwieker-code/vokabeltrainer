@@ -55,8 +55,8 @@ body{
 .foot{margin-top:36px;font-family:var(--mono);font-size:11px;color:var(--ink-soft);
   text-align:center;letter-spacing:.03em}
 </style>
-<link rel="stylesheet" href="assets/learning.css?v=20260917-examples-menu">
-<link rel="stylesheet" href="assets/menu-preview.css?v=20260917-examples-menu">
+<link rel="stylesheet" href="assets/learning.css?v=20260918-bili-menue">
+<link rel="stylesheet" href="assets/menu-preview.css?v=20260918-bili-menue">
 </head>
 <body>
 <div class="wrap">
@@ -66,6 +66,7 @@ body{
   </div>
 
   <div id="cards"></div>
+  <div id="bili"></div>
 
   <div class="foot">Vokabeltrainer Englisch</div>
 </div>
@@ -146,6 +147,104 @@ const MENU_ART = {
  'oberstufe/':'M8 29L40 12L72 29L40 46ZM20 36V54Q40 68 60 54V36M72 29V55'
 };
 function menuArt(path){return '<svg class="menu-art" aria-hidden="true" viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="'+MENU_ART[path]+'"/></svg>';}
+/* =========================================================================
+   BILINGUALER UNTERRICHT
+   Eigener Bereich unterhalb der Jahrgaenge, weil die Sachfaecher quer zu
+   den Jahrgangsstufen liegen. Aufklappbar, damit die Startseite kurz
+   bleibt. Sobald eine Jahrgangsstufe eigenes Vokabular hat, bekommt sie
+   hier ein "path" - dann wird aus dem Eintrag automatisch ein Link.
+   ========================================================================= */
+const BILI = {
+  "name": "Bilingualer Unterricht",
+  "meta": "Sachfachvokabular",
+  "color": "#6B4226",
+  "subjects": [
+    {
+      "id": "wipo",
+      "name": "WiPo",
+      "meta": "Wirtschaft/Politik",
+      "color": "#9A5B12",
+      "levels": [
+        {"name": "WiPo Bili E-Jahrgang", "meta": "Einf\u00fchrungsphase"},
+        {"name": "WiPo Bili Q1", "meta": "Qualifikationsphase"},
+        {"name": "WiPo Bili Q2", "meta": "Qualifikationsphase"}
+      ]
+    },
+    {
+      "id": "history",
+      "name": "History",
+      "meta": "Geschichte",
+      "color": "#6D3B6E",
+      "levels": [
+        {"name": "History Year 9", "meta": "Mittelstufe"},
+        {"name": "History Year 10", "meta": "Mittelstufe"}
+      ]
+    },
+    {
+      "id": "geography",
+      "name": "Geography",
+      "meta": "Geographie",
+      "color": "#2E6B4F",
+      "levels": [
+        {"name": "Geography Year 7", "meta": "Mittelstufe"},
+        {"name": "Geography Year 8", "meta": "Mittelstufe"},
+        {"name": "Geography Year 9", "meta": "Mittelstufe"},
+        {"name": "Geography Year 10", "meta": "Mittelstufe"}
+      ]
+    }
+  ]
+};
+
+const BILI_ART = {
+ 'bili':'M8 16H44V40H24L14 50V40H8ZM36 30H72V54H56V66L44 54H36Z',
+ 'wipo':'M10 68H70M18 68V48H28V68M34 68V32H44V68M50 68V40H60V68M14 38L26 26L38 32L58 12M48 12H60V24',
+ 'history':'M8 30L40 12L72 30M8 66H72M13 60H67M16 30V60M28 30V60M40 30V60M52 30V60M64 30V60',
+ 'geography':'M40 8A32 32 0 1 0 40 72A32 32 0 1 0 40 8M8 40H72M40 8Q24 40 40 72M40 8Q56 40 40 72'
+};
+function biliArt(key){
+  return '<svg class="bili-art" aria-hidden="true" viewBox="0 0 80 80" fill="none" stroke="currentColor" '
+    + 'stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="' + BILI_ART[key] + '"/></svg>';
+}
+const biliOpen = new Set();
+function biliLevel(level){
+  const label = '<span class="bili-level-text"><span class="bili-level-name">' + esc(level.name) + '</span>'
+    + '<span class="bili-level-meta">' + esc(level.meta || "") + '</span></span>';
+  return level.path
+    ? '<a class="bili-level" href="' + esc(level.path) + '">' + label
+      + '<span class="bili-level-go" aria-hidden="true">\u2192</span></a>'
+    : '<div class="bili-level is-pending">' + label
+      + '<span class="bili-pill">In Vorbereitung</span></div>';
+}
+function renderBili(){
+  const box = document.getElementById("bili");
+  const open = biliOpen.has('bili');
+  box.innerHTML = '<h2 class="bili-heading">' + esc(BILI.name) + '</h2>'
+    + '<div class="bili-acc" style="--unit:' + esc(BILI.color) + '">'
+    + '<button type="button" class="bili-head" data-bili="bili" aria-expanded="' + open + '">'
+    + biliArt('bili') + '<span class="bili-name">' + esc(BILI.name) + '</span>'
+    + '<span class="bili-meta">' + esc(BILI.meta) + '</span>'
+    + '<span class="bili-chev" aria-hidden="true">\u203a</span></button>'
+    + (open ? '<div class="bili-body">' + BILI.subjects.map(function(subject){
+        const subjectOpen = biliOpen.has(subject.id);
+        return '<div class="bili-acc" style="--unit:' + esc(subject.color) + '">'
+          + '<button type="button" class="bili-head" data-bili="' + esc(subject.id) + '" aria-expanded="' + subjectOpen + '">'
+          + biliArt(subject.id) + '<span class="bili-name">' + esc(subject.name) + '</span>'
+          + '<span class="bili-meta">' + esc(subject.meta) + '</span>'
+          + '<span class="bili-chev" aria-hidden="true">\u203a</span></button>'
+          + (subjectOpen ? '<div class="bili-body"><div class="bili-levels">'
+              + subject.levels.map(biliLevel).join("") + '</div></div>' : '')
+          + '</div>';
+      }).join("") + '</div>' : '')
+    + '</div>';
+  box.querySelectorAll('[data-bili]').forEach(function(button){
+    button.onclick = function(){
+      const id = button.dataset.bili;
+      if(biliOpen.has(id)) biliOpen.delete(id); else biliOpen.add(id);
+      renderBili();
+    };
+  });
+}
+
 function render(){
   const box = document.getElementById("cards");
   box.innerHTML = SITES.map(s => `
@@ -160,6 +259,7 @@ function render(){
   `).join("");
 }
 render();
+renderBili();
 </script>
 </body>
 </html>

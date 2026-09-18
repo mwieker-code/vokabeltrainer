@@ -30,3 +30,40 @@ body{background:#f3f6f2}
  #cards .menu-arrow{display:none}
  .foot{margin-top:20px}
 }
+
+/* Bilingualer Unterricht: aufklappbarer Bereich unter den Jahrgangskacheln.
+   Eigene Klassen, damit die Kacheln der Startseite unberührt bleiben. */
+.bili-heading{font-family:var(--serif);font-size:21px;font-weight:600;letter-spacing:-.01em;margin:30px 0 12px}
+.bili-acc{border:1px solid var(--rule);border-radius:20px;background:var(--card);overflow:hidden}
+.bili-acc .bili-acc{border-radius:14px}
+.bili-acc .bili-acc+.bili-acc{margin-top:10px}
+.bili-head{display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:18px 20px;border:0;
+  background:var(--unit);color:#fff;font-family:inherit;font-size:16px;cursor:pointer}
+.bili-acc .bili-acc .bili-head{padding:14px 18px}
+.bili-name{font-size:21px;font-weight:700;letter-spacing:-.02em;line-height:1.2}
+.bili-acc .bili-acc .bili-name{font-size:19px}
+.bili-meta{font-size:12px;font-weight:600;padding:4px 9px;border-radius:7px;background:#00000018;white-space:normal}
+.bili-art{width:34px;height:34px;flex:0 0 auto;opacity:.9}
+.bili-chev{margin-left:auto;font-size:20px;line-height:1;transition:transform .18s}
+.bili-head[aria-expanded="true"] .bili-chev{transform:rotate(90deg)}
+.bili-head:focus-visible{outline:3px solid #16232B;outline-offset:-4px}
+.bili-body{padding:16px 20px 20px}
+.bili-acc .bili-acc .bili-body{padding:14px 16px 16px}
+.bili-levels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.bili-level{display:flex;align-items:center;gap:14px;padding:14px 16px;min-height:72px;text-decoration:none;
+  background:var(--card);border:1px solid var(--rule);border-left:5px solid var(--unit);border-radius:12px;color:var(--ink)}
+a.bili-level{transition:box-shadow .15s,border-color .15s}
+a.bili-level:hover{box-shadow:0 3px 12px #173e4518;border-color:var(--unit)}
+a.bili-level:focus-visible{outline:3px solid var(--unit);outline-offset:3px}
+.bili-level-text{flex:1 1 auto;min-width:0}
+.bili-level-name{display:block;font-size:17px;font-weight:600;letter-spacing:-.01em}
+.bili-level-meta{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--ink-soft);margin-top:3px}
+.bili-level-go{font-size:18px;color:var(--unit)}
+.bili-pill{font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:999px;white-space:nowrap;
+  background:#EDE7DC;color:#6B5320;border:1px solid #D8C9A8}
+@media(max-width:620px){.bili-levels{grid-template-columns:1fr}
+  .bili-head{padding:15px 16px;gap:10px}.bili-name{font-size:19px}.bili-art{width:28px;height:28px}
+  .bili-body{padding:12px 14px 16px}}
+@media(prefers-reduced-motion:reduce){.bili-chev,a.bili-level{transition:none}}
+@media print{.bili-acc{break-inside:avoid;box-shadow:none}}
