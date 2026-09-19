@@ -27,7 +27,4 @@
 }
 html:not(.feedback-motion) *,html:not(.feedback-motion) *::before,html:not(.feedback-motion) *::after{animation:none!important;transition:none!important}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}@media print{.feedback-settings{display:none}}
-@media (prefers-color-scheme: dark){
-  .feedback-settings button{background:var(--card);border-color:var(--edge);color:var(--ink)}
-  .feedback-settings button[aria-pressed="true"]{background:var(--tint-moss);border-color:var(--moss)}
-}
+
