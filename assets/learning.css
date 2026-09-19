@@ -325,12 +325,12 @@ body{-webkit-tap-highlight-color:transparent}
 
   /* Auftritt mit Versatz: die Liste baut sich auf, statt auf einmal da zu
      sein. --i setzt das Skript beim Ansichtswechsel. */
-  .eb-in{animation:eb-auftritt var(--t-slow) var(--ease-out) both;
-    animation-delay:calc(var(--i,0) * 45ms)}
-  @keyframes eb-auftritt{from{opacity:0;transform:translateY(10px)}}
+  .eb-in{animation:eb-auftritt 420ms var(--ease-out) both;
+    animation-delay:calc(var(--i,0) * 38ms)}
+  @keyframes eb-auftritt{from{opacity:0;transform:translateY(6px)}}
   /* Die Lernfaecher fuellen sich von links, kurz nach ihrer Kachel. */
-  .eb-in .minirail i{animation:eb-fuellen 420ms var(--ease-out) both;
-    animation-delay:calc(var(--i,0) * 45ms + 150ms);transform-origin:left center}
+  .eb-in .minirail i{animation:eb-fuellen 480ms var(--ease-out) both;
+    animation-delay:calc(var(--i,0) * 38ms + 180ms);transform-origin:left center}
   @keyframes eb-fuellen{from{transform:scaleX(0)}}
   .assignment-bar-fill{animation:eb-fuellen 700ms var(--ease-out) both;transform-origin:left center}
 }

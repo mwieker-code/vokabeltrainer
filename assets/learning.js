@@ -1034,22 +1034,30 @@ ${vocabulary}`;
      ========================================================================= */
   {
     const plainRender=render;
-    let lastView=null;
+    let lastView=null, ersterAufbau=true;
     const ruhig=()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches;}catch(e){return false;}};
-    /* Listen bauen sich mit leichtem Versatz auf. Nur die ersten Eintraege
-       bekommen eine Verzoegerung - bei hundert Zeilen wartet sonst niemand. */
+    /* Der Aufbau mit Versatz laeuft nur beim ersten Zeichnen. Beim
+       Ansichtswechsel uebernimmt das Ueberblenden - beides zugleich ruckelt,
+       weil der Wechsel ein Standbild der neuen Ansicht aufnimmt, waehrend
+       darin noch etwas animiert wird. */
     const auftritt=()=>{
-      const liste=view.querySelectorAll(':scope > .topic, :scope > .assignment-saved > .assignment-card, :scope > .bili-acc, :scope > .yeargroup, :scope > .lsec, :scope > .vlist > .lsec');
-      liste.forEach((el,n)=>{ if(n<14)el.style.setProperty('--i',n); el.classList.add('eb-in'); });
+      const setzen=()=>{
+        const liste=view.querySelectorAll(':scope > .topic, :scope > .assignment-saved > .assignment-card, :scope > .bili-acc, :scope > .yeargroup, :scope > .lsec, :scope > .vlist > .lsec');
+        liste.forEach((el,n)=>{ if(n<10)el.style.setProperty('--i',n); el.classList.add('eb-in'); });
+      };
+      /* Erst wenn die Schrift steht - sonst faellt der Umbruch mitten in die
+         Bewegung und sieht aus wie ein Ruckler. */
+      if(document.fonts&&document.fonts.status!=='loaded')document.fonts.ready.then(setzen).catch(setzen);
+      else setzen();
     };
     render=function(){
       const wechsel=S.view!==lastView;
       lastView=S.view;
       if(!wechsel||ruhig()){plainRender();return;}
-      const danach=()=>{plainRender();auftritt();};
-      if(typeof document.startViewTransition!=='function'){danach();return;}
-      try{ document.startViewTransition(danach); }
-      catch(e){ danach(); }
+      if(ersterAufbau){ersterAufbau=false;plainRender();auftritt();return;}
+      if(typeof document.startViewTransition!=='function'){plainRender();return;}
+      try{ document.startViewTransition(()=>{plainRender();}); }
+      catch(e){ plainRender(); }
     };
   }
 
