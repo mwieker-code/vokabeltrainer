@@ -360,3 +360,11 @@ body{-webkit-tap-highlight-color:transparent}
   background:currentColor;opacity:.55;
   -webkit-mask:center/contain no-repeat var(--lupe);mask:center/contain no-repeat var(--lupe)}
 :root{--lupe:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>')}
+
+/* =========================================================================
+   FUSSZEILE
+   Die beiden Sicherungsknoepfe gehoeren zusammen. Als einzelne Flex-Kinder
+   brach auf dem Handy nur der zweite um und stand allein unter dem Zaehler;
+   als Gruppe wandern sie gemeinsam in die naechste Zeile.
+   ========================================================================= */
+.foot-actions{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
