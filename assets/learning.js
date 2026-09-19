@@ -1043,15 +1043,14 @@ ${vocabulary}`;
     const plainRender=render;
     let lastView=null, ersterAufbau=true;
     const ruhig=()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches;}catch(e){return false;}};
-    /* Der Aufbau mit Versatz laeuft nur beim ersten Zeichnen. Beim
+    /* Der Aufbau laeuft nur beim ersten Zeichnen. Beim
        Ansichtswechsel uebernimmt das Ueberblenden - beides zugleich ruckelt,
        weil der Wechsel ein Standbild der neuen Ansicht aufnimmt, waehrend
        darin noch etwas animiert wird. */
     const auftritt=()=>{
-      const setzen=()=>{
-        const liste=view.querySelectorAll(':scope > .topic, :scope > .assignment-saved > .assignment-card, :scope > .bili-acc, :scope > .yeargroup, :scope > .lsec, :scope > .vlist > .lsec');
-        liste.forEach((el,n)=>{ if(n<10)el.style.setProperty('--i',n); el.classList.add('eb-in'); });
-      };
+      /* Die Ansicht blendet als Ganzes ein. Frueher trat jedes Element
+         einzeln und versetzt auf; das las sich als Aufblaettern. */
+      const setzen=()=>{ view.classList.add('eb-ein'); };
       /* Erst wenn die Schrift steht - sonst faellt der Umbruch mitten in die
          Bewegung und sieht aus wie ein Ruckler. */
       if(document.fonts&&document.fonts.status!=='loaded')document.fonts.ready.then(setzen).catch(setzen);

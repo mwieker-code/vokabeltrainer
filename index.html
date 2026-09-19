@@ -64,8 +64,8 @@ body{
   .bili-short{display:inline}
 }
 </style>
-<link rel="stylesheet" href="assets/learning.css?v=20260919-bili">
-<link rel="stylesheet" href="assets/menu-preview.css?v=20260919-bili">
+<link rel="stylesheet" href="assets/learning.css?v=20260919-einblenden">
+<link rel="stylesheet" href="assets/menu-preview.css?v=20260919-einblenden">
 </head>
 <body>
 <div class="wrap">
@@ -222,6 +222,7 @@ function biliArt(key){
     + 'stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="' + BILI_ART[key] + '"/></svg>';
 }
 const biliOpen = new Set();
+let biliGezeichnet = false;
 /* Eine Zeile pro Fach. Die Jahrgaenge stehen als Beschriftung darunter,
    aufgeklappt werden sie erst auf der Fachseite. */
 function biliSubject(subject){
@@ -256,8 +257,9 @@ function renderBili(){
     + (open ? '<div class="bili-body"><div class="bili-levels is-subjects">'
         + BILI.subjects.map(biliSubject).join("") + '</div></div>' : '')
     + '</div>';
-  const panel=box.querySelector('.bili-acc');
-  if(panel){panel.style.setProperty('--i',document.querySelectorAll('#cards > .card').length);panel.classList.add('eb-in');}
+  /* Nur der erste Aufbau blendet ein. Ohne diese Sperre flackerte der
+     Bereich bei jedem Auf- und Zuklappen erneut. */
+  if(!biliGezeichnet){ biliGezeichnet = true; box.classList.add('eb-ein'); }
   box.querySelectorAll('[data-bili]').forEach(function(button){
     button.onclick = function(){
       const id = button.dataset.bili;
@@ -279,8 +281,9 @@ function render(){
       <div class="desc">${esc(s.desc || "")}</div>
     </a>
   `).join("");
-  /* Auftritt mit Versatz, wie auf den Jahrgangsseiten. */
-  [...box.children].forEach((el,n)=>{el.style.setProperty("--i",n);el.classList.add("eb-in");});
+  /* Die Kacheln blenden als ein Stueck ein, wie die Listen auf den
+     Jahrgangsseiten. */
+  box.classList.add("eb-ein");
 }
 render();
 renderBili();
