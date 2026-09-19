@@ -459,14 +459,13 @@ ${vocabulary}`;
     window.LearningFeedback?.tone('done');
   };
   /* =========================================================================
-     STIMMENWAHL
+     STIMME FUER DIE AUSSPRACHE
      Die Geraeteliste enthaelt pro Sprache mehrere Stimmen sehr
-     unterschiedlicher Qualitaet, und welche zuerst darin steht, ist Zufall -
-     deshalb klingt dieselbe Seite auf zwei Geraeten verschieden. Hier laesst
-     sich eine Stimme fest waehlen; ohne Wahl wird nach Qualitaet sortiert.
-     Die Wahl liegt im Browser, nicht im Lernstand.
+     unterschiedlicher Qualitaet, und welche zuerst darin steht, ist Zufall.
+     Auf Apple-Geraeten ist "Daniel" (en-GB) die brauchbare, deshalb hat sie
+     Vorrang. Den Namen gibt es nur dort, auf anderen Systemen greift die
+     Sortierung nach Qualitaet.
      ========================================================================= */
-  const voiceKey='vt:voice:v1';
   const synth=window.speechSynthesis;
   const enVoices=()=>{try{return (synth&&synth.getVoices()||[]).filter(v=>/^en/i.test(v.lang));}catch(e){return [];}};
   /* Mit diesen Zusaetzen kennzeichnen die Systeme ihre hochwertigen Stimmen;
@@ -480,14 +479,12 @@ ${vocabulary}`;
     else if(/en[-_]US/i.test(v.lang))n+=1;
     return n;
   };
-  const storedVoice=()=>{try{return localStorage.getItem(voiceKey)||'';}catch(e){return '';}};
-  /* Spaeter liesse sich hier eine Variante (AE/BE) beruecksichtigen, solange
-     keine feste Stimme gewaehlt ist. */
   function chosenVoice(){
     const list=enVoices();
     if(!list.length)return null;
-    const want=storedVoice();
-    return (want&&list.find(v=>v.name===want))||list.slice().sort((a,b)=>voiceRank(b)-voiceRank(a))[0];
+    const daniel=list.filter(v=>/\bdaniel\b/i.test(v.name)&&/en[-_]GB/i.test(v.lang));
+    if(daniel.length)return daniel.sort((a,b)=>voiceRank(b)-voiceRank(a))[0];
+    return list.slice().sort((a,b)=>voiceRank(b)-voiceRank(a))[0];
   }
   if(typeof Speech!=='undefined'&&Speech.available&&synth){
     let last='noch nichts abgespielt';
@@ -520,50 +517,12 @@ ${vocabulary}`;
     Speech.status=function(){
       const list=enVoices(), voice=chosenVoice();
       return list.length+' englische Stimmen \u00b7 '
-        +(voice?(storedVoice()?'gew\u00e4hlt: ':'automatisch: ')+voice.name+' ('+voice.lang+')':'keine englische Stimme gefunden')
+        +(voice?voice.name+' ('+voice.lang+')':'keine englische Stimme gefunden')
         +' \u00b7 zuletzt: '+last;
     };
   }
-  /* Stimmenwahl in die Hilfe einh\u00e4ngen, direkt beim Ausspracheteil. */
-  function voicePicker(){
-    const test=document.getElementById('sptest');
-    if(!test||!synth)return;
-    const box=document.createElement('p');
-    box.className='voice-pick';
-    box.innerHTML='<label for="voiceSelect">Stimme</label> <select id="voiceSelect"></select> '
-      +'<button type="button" class="switch" id="voiceTry">H\u00f6rprobe</button>';
-    const note=document.createElement('p');
-    note.className='voice-note';
-    note.textContent='Die Auswahl gilt nur in diesem Browser. Stehen hier wenige oder nur blecherne Stimmen, '
-      +'sind auf dem Ger\u00e4t keine besseren installiert \u2013 hochwertige englische Stimmen lassen sich in den '
-      +'Systemeinstellungen nachladen.';
-    test.parentElement.after(box, note);
-    const select=box.querySelector('#voiceSelect');
-    function fill(){
-      const list=enVoices(), want=storedVoice();
-      select.innerHTML='<option value="">Automatisch \u2013 beste gefundene</option>'
-        +list.slice().sort((a,b)=>voiceRank(b)-voiceRank(a))
-          .map(v=>'<option value="'+safe(v.name)+'"'+(v.name===want?' selected':'')+'>'
-            +safe(v.name)+' \u00b7 '+safe(v.lang)+(v.localService?'':' \u00b7 Netz')+'</option>').join('');
-      if(!list.length)select.innerHTML='<option value="">keine englische Stimme gefunden</option>';
-    }
-    fill();
-    if(synth.addEventListener)synth.addEventListener('voiceschanged',fill);
-    select.onchange=()=>{
-      try{ select.value?localStorage.setItem(voiceKey,select.value):localStorage.removeItem(voiceKey); }catch(e){}
-      const out=document.getElementById('spout');
-      if(out)out.textContent=Speech.status();
-    };
-    box.querySelector('#voiceTry').onclick=()=>{
-      Speech.say('London is the capital of the United Kingdom.');
-      const out=document.getElementById('spout');
-      if(out){ out.textContent=Speech.status(); setTimeout(()=>{out.textContent=Speech.status();},1200); }
-    };
-  }
-
   renderHelp = function(){
     originalHelp();
-    voicePicker();
     const doc=view.querySelector('.doc');
     if(doc)doc.insertAdjacentHTML('afterbegin','<h2>Dein Lernumfang</h2><p>Wähle einen Part, eine Unit oder ein Thema. Alles üben umfasst alle Wörter deiner Auswahl, auch bereits gelernte. Alternativ wählst du höchstens zehn Wörter, nur fällige Vokabeln oder die Blitzrunde. Fehler werden nach dem ersten Durchgang einmal wiederholt. Mit <b>Später fortsetzen</b> verlässt du die Runde. Auf der Jahrgangsübersicht kannst du sie im selben Browser fortsetzen. Pro Jahrgang wird eine Runde gespeichert; eine neue Runde ersetzt sie. Eine noch ungeprüfte Texteingabe wird nicht gespeichert. Ein Wechsel der Übungsart startet den gewählten Lernumfang neu.</p><p>Beim Tippen bleiben deine Eingabe und die Lösung sichtbar. Markierte Buchstaben zeigen Abweichungen. Falsche Antworten werden nicht als gewusst gespeichert, auch wenn du „Gewusst“ antippst.</p><h2>Blitzrunde</h2><p>60 Sekunden gegen die Zeit: Du siehst die deutsche Bedeutung und tippst das englische Wort, so schnell du kannst. Falsche oder ausgelassene Wörter werden am Ende aufgelistet. Die Blitzrunde zählt nicht auf deine fünf Lernfächer ein; dein normaler Lernstand bleibt unberührt.</p><h2>Töne und Animationen</h2><p>Unten auf der Seite kannst du Töne und Animationen getrennt ein- oder ausschalten. Töne sind anfangs ausgeschaltet. Die Einstellungen werden im Browser gespeichert. Die Aussprache über das Lautsprecher-Symbol funktioniert unabhängig vom Schalter für Rückmeldetöne. Bei reduzierter Bewegung in den Geräteeinstellungen werden Animationen unterdrückt.</p>');
   };
