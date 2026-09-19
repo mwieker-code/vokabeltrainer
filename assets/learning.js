@@ -417,7 +417,10 @@ ${vocabulary}`;
   };
   renderSession = function() {
     if(!S.queue.length){
-      view.innerHTML='<div class="done"><h2>Keine passenden Wörter fällig</h2><p>'+(S.mode==='cloze'?'Für diese Auswahl sind gerade keine passenden Lückensätze fällig.':'Du hast die fälligen Wörter dieser Auswahl bereits wiederholt.')+'</p><div class="controls"><button id="practiceAll">Freiwillig üben</button><button id="emptyHome">Zur Übersicht</button></div></div>';
+      view.innerHTML='<div class="done done-empty">'
+        +'<svg class="empty-art" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+        +'<path d="M4 6h16v13H4z"/><path d="M4 6l8 5 8-5"/><path d="M9 15h6"/></svg>'
+        +'<h2>Keine passenden Wörter fällig</h2><p>'+(S.mode==='cloze'?'Für diese Auswahl sind gerade keine passenden Lückensätze fällig.':'Du hast die fälligen Wörter dieser Auswahl bereits wiederholt.')+'</p><div class="controls"><button id="practiceAll">Freiwillig üben</button><button id="emptyHome">Zur Übersicht</button></div></div>';
       document.getElementById('emptyHome').onclick=home;
       document.getElementById('practiceAll').onclick=()=>{S.onlyDue=false;if(S.mode==='cloze')S.mode='card';buildQueue();render();};return;
     }
@@ -1033,12 +1036,20 @@ ${vocabulary}`;
     const plainRender=render;
     let lastView=null;
     const ruhig=()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches;}catch(e){return false;}};
+    /* Listen bauen sich mit leichtem Versatz auf. Nur die ersten Eintraege
+       bekommen eine Verzoegerung - bei hundert Zeilen wartet sonst niemand. */
+    const auftritt=()=>{
+      const liste=view.querySelectorAll(':scope > .topic, :scope > .assignment-saved > .assignment-card, :scope > .bili-acc, :scope > .yeargroup, :scope > .lsec, :scope > .vlist > .lsec');
+      liste.forEach((el,n)=>{ if(n<14)el.style.setProperty('--i',n); el.classList.add('eb-in'); });
+    };
     render=function(){
       const wechsel=S.view!==lastView;
       lastView=S.view;
-      if(!wechsel||ruhig()||typeof document.startViewTransition!=='function')return plainRender();
-      try{ document.startViewTransition(()=>{plainRender();}); }
-      catch(e){ plainRender(); }
+      if(!wechsel||ruhig()){plainRender();return;}
+      const danach=()=>{plainRender();auftritt();};
+      if(typeof document.startViewTransition!=='function'){danach();return;}
+      try{ document.startViewTransition(danach); }
+      catch(e){ danach(); }
     };
   }
 

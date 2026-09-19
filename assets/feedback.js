@@ -14,7 +14,18 @@ function tone(kind){if(!prefs.sound)return;try{const Audio=window.AudioContext||
   else{[196,185].forEach(f=>envTone(ctx,f,'square',t,.26,.08));}
 }).catch(()=>{});}catch(e){}}
 function confettiBurst(host){for(let i=0;i<16;i++){const p=document.createElement('span');p.className='confetti-piece';const angle=Math.random()*Math.PI*2,dist=44+Math.random()*76;p.style.setProperty('--dx',Math.cos(angle)*dist+'px');p.style.setProperty('--dy',Math.sin(angle)*dist+'px');p.style.setProperty('--rot',(Math.random()*360-180)+'deg');p.style.background=['var(--moss)','var(--petrol)','var(--amber)'][i%3];p.style.animationDelay=(Math.random()*30)+'ms';host.appendChild(p);p.addEventListener('animationend',()=>p.remove());}}
-function signal(kind){tone(kind);const host=document.querySelector('.vcard,#feedback,.panel');if(!host)return;host.classList.remove('feedback-ok','feedback-near','feedback-no');host.querySelectorAll('.confetti-piece').forEach(p=>p.remove());void host.offsetWidth;host.classList.add('feedback-'+kind);if(kind==='ok'&&document.documentElement.classList.contains('feedback-motion'))confettiBurst(host);}
+/* Kurzes Vibrieren zur Antwort. Android und Chrome koennen das; auf dem
+   iPhone fehlt die Schnittstelle in allen Browsern, weil alle WebKit
+   nutzen - dort passiert schlicht nichts. Gekoppelt an denselben Schalter
+   wie die Animationen. */
+function buzz(kind){
+  try{
+    if(!prefs.animation||!motion||motion.matches)return;
+    if(typeof navigator.vibrate!=='function')return;
+    navigator.vibrate(kind==='ok'?18:kind==='near'?[14,60,14]:[26,50,26]);
+  }catch(e){}
+}
+function signal(kind){tone(kind);buzz(kind);const host=document.querySelector('.vcard,#feedback,.panel');if(!host)return;host.classList.remove('feedback-ok','feedback-near','feedback-no');host.querySelectorAll('.confetti-piece').forEach(p=>p.remove());void host.offsetWidth;host.classList.add('feedback-'+kind);if(kind==='ok'&&document.documentElement.classList.contains('feedback-motion'))confettiBurst(host);}
 window.LearningFeedback={signal,tone};
 const bar=document.createElement('div');bar.className='feedback-settings';bar.setAttribute('aria-label','Rückmeldungen');bar.innerHTML='<button type="button" data-feedback-pref="sound"></button><button type="button" data-feedback-pref="animation"></button>';const host=document.querySelector('.wrap,main');if(host)host.append(bar);bar.querySelectorAll('button').forEach(b=>b.onclick=()=>{prefs[b.dataset.feedbackPref]=!prefs[b.dataset.feedbackPref];save();if(b.dataset.feedbackPref==='sound'&&prefs.sound)tone('ok');});if(motion)motion.addEventListener?.('change',sync);sync();
 })();

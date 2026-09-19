@@ -65,8 +65,8 @@ body{
   .bili-short{display:inline}
 }
 </style>
-<link rel="stylesheet" href="assets/learning.css?v=20260919-hell">
-<link rel="stylesheet" href="assets/menu-preview.css?v=20260919-hell">
+<link rel="stylesheet" href="assets/learning.css?v=20260919-politur">
+<link rel="stylesheet" href="assets/menu-preview.css?v=20260919-politur">
 </head>
 <body>
 <div class="wrap">
@@ -251,6 +251,8 @@ function renderBili(){
           + '</div>';
       }).join("") + '</div>' : '')
     + '</div>';
+  const panel=box.querySelector('.bili-acc');
+  if(panel){panel.style.setProperty('--i',document.querySelectorAll('#cards > .card').length);panel.classList.add('eb-in');}
   box.querySelectorAll('[data-bili]').forEach(function(button){
     button.onclick = function(){
       const id = button.dataset.bili;
@@ -272,6 +274,8 @@ function render(){
       <div class="desc">${esc(s.desc || "")}</div>
     </a>
   `).join("");
+  /* Auftritt mit Versatz, wie auf den Jahrgangsseiten. */
+  [...box.children].forEach((el,n)=>{el.style.setProperty("--i",n);el.classList.add("eb-in");});
 }
 render();
 renderBili();

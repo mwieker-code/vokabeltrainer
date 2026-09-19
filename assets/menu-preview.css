@@ -88,3 +88,7 @@ a.bili-level:focus-visible{outline:3px solid var(--unit);outline-offset:3px}
   #bili>.bili-acc>.bili-head .bili-chev{display:none}}
 @media(prefers-reduced-motion:reduce){.bili-chev,a.bili-level{transition:none}}
 @media print{.bili-acc{break-inside:avoid;box-shadow:none}}
+/* Auftritt und Druckpunkt auch im Hauptmenü */
+@media (prefers-reduced-motion: no-preference){
+  #cards .card:active,.bili-head:active{transform:scale(.985);transition-duration:80ms}
+}

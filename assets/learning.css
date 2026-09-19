@@ -290,3 +290,73 @@ details.yeargroup{border-radius:var(--radius-lg)}
 }
 @keyframes vt-weg{to{opacity:0}}
 @keyframes vt-her{from{opacity:0;transform:translateY(8px)}}
+
+/* =========================================================================
+   BEWEGUNG UND RUECKMELDUNG
+   Drei Zeiten, eine Kurve. Jede Animation der Seite greift darauf zu -
+   das ist der Unterschied zwischen "irgendwie animiert" und einer
+   Oberflaeche, die sich einheitlich anfuehlt.
+   ========================================================================= */
+:root{
+  --t-fast:120ms; --t-base:180ms; --t-slow:300ms;
+  --ease-out:cubic-bezier(.2,.7,.3,1);
+}
+/* Das graue Aufblitzen beim Antippen entfaellt - an seine Stelle tritt der
+   Druckpunkt unten, der auch auf dem Telefon sichtbar ist. */
+body{-webkit-tap-highlight-color:transparent}
+
+@media (prefers-reduced-motion: no-preference){
+  .topic,.card,button,.switch,.linkbtn,a.home-link,a.grammar-back,
+  .bili-head,.bili-level,.assignment-card,.level,summary{
+    transition:transform var(--t-fast) var(--ease-out),
+               box-shadow var(--t-base) var(--ease-out),
+               border-color var(--t-base) var(--ease-out),
+               background var(--t-base) var(--ease-out)}
+  .topic:hover,.card:hover{transform:translateY(-2px)}
+  .bili-level:hover,.assignment-card:hover{transform:translateY(-1px)}
+  button:not(:disabled):hover,.switch:hover,a.home-link:hover,a.grammar-back:hover{transform:translateY(-1px)}
+  /* Der Druckpunkt: kurz und knapp, das ist der Teil, den man mit dem
+     Finger spuert. Ohne ihn passiert auf dem Telefon beim Tippen nichts. */
+  .topic:active,.card:active,button:not(:disabled):active,.switch:active,
+  a.home-link:active,a.grammar-back:active,.bili-head:active,.bili-level:active{
+    transform:scale(.975);transition-duration:80ms}
+  .bili-head .bili-chev,.card .menu-arrow{transition:transform var(--t-base) var(--ease-out)}
+  .card:hover .menu-arrow{transform:translateX(4px)}
+
+  /* Auftritt mit Versatz: die Liste baut sich auf, statt auf einmal da zu
+     sein. --i setzt das Skript beim Ansichtswechsel. */
+  .eb-in{animation:eb-auftritt var(--t-slow) var(--ease-out) both;
+    animation-delay:calc(var(--i,0) * 45ms)}
+  @keyframes eb-auftritt{from{opacity:0;transform:translateY(10px)}}
+  /* Die Lernfaecher fuellen sich von links, kurz nach ihrer Kachel. */
+  .eb-in .minirail i{animation:eb-fuellen 420ms var(--ease-out) both;
+    animation-delay:calc(var(--i,0) * 45ms + 150ms);transform-origin:left center}
+  @keyframes eb-fuellen{from{transform:scaleX(0)}}
+  .assignment-bar-fill{animation:eb-fuellen 700ms var(--ease-out) both;transform-origin:left center}
+}
+
+/* =========================================================================
+   AUSGEWAEHLTE VOKABELN
+   Bisher verriet nur das Haekchen, was ausgewaehlt ist - bei 99 Zeilen
+   uebersieht man das.
+   ========================================================================= */
+.vrow:has(.csv-check input:checked){
+  background:var(--tint-petrol);
+  box-shadow:inset 3px 0 0 var(--petrol);
+  border-radius:var(--radius-xs)}
+.csv-check input{accent-color:var(--petrol)}
+
+/* =========================================================================
+   LEERE ZUSTAENDE
+   Nackter Text wirkt wie ein Fehler; ein gestalteter Hinweis wirkt wie
+   eine Antwort.
+   ========================================================================= */
+.done-empty{background:var(--tint-petrol);border:1px solid var(--edge)}
+.done-empty .empty-art{display:block;margin:0 auto 14px;width:56px;height:56px;color:var(--petrol);opacity:.9}
+.done-empty h2{margin-top:0}
+.noresult{margin:18px 0;padding:20px 22px;background:var(--tint-amber);border:1px solid var(--amber);
+  border-radius:var(--radius-md);color:var(--ink);font-size:15px;text-align:center}
+.noresult::before{content:"";display:block;width:34px;height:34px;margin:0 auto 10px;
+  background:currentColor;opacity:.55;
+  -webkit-mask:center/contain no-repeat var(--lupe);mask:center/contain no-repeat var(--lupe)}
+:root{--lupe:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>')}
