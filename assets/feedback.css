@@ -1,4 +1,4 @@
-.feedback-settings{display:flex;flex-wrap:wrap;gap:10px;margin:24px 0}.feedback-settings button{font:500 14px/1.5 system-ui,sans-serif;min-height:44px;border:1px solid #9ab4bc;border-radius:var(--radius-sm);background:#fff;color:#18323d;padding:8px 14px;cursor:pointer}.feedback-settings button[aria-pressed="true"]{background:#e0efeb;border-color:#357562}.feedback-settings button:focus-visible{outline:3px solid #bd781e;outline-offset:3px}
+.feedback-settings{display:flex;flex-wrap:wrap;gap:10px;margin:24px 0}.feedback-settings button{font:500 14px/1.5 system-ui,sans-serif;min-height:44px;border:1px solid #9ab4bc;border-radius:var(--radius-sm);background:var(--card);color:#18323d;padding:8px 14px;cursor:pointer}.feedback-settings button[aria-pressed="true"]{background:#e0efeb;border-color:#357562}.feedback-settings button:focus-visible{outline:3px solid #bd781e;outline-offset:3px}
 .vcard,#feedback,.panel{position:relative}
 .feedback-motion .feedback-ok{animation:feedback-good .55s cubic-bezier(.2,.8,.3,1)}
 .feedback-motion .feedback-near{animation:feedback-near .45s ease-out}
@@ -27,3 +27,7 @@
 }
 html:not(.feedback-motion) *,html:not(.feedback-motion) *::before,html:not(.feedback-motion) *::after{animation:none!important;transition:none!important}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}@media print{.feedback-settings{display:none}}
+@media (prefers-color-scheme: dark){
+  .feedback-settings button{background:var(--card);border-color:var(--edge);color:var(--ink)}
+  .feedback-settings button[aria-pressed="true"]{background:var(--tint-moss);border-color:var(--moss)}
+}

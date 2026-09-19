@@ -1021,6 +1021,27 @@ ${vocabulary}`;
     document.getElementById('pvHome').onclick=exitBlitz;
   }
 
+  /* =========================================================================
+     SANFTE ANSICHTSWECHSEL
+     Nur beim Wechsel der Ansicht, nicht bei jedem Neuzeichnen: Innerhalb
+     einer Runde greifen Aufrufer direkt nach render() auf das DOM zu, etwa
+     um die Rueckmeldung auf die Karte zu setzen. Ein aufgeschobenes
+     Neuzeichnen wuerde das zerstoeren. Kennt der Browser die Schnittstelle
+     nicht oder ist reduzierte Bewegung eingestellt, bleibt alles wie zuvor.
+     ========================================================================= */
+  {
+    const plainRender=render;
+    let lastView=null;
+    const ruhig=()=>{try{return matchMedia('(prefers-reduced-motion: reduce)').matches;}catch(e){return false;}};
+    render=function(){
+      const wechsel=S.view!==lastView;
+      lastView=S.view;
+      if(!wechsel||ruhig()||typeof document.startViewTransition!=='function')return plainRender();
+      try{ document.startViewTransition(()=>{plainRender();}); }
+      catch(e){ plainRender(); }
+    };
+  }
+
   readAssignment();
   render();
 })();

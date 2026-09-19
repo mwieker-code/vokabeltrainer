@@ -7,7 +7,7 @@ button{min-height:44px}.switch{padding:10px 12px}.topic{padding:17px 18px;margin
 .topic .t-name{font-size:17px}.topic .t-row{flex-wrap:wrap}.topic .t-count{white-space:normal}
 .dashboard{background:#0e5a66;color:white;border-radius:var(--radius-lg);padding:26px;margin-bottom:28px}
 .dashboard h2{font:600 30px var(--serif);margin:0 0 8px}.dashboard p{margin:8px 0 18px;line-height:1.6}
-.dashboard .primary{background:white;color:#0e5a66;border-color:white;font-weight:600;min-height:50px}
+.dashboard .primary{background:var(--card);color:#0e5a66;border-color:white;font-weight:600;min-height:50px}
 .dashboard .controls{align-items:center}.dashboard .quiet{background:transparent;color:white;border-color:#8cb8bf}
 .dashboard small{display:block;font-size:14px;color:#d8e9ec;margin-top:14px}
 .quicklinks{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0}.quicklinks button{flex:1;min-width:150px}
@@ -26,7 +26,7 @@ button{min-height:44px}.switch{padding:10px 12px}.topic{padding:17px 18px;margin
 .grammar-tile{display:block;text-decoration:none;color:var(--ink);background:#e2eff0;border:1px solid #b7d6d9;border-left:5px solid var(--petrol);margin-top:26px}.grammar-tile .t-name{font-size:21px;font-weight:600}.grammar-tile .t-count{display:inline-block;margin-top:6px}
 
 /* Shared, prominent navigation and masthead. */
-.masthead{background:#e0edef;border:1px solid #bfd4d8;border-left:6px solid #0e5a66;border-radius:var(--radius-lg);padding:24px;margin-bottom:26px;align-items:center;gap:18px}
+.masthead{background:var(--tint-petrol);border:1px solid #bfd4d8;border-left:6px solid #0e5a66;border-radius:var(--radius-lg);padding:24px;margin-bottom:26px;align-items:center;gap:18px}
 .masthead h1{font-family:var(--sans);font-size:clamp(28px,4vw,40px);font-weight:700;line-height:1.15;letter-spacing:-.035em;color:#123e49}
 .masthead .sub{font-family:var(--sans);font-size:16px;line-height:1.5;color:#3e5961;letter-spacing:0;text-transform:none;margin-top:9px}
 a.home-link,a.grammar-back{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:12px 16px;background:#0e5a66;color:#fff;border:2px solid #0e5a66;border-radius:var(--radius-sm);font:600 15px/1.4 var(--sans);text-decoration:none;white-space:normal}
@@ -91,7 +91,7 @@ a.home-link:hover,a.home-link:focus,a.home-link:active,a.grammar-back:hover,a.gr
   .homebar .switch{flex:0 0 auto;align-self:stretch;white-space:nowrap;padding:8px 12px}
 }
 
-.csv-controls{background:#e5eff1;border:1px solid #b7cdd2;border-radius:var(--radius-md);padding:20px;margin:18px 0}.csv-check{grid-column:1/-1;font-size:14px;display:flex;align-items:center;gap:8px;padding:8px 0}.csv-check[hidden],.csv-controls[hidden]{display:none}.csv-check input{width:20px;height:20px;accent-color:#0e5a66}@media print{.csv-controls,.csv-check{display:none!important}}
+.csv-controls{background:var(--tint-petrol);border:1px solid var(--edge);border-radius:var(--radius-md);padding:20px;margin:18px 0}.csv-check{grid-column:1/-1;font-size:14px;display:flex;align-items:center;gap:8px;padding:8px 0}.csv-check[hidden],.csv-controls[hidden]{display:none}.csv-check input{width:20px;height:20px;accent-color:#0e5a66}@media print{.csv-controls,.csv-check{display:none!important}}
 
 /* Print only expanded vocabulary sections; collapsed sections must not
    create boxes or forced page breaks in the PDF layout. */
@@ -106,18 +106,18 @@ a.home-link:hover,a.home-link:focus,a.home-link:active,a.grammar-back:hover,a.gr
 .unit-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:20px 0 24px}
 .unit-heading .section-title{margin:0}
 .unit-actions{display:flex;gap:10px;flex-wrap:wrap}
-.unit-actions button{font:inherit;font-size:14px;font-weight:600;border:1px solid #9bb9be;border-radius:var(--radius-sm);padding:11px 15px;min-height:44px;color:#234d56;background:transparent;cursor:pointer}
+.unit-actions button{font:inherit;font-size:14px;font-weight:600;border:1px solid var(--edge);border-radius:var(--radius-sm);padding:11px 15px;min-height:44px;color:#234d56;background:transparent;cursor:pointer}
 .unit-actions .browse-practice{background:#e0eef0}
 .unit-actions button:hover{color:#173b43;background:#cee2e6;border-color:#527c85}
 .unit-actions button:focus-visible{outline:3px solid #327c8b;outline-offset:3px}
 @media(max-width:640px){.unit-heading{align-items:flex-start;flex-direction:column}.unit-actions{width:100%}.unit-actions button{flex:1 1 200px}}
 
-.csv-groups{border:1px solid #9bb9be;border-radius:var(--radius-sm);margin-top:16px;padding:16px}.csv-groups legend{font-weight:700}.csv-groups details{margin:10px 0}.csv-groups summary{cursor:pointer;font-weight:600;padding:8px}.csv-groups label{display:block;padding:8px 12px}.csv-groups input{margin-right:6px}
+.csv-groups{border:1px solid var(--edge);border-radius:var(--radius-sm);margin-top:16px;padding:16px}.csv-groups legend{font-weight:700}.csv-groups details{margin:10px 0}.csv-groups summary{cursor:pointer;font-weight:600;padding:8px}.csv-groups label{display:block;padding:8px 12px}.csv-groups input{margin-right:6px}
 
-.test-prompt-dialog{width:min(760px,94vw);max-height:90vh;overflow:auto;border:1px solid #9bb9be;border-radius:var(--radius-lg);padding:24px;color:#18343e;background:white;font-family:inherit}.test-prompt-dialog::backdrop{background:#17333d88}.test-prompt-dialog fieldset{margin:18px 0;padding:16px;border:1px solid #c3d5d8;border-radius:var(--radius-sm)}.test-prompt-dialog label{display:block;margin:10px 0}.test-prompt-dialog input[type=number]{width:110px;padding:10px;font:inherit}.test-prompt-dialog textarea{width:100%;font:14px/1.5 monospace;padding:12px;box-sizing:border-box}.test-prompt-dialog #promptError{color:#982e22}.test-prompt-dialog #promptResult{margin-top:24px}.test-prompt-dialog h2{font-size:22px}
+.test-prompt-dialog{width:min(760px,94vw);max-height:90vh;overflow:auto;border:1px solid var(--edge);border-radius:var(--radius-lg);padding:24px;color:#18343e;background:var(--card);font-family:inherit}.test-prompt-dialog::backdrop{background:#17333d88}.test-prompt-dialog fieldset{margin:18px 0;padding:16px;border:1px solid #c3d5d8;border-radius:var(--radius-sm)}.test-prompt-dialog label{display:block;margin:10px 0}.test-prompt-dialog input[type=number]{width:110px;padding:10px;font:inherit}.test-prompt-dialog textarea{width:100%;font:14px/1.5 monospace;padding:12px;box-sizing:border-box}.test-prompt-dialog #promptError{color:#982e22}.test-prompt-dialog #promptResult{margin-top:24px}.test-prompt-dialog h2{font-size:22px}
 
 /* Vocabulary selection shared by all year groups. */
-.selection-bar{position:sticky;bottom:12px;z-index:5;background:#fff;border:1px solid #9bb9be;border-radius:var(--radius-lg);padding:16px;box-shadow:0 4px 22px #173e4530;margin-top:18px}.selection-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.selection-actions button{padding:10px 14px;border-radius:var(--radius-sm)}.selection-unit{font-size:18px;font-weight:650;display:flex;align-items:center;gap:12px;margin:28px 0 12px}.direct-selection{margin-right:12px}.selecting input[type=checkbox]{width:20px;height:20px;accent-color:#286f72;cursor:pointer}
+.selection-bar{position:sticky;bottom:12px;z-index:5;background:var(--card);border:1px solid var(--edge);border-radius:var(--radius-lg);padding:16px;box-shadow:0 4px 22px #173e4530;margin-top:18px}.selection-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.selection-actions button{padding:10px 14px;border-radius:var(--radius-sm)}.selection-unit{font-size:18px;font-weight:650;display:flex;align-items:center;gap:12px;margin:28px 0 12px}.direct-selection{margin-right:12px}.selecting input[type=checkbox]{width:20px;height:20px;accent-color:#286f72;cursor:pointer}
 @media screen{
 #vlist.selecting .vrow{grid-template-columns:32px minmax(0,1fr) minmax(0,1fr);padding:9px 0;align-items:start}
 #vlist.selecting .vrow .csv-check{position:static;grid-column:1;grid-row:1;margin:0;padding:2px 0;align-self:start}
@@ -135,7 +135,7 @@ a.home-link:hover,a.home-link:focus,a.home-link:active,a.grammar-back:hover,a.gr
 /* Test prompt options. */
 #promptAllocation>label{display:grid;grid-template-columns:minmax(0,1fr) 100px;align-items:center;gap:12px}
 #promptAllocation input[type=number]{width:100%;margin:0}
-#promptTense{display:block;width:100%;padding:12px;border:1px solid #9bb9be;border-radius:var(--radius-sm);font:inherit;background:white;color:#18323d}
+#promptTense{display:block;width:100%;padding:12px;border:1px solid var(--edge);border-radius:var(--radius-sm);font:inherit;background:var(--card);color:#18323d}
 .selection-files{margin-top:12px;border-top:1px solid #d5e2df;padding-top:10px}
 .selection-files summary{cursor:pointer;font-weight:600}
 .selection-files label{display:block;margin:12px 0}
@@ -144,27 +144,27 @@ a.home-link:hover,a.home-link:focus,a.home-link:active,a.grammar-back:hover,a.gr
 
 /* Lernauftrag: teacher-shared selection link and the pupil-facing banner. */
 .assignment-dialog select,.assignment-dialog input{display:block;width:100%;padding:11px;margin:6px 0 4px;
-  border:1px solid #9bb9be;border-radius:var(--radius-sm);font:inherit;background:#fff;color:#18323d;box-sizing:border-box}
+  border:1px solid var(--edge);border-radius:var(--radius-sm);font:inherit;background:var(--card);color:#18323d;box-sizing:border-box}
 .assignment-hint{font-size:13.5px;color:#42545c;margin:2px 0 10px}
 .assignment-qr{margin:14px 0;max-width:230px}
 /* Vollbild-QR für die digitale Tafel */
-.qr-fullscreen{width:100vw;max-width:100vw;height:100vh;max-height:100vh;border:0;padding:0;background:#fff;color:#16232b}
-.qr-fullscreen::backdrop{background:#fff}
+.qr-fullscreen{width:100vw;max-width:100vw;height:100vh;max-height:100vh;border:0;padding:0;background:var(--card);color:#16232b}
+.qr-fullscreen::backdrop{background:var(--card)}
 .qr-fullscreen-inner{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(12px,3vmin,28px);padding:20px}
 .qr-fullscreen-code{width:min(74vmin,860px)}
 .qr-fullscreen-code svg{width:100%;height:auto;display:block}
 .qr-fullscreen-title{margin:0;text-align:center;font:600 clamp(17px,3.2vmin,34px) var(--sans);overflow-wrap:anywhere;max-width:32ch}
-.qr-fullscreen-close{min-height:48px;padding:12px 20px;border:1px solid #9bb9be;border-radius:var(--radius-sm);
-  background:#fff;color:#18323d;font:600 16px var(--sans);cursor:pointer}
+.qr-fullscreen-close{min-height:48px;padding:12px 20px;border:1px solid var(--edge);border-radius:var(--radius-sm);
+  background:var(--card);color:#18323d;font:600 16px var(--sans);cursor:pointer}
 .qr-fullscreen-close:hover{background:#eef4f5;border-color:#0e5a66}
 @media print{.qr-fullscreen{display:none!important}}
 .assignment-qr svg{width:100%;height:auto;display:block;border:1px solid var(--rule);border-radius:var(--radius-sm)}
 .assignment-banner{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin:0 0 20px;padding:16px 18px;
-  background:#e3efec;border:1px solid #6a978b;border-left:5px solid #0e5a66;border-radius:var(--radius-md)}
+  background:var(--tint-moss);border:1px solid #6a978b;border-left:5px solid #0e5a66;border-radius:var(--radius-md)}
 .assignment-banner strong{font-size:17px}
 .assignment-banner span{color:#345c56;font-size:14.5px}
-.assignment-banner button{margin-left:auto;min-height:44px;padding:10px 16px;border:1px solid #9bb9be;
-  border-radius:var(--radius-sm);background:#fff;color:#18323d;font:600 15px var(--sans);cursor:pointer}
+.assignment-banner button{margin-left:auto;min-height:44px;padding:10px 16px;border:1px solid var(--edge);
+  border-radius:var(--radius-sm);background:var(--card);color:#18323d;font:600 15px var(--sans);cursor:pointer}
 .assignment-banner button+button{margin-left:0}
 .assignment-banner button.primary{background:#0e5a66;border-color:#0e5a66;color:#fff}
 .assignment-banner.stale{background:#f8ece7;border-color:#c98f7a;border-left-color:#b4573c;flex-direction:column;align-items:flex-start}
@@ -175,7 +175,7 @@ a.home-link:hover,a.home-link:focus,a.home-link:active,a.grammar-back:hover,a.gr
 body.board-open{overflow:hidden}
 .board{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;background:var(--card);color:var(--ink)}
 .board-bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--rule)}
-.board-bar button{min-height:44px;padding:10px 14px;border:1px solid #9bb9be;border-radius:var(--radius-sm);background:var(--card);color:var(--ink);font:600 15px var(--sans);cursor:pointer}
+.board-bar button{min-height:44px;padding:10px 14px;border:1px solid var(--edge);border-radius:var(--radius-sm);background:var(--card);color:var(--ink);font:600 15px var(--sans);cursor:pointer}
 .board-bar button:hover{border-color:var(--petrol);background:var(--ground)}
 .board-bar button:focus-visible{outline:3px solid var(--petrol);outline-offset:2px}
 .board-count{margin-left:auto;font-family:var(--mono);font-size:16px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
@@ -204,19 +204,19 @@ body.board-open{overflow:hidden}
 .assignment-saved{margin:0 0 22px}
 .assignment-saved .section-title{margin:0 0 10px}
 .assignment-card{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin:0 0 10px;
-  padding:14px 16px;background:#fff;border:1px solid var(--rule);border-left:5px solid #6a978b;border-radius:var(--radius-md)}
+  padding:14px 16px;background:var(--card);border:1px solid var(--rule);border-left:5px solid #6a978b;border-radius:var(--radius-md)}
 .assignment-card-main{flex:1 1 260px;display:flex;flex-direction:column;gap:4px}
 .assignment-card-main strong{font-size:16.5px}
 .assignment-card-meta{color:#345c56;font-size:14px}
 .assignment-progress{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin:4px 0 0}
 .assignment-bar{flex:1 1 160px;max-width:260px;height:10px;border-radius:var(--radius-pill);background:#dde7e6;
-  border:1px solid #9bb9be;overflow:hidden}
+  border:1px solid var(--edge);overflow:hidden}
 .assignment-bar-fill{display:block;height:100%;background:#0e5a66}
 .assignment-progress-text{color:#18323d;font-size:14px}
 .assignment-card-stale{margin:4px 0 0;color:#8a3d24;font-size:14px}
 .assignment-card-actions{display:flex;flex-wrap:wrap;gap:10px}
-.assignment-card-actions button{min-height:44px;padding:10px 16px;border:1px solid #9bb9be;
-  border-radius:var(--radius-sm);background:#fff;color:#18323d;font:600 15px var(--sans);cursor:pointer}
+.assignment-card-actions button{min-height:44px;padding:10px 16px;border:1px solid var(--edge);
+  border-radius:var(--radius-sm);background:var(--card);color:#18323d;font:600 15px var(--sans);cursor:pointer}
 .assignment-card-actions button.primary{background:#0e5a66;border-color:#0e5a66;color:#fff}
 .assignment-card-actions button:focus-visible{outline:3px solid #bd781e;outline-offset:3px}
 @media(max-width:560px){.assignment-card-actions{width:100%}.assignment-card-actions button{flex:1 1 auto}}
@@ -230,6 +230,8 @@ body.board-open{overflow:hidden}
    Bauteile auf diese Skala.
    ========================================================================= */
 :root{
+  color-scheme:light dark;          /* Eingabefelder und Scrollbalken ziehen mit */
+  --ground:#f3f6f2;                 /* der Wert, der bisher aus preview.css kam */
   --space-1:4px;  --space-2:8px;  --space-3:12px; --space-4:16px;
   --space-5:24px; --space-6:32px; --space-7:48px;
   --radius-xs:3px; --radius-sm:8px; --radius-md:12px; --radius-lg:18px; --radius-pill:999px;
@@ -237,7 +239,41 @@ body.board-open{overflow:hidden}
   --shadow-2:0 3px 12px rgba(22,35,43,.10);
   --shadow-3:0 10px 28px rgba(22,35,43,.16);
   --r:var(--radius-md);              /* das alte Einzeltoken zeigt auf die Skala */
+  /* Flaechen mit Farbstich - bisher als feste Werte ueber die Dateien verteilt */
+  --edge:#9bb9be;
+  --tint-petrol:#e5eff1;
+  --tint-moss:#e3efec;
+  --tint-amber:#fbf2e6;
+  --focus:#bd781e;
 }
+
+/* =========================================================================
+   DUNKLE ANSICHT
+   Folgt der Geraeteeinstellung. Nur die Tokens werden neu belegt; die
+   Bauteile selbst bleiben unveraendert. Die Jahrgangsfarben der Kacheln
+   sind kraeftig genug und bleiben, wie sie sind.
+   ========================================================================= */
+@media (prefers-color-scheme: dark){
+  :root{
+    --ground:#101a1f;
+    --card:#18252c;
+    --ink:#e7eef1;
+    --ink-soft:#a0b3bb;
+    --rule:#2b3c45;
+    --edge:#3d5a63;
+    --petrol:#7fd0dd;
+    --amber:#e8a860;
+    --moss:#7cc48c;
+    --tint-petrol:#16303a;
+    --tint-moss:#153029;
+    --tint-amber:#2e2517;
+    --focus:#e0a355;
+    --shadow-1:0 1px 2px rgba(0,0,0,.4);
+    --shadow-2:0 3px 12px rgba(0,0,0,.45);
+    --shadow-3:0 10px 28px rgba(0,0,0,.55);
+  }
+}
+
 
 /* Flaechen: Karten, Felder, Abschnitte */
 .topic,.vcard,.panel,.done,.dashboard,.csv-controls,.warnbox,.lsec,.bili-acc,
@@ -267,3 +303,49 @@ p,.lead,.note,.desc,.t-count{text-wrap:pretty}
 .unit-actions .browse-practice,.unit-actions .browse-list{border-radius:var(--radius-sm)}
 details.yeargroup{border-radius:var(--radius-lg)}
 .yeargroup .tag{border-radius:var(--radius-pill)}
+
+/* Bauteile, die im Hellen feste Farben tragen. Die Kacheln bekommen ihre
+   Flaeche vom Seitenskript als inline style, deshalb hier ausnahmsweise
+   !important - anders kommt man an ein style-Attribut nicht heran. */
+@media (prefers-color-scheme: dark){
+  .masthead{background:var(--tint-petrol);border-color:var(--edge);border-left-color:var(--petrol)}
+  .masthead h1{color:var(--ink)}
+  .masthead h1 .title-accent{color:var(--petrol)}
+  .masthead .sub{color:var(--ink-soft)}
+  a.home-link,a.grammar-back{background:var(--petrol);border-color:var(--petrol);color:#0c1a1f}
+  a.home-link:hover,a.grammar-back:hover{background:#a7e2ec;border-color:#a7e2ec;color:#0c1a1f}
+  .unit-actions .browse-list,.unit-actions .browse-practice,
+  .unit-heading .browse-list,.unit-heading .browse-practice{
+    color:var(--ink);background:var(--card);border-color:var(--edge)}
+  .topic[class*="u"],.topic.home-year,.topic.home-all,.topic.home-help{
+    background:var(--card)!important;color:var(--ink)!important}
+  .topic[class*="u"] .t-count,.topic.home-year .t-count,.topic.home-all .t-count,
+  .topic.home-help .t-count{color:var(--ink-soft)!important}
+  .topic[class*="u"] .t-name,.topic.home-year .t-name,.topic.home-all .t-name,
+  .topic.home-help .t-name{color:var(--ink)!important}
+  .topic[class*="u"] .t-due,.topic .t-due{color:var(--amber)!important}
+  .grammar-tile{background:var(--tint-petrol);border-color:var(--edge);border-left-color:var(--petrol)}
+  .grammar-tile .t-name{color:var(--ink)!important}
+  .feedback-settings button{background:var(--card);border-color:var(--edge);color:var(--ink)}
+  .feedback-settings button[aria-pressed="true"]{background:var(--tint-moss);border-color:var(--moss)}
+  .switch[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+  .warnbox{background:var(--tint-amber);border-color:var(--amber)}
+  .teacher{background:var(--tint-petrol);border-color:var(--edge)}
+  button,select,input[type="text"],input[type="number"],input[type="search"],textarea{
+    background:var(--card);color:var(--ink);border-color:var(--edge)}
+  button.primary{background:var(--petrol);border-color:var(--petrol);color:#0c1a1f}
+  .bili-level,.assignment-card,.level{background:var(--card);color:var(--ink)}
+  .bili-pill,.pill{background:var(--tint-amber);color:var(--amber);border-color:var(--amber)}
+  .assignment-bar{background:var(--rule);border-color:var(--edge)}
+  .assignment-bar-fill{background:var(--petrol)}
+}
+
+/* Ansichtswechsel: kurzes Ueberblenden statt hartem Schnitt. Die Abfrage
+   nach reduzierter Bewegung sitzt zusaetzlich im Skript, damit der Wechsel
+   dort gar nicht erst gestartet wird. */
+@media (prefers-reduced-motion: no-preference){
+  ::view-transition-old(root){animation:vt-weg .16s ease-in both}
+  ::view-transition-new(root){animation:vt-her .22s cubic-bezier(.2,.7,.3,1) both}
+}
+@keyframes vt-weg{to{opacity:0}}
+@keyframes vt-her{from{opacity:0;transform:translateY(8px)}}
