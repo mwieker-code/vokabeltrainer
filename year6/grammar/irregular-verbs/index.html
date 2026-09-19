@@ -392,7 +392,7 @@ button.primary:hover{background:#0B4A54}
 }
 </style>
 
-<link rel="stylesheet" href="../../../assets/learning.css?v=20260919-auftritt">
+<link rel="stylesheet" href="../../../assets/learning.css?v=20260919-fusszeile">
 <link rel="stylesheet" href="style.css?v=20260908-review">
 <div class="wrap">
   <div class="masthead">
@@ -407,8 +407,10 @@ button.primary:hover{background:#0B4A54}
   <div id="view"></div>
   <div class="foot">
     <span id="footstat"></span>
-    <button id="exportBtn">Fortschritt sichern</button>
-    <button id="importBtn">Fortschritt laden</button>
+    <span class="foot-actions">
+      <button id="exportBtn">Fortschritt sichern</button>
+      <button id="importBtn">Fortschritt laden</button>
+    </span>
     <input type="file" id="importFile" accept="application/json" hidden>
   </div>
   <div class="credit">Erstellt von Michael Wieker · Thomas-Mann-Schule Lübeck</div>
@@ -1766,8 +1768,8 @@ catch(err){
 
 </html>
 
-<link rel="stylesheet" href="../../../assets/feedback.css?v=20260919-auftritt">
-<script src="../../../assets/feedback.js?v=20260919-auftritt"></script>
+<link rel="stylesheet" href="../../../assets/feedback.css?v=20260919-fusszeile">
+<script src="../../../assets/feedback.js?v=20260919-fusszeile"></script>
 
 <script>
 (function(){
