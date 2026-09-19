@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#EEF1F3">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#101A1F">
 <title>English Basecamp – Oberstufe</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20fill%3D%22none%22%20stroke%3D%22%230E6878%22%20stroke-width%3D%225%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M32%2012%20L55%2051%20H9%20Z%22%2F%3E%3Cpath%20d%3D%22M32%2026%20L41%2051%22%2F%3E%3Cpath%20d%3D%22M32%2026%20L23%2051%22%2F%3E%3Cpath%20d%3D%22M4%2051%20H60%22%2F%3E%3C%2Fsvg%3E">
 <script>
@@ -70,7 +72,7 @@ body{
   padding-bottom:10px;margin-bottom:12px;border-bottom:2px solid currentColor}
 .yeargroup > summary::-webkit-details-marker{display:none}
 .yeargroup > summary .tag{font-family:var(--mono);font-size:12px;color:#fff;
-  padding:2px 9px;border-radius:2px}
+  padding:2px 9px;border-radius:var(--radius-xs)}
 .yeargroup > summary .name{font-family:var(--serif);font-size:17px;font-style:italic;color:inherit}
 .yeargroup > summary .ycount{margin-left:auto;font-family:var(--mono);font-size:11px;
   color:var(--ink-soft);letter-spacing:.04em;align-self:center}
@@ -101,7 +103,7 @@ body{
 .yeargroup{margin-bottom:34px}
 .yearhead{display:flex;align-items:center;gap:12px;margin-bottom:12px}
 .yearhead .tag{font-family:var(--mono);font-size:12px;background:var(--ink);color:var(--ground);
-  padding:2px 7px;border-radius:2px}
+  padding:2px 7px;border-radius:var(--radius-xs)}
 .yearhead .name{font-family:var(--serif);font-size:17px;font-style:italic;color:var(--ink-soft)}
 
 .topic{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--rule);
@@ -114,7 +116,7 @@ body{
 .topic .t-count{font-family:var(--mono);font-size:12px;color:var(--ink-soft);white-space:nowrap}
 .topic .t-due{color:var(--amber)}
 .minirail{display:flex;gap:2px;margin-top:9px}
-.minirail i{height:4px;flex:1;background:var(--rule);border-radius:1px}
+.minirail i{height:4px;flex:1;background:var(--rule);border-radius:var(--radius-xs)}
 .minirail i.f{background:var(--petrol)}
 
 .emptyhint{background:var(--card);border:1px dashed var(--rule);border-radius:var(--r);
@@ -266,7 +268,7 @@ button.primary:hover{background:#0B4A54}
 .doc li{margin-bottom:5px}
 .doc .lead{color:var(--ink-soft)}
 .doc code{font-family:var(--mono);font-size:12.5px;background:var(--ground);
-  padding:1px 5px;border-radius:2px}
+  padding:1px 5px;border-radius:var(--radius-xs)}
 .doc table{border-collapse:collapse;width:100%;margin:6px 0 14px;font-size:14px}
 .doc th,.doc td{text-align:left;padding:6px 10px;border-bottom:1px solid var(--rule)}
 .doc th{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;
@@ -308,7 +310,7 @@ button.primary:hover{background:#0B4A54}
 .lsec > summary::-webkit-details-marker{display:none}
 .lsec > summary:hover{background:var(--ground)}
 .lsec > summary .lyear{font-family:var(--mono);font-size:10px;letter-spacing:.08em;
-  background:var(--ink);color:var(--ground);border-radius:2px;padding:2px 6px;margin-right:9px}
+  background:var(--ink);color:var(--ground);border-radius:var(--radius-xs);padding:2px 6px;margin-right:9px}
 .lsec > summary .lnum{font-family:var(--mono);font-size:12px;color:var(--ink-soft);white-space:nowrap}
 .lsec[open] > summary{border-bottom:1px solid var(--rule)}
 .lbody{padding:4px 15px 12px}
@@ -357,7 +359,7 @@ button.primary:hover{background:#0B4A54}
   *{animation:none!important;transition:none!important}
 }
 </style>
-<link rel="stylesheet" href="../assets/learning.css?v=20260919-tafelmodus">
+<link rel="stylesheet" href="../assets/learning.css?v=20260919-dunkel">
 
 <div class="wrap">
     <div class="masthead">
@@ -18124,8 +18126,8 @@ try{
 }
 </script>
 
-<script src="../assets/qr.js?v=20260919-tafelmodus"></script>
-<script src="../assets/learning.js?v=20260919-tafelmodus"></script>
+<script src="../assets/qr.js?v=20260919-dunkel"></script>
+<script src="../assets/learning.js?v=20260919-dunkel"></script>
 
 <link rel="stylesheet" href="../assets/feedback.css">
 <script src="../assets/feedback.js"></script>
