@@ -230,7 +230,7 @@ body.board-open{overflow:hidden}
    Bauteile auf diese Skala.
    ========================================================================= */
 :root{
-  color-scheme:light dark;          /* Eingabefelder und Scrollbalken ziehen mit */
+  color-scheme:light;               /* die Seite ist hell; Eingabefelder folgen */
   --ground:#f3f6f2;                 /* der Wert, der bisher aus preview.css kam */
   --space-1:4px;  --space-2:8px;  --space-3:12px; --space-4:16px;
   --space-5:24px; --space-6:32px; --space-7:48px;
@@ -247,32 +247,7 @@ body.board-open{overflow:hidden}
   --focus:#bd781e;
 }
 
-/* =========================================================================
-   DUNKLE ANSICHT
-   Folgt der Geraeteeinstellung. Nur die Tokens werden neu belegt; die
-   Bauteile selbst bleiben unveraendert. Die Jahrgangsfarben der Kacheln
-   sind kraeftig genug und bleiben, wie sie sind.
-   ========================================================================= */
-@media (prefers-color-scheme: dark){
-  :root{
-    --ground:#101a1f;
-    --card:#18252c;
-    --ink:#e7eef1;
-    --ink-soft:#a0b3bb;
-    --rule:#2b3c45;
-    --edge:#3d5a63;
-    --petrol:#7fd0dd;
-    --amber:#e8a860;
-    --moss:#7cc48c;
-    --tint-petrol:#16303a;
-    --tint-moss:#153029;
-    --tint-amber:#2e2517;
-    --focus:#e0a355;
-    --shadow-1:0 1px 2px rgba(0,0,0,.4);
-    --shadow-2:0 3px 12px rgba(0,0,0,.45);
-    --shadow-3:0 10px 28px rgba(0,0,0,.55);
-  }
-}
+
 
 
 /* Flaechen: Karten, Felder, Abschnitte */
@@ -304,41 +279,7 @@ p,.lead,.note,.desc,.t-count{text-wrap:pretty}
 details.yeargroup{border-radius:var(--radius-lg)}
 .yeargroup .tag{border-radius:var(--radius-pill)}
 
-/* Bauteile, die im Hellen feste Farben tragen. Die Kacheln bekommen ihre
-   Flaeche vom Seitenskript als inline style, deshalb hier ausnahmsweise
-   !important - anders kommt man an ein style-Attribut nicht heran. */
-@media (prefers-color-scheme: dark){
-  .masthead{background:var(--tint-petrol);border-color:var(--edge);border-left-color:var(--petrol)}
-  .masthead h1{color:var(--ink)}
-  .masthead h1 .title-accent{color:var(--petrol)}
-  .masthead .sub{color:var(--ink-soft)}
-  a.home-link,a.grammar-back{background:var(--petrol);border-color:var(--petrol);color:#0c1a1f}
-  a.home-link:hover,a.grammar-back:hover{background:#a7e2ec;border-color:#a7e2ec;color:#0c1a1f}
-  .unit-actions .browse-list,.unit-actions .browse-practice,
-  .unit-heading .browse-list,.unit-heading .browse-practice{
-    color:var(--ink);background:var(--card);border-color:var(--edge)}
-  .topic[class*="u"],.topic.home-year,.topic.home-all,.topic.home-help{
-    background:var(--card)!important;color:var(--ink)!important}
-  .topic[class*="u"] .t-count,.topic.home-year .t-count,.topic.home-all .t-count,
-  .topic.home-help .t-count{color:var(--ink-soft)!important}
-  .topic[class*="u"] .t-name,.topic.home-year .t-name,.topic.home-all .t-name,
-  .topic.home-help .t-name{color:var(--ink)!important}
-  .topic[class*="u"] .t-due,.topic .t-due{color:var(--amber)!important}
-  .grammar-tile{background:var(--tint-petrol);border-color:var(--edge);border-left-color:var(--petrol)}
-  .grammar-tile .t-name{color:var(--ink)!important}
-  .feedback-settings button{background:var(--card);border-color:var(--edge);color:var(--ink)}
-  .feedback-settings button[aria-pressed="true"]{background:var(--tint-moss);border-color:var(--moss)}
-  .switch[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--ground)}
-  .warnbox{background:var(--tint-amber);border-color:var(--amber)}
-  .teacher{background:var(--tint-petrol);border-color:var(--edge)}
-  button,select,input[type="text"],input[type="number"],input[type="search"],textarea{
-    background:var(--card);color:var(--ink);border-color:var(--edge)}
-  button.primary{background:var(--petrol);border-color:var(--petrol);color:#0c1a1f}
-  .bili-level,.assignment-card,.level{background:var(--card);color:var(--ink)}
-  .bili-pill,.pill{background:var(--tint-amber);color:var(--amber);border-color:var(--amber)}
-  .assignment-bar{background:var(--rule);border-color:var(--edge)}
-  .assignment-bar-fill{background:var(--petrol)}
-}
+
 
 /* Ansichtswechsel: kurzes Ueberblenden statt hartem Schnitt. Die Abfrage
    nach reduzierter Bewegung sitzt zusaetzlich im Skript, damit der Wechsel
