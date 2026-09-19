@@ -206,7 +206,7 @@ ${vocabulary}`;
       controls.hidden=true;
       const toggle=document.getElementById('lcsv');toggle.textContent='Vokabeln auswählen';toggle.setAttribute('aria-expanded','false');
       const bar=document.createElement('section');bar.className='selection-bar';bar.hidden=true;
-      bar.innerHTML='<strong id="selectionCount" role="status"></strong><div class="selection-actions"><button id="selectionReview">Auswahl ansehen</button><button id="selectionClear">Aufheben</button><button id="selectionHits" hidden></button><button id="selectionCSV">CSV herunterladen</button><button id="selectionBeamer">Beamer-Modus</button><button id="selectionAssignment">Hausaufgaben-Link</button><button id="selectionPrompt" class="primary">Test-Prompt erstellen</button></div>';
+      bar.innerHTML='<strong id="selectionCount" role="status"></strong><div class="selection-actions"><button id="selectionReview">Auswahl ansehen</button><button id="selectionClear">Aufheben</button><button id="selectionHits" hidden></button><button id="selectionCSV">CSV herunterladen</button><button id="selectionBoard">Tafel-Modus</button><button id="selectionAssignment">Hausaufgaben-Link</button><button id="selectionPrompt" class="primary">Test-Prompt erstellen</button></div>';
       box.after(bar);let active=false,review=false;const headings=[];
       {
         const selectionYear=Number(KEY.match(/^vt(\d+):/)?.[1])||'oberstufe';
@@ -245,7 +245,7 @@ ${vocabulary}`;
       function refresh(){
         update();headings.forEach(({input,keys})=>{const n=keys.filter(k=>csvSelected.has(k)).length;input.checked=n===keys.length&&n>0;input.indeterminate=n>0&&n<keys.length;});
         bar.querySelector('#selectionCount').textContent=csvSelected.size+' Vokabeln ausgewählt';
-        ['selectionCSV','selectionBeamer','selectionAssignment','selectionPrompt','selectionReview','selectionClear'].forEach(id=>bar.querySelector('#'+id).disabled=!csvSelected.size);
+        ['selectionCSV','selectionBoard','selectionAssignment','selectionPrompt','selectionReview','selectionClear'].forEach(id=>bar.querySelector('#'+id).disabled=!csvSelected.size);
         bar.querySelector('#selectionReview').textContent=review?'Zur gesamten Liste':'Auswahl ansehen';bar.querySelector('#selectionReview').disabled=false;
         box.querySelectorAll('.vrow').forEach(row=>{row.classList.toggle('selection-hidden',review&&!csvSelected.has(row.querySelector('[data-csv-key]').dataset.csvKey));});
         box.querySelectorAll('[data-sec]').forEach(sec=>{sec.classList.toggle('selection-hidden',review&&![...sec.querySelectorAll('[data-csv-key]')].some(i=>csvSelected.has(i.dataset.csvKey)));if(review)sec.open=true;});
@@ -258,7 +258,7 @@ ${vocabulary}`;
       bar.querySelector('#selectionReview').onclick=()=>{review=!review;if(review){q.value='';filter.call(q);}refresh();};
       bar.querySelector('#selectionClear').onclick=()=>{csvSelected.clear();refresh();};
       bar.querySelector('#selectionHits').onclick=()=>{box.querySelectorAll('.vrow:not(.off) [data-csv-key]').forEach(i=>csvSelected.add(i.dataset.csvKey));refresh();};
-      bar.querySelector('#selectionCSV').onclick=()=>csvDownload(true);bar.querySelector('#selectionBeamer').onclick=openBeamer;bar.querySelector('#selectionAssignment').onclick=assignmentDialog;bar.querySelector('#selectionPrompt').onclick=testPromptDialog;
+      bar.querySelector('#selectionCSV').onclick=()=>csvDownload(true);bar.querySelector('#selectionBoard').onclick=openBoard;bar.querySelector('#selectionAssignment').onclick=assignmentDialog;bar.querySelector('#selectionPrompt').onclick=testPromptDialog;
       refresh();
     }
   };
@@ -935,7 +935,7 @@ ${vocabulary}`;
   }
 
   /* =========================================================================
-     BEAMER-MODUS  –  ausgewählte Vokabeln groß projizieren, etwa zum
+     TAFEL-MODUS  –  ausgewählte Vokabeln groß projizieren, etwa zum
      Chorsprechen oder für eine Vertretungsstunde. Liegt als Overlay über
      der Listenansicht und rührt den Lernstand nicht an.
      ========================================================================= */
@@ -944,17 +944,17 @@ ${vocabulary}`;
     for(const t of TOPICS)(SETS[t.id]||[]).forEach((v,i)=>{ if(csvSelected.has(t.id+':'+i))out.push(v); });
     return out;
   }
-  function openBeamer(){
+  function openBoard(){
     const words=selectedWords();
     if(!words.length)return;
     const bm={order:words.slice(),i:0,revealed:false,dir:'en2de'};
     const el=document.createElement('div');
-    el.className='beamer';
+    el.className='board';
     el.setAttribute('role','dialog');
     el.setAttribute('aria-modal','true');
-    el.setAttribute('aria-label','Beamer-Modus');
+    el.setAttribute('aria-label','Tafel-Modus');
     document.body.append(el);
-    document.body.classList.add('beamer-open');
+    document.body.classList.add('board-open');
 
     const current=()=>bm.order[bm.i];
     const ask=v=>bm.dir==='en2de'?v.en:v.de;
@@ -963,20 +963,20 @@ ${vocabulary}`;
     function draw(){
       const v=current();
       const showIpa=bm.dir==='en2de'&&v.ipa;
-      el.innerHTML='<div class="beamer-bar">'
+      el.innerHTML='<div class="board-bar">'
         +'<button type="button" id="bmDir">'+(bm.dir==='en2de'?'EN → DE':'DE → EN')+'</button>'
         +'<button type="button" id="bmShuffle">Mischen</button>'
         +(Speech.available?'<button type="button" id="bmSay">Aussprache</button>':'')
         +'<button type="button" id="bmFull">Vollbild</button>'
-        +'<span class="beamer-count">'+(bm.i+1)+' / '+bm.order.length+'</span>'
+        +'<span class="board-count">'+(bm.i+1)+' / '+bm.order.length+'</span>'
         +'<button type="button" id="bmClose">Schließen</button></div>'
-        +'<div class="beamer-stage" id="bmStage">'
-        +'<div class="beamer-word">'+safe(ask(v))+'</div>'
-        +(showIpa?'<div class="beamer-ipa">['+safe(v.ipa)+']</div>':'')
-        +(bm.revealed?'<div class="beamer-answer">'+safe(answer(v))+'</div>':'')
-        +(bm.revealed&&v.example_en?'<div class="beamer-example">'+safe(v.example_en)+'</div>':'')
+        +'<div class="board-stage" id="bmStage">'
+        +'<div class="board-word">'+safe(ask(v))+'</div>'
+        +(showIpa?'<div class="board-ipa">['+safe(v.ipa)+']</div>':'')
+        +(bm.revealed?'<div class="board-answer">'+safe(answer(v))+'</div>':'')
+        +(bm.revealed&&v.example_en?'<div class="board-example">'+safe(v.example_en)+'</div>':'')
         +'</div>'
-        +'<div class="beamer-hint">Leertaste oder Klick: aufdecken und weiter · ← → blättern · Esc: schließen</div>';
+        +'<div class="board-hint">Leertaste oder Klick: aufdecken und weiter · ← → blättern · Esc: schließen</div>';
       el.querySelector('#bmStage').onclick=advance;
       el.querySelector('#bmDir').onclick=()=>{bm.dir=bm.dir==='en2de'?'de2en':'en2de';bm.revealed=false;draw();};
       el.querySelector('#bmShuffle').onclick=()=>{bm.order=shuffle(bm.order);bm.i=0;bm.revealed=false;draw();};
@@ -999,7 +999,7 @@ ${vocabulary}`;
     function close(){
       document.removeEventListener('keydown',onKey,true);
       if(document.fullscreenElement)document.exitFullscreen?.();
-      document.body.classList.remove('beamer-open');
+      document.body.classList.remove('board-open');
       el.remove();
     }
     document.addEventListener('keydown',onKey,true);
