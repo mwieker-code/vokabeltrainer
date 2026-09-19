@@ -221,3 +221,11 @@ body.beamer-open{overflow:hidden}
 .assignment-card-actions button:focus-visible{outline:3px solid #bd781e;outline-offset:3px}
 @media(max-width:560px){.assignment-card-actions{width:100%}.assignment-card-actions button{flex:1 1 auto}}
 @media print{.assignment-saved{display:none}}
+/* Stimmenwahl in der Hilfe */
+.voice-pick{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin:14px 0 6px}
+.voice-pick label{font-weight:600;font-size:14.5px}
+.voice-pick select{min-height:44px;max-width:100%;padding:8px 10px;border:1px solid #9bb9be;border-radius:9px;
+  background:#fff;color:#18323d;font:500 14.5px var(--sans)}
+.voice-pick select:focus-visible{outline:3px solid #bd781e;outline-offset:3px}
+.voice-note{font-size:13.5px;color:var(--ink-soft);max-width:62ch;margin:0 0 14px}
+@media print{.voice-pick,.voice-note{display:none}}
