@@ -107,7 +107,7 @@ body{
   color:var(--unit,var(--ink-soft));flex:0 0 auto}
 details[open] > .yearhead::after{content:"\2212"}
 .yearhead .tag{font-family:var(--mono);font-size:12px;background:var(--unit,var(--ink));
-  color:#fff;padding:2px 7px;border-radius:2px}
+  color:#fff;padding:2px 7px;border-radius:var(--radius-xs)}
 .yeargroup[class*="u"] .yearhead{border-bottom:1px solid var(--unit);padding-bottom:6px}
 .yeargroup[class*="u"] .yearhead .name{color:var(--unit)}
 .topic[class*="u"]{border-left-color:var(--unit);border-left-width:4px;
@@ -140,7 +140,7 @@ details[open] > .yearhead::after{content:"\2212"}
 .topic .t-count{font-family:var(--mono);font-size:12px;color:var(--ink-soft);white-space:nowrap}
 .topic .t-due{color:var(--amber)}
 .minirail{display:flex;gap:2px;margin-top:9px}
-.minirail i{height:4px;flex:1;background:var(--rule);border-radius:1px}
+.minirail i{height:4px;flex:1;background:var(--rule);border-radius:var(--radius-xs)}
 .minirail i.f{background:var(--petrol)}
 
 .emptyhint{background:var(--card);border:1px dashed var(--rule);border-radius:var(--r);
@@ -275,7 +275,7 @@ button.primary:hover{background:#0B4A54}
 .doc li{margin-bottom:5px}
 .doc .lead{color:var(--ink-soft)}
 .doc code{font-family:var(--mono);font-size:12.5px;background:var(--ground);
-  padding:1px 5px;border-radius:2px}
+  padding:1px 5px;border-radius:var(--radius-xs)}
 .doc table{border-collapse:collapse;width:100%;margin:6px 0 14px;font-size:14px}
 .doc th,.doc td{text-align:left;padding:6px 10px;border-bottom:1px solid var(--rule)}
 .doc th{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;
@@ -317,7 +317,7 @@ button.primary:hover{background:#0B4A54}
 .lsec > summary::-webkit-details-marker{display:none}
 .lsec > summary:hover{background:var(--ground)}
 .lsec > summary .lyear{font-family:var(--mono);font-size:10px;letter-spacing:.08em;
-  background:var(--ink);color:var(--ground);border-radius:2px;padding:2px 6px;margin-right:9px}
+  background:var(--ink);color:var(--ground);border-radius:var(--radius-xs);padding:2px 6px;margin-right:9px}
 .lsec > summary .lnum{font-family:var(--mono);font-size:12px;color:var(--ink-soft);white-space:nowrap}
 .lsec[open] > summary{border-bottom:1px solid var(--rule)}
 .lbody{padding:4px 15px 12px}
@@ -368,7 +368,7 @@ button.primary:hover{background:#0B4A54}
 }
 .y8u5{--unit:#A36B1A;--unit-bg:#F5ECD9;--unit-ink:#63400F}
 </style>
-<link rel="stylesheet" href="../assets/learning.css?v=20260919-tafelmodus">
+<link rel="stylesheet" href="../assets/learning.css?v=20260919-designsystem">
 
 <div class="wrap">
     <div class="masthead">
@@ -5159,8 +5159,8 @@ try{
 }
 </script>
 
-<script src="../assets/qr.js?v=20260919-tafelmodus"></script>
-<script src="../assets/learning.js?v=20260919-tafelmodus"></script>
+<script src="../assets/qr.js?v=20260919-designsystem"></script>
+<script src="../assets/learning.js?v=20260919-designsystem"></script>
 
 <link rel="stylesheet" href="../assets/feedback.css">
 <script src="../assets/feedback.js"></script>

@@ -2,13 +2,13 @@ body{background:#f3f6f2}
 .wrap{max-width:1000px;padding-top:40px}
 .intro{font-size:16px;max-width:62ch;margin:20px 0 30px;line-height:1.7}
 #cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
-#cards .card{--card-ink:#fff;position:relative;overflow:hidden;margin:0;padding:25px 112px 25px 25px;min-height:185px;border:1px solid transparent;border-radius:20px;background:var(--unit);color:var(--card-ink);box-shadow:0 4px 16px #173e4518;transition:box-shadow .18s,transform .18s}
+#cards .card{--card-ink:#fff;position:relative;overflow:hidden;margin:0;padding:25px 112px 25px 25px;min-height:185px;border:1px solid transparent;border-radius:var(--radius-lg);background:var(--unit);color:var(--card-ink);box-shadow:0 4px 16px #173e4518;transition:box-shadow .18s,transform .18s}
 #cards .card[href="year6/"] .menu-art{color:#fff;opacity:1}
 #cards .card:hover{transform:translateY(-3px);box-shadow:0 9px 24px #173e4530}
 #cards .card:focus-visible{outline:3px solid var(--unit);outline-offset:4px}
 #cards .row{display:flex;align-items:flex-start;flex-direction:column;gap:9px}
 #cards .name{font-family:inherit;font-size:27px;font-weight:700;letter-spacing:-.025em;line-height:1.2;color:var(--card-ink)}
-#cards .meta{font-family:inherit;text-transform:none;letter-spacing:0;font-size:12px;font-weight:600;padding:4px 9px;border-radius:7px;background:#00000018;color:var(--card-ink);white-space:normal}
+#cards .meta{font-family:inherit;text-transform:none;letter-spacing:0;font-size:12px;font-weight:600;padding:4px 9px;border-radius:var(--radius-pill);background:#00000018;color:var(--card-ink);white-space:normal}
 #cards .desc{font-size:14px;line-height:1.6;color:var(--card-ink);margin-top:12px}
 .menu-art{position:absolute;right:20px;top:42px;width:76px;height:76px;color:var(--card-ink);opacity:.8}
 .menu-arrow{position:absolute;right:20px;bottom:18px;border-radius:50%;background:#00000018;width:28px;height:28px;display:grid;place-items:center;color:var(--card-ink)}
@@ -21,7 +21,7 @@ body{background:#f3f6f2}
 @media(max-width:620px) and (orientation:portrait){
  .wrap{padding:18px 14px 24px}
  #cards{gap:9px;margin-top:18px}
- #cards .card,#cards .card:last-child{min-height:70px;padding:14px 68px 14px 16px;border-radius:14px}
+ #cards .card,#cards .card:last-child{min-height:70px;padding:14px 68px 14px 16px;border-radius:var(--radius-md)}
  #cards .row{flex-direction:row;align-items:center;gap:6px 12px;flex-wrap:wrap}
  #cards .name{font-size:21px;line-height:1.25}
  #cards .meta{font-size:11px;padding:3px 6px}
@@ -38,15 +38,15 @@ body{background:#f3f6f2}
 #bili{margin-top:18px}
 @media(max-width:620px){#bili{margin-top:14px}}
 @media(max-width:620px) and (orientation:portrait){#bili{margin-top:9px}}
-.bili-acc{border:1px solid var(--rule);border-radius:20px;background:var(--card);overflow:hidden}
-.bili-acc .bili-acc{border-radius:14px}
+.bili-acc{border:1px solid var(--rule);border-radius:var(--radius-lg);background:var(--card);overflow:hidden}
+.bili-acc .bili-acc{border-radius:var(--radius-md)}
 .bili-acc .bili-acc+.bili-acc{margin-top:10px}
 .bili-head{display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:18px 20px;border:0;
   background:var(--unit);color:#fff;font-family:inherit;font-size:16px;cursor:pointer}
 .bili-acc .bili-acc .bili-head{padding:14px 18px}
 .bili-name{font-size:21px;font-weight:700;letter-spacing:-.02em;line-height:1.2}
 .bili-acc .bili-acc .bili-name{font-size:19px}
-.bili-meta{font-size:12px;font-weight:600;padding:4px 9px;border-radius:7px;background:#00000018;white-space:normal}
+.bili-meta{font-size:12px;font-weight:600;padding:4px 9px;border-radius:var(--radius-pill);background:#00000018;white-space:normal}
 .bili-art{width:34px;height:34px;flex:0 0 auto;opacity:.9}
 .bili-chev{margin-left:auto;font-size:20px;line-height:1;transition:transform .18s}
 .bili-head[aria-expanded="true"] .bili-chev{transform:rotate(90deg)}
@@ -55,7 +55,7 @@ body{background:#f3f6f2}
 .bili-acc .bili-acc .bili-body{padding:14px 16px 16px}
 .bili-levels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .bili-level{display:flex;align-items:center;gap:14px;padding:14px 16px;min-height:72px;text-decoration:none;
-  background:var(--card);border:1px solid var(--rule);border-left:5px solid var(--unit);border-radius:12px;color:var(--ink)}
+  background:var(--card);border:1px solid var(--rule);border-left:5px solid var(--unit);border-radius:var(--radius-md);color:var(--ink)}
 a.bili-level{transition:box-shadow .15s,border-color .15s}
 a.bili-level:hover{box-shadow:0 3px 12px #173e4518;border-color:var(--unit)}
 a.bili-level:focus-visible{outline:3px solid var(--unit);outline-offset:3px}
@@ -64,7 +64,7 @@ a.bili-level:focus-visible{outline:3px solid var(--unit);outline-offset:3px}
 .bili-level-meta{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;
   color:var(--ink-soft);margin-top:3px}
 .bili-level-go{font-size:18px;color:var(--unit)}
-.bili-pill{font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:999px;white-space:nowrap;
+.bili-pill{font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:var(--radius-pill);white-space:nowrap;
   background:#EDE7DC;color:#6B5320;border:1px solid #D8C9A8}
 /* Auf dem Telefon heisst der Bereich kurz "Bili". So traegt er dieselbe
    Schriftgroesse und dieselbe Kachelhoehe wie die Jahrgangskacheln
@@ -79,7 +79,7 @@ a.bili-level:focus-visible{outline:3px solid var(--unit);outline-offset:3px}
    Symbol am rechten Rand. Der Pfeil entfaellt hier, weil die Kacheln an
    dieser Stelle auch keinen tragen. */
 @media(max-width:620px) and (orientation:portrait){
-  #bili>.bili-acc{border-radius:14px}
+  #bili>.bili-acc{border-radius:var(--radius-md)}
   #bili>.bili-acc>.bili-head{position:relative;min-height:68px;padding:14px 68px 14px 16px;gap:12px}
   /* plus 1px Rahmen oben und unten = 70px wie die Kacheln */
   #bili>.bili-acc>.bili-head .bili-art{position:absolute;right:16px;top:50%;transform:translateY(-50%);
