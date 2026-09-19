@@ -64,8 +64,8 @@ body{
   .bili-short{display:inline}
 }
 </style>
-<link rel="stylesheet" href="assets/learning.css?v=20260919-fusszeile">
-<link rel="stylesheet" href="assets/menu-preview.css?v=20260919-fusszeile">
+<link rel="stylesheet" href="assets/learning.css?v=20260919-bili">
+<link rel="stylesheet" href="assets/menu-preview.css?v=20260919-bili">
 </head>
 <body>
 <div class="wrap">
@@ -165,6 +165,8 @@ function menuArt(path){return '<svg class="menu-art" aria-hidden="true" viewBox=
    den Jahrgangsstufen liegen. Aufklappbar, damit die Startseite kurz
    bleibt. Sobald eine Jahrgangsstufe eigenes Vokabular hat, bekommt sie
    hier ein "path" - dann wird aus dem Eintrag automatisch ein Link.
+   Die Jahrgaenge eines Fachs liegen auf der Fachseite, nicht hier: Nur so
+   teilen sie sich einen Lernstand und lassen sich gemeinsam ueben.
    ========================================================================= */
 const BILI = {
   "name": "Bilingualer Unterricht",
@@ -178,19 +180,20 @@ const BILI = {
       "meta": "Wirtschaft/Politik",
       "color": "#9A5B12",
       "levels": [
-        {"name": "WiPo Bili E-Jahrgang", "meta": "Einf\u00fchrungsphase"},
-        {"name": "WiPo Bili Q1", "meta": "Qualifikationsphase"},
-        {"name": "WiPo Bili Q2", "meta": "Qualifikationsphase"}
+        {"name": "WiPo Bili E-Jahrgang", "short": "E", "meta": "Einf\u00fchrungsphase"},
+        {"name": "WiPo Bili Q1", "short": "Q1", "meta": "Qualifikationsphase"},
+        {"name": "WiPo Bili Q2", "short": "Q2", "meta": "Qualifikationsphase"}
       ]
     },
     {
       "id": "history",
       "name": "History",
       "meta": "Geschichte",
+      "path": "bili/history/",
       "color": "#6D3B6E",
       "levels": [
-        {"name": "History Year 9", "meta": "Mittelstufe"},
-        {"name": "History Year 10", "meta": "Mittelstufe"}
+        {"name": "History Year 9", "short": "Year 9", "meta": "Mittelstufe"},
+        {"name": "History Year 10", "short": "Year 10", "meta": "Mittelstufe"}
       ]
     },
     {
@@ -199,10 +202,10 @@ const BILI = {
       "meta": "Geographie",
       "color": "#2E6B4F",
       "levels": [
-        {"name": "Geography Year 7", "meta": "Mittelstufe"},
-        {"name": "Geography Year 8", "meta": "Mittelstufe"},
-        {"name": "Geography Year 9", "meta": "Mittelstufe"},
-        {"name": "Geography Year 10", "meta": "Mittelstufe"}
+        {"name": "Geography Year 7", "short": "Year 7", "meta": "Mittelstufe"},
+        {"name": "Geography Year 8", "short": "Year 8", "meta": "Mittelstufe"},
+        {"name": "Geography Year 9", "short": "Year 9", "meta": "Mittelstufe"},
+        {"name": "Geography Year 10", "short": "Year 10", "meta": "Mittelstufe"}
       ]
     }
   ]
@@ -219,14 +222,26 @@ function biliArt(key){
     + 'stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="' + BILI_ART[key] + '"/></svg>';
 }
 const biliOpen = new Set();
-function biliLevel(level){
-  const label = '<span class="bili-level-text"><span class="bili-level-name">' + esc(level.name) + '</span>'
-    + '<span class="bili-level-meta">' + esc(level.meta || "") + '</span></span>';
-  return level.path
-    ? '<a class="bili-level" href="' + esc(level.path) + '">' + label
-      + '<span class="bili-level-go" aria-hidden="true">\u2192</span></a>'
-    : '<div class="bili-level is-pending">' + label
-      + '<span class="bili-pill">In Vorbereitung</span></div>';
+/* Eine Zeile pro Fach. Die Jahrgaenge stehen als Beschriftung darunter,
+   aufgeklappt werden sie erst auf der Fachseite. */
+function biliSubject(subject){
+  /* Drei oder mehr aufeinanderfolgende Jahrgaenge schreiben wir als Spanne.
+     Sonst umbricht die Zeile und die Fachzeilen werden unterschiedlich hoch. */
+  const kurz = subject.levels.map(function(l){ return l.short || l.name; });
+  const zahlen = kurz.map(function(k){ const m = /^Year (\d+)$/.exec(k); return m ? Number(m[1]) : null; });
+  const spanne = kurz.length > 2 && zahlen.every(function(n, i){
+    return n !== null && (i === 0 || n === zahlen[i-1] + 1);
+  });
+  const jahrgaenge = spanne ? "Year " + zahlen[0] + "\u2013" + zahlen[zahlen.length-1]
+    : kurz.join(" \u00b7 ");
+  const label = '<span class="bili-level-text"><span class="bili-level-name">' + esc(subject.name) + '</span>'
+    + '<span class="bili-level-meta">' + esc(jahrgaenge) + '</span></span>';
+  const art = biliArt(subject.id);
+  return subject.path
+    ? '<a class="bili-level" style="--unit:' + esc(subject.color) + '" href="' + esc(subject.path) + '">'
+      + art + label + '<span class="bili-level-go" aria-hidden="true">\u2192</span></a>'
+    : '<div class="bili-level is-pending" style="--unit:' + esc(subject.color) + '">'
+      + art + label + '<span class="bili-pill">In Vorbereitung</span></div>';
 }
 function renderBili(){
   const box = document.getElementById("bili");
@@ -238,17 +253,8 @@ function renderBili(){
     + '<span class="bili-short">' + esc(BILI.shortName) + '</span></span>'
     + '<span class="bili-meta">' + esc(BILI.meta) + '</span>'
     + '<span class="bili-chev" aria-hidden="true">\u203a</span></button>'
-    + (open ? '<div class="bili-body">' + BILI.subjects.map(function(subject){
-        const subjectOpen = biliOpen.has(subject.id);
-        return '<div class="bili-acc" style="--unit:' + esc(subject.color) + '">'
-          + '<button type="button" class="bili-head" data-bili="' + esc(subject.id) + '" aria-expanded="' + subjectOpen + '">'
-          + biliArt(subject.id) + '<span class="bili-name">' + esc(subject.name) + '</span>'
-          + '<span class="bili-meta">' + esc(subject.meta) + '</span>'
-          + '<span class="bili-chev" aria-hidden="true">\u203a</span></button>'
-          + (subjectOpen ? '<div class="bili-body"><div class="bili-levels">'
-              + subject.levels.map(biliLevel).join("") + '</div></div>' : '')
-          + '</div>';
-      }).join("") + '</div>' : '')
+    + (open ? '<div class="bili-body"><div class="bili-levels is-subjects">'
+        + BILI.subjects.map(biliSubject).join("") + '</div></div>' : '')
     + '</div>';
   const panel=box.querySelector('.bili-acc');
   if(panel){panel.style.setProperty('--i',document.querySelectorAll('#cards > .card').length);panel.classList.add('eb-in');}

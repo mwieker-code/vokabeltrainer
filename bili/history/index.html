@@ -1,0 +1,1802 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#F3F6F2">
+<title>English Basecamp – History (Bili)</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20fill%3D%22none%22%20stroke%3D%22%230E6878%22%20stroke-width%3D%225%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M32%2012%20L55%2051%20H9%20Z%22%2F%3E%3Cpath%20d%3D%22M32%2026%20L41%2051%22%2F%3E%3Cpath%20d%3D%22M32%2026%20L23%2051%22%2F%3E%3Cpath%20d%3D%22M4%2051%20H60%22%2F%3E%3C%2Fsvg%3E">
+<script>
+/* Faengt Fehler ab, die sonst zu einer leeren Seite fuehren, und zeigt sie an. */
+window.onerror = function(msg, src, line, col){
+  try{
+    var box = document.getElementById("warn");
+    if(!box){
+      box = document.createElement("div");
+      box.id = "warn";
+      document.body.insertBefore(box, document.body.firstChild);
+    }
+    box.innerHTML = '<div class="warn"><b>Diese Seite laeuft in deinem Browser nicht.</b><br>'
+      + 'Wahrscheinlich ist er zu alt fuer eine der verwendeten Funktionen. '
+      + 'Bitte diesen Text weitergeben:<br><span style="font-family:monospace;font-size:11px">'
+      + String(msg) + ' (Zeile ' + line + ':' + col + ')</span></div>';
+  }catch(e){}
+  return false;
+};
+</script>
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../assets/fonts/inter-400-latin.woff2">
+<link rel="stylesheet" href="../../assets/fonts.css?v=1">
+
+<style>
+:root{
+  --ground:#EEF1F3;
+  --card:#FFFFFF;
+  --ink:#16232B;
+  --ink-soft:#5A6B75;
+  --rule:#D6DCE0;
+  --petrol:#0E5A66;
+  --amber:#C9761E;
+  --moss:#3F7A4B;
+  --year-e:#3C5A82;
+  --year-q1:#2E6E52;
+  --year-q2:#AC6428;
+  --year-all:#6B6358;
+  --year-e-bg:#E4EAF1;
+  --year-q1-bg:#E4EFE9;
+  --year-q2-bg:#F4E8D9;
+  --year-all-bg:#E9E7E2;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Consolas,monospace;
+  --r:4px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--ground);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:16px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:760px;margin:0 auto;padding:24px 20px 64px}
+
+/* ---------- Kopfzeile ---------- */
+.masthead{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;
+  border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:28px;flex-wrap:wrap}
+.mhead-text{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;min-width:0}
+.mhead-logo{height:38px;width:auto;flex:0 0 auto;align-self:center}
+.yeargroup{border:none;background:none;margin-bottom:22px}
+.yeargroup > summary{cursor:pointer;list-style:none;display:flex;align-items:baseline;gap:12px;
+  padding-bottom:10px;margin-bottom:12px;border-bottom:2px solid currentColor}
+.yeargroup > summary::-webkit-details-marker{display:none}
+.yeargroup > summary .tag{font-family:var(--mono);font-size:12px;color:#fff;
+  padding:2px 9px;border-radius:var(--radius-xs)}
+.yeargroup > summary .name{font-family:var(--serif);font-size:17px;font-style:italic;color:inherit}
+.yeargroup > summary .ycount{margin-left:auto;font-family:var(--mono);font-size:11px;
+  color:var(--ink-soft);letter-spacing:.04em;align-self:center}
+.yeargroup[open] > summary{margin-bottom:12px}
+.yeargroup .topic{border:none;border-left:5px solid var(--rule);border-radius:var(--r);
+  margin-bottom:8px}
+.yeargroup .topic .t-name{color:var(--ink)}
+.yeargroup .topic .t-count{color:var(--ink-soft)}
+.yeargroup .topic .t-due{font-weight:600}
+.yeargroup .minirail i{background:rgba(255,255,255,.55)}
+.yeargroup .minirail i.f{background:currentColor}
+
+@media(max-width:560px){
+  .masthead{align-items:center}
+  .mhead-text{gap:2px;display:block}
+  .mhead-logo{height:30px}
+}
+@media print{ .mhead-logo{height:34px} }
+.masthead h1{font-family:var(--serif);font-weight:600;font-size:24px;margin:0;letter-spacing:-.01em}
+.masthead .sub{font-family:var(--mono);font-size:11px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-soft)}
+.home-link{font-family:var(--mono);font-size:11px;letter-spacing:.04em;
+  text-transform:uppercase;color:var(--ink-soft);text-decoration:none;
+  white-space:nowrap;align-self:center}
+.home-link:hover{color:var(--ink);text-decoration:underline}
+
+/* ---------- Startseite ---------- */
+.yeargroup{margin-bottom:34px}
+.yearhead{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.yearhead .tag{font-family:var(--mono);font-size:12px;background:var(--ink);color:var(--ground);
+  padding:2px 7px;border-radius:var(--radius-xs)}
+.yearhead .name{font-family:var(--serif);font-size:17px;font-style:italic;color:var(--ink-soft)}
+
+.topic{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--rule);
+  border-left:3px solid var(--rule);border-radius:var(--r);padding:13px 15px;margin-bottom:8px;
+  cursor:pointer;font:inherit;color:inherit;transition:border-color .15s,transform .15s}
+.topic:hover{border-left-color:var(--petrol);transform:translateX(2px)}
+.topic:focus-visible{outline:2px solid var(--petrol);outline-offset:2px}
+.topic .t-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.topic .t-name{font-weight:500}
+.topic .t-count{font-family:var(--mono);font-size:12px;color:var(--ink-soft);white-space:nowrap}
+.topic .t-due{color:var(--amber)}
+.minirail{display:flex;gap:2px;margin-top:9px}
+.minirail i{height:4px;flex:1;background:var(--rule);border-radius:var(--radius-xs)}
+.minirail i.f{background:var(--petrol)}
+
+.emptyhint{background:var(--card);border:1px dashed var(--rule);border-radius:var(--r);
+  padding:14px 16px;color:var(--ink-soft);font-size:14px}
+
+/* ---------- Sitzung: Leitner-Schiene (Signature) ---------- */
+.rail{display:flex;gap:6px;margin-bottom:22px;border-radius:6px;padding:3px;border:1px solid transparent}
+.slot{flex:1;background:var(--card);border:1px solid var(--rule);border-radius:var(--r);
+  padding:7px 6px 6px;text-align:center;position:relative;transition:border-color .2s,background .2s}
+.slot .n{font-family:var(--mono);font-size:10px;color:var(--ink-soft);letter-spacing:.06em}
+.slot .c{font-family:var(--serif);font-size:19px;line-height:1.1;margin-top:1px}
+.slot .iv{font-family:var(--mono);font-size:9px;color:var(--ink-soft);margin-top:2px}
+.slot.here{border-color:var(--petrol);background:#E7F0F1}
+.slot.here::after{content:"";position:absolute;left:50%;bottom:-7px;width:8px;height:8px;
+  transform:translateX(-50%) rotate(45deg);background:#E7F0F1;
+  border-right:1px solid var(--petrol);border-bottom:1px solid var(--petrol)}
+.slot.land{animation:land .45s ease-out}
+@keyframes land{0%{transform:translateY(-6px)}60%{transform:translateY(2px)}100%{transform:none}}
+
+/* ---------- Karte ---------- */
+.stage{position:relative}
+.vcard{background:var(--card);border:1px solid var(--rule);border-radius:var(--r);
+  padding:30px 26px;min-height:250px;display:flex;flex-direction:column;
+  box-shadow:0 1px 0 var(--rule),0 6px 22px rgba(22,35,43,.06)}
+.vcard.deal{animation:deal .28s ease-out}
+@keyframes deal{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+.eyebrow{border-left:3px solid var(--rule);padding-left:9px;display:flex;justify-content:space-between;gap:12px;font-family:var(--mono);font-size:11px;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);
+  border-bottom:1px solid var(--rule);padding-bottom:8px;margin-bottom:20px}
+.prompt{font-family:var(--serif);font-size:38px;line-height:1.15;letter-spacing:-.015em;margin:0}
+.pos{font-family:var(--serif);font-style:italic;color:var(--ink-soft);font-size:15px;margin-top:5px}
+.phon{display:flex;align-items:center;gap:10px;margin-top:7px;flex-wrap:wrap}
+.ipa{font-family:var(--mono);font-size:13px;color:var(--ink-soft);letter-spacing:.01em}
+.speak{padding:5px 9px;line-height:0;border-color:var(--rule);color:var(--petrol)}
+.speak:hover{border-color:var(--petrol);background:#E7F0F1}
+.speak svg{width:15px;height:15px;display:block}
+.speak.on{background:var(--petrol);border-color:var(--petrol);color:#fff}
+.answer{margin-top:20px;padding-top:18px;border-top:1px solid var(--rule)}
+.answer .de{font-family:var(--serif);font-size:23px}
+.answer .coll{font-size:13px;color:var(--ink-soft);margin-top:8px}
+.answer .ex{font-family:var(--serif);font-style:italic;font-size:16px;margin-top:14px;
+  padding-left:12px;border-left:2px solid var(--petrol);color:#31434D}
+.answer .ex b{font-style:normal;font-weight:600;color:var(--ink);
+  box-shadow:inset 0 -.42em 0 rgba(14,90,102,.14)}
+.answer .ex .speak{margin-left:8px;vertical-align:middle;padding:4px 7px}
+.answer .ex .speak svg{width:13px;height:13px}
+.spacer{flex:1}
+
+/* ---------- Bedienelemente ---------- */
+.controls{margin-top:16px;display:flex;gap:8px;flex-wrap:wrap}
+button{font:inherit;cursor:pointer;border-radius:var(--r);border:1px solid var(--rule);
+  background:var(--card);color:var(--ink);padding:11px 15px;transition:background .15s,border-color .15s}
+button:hover{border-color:var(--ink-soft)}
+button:focus-visible{outline:2px solid var(--petrol);outline-offset:2px}
+button.primary{background:var(--petrol);border-color:var(--petrol);color:#fff;flex:1}
+button.primary:hover{background:#0B4A54}
+.rate{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 8px}
+.rate span{font-family:var(--mono);font-size:10px;color:var(--ink-soft);letter-spacing:.05em}
+.rate.again{border-color:var(--amber);color:var(--amber)}
+.rate.again:hover{background:#FBF2E6}
+.rate.hard{border-color:var(--ink-soft)}
+.rate.hard:hover{background:#EEF1F3}
+.rate.good{border-color:var(--moss);color:var(--moss)}
+.rate.good:hover{background:#EDF4EE}
+
+.opts{display:grid;gap:8px;margin-top:20px}
+.opt{text-align:left;padding:13px 15px;font-family:var(--serif);font-size:17px}
+.opt.right{border-color:var(--moss);background:#EDF4EE;color:var(--moss)}
+.opt.wrong{border-color:var(--amber);background:#FBF2E6;color:var(--amber)}
+.opt:disabled{cursor:default;opacity:1}
+
+.typebox{margin-top:20px}
+.typebox input{width:100%;font-family:var(--serif);font-size:22px;padding:12px 14px;
+  border:1px solid var(--rule);border-radius:var(--r);background:var(--ground);color:var(--ink)}
+.typebox input:focus{outline:2px solid var(--petrol);outline-offset:1px;background:var(--card)}
+.verdict{margin-top:12px;font-size:14px}
+.verdict.ok{color:var(--moss)}
+.verdict.near{color:var(--amber)}
+.verdict.no{color:var(--amber)}
+.verdict .sol{font-family:var(--serif);font-size:18px;color:var(--ink);display:block;margin-top:3px}
+
+/* ---------- Kopf der Sitzung ---------- */
+.sessionbar{display:flex;justify-content:space-between;align-items:center;gap:12px;
+  margin-bottom:18px;flex-wrap:wrap}
+.linkbtn{background:none;border:none;padding:4px 0;color:var(--petrol);text-decoration:underline;
+  text-underline-offset:3px}
+.switches{display:flex;gap:6px;flex-wrap:wrap}
+.switch{font-family:var(--mono);font-size:11px;letter-spacing:.05em;padding:6px 9px;
+  text-transform:uppercase}
+.switch[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+
+/* ---------- Abschluss ---------- */
+.done{background:var(--card);border:1px solid var(--rule);border-radius:var(--r);padding:34px 26px;text-align:center}
+.done h2{font-family:var(--serif);font-weight:600;font-size:26px;margin:0 0 8px}
+.done p{color:var(--ink-soft);margin:0 0 20px}
+
+/* ---------- Fußzeile ---------- */
+.credit{margin-top:14px;padding-top:12px;border-top:1px solid var(--rule);
+  font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--ink-soft)}
+@media print{ .credit{display:none} }
+.foot{margin-top:40px;padding-top:14px;border-top:1px solid var(--rule);
+  display:flex;gap:16px;flex-wrap:wrap;align-items:center;
+  font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.04em}
+.foot button{padding:5px 9px;font-family:var(--mono);font-size:11px}
+.warn{background:#FBF2E6;border:1px solid var(--amber);color:#8A4E12;border-radius:var(--r);
+  padding:9px 12px;font-size:13px;margin-bottom:20px;line-height:1.4}
+
+/* ---------- Heute faellig ---------- */
+.dueBtn{display:block;width:100%;text-align:left;background:var(--petrol);border:1px solid var(--petrol);
+  border-left:3px solid var(--ink);border-radius:var(--r);padding:13px 15px;margin-bottom:18px;
+  cursor:pointer;font:inherit;color:#fff;transition:background .15s}
+.dueBtn:hover{background:#0B4A54}
+.dueBtn:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.dueBtn .t-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.dueBtn .t-name{font-weight:600}
+.dueBtn .t-count{font-family:var(--mono);font-size:12px;opacity:.85;white-space:nowrap}
+.dueBtn:disabled{opacity:.45;cursor:not-allowed}
+
+/* ---------- Lernstand-Code ---------- */
+.codebox{background:var(--card);border:1px solid var(--rule);border-radius:var(--r);
+  padding:18px 18px 16px;margin-bottom:12px}
+.codebox h3{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--petrol);margin:0 0 10px}
+.codeout{font-family:var(--mono);font-size:13px;word-break:break-all;background:var(--ground);
+  border:1px solid var(--rule);border-radius:var(--r);padding:10px 12px;margin:8px 0;
+  max-height:120px;overflow:auto;user-select:all;-webkit-user-select:all}
+.codein{width:100%;font-family:var(--mono);font-size:13px;padding:10px 12px;
+  border:1px solid var(--rule);border-radius:var(--r);background:var(--ground);color:var(--ink)}
+.codein:focus{outline:2px solid var(--petrol);outline-offset:1px;background:var(--card)}
+.codemsg{font-size:13px;margin-top:8px}
+.codemsg.ok{color:var(--moss)}
+.codemsg.err{color:var(--amber)}
+
+/* ---------- Schriftgroesse ---------- */
+.szctl{display:flex;align-items:center;gap:8px}
+.szctl button{padding:4px 9px;font-family:var(--mono);font-size:13px;line-height:1}
+.szctl span{font-family:var(--mono);font-size:11px;color:var(--ink-soft)}
+
+/* ---------- Anleitung ---------- */
+.doc{background:var(--card);border:1px solid var(--rule);border-radius:var(--r);
+  padding:26px 26px 30px;max-width:640px}
+.doc h2{font-family:var(--serif);font-weight:600;font-size:21px;margin:34px 0 8px;
+  letter-spacing:-.01em}
+.doc h2:first-child{margin-top:0}
+.doc h3{font-family:var(--sans);font-weight:600;font-size:15px;margin:20px 0 5px}
+.doc p{margin:0 0 12px;font-size:15px}
+.doc ul{margin:0 0 12px;padding-left:20px;font-size:15px}
+.doc li{margin-bottom:5px}
+.doc .lead{color:var(--ink-soft)}
+.doc code{font-family:var(--mono);font-size:12.5px;background:var(--ground);
+  padding:1px 5px;border-radius:var(--radius-xs)}
+.doc table{border-collapse:collapse;width:100%;margin:6px 0 14px;font-size:14px}
+.doc th,.doc td{text-align:left;padding:6px 10px;border-bottom:1px solid var(--rule)}
+.doc th{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--ink-soft);font-weight:500}
+.doc td:first-child{font-family:var(--mono);font-size:12.5px;white-space:nowrap}
+.kbd{font-family:var(--mono);font-size:11.5px;border:1px solid var(--rule);
+  border-bottom-width:2px;border-radius:3px;padding:1px 6px;background:var(--ground)}
+.doc .warnbox{background:#FBF2E6;border:1px solid var(--amber);border-radius:var(--r);
+  padding:12px 14px;font-size:14.5px;margin:0 0 14px;line-height:1.5}
+.doc .teacher{border-top:2px solid var(--ink);margin-top:36px;padding-top:18px}
+@media print{
+  .doc{border:none;padding:0;max-width:none}
+  .doc h2{page-break-after:avoid}
+}
+
+/* ---------- Lueckensatz ---------- */
+.cloze{font-family:var(--serif);font-size:22px;line-height:1.55;margin:0}
+.cloze .gap{display:inline-block;min-width:5.5em;border-bottom:2px solid var(--petrol);
+  text-align:center;color:var(--petrol);font-family:var(--mono);font-size:15px;
+  vertical-align:baseline;padding:0 4px}
+.cloze b{font-style:normal;font-weight:600;
+  box-shadow:inset 0 -.42em 0 rgba(14,90,102,.18)}
+.clue{font-family:var(--serif);font-size:16px;color:var(--ink-soft);margin-top:14px}
+.clue span{color:var(--ink)}
+
+/* ---------- Listenansicht ---------- */
+.listctl{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.listctl input[type=search]{flex:1;min-width:180px;font:inherit;font-size:15px;
+  padding:10px 13px;border:1px solid var(--rule);border-radius:var(--r);
+  background:var(--card);color:var(--ink);-webkit-appearance:none}
+.listctl input[type=search]:focus{outline:2px solid var(--petrol);outline-offset:1px}
+.listcount{font-family:var(--mono);font-size:11px;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--ink-soft);margin-bottom:16px}
+
+.lsec{background:var(--card);border:1px solid var(--rule);border-radius:var(--r);
+  margin-bottom:8px;overflow:hidden}
+.lsec > summary{cursor:pointer;padding:13px 15px;display:flex;justify-content:space-between;
+  align-items:baseline;gap:12px;list-style:none;font-weight:500}
+.lsec > summary::-webkit-details-marker{display:none}
+.lsec > summary:hover{background:var(--ground)}
+.lsec > summary .lyear{font-family:var(--mono);font-size:10px;letter-spacing:.08em;
+  background:var(--ink);color:var(--ground);border-radius:var(--radius-xs);padding:2px 6px;margin-right:9px}
+.lsec > summary .lnum{font-family:var(--mono);font-size:12px;color:var(--ink-soft);white-space:nowrap}
+.lsec[open] > summary{border-bottom:1px solid var(--rule)}
+.lbody{padding:4px 15px 12px}
+
+.vrow{display:grid;grid-template-columns:1fr 1fr;gap:4px 18px;
+  padding:9px 0;border-bottom:1px solid var(--ground);break-inside:avoid}
+.vrow:last-child{border-bottom:none}
+.ven{font-family:var(--serif);font-size:16px}
+.vipa{font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);margin-left:7px;white-space:nowrap}
+.vpos{font-family:var(--serif);font-style:italic;font-size:12.5px;color:var(--ink-soft);margin-left:7px}
+.vde{font-size:14.5px}
+.vex{grid-column:1 / -1;font-family:var(--serif);font-style:italic;font-size:14px;
+  color:#31434D;padding-left:11px;border-left:2px solid var(--rule);margin-top:3px}
+.vlist.hide-ex .vex{display:none}
+.vlist.hide-ipa .vipa{display:none}
+.vrow.off{display:none}
+.lsec.off{display:none}
+.noresult{background:var(--card);border:1px dashed var(--rule);border-radius:var(--r);
+  padding:14px 16px;color:var(--ink-soft);font-size:14px}
+
+@media print{
+  body{background:#fff}
+  .wrap{max-width:none;padding:0}
+  .masthead{border-bottom:1px solid #000;margin-bottom:14px}
+  .sessionbar,.listctl,.foot,#warn,.listcount button{display:none!important}
+  .lsec{border:none;border-radius:0;margin:0 0 6mm;page-break-inside:auto}
+  .lsec + .lsec{page-break-before:always}
+  .lsec > summary{padding:0 0 4px;border-bottom:1px solid #000;font-size:14pt}
+  .lsec > summary .lnum{color:#000}
+  .lbody{padding:6px 0 0;columns:2;column-gap:10mm}
+  .vrow{grid-template-columns:1fr;gap:1px;padding:3px 0;
+    border-bottom:none;page-break-inside:avoid}
+  .ven{font-size:11pt}
+  .vde{font-size:10pt;color:#333}
+  .vipa{color:#555}
+  .vex{font-size:9.5pt;border-left:1px solid #999}
+}
+
+@media(max-width:560px){
+  .prompt{font-size:30px}
+  .slot .c{font-size:16px}
+  .slot .iv{display:none}
+  .vcard{padding:22px 18px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+</style>
+<link rel="stylesheet" href="../../assets/learning.css?v=20260919-bili">
+
+<div class="wrap">
+    <div class="masthead">
+    <svg class="brandmark" width="68" height="68" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M32 12 L55 51 H9 Z"/><path d="M32 26 L41 51"/><path d="M32 26 L23 51"/><path d="M4 51 H60"/></svg>
+    <div class="mhead-text">
+      <h1>English <span class="title-accent">Basecamp</span></h1>
+      <div class="sub">History · Bilingualer Unterricht</div>
+    </div>
+    <a class="home-link" href="../../">&larr; Alle Jahrg&auml;nge</a>
+  </div>
+  <div id="warn"></div>
+  <div id="view"></div>
+  <div class="foot">
+    <span id="footstat"></span>
+    <span class="foot-actions">
+      <button id="exportBtn">Fortschritt sichern</button>
+      <button id="importBtn">Fortschritt laden</button>
+    </span>
+    <input type="file" id="importFile" accept="application/json" hidden>
+    <div class="szctl">
+      <button id="szDown" title="Schrift kleiner">A−</button>
+      <span id="szLabel">100%</span>
+      <button id="szUp" title="Schrift gr\u00f6\u00dfer">A+</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   VOKABELDATEN
+   Alles steckt in dieser Datei. Zum Aendern: Eintrag im passenden Thema
+   ergaenzen oder korrigieren. Pflichtfelder sind id, en, de, pos.
+   Optional: ipa, collocations, example_en, distractor_hint.
+   ========================================================================= */
+const TOPICS = [
+ {
+  "id": "h9-industrial",
+  "year": "Year 9",
+  "yearName": "Industrial Age to World War I",
+  "name": "The Industrial Revolution"
+ },
+ {
+  "id": "h9-empire",
+  "year": "Year 9",
+  "yearName": "Industrial Age to World War I",
+  "name": "Imperialism and Empire"
+ },
+ {
+  "id": "h9-ww1",
+  "year": "Year 9",
+  "yearName": "Industrial Age to World War I",
+  "name": "The First World War"
+ },
+ {
+  "id": "h10-weimar",
+  "year": "Year 10",
+  "yearName": "Dictatorship, War and Division",
+  "name": "The Weimar Republic"
+ },
+ {
+  "id": "h10-ns",
+  "year": "Year 10",
+  "yearName": "Dictatorship, War and Division",
+  "name": "National Socialism and the Holocaust"
+ },
+ {
+  "id": "h10-coldwar",
+  "year": "Year 10",
+  "yearName": "Dictatorship, War and Division",
+  "name": "The Cold War and a Divided Germany"
+ }
+];
+
+const SETS = {
+ "h9-industrial": [
+  {
+   "id": "ind-01",
+   "en": "factory",
+   "de": "die Fabrik",
+   "pos": "noun",
+   "collocations": "to work in a factory",
+   "example_en": "Thousands of workers moved to the cities to work in a factory."
+  },
+  {
+   "id": "ind-02",
+   "en": "steam engine",
+   "de": "die Dampfmaschine",
+   "pos": "noun",
+   "collocations": "to power a steam engine",
+   "example_en": "The steam engine made it possible to produce goods far more quickly."
+  },
+  {
+   "id": "ind-03",
+   "en": "working conditions",
+   "de": "die Arbeitsbedingungen",
+   "pos": "noun",
+   "collocations": "harsh / poor working conditions",
+   "example_en": "Reformers described the harsh working conditions in the mills."
+  },
+  {
+   "id": "ind-04",
+   "en": "to urbanise",
+   "de": "verstädtern",
+   "pos": "verb",
+   "collocations": "rapidly urbanising regions",
+   "example_en": "The regions around the coalfields urbanised within a single generation."
+  },
+  {
+   "id": "ind-05",
+   "en": "child labour",
+   "de": "die Kinderarbeit",
+   "pos": "noun",
+   "collocations": "to ban child labour",
+   "example_en": "Parliament slowly began to restrict child labour in the mines."
+  },
+  {
+   "id": "ind-06",
+   "en": "trade union",
+   "de": "die Gewerkschaft",
+   "pos": "noun",
+   "collocations": "to join a trade union",
+   "example_en": "Workers joined a trade union to demand shorter hours."
+  }
+ ],
+ "h9-empire": [
+  {
+   "id": "emp-01",
+   "en": "colony",
+   "de": "die Kolonie",
+   "pos": "noun",
+   "collocations": "to establish a colony",
+   "example_en": "European powers established a colony wherever they saw profit."
+  },
+  {
+   "id": "emp-02",
+   "en": "to exploit",
+   "de": "ausbeuten",
+   "pos": "verb",
+   "collocations": "to exploit resources / labour",
+   "example_en": "The company exploited the region's resources for decades."
+  },
+  {
+   "id": "emp-03",
+   "en": "missionary",
+   "de": "der Missionar / die Missionarin",
+   "pos": "noun",
+   "collocations": "a missionary society",
+   "example_en": "A missionary society funded the first school in the district."
+  },
+  {
+   "id": "emp-04",
+   "en": "resistance",
+   "de": "der Widerstand",
+   "pos": "noun",
+   "collocations": "armed / peaceful resistance",
+   "example_en": "Local rulers organised armed resistance against the occupation."
+  },
+  {
+   "id": "emp-05",
+   "en": "scramble for Africa",
+   "de": "das Wettrennen um Afrika",
+   "pos": "noun",
+   "collocations": "the scramble for Africa",
+   "example_en": "The scramble for Africa divided a continent at a conference table."
+  },
+  {
+   "id": "emp-06",
+   "en": "to justify",
+   "de": "rechtfertigen",
+   "pos": "verb",
+   "collocations": "to justify a policy",
+   "example_en": "Politicians tried to justify expansion as a civilising mission."
+  }
+ ],
+ "h9-ww1": [
+  {
+   "id": "ww1-01",
+   "en": "alliance",
+   "de": "das Bündnis",
+   "pos": "noun",
+   "collocations": "a system of alliances",
+   "example_en": "A system of alliances turned a local crisis into a world war."
+  },
+  {
+   "id": "ww1-02",
+   "en": "trench warfare",
+   "de": "der Grabenkrieg",
+   "pos": "noun",
+   "collocations": "the reality of trench warfare",
+   "example_en": "Trench warfare made rapid victory impossible."
+  },
+  {
+   "id": "ww1-03",
+   "en": "mobilisation",
+   "de": "die Mobilmachung",
+   "pos": "noun",
+   "collocations": "general mobilisation",
+   "example_en": "General mobilisation was ordered within days."
+  },
+  {
+   "id": "ww1-04",
+   "en": "armistice",
+   "de": "der Waffenstillstand",
+   "pos": "noun",
+   "collocations": "to sign an armistice",
+   "example_en": "The armistice was signed in a railway carriage."
+  },
+  {
+   "id": "ww1-05",
+   "en": "propaganda",
+   "de": "die Propaganda",
+   "pos": "noun",
+   "collocations": "wartime propaganda",
+   "example_en": "Wartime propaganda presented the enemy as a monster."
+  },
+  {
+   "id": "ww1-06",
+   "en": "to surrender",
+   "de": "kapitulieren",
+   "pos": "verb",
+   "collocations": "to surrender unconditionally",
+   "example_en": "The garrison surrendered after a three-week siege."
+  }
+ ],
+ "h10-weimar": [
+  {
+   "id": "wei-01",
+   "en": "republic",
+   "de": "die Republik",
+   "pos": "noun",
+   "collocations": "to proclaim a republic",
+   "example_en": "The republic was proclaimed from a window in Berlin."
+  },
+  {
+   "id": "wei-02",
+   "en": "constitution",
+   "de": "die Verfassung",
+   "pos": "noun",
+   "collocations": "to draft a constitution",
+   "example_en": "The constitution guaranteed rights that were rarely defended."
+  },
+  {
+   "id": "wei-03",
+   "en": "hyperinflation",
+   "de": "die Hyperinflation",
+   "pos": "noun",
+   "collocations": "the hyperinflation of 1923",
+   "example_en": "During the hyperinflation wages lost their value within hours."
+  },
+  {
+   "id": "wei-04",
+   "en": "coalition government",
+   "de": "die Koalitionsregierung",
+   "pos": "noun",
+   "collocations": "a fragile coalition government",
+   "example_en": "A fragile coalition government collapsed after eight months."
+  },
+  {
+   "id": "wei-05",
+   "en": "reparations",
+   "de": "die Reparationen",
+   "pos": "noun",
+   "collocations": "to pay reparations",
+   "example_en": "The country was required to pay reparations it could not afford."
+  },
+  {
+   "id": "wei-06",
+   "en": "to undermine",
+   "de": "untergraben",
+   "pos": "verb",
+   "collocations": "to undermine democracy",
+   "example_en": "Street violence undermined trust in democracy."
+  }
+ ],
+ "h10-ns": [
+  {
+   "id": "ns-01",
+   "en": "dictatorship",
+   "de": "die Diktatur",
+   "pos": "noun",
+   "collocations": "to establish a dictatorship",
+   "example_en": "Within months the government had established a dictatorship."
+  },
+  {
+   "id": "ns-02",
+   "en": "persecution",
+   "de": "die Verfolgung",
+   "pos": "noun",
+   "collocations": "the persecution of minorities",
+   "example_en": "The persecution of Jewish citizens was written into law."
+  },
+  {
+   "id": "ns-03",
+   "en": "perpetrator",
+   "de": "der Täter / die Täterin",
+   "pos": "noun",
+   "collocations": "perpetrators and bystanders",
+   "example_en": "Historians distinguish between perpetrators, bystanders and victims."
+  },
+  {
+   "id": "ns-04",
+   "en": "bystander",
+   "de": "der Zuschauer / die Zuschauerin",
+   "pos": "noun",
+   "collocations": "an indifferent bystander",
+   "example_en": "Many people chose to remain bystanders."
+  },
+  {
+   "id": "ns-05",
+   "en": "to deport",
+   "de": "deportieren",
+   "pos": "verb",
+   "collocations": "to deport to a camp",
+   "example_en": "Families were deported to camps in the occupied east."
+  },
+  {
+   "id": "ns-06",
+   "en": "remembrance",
+   "de": "das Gedenken, die Erinnerung",
+   "pos": "noun",
+   "collocations": "a culture of remembrance",
+   "example_en": "A culture of remembrance keeps these events present."
+  }
+ ],
+ "h10-coldwar": [
+  {
+   "id": "cw-01",
+   "en": "superpower",
+   "de": "die Supermacht",
+   "pos": "noun",
+   "collocations": "the two superpowers",
+   "example_en": "The two superpowers divided Europe into spheres of influence."
+  },
+  {
+   "id": "cw-02",
+   "en": "iron curtain",
+   "de": "der Eiserne Vorhang",
+   "pos": "noun",
+   "collocations": "behind the iron curtain",
+   "example_en": "Families behind the iron curtain were separated for decades."
+  },
+  {
+   "id": "cw-03",
+   "en": "arms race",
+   "de": "das Wettrüsten",
+   "pos": "noun",
+   "collocations": "the nuclear arms race",
+   "example_en": "The arms race consumed enormous resources on both sides."
+  },
+  {
+   "id": "cw-04",
+   "en": "reunification",
+   "de": "die Wiedervereinigung",
+   "pos": "noun",
+   "collocations": "German reunification",
+   "example_en": "Reunification raised questions that took years to answer."
+  },
+  {
+   "id": "cw-05",
+   "en": "to defect",
+   "de": "sich absetzen, überlaufen",
+   "pos": "verb",
+   "collocations": "to defect to the West",
+   "example_en": "Athletes who defected to the West became political symbols."
+  },
+  {
+   "id": "cw-06",
+   "en": "checkpoint",
+   "de": "der Kontrollpunkt",
+   "pos": "noun",
+   "collocations": "to pass a checkpoint",
+   "example_en": "Passing a checkpoint could take several hours."
+  }
+ ]
+};
+</script>
+
+<script>
+/* =========================================================================
+   SPEICHER  –  localStorage mit Rückfallebene im Arbeitsspeicher
+   ========================================================================= */
+const Store = (function(){
+  let persistent = true, mem = {};
+  try{
+    localStorage.setItem("vt:test","1");
+    localStorage.removeItem("vt:test");
+  }catch(e){ persistent = false; }
+  return {
+    persistent,
+    get(k){
+      try{
+        if(persistent) return localStorage.getItem(k);
+        return (k in mem) ? mem[k] : null;
+      }catch(e){ return (k in mem) ? mem[k] : null; }
+    },
+    set(k,v){
+      try{ persistent ? localStorage.setItem(k,v) : (mem[k]=v); }
+      catch(e){ mem[k]=v; }
+    }
+  };
+})();
+
+/* Beschreibt diese Seite fuer die gemeinsamen Skripte. Ohne sie haelt
+   assets/learning.js jede Themenseite fuer die Oberstufe und beschriftet
+   entsprechend. */
+const PAGE = {
+  "name": "History · Bilingualer Unterricht",
+  "crossLabel": "Jahrgangsübergreifend üben",
+  "allLabel": "Alle Jahrgänge",
+  "groupName": "Jahrgang",
+  "promptLevel": "History (bilingual) \u2013 Year 9 und Year 10",
+  "promptLanguage": "Englische Fachsprache des Geschichtsunterrichts, altersgerecht für Year 9 und Year 10; Fachbegriffe korrekt verwenden, Satzbau der Mittelstufe."
+};
+
+const KEY = "vt:bili:history:progress";
+const INTERVALS = [0,0,1,2,4,8];      // Fach 1..5 -> Tage bis zur Wiedervorlage
+const DAY = 86400000;
+
+let progress = (function(){
+  try{ return JSON.parse(Store.get(KEY)) || {}; }catch(e){ return {}; }
+})();
+
+function save(){ Store.set(KEY, JSON.stringify(progress)); }
+
+function rec(topicId, dir, vid){
+  if(!progress[topicId]) progress[topicId] = {};
+  if(!progress[topicId][dir]) progress[topicId][dir] = {};
+  if(!progress[topicId][dir][vid]) progress[topicId][dir][vid] = {box:1, due:0};
+  return progress[topicId][dir][vid];
+}
+function isDue(r){ return Date.now() >= r.due; }
+
+function boxCounts(topicId, dir){
+  const c=[0,0,0,0,0];
+  for(const v of SETS[topicId]) c[rec(topicId,dir,v.id).box-1]++;
+  return c;
+}
+function dueCount(topicId, dir){
+  return SETS[topicId].filter(v => isDue(rec(topicId,dir,v.id))).length;
+}
+
+/* =========================================================================
+   AUSSPRACHE  –  Web Speech API des Browsers, keine externe Anbindung
+   Nutzt die auf dem Gerät installierten Stimmen. Kein Konto, kein Schlüssel,
+   kein Datenversand. Verfügbarkeit und Qualität hängen vom Endgerät ab.
+   ========================================================================= */
+const Speech = (function(){
+  var synth = window.speechSynthesis;
+  if(!synth) return {available:false, say:function(){}, status:function(){ return "nicht unterstützt"; }};
+
+  var voice = null;
+  var last = "noch nichts abgespielt";
+
+  function pick(){
+    var vs = [];
+    try{ vs = synth.getVoices() || []; }catch(e){ return; }
+    vs = vs.filter(function(v){ return /^en/i.test(v.lang); });
+    if(!vs.length) return;                        // auf iOS anfangs leer
+    voice = vs.filter(function(v){ return /en[-_]GB/i.test(v.lang); })[0]
+         || vs.filter(function(v){ return /en[-_]US/i.test(v.lang); })[0]
+         || vs[0];
+  }
+  pick();
+  if(synth.addEventListener) synth.addEventListener("voiceschanged", pick);
+
+  return {
+    available:true,
+
+    /* Zaehlt die geladenen Stimmen und meldet, was zuletzt passiert ist. */
+    status:function(){
+      var n = 0;
+      try{ n = (synth.getVoices() || []).length; }catch(e){}
+      return n + " Stimmen geladen \u00b7 " + (voice ? "gewählt: " + voice.name + " (" + voice.lang + ")"
+                                                     : "keine englische Stimme gefunden")
+           + " \u00b7 zuletzt: " + last;
+    },
+
+    say:function(text, btn){
+      try{
+        // Laeuft schon etwas? Dann nur abbrechen und beenden. Niemals
+        // cancel() unmittelbar vor speak() aufrufen - iOS verschluckt sonst
+        // beides und bleibt stumm.
+        if(synth.speaking || synth.pending){
+          synth.cancel();
+          last = "abgebrochen";
+          if(btn) btn.classList.remove("on");
+          return;
+        }
+
+        // Stimmenliste im Moment des Antippens auffrischen; auf iOS ist sie
+        // beim Laden der Seite noch leer.
+        if(!voice) pick();
+
+        var u = new SpeechSynthesisUtterance(String(text).replace(/^to\s+/i, ""));
+        u.lang = "en-GB";
+        if(voice){ try{ u.voice = voice; u.lang = voice.lang || "en-GB"; }catch(e){} }
+        u.rate = 0.9;
+
+        last = "gestartet";
+        u.onstart = function(){ last = "spricht"; };
+        u.onend   = function(){ last = "fertig"; if(btn) btn.classList.remove("on"); };
+        u.onerror = function(ev){
+          last = "Fehler: " + ((ev && ev.error) ? ev.error : "unbekannt");
+          if(btn) btn.classList.remove("on");
+        };
+
+        if(btn) btn.classList.add("on");
+        synth.speak(u);                  // direkt aus der Nutzeraktion heraus
+        if(synth.paused){ try{ synth.resume(); }catch(e){} }
+      }catch(e){
+        last = "Ausnahme: " + e.message;
+        if(btn) btn.classList.remove("on");
+      }
+    }
+  };
+})();
+
+const SPK = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+  <path d="M15.5 8.5a5 5 0 0 1 0 7"></path><path d="M18.5 5.5a9 9 0 0 1 0 13"></path></svg>`;
+
+function speakBtn(text){
+  if(!Speech.available) return "";
+  return `<button class="speak" data-say="${esc(text)}" title="Aussprache anhören"
+    aria-label="Aussprache von ${esc(text)} anhören">${SPK}</button>`;
+}
+
+/* =========================================================================
+   HILFSFUNKTIONEN
+   ========================================================================= */
+const shuffle = a => a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]);
+const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function normalise(s){
+  return s.toLowerCase().trim()
+    .replace(/^(to|the|a|an)\s+/,"")
+    .replace(/[.,;!?'"’]/g,"")
+    .replace(/\s+/g," ");
+}
+function distance(a,b){
+  const m=a.length,n=b.length,d=Array.from({length:m+1},(_,i)=>[i,...Array(n).fill(0)]);
+  for(let j=0;j<=n;j++) d[0][j]=j;
+  for(let i=1;i<=m;i++) for(let j=1;j<=n;j++)
+    d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));
+  return d[m][n];
+}
+function checkTyped(input, target){
+  const a=normalise(input), b=normalise(target);
+  if(!a) return "no";
+  if(a===b) return "ok";
+  // Mehrere zulässige Übersetzungen, durch Komma getrennt
+  if(b.split(",").map(s=>s.trim()).includes(a)) return "ok";
+  const tol = b.length > 6 ? 2 : 1;
+  return distance(a,b) <= tol ? "near" : "no";
+}
+function markExample(sentence, word){
+  const stem = word.replace(/^to\s+/i,"").split(/[\s/]/)[0].slice(0, Math.max(4, word.length-3));
+  const re = new RegExp("("+stem.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"\\w*)","i");
+  return esc(sentence).replace(re,"<b>$1</b>");
+}
+
+/* =========================================================================
+   ZUSTAND
+   ========================================================================= */
+const S = {
+  view:"home",
+  topicId:null,
+  dir:"en2de",          // en2de | de2en
+  mode:"card",          // card | mc | type
+  onlyDue:true,
+  queue:[], i:0, revealed:false, answered:null, landed:null,
+  seen:0
+};
+const view = document.getElementById("view");
+const dirLabel = () => S.dir==="en2de" ? "EN → DE" : "DE → EN";
+const askSide  = v => S.dir==="en2de" ? v.en : v.de;
+const ansSide  = v => S.dir==="en2de" ? v.de : v.en;
+
+/* =========================================================================
+   STARTSEITE
+   ========================================================================= */
+function renderHome(){
+  const years = [...new Set(TOPICS.map(t=>t.year))];
+  let h = "";
+  for(const y of years){
+    const group = TOPICS.filter(t=>t.year===y);
+    const yc = yearColor(y);
+    const bg = yearBg(y);
+    const groupDue = group.reduce((n,t) => {
+      if(!SETS[t.id]) return n;
+      return n + SETS[t.id].filter(v => isDue(rec(t.id, S.dir, v.id))).length;
+    }, 0);
+    h += `<details class="yeargroup" style="color:${yc}" ${y === "ALL" ? 'id="all"' : ""}>
+      <summary>
+        <span class="tag" style="background:${yc}">${y}</span>
+        <span class="name">${esc(group[0].yearName)}</span>
+        <span class="ycount">${group.length + (y === "ALL" ? 1 : 0)} Themen${groupDue ? " · " + groupDue + " fällig" : ""}</span>
+      </summary>`;
+    for(const t of group){
+      const total = SETS[t.id] ? SETS[t.id].length : 0;
+      const due = total ? dueCount(t.id, S.dir) : 0;
+      const c = total ? boxCounts(t.id, S.dir) : [0,0,0,0,0];
+      const known = c[2]+c[3]+c[4];
+      const filled = total ? Math.round(known/total*5) : 0;
+      h += `<button class="topic" data-topic="${t.id}"
+          style="background:${bg};border-left-color:${yc};color:${yc}" ${total?"":"disabled"}>
+        <span class="t-row">
+          <span class="t-name">${esc(t.name)}</span>
+          <span class="t-count">${total ? (due?`<span class="t-due">${due} fällig</span> · `:"") + total + " Vok." : "leer"}</span>
+        </span>
+        <span class="minirail">${[0,1,2,3,4].map(k=>`<i class="${k<filled?"f":""}"></i>`).join("")}</span>
+      </button>`;
+    }
+    h += `</details>`;
+  }
+  h += `<div class="emptyhint">Wähle ein Thema. Der Fortschritt wird pro Abfragerichtung
+        (${dirLabel()}) getrennt gespeichert und bleibt auf diesem Gerät.</div>`;
+  const grand = TOPICS.reduce((n,t) => n + (SETS[t.id] ? SETS[t.id].length : 0), 0);
+  const totalDue = TOPICS.reduce((n,t) => {
+    if(!SETS[t.id]) return n;
+    return n + SETS[t.id].filter(v => isDue(rec(t.id, S.dir, v.id))).length;
+  }, 0);
+  if(totalDue > 0){
+    h += `<button class="dueBtn" id="dueBtn">
+      <span class="t-row">
+        <span class="t-name">Heute f\u00e4llig</span>
+        <span class="t-count">${totalDue} Karten aus allen Themen</span>
+      </span>
+    </button>`;
+  }
+
+  h += `<button class="topic" id="allBtn" style="border-left-color:var(--petrol)">
+    <span class="t-row">
+      <span class="t-name">Alle Vokabeln ansehen</span>
+      <span class="t-count">${grand} Einträge</span>
+    </span>
+  </button>`;
+
+  h += `<button class="topic" id="helpBtn" style="border-left-color:var(--petrol)">
+    <span class="t-row">
+      <span class="t-name">Anleitung</span>
+      <span class="t-count">So funktioniert die Seite</span>
+    </span>
+  </button>`;
+
+  view.innerHTML = h;
+  view.querySelectorAll("[data-topic]").forEach(b =>
+    b.addEventListener("click", () => startSession(b.dataset.topic)));
+  const db = document.getElementById("dueBtn");
+  if(db) db.onclick = () => startDueSession();
+
+  const ab = document.getElementById("allBtn");
+  if(ab) ab.onclick = () => { S.view = "list"; render(); };
+  const hb = document.getElementById("helpBtn");
+  if(hb) hb.onclick = () => { S.view = "help"; render(); };
+  updateFoot();
+}
+
+/* =========================================================================
+   SITZUNG
+   ========================================================================= */
+function buildQueue(){
+  let all = SETS[S.topicId];
+  if(S.mode === "cloze") all = all.filter(hasCloze);
+  if(!all.length){ S.queue = []; S.i = 0; return; }
+  const pool = S.onlyDue ? all.filter(v=>isDue(rec(S.topicId,S.dir,v.id))) : all;
+  S.queue = shuffle(pool.length ? pool : all);
+  S.i = 0; S.revealed = false; S.answered = null;
+}
+function startSession(topicId){
+  S.topicId = topicId; S.view = "session"; S.seen = 0;
+  S.mixedDue = false;
+  buildQueue(); render();
+}
+
+/* Alle faelligen Karten aus allen Themen in eine gemischte Sitzung laden. */
+function startDueSession(){
+  var pool = [];
+  for(var i = 0; i < TOPICS.length; i++){
+    var t = TOPICS[i];
+    var es = SETS[t.id];
+    if(!es) continue;
+    for(var j = 0; j < es.length; j++){
+      var v = es[j];
+      if(isDue(rec(t.id, S.dir, v.id))){
+        pool.push({vocab: v, topicId: t.id});
+      }
+    }
+  }
+  if(!pool.length) return;
+  S.mixedDue = true;
+  S.mixedPool = shuffle(pool);
+  S.mixedI = 0;
+  S.view = "session";
+  S.seen = 0;
+  S.revealed = false;
+  S.answered = null;
+  S.options = null;
+  // Setze topicId auf das erste Element, damit die Schiene stimmt
+  S.topicId = S.mixedPool[0].topicId;
+  S.queue = S.mixedPool.map(function(x){ return x.vocab; });
+  S.i = 0;
+  render();
+}
+function current(){ return S.queue[S.i]; }
+
+function renderSession(){
+  if(!S.queue.length){
+    view.innerHTML = `<div class="done"><h2>Keine Karten</h2>
+      <p>In diesem Thema gibt es für den Lückensatz-Modus keine passenden Beispielsätze.</p>
+      <div class="controls"><button class="primary" id="home">Themenübersicht</button></div></div>`;
+    document.getElementById("home").onclick = () => { S.view="home"; S.mode="card"; render(); };
+    return;
+  }
+  if(S.i >= S.queue.length){ renderDone(); return; }
+  const v = current();
+  const r = rec(S.topicId, S.dir, v.id);
+  const tid = (S.mixedDue && S.mixedPool && S.mixedPool[S.i])
+    ? S.mixedPool[S.i].topicId : S.topicId;
+  const topic = TOPICS.find(t=>t.id===tid);
+
+  const rail = [1,2,3,4,5].map(n=>{
+    const cls = (n===r.box?"here":"") + (S.landed===n?" land":"");
+    return `<div class="slot ${cls}"><div class="n">FACH ${n}</div>
+      <div class="c">${boxCounts(tid,S.dir)[n-1]}</div>
+      <div class="iv">${n===1?"sofort":INTERVALS[n]+" d"}</div></div>`;
+  }).join("");
+
+  const ycNow = yearColor(topic.year);
+  let body = `<div class="eyebrow" style="border-left-color:${ycNow}">
+      <span>${S.mixedDue ? esc(topic.year + " · " + topic.name) : esc(topic.name)}</span>
+      <span>${S.i+1} / ${S.queue.length}</span>
+    </div>`;
+
+  if(S.mode === "card"){
+    body += promptBlock(v);
+    if(S.revealed){
+      body += answerBlock(v);
+    }
+    body += `<div class="spacer"></div>`;
+  }
+
+  if(S.mode === "mc"){
+    if(!S.options) S.options = shuffle([v, ...buildDistractors(v)]);
+    body += promptBlock(v) + `<div class="opts">`;
+    for(const o of S.options){
+      let cls = "";
+      if(S.answered){
+        if(o.id===v.id) cls = "right";
+        else if(o.id===S.answered) cls = "wrong";
+      }
+      body += `<button class="opt ${cls}" data-opt="${o.id}" ${S.answered?"disabled":""}>
+        ${esc(ansSide(o))}</button>`;
+    }
+    body += `</div>`;
+    if(S.answered) body += answerBlock(v, true);
+    body += `<div class="spacer"></div>`;
+  }
+
+  if(S.mode === "type"){
+    body += promptBlock(v) + `
+      <div class="typebox">
+        <input id="typeIn" placeholder="${S.dir==="en2de"?"Deutsche Bedeutung":"English word"}"
+               autocomplete="off" autocapitalize="off" spellcheck="false" ${S.answered?"disabled":""}>
+        <div class="verdict" id="verdict"></div>
+      </div>`;
+    if(S.answered) body += answerBlock(v, true);
+    body += `<div class="spacer"></div>`;
+  }
+
+  if(S.mode === "cloze"){
+    const cp = clozeParts(v);
+    body += '<div class="cloze">' + esc(cp.before)
+          + (S.answered ? '<b>' + esc(cp.word) + '</b>'
+                        : '<span class="gap">?</span>')
+          + esc(cp.after) + '</div>'
+          + '<div class="clue">gesucht: <span>' + esc(v.de) + '</span>'
+          + (v.pos ? ' \u00b7 ' + esc(v.pos) : "") + '</div>'
+          + '<div class="typebox">'
+          + '<input id="typeIn" placeholder="englisches Wort" autocomplete="off" '
+          + 'autocapitalize="off" spellcheck="false" ' + (S.answered ? "disabled" : "") + '>'
+          + '<div class="verdict" id="verdict"></div></div>';
+    if(S.answered) body += answerBlock(v, true);
+    body += '<div class="spacer"></div>';
+  }
+
+  const controls = S.revealed || S.answered
+    ? `<button class="rate again" data-rate="0">Nochmal<span>1</span></button>
+       <button class="rate hard"  data-rate="1">Unsicher<span>2</span></button>
+       <button class="rate good"  data-rate="2">Gewusst<span>3</span></button>`
+    : (S.mode==="card"
+        ? `<button class="primary" id="flip">Umdrehen <span style="opacity:.6">(Leertaste)</span></button>`
+        : ((S.mode==="type" || S.mode==="cloze")
+            ? `<button class="primary" id="submit">Prüfen (Enter)</button>` : ""));
+
+  view.innerHTML = `
+    <div class="sessionbar">
+      <button class="linkbtn" id="back">← Themenübersicht</button>
+      <div class="switches">
+        <button class="switch" data-mode="card" aria-pressed="${S.mode==="card"}">Karteikarte</button>
+        <button class="switch" data-mode="mc"   aria-pressed="${S.mode==="mc"}">Auswahl</button>
+        <button class="switch" data-mode="type" aria-pressed="${S.mode==="type"}">Tippen</button>
+        <button class="switch" data-mode="cloze" aria-pressed="${S.mode==="cloze"}">Lückensatz</button>
+        ${S.mode==="cloze" ? "" : `<button class="switch" id="dirBtn">${dirLabel()}</button>`}
+      </div>
+    </div>
+    <div class="rail" style="border-color:${ycNow}55">${rail}</div>
+    <div class="stage"><div class="vcard deal">${body}</div></div>
+    <div class="controls">${controls}</div>`;
+
+  bindSession();
+  const inp = document.getElementById("typeIn");
+  if(inp && !S.answered) inp.focus();
+  updateFoot();
+}
+
+/* Zerlegt den Beispielsatz in Teil vor der Vokabel, Vokabel, Teil danach.
+   Versucht zuerst die ganze Wendung, dann das erste Wort mit Endungen.
+   Gibt null zurueck, wenn die Vokabel im Satz nicht auffindbar ist. */
+/* Ordnet einem Jahrgang eine feste Farbe zu. "ALL" (jahrgangsuebergreifend)
+   bekommt einen neutralen Ton statt einer der drei Jahrgangsfarben. */
+function yearColor(year){
+  if(year === "Year 9")  return "var(--year-e)";
+  if(year === "Year 10") return "var(--year-q1)";
+  return "var(--year-all)";
+}
+function yearBg(year){
+  if(year === "Year 9")  return "var(--year-e-bg)";
+  if(year === "Year 10") return "var(--year-q1-bg)";
+  return "var(--year-all-bg)";
+}
+
+function clozeParts(v){
+  var ex = v.example_en;
+  if(!ex) return null;
+  var core = String(v.en).replace(/\([^)]*\)/g, " ").split("/")[0];
+  core = core.replace(/^\s*to\s+/i, "").replace(/\.{2,}|…/g, " ").replace(/\s+/g, " ").trim().replace(/[.!?]$/, "");
+  if(!core) return null;
+  var esc0 = function(x){ return x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); };
+
+  var words = core.split(" ");
+  var tries = [];
+  if(words.length > 1){
+    tries.push(words.map(esc0).join("\\s+") + "\\w*");           // ganze Wendung
+    tries.push(esc0(words[words.length - 1]) + "\\w*");          // letztes Wort
+  }
+  var first = words[0];
+  tries.push(esc0(first.slice(0, Math.max(4, first.length - 3))) + "\\w*");
+
+  for(var i = 0; i < tries.length; i++){
+    var m = ex.match(new RegExp("\\b(" + tries[i] + ")", "i"));
+    if(m && m.index !== undefined && m[1].length > 2){
+      return {before: ex.slice(0, m.index), word: m[1],
+              after: ex.slice(m.index + m[1].length), core: core};
+    }
+  }
+  return null;
+}
+
+function hasCloze(v){ return clozeParts(v) !== null; }
+
+function promptBlock(v){
+  const englishAsked = S.dir === "en2de";
+  const phon = englishAsked && (v.ipa || Speech.available)
+    ? `<div class="phon">
+         ${v.ipa ? `<span class="ipa">/${esc(v.ipa.replace(/^\/|\/$/g, ""))}/</span>` : ""}
+         ${speakBtn(v.en)}
+       </div>`
+    : "";
+  return `<h2 class="prompt">${esc(askSide(v))}</h2>
+    <div class="pos">${esc(v.pos)}</div>${phon}`;
+}
+
+/* Distraktoren: erst die gepflegten Verwechslungskandidaten, dann Zufall
+   aus demselben Thema. Freie Paare bekommen eine synthetische ID. */
+function buildDistractors(v){
+  const out = [];
+  const set = SETS[S.topicId];
+  let n = 0;
+  for(const h of (v.distractor_hint || [])){
+    if(typeof h === "string"){
+      const found = set.find(x => x.id === h);
+      if(found && found.id !== v.id) out.push(found);
+    }else if(h && h.en && h.de){
+      out.push({id:"hint-"+v.id+"-"+(n++), en:h.en, de:h.de, pos:v.pos, hint:true});
+    }
+  }
+  const used = new Set([v.id, ...out.map(o=>o.id)]);
+  const rest = shuffle(set.filter(x => !used.has(x.id)));
+  return [...out, ...rest].slice(0,3);
+}
+
+function answerBlock(v, compact){
+  const englishIsAnswer = S.dir === "de2en";
+  const phon = englishIsAnswer && (v.ipa || Speech.available)
+    ? `<div class="phon">
+         ${v.ipa ? `<span class="ipa">/${esc(v.ipa.replace(/^\/|\/$/g, ""))}/</span>` : ""}
+         ${speakBtn(v.en)}
+       </div>`
+    : "";
+  return `<div class="answer">
+    ${compact ? "" : `<div class="de">${esc(ansSide(v))}</div>`}
+    ${phon}
+    ${v.collocations ? `<div class="coll">${esc(v.collocations)}</div>` : ""}
+    ${v.example_en ? `<div class="ex">${markExample(v.example_en, v.en)}
+      ${speakBtn(v.example_en)}</div>` : ""}
+  </div>`;
+}
+
+function bindSession(){
+  document.getElementById("back").onclick = () => { S.view="home"; S.options=null; S.mixedDue=false; render(); };
+  const dirB = document.getElementById("dirBtn");
+  if(dirB) dirB.onclick = () => {
+    S.dir = S.dir==="en2de" ? "de2en" : "en2de";
+    S.options=null; buildQueue(); render();
+  };
+  view.querySelectorAll("[data-mode]").forEach(b => b.onclick = () => {
+    const was = S.mode;
+    S.mode = b.dataset.mode; S.revealed=false; S.answered=null; S.options=null;
+    if(was === "cloze" || S.mode === "cloze") buildQueue();
+    render();
+  });
+  const flip = document.getElementById("flip");
+  if(flip) flip.onclick = () => { S.revealed = true; render(); };
+
+  view.querySelectorAll("[data-opt]").forEach(b => b.onclick = () => {
+    S.answered = b.dataset.opt; render();
+  });
+
+  const sub = document.getElementById("submit");
+  if(sub) sub.onclick = submitTyped;
+
+  view.querySelectorAll("[data-rate]").forEach(b =>
+    b.onclick = () => rate(Number(b.dataset.rate)));
+
+  view.querySelectorAll("[data-say]").forEach(b => b.onclick = ev => {
+    ev.stopPropagation();
+    Speech.say(b.dataset.say, b);
+  });
+}
+
+function submitTyped(){
+  const inp = document.getElementById("typeIn");
+  if(!inp) return;
+  const v = current();
+  let res;
+  if(S.mode === "cloze"){
+    const cp = clozeParts(v);
+    res = checkTyped(inp.value, cp.word);
+    if(res !== "ok") {
+      const alt = checkTyped(inp.value, cp.core);
+      if(alt === "ok" || (alt === "near" && res === "no")) res = alt;
+    }
+  }else{
+    res = checkTyped(inp.value, ansSide(v));
+  }
+  S.answered = res;
+  render();
+  const el = document.getElementById("verdict");
+  if(el){
+    el.className = "verdict " + res;
+    const sol = S.mode === "cloze" ? clozeParts(v).word : ansSide(v);
+    el.innerHTML = res==="ok"   ? "Richtig."
+                 : res==="near" ? `Fast – Schreibweise prüfen.<span class="sol">${esc(sol)}</span>`
+                 :                `Noch nicht.<span class="sol">${esc(sol)}</span>`;
+  }
+}
+
+function rate(quality){
+  const v = current();
+  const tid = (S.mixedDue && S.mixedPool) ? S.mixedPool[S.i].topicId : S.topicId;
+  const r = rec(tid, S.dir, v.id);
+  if(quality === 0)       r.box = 1;
+  else if(quality === 1)  r.box = Math.max(1, r.box - 1);
+  else                    r.box = Math.min(5, r.box + 1);
+  r.due = Date.now() + INTERVALS[r.box] * DAY;
+  save();
+  S.landed = r.box;
+  S.seen++;
+  S.i++; S.revealed=false; S.answered=null; S.options=null;
+  render();
+  setTimeout(()=>{ S.landed=null; }, 500);
+}
+
+function renderDone(){
+  const c = boxCounts(S.topicId, S.dir);
+  const total = SETS[S.topicId].length;
+  view.innerHTML = `<div class="done">
+    <h2>Durchgang beendet</h2>
+    <p>${S.seen} Karten bearbeitet · ${c[4]} von ${total} in Fach 5</p>
+    <div class="controls">
+      <button class="primary" id="again">Weiter üben</button>
+      <button id="home">Themenübersicht</button>
+    </div></div>`;
+  document.getElementById("again").onclick = () => {
+    if(S.mixedDue){ S.mixedDue = false; S.view = "home"; render(); return; }
+    S.onlyDue = false; buildQueue(); S.seen = 0; render();
+  };
+  document.getElementById("home").onclick = () => { S.view="home"; S.mixedDue=false; render(); };
+  updateFoot();
+}
+
+/* =========================================================================
+   ANLEITUNG
+   Reine Anzeige. Text bewusst kurz gehalten: Schuelerinnen und Schueler
+   lesen das einmal, danach nie wieder.
+   ========================================================================= */
+function renderHelp(){
+  var d = [];
+
+  d.push('<h2>Wofür ist diese Seite?</h2>');
+  d.push('<p class="lead">Zum Lernen des Englisch-Vokabulars der Oberstufe. Alle Wörter sind nach Themen sortiert. Du kannst sie auf vier verschiedene Arten üben, und die Seite merkt sich, was du schon kannst.</p>');
+  d.push('<p>Es gibt keine Anmeldung und kein Passwort. Öffne einfach den Link.</p>');
+
+  d.push('<h2>Loslegen</h2>');
+  d.push('<ul>');
+  d.push('<li>Auf der Startseite ein Thema antippen — oder <b>Heute fällig</b>, um alle überfälligen Karten aus allen Themen gemischt zu üben.</li>');
+  d.push('<li>Wähle den Lernumfang: <b>Alles üben</b>, eine kurze Runde mit höchstens zehn Wörtern oder nur fällige Vokabeln. Danach startet die Übung.</li>');
+  d.push('<li>Bewerte ehrlich: <b>Nochmal</b>, <b>Unsicher</b> oder <b>Gewusst</b>.</li>');
+  d.push('<li>Die nächste Karte kommt automatisch.</li>');
+  d.push('</ul>');
+  d.push('<p>Zurück zur Übersicht kommst du jederzeit oben links.</p>');
+
+  d.push('<h2>Die fünf Fächer</h2>');
+  d.push('<p>Jede Vokabel steckt in einem von fünf Fächern. Die Fachübersicht ist während der Übung standardmäßig geöffnet. Du kannst sie bei Bedarf zuklappen.</p>');
+  d.push('<p>Eine neue Vokabel startet in Fach 1. Antwortest du richtig, rückt sie ein Fach weiter. Antwortest du falsch, fällt sie zurück in Fach 1. Je weiter oben eine Vokabel steht, desto seltener siehst du sie wieder:</p>');
+  d.push('<table><thead><tr><th>Fach</th><th>Du siehst die Vokabel wieder</th></tr></thead><tbody>'
+       + '<tr><td>1</td><td>sofort; einmal zusätzlich im selben Durchgang</td></tr>'
+       + '<tr><td>2</td><td>nach 1 Tag</td></tr>'
+       + '<tr><td>3</td><td>nach 2 Tagen</td></tr>'
+       + '<tr><td>4</td><td>nach 4 Tagen</td></tr>'
+       + '<tr><td>5</td><td>nach 8 Tagen</td></tr>'
+       + '</tbody></table>');
+  d.push('<p>Die Abstände bestimmen, wann eine Vokabel wieder fällig ist. Bei <b>Alles üben</b> werden auch noch nicht fällige Wörter abgefragt. Übe lieber <b>jeden Tag zehn Minuten</b> üben als einmal pro Woche eine Stunde.</p>');
+  d.push('<p>Die Zahl in jedem Fach zeigt, wie viele Vokabeln dieses Themas gerade dort liegen. Ziel ist, alles nach Fach 5 zu bekommen.</p>');
+
+  d.push('<h2>Die vier Übungsarten</h2>');
+  d.push('<p>Oben rechts kannst du umschalten. Alle vier greifen auf dieselben Vokabeln und dasselbe Fächersystem zu.</p>');
+  d.push('<h3>Karteikarte</h3>');
+  d.push('<p>Wort ansehen, überlegen, umdrehen, selbst bewerten. Am schnellsten, aber du musst ehrlich zu dir sein.</p>');
+  d.push('<h3>Auswahl</h3>');
+  d.push('<p>Vier Antworten, eine ist richtig. Gut zum Aufwärmen. Achtung: Wiedererkennen ist leichter als Wissen.</p>');
+  d.push('<h3>Tippen</h3>');
+  d.push('<p>Du schreibst die Übersetzung. Kleine Abweichungen können als „Fast" erscheinen. Sie zählen nicht als vollständig richtig; deine Eingabe und die Lösung helfen dir beim Vergleichen.</p>');
+  d.push('<h3>Lückensatz</h3>');
+  d.push('<p>Ein englischer Beispielsatz mit einer Lücke, darunter die deutsche Bedeutung. Du schreibst das fehlende englische Wort. Hier lernst du nicht nur die Vokabel, sondern auch, wie sie im Satz benutzt wird — genau das brauchst du beim Schreiben.</p>');
+
+  d.push('<h2>Abfragerichtung</h2>');
+  d.push('<p>Standardmäßig übst du <b>DE → EN</b>: Du siehst Deutsch und antwortest auf Englisch. Mit dem Richtungsknopf schaltest du um. <b>EN → DE</b> heißt: Du siehst Englisch und sagst die deutsche Bedeutung. <b>DE → EN</b> ist die schwerere und für Klausuren wichtigere Richtung.</p>');
+  d.push('<p>Beide Richtungen haben getrennte Fächer. Eine Vokabel kann in der einen Richtung in Fach 5 stehen und in der anderen in Fach 1.</p>');
+
+  d.push('<h2>Aussprache</h2>');
+  d.push('<p>Neben dem englischen Wort steht die Lautschrift, daneben ein Lautsprecher-Symbol. Antippen liest das Wort vor. Am Beispielsatz gibt es ein zweites, kleineres Symbol für den ganzen Satz. Am Computer geht es auch mit der Taste <span class="kbd">S</span>.</p>');
+  d.push('<p>Die Stimme kommt von deinem Gerät und klingt je nach Handy unterschiedlich gut. Die Lautschrift ist die verlässlichere Angabe.</p>');
+  d.push('<p><button class="switch" id="sptest">Aussprache testen</button> '
+       + '<span id="spout" style="font-family:var(--mono);font-size:11.5px;color:var(--ink-soft)"></span></p>');
+  d.push('<p class="lead" style="font-size:13.5px">Hörst du nichts, prüfe Lautstärke, Audioausgabe und die Spracheinstellungen deines Geräts. Bleibt es still, gib die Zeile neben dem Knopf an deine Lehrkraft weiter.</p>');
+
+  d.push('<h2>Tastatur am Computer</h2>');
+  d.push('<table><tbody>'
+       + '<tr><td><span class="kbd">Leertaste</span></td><td>Karte umdrehen</td></tr>'
+       + '<tr><td><span class="kbd">1</span> <span class="kbd">2</span> <span class="kbd">3</span></td><td>Nochmal / Unsicher / Gewusst</td></tr>'
+       + '<tr><td><span class="kbd">Enter</span></td><td>Eingabe prüfen</td></tr>'
+       + '<tr><td><span class="kbd">S</span></td><td>Aussprache abspielen</td></tr>'
+       + '</tbody></table>');
+
+  d.push('<h2>Dein Lernstand</h2>');
+  d.push('<div class="warnbox"><b>Wichtig:</b> Dein Fortschritt wird nur in dem Browser gespeichert, in dem du übst. Er wandert nicht zwischen Handy und Computer, und er verschwindet, wenn du die Browserdaten löschst.</div>');
+  d.push('<p>Ganz unten auf der Seite gibt es <b>Fortschritt sichern</b>. Du bekommst einen <b>Code</b> — eine lange Zeichenkette. Kopiere ihn und schick ihn dir selbst per Mail oder notiere ihn. Mit <b>Fortschritt laden</b> gibst du den Code auf einem anderen Gerät ein, und dein Lernstand ist wiederhergestellt.</p>');
+  d.push('<p>Alternativ kannst du beim Laden auch eine JSON-Datei verwenden, falls du eine ältere Sicherung hast.</p>');
+
+  d.push('<h2>Alle Vokabeln nachschlagen</h2>');
+  d.push('<p>Auf der Jahrgangsübersicht findest du <b>Vokabeln nachschlagen</b>. Dort findest du:</p>');
+  d.push('<ul>');
+  d.push('<li>ein <b>Suchfeld</b> — es durchsucht Englisch, Deutsch und die Beispielsätze;</li>');
+  d.push('<li>Schalter für <b>Beispielsätze</b> und <b>Lautschrift</b>;</li>');
+  d.push('<li><b>Drucken</b> — druckt die aufgeklappten Abschnitte und berücksichtigt den Suchfilter. Zugeklappte Abschnitte werden vollständig ausgelassen und erzeugen keine zusätzlichen leeren Seiten. Im Druckdialog kannst du auch als PDF speichern.</li>');
+  d.push('</ul>');
+
+  d.push('<h2>Schriftgröße</h2>');
+  d.push('<p>Unten auf der Seite findest du <b>A−</b> und <b>A+</b>. Damit vergrößerst oder verkleinerst du die Schrift. Die Einstellung bleibt gespeichert.</p>');
+
+  d.push('<div class="teacher">');
+  d.push('<h2>Für Kolleginnen und Kollegen</h2>');
+  d.push('<p>Die Website benötigt kein Lernkonto. Der Lernstand wird lokal im Browser gespeichert; es gibt keine automatische Synchronisierung zwischen Geräten.</p>');
+  d.push('<p>Mit <b>CSV</b> öffnest du die Exportauswahl. Du kannst alle Vokabeln dieses Jahrgangs oder nur ausgewählte Wörter exportieren. Die Datei enthält genau drei Spalten: <b>Unit, Englisch, Deutsch</b>. Für eine Auswahl markierst du einzelne Wörter oder übernimmst die sichtbaren Suchergebnisse. Der Export aller Wörter bleibt vom Suchfilter unabhängig.</p>');
+  d.push('<p>Alle Übersetzungen, Kollokationen und Beispielsätze sind eigenständig formuliert. Die Auswahl der Stichwörter orientiert sich an den Korridorthemen und am eingeführten Lehrwerk.</p>');
+  d.push('</div>');
+
+  view.innerHTML =
+      '<div class="sessionbar">'
+    +   '<button class="linkbtn" id="hback">\u2190 Themenübersicht</button>'
+    +   '<div class="switches"><button class="switch" id="hprint">Drucken</button></div>'
+    + '</div>'
+    + '<div class="doc">' + d.join("") + '</div>';
+
+  document.getElementById("hback").onclick = function(){ S.view = "home"; render(); };
+  document.getElementById("hprint").onclick = function(){ try{ window.print(); }catch(e){} };
+
+  var st = document.getElementById("sptest"), out = document.getElementById("spout");
+  if(st && out){
+    st.onclick = function(){
+      Speech.say("This is a test of the pronunciation.");
+      out.textContent = Speech.status();
+      setTimeout(function(){ out.textContent = Speech.status(); }, 1200);
+    };
+    out.textContent = Speech.status();
+  }
+  updateFoot();
+}
+
+/* =========================================================================
+   LISTENANSICHT
+   Reine Anzeige: liest die Vokabeln, schreibt nichts und ruehrt den
+   Lernstand nicht an. Themen sind eingeklappt; die Suche oeffnet sie.
+   ========================================================================= */
+var LIST_PREFS = {ex:false, ipa:true};   // Beispielsaetze aus, Lautschrift an
+
+function renderList(){
+  var grand = 0, h = "";
+
+  for(var i = 0; i < TOPICS.length; i++){
+    var t = TOPICS[i];
+    var entries = SETS[t.id];
+    if(!entries || !entries.length) continue;
+    grand += entries.length;
+
+    var lyc = yearColor(t.year);
+    h += '<details class="lsec" data-sec="' + t.id + '" style="border-left:3px solid ' + lyc + '"><summary>'
+       + '<span><span class="lyear" style="background:' + lyc + '">' + esc(t.year) + '</span>' + esc(t.name) + '</span>'
+       + '<span class="lnum">' + entries.length + '</span></summary><div class="lbody">';
+
+    for(var j = 0; j < entries.length; j++){
+      var e = entries[j];
+      var hay = (e.en + " " + e.de + " " + (e.pos||"") + " "
+               + (e.collocations||"") + " " + (e.example_en||"")).toLowerCase();
+      h += '<div class="vrow" data-s="' + esc(hay) + '">'
+         + '<div><span class="ven">' + esc(e.en) + '</span>'
+         + (e.pos ? '<span class="vpos">' + esc(e.pos) + '</span>' : "")
+         + (e.ipa ? '<span class="vipa">/' + esc(e.ipa.replace(/^\/|\/$/g, "")) + '/</span>' : "")
+         + '</div>'
+         + '<div class="vde">' + esc(e.de) + '</div>'
+         + (e.example_en ? '<div class="vex">' + esc(e.example_en) + '</div>' : "")
+         + '</div>';
+    }
+    h += "</div></details>";
+  }
+
+  view.innerHTML =
+      '<div class="sessionbar">'
+    +   '<button class="linkbtn" id="lback">\u2190 Themen\u00fcbersicht</button>'
+    +   '<div class="switches">'
+    +     '<button class="switch" id="lex" aria-pressed="' + LIST_PREFS.ex + '">Beispiels\u00e4tze</button>'
+    +     '<button class="switch" id="lipa" aria-pressed="' + LIST_PREFS.ipa + '">Lautschrift</button>'
+    +     '<button class="switch" id="lopen">Alle aufklappen</button>'
+    +     '<button class="switch" id="lprint">Drucken</button>'
+    +     '<button class="switch" id="lcsv">CSV</button>'
+    +   '</div>'
+    + '</div>'
+    + '<div class="listctl">'
+    +   '<input type="search" id="lq" placeholder="Suchen \u2013 englisch, deutsch oder im Beispielsatz" '
+    +     'autocomplete="off" autocapitalize="off" spellcheck="false">'
+    + '</div>'
+    + '<div class="listcount" id="lcount">' + grand + ' Vokabeln in '
+    +   Object.keys(SETS).length + ' Themen \u00b7 Thema antippen zum \u00d6ffnen</div>'
+    + '<div class="vlist" id="vlist">' + h + '</div>'
+    + '<div class="noresult" id="lnone" hidden>Kein Treffer.</div>';
+
+  var box = document.getElementById("vlist");
+  applyListPrefs(box);
+
+  document.getElementById("lback").onclick = function(){ S.view = "home"; render(); };
+  document.getElementById("lex").onclick = function(){
+    LIST_PREFS.ex = !LIST_PREFS.ex;
+    this.setAttribute("aria-pressed", LIST_PREFS.ex);
+    applyListPrefs(box);
+  };
+  document.getElementById("lipa").onclick = function(){
+    LIST_PREFS.ipa = !LIST_PREFS.ipa;
+    this.setAttribute("aria-pressed", LIST_PREFS.ipa);
+    applyListPrefs(box);
+  };
+  document.getElementById("lopen").onclick = function(){
+    var secs = box.querySelectorAll("details.lsec");
+    var anyClosed = false;
+    for(var i = 0; i < secs.length; i++){ if(!secs[i].open) anyClosed = true; }
+    for(var k = 0; k < secs.length; k++){ secs[k].open = anyClosed; }
+    this.textContent = anyClosed ? "Alle zuklappen" : "Alle aufklappen";
+  };
+  document.getElementById("lprint").onclick = function(){
+    try{ window.print(); }catch(e){}
+  };
+  document.getElementById("lcsv").onclick = function(){ exportCsv(box); };
+
+  var q = document.getElementById("lq");
+  q.oninput = function(){ filterList(box, q.value); };
+
+  updateFoot();
+}
+
+/* Exportiert die gerade sichtbaren Zeilen als Tabelle (Tab-getrennt,
+   mit BOM, damit Excel die Umlaute richtig liest). */
+function exportCsv(box){
+  var cols = ["Thema","en","de","pos","ipa","collocations","example_en"];
+  var rows = [cols.join("\t")];
+  var n = 0;
+
+  for(var i = 0; i < TOPICS.length; i++){
+    var t = TOPICS[i];
+    var entries = SETS[t.id];
+    if(!entries) continue;
+    var sec = box.querySelector('details[data-sec="' + t.id + '"]');
+    if(!sec || sec.className.indexOf("off") !== -1) continue;
+    var domRows = sec.querySelectorAll(".vrow");
+
+    for(var j = 0; j < entries.length; j++){
+      if(domRows[j] && domRows[j].className.indexOf("off") !== -1) continue;
+      var e = entries[j];
+      var cell = function(x){ return String(x == null ? "" : x).replace(/[\t\r\n]+/g, " "); };
+      rows.push([t.name, e.en, e.de, e.pos || "", e.ipa || "",
+                 e.collocations || "", e.example_en || ""].map(cell).join("\t"));
+      n++;
+    }
+  }
+
+  if(!n){ alert("Nichts zu exportieren \u2013 die Suche liefert keine Treffer."); return; }
+  try{
+    var blob = new Blob(["\ufeff" + rows.join("\n")], {type:"text/csv;charset=utf-8"});
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "vokabeln.csv";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }catch(err){ alert("Der Export hat nicht funktioniert: " + err.message); }
+}
+
+function applyListPrefs(box){
+  box.className = "vlist" + (LIST_PREFS.ex ? "" : " hide-ex")
+                          + (LIST_PREFS.ipa ? "" : " hide-ipa");
+}
+
+function filterList(box, raw){
+  var term = String(raw || "").toLowerCase().trim();
+  var secs = box.querySelectorAll("details.lsec");
+  var hits = 0;
+
+  for(var i = 0; i < secs.length; i++){
+    var sec = secs[i];
+    var rows = sec.querySelectorAll(".vrow");
+    var shown = 0;
+    for(var j = 0; j < rows.length; j++){
+      var match = !term || rows[j].getAttribute("data-s").indexOf(term) !== -1;
+      rows[j].className = "vrow" + (match ? "" : " off");
+      if(match) shown++;
+    }
+    hits += shown;
+    sec.className = "lsec" + (shown ? "" : " off");
+    if(term) sec.open = shown > 0;
+  }
+
+  document.getElementById("lnone").hidden = !(term && hits === 0);
+  document.getElementById("lcount").textContent = term
+    ? hits + " Treffer f\u00fcr \u201e" + raw.trim() + "\u201c"
+    : box.querySelectorAll(".vrow").length + " Vokabeln in "
+      + Object.keys(SETS).length + " Themen \u00b7 Thema antippen zum \u00d6ffnen";
+}
+
+/* =========================================================================
+   TASTATUR
+   ========================================================================= */
+document.addEventListener("keydown", e => {
+  if(S.view !== "session") return;
+  const typing = document.activeElement && document.activeElement.id === "typeIn";
+  if(typing && e.key === "Enter"){ e.preventDefault(); submitTyped(); return; }
+  if(typing && !S.answered) return;
+  if((e.key === "s" || e.key === "S") && current()){
+    e.preventDefault(); Speech.say(current().en); return;
+  }
+  if(e.key === " " && S.mode === "card" && !S.revealed){
+    e.preventDefault(); S.revealed = true; render(); return;
+  }
+  if((S.revealed || S.answered) && ["1","2","3"].includes(e.key)){
+    e.preventDefault(); rate(Number(e.key) - 1);
+  }
+});
+
+/* =========================================================================
+   EXPORT / IMPORT
+   ========================================================================= */
+  /* ---- Fortschritt als komprimierten Code speichern / laden ---- */
+function encodeProgress(){
+  try{
+    var j = JSON.stringify(progress);
+    // base64url-kodiert, damit der Code kopierbar ist
+    return btoa(unescape(encodeURIComponent(j)))
+      .replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+  }catch(e){ return ""; }
+}
+function decodeProgress(code){
+  try{
+    var b = String(code).trim().replace(/-/g,"+").replace(/_/g,"/");
+    while(b.length % 4) b += "=";
+    var j = decodeURIComponent(escape(atob(b)));
+    return JSON.parse(j);
+  }catch(e){ return null; }
+}
+
+document.getElementById("exportBtn").onclick = () => {
+  const code = encodeProgress();
+  if(!code){ alert("Kein Fortschritt vorhanden."); return; }
+  // Code in einem Overlay anzeigen
+  const existing = document.getElementById("codeOverlay");
+  if(existing){ existing.remove(); }
+  const d = document.createElement("div");
+  d.id = "codeOverlay";
+  d.innerHTML = '<div class="codebox"><h3>Dein Fortschrittscode</h3>'
+    + '<p style="font-size:13.5px;margin:0 0 6px">Kopiere diesen Code und bewahre ihn auf '
+    + '(z.\u00a0B. per Mail an dich selbst). Mit ihm kannst du deinen Lernstand auf einem '
+    + 'anderen Ger\u00e4t wiederherstellen.</p>'
+    + '<div class="codeout">' + code + '</div>'
+    + '<div class="bar">'
+    + '<button class="small" id="codeCopy">Code kopieren</button> '
+    + '<button class="small" id="codeClose">Schlie\u00dfen</button>'
+    + '</div></div>';
+  document.getElementById("view").parentNode.insertBefore(d, document.getElementById("view"));
+  document.getElementById("codeCopy").onclick = async () => {
+    try{ await navigator.clipboard.writeText(code);
+      document.getElementById("codeCopy").textContent = "Kopiert!";
+    }catch(e){
+      document.getElementById("codeCopy").textContent = "Bitte manuell markieren";
+    }
+    setTimeout(()=>{ const b = document.getElementById("codeCopy"); if(b) b.textContent = "Code kopieren"; }, 2200);
+  };
+  document.getElementById("codeClose").onclick = () => d.remove();
+};
+
+document.getElementById("importBtn").onclick = () => {
+  const existing = document.getElementById("codeOverlay");
+  if(existing){ existing.remove(); }
+  const d = document.createElement("div");
+  d.id = "codeOverlay";
+  d.innerHTML = '<div class="codebox"><h3>Fortschritt laden</h3>'
+    + '<p style="font-size:13.5px;margin:0 0 6px">F\u00fcge deinen Fortschrittscode hier ein:</p>'
+    + '<input type="text" class="codein" id="codeIn" placeholder="Code einf\u00fcgen" autocomplete="off">'
+    + '<div class="codemsg" id="codeMsg"></div>'
+    + '<div class="bar" style="margin-top:10px">'
+    + '<button class="small primary" id="codeApply">\u00dcbernehmen</button> '
+    + '<button class="small" id="codeFile">Stattdessen Datei laden</button> '
+    + '<button class="small" id="codeClose2">Abbrechen</button>'
+    + '</div></div>';
+  document.getElementById("view").parentNode.insertBefore(d, document.getElementById("view"));
+  document.getElementById("codeApply").onclick = () => {
+    const inp = document.getElementById("codeIn");
+    const msg = document.getElementById("codeMsg");
+    const result = decodeProgress(inp.value);
+    if(!result){ msg.className = "codemsg err"; msg.textContent = "Der Code ist ung\u00fcltig oder leer."; return; }
+    progress = result; save(); render();
+    msg.className = "codemsg ok"; msg.textContent = "Lernstand wiederhergestellt!";
+    setTimeout(() => d.remove(), 1500);
+  };
+  document.getElementById("codeFile").onclick = () => {
+    d.remove();
+    document.getElementById("importFile").click();
+  };
+  document.getElementById("codeClose2").onclick = () => d.remove();
+};
+
+document.getElementById("importFile").onchange = ev => {
+  const f = ev.target.files[0]; if(!f) return;
+  const fr = new FileReader();
+  fr.onload = () => {
+    try{ progress = JSON.parse(fr.result); save(); render(); }
+    catch(e){ alert("Die Datei konnte nicht gelesen werden."); }
+  };
+  fr.readAsText(f);
+};
+
+/* ---- Schriftgroesse ---- */
+var fontSize = 100;
+try{
+  var stored = Number(Store.get("vt:fontsize"));
+  if(stored >= 80 && stored <= 150) fontSize = stored;
+}catch(e){}
+function applyFontSize(){
+  document.querySelector(".wrap").style.fontSize = fontSize + "%";
+  var lb = document.getElementById("szLabel");
+  if(lb) lb.textContent = fontSize + "%";
+  try{ Store.set("vt:fontsize", String(fontSize)); }catch(e){}
+}
+applyFontSize();
+document.getElementById("szDown").onclick = function(){
+  fontSize = Math.max(80, fontSize - 10); applyFontSize();
+};
+document.getElementById("szUp").onclick = function(){
+  fontSize = Math.min(150, fontSize + 10); applyFontSize();
+};
+
+function updateFoot(){
+  let done = 0, all = 0;
+  for(const t of TOPICS){
+    if(!SETS[t.id]) continue;
+    all += SETS[t.id].length;
+    done += boxCounts(t.id, S.dir).slice(2).reduce((a,b)=>a+b,0);
+  }
+  document.getElementById("footstat").textContent =
+    `${done}/${all} SICHER · ${dirLabel()}`;
+}
+
+/* =========================================================================
+   START
+   ========================================================================= */
+function render(){
+  if(S.view === "home") return renderHome();
+  if(S.view === "list") return renderList();
+  if(S.view === "help") return renderHelp();
+  return renderSession();
+}
+
+function showWarn(html){ document.getElementById("warn").innerHTML = html; }
+
+if(!Store.persistent){
+  showWarn(`<div class="warn"><b>Vorschau-Modus:</b> Dieser Browserkontext erlaubt keinen
+     dauerhaften Speicher. Der Fortschritt gilt nur fuer diese Sitzung. Lade die Datei
+     herunter und oeffne sie per Doppelklick \u2013 dort bleibt der Lernstand erhalten.</div>`);
+}
+
+try{
+  render();
+}catch(err){
+  showWarn('<div class="warn"><b>Beim Aufbau der Seite ist ein Fehler aufgetreten.</b><br>'
+    + '<span style="font-family:var(--mono);font-size:11px">' + err.message + '</span></div>');
+}
+</script>
+
+<script src="../../assets/qr.js?v=20260919-bili"></script>
+<script src="../../assets/learning.js?v=20260919-bili"></script>
+
+<link rel="stylesheet" href="../../assets/feedback.css?v=20260919-bili">
+<script src="../../assets/feedback.js?v=20260919-bili"></script>
+
+<link rel="stylesheet" href="design/preview.css?v=20260917-teacher-prompt">
