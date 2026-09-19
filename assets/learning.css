@@ -323,14 +323,13 @@ body{-webkit-tap-highlight-color:transparent}
   .bili-head .bili-chev,.card .menu-arrow{transition:transform var(--t-base) var(--ease-out)}
   .card:hover .menu-arrow{transform:translateX(4px)}
 
-  /* Auftritt mit Versatz: die Liste baut sich auf, statt auf einmal da zu
-     sein. --i setzt das Skript beim Ansichtswechsel. */
-  .eb-in{animation:eb-auftritt 600ms var(--ease-out) both;
-    animation-delay:calc(var(--i,0) * 60ms)}
-  @keyframes eb-auftritt{from{opacity:0;transform:translateY(6px)}}
-  /* Die Lernfaecher fuellen sich von links, kurz nach ihrer Kachel. */
-  .eb-in .minirail i{animation:eb-fuellen 650ms var(--ease-out) both;
-    animation-delay:calc(var(--i,0) * 60ms + 270ms);transform-origin:left center}
+  /* Der erste Aufbau bekommt einen weichen Rand, mehr nicht: Die Liste
+     blendet als ein Stueck ein. Vorher trat jede Gruppe einzeln und
+     versetzt auf - vier getrennte Ereignisse nacheinander, die das Auge
+     als Aufblaettern liest. Ohne Versatz und ohne Bewegung gibt es nichts,
+     dem man folgen koennte, also auch nichts, das stocken kann. */
+  .eb-ein{animation:eb-einblenden 220ms var(--ease-out) both}
+  @keyframes eb-einblenden{from{opacity:0}}
   @keyframes eb-fuellen{from{transform:scaleX(0)}}
   .assignment-bar-fill{animation:eb-fuellen 700ms var(--ease-out) both;transform-origin:left center}
 }
