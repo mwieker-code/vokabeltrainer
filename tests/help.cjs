@@ -9,7 +9,14 @@ for(const folder of ['year8','year5','year6','year9','year10','oberstufe','year6
  vm.runInContext('renderHelp()',ctx);
  const text=dom.window.document.querySelector('.doc').textContent;
  if(!irregular){
-  for(const phrase of ['Unit, Englisch, Deutsch','höchstens zehn','Später fortsetzen','Standardmäßig übst du DE → EN','Töne und Animationen','als PDF speichern'])assert(text.includes(phrase),folder+': '+phrase);
+  for(const phrase of ['Unit, Englisch, Deutsch','höchstens zehn','Später fortsetzen','Standardmäßig übst du DE → EN','Töne und Animationen','als PDF speichern','Zum Home-Bildschirm','Fortschritt sichern'])assert(text.includes(phrase),folder+': '+phrase);
+  /* Der Startbildschirm-Abschnitt steht hinter "Loslegen": Dort geht es
+     darum, wie man die Seite oeffnet. Geprueft wird die Reihenfolge der
+     Ueberschriften, nicht ihre Nummer. */
+  const kopf=[...dom.window.document.querySelectorAll('.doc h2')].map(h=>h.textContent.trim());
+  const nach=n=>kopf.findIndex(k=>k.startsWith(n));
+  assert(nach('Basecamp auf den Startbildschirm')>nach('Loslegen'),folder+': Startbildschirm vor Loslegen');
+  assert(nach('Basecamp auf den Startbildschirm')<nach('Die fünf Fächer'),folder+': Startbildschirm hinter den Fächern');
   for(const stale of ['gerade sichtbaren Einträge','example_en','Tippfehler werden verziehen','Die erste Karte erscheint'])assert(!text.includes(stale),folder+': stale '+stale);
  }else{
   assert(text.includes('beat – beat – beaten'));

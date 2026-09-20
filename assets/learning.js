@@ -591,9 +591,40 @@ ${vocabulary}`;
         +' \u00b7 zuletzt: '+last;
     };
   }
+  /* Der Abschnitt gehoert hinter "Loslegen": Dort steht, wie man die
+     Seite oeffnet, und das Ablegen auf dem Startbildschirm ist nichts
+     anderes. Gesucht wird die Ueberschrift, nicht eine Position -
+     sonst verrutscht der Abschnitt, sobald die Hilfe waechst. */
+  const STARTBILDSCHIRM =
+    '<h2>Basecamp auf den Startbildschirm</h2>'
+  + '<p>Auf dem iPhone kannst du Basecamp ablegen wie eine App: in Safari '
+  + 'unten das Teilen-Symbol antippen (das Quadrat mit dem Pfeil nach oben), '
+  + '<b>Zum Home-Bildschirm</b> wählen, mit <b>Hinzufügen</b> bestätigen. '
+  + 'Danach startest du über das Zelt-Symbol. Die Adressleiste und die '
+  + 'Knöpfe von Safari sind dann weg – beim Tippen wird dadurch unten '
+  + 'Platz frei.</p>'
+  + '<p>Auf Android-Handys legst du über das Menü mit den drei Punkten '
+  + 'ebenfalls eine Verknüpfung an. Sie öffnet den Trainer im Browser, '
+  + 'nicht als eigene App.</p>'
+  + '<div class="warnbox"><b>Vorher sichern:</b> Der Lernstand auf dem '
+  + 'Startbildschirm kann vom Stand in Safari getrennt sein. Hast du schon '
+  + 'in Safari geübt, hole dir unten auf der Seite mit <b>Fortschritt '
+  + 'sichern</b> die Datei und lade sie beim ersten Start über '
+  + '<b>Fortschritt laden</b> wieder ein.</div>';
+
+  function startbildschirmEinsetzen(doc){
+    const kopf=[...doc.querySelectorAll('h2')].find(h=>/^Loslegen/.test(h.textContent.trim()));
+    if(!kopf){ doc.insertAdjacentHTML('beforeend',STARTBILDSCHIRM); return; }
+    let ziel=kopf.nextElementSibling;
+    while(ziel && ziel.tagName!=='H2') ziel=ziel.nextElementSibling;
+    if(ziel) ziel.insertAdjacentHTML('beforebegin',STARTBILDSCHIRM);
+    else doc.insertAdjacentHTML('beforeend',STARTBILDSCHIRM);
+  }
+
   renderHelp = function(){
     originalHelp();
     const doc=view.querySelector('.doc');
+    if(doc)startbildschirmEinsetzen(doc);
     if(doc)doc.insertAdjacentHTML('afterbegin','<h2>Dein Lernumfang</h2><p>Wähle einen Part, eine Unit oder ein Thema. Alles üben umfasst alle Wörter deiner Auswahl, auch bereits gelernte. Alternativ wählst du höchstens zehn Wörter, nur fällige Vokabeln oder die Blitzrunde. Fehler werden nach dem ersten Durchgang einmal wiederholt. Mit <b>Später fortsetzen</b> verlässt du die Runde. Auf der Jahrgangsübersicht kannst du sie im selben Browser fortsetzen. Pro Jahrgang wird eine Runde gespeichert; eine neue Runde ersetzt sie. Eine noch ungeprüfte Texteingabe wird nicht gespeichert. Ein Wechsel der Übungsart startet den gewählten Lernumfang neu.</p><p>Beim Tippen bleiben deine Eingabe und die Lösung sichtbar. Markierte Buchstaben zeigen Abweichungen. Falsche Antworten werden nicht als gewusst gespeichert, auch wenn du „Gewusst“ antippst.</p><h2>Blitzrunde</h2><p>60 Sekunden gegen die Zeit: Du siehst die deutsche Bedeutung und tippst das englische Wort, so schnell du kannst. Falsche oder ausgelassene Wörter werden am Ende aufgelistet. Die Blitzrunde zählt nicht auf deine fünf Lernfächer ein; dein normaler Lernstand bleibt unberührt.</p><h2>Töne und Animationen</h2><p>Unten auf der Seite kannst du Töne und Animationen getrennt ein- oder ausschalten. Töne sind anfangs ausgeschaltet. Die Einstellungen werden im Browser gespeichert. Die Aussprache über das Lautsprecher-Symbol funktioniert unabhängig vom Schalter für Rückmeldetöne. Bei reduzierter Bewegung in den Geräteeinstellungen werden Animationen unterdrückt.</p>');
   };
 
@@ -1301,6 +1332,10 @@ ${vocabulary}`;
     }
 
     function pflege(){
+      /* Der Beobachter kann noch einmal anschlagen, wenn das Dokument
+         schon fort ist - in Testumgebungen, die das Fenster schliessen.
+         Dann gibt es nichts mehr zu pflegen. */
+      if(typeof document === 'undefined' || !document.body) return;
       const runde = klein.matches && S.view === 'session';
       document.body.classList.toggle('eb-runde', runde);
 
