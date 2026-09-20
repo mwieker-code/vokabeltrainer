@@ -58,6 +58,34 @@ const modus=(s,name)=>[...s.d.querySelectorAll('button')].find(b=>b.textContent.
   console.log('App-Erkennung: nur vom Startbildschirm, nicht im Browser');
 }
 
+/* Die Blitzrunde hat ihr eigenes Eingabefeld und ihre eigene Ansicht.
+   Sie blieb dadurch als einzige bei der Systemtastatur. */
+{
+  const t=seite('year5',390);
+  t.d.querySelector('#practiceAcross').click();
+  [...t.d.querySelectorAll('#view button')].find(b=>/Blitz/i.test(b.textContent)).click();
+  assert.equal(t.lauf('S.view'),'pvblitz','Blitzrunde startet nicht');
+  const feld=t.d.getElementById('pvTypeIn');
+  assert.ok(feld,'Blitzrunde: kein Eingabefeld');
+  assert.ok(feld.hasAttribute('readonly'),'Blitzrunde: Systemtastatur nicht unterdrueckt');
+  const feldchen=t.d.querySelector('.eb-tasten');
+  assert.ok(feldchen,'Blitzrunde: kein Tastenfeld');
+  assert.equal(feldchen.dataset.sprache,'en','Blitzrunde: es wird immer englisch geantwortet');
+  assert.equal(t.d.body.dataset.ebAntwort,'offen',
+    'Blitzrunde: die Seite gibt den Platz des Tastenfelds frei');
+
+  const tippe=k=>feldchen.querySelector('.tk[data-k="'+k+'"]')
+    .dispatchEvent(new t.w.Event('pointerdown',{bubbles:true}));
+  'cat'.split('').forEach(tippe);
+  assert.equal(feld.value,'cat','Blitzrunde: Eingabe kommt nicht an');
+  const vorher=t.lauf('S.pv.i');
+  tippe('\u23ce');
+  assert.equal(t.lauf('S.pv.i'),vorher+1,
+    'Blitzrunde: die Prüfen-Taste bringt kein neues Wort');
+  assert.ok(t.d.querySelector('.eb-tasten'),'Blitzrunde: Tastenfeld verschwindet nach dem Prüfen');
+  console.log('Blitzrunde: eigenes Tastenfeld, englische Belegung, Prüfen-Taste');
+}
+
 for(const folder of ['year5','year9','oberstufe','bili/history']){
   /* ---- Telefon ---- */
   const t=seite(folder,390);
