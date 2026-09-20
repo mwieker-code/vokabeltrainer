@@ -605,31 +605,6 @@ body{-webkit-tap-highlight-color:transparent}
      Entscheidung wieder weg. */
   body.eb-runde .switches #tastenprobe{flex:0 0 auto;font-size:12px}
 
-  /* ---- Die Seillaenge ----
-     Basecamp heisst die Seite, und Fortschritt hat in dieser Welt eine
-     Form: Hoehe. Deshalb keine Flamme, sondern eine Reihe steigender
-     Marken. Sie sitzt im Streifen, den das kleinere Tastenfeld frei
-     macht, nimmt davon knapp die Haelfte und laesst den Rest Luft. */
-  .eb-serie{display:flex;align-items:center;justify-content:center;gap:10px;
-    margin:0 0 10px;padding:7px 14px;align-self:center;
-    background:#E7EEEC;border-radius:999px;width:fit-content;margin-inline:auto}
-  .eb-seil{display:flex;align-items:flex-end;gap:3px;height:16px}
-  .eb-seil i{display:block;width:5px;border-radius:2px;background:#C3CFCC}
-  .eb-seil i:nth-child(1){height:6px}
-  .eb-seil i:nth-child(2){height:9px}
-  .eb-seil i:nth-child(3){height:12px}
-  .eb-seil i:nth-child(4){height:14px}
-  .eb-seil i:nth-child(5){height:16px}
-  .eb-seil i.an{background:var(--petrol)}
-  .eb-serie .eb-zahl{font-size:13px;font-weight:600;color:var(--petrol);line-height:1}
-  .eb-serie .eb-leise{font-weight:400;color:var(--ink-soft)}
-  /* Ist eine Seillaenge voll, faerbt sich die Zeile kurz kraeftiger -
-     ohne Sprung, ohne Ausrufezeichen. */
-  .eb-serie[data-voll="ja"]{background:var(--petrol)}
-  .eb-serie[data-voll="ja"] .eb-seil i.an{background:#fff}
-  .eb-serie[data-voll="ja"] .eb-zahl{color:#fff}
-  .eb-serie[data-voll="ja"] .eb-leise{color:#CFE0DC}
-
   /* ---- Quer gehalten ----
      Karte links, Tastenfeld rechts. Uebereinander ist kein Platz: 430
      Punkte Hoehe tragen keine Karte und vier Tastenreihen zugleich.
