@@ -1152,11 +1152,14 @@ ${vocabulary}`;
       const runde = klein.matches && S.view === 'session';
       document.body.classList.toggle('eb-runde', runde);
 
-      /* Die Schalterzeile scrollt waagerecht. Ohne Hinweis sieht man
-         nicht, dass rechts noch etwas steht. */
-      const schalter = document.querySelector('.sessionbar .switches');
-      if(schalter) schalter.classList.toggle('eb-mehr',
-        runde && schalter.scrollWidth > schalter.clientWidth + 4);
+      /* Der Richtungsschalter zieht auf dem Telefon in die
+         Fortschrittszeile um - in der Schalterzeile fehlte sonst der
+         Platz fuer die vierte Uebungsart. */
+      const richtung = document.getElementById('dirBtn');
+      const leiste = document.querySelector('.round-progress');
+      if(richtung && leiste && runde && richtung.parentElement !== leiste){
+        leiste.appendChild(richtung);
+      }
 
       const tasten = klein.matches && tippt();
       document.body.classList.toggle('eb-tippen', tasten);
@@ -1164,7 +1167,10 @@ ${vocabulary}`;
 
       const feld = feldVon();
       if(feld){
-        if(tasten){ feld.setAttribute('readonly',''); feld.blur(); }
+        /* readonly haelt die Systemtastatur fern; der Fokus bleibt, damit
+           die Schreibmarke blinkt und sichtbar ist, dass man sofort
+           tippen kann - auch beim naechsten Wort nach der Bewertung. */
+        if(tasten){ feld.setAttribute('readonly',''); }
         else feld.removeAttribute('readonly');
       }
       /* Wechselt die Abfragerichtung oder die Uebungsart, gilt wieder die
@@ -1182,6 +1188,11 @@ ${vocabulary}`;
 
     const vorher = render;
     render = function(){ vorher(); pflege(); };
+    /* Der Ansichtswechsel blendet ueber und tauscht den Inhalt erst
+       danach aus - nach render() steht also noch der alte Stand. Der
+       Beobachter greift, wenn der neue da ist. */
+    const beobachter = new MutationObserver(pflege);
+    beobachter.observe(view, {childList:true});
     klein.addEventListener('change', pflege);
     addEventListener('resize', pflege);
   }
