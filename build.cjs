@@ -4,7 +4,7 @@ const vm=require('node:vm');
 const root=__dirname, out=path.join(root,'dist');
 fs.rmSync(out,{recursive:true,force:true});
 fs.mkdirSync(out,{recursive:true});
-for(const item of ['index.html','manifest.webmanifest','fassung.json','year8','year5','year7','year6','year9','year10','oberstufe','bili','all','assets']){
+for(const item of ['index.html','manifest.webmanifest','fassung.json','sw.js','year8','year5','year7','year6','year9','year10','oberstufe','bili','all','assets']){
  fs.cpSync(path.join(root,item),path.join(out,item),{recursive:true});
 }
 for(const dir of ['', 'year8','year5','year7','year6','year9','year10','oberstufe','oberstufe/analysis','bili/history','all','all/analysis','year6/grammar','year6/grammar/simple-past','year6/grammar/irregular-verbs']){
@@ -16,6 +16,7 @@ for(const dir of ['', 'year8','year5','year7','year6','year9','year10','oberstuf
  }
 }
 new vm.Script(fs.readFileSync(path.join(out,'assets/learning.js'),'utf8'));
+new vm.Script(fs.readFileSync(path.join(out,'sw.js'),'utf8'));
 const start=fs.readFileSync(path.join(out,'index.html'),'utf8');
 const sites=JSON.parse(start.match(/const SITES = (\[[\s\S]*?\]);/)[1]);
 for(const site of sites)if(!fs.existsSync(path.join(out,site.path,'index.html')))throw new Error('Missing year '+site.path);

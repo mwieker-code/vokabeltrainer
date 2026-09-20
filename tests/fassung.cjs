@@ -46,4 +46,32 @@ for(const seite of seiten){
     path.relative(root,seite)+': learning.js ohne Versionsnummer');
 }
 
-console.log('Fassung '+datei.fassung+': '+geprueft+' Seiten stimmen mit fassung.json überein');
+/* ---- Der Helfer fuer den Betrieb ohne Netz ----
+   Er kann hier nicht laufen - ein Service Worker braucht einen Browser.
+   Geprueft wird, was auch ohne ihn schiefgehen kann: eine Fassung, die
+   im Helfer festgeschrieben statt aus seiner Adresse gelesen wird, und
+   eine Fassungsdatei, die versehentlich mit eingelagert wird. Beides
+   liesse sich erst am Geraet bemerken, und zwar zu spaet. */
+const helfer=fs.readFileSync(path.join(root,'sw.js'),'utf8');
+assert.match(helfer,/searchParams\.get\('v'\)/,
+  'sw.js liest seine Fassung nicht aus der eigenen Adresse');
+assert.ok(!new RegExp('\\d{8}-[a-z]+').test(helfer),
+  'sw.js traegt eine festgeschriebene Fassung - sie veraltet beim naechsten Release');
+assert.match(helfer,/fassung\.json/,
+  'sw.js nimmt die Fassungsdatei nicht vom Einlagern aus');
+assert.match(helfer,/caches\.delete/,
+  'sw.js raeumt alte Lager nicht ab');
+
+const gemeinsam=fs.readFileSync(path.join(root,'assets/learning.js'),'utf8');
+assert.match(gemeinsam,/register\(\s*ort \+ 'sw\.js\?v='/,
+  'learning.js meldet den Helfer nicht mit Fassung an');
+assert.match(gemeinsam,/updateViaCache: 'none'/,
+  'learning.js laesst den Helfer selbst zwischenspeichern');
+assert.match(gemeinsam,/id="hclear"/,
+  'in der Hilfe fehlt der Notausgang zum Leeren des Zwischenspeichers');
+
+const bau=fs.readFileSync(path.join(root,'build.cjs'),'utf8');
+for(const n of ['sw.js','fassung.json','manifest.webmanifest'])
+  assert.ok(bau.includes("'"+n+"'"),'build.cjs kopiert '+n+' nicht mit');
+
+console.log('Fassung '+datei.fassung+': '+geprueft+' Seiten, Helfer und Notausgang stimmen');
