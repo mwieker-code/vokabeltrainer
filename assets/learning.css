@@ -581,31 +581,49 @@ body{-webkit-tap-highlight-color:transparent}
      Reihe 1 und rueckt sie ein, statt sie zu dehnen. Nur so steht das
      "a" unter dem "q" - die Fingerstellung, die jedes Kind aus jeder
      anderen Tastatur mitbringt. */
+  /* Luecke und Aussenrand sind auf iOS feste Punktmasse, keine
+     Anteile: 6 zwischen den Tasten, 6,67 nach aussen - auf jedem
+     iPhone dieselben. Was sich mit der Bildschirmbreite aendert, ist
+     allein die Tastenbreite. Als Anteil gerechnet schrumpfte die
+     Luecke auf schmalen Geraeten und die Tasten wuchsen dafuer, in
+     jeder Reihe verschieden stark. Genau daran brach die Staffelung:
+     Das "z" stand 1,4 Punkte links vom "s" darueber, obwohl es auf
+     iOS genau darunter sitzt. */
   /* Nur oben und an den Seiten: Den Abstand nach unten bestimmt die
      Regel fuer den Home-Indicator weiter oben, sonst waere die unterste
      Reihe in der App wieder angeschnitten. */
-  body.eb-tippen .eb-tasten{--tk:45px;padding-top:6px;padding-left:1.515%;padding-right:1.515%}
-  body.eb-tippen .eb-tasten .tr{gap:1.364%;margin-bottom:11.67px;padding:0}
+  body.eb-tippen .eb-tasten{--tk:45px;--tb:calc((100% - 54px) / 10);
+    padding-top:6px;padding-left:6.67px;padding-right:6.67px}
+  /* Die deutsche Belegung traegt elf Buchstaben je Reihe statt zehn. */
+  body.eb-tippen .eb-tasten[data-sprache="de"][data-ebene="buchstaben"]{
+    --tb:calc((100% - 60px) / 11)}
+  body.eb-tippen .eb-tasten .tr{gap:6px;margin-bottom:11.67px;padding:0}
   body.eb-tippen .eb-tasten .tr:last-child{margin-bottom:0}
-  body.eb-tippen .eb-tasten .tk{border-radius:5px;font-size:23px;box-shadow:0 1px 0 #8A8E96}
-  /* Reihe 2 der englischen Belegung: neun Tasten, eingerueckt. Die
-     deutsche traegt dort elf und braucht keinen Einzug. */
-  body.eb-tippen .eb-tasten[data-sprache="en"][data-ebene="buchstaben"] .tr:nth-child(2){
-    padding:0 4.848%}
-  /* Umschalt und Ruecktaste: feste Breite, groesserer Abstand zu den
-     Buchstaben daneben. */
-  body.eb-tippen .eb-tasten .tk.weit{flex:0 0 11.364%;font-size:20px}
-  body.eb-tippen .eb-tasten .tr > .tk.weit:first-child{margin-right:1.97%}
-  body.eb-tippen .eb-tasten[data-sprache="de"] .tr > .tk.weit:first-child{margin-right:5.152%}
-  body.eb-tippen .eb-tasten .tr > .tk.weit:last-child{margin-left:1.97%}
-  body.eb-tippen .eb-tasten[data-sprache="de"] .tr > .tk.weit:last-child{margin-left:5.152%}
-  /* Untere Reihe auf den Plaetzen von iOS. */
+  /* Eine Breite fuer alle Buchstaben, in jeder Reihe dieselbe. Die
+     kuerzeren Reihen stehen mittig - damit fallen Einzug und
+     Staffelung von selbst richtig aus, statt gerechnet zu werden. */
+  body.eb-tippen .eb-tasten .tk{flex:0 0 var(--tb);
+    border-radius:5px;font-size:23px;box-shadow:0 1px 0 #8A8E96}
+  /* Umschalt und Ruecktaste: feste Breite, 14,67 Abstand zu den
+     Buchstaben daneben - 6 davon traegt schon die Luecke der Reihe. */
+  body.eb-tippen .eb-tasten .tk.weit{flex:0 0 50px;font-size:20px}
+  body.eb-tippen .eb-tasten .tr > .tk.weit:first-child{margin-right:8.67px}
+  body.eb-tippen .eb-tasten[data-sprache="de"] .tr > .tk.weit:first-child{margin-right:16.67px}
+  body.eb-tippen .eb-tasten .tr > .tk.weit:last-child{margin-left:8.67px}
+  body.eb-tippen .eb-tasten[data-sprache="de"] .tr > .tk.weit:last-child{margin-left:16.67px}
+  /* Untere Reihe auf den Plaetzen von iOS: 48, 48, Rest, 102. */
   body.eb-tippen .eb-tasten .tk.ebene,
-  body.eb-tippen .eb-tasten .tk.sprache{flex:0 0 10.909%;font-size:13px}
+  body.eb-tippen .eb-tasten .tk.sprache{flex:0 0 48px;font-size:13px}
   body.eb-tippen .eb-tasten .tk.raum{flex:1 1 auto;font-size:15px}
-  body.eb-tippen .eb-tasten .tk.senden{flex:0 0 23.182%;font-size:15px}
+  body.eb-tippen .eb-tasten .tk.senden{flex:0 0 102px;font-size:15px}
   body.eb-tippen .eb-tasten[data-sprache="de"] .tk{font-size:21px}
   body.eb-tippen .eb-tasten[data-ebene="zeichen"] .tk{font-size:19px}
+  /* Gehaltene Leertaste: Das Tastenfeld wird zum Schiebefeld. Die
+     Beschriftung tritt zurueck, damit sichtbar ist, dass jetzt nicht
+     getippt, sondern gezogen wird - iOS macht es genauso. */
+  body.eb-tippen .eb-tasten[data-schieben="an"] .tk{color:transparent;
+    background:#C9CDD4;box-shadow:none}
+  body.eb-tippen .eb-tasten[data-schieben="an"] .tk.senden{background:#C9CDD4}
   /* ---- Quer gehalten ----
      Karte links, Tastenfeld rechts. Uebereinander ist kein Platz: 430
      Punkte Hoehe tragen keine Karte und vier Tastenreihen zugleich.
