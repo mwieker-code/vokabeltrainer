@@ -490,6 +490,11 @@ body{-webkit-tap-highlight-color:transparent}
     cursor:pointer;-webkit-user-select:none;user-select:none;padding:0;
     -webkit-tap-highlight-color:transparent}
   .eb-tasten .tk:active{background:#B9BDC4}
+  /* Kein Zoom durch Doppeltippen, solange getippt wird - weder auf dem
+     Tastenfeld noch auf der Karte darueber. "manipulation" laesst
+     Schieben und das Spreizen mit zwei Fingern zu und nimmt nur die
+     Gesten weg, die hier aus Versehen entstehen. */
+  body.eb-tippen, .eb-tasten, .eb-tasten .tk{touch-action:manipulation}
   .eb-tasten .tk.weit{flex:1.4 1 0;background:#ADB2BA;font-size:19px}
   .eb-tasten .tk.raum{flex:2.6 1 0;font-size:15px}
   .eb-tasten .tk.senden{flex:2.2 1 0;background:var(--petrol);color:#fff;
