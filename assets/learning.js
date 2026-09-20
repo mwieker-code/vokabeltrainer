@@ -271,13 +271,63 @@ ${vocabulary}`;
       refresh();
     }
   };
+  /* "doesn't", "doesnt" und "does not" sind dasselbe Wort. Die
+     Apostrophe fallen schon in normalise weg, die Langform bleibt
+     stehen - sie wird hier auf dieselbe Kurzform gebracht. Nur
+     Verneinungen: Dort gibt es keine Verwechslung. Die positiven
+     Kurzformen bleiben aussen vor, weil einige von ihnen ohne
+     Apostroph eigene Woerter sind - "we're" wird zu "were", "it's" zu
+     "its", "she'd" zu "shed". Das waere als richtig gewertet, wo der
+     Schueler etwas anderes gemeint hat. */
+  const VERNEINT = /\b(do|does|did|is|are|was|were|have|has|had|could|would|should|must|might|need|dare|ought)\s+not\b/g;
+  function kurzform(s) {
+    return s.replace(VERNEINT, '$1nt')
+            .replace(/\bcan\s?not\b/g, 'cant')
+            .replace(/\bwill\s+not\b/g, 'wont')
+            .replace(/\bshall\s+not\b/g, 'shant');
+  }
+
+  /* Kommas und Schraegstriche trennen gleichwertige Loesungen - aber
+     nur ausserhalb von Klammern. "to stay (at/with)" ist ein Eintrag
+     mit zwei Ergaenzungen, keine zwei Loesungen. */
+  function teile(s) {
+    const out = [];
+    let tiefe = 0, akt = '';
+    for (const c of String(s)) {
+      if (c === '(') tiefe++;
+      else if (c === ')') tiefe = Math.max(0, tiefe - 1);
+      if (tiefe === 0 && (c === ',' || c === ';' || c === '/')) { out.push(akt); akt = ''; continue; }
+      akt += c;
+    }
+    out.push(akt);
+    return out.map(x => x.trim()).filter(Boolean);
+  }
+
+  /* Jede Klammer ist eine Wahl: weglassen oder einsetzen, und steht ein
+     Schraegstrich darin, jede ihrer Alternativen. "(to) beg (for)"
+     ergibt beg, beg for, to beg, to beg for. Mehr als zwei Klammern
+     traegt kein Eintrag im Bestand. */
+  function klammerformen(part) {
+    const out = [];
+    (function bau(s) {
+      const m = /\(([^)]*)\)/.exec(s);
+      if (!m) { out.push(s); return; }
+      const vor = s.slice(0, m.index), nach = s.slice(m.index + m[0].length);
+      for (const w of new Set(['', m[1].trim(), ...m[1].split('/').map(x => x.trim())]))
+        bau(vor + w + nach);
+    })(part);
+    return out;
+  }
+
   // Split alternatives BEFORE removing punctuation. Keep both optional-word forms.
   function forms(target) {
-    const parts = String(target).split(/\s*(?:[,;]|\s\/\s|\/)\s*/).filter(Boolean);
     const result = [];
-    for (const part of parts) {
-      const variants = [part.replace(/[()]/g, ''), part.replace(/\([^)]*\)/g, '')];
-      for (const variant of variants) {
+    /* Der ganze Eintrag zaehlt mit, nicht nur seine Teile: Wer abtippt,
+       was als Loesung dasteht, hat richtig geantwortet - auch bei
+       "he/she/it isn't ...", wo die Schraegstriche sonst drei getrennte
+       Loesungen ergeben. */
+    for (const part of [String(target), ...teile(target)]) {
+      for (const variant of klammerformen(part)) {
         const value = normalise(variant.replace(/\b(?:sb|sth)\./gi, '').replace(/^(?:AE|BE):\s*/i, ''));
         if (value) result.push(value);
       }
@@ -285,11 +335,19 @@ ${vocabulary}`;
     return [...new Set(result)];
   }
   checkTyped = function(input, target) {
-    const a = normalise(String(input));
+    /* Klammern und die Platzhalter sb./sth. aus der Eingabe nehmen: Wer
+       den Eintrag abschreibt, wie er dasteht - "(to) phone sb." -,
+       meint dasselbe wie "phone". */
+    const a = normalise(String(input).replace(/[()]/g, '')
+                                     .replace(/\b(?:sb|sth)\./gi, ''));
     if (!a) return 'no';
     const choices = forms(target);
     if (choices.includes(a)) return 'ok';
-    return choices.some(b => distance(a, b) <= (b.length > 6 ? 2 : b.length > 2 ? 1 : 0)) ? 'near' : 'no';
+    /* Erst danach die Kurzformen: Die Rueckmeldung vergleicht Buchstabe
+       fuer Buchstabe gegen den Eintrag, wie er dasteht. */
+    const ak = kurzform(a), ck = choices.map(kurzform);
+    if (ck.includes(ak)) return 'ok';
+    return ck.some(b => distance(ak, b) <= (b.length > 6 ? 2 : b.length > 2 ? 1 : 0)) ? 'near' : 'no';
   };
 
   // Levenshtein alignment marks substitutions, insertions and deletions on both sides.
