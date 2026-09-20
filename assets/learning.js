@@ -1215,10 +1215,17 @@ ${vocabulary}`;
     let wahl = null;                       // null = der Abfragerichtung folgen
     let letzteAuto = null;
     const antwortsprache = () =>
-      S.mode === 'cloze' ? 'en' : (S.dir === 'en2de' ? 'de' : 'en');
+      /* In der Blitzrunde steht immer Deutsch da und Englisch wird
+         getippt, ganz gleich, was in der Runde eingestellt war. */
+      S.view === 'pvblitz' ? 'en'
+        : S.mode === 'cloze' ? 'en' : (S.dir === 'en2de' ? 'de' : 'en');
     const belegung = () => wahl || antwortsprache();
 
-    const feldVon = () => document.getElementById('typeIn');
+    /* Die Blitzrunde bringt ihr eigenes Eingabefeld mit. Ohne diese
+       Zeile blieb sie bei der Systemtastatur - als einzige. */
+    const feldVon = () =>
+      document.getElementById('typeIn') || document.getElementById('pvTypeIn');
+    const blitz = () => S.view === 'pvblitz';
 
     /* Die Schreibmarke ist ein gezeichneter Strich, kein echter Cursor -
        ein readonly-Feld zeigt auf iOS keinen. Ihre Lage ist die Breite
@@ -1260,7 +1267,7 @@ ${vocabulary}`;
         Math.round(feld.offsetTop + (feld.offsetHeight - hoehe) / 2) + 'px');
       box.style.setProperty('--eb-marke-links', Math.round(feld.offsetLeft) + 'px');
     }
-    const tippt = () => S.view === 'session' && !!feldVon();
+    const tippt = () => (S.view === 'session' || blitz()) && !!feldVon();
 
     /* Die Karte stand oben, das Tastenfeld unten, dazwischen bis zu 301
        Punkte Leere - der Blick musste ueber den halben Bildschirm
@@ -1294,8 +1301,13 @@ ${vocabulary}`;
       if(!buehne) return;
       const karte = buehne.querySelector('.vcard');
       if(!karte) return;
+      /* Die Blitzrunde traegt unter dem Eingabefeld nichts mehr - dort
+         wuerde die wachsende Karte den Platz als weisse Leere unter der
+         Eingabe zeigen. Sie rueckt deshalb nur herunter, wie im
+         Browser, und behaelt ihre Groesse. */
       const app = document.body.classList.contains('eb-app')
-               && document.body.classList.contains('eb-tippen');
+               && document.body.classList.contains('eb-tippen')
+               && !blitz();
       const tasten = document.querySelector('.eb-tasten');
 
       if(!tasten){
@@ -1389,7 +1401,12 @@ ${vocabulary}`;
         if(!b) return;
         e.preventDefault();
         const k = b.dataset.k, feld = feldVon();
-        if(k === '⏎'){ const s = document.getElementById('submit'); if(s) s.click(); return; }
+        if(k === '⏎'){
+          const s = document.getElementById('submit');
+          if(s) s.click();
+          else if(blitz()) blitzSubmit();   // dort pruefte sonst nur die Enter-Taste
+          return;
+        }
         if(k === '⇄'){ wahl = belegung() === 'en' ? 'de' : 'en'; baueTasten(); return; }
         if(k === '⌘'){ ebene = zeichen ? 'buchstaben' : 'zeichen'; baueTasten(); return; }
         if(!feld || feld.disabled) return;
@@ -1432,7 +1449,7 @@ ${vocabulary}`;
          Dann gibt es nichts mehr zu pflegen. */
       if(typeof document === 'undefined' || !document.body) return;
       document.body.classList.toggle('eb-app', alsApp());
-      const runde = klein.matches && S.view === 'session';
+      const runde = klein.matches && (S.view === 'session' || blitz());
       document.body.classList.toggle('eb-runde', runde);
 
       /* Der Richtungsschalter zieht auf dem Telefon in die
@@ -1446,7 +1463,11 @@ ${vocabulary}`;
 
       const tasten = klein.matches && tippt();
       document.body.classList.toggle('eb-tippen', tasten);
-      document.body.dataset.ebAntwort = document.getElementById('submit') ? 'offen' : 'bewertet';
+      /* In der Blitzrunde gibt es keinen Pruefen-Knopf, aber die Antwort
+         steht trotzdem offen - sonst gaebe die Seite den Platz frei, auf
+         dem das Tastenfeld steht. */
+      document.body.dataset.ebAntwort =
+        (document.getElementById('submit') || blitz()) ? 'offen' : 'bewertet';
 
       const feld = feldVon();
       if(feld){
