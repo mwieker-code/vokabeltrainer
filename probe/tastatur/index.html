@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Basecamp · Tastaturprobe</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="probe.webmanifest">
+<link rel="apple-touch-icon" sizes="180x180" href="../../assets/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#F3F6F2">
+<meta name="robots" content="noindex">
+<!--
+  WEGWERFSEITE. Sie gehoert nicht zur App, ist von nirgends verlinkt und
+  wird geloescht, sobald die Frage beantwortet ist.
+
+  Die Frage: Koennen wir statt des eigenen Tastenfelds wieder die
+  Systemtastatur nehmen - so, dass sie nichts verdeckt und fest an einer
+  Stelle sitzt? Drei Dinge entscheiden das, und alle drei beantwortet nur
+  ein echtes iPhone:
+
+    1  Verdeckt sie etwas, und wie gross ist der Sprung beim Oeffnen?
+    2  Schweigt die Autokorrektur, wenn englische Woerter getippt werden?
+    3  Bleibt sie zwischen zwei Woertern offen, oder klappt sie zu?
+
+  Die Seite selbst ist der Bauplan, um den es geht: ein fester Rahmen,
+  genau so hoch wie der sichtbare Ausschnitt (visualViewport), der sich
+  mitbewegt, wenn die Tastatur aufgeht. Bleibt die rote Linie unten
+  sichtbar, traegt der Bauplan.
+-->
+<style>
+  :root{
+    --grund:#F3F6F2; --karte:#FFFFFF; --tinte:#16232B; --leise:#5A6B75;
+    --petrol:#0E5A66; --rand:#D9E0E2; --warn:#C0392B; --gut:#1E7A4C;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;height:100%;overflow:hidden;
+    background:var(--grund);color:var(--tinte);
+    font:400 15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif;
+    -webkit-text-size-adjust:100%}
+
+  /* Der Rahmen ist das eigentliche Experiment: Er ist immer genau so
+     hoch wie der sichtbare Ausschnitt und rutscht mit, wenn Safari die
+     Seite verschiebt. Was darin liegt, kann die Tastatur nicht
+     verdecken - wenn der Bauplan traegt. */
+  #rahmen{position:fixed;left:0;top:0;width:100%;height:100%;
+    display:flex;flex-direction:column;
+    border-top:3px solid var(--warn);border-bottom:3px solid var(--warn)}
+
+  header{flex:0 0 auto;padding:8px 14px 0}
+  h1{margin:0;font-size:13px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--leise);font-weight:600}
+  nav{display:flex;gap:6px;margin:8px 0 0}
+  nav button{flex:1 1 0;min-width:0;padding:8px 4px;border:1px solid var(--rand);
+    border-radius:9px;background:var(--karte);color:var(--tinte);
+    font:inherit;font-size:13px;-webkit-appearance:none}
+  nav button[aria-current="true"]{background:var(--petrol);color:#fff;
+    border-color:var(--petrol);font-weight:600}
+
+  main{flex:1 1 auto;overflow-y:auto;-webkit-overflow-scrolling:touch;
+    padding:12px 14px}
+  section[hidden]{display:none}
+  .karte{background:var(--karte);border:1px solid var(--rand);border-radius:14px;
+    padding:12px 14px;margin:0 0 10px}
+  h2{margin:0 0 6px;font-size:15px}
+  p{margin:0 0 8px}
+  .leise{color:var(--leise);font-size:13px}
+  ol,ul{margin:0 0 8px;padding-left:20px}
+  li{margin-bottom:4px}
+  code{font-family:ui-monospace,Menlo,monospace;font-size:13px;
+    background:#EDF1F0;padding:1px 4px;border-radius:4px}
+
+  input[type=text]{width:100%;padding:11px 12px;border:2px solid var(--petrol);
+    border-radius:10px;font:inherit;font-size:17px;background:#fff;color:var(--tinte);
+    -webkit-appearance:none}
+  /* 17px, damit iOS beim Hineintippen nicht hineinzoomt - unter 16
+     tut es das immer. */
+  input[type=text]:focus{outline:none;border-color:var(--petrol);
+    box-shadow:0 0 0 3px rgba(14,90,102,.18)}
+  label{display:block;font-size:13px;color:var(--leise);margin:0 0 4px}
+
+  .werte{display:grid;grid-template-columns:1fr auto;gap:2px 10px;
+    font-family:ui-monospace,Menlo,monospace;font-size:13px}
+  .werte b{font-weight:600;text-align:right}
+  .gross{font-size:26px;font-weight:700;font-family:inherit;color:var(--petrol)}
+
+  .urteil{display:inline-block;padding:2px 8px;border-radius:99px;
+    font-size:13px;font-weight:600}
+  .urteil.ja{background:#E3F2E9;color:var(--gut)}
+  .urteil.nein{background:#FBE7E4;color:var(--warn)}
+  .urteil.offen{background:#EDF1F0;color:var(--leise)}
+
+  .spur{font-family:ui-monospace,Menlo,monospace;font-size:12px;
+    line-height:1.5;color:var(--leise);max-height:150px;overflow-y:auto}
+  .spur div:first-child{color:var(--tinte);font-weight:600}
+
+  .knopf{display:inline-block;padding:9px 14px;border:0;border-radius:10px;
+    background:var(--petrol);color:#fff;font:inherit;font-size:14px;font-weight:600;
+    -webkit-appearance:none}
+  .knopf.leise{background:#E4E9E8;color:var(--tinte)}
+
+  footer{flex:0 0 auto;padding:6px 14px;border-top:1px solid var(--rand);
+    background:var(--karte);
+    font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--leise);
+    display:flex;justify-content:space-between;gap:8px}
+  /* Die beiden roten Kanten sind das Messinstrument: Verschwindet die
+     untere hinter der Tastatur, traegt der Bauplan nicht. Ihre
+     Beschriftung darf den Inhalt nicht ueberdecken - oben sitzt sie
+     deshalb rechts, unten in der Fusszeile selbst. */
+  .marke{position:absolute;right:10px;top:-3px;font-size:10px;
+    letter-spacing:.08em;text-transform:uppercase;color:var(--warn);
+    font-weight:700;background:var(--grund);padding:0 5px}
+  footer .kante{color:var(--warn);font-weight:700;letter-spacing:.04em;
+    text-transform:uppercase}
+</style>
+</head>
+<body>
+<div id="rahmen">
+  <span class="marke">Obere Kante</span>
+
+  <header>
+    <h1>Basecamp · Tastaturprobe</h1>
+    <nav>
+      <button type="button" data-zu="v1" aria-current="true">1 Verdeckung</button>
+      <button type="button" data-zu="v2">2 Autokorrektur</button>
+      <button type="button" data-zu="v3">3 Fokus</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ================= Versuch 1 ================= -->
+    <section id="v1">
+      <div class="karte">
+        <h2>Verdeckt die Tastatur etwas?</h2>
+        <p class="leise">Tippe unten ins Feld. Entscheidend ist die <b>rote Linie
+        ganz unten</b>: Bleibt sie sichtbar, verdeckt die Tastatur nichts und der
+        Bauplan trägt. Verschwindet sie, trägt er nicht.</p>
+        <p class="leise">Schiebe die Seite danach mit dem Finger hoch und runter.
+        Sie darf sich nicht bewegen.</p>
+      </div>
+
+      <div class="karte">
+        <div class="werte">
+          <span>Tastaturhöhe</span><b class="gross" id="m-tast">—</b>
+          <span>Fenster (innerHeight)</span><b id="m-fenster">—</b>
+          <span>Sichtbar (visualViewport)</span><b id="m-sicht">—</b>
+          <span>Versatz (offsetTop)</span><b id="m-versatz">—</b>
+          <span>Maßstab (scale)</span><b id="m-skala">—</b>
+          <span>Sprung beim Öffnen</span><b id="m-sprung">—</b>
+          <span>Dauer des Sprungs</span><b id="m-dauer">—</b>
+        </div>
+      </div>
+
+      <div class="karte">
+        <label for="f1">Hier tippen</label>
+        <input type="text" id="f1" placeholder="irgendetwas" autocomplete="off">
+      </div>
+
+      <div class="karte">
+        <h2>Verlauf</h2>
+        <p class="leise">Jede Änderung des sichtbaren Ausschnitts, mit Abstand in
+        Millisekunden. Viele kleine Schritte heißen: Die Tastatur fährt animiert
+        auf und der Rahmen folgt ihr. Ein einziger großer Schritt heißt: Sie
+        springt.</p>
+        <div class="spur" id="spur"><div>— noch nichts —</div></div>
+        <p><button type="button" class="knopf leise" id="spur-leeren">Verlauf leeren</button></p>
+      </div>
+    </section>
+
+    <!-- ================= Versuch 2 ================= -->
+    <section id="v2" hidden>
+      <div class="karte">
+        <h2>Schweigt die Autokorrektur?</h2>
+        <p>Tippe in <b>jedes</b> der drei Felder genau diese Zeile — ohne die
+        Vorschläge über der Tastatur anzutippen:</p>
+        <p><code id="ziel-text">dont hte mouse wont</code></p>
+        <p class="leise">Das Feld färbt sich grün, wenn genau das drinsteht, und
+        rot, sobald etwas anderes daraus geworden ist. Achte nebenbei darauf, ob
+        über der Tastatur eine Vorschlagszeile erscheint.</p>
+      </div>
+
+      <div class="karte">
+        <label for="f2a">A · ganz normal, nichts abgeschaltet</label>
+        <input type="text" id="f2a" data-ziel>
+        <p class="leise" style="margin:6px 0 0">Urteil: <span class="urteil offen" id="u2a">noch leer</span></p>
+      </div>
+
+      <div class="karte">
+        <label for="f2b">B · <code>autocorrect=off</code>, <code>autocapitalize=off</code>, <code>spellcheck=false</code></label>
+        <input type="text" id="f2b" data-ziel autocorrect="off" autocapitalize="off"
+               spellcheck="false" autocomplete="off">
+        <p class="leise" style="margin:6px 0 0">Urteil: <span class="urteil offen" id="u2b">noch leer</span></p>
+      </div>
+
+      <div class="karte">
+        <label for="f2c">C · wie B, zusätzlich <code>lang="en"</code> und <code>inputmode="text"</code></label>
+        <input type="text" id="f2c" data-ziel lang="en" inputmode="text"
+               autocorrect="off" autocapitalize="off" spellcheck="false" autocomplete="off">
+        <p class="leise" style="margin:6px 0 0">Urteil: <span class="urteil offen" id="u2c">noch leer</span></p>
+      </div>
+
+      <div class="karte">
+        <p class="leise">Wichtig: Was hier passiert, hängt davon ab, welche
+        Tastatursprachen auf <b>deinem</b> iPhone installiert sind. Wenn du eine
+        englische Tastatur hast und sie gerade aktiv ist, sagt der Versuch wenig
+        über ein Kind aus, das nur die deutsche hat. Probiere beide Sprachen
+        durch, falls du beide hast.</p>
+      </div>
+    </section>
+
+    <!-- ================= Versuch 3 ================= -->
+    <section id="v3" hidden>
+      <div class="karte">
+        <h2>Bleibt die Tastatur zwischen zwei Wörtern offen?</h2>
+        <p class="leise">Das ist die teuerste der drei Fragen. Basecamp zeichnet
+        nach jeder Antwort die Karte neu — das Eingabefeld ist danach ein anderes
+        Element. Ob iOS die Tastatur dann offen lässt, entscheidet darüber, ob
+        ein Kind vor jedem Wort erst ins Feld tippen muss.</p>
+        <p>Tippe das Wort und drücke die <b>Weiter-Taste rechts unten</b> auf der
+        Tastatur. Fünf Wörter lang. Beobachte, ob die Tastatur zwischendurch
+        zugeht.</p>
+      </div>
+
+      <div class="karte">
+        <p style="margin:0 0 8px"><b>Verfahren</b></p>
+        <p><button type="button" class="knopf" data-art="neu">A · Feld wird neu gezeichnet</button></p>
+        <p><button type="button" class="knopf leise" data-art="bleibt">B · Feld bleibt stehen</button></p>
+        <p class="leise" id="art-text">A bildet nach, was Basecamp heute tut: Das
+        Feld wird verworfen und ein neues gebaut, danach wird der Fokus gesetzt.</p>
+      </div>
+
+      <div class="karte" id="runde">
+        <p class="leise" style="margin:0">Wort <span id="r-nr">1</span> von 5 · gesucht:</p>
+        <p style="font-size:24px;font-weight:700;margin:2px 0 10px" id="r-wort">Maus</p>
+        <form id="r-form" autocomplete="off">
+          <div id="r-platz"></div>
+        </form>
+      </div>
+
+      <div class="karte">
+        <div class="werte">
+          <span>Tastatur zugegangen</span><b class="gross" id="r-zu">0</b>
+          <span>Fokus liegt auf</span><b id="r-fokus">—</b>
+          <span>Runde</span><b id="r-stand">läuft</b>
+        </div>
+        <p style="margin:10px 0 0"><button type="button" class="knopf leise" id="r-neu">Von vorn</button></p>
+      </div>
+    </section>
+
+    <div class="karte">
+      <h2>Was du mir zurückmelden solltest</h2>
+      <ol>
+        <li>Bleibt die rote Linie unten sichtbar, wenn die Tastatur offen ist?</li>
+        <li>Welches der drei Felder in Versuch 2 bleibt grün?</li>
+        <li>Wie oft ist die Tastatur in Versuch 3 zugegangen — bei A, und bei B?</li>
+      </ol>
+      <p class="leise">Und bitte beides durchspielen: einmal in Safari, einmal
+      über „Zum Home-Bildschirm“ als eigene App. Das Verhalten kann sich
+      unterscheiden, und für Basecamp zählt vor allem die App.</p>
+    </div>
+  </main>
+
+  <footer>
+    <span class="kante">↓ Untere Kante</span>
+    <span id="f-modus">—</span>
+    <span id="f-vv">—</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  var vv = window.visualViewport || null;
+  var rahmen = document.getElementById('rahmen');
+
+  /* ---- Der Rahmen folgt dem sichtbaren Ausschnitt ---------------- */
+  function anpassen(){
+    if(!vv){ rahmen.style.height = window.innerHeight + 'px'; return; }
+    rahmen.style.height = vv.height + 'px';
+    rahmen.style.transform = 'translateY(' + vv.offsetTop + 'px)';
+  }
+
+  /* ---- Versuch 1: Messwerte und Verlauf -------------------------- */
+  var spur = document.getElementById('spur');
+  var zeilen = [], letzteZeit = 0, sprungStart = 0, sprungVon = 0, maxSprung = 0;
+  var rund = function(n){ return Math.round(n * 10) / 10; };
+  function setz(id, wert){ var el = document.getElementById(id); if(el) el.textContent = wert; }
+
+  function messen(grund){
+    var fenster = window.innerHeight;
+    var hoehe = vv ? vv.height : fenster;
+    var tast = Math.max(0, fenster - hoehe);
+    setz('m-fenster', fenster + ' pt');
+    setz('m-sicht', rund(hoehe) + ' pt');
+    setz('m-versatz', vv ? rund(vv.offsetTop) + ' pt' : 'kein visualViewport');
+    setz('m-skala', vv ? rund(vv.scale) : '—');
+    setz('m-tast', tast > 0 ? Math.round(tast) + ' pt' : 'zu');
+    setz('f-vv', vv ? (Math.round(hoehe) + '/' + fenster) : 'kein vv');
+
+    if(grund){
+      var jetzt = performance.now();
+      var abstand = letzteZeit ? Math.round(jetzt - letzteZeit) : 0;
+      letzteZeit = jetzt;
+      var vorher = zeilen.length ? zeilen[0].h : hoehe;
+      var schritt = Math.abs(vorher - hoehe);
+      if(schritt > maxSprung){ maxSprung = schritt; setz('m-sprung', Math.round(maxSprung) + ' pt'); }
+      /* Ein Sprung endet, wenn 400 ms lang nichts mehr passiert. */
+      if(!sprungStart || abstand > 400){ sprungStart = jetzt; sprungVon = vorher; }
+      else setz('m-dauer', Math.round(jetzt - sprungStart) + ' ms');
+      zeilen.unshift({h:hoehe, t:abstand, g:grund});
+      if(zeilen.length > 40) zeilen.pop();
+      zeichneSpur();
+    }
+  }
+  function zeichneSpur(){
+    if(!zeilen.length){ spur.innerHTML = '<div>— noch nichts —</div>'; return; }
+    spur.innerHTML = zeilen.map(function(z, i){
+      return '<div>' + (i === 0 ? '▸ ' : '  ') + 'h ' + rund(z.h) +
+             '   +' + z.t + ' ms   ' + z.g + '</div>';
+    }).join('');
+  }
+  document.getElementById('spur-leeren').onclick = function(){
+    zeilen = []; letzteZeit = 0; sprungStart = 0; maxSprung = 0;
+    setz('m-sprung', '—'); setz('m-dauer', '—'); zeichneSpur();
+  };
+
+  /* ---- Versuch 2: Autokorrektur ---------------------------------- */
+  var ZIEL = document.getElementById('ziel-text').textContent.trim();
+  [['f2a','u2a'],['f2b','u2b'],['f2c','u2c']].forEach(function(paar){
+    var feld = document.getElementById(paar[0]), urteil = document.getElementById(paar[1]);
+    feld.addEventListener('input', function(){
+      var wert = feld.value;
+      if(!wert){ urteil.className = 'urteil offen'; urteil.textContent = 'noch leer'; return; }
+      if(ZIEL.indexOf(wert) === 0){
+        urteil.className = 'urteil ja';
+        urteil.textContent = wert === ZIEL ? 'unverändert — sauber' : 'bis hier unverändert';
+      }else{
+        urteil.className = 'urteil nein';
+        urteil.textContent = 'verändert: ' + JSON.stringify(wert);
+      }
+    });
+  });
+
+  /* ---- Versuch 3: Fokus ------------------------------------------ */
+  var WOERTER = ['Maus', 'Hund', 'Tisch', 'grün', 'laufen'];
+  var art = 'neu', nr = 0, zugegangen = 0, warOffen = false;
+  var platz = document.getElementById('r-platz');
+  var form = document.getElementById('r-form');
+
+  function feldBauen(){
+    /* Verfahren A wirft das Feld weg und baut ein neues - so wie
+       Basecamp heute die ganze Karte neu zeichnet. Verfahren B laesst
+       dasselbe Element stehen und tauscht nur seinen Inhalt. */
+    var alt = platz.querySelector('input');
+    if(art === 'bleibt' && alt){ alt.value = ''; return alt; }
+    platz.innerHTML = '';
+    var feld = document.createElement('input');
+    feld.type = 'text'; feld.id = 'r-feld'; feld.enterKeyHint = 'next';
+    feld.setAttribute('autocorrect','off'); feld.setAttribute('autocapitalize','off');
+    feld.setAttribute('spellcheck','false'); feld.setAttribute('autocomplete','off');
+    feld.placeholder = 'englisches Wort';
+    platz.appendChild(feld);
+    return feld;
+  }
+  function wortZeigen(){
+    document.getElementById('r-nr').textContent = Math.min(nr + 1, WOERTER.length);
+    document.getElementById('r-wort').textContent = WOERTER[Math.min(nr, WOERTER.length - 1)];
+    var feld = feldBauen();
+    /* Der Punkt des Versuchs: focus() ohne Fingerdruck. Auf iOS oeffnet
+       das die Tastatur nicht - offen bleibt sie nur, wenn sie es schon
+       war und der Fokus nie wegging. */
+    try{ feld.focus(); }catch(e){}
+  }
+  function weiter(){
+    if(nr >= WOERTER.length - 1){
+      document.getElementById('r-stand').textContent = 'fertig';
+      return;
+    }
+    nr++; wortZeigen();
+  }
+  form.addEventListener('submit', function(e){ e.preventDefault(); weiter(); });
+  platz.addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){ e.preventDefault(); weiter(); }
+  });
+  document.querySelectorAll('[data-art]').forEach(function(b){
+    b.onclick = function(){
+      art = b.dataset.art;
+      document.querySelectorAll('[data-art]').forEach(function(x){
+        x.className = 'knopf' + (x === b ? '' : ' leise'); });
+      document.getElementById('art-text').textContent = art === 'neu'
+        ? 'A bildet nach, was Basecamp heute tut: Das Feld wird verworfen und ein neues gebaut, danach wird der Fokus gesetzt.'
+        : 'B lässt dasselbe Feld stehen und tauscht nur seinen Inhalt. Der Fokus geht dabei nie verloren.';
+      neueRunde();
+    };
+  });
+  function neueRunde(){
+    nr = 0; zugegangen = 0; warOffen = false;
+    document.getElementById('r-zu').textContent = '0';
+    document.getElementById('r-stand').textContent = 'läuft';
+    platz.innerHTML = '';
+    wortZeigen();
+  }
+  document.getElementById('r-neu').onclick = neueRunde;
+
+  /* Zugegangen heisst: Der sichtbare Ausschnitt war um mehr als
+     hundert Punkte kleiner als das Fenster und ist es nicht mehr. */
+  function tastaturBeobachten(){
+    var offen = vv ? (window.innerHeight - vv.height) > 100 : false;
+    if(warOffen && !offen){
+      zugegangen++;
+      document.getElementById('r-zu').textContent = String(zugegangen);
+    }
+    warOffen = offen;
+  }
+  setInterval(function(){
+    var a = document.activeElement;
+    document.getElementById('r-fokus').textContent =
+      a && a !== document.body ? (a.id || a.tagName.toLowerCase()) : 'nichts';
+  }, 300);
+
+  /* ---- Reiter ----------------------------------------------------- */
+  document.querySelectorAll('nav button').forEach(function(b){
+    b.onclick = function(){
+      document.querySelectorAll('nav button').forEach(function(x){
+        x.setAttribute('aria-current', String(x === b)); });
+      ['v1','v2','v3'].forEach(function(id){
+        document.getElementById(id).hidden = (id !== b.dataset.zu); });
+      if(b.dataset.zu === 'v3' && !platz.querySelector('input')) neueRunde();
+    };
+  });
+
+  /* ---- Anmelden ---------------------------------------------------- */
+  if(vv){
+    vv.addEventListener('resize', function(){ anpassen(); messen('resize'); tastaturBeobachten(); });
+    vv.addEventListener('scroll', function(){ anpassen(); messen('scroll'); });
+  }
+  window.addEventListener('resize', function(){ anpassen(); messen('fenster'); });
+  window.addEventListener('orientationchange', function(){ setTimeout(function(){
+    anpassen(); messen('drehung'); }, 300); });
+  /* Safari scrollt das Layout, wenn ein Feld den Fokus bekommt. Der
+     Rahmen soll das nicht mitmachen. */
+  window.addEventListener('scroll', function(){ window.scrollTo(0, 0); });
+
+  var alsApp = (window.navigator.standalone === true) ||
+    (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+  document.getElementById('f-modus').textContent =
+    (alsApp ? 'App' : 'Browser') + ' · ' + (vv ? 'visualViewport da' : 'kein visualViewport');
+
+  anpassen(); messen(''); neueRunde();
+})();
+</script>
+</body>
+</html>
