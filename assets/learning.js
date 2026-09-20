@@ -6,6 +6,22 @@
      beschreiben sich selbst ueber ein globales PAGE. Fehlt es, ist die
      Seite die Oberstufe und alles bleibt wie bisher. */
   const seite = (upper && typeof PAGE === 'object' && PAGE) ? PAGE : null;
+  /* Die eigene Fassung steht in der Adresse, mit der diese Datei geladen
+     wurde. Sie erscheint unten in der Hilfe und entscheidet weiter unten,
+     ob sich die Seite auffrischen muss. */
+  const FASSUNG = (() => {
+    const el = document.querySelector('script[src*="learning.js?v="]');
+    const m = el && /[?&]v=([^&"']+)/.exec(el.getAttribute('src'));
+    return m ? m[1] : null;
+  })();
+  /* Die Seiten liegen verschieden tief. Wohin es zur Wurzel geht, steht
+     schon im Verweis auf das Manifest. */
+  function wurzel(){
+    const l = document.querySelector('link[rel="manifest"]');
+    const href = l && l.getAttribute('href');
+    return href ? href.replace(/manifest\.webmanifest$/, '') : './';
+  }
+
   const originalHome = renderHome;
   const originalSession = renderSession;
   const originalHelp = renderHelp;
@@ -627,6 +643,11 @@ ${vocabulary}`;
     originalHelp();
     const doc=view.querySelector('.doc');
     if(doc)startbildschirmEinsetzen(doc);
+    /* Ganz unten, klein: Wer schreibt "bei mir sieht das anders aus",
+       kann diese Angabe mitschicken. */
+    if(doc&&FASSUNG)doc.insertAdjacentHTML('beforeend',
+      '<p class="lead" style="font-size:12.5px">Fassung <b>'+safe(FASSUNG)+'</b>. '
+      +'Wenn etwas nicht so aussieht wie beschrieben, schicke diese Angabe mit.</p>');
     if(doc)doc.insertAdjacentHTML('afterbegin','<h2>Dein Lernumfang</h2><p>Wähle einen Part, eine Unit oder ein Thema. Alles üben umfasst alle Wörter deiner Auswahl, auch bereits gelernte. Alternativ wählst du höchstens zehn Wörter, nur fällige Vokabeln oder die Blitzrunde. Fehler werden nach dem ersten Durchgang einmal wiederholt. Mit <b>Später fortsetzen</b> verlässt du die Runde. Auf der Jahrgangsübersicht kannst du sie im selben Browser fortsetzen. Pro Jahrgang wird eine Runde gespeichert; eine neue Runde ersetzt sie. Eine noch ungeprüfte Texteingabe wird nicht gespeichert. Ein Wechsel der Übungsart startet den gewählten Lernumfang neu.</p><p>Beim Tippen bleiben deine Eingabe und die Lösung sichtbar. Markierte Buchstaben zeigen Abweichungen. Falsche Antworten werden nicht als gewusst gespeichert, auch wenn du „Gewusst“ antippst.</p><h2>Blitzrunde</h2><p>60 Sekunden gegen die Zeit: Du siehst die deutsche Bedeutung und tippst das englische Wort, so schnell du kannst. Falsche oder ausgelassene Wörter werden am Ende aufgelistet. Die Blitzrunde zählt nicht auf deine fünf Lernfächer ein; dein normaler Lernstand bleibt unberührt.</p><h2>Töne und Animationen</h2><p>Unten auf der Seite kannst du Töne und Animationen getrennt ein- oder ausschalten. Töne sind anfangs ausgeschaltet. Die Einstellungen werden im Browser gespeichert. Die Aussprache über das Lautsprecher-Symbol funktioniert unabhängig vom Schalter für Rückmeldetöne. Bei reduzierter Bewegung in den Geräteeinstellungen werden Animationen unterdrückt.</p>');
   };
 
@@ -1282,6 +1303,7 @@ ${vocabulary}`;
            gezeichnet. Sie bleibt trotzdem, wo sie beim Tippen stand -
            sonst springt das Eingabefeld beim Antworten nach oben. */
         if(app && appMerker){
+          buehne.style.marginTop = appMerker.rand + 'px';
           karte.style.minHeight = appMerker.hoehe + 'px';
           const wort = wortVon(karte);
           if(wort) wort.style.paddingTop = appMerker.oben + 'px';
@@ -1293,19 +1315,30 @@ ${vocabulary}`;
       if(app){
         const wort = wortVon(karte);
         if(!wort) return;
+        /* Erst den Grundzustand herstellen, dann messen: So steht in
+           platz immer der ganze freie Raum und nicht der Rest vom
+           letzten Mal - sonst waechst die Karte bei jedem Durchlauf ein
+           Stueck weiter. */
+        buehne.style.marginTop = '';
+        karte.style.minHeight = '';
+        wort.style.paddingTop = '';
         const platz = Math.round(tasten.getBoundingClientRect().top - LUFT
                                - karte.getBoundingClientRect().bottom);
         if(platz > 0){
-          const hoehe = Math.round(karte.getBoundingClientRect().height) + platz;
-          const oben = Math.round(parseFloat(wort.style.paddingTop) || 0) + platz;
-          karte.style.minHeight = hoehe + 'px';
-          wort.style.paddingTop = oben + 'px';
-          appMerker = {hoehe, oben};
+          /* Haelftig geteilt: Die eine Haelfte bleibt als Abstand ueber
+             der Karte, die andere geht in die Karte, ueber das
+             abgefragte Wort. Alles in eine Haelfte zu legen ergibt eine
+             einzelne grosse Leere - so sind es zwei unauffaellige. */
+          const rand = Math.round(platz / 2);
+          const innen = platz - rand;
+          buehne.style.marginTop = rand + 'px';
+          karte.style.minHeight =
+            (Math.round(karte.getBoundingClientRect().height) + innen) + 'px';
+          wort.style.paddingTop = innen + 'px';
+          appMerker = {rand, hoehe: Math.round(karte.getBoundingClientRect().height),
+                       oben: innen};
         }
-        else if(appMerker){
-          karte.style.minHeight = appMerker.hoehe + 'px';
-          wort.style.paddingTop = appMerker.oben + 'px';
-        }
+        else appMerker = null;
         return;
       }
 
@@ -1459,6 +1492,41 @@ ${vocabulary}`;
     addEventListener('resize', pflege);
   }
 
+  /* =========================================================================
+     IMMER DIE AKTUELLE FASSUNG
+     Die gemeinsamen Dateien tragen eine Versionsnummer, damit ein Browser
+     sie nach einer Aenderung neu holt. Nur: Das steht in der Seite, und
+     die Seite selbst liegt auch im Zwischenspeicher. Bleibt sie dort,
+     zeigt sie weiter auf die alten Dateien. In Safari zieht man zum
+     Neuladen - vom Startbildschirm aus gibt es dafuer keinen Griff.
+
+     Also fragt die Seite beim Start nach, am Zwischenspeicher vorbei,
+     welche Fassung ausgeliefert wird, und laedt sich einmal neu, wenn es
+     eine andere ist als ihre eigene. Ohne Netz faellt die Anfrage aus und
+     alles bleibt, wie es ist.
+     ========================================================================= */
+  async function fassungPruefen(){
+    if(!FASSUNG || typeof fetch !== 'function') return;
+    let neue = null;
+    try{
+      const r = await fetch(wurzel() + 'fassung.json', {cache:'no-store'});
+      if(!r.ok) return;
+      neue = (await r.json()).fassung;
+    }catch(e){ return; }
+    if(!neue || neue === FASSUNG) return;
+    /* Hoechstens einmal je Sitzung: Bringt das Neuladen die neue Fassung
+       wider Erwarten nicht, darf daraus keine Schleife werden. */
+    try{
+      if(sessionStorage.getItem('vt:fassung') === neue) return;
+      sessionStorage.setItem('vt:fassung', neue);
+    }catch(e){ return; }
+    /* Erst den Zwischenspeicher der Seite selbst erneuern, dann neu
+       laden - ein blosses Neuladen kann die alte Seite wiederbringen. */
+    try{ await fetch(location.href, {cache:'reload'}); }catch(e){}
+    location.reload();
+  }
+
   readAssignment();
   render();
+  fassungPruefen();
 })();

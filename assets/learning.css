@@ -539,8 +539,9 @@ body{-webkit-tap-highlight-color:transparent}
      dort nichts hinzulegen. Am Geraet gemessen reicht das Band 31 Punkte
      in die Seite hinein, die Knopfreihe beginnt also 40 Punkte tiefer - acht Punkte Luft.
 
-     Unten ist Platz frei geworden: Ohne die Leisten des Browsers ist das
-     Fenster 891 statt rund 750 Punkte hoch. Den nehmen die Tasten. */
+     Die Tasten bleiben so hoch wie im Browser. Hoehere Tasten haben den
+     gewonnenen Platz zwar aufgebraucht, aber nicht besser getroffen -
+     bei 40 Punkten Breite sahen 84 Punkte Hoehe gestreckt aus. */
   /* Erst ab 700 Punkten Fensterhoehe: Auf kurzen Bildschirmen ist der
      Platz zu knapp, dort waere ein Inhalt, der unter das Tastenfeld
      rutscht, schlimmer als ein angelaufener oberer Rand. */
@@ -548,8 +549,15 @@ body{-webkit-tap-highlight-color:transparent}
     body.eb-app .wrap{padding-top:40px}
     body.eb-app.eb-runde .wrap{padding-top:40px}
   }
-  @media (min-height:860px){
-    body.eb-app .eb-tasten{--tk:84px}
+  /* Unten haelt die App nichts frei: Die Webansicht reicht bis an die
+     Bildschirmkante, und env(safe-area-inset-bottom) meldet dabei 0.
+     Der Streifen des Home-Indicators ist 34 Punkte hoch - so viel
+     Abstand bekommen die Bewertungsknoepfe und die unterste Tastenreihe,
+     sonst schneidet er sie an. Erst ab 700 Punkten Fensterhoehe: Geraete
+     mit Home-Knopf haben keinen solchen Streifen und keinen Platz uebrig. */
+  @media (min-height:700px){
+    body.eb-app .controls{padding-bottom:max(calc(10px + env(safe-area-inset-bottom)),34px)}
+    body.eb-app .eb-tasten{padding-bottom:max(calc(6px + env(safe-area-inset-bottom)),34px)}
   }
 
   /* ---- Quer gehalten ----
