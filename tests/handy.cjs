@@ -74,21 +74,29 @@ const modus=(s,name)=>[...s.d.querySelectorAll('button')].find(b=>b.textContent.
   console.log('Tastenfeld: kein Doppeltipp-Zoom, Griff daneben zählt');
 }
 
-/* Der Probeknopf gehoert in die Schalterzeile und nur in die App:
-   In der Fortschrittszeile hat er den Lernumfang abgeschnitten, und im
-   Browser haette er jedem Schueler die Zeile verschoben. */
+/* Die Geometrie von iOS gilt jetzt immer - der Probeschalter, mit dem
+   sie am Geraet verglichen wurde, ist fort. Bleibt er versehentlich
+   stehen, sieht jeder Schueler eine Schaltflaeche, die ihn nichts
+   angeht. */
 {
+  const blatt=fs.readFileSync(path.join(root,'assets/learning.css'),'utf8');
+  assert.match(blatt,/body\.eb-tippen \.eb-tasten\{--tk:45px/,
+    'die iOS-Geometrie gilt nicht mehr fuer jedes Tastenfeld');
+  assert.equal(/eb-ios|tastenprobe/.test(blatt),false,
+    'im Blatt steht noch etwas vom Probeschalter');
+  const skript=fs.readFileSync(path.join(root,'assets/learning.js'),'utf8');
+  assert.equal(/iosProbe|tastenprobe/.test(skript),false,
+    'im Skript steht noch etwas vom Probeschalter');
   const t=seite('year5',390,true,{'vt:tastenprobe':'ios'});
   inRunde(t); modus(t,'Tippen');
-  assert.ok(t.d.querySelector('.sessionbar .switches #tastenprobe'),
-    'Probeknopf steht nicht in der Schalterzeile');
-  assert.equal(t.d.querySelector('.round-progress #tastenprobe'),null,
-    'Probeknopf steht in der Fortschrittszeile');
-  const imBrowser=seite('year5',390);
-  inRunde(imBrowser); modus(imBrowser,'Tippen');
-  assert.equal(imBrowser.d.querySelector('#tastenprobe'),null,
-    'Probeknopf erscheint auch im Browser');
-  console.log('Probeknopf: in der Schalterzeile, nur in der App');
+  assert.equal(t.d.querySelector('#tastenprobe'),null,'Probeknopf steht noch da');
+  /* Unterste Reihe in der Reihenfolge von iOS: 123 ganz links, dann
+     der Sprachwechsel - und keine fuenfte Taste mehr. */
+  const unten=[...t.d.querySelectorAll('.eb-tasten .tr:last-child .tk')]
+    .map(b=>b.dataset.k);
+  assert.deepEqual(unten,['⌘','⇄',' ','⏎'],
+    'die unterste Reihe steht nicht in der Reihenfolge von iOS');
+  console.log('Tastenfeld: iOS-Geometrie fest, kein Probeschalter mehr');
 }
 
 /* Die Blitzrunde hat ihr eigenes Eingabefeld und ihre eigene Ansicht.
