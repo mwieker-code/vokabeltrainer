@@ -367,3 +367,14 @@ body{-webkit-tap-highlight-color:transparent}
    als Gruppe wandern sie gemeinsam in die naechste Zeile.
    ========================================================================= */
 .foot-actions{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+
+/* =========================================================================
+   AUSWAHLMODUS IN DER WORTLISTE
+   Die Abschnittszeile ist eine Flexzeile mit space-between. Ohne
+   Auswahlmodus ist das Kaestchen ausgeblendet, also stehen nur zwei Dinge
+   darin: Titel links, Anzahl rechts. Sobald das Kaestchen sichtbar wird,
+   verteilt space-between drei Elemente - und der Titel rutscht in die
+   Mitte. Der Titel nimmt deshalb den freien Platz selbst ein und bleibt
+   damit am Kaestchen stehen, egal wie viele Nachbarn die Zeile hat.
+   ========================================================================= */
+.lsec > summary > span:not(.lnum){flex:1 1 auto;min-width:0;text-align:left}
