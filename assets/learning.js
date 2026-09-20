@@ -22,6 +22,23 @@
     return href ? href.replace(/manifest\.webmanifest$/, '') : './';
   }
 
+  /* ---- Serie richtiger Antworten ----
+     Gezaehlt wird nur, was die Seite selbst pruefen kann: Tippen,
+     Lueckensatz, Auswahl. Die Karteikarte bewertet sich selbst, und
+     eine sichtbare Serie waere dort eine Einladung, sich
+     schoenzureden - das Faechersystem rechnet aber mit ehrlichen
+     Bewertungen. Ein "Fast" haelt die Serie, statt sie zu reissen:
+     Ein Tippfehler ist kein Nichtwissen. */
+  let serie = 0, serieBest = 0;
+  function serieZaehlen(v){
+    if(S.mode === 'card') return;
+    const richtig = S.mode === 'mc' ? S.answered === v.id : S.answered === 'ok';
+    const fast = S.mode !== 'mc' && S.answered === 'near';
+    if(richtig) serie++;
+    else if(!fast) serie = 0;
+    if(serie > serieBest) serieBest = serie;
+  }
+
   const originalHome = renderHome;
   const originalSession = renderSession;
   const originalHelp = renderHelp;
@@ -421,6 +438,7 @@ ${vocabulary}`;
     const reviewed=shuffle(pool.filter(v=>record(v).due!==0));
     const unseen=shuffle(pool.filter(v=>record(v).due===0));
     S.queue=[...reviewed,...unseen].slice(0,S.roundLimit);
+    serie=0; serieBest=0;
     S.initialCount=S.queue.length; S.i=0; S.seen=0; S.revealed=false;
     S.answered=null; S.options=null; S.typedValue=''; S.mixedDue=false;
     S.retried=new Set(); S.missed=new Set(); S.roundAnswered=new Set();
@@ -474,6 +492,7 @@ ${vocabulary}`;
 
   rate = function(quality) {
     const v=current(); if(!v || !(S.revealed || S.answered)) return;
+    serieZaehlen(v);
     // An objectively wrong typed/choice answer cannot advance a card as "known".
     if(S.mode==='mc' && S.answered!==v.id) quality=0;
     if((S.mode==='type'||S.mode==='cloze') && S.answered==='no') quality=0;
@@ -1400,10 +1419,16 @@ ${vocabulary}`;
            Sprachwechsel, Leer und Pruefen - das Zeichen der fuenften
            Taste steht auf der 123-Ebene. */
         + (zeichen ? ebenenTaste
-           : ebenenTaste
-             + '<button type="button" class="tk sprache" data-k="⇄"'
-             + ' aria-label="Tastaturbelegung wechseln">' + spr.toUpperCase() + '</button>'
-             + (iosProbe ? '' : taste(B.extra)))
+           : (function(){
+               const sprachTaste =
+                 '<button type="button" class="tk sprache" data-k="⇄"'
+                 + ' aria-label="Tastaturbelegung wechseln">' + spr.toUpperCase()
+                 + '</button>';
+               /* Auf iOS steht 123 ganz links - dort also zuerst. Die
+                  heutige Form behaelt ihre Reihenfolge. */
+               return iosProbe ? ebenenTaste + sprachTaste
+                               : sprachTaste + ebenenTaste + taste(B.extra);
+             })())
         + '<button type="button" class="tk raum" data-k=" ">Leer</button>'
         + '<button type="button" class="tk senden" data-k="⏎">Prüfen</button></div>';
 
@@ -1472,8 +1497,42 @@ ${vocabulary}`;
       baueTasten();
       kartePlatzieren();
     }
+    /* Die Seillaenge im freien Streifen ueber der Karte. Sie erscheint
+       ab der zweiten richtigen Antwort - wer noch nichts getan hat,
+       wird nicht begruesst - und geht bei einem Fehler still auf null,
+       ohne Ausrufezeichen. Fuenf Marken sind eine Seillaenge; ist sie
+       voll, faengt die naechste an und die Zahl zaehlt weiter. */
+    function serieZeigen(){
+      const buehne = document.querySelector('.stage');
+      if(!buehne) return;
+      const alt = document.querySelector('.eb-serie');
+      if(!iosProbe || serie < 2){ if(alt) alt.remove(); return; }
+      const marken = ((serie - 1) % 5) + 1;
+      const el = alt || document.createElement('div');
+      if(!alt){ el.className = 'eb-serie'; el.setAttribute('role','status'); }
+      el.dataset.voll = marken === 5 ? 'ja' : 'nein';
+      el.innerHTML =
+        '<span class="eb-seil" aria-hidden="true">'
+        + [1,2,3,4,5].map(n => '<i' + (n <= marken ? ' class="an"' : '') + '></i>').join('')
+        + '</span><span class="eb-zahl">' + serie + ' in Folge</span>'
+        /* Die beste Serie steht nur da, solange sie noch ueber der
+           laufenden liegt - sonst wiederholt sie dieselbe Zahl. */
+        + (serieBest > serie ? '<span class="eb-zahl eb-leise">' + serieBest + ' als Bestes</span>' : '');
+      if(!alt) buehne.parentNode.insertBefore(el, buehne);
+    }
+
     function probeKnopf(){
-      const leiste = document.querySelector('.round-progress');
+      /* Nur vom Startbildschirm aus - dort wird verglichen. Im Browser
+         bliebe sonst fuer jeden Schueler eine Schaltflaeche stehen, die
+         ihn nichts angeht, und die Schalterzeile ruecke um gut dreissig
+         Punkte zur Seite. */
+      if(!document.body.classList.contains('eb-app')) return;
+      /* In die Schalterzeile, nicht in die Fortschrittszeile: Die
+         laeuft ohne Umbruch, und ein sechster Eintrag hat dort den
+         Lernumfang abgeschnitten und den Balken verdraengt. Die
+         Schalterzeile laesst sich seitlich schieben und vertraegt
+         einen mehr. */
+      const leiste = document.querySelector('.sessionbar .switches');
       if(!leiste || leiste.querySelector('#tastenprobe')) return;
       const k = document.createElement('button');
       k.id = 'tastenprobe'; k.type = 'button'; k.className = 'switch';
@@ -1534,9 +1593,11 @@ ${vocabulary}`;
           baueTasten();
       }
       else if(da) da.remove();
-      if(tasten){ markeSetzen(); probeKnopf(); kartePlatzieren(); }
+      if(tasten){ markeSetzen(); probeKnopf(); serieZeigen(); kartePlatzieren(); }
       else {
         randMerker = 0; appMerker = null;
+        const weg = document.querySelector('.eb-serie');
+        if(weg) weg.remove();
         const buehne = document.querySelector('.stage');
         if(buehne && buehne.style.marginTop) buehne.style.marginTop = '';
       }
