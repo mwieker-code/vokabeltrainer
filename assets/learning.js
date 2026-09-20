@@ -606,11 +606,13 @@ ${vocabulary}`;
   + '<p>Auf Android-Handys legst du über das Menü mit den drei Punkten '
   + 'ebenfalls eine Verknüpfung an. Sie öffnet den Trainer im Browser, '
   + 'nicht als eigene App.</p>'
-  + '<div class="warnbox"><b>Vorher sichern:</b> Der Lernstand auf dem '
-  + 'Startbildschirm kann vom Stand in Safari getrennt sein. Hast du schon '
-  + 'in Safari geübt, hole dir unten auf der Seite mit <b>Fortschritt '
-  + 'sichern</b> die Datei und lade sie beim ersten Start über '
-  + '<b>Fortschritt laden</b> wieder ein.</div>';
+  + '<div class="warnbox"><b>Vorher sichern:</b> Auf dem Startbildschirm hat '
+  + 'Basecamp seinen eigenen Speicher. Dein Lernstand aus Safari ist dort '
+  + 'nicht vorhanden. Hole dir deshalb vorher unten auf der Seite mit '
+  + '<b>Fortschritt sichern</b> die Datei und lade sie beim ersten Start '
+  + 'über <b>Fortschritt laden</b> wieder ein. Üb danach nur noch an einer '
+  + 'Stelle \u2013 sonst hast du zwei Lernstände, die nichts voneinander '
+  + 'wissen.</div>';
 
   function startbildschirmEinsetzen(doc){
     const kopf=[...doc.querySelectorAll('h2')].find(h=>/^Loslegen/.test(h.textContent.trim()));
