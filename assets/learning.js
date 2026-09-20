@@ -1219,7 +1219,7 @@ ${vocabulary}`;
     const ZEICHEN = { reihen: [
       '1234567890'.split(''),
       ['-','/',':',';','(',')','\u20ac','&','@'],
-      ['.', ',', '?', '!', '\u2019', '"', '\u232b']
+      ['.', ',', '?', '!', '\u00df', '\u2019', '"', '\u232b']
     ] };
     let ebene = 'buchstaben';              // oder 'zeichen'
     let wahl = null;                       // null = der Abfragerichtung folgen
@@ -1395,10 +1395,15 @@ ${vocabulary}`;
             taste(k, (k === '⇧' || k === '⌫') ? 'weit' : '')).join('')
           + '</div>').join('')
         + '<div class="tr">'
+        /* iOS traegt unten vier Tasten: 123, Emoji, Leerzeichen,
+           Eingabe. Dieselben vier Plaetze nehmen bei uns 123, der
+           Sprachwechsel, Leer und Pruefen - das Zeichen der fuenften
+           Taste steht auf der 123-Ebene. */
         + (zeichen ? ebenenTaste
-           : '<button type="button" class="tk sprache" data-k="⇄"'
+           : ebenenTaste
+             + '<button type="button" class="tk sprache" data-k="⇄"'
              + ' aria-label="Tastaturbelegung wechseln">' + spr.toUpperCase() + '</button>'
-             + ebenenTaste + taste(B.extra))
+             + (iosProbe ? '' : taste(B.extra)))
         + '<button type="button" class="tk raum" data-k=" ">Leer</button>'
         + '<button type="button" class="tk senden" data-k="⏎">Prüfen</button></div>';
 
@@ -1453,12 +1458,38 @@ ${vocabulary}`;
       return !!appAnsicht.matches;
     }
 
+    /* ---- Probe: Tastenfeld in der Geometrie von iOS ----
+       Zum Vergleichen am Geraet, umschaltbar ueber einen Knopf in der
+       Fortschrittszeile. Faellt die Entscheidung, faellt der Schalter
+       weg und eine der beiden Formen bleibt. */
+    const IOS_SCHLUESSEL = 'vt:tastenprobe';
+    let iosProbe = false;
+    try{ iosProbe = localStorage.getItem(IOS_SCHLUESSEL) === 'ios'; }catch(e){}
+    function probeSetzen(an){
+      iosProbe = an;
+      try{ localStorage.setItem(IOS_SCHLUESSEL, an ? 'ios' : 'heute'); }catch(e){}
+      document.body.classList.toggle('eb-ios', an);
+      baueTasten();
+      kartePlatzieren();
+    }
+    function probeKnopf(){
+      const leiste = document.querySelector('.round-progress');
+      if(!leiste || leiste.querySelector('#tastenprobe')) return;
+      const k = document.createElement('button');
+      k.id = 'tastenprobe'; k.type = 'button'; k.className = 'switch';
+      k.textContent = iosProbe ? 'iOS' : 'heute';
+      k.title = 'Tastenfeld umschalten: heutige Form oder iOS-Geometrie';
+      k.onclick = () => { probeSetzen(!iosProbe); k.textContent = iosProbe ? 'iOS' : 'heute'; };
+      leiste.appendChild(k);
+    }
+
     function pflege(){
       /* Der Beobachter kann noch einmal anschlagen, wenn das Dokument
          schon fort ist - in Testumgebungen, die das Fenster schliessen.
          Dann gibt es nichts mehr zu pflegen. */
       if(typeof document === 'undefined' || !document.body) return;
       document.body.classList.toggle('eb-app', alsApp());
+      document.body.classList.toggle('eb-ios', iosProbe);
       const runde = klein.matches && (S.view === 'session' || blitz());
       document.body.classList.toggle('eb-runde', runde);
 
@@ -1503,7 +1534,7 @@ ${vocabulary}`;
           baueTasten();
       }
       else if(da) da.remove();
-      if(tasten){ markeSetzen(); kartePlatzieren(); }
+      if(tasten){ markeSetzen(); probeKnopf(); kartePlatzieren(); }
       else {
         randMerker = 0; appMerker = null;
         const buehne = document.querySelector('.stage');

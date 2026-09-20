@@ -560,6 +560,52 @@ body{-webkit-tap-highlight-color:transparent}
     body.eb-app .eb-tasten{padding-bottom:max(calc(6px + env(safe-area-inset-bottom)),34px)}
   }
 
+  /* ---- Probe: Tastenfeld in der Geometrie von iOS ----
+     Alle Masse als Anteil der Bildschirmbreite, damit die Form auf
+     jedem Telefon dieselbe ist - iOS macht es genauso. Die Zahlen
+     stammen aus einem unskalierten Screenshot (1320 px auf 440
+     Punkte, Massstab genau 3), geteilt durch drei:
+
+       Taste            37,33 breit, 45 hoch   (deutsch 33,33 breit)
+       Luecke            6 waagerecht, 11,67 senkrecht
+       Aussenrand        6,67
+       Umschalt/Rueck   50, mit 14,67 Abstand zu den Buchstaben
+       untere Reihe     48 / 48 / 210,67 / 102
+
+     Der Kern ist Reihe 2: iOS laesst ihre Tasten so breit wie die in
+     Reihe 1 und rueckt sie ein, statt sie zu dehnen. Nur so steht das
+     "a" unter dem "q" - die Fingerstellung, die jedes Kind aus jeder
+     anderen Tastatur mitbringt. */
+  /* Nur oben und an den Seiten: Den Abstand nach unten bestimmt die
+     Regel fuer den Home-Indicator weiter oben, sonst waere die unterste
+     Reihe in der App wieder angeschnitten. */
+  body.eb-ios .eb-tasten{--tk:45px;padding-top:6px;padding-left:1.515%;padding-right:1.515%}
+  body.eb-ios .eb-tasten .tr{gap:1.364%;margin-bottom:11.67px;padding:0}
+  body.eb-ios .eb-tasten .tr:last-child{margin-bottom:0}
+  body.eb-ios .eb-tasten .tk{border-radius:5px;font-size:23px;box-shadow:0 1px 0 #8A8E96}
+  /* Reihe 2 der englischen Belegung: neun Tasten, eingerueckt. Die
+     deutsche traegt dort elf und braucht keinen Einzug. */
+  body.eb-ios .eb-tasten[data-sprache="en"][data-ebene="buchstaben"] .tr:nth-child(2){
+    padding:0 4.848%}
+  /* Umschalt und Ruecktaste: feste Breite, groesserer Abstand zu den
+     Buchstaben daneben. */
+  body.eb-ios .eb-tasten .tk.weit{flex:0 0 11.364%;font-size:20px}
+  body.eb-ios .eb-tasten .tr > .tk.weit:first-child{margin-right:1.97%}
+  body.eb-ios .eb-tasten[data-sprache="de"] .tr > .tk.weit:first-child{margin-right:5.152%}
+  body.eb-ios .eb-tasten .tr > .tk.weit:last-child{margin-left:1.97%}
+  body.eb-ios .eb-tasten[data-sprache="de"] .tr > .tk.weit:last-child{margin-left:5.152%}
+  /* Untere Reihe auf den Plaetzen von iOS. */
+  body.eb-ios .eb-tasten .tk.ebene,
+  body.eb-ios .eb-tasten .tk.sprache{flex:0 0 10.909%;font-size:13px}
+  body.eb-ios .eb-tasten .tk.raum{flex:1 1 auto;font-size:15px}
+  body.eb-ios .eb-tasten .tk.senden{flex:0 0 23.182%;font-size:15px}
+  body.eb-ios .eb-tasten[data-sprache="de"] .tk{font-size:21px}
+  body.eb-ios .eb-tasten[data-ebene="zeichen"] .tk{font-size:19px}
+  /* Der Probeschalter in der Fortschrittszeile - faellt mit der
+     Entscheidung wieder weg. */
+  body.eb-runde .round-progress #tastenprobe{flex:0 0 auto;font-size:11px;
+    padding:5px 9px;margin-left:4px}
+
   /* ---- Quer gehalten ----
      Karte links, Tastenfeld rechts. Uebereinander ist kein Platz: 430
      Punkte Hoehe tragen keine Karte und vier Tastenreihen zugleich.
