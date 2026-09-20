@@ -59,7 +59,7 @@ for(const seite of seiten){
   const kurz=path.relative(root,seite);
   for(const [name,muster] of [
       ['Manifest',/<link rel="manifest" href="([^"]+)"/],
-      ['Apple-Symbol',/<link rel="apple-touch-icon" href="([^"]+)"/]]){
+      ['Apple-Symbol',/<link rel="apple-touch-icon"[^>]* href="([^"]+)"/]]){
     const treffer=muster.exec(html);
     assert.ok(treffer,kurz+': kein '+name);
     const ziel=path.resolve(path.dirname(seite),treffer[1]);
@@ -77,5 +77,14 @@ assert.ok(gezaehlt>=13,'nur '+gezaehlt+' Seiten mit Kopf gefunden');
    ihn dort. Er muss trotzdem ein PNG der erwarteten Groesse sein. */
 assert.equal(masse(path.join(root,'assets/apple-touch-icon.png')),'180x180',
   'apple-touch-icon hat nicht 180x180');
+
+/* Seit iOS 17.4 nimmt WebKit das Symbol aus dem Manifest, sobald eines
+   verlinkt ist - das Apple-Symbol allein genuegt dann nicht mehr. Es
+   steht deshalb auch im Manifest, und jeder Eintrag ausser dem
+   beschneidbaren traegt ausdruecklich purpose "any". */
+assert.ok(m.icons.some(i=>i.sizes==='180x180'&&i.purpose==='any'),
+  'das Apple-Symbol fehlt im Manifest');
+assert.ok(m.icons.filter(i=>i.purpose==='any').length>=3,
+  'zu wenige Symbole mit purpose any');
 
 console.log('Manifest: '+m.icons.length+' Symbole, '+gezaehlt+' Seiten verweisen darauf');
