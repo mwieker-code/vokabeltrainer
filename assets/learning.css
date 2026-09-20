@@ -541,7 +541,10 @@ body{-webkit-tap-highlight-color:transparent}
 
      Unten ist Platz frei geworden: Ohne die Leisten des Browsers ist das
      Fenster 891 statt rund 750 Punkte hoch. Den nehmen die Tasten. */
-  @media (min-height:600px){
+  /* Erst ab 700 Punkten Fensterhoehe: Auf kurzen Bildschirmen ist der
+     Platz zu knapp, dort waere ein Inhalt, der unter das Tastenfeld
+     rutscht, schlimmer als ein angelaufener oberer Rand. */
+  @media (min-height:700px){
     body.eb-app .wrap{padding-top:40px}
     body.eb-app.eb-runde .wrap{padding-top:40px}
   }
