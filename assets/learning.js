@@ -1251,19 +1251,64 @@ ${vocabulary}`;
        hinein, ohne dass das Eingabefeld dabei seinen Platz verlaesst. */
     const LUFT = 10;
     let randMerker = 0;
+    /* Vom Startbildschirm aus bleiben ueber der Karte 64 Punkte leer.
+       Die Karte nimmt sie sich: Sie waechst nach oben, und das Wort
+       bekommt denselben Betrag als Abstand darueber. Beides zusammen
+       laesst Wort, Eingabefeld und Tasten genau dort, wo sie stehen -
+       verschoben wird nur die Oberkante der Karte.
+
+       Die Rueckmeldung bekommt dabei bewusst keinen Platz reserviert:
+       Sie braucht 91 Punkte, frei sind 64. Reserviert man ihr alles,
+       reicht die Karte unter die Tastatur. Sie waechst weiterhin nach
+       unten, in den Platz, den die Tastatur beim Pruefen freigibt -
+       ueber der Karte bewegt sich dabei nichts. */
+    let appMerker = null;
+    /* Beim Tippen traegt das abgefragte Wort die Klasse prompt, beim
+       Lueckensatz der Satz die Klasse cloze - beide stehen an
+       derselben Stelle der Karte. */
+    const wortVon = karte => karte.querySelector('.prompt, .cloze');
+
     function kartePlatzieren(){
       const buehne = document.querySelector('.stage');
       if(!buehne) return;
       const karte = buehne.querySelector('.vcard');
       if(!karte) return;
+      const app = document.body.classList.contains('eb-app')
+               && document.body.classList.contains('eb-tippen');
       const tasten = document.querySelector('.eb-tasten');
+
       if(!tasten){
         /* Nach dem Pruefen ist das Tastenfeld fort und die Karte neu
            gezeichnet. Sie bleibt trotzdem, wo sie beim Tippen stand -
            sonst springt das Eingabefeld beim Antworten nach oben. */
-        if(randMerker) buehne.style.marginTop = randMerker + 'px';
+        if(app && appMerker){
+          karte.style.minHeight = appMerker.hoehe + 'px';
+          const wort = wortVon(karte);
+          if(wort) wort.style.paddingTop = appMerker.oben + 'px';
+        }
+        else if(randMerker) buehne.style.marginTop = randMerker + 'px';
         return;
       }
+
+      if(app){
+        const wort = wortVon(karte);
+        if(!wort) return;
+        const platz = Math.round(tasten.getBoundingClientRect().top - LUFT
+                               - karte.getBoundingClientRect().bottom);
+        if(platz > 0){
+          const hoehe = Math.round(karte.getBoundingClientRect().height) + platz;
+          const oben = Math.round(parseFloat(wort.style.paddingTop) || 0) + platz;
+          karte.style.minHeight = hoehe + 'px';
+          wort.style.paddingTop = oben + 'px';
+          appMerker = {hoehe, oben};
+        }
+        else if(appMerker){
+          karte.style.minHeight = appMerker.hoehe + 'px';
+          wort.style.paddingTop = appMerker.oben + 'px';
+        }
+        return;
+      }
+
       const jetzt = parseFloat(buehne.style.marginTop) || 0;
       const luecke = tasten.getBoundingClientRect().top -
                      karte.getBoundingClientRect().bottom;
@@ -1396,7 +1441,7 @@ ${vocabulary}`;
       else if(da) da.remove();
       if(tasten){ markeSetzen(); kartePlatzieren(); }
       else {
-        randMerker = 0;
+        randMerker = 0; appMerker = null;
         const buehne = document.querySelector('.stage');
         if(buehne && buehne.style.marginTop) buehne.style.marginTop = '';
       }

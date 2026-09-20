@@ -46,6 +46,15 @@ const modus=(s,name)=>[...s.d.querySelectorAll('button')].find(b=>b.textContent.
   inRunde(app); modus(app,'Tippen');
   assert.ok(app.d.body.classList.contains('eb-app'),
     'Start vom Startbildschirm nicht erkannt');
+  /* Die Karte fuellt in der App den freien Platz, indem sie dem
+     abgefragten Wort Abstand darueber gibt. Beim Tippen heisst dieses
+     Wort prompt, beim Lueckensatz cloze - findet die Karte es nicht,
+     bleibt der Platz leer, ohne dass etwas auffaellt. */
+  for(const art of ['Tippen','Lückensatz']){
+    modus(app,art);
+    assert.ok(app.d.querySelector('.vcard .prompt, .vcard .cloze'),
+      art+': die Karte findet ihr Wort nicht');
+  }
   console.log('App-Erkennung: nur vom Startbildschirm, nicht im Browser');
 }
 
