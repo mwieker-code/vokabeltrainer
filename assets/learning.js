@@ -1259,9 +1259,9 @@ ${vocabulary}`;
        der Abfragerichtung. Der Umschalter setzt sich darueber hinweg. */
     const BELEGUNG = {
       en: { reihen: ['qwertyuiop'.split(''), 'asdfghjkl'.split(''),
-                     ['⇧','z','x','c','v','b','n','m','⌫']], extra: '’' },
+                     ['⇧','z','x','c','v','b','n','m','⌫']] },
       de: { reihen: ['qwertzuiopü'.split(''), 'asdfghjklöä'.split(''),
-                     ['⇧','y','x','c','v','b','n','m','⌫']], extra: 'ß' }
+                     ['⇧','y','x','c','v','b','n','m','⌫']] }
     };
     /* Zweite Ebene. Fragezeichen und Punkt gehoeren zum Lueckensatz,
        Ziffern und Bindestrich zu einzelnen Vokabeln - beides hatte auf
@@ -1447,18 +1447,17 @@ ${vocabulary}`;
         + '<div class="tr">'
         /* iOS traegt unten vier Tasten: 123, Emoji, Leerzeichen,
            Eingabe. Dieselben vier Plaetze nehmen bei uns 123, der
-           Sprachwechsel, Leer und Pruefen - das Zeichen der fuenften
-           Taste steht auf der 123-Ebene. */
+           Sprachwechsel, Leer und Pruefen. Apostroph und ß hatten
+           frueher eine fuenfte Taste; sie stehen jetzt auf der
+           123-Ebene. */
         + (zeichen ? ebenenTaste
            : (function(){
                const sprachTaste =
                  '<button type="button" class="tk sprache" data-k="⇄"'
                  + ' aria-label="Tastaturbelegung wechseln">' + spr.toUpperCase()
                  + '</button>';
-               /* Auf iOS steht 123 ganz links - dort also zuerst. Die
-                  heutige Form behaelt ihre Reihenfolge. */
-               return iosProbe ? ebenenTaste + sprachTaste
-                               : sprachTaste + ebenenTaste + taste(B.extra);
+               /* Auf iOS steht 123 ganz links - dort also zuerst. */
+               return ebenenTaste + sprachTaste;
              })())
         + '<button type="button" class="tk raum" data-k=" ">Leer</button>'
         + '<button type="button" class="tk senden" data-k="⏎">Prüfen</button></div>';
@@ -1537,48 +1536,12 @@ ${vocabulary}`;
       return !!appAnsicht.matches;
     }
 
-    /* ---- Probe: Tastenfeld in der Geometrie von iOS ----
-       Zum Vergleichen am Geraet, umschaltbar ueber einen Knopf in der
-       Fortschrittszeile. Faellt die Entscheidung, faellt der Schalter
-       weg und eine der beiden Formen bleibt. */
-    const IOS_SCHLUESSEL = 'vt:tastenprobe';
-    let iosProbe = false;
-    try{ iosProbe = localStorage.getItem(IOS_SCHLUESSEL) === 'ios'; }catch(e){}
-    function probeSetzen(an){
-      iosProbe = an;
-      try{ localStorage.setItem(IOS_SCHLUESSEL, an ? 'ios' : 'heute'); }catch(e){}
-      document.body.classList.toggle('eb-ios', an);
-      baueTasten();
-      kartePlatzieren();
-    }
-    function probeKnopf(){
-      /* Nur vom Startbildschirm aus - dort wird verglichen. Im Browser
-         bliebe sonst fuer jeden Schueler eine Schaltflaeche stehen, die
-         ihn nichts angeht, und die Schalterzeile ruecke um gut dreissig
-         Punkte zur Seite. */
-      if(!document.body.classList.contains('eb-app')) return;
-      /* In die Schalterzeile, nicht in die Fortschrittszeile: Die
-         laeuft ohne Umbruch, und ein sechster Eintrag hat dort den
-         Lernumfang abgeschnitten und den Balken verdraengt. Die
-         Schalterzeile laesst sich seitlich schieben und vertraegt
-         einen mehr. */
-      const leiste = document.querySelector('.sessionbar .switches');
-      if(!leiste || leiste.querySelector('#tastenprobe')) return;
-      const k = document.createElement('button');
-      k.id = 'tastenprobe'; k.type = 'button'; k.className = 'switch';
-      k.textContent = iosProbe ? 'iOS' : 'heute';
-      k.title = 'Tastenfeld umschalten: heutige Form oder iOS-Geometrie';
-      k.onclick = () => { probeSetzen(!iosProbe); k.textContent = iosProbe ? 'iOS' : 'heute'; };
-      leiste.appendChild(k);
-    }
-
     function pflege(){
       /* Der Beobachter kann noch einmal anschlagen, wenn das Dokument
          schon fort ist - in Testumgebungen, die das Fenster schliessen.
          Dann gibt es nichts mehr zu pflegen. */
       if(typeof document === 'undefined' || !document.body) return;
       document.body.classList.toggle('eb-app', alsApp());
-      document.body.classList.toggle('eb-ios', iosProbe);
       const runde = klein.matches && (S.view === 'session' || blitz());
       document.body.classList.toggle('eb-runde', runde);
 
@@ -1623,7 +1586,7 @@ ${vocabulary}`;
           baueTasten();
       }
       else if(da) da.remove();
-      if(tasten){ markeSetzen(); probeKnopf(); kartePlatzieren(); }
+      if(tasten){ markeSetzen(); kartePlatzieren(); }
       else {
         randMerker = 0; appMerker = null;
         const buehne = document.querySelector('.stage');
