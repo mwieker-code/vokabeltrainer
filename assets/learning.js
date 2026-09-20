@@ -1467,10 +1467,33 @@ ${vocabulary}`;
       /* pointerdown statt click: Die Taste reagiert beim Aufsetzen des
          Fingers, nicht erst beim Loslassen - das ist der Unterschied
          zwischen "reagiert sofort" und "haengt". */
+      /* Zwischen den Tasten liegt Luft. Ein Finger, der sie trifft,
+         loeste bisher nichts aus - und zwei solche Treffer kurz
+         hintereinander liest Safari als Doppeltipp und zoomt die Seite
+         hinein. Deshalb zweierlei: Der Griff daneben wird der naechsten
+         Taste zugeschlagen, solange er nah genug liegt, und jeder
+         Zeigerdruck auf dem Tastenfeld wird abgefangen, damit der
+         Doppeltipp gar nicht erst entsteht. Das Zoomen mit zwei Fingern
+         bleibt davon unberuehrt. */
+      const GRIFFWEITE = 14;   // so weit daneben zaehlt noch als Treffer
+      function naechsteTaste(x, y){
+        let beste = null, naehe = Infinity;
+        for(const k of box.querySelectorAll('.tk')){
+          const r = k.getBoundingClientRect();
+          const dx = x < r.left ? r.left - x : x > r.right ? x - r.right : 0;
+          const dy = y < r.top ? r.top - y : y > r.bottom ? y - r.bottom : 0;
+          const d = Math.sqrt(dx * dx + dy * dy);
+          if(d < naehe){ naehe = d; beste = k; }
+        }
+        return naehe <= GRIFFWEITE ? beste : null;
+      }
+
       box.addEventListener('pointerdown', e => {
-        const b = e.target.closest('.tk');
-        if(!b) return;
+        /* Immer abfangen - auch der Griff ins Leere darf keinen
+           Doppeltipp ausloesen. */
         e.preventDefault();
+        const b = e.target.closest('.tk') || naechsteTaste(e.clientX, e.clientY);
+        if(!b) return;
         const k = b.dataset.k, feld = feldVon();
         if(k === '⏎'){
           const s = document.getElementById('submit');

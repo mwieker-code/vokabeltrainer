@@ -59,6 +59,21 @@ const modus=(s,name)=>[...s.d.querySelectorAll('button')].find(b=>b.textContent.
   console.log('App-Erkennung: nur vom Startbildschirm, nicht im Browser');
 }
 
+/* Kein Zoom durch Doppeltippen, solange getippt wird. Wo genau ein
+   Finger landet, weiss nur ein Browser mit Layout - hier steht nur,
+   dass die Regel nicht aus dem Blatt verschwindet. Dass der Griff
+   zwischen zwei Tasten der naechsten zugeschlagen wird, ist im Browser
+   gemessen. */
+{
+  const blatt=fs.readFileSync(path.join(root,'assets/learning.css'),'utf8');
+  assert.match(blatt,/body\.eb-tippen[^{]*\{touch-action:manipulation\}/,
+    'die Regel gegen den Doppeltipp-Zoom fehlt');
+  const skript=fs.readFileSync(path.join(root,'assets/learning.js'),'utf8');
+  assert.match(skript,/function naechsteTaste/,
+    'der Griff neben die Taste wird nicht aufgefangen');
+  console.log('Tastenfeld: kein Doppeltipp-Zoom, Griff daneben zählt');
+}
+
 /* Der Probeknopf gehoert in die Schalterzeile und nur in die App:
    In der Fortschrittszeile hat er den Lernumfang abgeschnitten, und im
    Browser haette er jedem Schueler die Zeile verschoben. */
