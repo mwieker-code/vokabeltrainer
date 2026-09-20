@@ -214,3 +214,56 @@ for(const folder of ['year5','year9','oberstufe','bili/history']){
 
   console.log(folder+': Tastenfeld, Belegung, Rückzug und Rechner passen');
 }
+
+/* Zwei gehaltene Tasten. Beide brauchen echte Zeit, deshalb laeuft
+   dieser Teil asynchron - der Rest der Datei ist da schon durch. */
+(async () => {
+  const warte = ms => new Promise(r => setTimeout(r, ms));
+  const t = seite('year5', 390);
+  inRunde(t); modus(t, 'Tippen');
+  const box = t.d.querySelector('.eb-tasten');
+  const feld = t.d.getElementById('typeIn');
+  const kasten = feld.closest('.typebox');
+  const marke = () => kasten.style.getPropertyValue('--eb-marke-x');
+  const druck = (k, x) => box.querySelector('.tk[data-k="' + k + '"]')
+    .dispatchEvent(new t.w.MouseEvent('pointerdown', {bubbles:true, clientX:x || 0}));
+
+  /* Die Ruecktaste: ein Tipp nimmt einen Buchstaben, gehalten raeumt
+     sie die ganze Zeile. */
+  'cat'.split('').forEach(k => druck(k));
+  assert.equal(feld.value, 'cat', 'Eingabe kommt nicht an');
+  druck('⌫');
+  assert.equal(feld.value, 'ca', 'der Tipp auf die Ruecktaste nimmt keinen Buchstaben');
+  await warte(700);
+  assert.equal(feld.value, '', 'die gehaltene Ruecktaste raeumt die Zeile nicht');
+  box.dispatchEvent(new t.w.Event('pointerup', {bubbles:true}));
+
+  /* Die Leertaste: ein Tipp setzt ein Leerzeichen, gehalten wird das
+     Tastenfeld zum Schiebefeld - das Leerzeichen kommt zurueck und der
+     Finger zieht die Schreibmarke. */
+  'cat'.split('').forEach(k => druck(k));
+  druck(' ', 200);
+  assert.equal(feld.value, 'cat ', 'der Tipp auf die Leertaste setzt kein Leerzeichen');
+  await warte(500);
+  assert.equal(feld.value, 'cat', 'das Halten nimmt das Leerzeichen nicht zurueck');
+  assert.equal(box.dataset.schieben, 'an', 'das Tastenfeld wird nicht zum Schiebefeld');
+  assert.ok(parseFloat(marke()) > 0, 'die Schreibmarke steht nicht hinter dem Wort');
+  /* Ein Zeichen ist hier rund zwoelf Punkte breit - 60 nach links sind
+     also weiter als das ganze Wort, die Marke landet davor. */
+  box.dispatchEvent(new t.w.MouseEvent('pointermove', {bubbles:true, clientX:140}));
+  assert.equal(parseFloat(marke()), 0, 'die Schreibmarke wandert nicht mit dem Finger');
+  box.dispatchEvent(new t.w.MouseEvent('pointermove', {bubbles:true, clientX:188}));
+  assert.ok(parseFloat(marke()) > 0 && parseFloat(marke()) < 36,
+    'die Schreibmarke haelt nicht zwischen den Buchstaben');
+  box.dispatchEvent(new t.w.MouseEvent('pointermove', {bubbles:true, clientX:140}));
+  box.dispatchEvent(new t.w.Event('pointerup', {bubbles:true}));
+  assert.ok(!box.dataset.schieben, 'das Schiebefeld bleibt nach dem Loslassen stehen');
+
+  /* Und jetzt wird vorn eingefuegt, nicht hinten angehaengt. */
+  druck('s');
+  assert.equal(feld.value, 'scat', 'der Buchstabe landet nicht an der Schreibstelle');
+  druck('⌫');
+  assert.equal(feld.value, 'cat', 'die Ruecktaste loescht nicht an der Schreibstelle');
+  box.dispatchEvent(new t.w.Event('pointerup', {bubbles:true}));
+  console.log('Gehaltene Tasten: Zeile leeren, Schreibmarke schieben');
+})();

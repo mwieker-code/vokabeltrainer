@@ -1289,13 +1289,37 @@ ${vocabulary}`;
 
     /* Die Schreibmarke ist ein gezeichneter Strich, kein echter Cursor -
        ein readonly-Feld zeigt auf iOS keinen. Ihre Lage ist die Breite
-       des bereits getippten Textes, gemessen in der Schrift des Feldes. */
+       des Textes vor der Schreibstelle, gemessen in der Schrift des
+       Feldes. */
     let stift = null;
+    /* Wo im Wort geschrieben wird. null heisst: am Ende - der Normalfall,
+       und der einzige Stand, solange niemand die Leertaste haelt. */
+    let stelle = null;
+    function stelleVon(feld){
+      const n = feld.value.length;
+      return stelle === null ? n : Math.max(0, Math.min(stelle, n));
+    }
+    /* Breite eines Textstuecks in der Schrift des Feldes. */
+    function textBreite(text, stil){
+      if(!text) return 0;
+      if(stift){
+        stift.font = stil.fontStyle + ' ' + stil.fontWeight + ' ' +
+                     stil.fontSize + ' ' + stil.fontFamily;
+        return stift.measureText(text).width;
+      }
+      /* Ohne Canvas - sehr alte Browser, Testumgebungen - eine grobe
+         Schaetzung: besser als eine Marke, die stehen bleibt. */
+      return text.length * parseFloat(stil.fontSize) * 0.55;
+    }
     function markeSetzen(){
       const feld = feldVon();
       const box = feld && feld.closest('.typebox');
       if(!box) return;
       const leer = !feld.value;
+      /* Ein leeres Feld heisst: neue Karte. Die Schreibstelle geht
+         zurueck ans Ende, sonst truege sie die Stelle des Wortes
+         davor ins naechste hinein. */
+      if(leer) stelle = null;
       box.classList.toggle('leer', leer);
       box.classList.toggle('aus', feld.disabled);
       const stil = getComputedStyle(feld);
@@ -1304,18 +1328,8 @@ ${vocabulary}`;
         catch(e){ stift = false; }
         if(!stift) stift = false;
       }
-      let breite = 0;
-      if(!leer){
-        if(stift){
-          stift.font = stil.fontStyle + ' ' + stil.fontWeight + ' ' +
-                       stil.fontSize + ' ' + stil.fontFamily;
-          breite = stift.measureText(feld.value).width;
-        }else{
-          /* Ohne Canvas - sehr alte Browser, Testumgebungen - eine grobe
-             Schaetzung: besser als eine Marke, die stehen bleibt. */
-          breite = feld.value.length * parseFloat(stil.fontSize) * 0.55;
-        }
-      }
+      const breite = leer ? 0
+        : textBreite(feld.value.slice(0, stelleVon(feld)), stil);
       box.style.setProperty('--eb-marke-x', Math.round(breite) + 'px');
       box.style.setProperty('--eb-marke-rand', stil.paddingLeft);
       /* Die Hoehe der Box taugt nicht als Bezug: Unter dem Feld haengt
@@ -1487,28 +1501,110 @@ ${vocabulary}`;
         return naehe <= GRIFFWEITE ? beste : null;
       }
 
+      /* Zwei Tasten koennen gehalten werden. Beide brauchen eine Uhr,
+         die beim Loslassen wieder stehenbleibt.
+           Ruecktaste  -  nach einer halben Sekunde ist die Zeile leer.
+           Leertaste   -  nach einer Drittelsekunde wird das Tastenfeld
+                          zum Schiebefeld: Der Finger zieht die
+                          Schreibmarke durchs Wort, wie auf iOS. */
+      const HALTEN_LEEREN = 500, HALTEN_SCHIEBEN = 330;
+      let uhr = null, schiebt = false, zeiger = null, startX = 0, startStelle = 0;
+      function uhrAus(){ if(uhr){ clearTimeout(uhr); uhr = null; } }
+      function schiebenAus(){
+        uhrAus();
+        if(schiebt){ schiebt = false; delete box.dataset.schieben; markeSetzen(); }
+        if(zeiger !== null){
+          try{ box.releasePointerCapture(zeiger); }catch(err){}
+          zeiger = null;
+        }
+      }
+      /* Welcher Buchstabe liegt unter dem Finger? Gemessen wird in der
+         Schrift des Feldes, nicht in Zeichen je Pixel - sonst liefe die
+         Marke bei "mm" anders als bei "ll". */
+      function stelleBei(feld, x){
+        const stil = getComputedStyle(feld);
+        const ziel = textBreite(feld.value.slice(0, startStelle), stil) + (x - startX);
+        let beste = 0, naehe = Infinity;
+        for(let i = 0; i <= feld.value.length; i++){
+          const d = Math.abs(textBreite(feld.value.slice(0, i), stil) - ziel);
+          if(d < naehe){ naehe = d; beste = i; }
+        }
+        return beste;
+      }
+
       box.addEventListener('pointerdown', e => {
         /* Immer abfangen - auch der Griff ins Leere darf keinen
            Doppeltipp ausloesen. */
         e.preventDefault();
+        schiebenAus();
         const b = e.target.closest('.tk') || naechsteTaste(e.clientX, e.clientY);
         if(!b) return;
         const k = b.dataset.k, feld = feldVon();
-        if(k === '⏎'){
+        if(k === '\u23ce'){
           const s = document.getElementById('submit');
           if(s) s.click();
           else if(blitz()) blitzSubmit();   // dort pruefte sonst nur die Enter-Taste
           return;
         }
-        if(k === '⇄'){ wahl = belegung() === 'en' ? 'de' : 'en'; baueTasten(); return; }
-        if(k === '⌘'){ ebene = zeichen ? 'buchstaben' : 'zeichen'; baueTasten(); return; }
+        if(k === '\u21c4'){ wahl = belegung() === 'en' ? 'de' : 'en'; baueTasten(); return; }
+        if(k === '\u2318'){ ebene = zeichen ? 'buchstaben' : 'zeichen'; baueTasten(); return; }
         if(!feld || feld.disabled) return;
-        if(k === '⌫') feld.value = feld.value.slice(0, -1);
-        else if(k === '⇧'){ gross = !gross; box.dataset.gross = gross ? 'an' : 'aus'; return; }
-        else { feld.value += gross ? k.toUpperCase() : k; gross = false; box.dataset.gross = 'aus'; }
+        const i = stelleVon(feld), v = feld.value;
+        if(k === '\u232b'){
+          if(i > 0){ feld.value = v.slice(0, i - 1) + v.slice(i); stelle = i - 1; }
+          /* Gehalten raeumt sie die ganze Zeile. */
+          uhr = setTimeout(() => {
+            uhr = null;
+            const f = feldVon();
+            if(!f || f.disabled || !f.value) return;
+            f.value = ''; stelle = 0;
+            f.dispatchEvent(new Event('input', {bubbles:true}));
+            markeSetzen();
+          }, HALTEN_LEEREN);
+        }
+        else if(k === '\u21e7'){ gross = !gross; box.dataset.gross = gross ? 'an' : 'aus'; return; }
+        else {
+          feld.value = v.slice(0, i) + (gross ? k.toUpperCase() : k) + v.slice(i);
+          stelle = i + 1;
+          gross = false; box.dataset.gross = 'aus';
+          if(k === ' '){
+            /* Die Taste reagiert beim Aufsetzen - das Leerzeichen steht
+               also schon. Wird daraus ein Halten, nimmt die Uhr es
+               wieder zurueck, und der Finger schiebt stattdessen. */
+            startX = e.clientX;
+            const nummer = e.pointerId;
+            uhr = setTimeout(() => {
+              uhr = null;
+              const f = feldVon();
+              if(!f || f.disabled) return;
+              const j = stelleVon(f);
+              if(j > 0 && f.value[j - 1] === ' '){
+                f.value = f.value.slice(0, j - 1) + f.value.slice(j);
+                stelle = j - 1;
+                f.dispatchEvent(new Event('input', {bubbles:true}));
+              }
+              schiebt = true; startStelle = stelleVon(f);
+              box.dataset.schieben = 'an';
+              try{ box.setPointerCapture(nummer); zeiger = nummer; }catch(err){}
+              markeSetzen();
+            }, HALTEN_SCHIEBEN);
+          }
+        }
         feld.dispatchEvent(new Event('input', {bubbles:true}));
         markeSetzen();
       });
+
+      box.addEventListener('pointermove', e => {
+        if(!schiebt) return;
+        e.preventDefault();
+        const feld = feldVon();
+        if(!feld || feld.disabled) return;
+        const neu = stelleBei(feld, e.clientX);
+        if(neu !== stelle){ stelle = neu; markeSetzen(); }
+      });
+      for(const art of ['pointerup', 'pointercancel', 'pointerleave'])
+        box.addEventListener(art, schiebenAus);
+
       document.body.appendChild(box);
       /* Die Hoehe steht erst nach dem Zeichnen fest; sie sagt der Seite,
          wie viel Platz sie unten frei lassen muss. */
