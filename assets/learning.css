@@ -378,3 +378,72 @@ body{-webkit-tap-highlight-color:transparent}
    damit am Kaestchen stehen, egal wie viele Nachbarn die Zeile hat.
    ========================================================================= */
 .lsec > summary > span:not(.lnum){flex:1 1 auto;min-width:0;text-align:left}
+
+/* =========================================================================
+   UEBEN AUF DEM TELEFON
+   Zwei Dinge, die nur auf kleinen Bildschirmen gelten.
+
+   Erstens: Waehrend einer Runde zeigt die Seite nur, was zur Runde
+   gehoert. Schriftzug, Fusszeile und die Ton-Schalter kosten zusammen
+   ueber 250px, die niemand beim Antworten ansieht.
+
+   Zweitens: Statt der Systemtastatur zeichnet die Seite ihr eigenes
+   Tastenfeld. Der Grund ist nicht Platz, sondern Verlaesslichkeit - die
+   Systemtastatur schiebt den sichtbaren Ausschnitt, und zwar auf jedem
+   Geraet anders. Was es nicht gibt, kann nichts verschieben. Nebenbei
+   entfaellt die deutsche Autokorrektur beim Tippen englischer Woerter.
+   ========================================================================= */
+@media (max-width:620px){
+  /* ---- Aufgeraeumte Runde ---- */
+  body.eb-runde .masthead,
+  body.eb-runde .foot,
+  body.eb-runde .feedback-settings{display:none}
+  body.eb-runde .wrap{padding-top:10px}
+  body.eb-runde .sessionbar{display:flex;align-items:center;gap:10px;flex-wrap:nowrap}
+  body.eb-runde .sessionbar .switches{display:flex;flex-wrap:nowrap;gap:8px;
+    overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+  body.eb-runde .sessionbar .switches::-webkit-scrollbar{display:none}
+  body.eb-runde .sessionbar .switch{flex:0 0 auto;white-space:nowrap}
+  body.eb-runde #back{flex:0 0 auto}
+  /* Weiche Kante rechts, solange dort noch Schalter stehen. */
+  body.eb-runde .switches.eb-mehr{
+    -webkit-mask-image:linear-gradient(to right,#000 86%,transparent);
+    mask-image:linear-gradient(to right,#000 86%,transparent)}
+  body.eb-runde .round-progress{display:flex;align-items:center;gap:10px;
+    font-size:12px;margin:10px 0 6px}
+  body.eb-runde .round-progress progress{flex:1;height:4px;margin:0}
+  body.eb-runde .box-details summary{padding:8px 12px;font-size:13px}
+
+  /* ---- Eigenes Tastenfeld ---- */
+  body.eb-tippen{padding-bottom:var(--eb-tastenhoehe,296px)}
+  .eb-tasten{position:fixed;left:0;right:0;bottom:0;z-index:50;
+    padding:6px 4px calc(6px + env(safe-area-inset-bottom));
+    background:#D3D6DB;border-radius:12px 12px 0 0}
+  .eb-tasten .tr{display:flex;gap:4px;justify-content:center;margin-bottom:7px;padding:0 3px}
+  .eb-tasten .tr:last-child{margin-bottom:0}
+  .eb-tasten .tk{flex:1 1 0;min-width:0;height:var(--tk,64px);border:0;border-radius:7px;
+    background:#fff;color:var(--ink);font:400 25px/1 var(--sans);box-shadow:0 1px 0 #8A8E96;
+    cursor:pointer;-webkit-user-select:none;user-select:none;padding:0;
+    -webkit-tap-highlight-color:transparent}
+  .eb-tasten .tk:active{background:#B9BDC4}
+  .eb-tasten .tk.weit{flex:1.4 1 0;background:#ADB2BA;font-size:19px}
+  .eb-tasten .tk.raum{flex:2.6 1 0;font-size:15px}
+  .eb-tasten .tk.senden{flex:2.2 1 0;background:var(--petrol);color:#fff;
+    font-size:16px;font-weight:600}
+  .eb-tasten .tk.sprache{flex:1.1 1 0;background:#ADB2BA;font-size:14px;
+    font-weight:600;letter-spacing:.04em}
+  .eb-tasten[data-sprache="de"] .tk{font-size:23px}
+  /* Elf Tasten je Reihe und kurze Bildschirme vertragen sich schlecht. */
+  @media (max-height:720px){.eb-tasten{--tk:50px}.eb-tasten .tk{font-size:21px}}
+  @media (max-height:640px){.eb-tasten{--tk:44px}.eb-tasten .tk{font-size:19px}}
+
+  /* Der untere Streifen traegt beides nacheinander: beim Antworten die
+     Tasten, danach Nochmal / Unsicher / Gewusst. Gleicher Platz, kein
+     Springen. */
+  body.eb-tippen[data-eb-antwort="offen"] .controls{display:none}
+  body.eb-tippen .controls{position:fixed;left:0;right:0;bottom:0;z-index:51;margin:0;
+    padding:10px 12px calc(10px + env(safe-area-inset-bottom));
+    background:var(--card);border-top:1px solid var(--rule);
+    display:flex;gap:8px;box-shadow:0 -4px 14px #16232b14}
+  body.eb-tippen .controls button{flex:1 1 0;min-width:0}
+}
