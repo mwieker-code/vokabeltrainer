@@ -3,14 +3,19 @@
    Layout. Die Masse sind im Browser gemessen, hier geht es darum, dass
    das Tastenfeld entsteht, die richtige Belegung traegt, wieder
    verschwindet und den Desktop in Ruhe laesst. */
-const {JSDOM}=require('jsdom');
+const {JSDOM, VirtualConsole}=require('jsdom');
 const vm=require('node:vm');
 const fs=require('fs'),path=require('path'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..');
 
 function seite(folder, breite){
   const html=fs.readFileSync(path.join(root,folder,'index.html'),'utf8');
-  const dom=new JSDOM(html,{runScripts:'outside-only',url:'https://example.org/'+folder+'/'});
+  /* jsdom kann kein Canvas und meldet das lautstark. Die Schreibmarke
+     faellt dann auf ihre Schaetzung zurueck - erwartet, kein Fehler. */
+  const stille=new VirtualConsole();
+  stille.on('jsdomError',e=>{ if(!/getContext/.test(String(e.message))) throw e; });
+  const dom=new JSDOM(html,{runScripts:'outside-only',virtualConsole:stille,
+    url:'https://example.org/'+folder+'/'});
   const w=dom.window;w.scrollTo=()=>{};
   /* jsdom kennt matchMedia nicht - die Breite entscheidet. */
   w.matchMedia=q=>({matches:/max-width:620px/.test(q)?breite<=620:false,
@@ -37,6 +42,11 @@ for(const folder of ['year5','year9','oberstufe','bili/history']){
   assert.ok(t.d.body.classList.contains('eb-tippen'),folder+': Tastenfeld nicht aktiv');
   assert.ok(feld.hasAttribute('readonly'),folder+': Systemtastatur nicht unterdrueckt');
 
+  /* Die Schreibmarke sitzt am Ende des Getippten; solange nichts
+     dasteht, weicht der blasse Hinweis zur Seite. */
+  const kasten=t.d.querySelector('.typebox');
+  assert.ok(kasten.classList.contains('leer'),folder+': leeres Feld nicht erkannt');
+
   const feldchen=t.d.querySelector('.eb-tasten');
   assert.ok(feldchen,folder+': Tastenfeld fehlt');
   assert.equal(feldchen.dataset.sprache,'en',folder+': falsche Belegung bei DE -> EN');
@@ -48,6 +58,9 @@ for(const folder of ['year5','year9','oberstufe','bili/history']){
     .dispatchEvent(new t.w.Event('pointerdown',{bubbles:true}));
   'cat'.split('').forEach(tippe);
   assert.equal(feld.value,'cat',folder+': Eingabe kommt nicht an');
+  assert.ok(!kasten.classList.contains('leer'),folder+': Feld gilt noch als leer');
+  assert.ok(parseFloat(kasten.style.getPropertyValue('--eb-marke-x'))>0,
+    folder+': Schreibmarke wandert nicht mit');
   tippe('⌫');
   assert.equal(feld.value,'ca',folder+': Ruecktaste wirkt nicht');
 
@@ -62,6 +75,9 @@ for(const folder of ['year5','year9','oberstufe','bili/history']){
 
   /* Tippen muss sofort gehen - ohne vorher ins Feld zu tippen. */
   assert.equal(t.d.activeElement.id,'typeIn',folder+': Eingabefeld nicht bereit');
+
+  /* Zurueck ist der einzige Ausgang und muss als Knopf erkennbar sein. */
+  assert.ok(t.d.getElementById('back'),folder+': kein Zurueck');
 
   /* Andere Richtung, andere Belegung. */
   t.d.getElementById('dirBtn').click();
