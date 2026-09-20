@@ -51,6 +51,18 @@ for(const folder of ['year5','year9','oberstufe','bili/history']){
   tippe('⌫');
   assert.equal(feld.value,'ca',folder+': Ruecktaste wirkt nicht');
 
+  /* Alle vier Uebungsarten stehen nebeneinander, mit kurzer
+     Beschriftung - eine halb sichtbare sieht aus wie ein Fehler. */
+  const modi=[...t.d.querySelectorAll('.sessionbar .switches .switch[data-mode]')];
+  assert.equal(modi.length,4,folder+': nicht alle Uebungsarten in der Zeile');
+  assert.equal(t.d.querySelector('.sessionbar .switches #dirBtn'),null,
+    folder+': Richtungsschalter steht noch in der Schalterzeile');
+  assert.ok(t.d.querySelector('.round-progress #dirBtn'),
+    folder+': Richtungsschalter nicht in die Fortschrittszeile gewandert');
+
+  /* Tippen muss sofort gehen - ohne vorher ins Feld zu tippen. */
+  assert.equal(t.d.activeElement.id,'typeIn',folder+': Eingabefeld nicht bereit');
+
   /* Andere Richtung, andere Belegung. */
   t.d.getElementById('dirBtn').click();
   const jetzt=t.d.querySelector('.eb-tasten');

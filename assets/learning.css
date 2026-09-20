@@ -398,21 +398,57 @@ body{-webkit-tap-highlight-color:transparent}
   body.eb-runde .masthead,
   body.eb-runde .foot,
   body.eb-runde .feedback-settings{display:none}
-  body.eb-runde .wrap{padding-top:10px}
+  body.eb-runde .wrap{padding-top:10px;padding-bottom:8px}
   body.eb-runde .sessionbar{display:flex;align-items:center;gap:10px;flex-wrap:nowrap}
   body.eb-runde .sessionbar .switches{display:flex;flex-wrap:nowrap;gap:8px;
     overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:2px}
   body.eb-runde .sessionbar .switches::-webkit-scrollbar{display:none}
-  body.eb-runde .sessionbar .switch{flex:0 0 auto;white-space:nowrap}
-  body.eb-runde #back{flex:0 0 auto}
-  /* Weiche Kante rechts, solange dort noch Schalter stehen. */
-  body.eb-runde .switches.eb-mehr{
-    -webkit-mask-image:linear-gradient(to right,#000 86%,transparent);
-    mask-image:linear-gradient(to right,#000 86%,transparent)}
-  body.eb-runde .round-progress{display:flex;align-items:center;gap:10px;
-    font-size:12px;margin:10px 0 6px}
+  /* Alle Schalter muessen in die Zeile passen - eine halb sichtbare
+     Uebungsart sieht aus wie ein Fehler. Dafuer wird es enger, und
+     "Spaeter fortsetzen" schrumpft auf seinen Pfeil: Die Beschriftung
+     kostete 131 der 390 Punkte, und wohin der Pfeil fuehrt, ist an
+     dieser Stelle die kleinste Frage. */
+  body.eb-runde .sessionbar .switch{flex:0 0 auto;white-space:nowrap;
+    padding-left:9px;padding-right:9px;font-size:13px}
+  /* Kurze Beschriftungen, damit alle vier Uebungsarten nebeneinander
+     stehen. Der lange Name bleibt im Knopf und wird vorgelesen, er wird
+     nur nicht angezeigt. */
+  body.eb-runde .switch[data-mode]{font-size:0}
+  body.eb-runde .switch[data-mode]::before{font-size:13px;line-height:1.2}
+  body.eb-runde .switch[data-mode="card"]::before{content:"Karte"}
+  body.eb-runde .switch[data-mode="mc"]::before{content:"Auswahl"}
+  body.eb-runde .switch[data-mode="type"]::before{content:"Tippen"}
+  /* Das Leerzeichen nach der Escape-Sequenz beendet sie - ohne es
+     liest der Browser das folgende c als weitere Hexziffer. */
+  body.eb-runde .switch[data-mode="cloze"]::before{content:"L\00fc cke"}
+  @media (max-width:365px){
+    body.eb-runde .sessionbar .switch{padding-left:7px;padding-right:7px}
+    body.eb-runde .switch[data-mode]::before{font-size:12px}}
+
+  /* Die Abfragerichtung wandert in die Fortschrittszeile: Sie gehoert
+     zur Runde, nicht zur Wahl der Uebungsart, und in der Schalterzeile
+     nimmt sie den Platz einer ganzen Uebungsart weg. */
+  body.eb-runde .round-progress #dirBtn{flex:0 0 auto;font-size:11px;
+    padding:5px 9px;margin-left:4px}
+  body.eb-runde #back{flex:0 0 auto;font-size:0;padding:8px 10px}
+  body.eb-runde #back::before{content:"\2190";font-size:19px;line-height:1}
+  /* Eine Zeile, auch mit dem Richtungsschalter darin: Der Name des
+     Lernumfangs weicht zurueck, bevor etwas umbricht. */
+  body.eb-runde .round-progress{display:flex;align-items:center;gap:8px;
+    flex-wrap:nowrap;font-size:12px;margin:10px 0 6px;padding:0}
+  body.eb-runde .round-progress > span:first-child{
+    min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  body.eb-runde .round-progress > span{flex:0 1 auto;white-space:nowrap}
   body.eb-runde .round-progress progress{flex:1;height:4px;margin:0}
   body.eb-runde .box-details summary{padding:8px 12px;font-size:13px}
+  /* Beim Tippen zaehlt jeder Punkt: Passt die Seite genau ins Fenster,
+     klappt Safari die Adressleiste nicht ein - und die Tastatur bleibt,
+     wo sie ist. Die Lernfaecher stehen in den anderen Uebungsarten. */
+  body.eb-tippen .box-details{display:none}
+  body.eb-tippen .round-progress{margin:6px 0 4px}
+  /* Der Fuellabstand unter dem Eingabefeld hielt frueher den Knopf auf
+     Abstand. Der Knopf steht jetzt unten. */
+  body.eb-tippen .vcard .spacer{display:none}
 
   /* ---- Eigenes Tastenfeld ---- */
   body.eb-tippen{padding-bottom:var(--eb-tastenhoehe,296px)}
