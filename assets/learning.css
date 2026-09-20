@@ -508,11 +508,21 @@ body{-webkit-tap-highlight-color:transparent}
   /* Elf Tasten je Reihe und kurze Bildschirme vertragen sich schlecht. */
   @media (max-height:720px){.eb-tasten{--tk:50px}.eb-tasten .tk{font-size:21px}}
   @media (max-height:640px){.eb-tasten{--tk:44px}.eb-tasten .tk{font-size:19px}}
+  /* Grosse Telefone hatten zwischen Karte und Tastenfeld 213 bis 301
+     Punkte Luft stehen. Die Tasten nehmen sich einen Teil davon: Wer
+     mit dem Daumen tippt, trifft hoehere Tasten sicherer. In der Breite
+     geht nichts, dort stehen elf Tasten nebeneinander. */
+  @media (min-height:800px){.eb-tasten{--tk:76px}}
+  @media (min-height:900px){.eb-tasten{--tk:84px}}
 
   /* Der untere Streifen traegt beides nacheinander: beim Antworten die
      Tasten, danach Nochmal / Unsicher / Gewusst. Gleicher Platz, kein
      Springen. */
   body.eb-tippen[data-eb-antwort="offen"] .controls{display:none}
+  /* Nach dem Pruefen steht kein Tastenfeld mehr da - der Platz dafuer
+     darf dann auch nicht mehr freigehalten werden, sonst wird die Seite
+     laenger als das Fenster, und Safari klappt seine Adressleiste ein. */
+  body.eb-tippen[data-eb-antwort="bewertet"]{padding-bottom:96px}
   body.eb-tippen .controls{position:fixed;left:0;right:0;bottom:0;z-index:51;margin:0;
     padding:10px 12px calc(10px + env(safe-area-inset-bottom));
     background:var(--card);border-top:1px solid var(--rule);
@@ -525,7 +535,8 @@ body{-webkit-tap-highlight-color:transparent}
      Diese Regeln stehen absichtlich am Ende - sie ueberschreiben die
      Grundform des Tastenfelds weiter oben. */
   @media (max-height:500px) and (pointer:coarse){
-    body.eb-tippen{padding-bottom:0;padding-right:46%}
+    body.eb-tippen,
+    body.eb-tippen[data-eb-antwort="bewertet"]{padding-bottom:0;padding-right:46%}
     body.eb-tippen .round-progress{display:none}
     /* Quer traegt die Zeile den Pfeil ohne Wort - die linke Spalte ist
        schmaler, als ihre Breite vermuten laesst. */

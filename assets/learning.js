@@ -1150,6 +1150,37 @@ ${vocabulary}`;
     }
     const tippt = () => S.view === 'session' && !!feldVon();
 
+    /* Die Karte stand oben, das Tastenfeld unten, dazwischen bis zu 301
+       Punkte Leere - der Blick musste ueber den halben Bildschirm
+       springen. Die Karte rueckt herunter, bis sie fast am Tastenfeld
+       steht. Gerechnet statt geschaetzt: Wie hoch die Karte ausfaellt,
+       haengt am Wort, und die Zeile darueber ist nicht immer gleich
+       hoch. Gemessen wird nur, solange das Tastenfeld steht; nach dem
+       Pruefen waechst die Rueckmeldung in den frei werdenden Platz
+       hinein, ohne dass das Eingabefeld dabei seinen Platz verlaesst. */
+    const LUFT = 10;
+    let randMerker = 0;
+    function kartePlatzieren(){
+      const buehne = document.querySelector('.stage');
+      if(!buehne) return;
+      const karte = buehne.querySelector('.vcard');
+      if(!karte) return;
+      const tasten = document.querySelector('.eb-tasten');
+      if(!tasten){
+        /* Nach dem Pruefen ist das Tastenfeld fort und die Karte neu
+           gezeichnet. Sie bleibt trotzdem, wo sie beim Tippen stand -
+           sonst springt das Eingabefeld beim Antworten nach oben. */
+        if(randMerker) buehne.style.marginTop = randMerker + 'px';
+        return;
+      }
+      const jetzt = parseFloat(buehne.style.marginTop) || 0;
+      const luecke = tasten.getBoundingClientRect().top -
+                     karte.getBoundingClientRect().bottom;
+      const ziel = Math.max(0, Math.round(jetzt + luecke - LUFT));
+      if(ziel !== jetzt) buehne.style.marginTop = ziel + 'px';
+      randMerker = ziel;
+    }
+
     function baueTasten(){
       const alt = document.querySelector('.eb-tasten');
       if(alt) alt.remove();
@@ -1207,6 +1238,7 @@ ${vocabulary}`;
       gleich(() => {
         document.documentElement.style.setProperty('--eb-tastenhoehe',
           Math.round(box.getBoundingClientRect().height) + 'px');
+        kartePlatzieren();
       });
     }
 
@@ -1251,7 +1283,12 @@ ${vocabulary}`;
           baueTasten();
       }
       else if(da) da.remove();
-      if(tasten) markeSetzen();
+      if(tasten){ markeSetzen(); kartePlatzieren(); }
+      else {
+        randMerker = 0;
+        const buehne = document.querySelector('.stage');
+        if(buehne && buehne.style.marginTop) buehne.style.marginTop = '';
+      }
     }
 
     const vorher = render;
