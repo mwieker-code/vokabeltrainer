@@ -64,6 +64,21 @@ for(const folder of ['year5','year9','oberstufe','bili/history']){
   tippe('⌫');
   assert.equal(feld.value,'ca',folder+': Ruecktaste wirkt nicht');
 
+  /* Zweite Ebene: Ziffern und Satzzeichen. Das Fragezeichen gehoert zum
+     Lueckensatz, es darf nicht am Tastenfeld scheitern. */
+  tippe('⌘');
+  const zweite=t.d.querySelector('.eb-tasten');
+  assert.equal(zweite.dataset.ebene,'zeichen',folder+': keine Zeichenebene');
+  for(const z of ['?','!','.',',','-','1']) assert.ok(
+    zweite.querySelector('.tk[data-k="'+z+'"]'),folder+': Zeichen fehlt: '+z);
+  zweite.querySelector('.tk[data-k=\'"\']')
+    .dispatchEvent(new t.w.Event('pointerdown',{bubbles:true}));
+  assert.equal(feld.value,'ca"',folder+': Anfuehrungszeichen kommt nicht an');
+  zweite.querySelector('.tk.ebene').dispatchEvent(new t.w.Event('pointerdown',{bubbles:true}));
+  assert.equal(t.d.querySelector('.eb-tasten').dataset.ebene,'buchstaben',
+    folder+': kein Weg zurueck zu den Buchstaben');
+  feld.value='ca';
+
   /* Alle vier Uebungsarten stehen nebeneinander, mit kurzer
      Beschriftung - eine halb sichtbare sieht aus wie ein Fehler. */
   const modi=[...t.d.querySelectorAll('.sessionbar .switches .switch[data-mode]')];

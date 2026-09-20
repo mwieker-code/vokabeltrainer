@@ -1091,6 +1091,15 @@ ${vocabulary}`;
       de: { reihen: ['qwertzuiopü'.split(''), 'asdfghjklöä'.split(''),
                      ['⇧','y','x','c','v','b','n','m','⌫']], extra: 'ß' }
     };
+    /* Zweite Ebene. Fragezeichen und Punkt gehoeren zum Lueckensatz,
+       Ziffern und Bindestrich zu einzelnen Vokabeln - beides hatte auf
+       den Buchstabenreihen keinen Platz. */
+    const ZEICHEN = { reihen: [
+      '1234567890'.split(''),
+      ['-','/',':',';','(',')','\u20ac','&','@'],
+      ['.', ',', '?', '!', '\u2019', '"', '\u232b']
+    ] };
+    let ebene = 'buchstaben';              // oder 'zeichen'
     let wahl = null;                       // null = der Abfragerichtung folgen
     let letzteAuto = null;
     const antwortsprache = () =>
@@ -1130,26 +1139,75 @@ ${vocabulary}`;
       }
       box.style.setProperty('--eb-marke-x', Math.round(breite) + 'px');
       box.style.setProperty('--eb-marke-rand', stil.paddingLeft);
+      /* Die Hoehe der Box taugt nicht als Bezug: Unter dem Feld haengt
+         die Rueckmeldung, die Marke sass dadurch zu tief. Gemessen wird
+         deshalb das Feld selbst - die Marke steht auf seiner Mitte. */
+      const hoehe = Math.round((parseFloat(stil.fontSize) || 16) * 1.15);
+      box.style.setProperty('--eb-marke-hoehe', hoehe + 'px');
+      box.style.setProperty('--eb-marke-oben',
+        Math.round(feld.offsetTop + (feld.offsetHeight - hoehe) / 2) + 'px');
+      box.style.setProperty('--eb-marke-links', Math.round(feld.offsetLeft) + 'px');
     }
     const tippt = () => S.view === 'session' && !!feldVon();
+
+    /* Die Karte stand oben, das Tastenfeld unten, dazwischen bis zu 301
+       Punkte Leere - der Blick musste ueber den halben Bildschirm
+       springen. Die Karte rueckt herunter, bis sie fast am Tastenfeld
+       steht. Gerechnet statt geschaetzt: Wie hoch die Karte ausfaellt,
+       haengt am Wort, und die Zeile darueber ist nicht immer gleich
+       hoch. Gemessen wird nur, solange das Tastenfeld steht; nach dem
+       Pruefen waechst die Rueckmeldung in den frei werdenden Platz
+       hinein, ohne dass das Eingabefeld dabei seinen Platz verlaesst. */
+    const LUFT = 10;
+    let randMerker = 0;
+    function kartePlatzieren(){
+      const buehne = document.querySelector('.stage');
+      if(!buehne) return;
+      const karte = buehne.querySelector('.vcard');
+      if(!karte) return;
+      const tasten = document.querySelector('.eb-tasten');
+      if(!tasten){
+        /* Nach dem Pruefen ist das Tastenfeld fort und die Karte neu
+           gezeichnet. Sie bleibt trotzdem, wo sie beim Tippen stand -
+           sonst springt das Eingabefeld beim Antworten nach oben. */
+        if(randMerker) buehne.style.marginTop = randMerker + 'px';
+        return;
+      }
+      const jetzt = parseFloat(buehne.style.marginTop) || 0;
+      const luecke = tasten.getBoundingClientRect().top -
+                     karte.getBoundingClientRect().bottom;
+      const ziel = Math.max(0, Math.round(jetzt + luecke - LUFT));
+      if(ziel !== jetzt) buehne.style.marginTop = ziel + 'px';
+      randMerker = ziel;
+    }
 
     function baueTasten(){
       const alt = document.querySelector('.eb-tasten');
       if(alt) alt.remove();
       const spr = belegung(), B = BELEGUNG[spr];
+      const zeichen = ebene === 'zeichen';
+      const reihen = zeichen ? ZEICHEN.reihen : B.reihen;
       const box = document.createElement('div');
       box.className = 'eb-tasten';
       box.dataset.sprache = spr;
-      box.innerHTML = B.reihen.map(reihe =>
+      box.dataset.ebene = ebene;
+      /* Anfuehrungszeichen und Kaufmanns-Und stehen selbst auf Tasten -
+         sie muessen die Auszeichnung der Taste unbeschadet ueberstehen. */
+      const h = t => String(t).replace(/&/g, '&amp;').replace(/"/g, '&quot;')
+                              .replace(/</g, '&lt;');
+      const taste = (k, klasse, text) =>
+        '<button type="button" class="tk' + (klasse ? ' ' + klasse : '') +
+        '" data-k="' + h(k) + '">' + h(text === undefined ? k : text) + '</button>';
+      const ebenenTaste = taste('⌘', 'ebene', zeichen ? 'ABC' : '123');
+      box.innerHTML = reihen.map(reihe =>
           '<div class="tr">' + reihe.map(k =>
-            '<button type="button" class="tk' +
-            ((k === '⇧' || k === '⌫') ? ' weit' : '') +
-            '" data-k="' + k + '">' + k + '</button>').join('') + '</div>').join('')
+            taste(k, (k === '⇧' || k === '⌫') ? 'weit' : '')).join('')
+          + '</div>').join('')
         + '<div class="tr">'
-        + '<button type="button" class="tk sprache" data-k="⇄"'
-        +   ' aria-label="Tastaturbelegung wechseln">' + spr.toUpperCase() + '</button>'
-        + '<button type="button" class="tk" data-k="' + B.extra + '">' + B.extra + '</button>'
-        + '<button type="button" class="tk" data-k="-">-</button>'
+        + (zeichen ? ebenenTaste
+           : '<button type="button" class="tk sprache" data-k="⇄"'
+             + ' aria-label="Tastaturbelegung wechseln">' + spr.toUpperCase() + '</button>'
+             + ebenenTaste + taste(B.extra))
         + '<button type="button" class="tk raum" data-k=" ">Leer</button>'
         + '<button type="button" class="tk senden" data-k="⏎">Prüfen</button></div>';
 
@@ -1164,6 +1222,7 @@ ${vocabulary}`;
         const k = b.dataset.k, feld = feldVon();
         if(k === '⏎'){ const s = document.getElementById('submit'); if(s) s.click(); return; }
         if(k === '⇄'){ wahl = belegung() === 'en' ? 'de' : 'en'; baueTasten(); return; }
+        if(k === '⌘'){ ebene = zeichen ? 'buchstaben' : 'zeichen'; baueTasten(); return; }
         if(!feld || feld.disabled) return;
         if(k === '⌫') feld.value = feld.value.slice(0, -1);
         else if(k === '⇧'){ gross = !gross; box.dataset.gross = gross ? 'an' : 'aus'; return; }
@@ -1179,6 +1238,7 @@ ${vocabulary}`;
       gleich(() => {
         document.documentElement.style.setProperty('--eb-tastenhoehe',
           Math.round(box.getBoundingClientRect().height) + 'px');
+        kartePlatzieren();
       });
     }
 
@@ -1213,12 +1273,22 @@ ${vocabulary}`;
       const auto = antwortsprache();
       if(auto !== letzteAuto){ wahl = null; letzteAuto = auto; }
 
+      /* Nach der Bewertung faengt das naechste Wort wieder mit
+         Buchstaben an - Satzzeichen sind der Sonderfall. */
+      if(!feld || feld.disabled) ebene = 'buchstaben';
+
       const da = document.querySelector('.eb-tasten');
       if(tasten && feld && !feld.disabled){
-        if(!da || da.dataset.sprache !== belegung()) baueTasten();
+        if(!da || da.dataset.sprache !== belegung() || da.dataset.ebene !== ebene)
+          baueTasten();
       }
       else if(da) da.remove();
-      if(tasten) markeSetzen();
+      if(tasten){ markeSetzen(); kartePlatzieren(); }
+      else {
+        randMerker = 0;
+        const buehne = document.querySelector('.stage');
+        if(buehne && buehne.style.marginTop) buehne.style.marginTop = '';
+      }
     }
 
     const vorher = render;
