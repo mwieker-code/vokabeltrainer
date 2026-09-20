@@ -22,23 +22,6 @@
     return href ? href.replace(/manifest\.webmanifest$/, '') : './';
   }
 
-  /* ---- Serie richtiger Antworten ----
-     Gezaehlt wird nur, was die Seite selbst pruefen kann: Tippen,
-     Lueckensatz, Auswahl. Die Karteikarte bewertet sich selbst, und
-     eine sichtbare Serie waere dort eine Einladung, sich
-     schoenzureden - das Faechersystem rechnet aber mit ehrlichen
-     Bewertungen. Ein "Fast" haelt die Serie, statt sie zu reissen:
-     Ein Tippfehler ist kein Nichtwissen. */
-  let serie = 0, serieBest = 0;
-  function serieZaehlen(v){
-    if(S.mode === 'card') return;
-    const richtig = S.mode === 'mc' ? S.answered === v.id : S.answered === 'ok';
-    const fast = S.mode !== 'mc' && S.answered === 'near';
-    if(richtig) serie++;
-    else if(!fast) serie = 0;
-    if(serie > serieBest) serieBest = serie;
-  }
-
   const originalHome = renderHome;
   const originalSession = renderSession;
   const originalHelp = renderHelp;
@@ -352,6 +335,56 @@ ${vocabulary}`;
     return out;
   }
 
+  /* =========================================================================
+     WO DIE LUECKE HINGEHOERT
+     Die Seite sucht das Stichwort im Beispielsatz und macht daraus die
+     Luecke. Zwei Dinge gingen dabei schief.
+
+     "his - his name" ist ein Eintrag mit angehaengter Wendung. Zerlegt
+     man ihn in vier Woerter, findet man die Wendung im Satz nicht und
+     faellt auf "nimm das letzte Wort" zurueck - die Luecke sass auf
+     "name", einer anderen Vokabel derselben Unit, und gefragt war
+     "sein/e". Vor dem Gedankenstrich steht das Stichwort; dahinter
+     nichts, was die Luecke angeht.
+
+     Und die ganze Wendung wurde nur ungebeugt gesucht: "to raise
+     awareness" fand "raised awareness" nicht, weil hinter "raise" ein
+     Leerzeichen erwartet wurde. Deshalb landete die Luecke auf
+     "awareness" statt auf der Wendung. Jetzt darf jedes Wort der
+     Wendung eine Endung tragen.
+     ========================================================================= */
+  clozeParts = function(v){
+    const ex = v.example_en;
+    if(!ex) return null;
+    let core = String(v.en).split(/\s+[-\u2013]\s+/)[0];
+    core = core.replace(/\([^)]*\)/g, ' ').split('/')[0];
+    core = core.replace(/^\s*to\s+/i, '').replace(/\.{2,}|\u2026/g, ' ')
+               .replace(/\s+/g, ' ').trim().replace(/[.!?]$/, '');
+    if(!core) return null;
+    const esc = x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const w = core.split(' ').filter(Boolean);
+    if(!w.length) return null;
+    const versuche = [];
+    if(w.length > 1){
+      versuche.push(w.map(x => esc(x) + '\\w*').join('\\s+'));   // ganze Wendung, auch gebeugt
+      versuche.push(esc(w[w.length - 1]) + '\\w*');            // letztes Wort
+    }
+    /* Der Stamm des Stichworts taugt erst ab drei Buchstaben. "be"
+       fing sonst jedes Wort, das mit be anfaengt: Bei "(to) be
+       supposed to do sth." sass die Luecke auf "before", bei "(to) be
+       prone to sth." auf "Bees". Lieber keine Luecke als eine falsche -
+       der Eintrag faellt dann aus dem Lueckensatz heraus. */
+    if(w[0].length >= 3)
+      versuche.push(esc(w[0].slice(0, Math.max(4, w[0].length - 3))) + '\\w*');
+    for(const muster of versuche){
+      const m = ex.match(new RegExp('\\b(' + muster + ')', 'i'));
+      if(m && m.index !== undefined && m[1].length > 2)
+        return {before: ex.slice(0, m.index), word: m[1],
+                after: ex.slice(m.index + m[1].length), core};
+    }
+    return null;
+  };
+
   // Split alternatives BEFORE removing punctuation. Keep both optional-word forms.
   function forms(target) {
     const result = [];
@@ -438,7 +471,6 @@ ${vocabulary}`;
     const reviewed=shuffle(pool.filter(v=>record(v).due!==0));
     const unseen=shuffle(pool.filter(v=>record(v).due===0));
     S.queue=[...reviewed,...unseen].slice(0,S.roundLimit);
-    serie=0; serieBest=0;
     S.initialCount=S.queue.length; S.i=0; S.seen=0; S.revealed=false;
     S.answered=null; S.options=null; S.typedValue=''; S.mixedDue=false;
     S.retried=new Set(); S.missed=new Set(); S.roundAnswered=new Set();
@@ -492,7 +524,6 @@ ${vocabulary}`;
 
   rate = function(quality) {
     const v=current(); if(!v || !(S.revealed || S.answered)) return;
-    serieZaehlen(v);
     // An objectively wrong typed/choice answer cannot advance a card as "known".
     if(S.mode==='mc' && S.answered!==v.id) quality=0;
     if((S.mode==='type'||S.mode==='cloze') && S.answered==='no') quality=0;
@@ -1497,30 +1528,6 @@ ${vocabulary}`;
       baueTasten();
       kartePlatzieren();
     }
-    /* Die Seillaenge im freien Streifen ueber der Karte. Sie erscheint
-       ab der zweiten richtigen Antwort - wer noch nichts getan hat,
-       wird nicht begruesst - und geht bei einem Fehler still auf null,
-       ohne Ausrufezeichen. Fuenf Marken sind eine Seillaenge; ist sie
-       voll, faengt die naechste an und die Zahl zaehlt weiter. */
-    function serieZeigen(){
-      const buehne = document.querySelector('.stage');
-      if(!buehne) return;
-      const alt = document.querySelector('.eb-serie');
-      if(!iosProbe || serie < 2){ if(alt) alt.remove(); return; }
-      const marken = ((serie - 1) % 5) + 1;
-      const el = alt || document.createElement('div');
-      if(!alt){ el.className = 'eb-serie'; el.setAttribute('role','status'); }
-      el.dataset.voll = marken === 5 ? 'ja' : 'nein';
-      el.innerHTML =
-        '<span class="eb-seil" aria-hidden="true">'
-        + [1,2,3,4,5].map(n => '<i' + (n <= marken ? ' class="an"' : '') + '></i>').join('')
-        + '</span><span class="eb-zahl">' + serie + ' in Folge</span>'
-        /* Die beste Serie steht nur da, solange sie noch ueber der
-           laufenden liegt - sonst wiederholt sie dieselbe Zahl. */
-        + (serieBest > serie ? '<span class="eb-zahl eb-leise">' + serieBest + ' als Bestes</span>' : '');
-      if(!alt) buehne.parentNode.insertBefore(el, buehne);
-    }
-
     function probeKnopf(){
       /* Nur vom Startbildschirm aus - dort wird verglichen. Im Browser
          bliebe sonst fuer jeden Schueler eine Schaltflaeche stehen, die
@@ -1593,11 +1600,9 @@ ${vocabulary}`;
           baueTasten();
       }
       else if(da) da.remove();
-      if(tasten){ markeSetzen(); probeKnopf(); serieZeigen(); kartePlatzieren(); }
+      if(tasten){ markeSetzen(); probeKnopf(); kartePlatzieren(); }
       else {
         randMerker = 0; appMerker = null;
-        const weg = document.querySelector('.eb-serie');
-        if(weg) weg.remove();
         const buehne = document.querySelector('.stage');
         if(buehne && buehne.style.marginTop) buehne.style.marginTop = '';
       }
