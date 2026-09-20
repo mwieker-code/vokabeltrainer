@@ -1333,11 +1333,27 @@ ${vocabulary}`;
       });
     }
 
+    /* Laeuft die Seite vom Startbildschirm aus? Dann fehlen die Leisten
+       des Browsers, das Fenster ist rund neunzig Punkte hoeher, und iOS
+       legt oben ein Glasband ueber den Inhalt. Beides braucht eigene
+       Masse - und zwar nur dort. Im Browser wird die Klasse nie
+       gesetzt, dort bleibt jede Regel dieser Seite unberuehrt.
+       Zwei Wege, weil keiner allein ueberall trifft: navigator.standalone
+       kennt iOS seit langem, display-mode ist der heutige Weg. */
+    const appAnsicht = typeof matchMedia === 'function'
+      ? matchMedia('(display-mode: standalone)')
+      : {matches:false, addEventListener(){}};
+    function alsApp(){
+      try{ if(navigator.standalone === true) return true; }catch(e){}
+      return !!appAnsicht.matches;
+    }
+
     function pflege(){
       /* Der Beobachter kann noch einmal anschlagen, wenn das Dokument
          schon fort ist - in Testumgebungen, die das Fenster schliessen.
          Dann gibt es nichts mehr zu pflegen. */
       if(typeof document === 'undefined' || !document.body) return;
+      document.body.classList.toggle('eb-app', alsApp());
       const runde = klein.matches && S.view === 'session';
       document.body.classList.toggle('eb-runde', runde);
 
@@ -1394,6 +1410,7 @@ ${vocabulary}`;
     const beobachter = new MutationObserver(pflege);
     beobachter.observe(view, {childList:true});
     klein.addEventListener('change', pflege);
+    appAnsicht.addEventListener('change', pflege);
     addEventListener('resize', pflege);
   }
 

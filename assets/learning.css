@@ -529,6 +529,26 @@ body{-webkit-tap-highlight-color:transparent}
     display:flex;gap:8px;box-shadow:0 -4px 14px #16232b14}
   body.eb-tippen .controls button{flex:1 1 0;min-width:0}
 
+  /* ---- Vom Startbildschirm gestartet ----
+     Nur hier, nie im Browser: Die Klasse setzt das Skript ausschliesslich,
+     wenn die Seite als eigene App laeuft.
+
+     Oben legt iOS 26 ein Glasband ueber den Inhalt - den "Scroll Edge
+     Effect". Es laesst sich weder abschalten noch ausmessen;
+     env(safe-area-inset-top) waechst nicht mit. Der einzige Hebel ist,
+     dort nichts hinzulegen. Am Geraet gemessen reicht das Band 31 Punkte
+     in die Seite hinein, die Knopfreihe beginnt also 40 Punkte tiefer - acht Punkte Luft.
+
+     Unten ist Platz frei geworden: Ohne die Leisten des Browsers ist das
+     Fenster 891 statt rund 750 Punkte hoch. Den nehmen die Tasten. */
+  @media (min-height:600px){
+    body.eb-app .wrap{padding-top:40px}
+    body.eb-app.eb-runde .wrap{padding-top:40px}
+  }
+  @media (min-height:860px){
+    body.eb-app .eb-tasten{--tk:84px}
+  }
+
   /* ---- Quer gehalten ----
      Karte links, Tastenfeld rechts. Uebereinander ist kein Platz: 430
      Punkte Hoehe tragen keine Karte und vier Tastenreihen zugleich.

@@ -8,7 +8,7 @@ const vm=require('node:vm');
 const fs=require('fs'),path=require('path'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..');
 
-function seite(folder, breite){
+function seite(folder, breite, alsApp){
   const html=fs.readFileSync(path.join(root,folder,'index.html'),'utf8');
   /* jsdom kann kein Canvas und meldet das lautstark. Die Schreibmarke
      faellt dann auf ihre Schaetzung zurueck - erwartet, kein Fehler. */
@@ -17,6 +17,7 @@ function seite(folder, breite){
   const dom=new JSDOM(html,{runScripts:'outside-only',virtualConsole:stille,
     url:'https://example.org/'+folder+'/'});
   const w=dom.window;w.scrollTo=()=>{};
+  if(alsApp) Object.defineProperty(w.navigator,'standalone',{get:()=>true,configurable:true});
   /* jsdom kennt matchMedia nicht - die Breite entscheidet. */
   w.matchMedia=q=>({matches:/max-width:620px/.test(q)?breite<=620:false,
     media:q,addEventListener(){},removeEventListener(){},addListener(){},removeListener(){}});
@@ -31,6 +32,22 @@ function inRunde(s){
   [...s.d.querySelectorAll('#view button')].find(b=>/Alles üben/.test(b.textContent)).click();
 }
 const modus=(s,name)=>[...s.d.querySelectorAll('button')].find(b=>b.textContent.trim()===name).click();
+
+/* Vom Startbildschirm gestartet gelten eigene Masse - und nur dort.
+   Im Browser darf die Klasse nicht auftauchen, sonst waendern sich
+   Abstaende und Tastenhoehe fuer alle. */
+{
+  const browser=seite('year5',390);
+  inRunde(browser); modus(browser,'Tippen');
+  assert.ok(!browser.d.body.classList.contains('eb-app'),
+    'Browser gilt faelschlich als App');
+
+  const app=seite('year5',390,true);
+  inRunde(app); modus(app,'Tippen');
+  assert.ok(app.d.body.classList.contains('eb-app'),
+    'Start vom Startbildschirm nicht erkannt');
+  console.log('App-Erkennung: nur vom Startbildschirm, nicht im Browser');
+}
 
 for(const folder of ['year5','year9','oberstufe','bili/history']){
   /* ---- Telefon ---- */
