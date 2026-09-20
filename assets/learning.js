@@ -645,9 +645,19 @@ ${vocabulary}`;
     if(doc)startbildschirmEinsetzen(doc);
     /* Ganz unten, klein: Wer schreibt "bei mir sieht das anders aus",
        kann diese Angabe mitschicken. */
-    if(doc&&FASSUNG)doc.insertAdjacentHTML('beforeend',
-      '<p class="lead" style="font-size:12.5px">Fassung <b>'+safe(FASSUNG)+'</b>. '
-      +'Wenn etwas nicht so aussieht wie beschrieben, schicke diese Angabe mit.</p>');
+    if(doc&&FASSUNG){
+      doc.insertAdjacentHTML('beforeend',
+        '<h2>Ohne Internet üben</h2>'
+        +'<p>Was du einmal geöffnet hast, bleibt auf deinem Gerät. Öffne deinen '
+        +'Jahrgang also einmal mit Verbindung — danach kannst du im Bus oder im '
+        +'Funkloch weiterüben. Dein Lernstand wird ohnehin auf dem Gerät '
+        +'gespeichert, nicht im Netz.</p>'
+        +'<p class="lead" style="font-size:12.5px">Fassung <b>'+safe(FASSUNG)+'</b>. '
+        +'Wenn etwas nicht so aussieht wie beschrieben, schicke diese Angabe mit. '
+        +'<button class="switch" id="hclear" type="button">Zwischenspeicher leeren</button></p>');
+      const knopf=doc.querySelector('#hclear');
+      if(knopf)knopf.onclick=()=>{knopf.disabled=true;knopf.textContent='wird geleert …';lagerRaeumen();};
+    }
     if(doc)doc.insertAdjacentHTML('afterbegin','<h2>Dein Lernumfang</h2><p>Wähle einen Part, eine Unit oder ein Thema. Alles üben umfasst alle Wörter deiner Auswahl, auch bereits gelernte. Alternativ wählst du höchstens zehn Wörter, nur fällige Vokabeln oder die Blitzrunde. Fehler werden nach dem ersten Durchgang einmal wiederholt. Mit <b>Später fortsetzen</b> verlässt du die Runde. Auf der Jahrgangsübersicht kannst du sie im selben Browser fortsetzen. Pro Jahrgang wird eine Runde gespeichert; eine neue Runde ersetzt sie. Eine noch ungeprüfte Texteingabe wird nicht gespeichert. Ein Wechsel der Übungsart startet den gewählten Lernumfang neu.</p><p>Beim Tippen bleiben deine Eingabe und die Lösung sichtbar. Markierte Buchstaben zeigen Abweichungen. Falsche Antworten werden nicht als gewusst gespeichert, auch wenn du „Gewusst“ antippst.</p><h2>Blitzrunde</h2><p>60 Sekunden gegen die Zeit: Du siehst die deutsche Bedeutung und tippst das englische Wort, so schnell du kannst. Falsche oder ausgelassene Wörter werden am Ende aufgelistet. Die Blitzrunde zählt nicht auf deine fünf Lernfächer ein; dein normaler Lernstand bleibt unberührt.</p><h2>Töne und Animationen</h2><p>Unten auf der Seite kannst du Töne und Animationen getrennt ein- oder ausschalten. Töne sind anfangs ausgeschaltet. Die Einstellungen werden im Browser gespeichert. Die Aussprache über das Lautsprecher-Symbol funktioniert unabhängig vom Schalter für Rückmeldetöne. Bei reduzierter Bewegung in den Geräteeinstellungen werden Animationen unterdrückt.</p>');
   };
 
@@ -1547,7 +1557,41 @@ ${vocabulary}`;
     location.reload();
   }
 
+  /* =========================================================================
+     OHNE NETZ
+     Der Helfer im Hintergrund legt ab, was geladen wurde, und bedient
+     damit den naechsten Start ohne Verbindung. Er traegt die Fassung in
+     seiner Adresse: Eine neue Fassung ist ein anderer Helfer, der beim
+     Antritt das alte Lager raeumt. Geht die Anmeldung schief - alte
+     Browser, abgeschaltete Helfer, kein sicherer Ursprung -, aendert
+     sich nichts ausser dass es ohne Netz nicht geht.
+     ========================================================================= */
+  function helferAnmelden(){
+    if(!FASSUNG || !('serviceWorker' in navigator)) return;
+    const ort = wurzel();
+    navigator.serviceWorker
+      .register(ort + 'sw.js?v=' + encodeURIComponent(FASSUNG),
+                {scope: ort, updateViaCache: 'none'})
+      .catch(() => {});
+  }
+
+  /* Der Notausgang aus der Hilfe: Lager raeumen, Helfer abmelden, neu
+     laden. Wenn eine Kollegin schreibt, es sehe seltsam aus und keine
+     Fassung passt dazu, ist das die eine Handlung, die alles zuruecksetzt.
+     Der Lernstand bleibt - der steht woanders. */
+  async function lagerRaeumen(){
+    try{
+      if('caches' in window)
+        for(const name of await caches.keys())
+          if(name.startsWith('basecamp-')) await caches.delete(name);
+      if('serviceWorker' in navigator)
+        for(const reg of await navigator.serviceWorker.getRegistrations()) await reg.unregister();
+    }catch(e){}
+    location.reload();
+  }
+
   readAssignment();
   render();
   fassungPruefen();
+  helferAnmelden();
 })();
