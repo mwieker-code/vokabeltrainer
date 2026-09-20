@@ -8,7 +8,7 @@ const vm=require('node:vm');
 const fs=require('fs'),path=require('path'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..');
 
-function seite(folder, breite, alsApp){
+function seite(folder, breite, alsApp, speicher){
   const html=fs.readFileSync(path.join(root,folder,'index.html'),'utf8');
   /* jsdom kann kein Canvas und meldet das lautstark. Die Schreibmarke
      faellt dann auf ihre Schaetzung zurueck - erwartet, kein Fehler. */
@@ -18,6 +18,7 @@ function seite(folder, breite, alsApp){
     url:'https://example.org/'+folder+'/'});
   const w=dom.window;w.scrollTo=()=>{};
   if(alsApp) Object.defineProperty(w.navigator,'standalone',{get:()=>true,configurable:true});
+  if(speicher) for(const [k,v] of Object.entries(speicher)) w.localStorage.setItem(k,v);
   /* jsdom kennt matchMedia nicht - die Breite entscheidet. */
   w.matchMedia=q=>({matches:/max-width:620px/.test(q)?breite<=620:false,
     media:q,addEventListener(){},removeEventListener(){},addListener(){},removeListener(){}});
@@ -56,6 +57,51 @@ const modus=(s,name)=>[...s.d.querySelectorAll('button')].find(b=>b.textContent.
       art+': die Karte findet ihr Wort nicht');
   }
   console.log('App-Erkennung: nur vom Startbildschirm, nicht im Browser');
+}
+
+/* Die Serie richtiger Antworten. Sie zaehlt nur, was die Seite selbst
+   pruefen kann - die Karteikarte bewertet sich selbst, und eine
+   sichtbare Serie waere dort eine Einladung, sich schoenzureden. */
+{
+  const t=seite('year5',390,true,{'vt:tastenprobe':'ios'});
+  inRunde(t); modus(t,'Tippen');
+  const zeigt=()=>{const e=t.d.querySelector('.eb-serie');return e?e.textContent:null;};
+  const antworte=(richtig)=>{
+    const loesung=t.lauf("(function(){var v=S.queue[S.i];return S.dir==='en2de'?v.de:v.en})()");
+    const feld=t.d.getElementById('typeIn');
+    feld.value = richtig ? loesung : 'xyzxyz';
+    feld.dispatchEvent(new t.w.Event('input',{bubbles:true}));
+    t.lauf('submitTyped()');
+    t.lauf('rate(2)');
+  };
+  assert.equal(zeigt(),null,'Serie steht schon vor der ersten Antwort da');
+  antworte(true);
+  assert.equal(zeigt(),null,'Serie erscheint schon nach der ersten Antwort');
+  antworte(true);
+  assert.match(String(zeigt()),/2 in Folge/,'Serie erscheint nicht ab der zweiten');
+  antworte(false);
+  assert.equal(zeigt(),null,'Serie ueberlebt eine falsche Antwort');
+
+  /* Der Probeknopf gehoert in die Schalterzeile und nur in die App:
+     In der Fortschrittszeile hat er den Lernumfang abgeschnitten, und
+     im Browser haette er jedem Schueler die Zeile verschoben. */
+  assert.ok(t.d.querySelector('.sessionbar .switches #tastenprobe'),
+    'Probeknopf steht nicht in der Schalterzeile');
+  assert.equal(t.d.querySelector('.round-progress #tastenprobe'),null,
+    'Probeknopf steht in der Fortschrittszeile');
+  const imBrowser=seite('year5',390);
+  inRunde(imBrowser); modus(imBrowser,'Tippen');
+  assert.equal(imBrowser.d.querySelector('#tastenprobe'),null,
+    'Probeknopf erscheint auch im Browser');
+
+  /* Die Karteikarte darf nichts beisteuern. */
+  antworte(true); antworte(true);
+  assert.match(String(zeigt()),/2 in Folge/,'Serie zaehlt nach dem Fehler nicht wieder hoch');
+  modus(t,'Karteikarte');
+  t.lauf('S.revealed=true; rate(2)');
+  t.lauf('S.revealed=true; rate(2)');
+  assert.equal(t.lauf('typeof serie'),'undefined','serie liegt offen im Fensterobjekt');
+  console.log('Serie: erscheint ab zwei, reisst beim Fehler, Karteikarte zaehlt nicht');
 }
 
 /* Die Blitzrunde hat ihr eigenes Eingabefeld und ihre eigene Ansicht.
