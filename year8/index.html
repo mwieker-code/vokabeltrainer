@@ -373,7 +373,7 @@ button.primary:hover{background:#0B4A54}
 }
 .y8u5{--unit:#A36B1A;--unit-bg:#F5ECD9;--unit-ink:#63400F}
 </style>
-<link rel="stylesheet" href="../assets/learning.css?v=20260920-offline">
+<link rel="stylesheet" href="../assets/learning.css?v=20260920-klammer">
 
 <div class="wrap">
     <div class="masthead">
@@ -4209,7 +4209,7 @@ function topicName(id){
     var u = TOPICS.filter(function(x){ return x.unit === m[1]; })[0];
     if(u) return u.unitName + " \u2013 ganze Unit";
     var y = YEARS.filter(function(x){ return x.id === m[1]; })[0];
-    if(y) return y.label + " (" + y.book + ") \u2013 alle Units";
+    if(y) return y.label + (y.book ? " (" + y.book + ")" : "") + " \u2013 alle Units";
   }
   return id;
 }
@@ -4441,7 +4441,7 @@ function renderHome(){
     const list = setOf(y.id + "-all");
     h += `<section class="yeargroup">
       <div class="yearhead"><span class="tag">${esc(y.label)}</span>
-      <span class="name">${esc(y.book)}</span></div>
+      ${y.book ? `<span class="name">${esc(y.book)}</span>` : ""}</div>
       <button class="topic home-year" data-year="${y.id}">
         <span class="t-row">
           <span class="t-name">${esc(y.label)}</span>
@@ -5166,10 +5166,10 @@ try{
 }
 </script>
 
-<script src="../assets/qr.js?v=20260920-offline"></script>
-<script src="../assets/learning.js?v=20260920-offline"></script>
+<script src="../assets/qr.js?v=20260920-klammer"></script>
+<script src="../assets/learning.js?v=20260920-klammer"></script>
 
-<link rel="stylesheet" href="../assets/feedback.css?v=20260920-offline">
-<script src="../assets/feedback.js?v=20260920-offline"></script>
+<link rel="stylesheet" href="../assets/feedback.css?v=20260920-klammer">
+<script src="../assets/feedback.js?v=20260920-klammer"></script>
 
 <link rel="stylesheet" href="design/preview.css?v=20260917-teacher-prompt">
