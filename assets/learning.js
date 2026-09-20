@@ -1079,7 +1079,7 @@ ${vocabulary}`;
     /* Fehlt matchMedia - sehr alte Browser, Testumgebungen -, bleibt
        alles beim Verhalten am Rechner, statt dass das Skript abbricht. */
     const klein = typeof matchMedia === 'function'
-      ? matchMedia('(max-width:620px)')
+      ? matchMedia('(max-width:620px), (max-height:500px) and (pointer:coarse)')
       : {matches:false, addEventListener(){}, removeEventListener(){}};
 
     /* Zwei Belegungen. Welche gilt, entscheidet die Sprache der Antwort:
@@ -1098,6 +1098,39 @@ ${vocabulary}`;
     const belegung = () => wahl || antwortsprache();
 
     const feldVon = () => document.getElementById('typeIn');
+
+    /* Die Schreibmarke ist ein gezeichneter Strich, kein echter Cursor -
+       ein readonly-Feld zeigt auf iOS keinen. Ihre Lage ist die Breite
+       des bereits getippten Textes, gemessen in der Schrift des Feldes. */
+    let stift = null;
+    function markeSetzen(){
+      const feld = feldVon();
+      const box = feld && feld.closest('.typebox');
+      if(!box) return;
+      const leer = !feld.value;
+      box.classList.toggle('leer', leer);
+      box.classList.toggle('aus', feld.disabled);
+      const stil = getComputedStyle(feld);
+      if(stift === null){
+        try{ stift = document.createElement('canvas').getContext('2d'); }
+        catch(e){ stift = false; }
+        if(!stift) stift = false;
+      }
+      let breite = 0;
+      if(!leer){
+        if(stift){
+          stift.font = stil.fontStyle + ' ' + stil.fontWeight + ' ' +
+                       stil.fontSize + ' ' + stil.fontFamily;
+          breite = stift.measureText(feld.value).width;
+        }else{
+          /* Ohne Canvas - sehr alte Browser, Testumgebungen - eine grobe
+             Schaetzung: besser als eine Marke, die stehen bleibt. */
+          breite = feld.value.length * parseFloat(stil.fontSize) * 0.55;
+        }
+      }
+      box.style.setProperty('--eb-marke-x', Math.round(breite) + 'px');
+      box.style.setProperty('--eb-marke-rand', stil.paddingLeft);
+    }
     const tippt = () => S.view === 'session' && !!feldVon();
 
     function baueTasten(){
@@ -1136,6 +1169,7 @@ ${vocabulary}`;
         else if(k === '⇧'){ gross = !gross; box.dataset.gross = gross ? 'an' : 'aus'; return; }
         else { feld.value += gross ? k.toUpperCase() : k; gross = false; box.dataset.gross = 'aus'; }
         feld.dispatchEvent(new Event('input', {bubbles:true}));
+        markeSetzen();
       });
       document.body.appendChild(box);
       /* Die Hoehe steht erst nach dem Zeichnen fest; sie sagt der Seite,
@@ -1184,6 +1218,7 @@ ${vocabulary}`;
         if(!da || da.dataset.sprache !== belegung()) baueTasten();
       }
       else if(da) da.remove();
+      if(tasten) markeSetzen();
     }
 
     const vorher = render;

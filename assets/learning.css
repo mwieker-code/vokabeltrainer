@@ -393,7 +393,7 @@ body{-webkit-tap-highlight-color:transparent}
    Geraet anders. Was es nicht gibt, kann nichts verschieben. Nebenbei
    entfaellt die deutsche Autokorrektur beim Tippen englischer Woerter.
    ========================================================================= */
-@media (max-width:620px){
+@media (max-width:620px), (max-height:500px) and (pointer:coarse){
   /* ---- Aufgeraeumte Runde ---- */
   body.eb-runde .masthead,
   body.eb-runde .foot,
@@ -422,16 +422,25 @@ body{-webkit-tap-highlight-color:transparent}
      liest der Browser das folgende c als weitere Hexziffer. */
   body.eb-runde .switch[data-mode="cloze"]::before{content:"L\00fc cke"}
   @media (max-width:365px){
-    body.eb-runde .sessionbar .switch{padding-left:7px;padding-right:7px}
-    body.eb-runde .switch[data-mode]::before{font-size:12px}}
+    body.eb-runde .sessionbar .switch{padding-left:6px;padding-right:6px}
+    body.eb-runde .switch[data-mode]::before{font-size:12px}
+    body.eb-runde #back{padding:0 8px}}
 
   /* Die Abfragerichtung wandert in die Fortschrittszeile: Sie gehoert
      zur Runde, nicht zur Wahl der Uebungsart, und in der Schalterzeile
      nimmt sie den Platz einer ganzen Uebungsart weg. */
   body.eb-runde .round-progress #dirBtn{flex:0 0 auto;font-size:11px;
     padding:5px 9px;margin-left:4px}
-  body.eb-runde #back{flex:0 0 auto;font-size:0;padding:8px 10px}
+  /* Zurueck ist der einzige Weg aus der Runde heraus - als blasser
+     Pfeil sah er aus wie Zierde. Jetzt ein Knopf im Akzentton, mit
+     Beschriftung, sobald die Zeile sie traegt. */
+  body.eb-runde #back{flex:0 0 auto;font-size:0;padding:0 12px;height:38px;
+    display:inline-flex;align-items:center;gap:6px;border-radius:var(--radius-sm);
+    background:var(--petrol);color:#fff;text-decoration:none;border:0}
   body.eb-runde #back::before{content:"\2190";font-size:19px;line-height:1}
+  @media (min-width:400px){
+    body.eb-runde #back{padding:0 14px}
+    body.eb-runde #back::after{content:"Zur\00fc ck";font-size:14px;font-weight:600;line-height:1}}
   /* Eine Zeile, auch mit dem Richtungsschalter darin: Der Name des
      Lernumfangs weicht zurueck, bevor etwas umbricht. */
   body.eb-runde .round-progress{display:flex;align-items:center;gap:8px;
@@ -446,9 +455,27 @@ body{-webkit-tap-highlight-color:transparent}
      wo sie ist. Die Lernfaecher stehen in den anderen Uebungsarten. */
   body.eb-tippen .box-details{display:none}
   body.eb-tippen .round-progress{margin:6px 0 4px}
+
   /* Der Fuellabstand unter dem Eingabefeld hielt frueher den Knopf auf
      Abstand. Der Knopf steht jetzt unten. */
   body.eb-tippen .vcard .spacer{display:none}
+
+  /* Eine blinkende Schreibmarke, damit sichtbar ist, dass sofort
+     getippt werden kann. Ihre Lage misst das Skript aus dem bereits
+     getippten Text; solange nichts dasteht, rueckt der blasse Hinweis
+     zur Seite, statt sich mit ihr zu ueberlagern. */
+  body.eb-tippen .typebox{position:relative}
+  body.eb-tippen .typebox::after{content:"";position:absolute;
+    left:calc(var(--eb-marke-x,0px) + var(--eb-marke-rand,16px));
+    top:50%;transform:translateY(-50%);width:2px;height:1.25em;
+    background:var(--petrol);border-radius:1px;
+    animation:eb-blinken 1.06s steps(1) infinite}
+  body.eb-tippen .typebox.leer #typeIn{text-indent:14px}
+  body.eb-tippen #typeIn:disabled ~ .verdict,
+  body.eb-tippen .typebox.aus::after{display:none}
+  @keyframes eb-blinken{0%,50%{opacity:1}50.01%,100%{opacity:0}}
+  @media (prefers-reduced-motion:reduce){
+    body.eb-tippen .typebox::after{animation:none}}
 
   /* ---- Eigenes Tastenfeld ---- */
   body.eb-tippen{padding-bottom:var(--eb-tastenhoehe,296px)}
@@ -482,4 +509,27 @@ body{-webkit-tap-highlight-color:transparent}
     background:var(--card);border-top:1px solid var(--rule);
     display:flex;gap:8px;box-shadow:0 -4px 14px #16232b14}
   body.eb-tippen .controls button{flex:1 1 0;min-width:0}
+
+  /* ---- Quer gehalten ----
+     Karte links, Tastenfeld rechts. Uebereinander ist kein Platz: 430
+     Punkte Hoehe tragen keine Karte und vier Tastenreihen zugleich.
+     Diese Regeln stehen absichtlich am Ende - sie ueberschreiben die
+     Grundform des Tastenfelds weiter oben. */
+  @media (max-height:500px) and (pointer:coarse){
+    body.eb-tippen{padding-bottom:0;padding-right:46%}
+    body.eb-tippen .round-progress{display:none}
+    /* Quer traegt die Zeile den Pfeil ohne Wort - die linke Spalte ist
+       schmaler, als ihre Breite vermuten laesst. */
+    body.eb-runde #back::after{content:none}
+    body.eb-runde .sessionbar .switch{padding-left:7px;padding-right:7px}
+    body.eb-tippen .eb-tasten{top:0;left:auto;right:0;bottom:0;width:46%;
+      border-radius:12px 0 0 12px;display:flex;flex-direction:column;
+      justify-content:center;--tk:40px;
+      padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
+    body.eb-tippen .eb-tasten .tk{font-size:18px}
+    body.eb-tippen .eb-tasten .tr{margin-bottom:5px}
+    body.eb-tippen .controls{left:auto;right:0;width:46%}
+    body.eb-tippen .vcard{margin-bottom:0}
+    body.eb-tippen .stage{margin-bottom:0}
+  }
 }
