@@ -466,8 +466,9 @@ body{-webkit-tap-highlight-color:transparent}
      zur Seite, statt sich mit ihr zu ueberlagern. */
   body.eb-tippen .typebox{position:relative}
   body.eb-tippen .typebox::after{content:"";position:absolute;
-    left:calc(var(--eb-marke-x,0px) + var(--eb-marke-rand,16px));
-    top:50%;transform:translateY(-50%);width:2px;height:1.25em;
+    left:calc(var(--eb-marke-links,0px) + var(--eb-marke-x,0px)
+              + var(--eb-marke-rand,16px));
+    top:var(--eb-marke-oben,0px);width:2px;height:var(--eb-marke-hoehe,24px);
     background:var(--petrol);border-radius:1px;
     animation:eb-blinken 1.06s steps(1) infinite}
   body.eb-tippen .typebox.leer #typeIn{text-indent:14px}
@@ -495,7 +496,15 @@ body{-webkit-tap-highlight-color:transparent}
     font-size:16px;font-weight:600}
   .eb-tasten .tk.sprache{flex:1.1 1 0;background:#ADB2BA;font-size:14px;
     font-weight:600;letter-spacing:.04em}
+  /* Die zweite Ebene: Ziffern und Satzzeichen. Der Umschalter sieht aus
+     wie der Belegungswechsel daneben - beide tauschen die Tasten aus. */
+  .eb-tasten .tk.ebene{flex:1.1 1 0;background:#ADB2BA;font-size:14px;
+    font-weight:600;letter-spacing:.04em}
   .eb-tasten[data-sprache="de"] .tk{font-size:23px}
+  .eb-tasten[data-ebene="zeichen"] .tk{font-size:21px}
+  .eb-tasten[data-ebene="zeichen"] .tk.raum{font-size:15px}
+  .eb-tasten[data-ebene="zeichen"] .tk.senden{font-size:16px}
+  .eb-tasten[data-ebene="zeichen"] .tk.ebene{font-size:14px}
   /* Elf Tasten je Reihe und kurze Bildschirme vertragen sich schlecht. */
   @media (max-height:720px){.eb-tasten{--tk:50px}.eb-tasten .tk{font-size:21px}}
   @media (max-height:640px){.eb-tasten{--tk:44px}.eb-tasten .tk{font-size:19px}}
