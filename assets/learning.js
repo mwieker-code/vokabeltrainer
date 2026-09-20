@@ -1067,6 +1067,125 @@ ${vocabulary}`;
     };
   }
 
+  /* =========================================================================
+     UEBEN AUF DEM TELEFON
+     Auf kleinen Bildschirmen zeigt die Runde nur, was zur Runde gehoert,
+     und die Seite bringt ihr eigenes Tastenfeld mit. Warum kein Rueckgriff
+     auf die Systemtastatur: Sie schiebt den sichtbaren Ausschnitt, auf
+     jedem Geraet anders, und das Eingabefeld landet dabei hinter ihr.
+     Was es nicht gibt, kann nichts verschieben.
+     ========================================================================= */
+  {
+    /* Fehlt matchMedia - sehr alte Browser, Testumgebungen -, bleibt
+       alles beim Verhalten am Rechner, statt dass das Skript abbricht. */
+    const klein = typeof matchMedia === 'function'
+      ? matchMedia('(max-width:620px)')
+      : {matches:false, addEventListener(){}, removeEventListener(){}};
+
+    /* Zwei Belegungen. Welche gilt, entscheidet die Sprache der Antwort:
+       Der Lueckensatz wird immer englisch ausgefuellt, sonst haengt es an
+       der Abfragerichtung. Der Umschalter setzt sich darueber hinweg. */
+    const BELEGUNG = {
+      en: { reihen: ['qwertyuiop'.split(''), 'asdfghjkl'.split(''),
+                     ['⇧','z','x','c','v','b','n','m','⌫']], extra: '’' },
+      de: { reihen: ['qwertzuiopü'.split(''), 'asdfghjklöä'.split(''),
+                     ['⇧','y','x','c','v','b','n','m','⌫']], extra: 'ß' }
+    };
+    let wahl = null;                       // null = der Abfragerichtung folgen
+    let letzteAuto = null;
+    const antwortsprache = () =>
+      S.mode === 'cloze' ? 'en' : (S.dir === 'en2de' ? 'de' : 'en');
+    const belegung = () => wahl || antwortsprache();
+
+    const feldVon = () => document.getElementById('typeIn');
+    const tippt = () => S.view === 'session' && !!feldVon();
+
+    function baueTasten(){
+      const alt = document.querySelector('.eb-tasten');
+      if(alt) alt.remove();
+      const spr = belegung(), B = BELEGUNG[spr];
+      const box = document.createElement('div');
+      box.className = 'eb-tasten';
+      box.dataset.sprache = spr;
+      box.innerHTML = B.reihen.map(reihe =>
+          '<div class="tr">' + reihe.map(k =>
+            '<button type="button" class="tk' +
+            ((k === '⇧' || k === '⌫') ? ' weit' : '') +
+            '" data-k="' + k + '">' + k + '</button>').join('') + '</div>').join('')
+        + '<div class="tr">'
+        + '<button type="button" class="tk sprache" data-k="⇄"'
+        +   ' aria-label="Tastaturbelegung wechseln">' + spr.toUpperCase() + '</button>'
+        + '<button type="button" class="tk" data-k="' + B.extra + '">' + B.extra + '</button>'
+        + '<button type="button" class="tk" data-k="-">-</button>'
+        + '<button type="button" class="tk raum" data-k=" ">Leer</button>'
+        + '<button type="button" class="tk senden" data-k="⏎">Prüfen</button></div>';
+
+      let gross = false;
+      /* pointerdown statt click: Die Taste reagiert beim Aufsetzen des
+         Fingers, nicht erst beim Loslassen - das ist der Unterschied
+         zwischen "reagiert sofort" und "haengt". */
+      box.addEventListener('pointerdown', e => {
+        const b = e.target.closest('.tk');
+        if(!b) return;
+        e.preventDefault();
+        const k = b.dataset.k, feld = feldVon();
+        if(k === '⏎'){ const s = document.getElementById('submit'); if(s) s.click(); return; }
+        if(k === '⇄'){ wahl = belegung() === 'en' ? 'de' : 'en'; baueTasten(); return; }
+        if(!feld || feld.disabled) return;
+        if(k === '⌫') feld.value = feld.value.slice(0, -1);
+        else if(k === '⇧'){ gross = !gross; box.dataset.gross = gross ? 'an' : 'aus'; return; }
+        else { feld.value += gross ? k.toUpperCase() : k; gross = false; box.dataset.gross = 'aus'; }
+        feld.dispatchEvent(new Event('input', {bubbles:true}));
+      });
+      document.body.appendChild(box);
+      /* Die Hoehe steht erst nach dem Zeichnen fest; sie sagt der Seite,
+         wie viel Platz sie unten frei lassen muss. */
+      const gleich = typeof requestAnimationFrame === 'function'
+        ? requestAnimationFrame : (fn => setTimeout(fn, 0));
+      gleich(() => {
+        document.documentElement.style.setProperty('--eb-tastenhoehe',
+          Math.round(box.getBoundingClientRect().height) + 'px');
+      });
+    }
+
+    function pflege(){
+      const runde = klein.matches && S.view === 'session';
+      document.body.classList.toggle('eb-runde', runde);
+
+      /* Die Schalterzeile scrollt waagerecht. Ohne Hinweis sieht man
+         nicht, dass rechts noch etwas steht. */
+      const schalter = document.querySelector('.sessionbar .switches');
+      if(schalter) schalter.classList.toggle('eb-mehr',
+        runde && schalter.scrollWidth > schalter.clientWidth + 4);
+
+      const tasten = klein.matches && tippt();
+      document.body.classList.toggle('eb-tippen', tasten);
+      document.body.dataset.ebAntwort = document.getElementById('submit') ? 'offen' : 'bewertet';
+
+      const feld = feldVon();
+      if(feld){
+        if(tasten){ feld.setAttribute('readonly',''); feld.blur(); }
+        else feld.removeAttribute('readonly');
+      }
+      /* Wechselt die Abfragerichtung oder die Uebungsart, gilt wieder die
+         automatische Belegung - eine vorher von Hand gewaehlte waere dann
+         meistens die falsche. */
+      const auto = antwortsprache();
+      if(auto !== letzteAuto){ wahl = null; letzteAuto = auto; }
+
+      const da = document.querySelector('.eb-tasten');
+      if(tasten && feld && !feld.disabled){
+        if(!da || da.dataset.sprache !== belegung()) baueTasten();
+      }
+      else if(da) da.remove();
+    }
+
+    const vorher = render;
+    render = function(){ vorher(); pflege(); };
+    klein.addEventListener('change', pflege);
+    addEventListener('resize', pflege);
+  }
+
   readAssignment();
   render();
 })();
