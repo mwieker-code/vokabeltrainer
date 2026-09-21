@@ -26,6 +26,9 @@
     C  Derselbe Klang wie in Basecamp, aus der echten feedback.js.
     E  Dieselbe Glocke ohne Hall, ohne Vorlauf, mit linearer
        Huellkurve - die drei Dinge, die Safari anders behandelt.
+    F  Welche feedback.js die Uebungsseite wirklich nimmt - und deren
+       Klang zum Anhoeren. Die Probe holt immer frisch, die App unter
+       ihrer Versionsnummer.
     D  Derselbe Klang offline gerechnet. Das misst die Abtastwerte auf
        diesem Geraet - klingt nichts, aber D zeigt Ausschlag, dann
        stimmt die Rechnung und es scheitert an der Ausgabe.
@@ -115,6 +118,20 @@ sag mir, bei welcher du etwas hörst.</p>
   Safari anders als Chrome. Klingt E, aber C nicht, weiß ich, welches.</p>
   <button type="button" id="e">E abspielen</button>
   <p style="margin:0">Ergebnis: <span class="urteil offen" id="ue">noch nicht geprüft</span></p>
+</div>
+
+<div class="karte">
+  <h2>F · Was die App wirklich lädt</h2>
+  <p class="leise">Die Probe holt <code>feedback.js</code> mit einer
+  Zufallsnummer — immer frisch. Die Übungsseite holt sie mit ihrer
+  Versionsnummer, und unter derselben Nummer liefern Browser und
+  Offline-Helfer ewig denselben Stand. Klingt C, aber die App bleibt
+  still, ist das der wahrscheinlichste Grund.</p>
+  <button type="button" id="f">F prüfen — welche Datei nimmt die Übungsseite?</button>
+  <div class="werte" id="fwerte" style="margin-top:8px"></div>
+  <button type="button" id="f2" class="leise" style="margin-top:10px" hidden>
+    Den Klang aus <em>dieser</em> Datei abspielen</button>
+  <p style="margin:0">Ergebnis: <span class="urteil offen" id="uf">noch nicht geprüft</span></p>
 </div>
 
 <div class="karte">
@@ -261,6 +278,55 @@ sag mir, bei welcher du etwas hörst.</p>
       urteil('ue',null,'gestartet — hörst du etwas?');
       setTimeout(werte,300);
     }catch(e){ urteil('ue',false,'Fehler'); log('E: Fehler —',e.message); }
+  };
+
+  /* ---- F: die Datei der Uebungsseite ---- */
+  let appKlang=null;
+  document.getElementById('f').onclick=async ()=>{
+    const z=[];
+    try{
+      /* Zweimal holen: einmal so, wie der Browser die Seite sowieso
+         haette (aus seinem Speicher, wenn er einen hat), und einmal
+         frisch vom Server. Weichen die ab, liegt bei dir eine alte
+         Seite - und die holt sich dann auch eine alte feedback.js. */
+      const lies=async u=>{const t=await fetch(u).then(r=>r.text());
+        const m=/assets\/feedback\.js\?v=([^"']+)/.exec(t); return m?m[1]:null;};
+      const beiDir=await lies('../../year5/');
+      const server=await lies('../../year5/?klangprobe='+Date.now());
+      if(!beiDir){ urteil('uf',false,'keine feedback.js in der Seite'); return; }
+      z.push(['Übungsseite bei dir','v='+beiDir]);
+      z.push(['Übungsseite am Server','v='+server]);
+      if(beiDir!==server)
+        z.push(['Stand','ALT — deine Seite hinkt hinterher']);
+      const adresse='../../assets/feedback.js?v='+beiDir;
+      /* Genau diese Adresse holen - so, wie die App sie holt. Was der
+         Browser oder der Helfer dort liegen haben, kommt hier zum
+         Vorschein. */
+      const datei=await fetch(adresse).then(r=>r.text());
+      const hatWecken=/function wecken\(\)/.test(datei);
+      z.push(['enthält das Wecken',hatWecken?'ja':'NEIN — alter Stand']);
+      z.push(['Länge',datei.length+' Zeichen']);
+      document.getElementById('fwerte').innerHTML=
+        z.map(([k,v])=>'<span>'+k+'</span><b>'+v+'</b>').join('');
+      log('F: bei dir v='+beiDir+' · am Server v='+server+' · Wecken '+(hatWecken?'vorhanden':'FEHLT'));
+      const stimmt=hatWecken&&beiDir===server;
+      urteil('uf',stimmt,stimmt?'aktueller Stand':'ALTER Stand — das ist die Ursache');
+      /* Diese Datei laden und ihren Klang spielbar machen. */
+      const alt=window.LearningFeedback;
+      const sk=document.createElement('script');
+      sk.src=adresse;
+      sk.onload=()=>{ appKlang=window.LearningFeedback; window.LearningFeedback=alt;
+        document.getElementById('f2').hidden=false;
+        log('F: Datei der Übungsseite geladen, Klang steht bereit'); };
+      sk.onerror=()=>log('F: Datei der Übungsseite ließ sich nicht laden');
+      document.head.appendChild(sk);
+    }catch(e){ urteil('uf',false,'Fehler'); log('F: Fehler —',e.message); }
+  };
+  document.getElementById('f2').onclick=()=>{
+    if(!appKlang){ log('F: kein Klang aus der App-Datei'); return; }
+    try{ appKlang.tone('ok'); log('F: Klang der App-Datei gerufen');
+      urteil('uf',null,'gerufen — hörst du etwas?'); }
+    catch(e){ log('F: Fehler —',e.message); }
   };
 
   document.getElementById('kopieren').onclick=()=>{
