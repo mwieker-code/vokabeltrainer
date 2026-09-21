@@ -13,7 +13,7 @@
   document.body.classList.toggle('ascent-active',active);
   if(!active){panel.remove();return;}
   const stage=document.querySelector('.stage'),done=document.querySelector('.done');if(!stage&&!done)return;
-  if(queue!==S.queue){queue=S.queue;credited=new Set();streak=0;position=0;}
+  if(queue!==S.queue){queue=S.queue;credited=new Set();streak=0;position=0;lastTarget=-1;}
   const n=S.initialCount||S.queue.length;const completed=Math.min(n,S.i+(S.answered?1:0));const pct=n?completed/n:0;
   panel.classList.toggle('ascent-summit',S.i>=S.queue.length);
   panel.querySelector('.ascent-count').textContent=completed+' / '+n+' Wörter'+(S.i>=n&&S.i<S.queue.length?' · Wiederholung':'');

@@ -397,7 +397,7 @@ button.primary:hover{background:#0B4A54}
 }
 </style>
 
-<link rel="stylesheet" href="../../../assets/learning.css?v=20260921-anleitung">
+<link rel="stylesheet" href="../../../assets/learning.css?v=20260921-berg">
 <link rel="stylesheet" href="style.css?v=20260908-review">
 <div class="wrap">
   <div class="masthead">
@@ -1235,7 +1235,7 @@ function renderSession(){
 
   bindSession();
   var inp = document.getElementById("in1");
-  if(inp && !S.answered) inp.focus();
+  if(inp && !S.answered) inp.focus({preventScroll:true});
   if(S.res && S.res.indexOf("no") !== -1){
     var card = view.querySelector(".vcard");
     if(card){

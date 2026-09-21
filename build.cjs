@@ -4,7 +4,7 @@ const vm=require('node:vm');
 const root=__dirname, out=path.join(root,'dist');
 fs.rmSync(out,{recursive:true,force:true});
 fs.mkdirSync(out,{recursive:true});
-for(const item of ['index.html','manifest.webmanifest','fassung.json','sw.js','year8','year5','year7','year6','year9','year10','oberstufe','bili','all','assets']){
+for(const item of ['index.html','manifest.webmanifest','fassung.json','sw.js','year8','year5','year7','year6','year9','year10','oberstufe','bili','all','assets','probe']){
  fs.cpSync(path.join(root,item),path.join(out,item),{recursive:true});
 }
 for(const dir of ['', 'year8','year5','year7','year6','year9','year10','oberstufe','oberstufe/analysis','bili/history','all','all/analysis','year6/grammar','year6/grammar/simple-past','year6/grammar/irregular-verbs']){

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<link rel="manifest" href="manifest.webmanifest">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<link rel="apple-touch-icon" sizes="180x180" href="https://mwieker-code.github.io/vokabeltrainer/assets/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../../assets/apple-touch-icon.png">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Basecamp">
@@ -373,7 +374,7 @@ button.primary:hover{background:#0B4A54}
   *{animation:none!important;transition:none!important}
 }
 </style>
-<link rel="stylesheet" href="learning.css?v=ascent-1">
+<link rel="stylesheet" href="learning.css?v=20260921-berg">
 
 <div class="wrap">
     <div class="masthead">
@@ -5950,7 +5951,7 @@ function renderSession(){
 
   bindSession();
   const inp = document.getElementById("typeIn");
-  if(inp && !S.answered) inp.focus();
+  if(inp && !S.answered) inp.focus({preventScroll:true});
   updateFoot();
 }
 
@@ -6478,7 +6479,7 @@ try{
 </script>
 
 <script src="https://mwieker-code.github.io/vokabeltrainer/assets/qr.js?v=20260920-griff"></script>
-<script src="learning.js?v=ascent-1"></script>
+<script src="learning.js?v=20260921-berg"></script>
 
 <link rel="stylesheet" href="feedback.css?v=ascent-1">
 <script src="feedback.js?v=ascent-1"></script>
