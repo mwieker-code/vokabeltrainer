@@ -8,19 +8,53 @@ for(const folder of ['year5','year6','year7','year8','year9','year10','oberstufe
  for(const m of html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g))if(m[1].trim())run(m[1]);
  run(fs.readFileSync('assets/learning.js','utf8'));run(fs.readFileSync('assets/ascent.js','utf8'));
  assert.equal(w.document.querySelectorAll('.ascent-panel').length,0);
+
  w.document.querySelector('[data-topic]').click();w.document.querySelector('[data-scope="short"]').click();
  run("S.mode='type';buildQueue();render();");
  const panel=()=>w.document.querySelector('.ascent-panel');
- assert.equal(panel().querySelector('.ascent-percent').textContent,'0 %',folder);
- run("Object.assign(current(),{en:'school',de:'Schule',pos:'noun'});S.dir='de2en';render();");
- w.document.querySelector('#typeIn').value='school';w.document.querySelector('#submit').click();
- assert.equal(panel().querySelector('.ascent-streak').textContent,'1 in Folge');
- assert.equal(panel().querySelector('.ascent-percent').textContent,'10 %');run('render();');
- assert.equal(w.document.querySelectorAll('.ascent-panel').length,1);
- run('rate(2);');w.document.querySelector('#typeIn').value='wrong';w.document.querySelector('#submit').click();
- assert.equal(panel().querySelector('.ascent-streak').textContent,'0 in Folge');
- run('rate(0);S.i=S.initialCount;render();');assert.equal(panel().querySelector('.ascent-percent').textContent,'100 %');
- run('S.i=S.queue.length;render();');assert.ok(panel().classList.contains('ascent-summit'));
+ const antworte=wort=>{
+  run("Object.assign(current(),{en:'school',de:'Schule',pos:'noun'});S.dir='de2en';render();");
+  w.document.querySelector('#typeIn').value=wort;
+  w.document.querySelector('#submit').click();
+ };
+ const prozent=()=>panel().querySelector('.ascent-percent').textContent;
+ const serie=()=>panel().querySelector('.ascent-streak').textContent;
+
+ assert.equal(prozent(),'0 %',folder);
+ /* Vorangehen tut nur, wer das Wort kann. Ein Fehler laesst die Figur
+    stehen - er wirft nicht zurueck, bringt aber auch nichts ein. Wuerde
+    jede Antwort zaehlen, erreichte den Gipfel auch, wer zehnmal
+    danebentippt. */
+ antworte('school');
+ assert.equal(serie(),'1 in Folge',folder+': die Serie zaehlt nicht mit');
+ assert.equal(prozent(),'10 %',folder+': das gekonnte Wort bringt keinen Schritt');
+ run('render();');
+ assert.equal(w.document.querySelectorAll('.ascent-panel').length,1,folder+': der Berg steht doppelt');
+ run('rate(2);');
+
+ antworte('falsch');
+ assert.equal(serie(),'0 in Folge',folder+': die Serie reisst beim Fehler nicht');
+ assert.equal(prozent(),'10 %',folder+': der Fehler bringt die Figur trotzdem voran');
+ run('rate(0);');
+
+ /* Neun weitere gekonnte Woerter fuehren auf den Gipfel der Etappe. */
+ for(let k=0;k<9;k++){ antworte('school'); run('rate(2);'); }
+ run('render();');
+ assert.equal(prozent(),'100 %',folder+': der Gipfel wird nicht erreicht');
+ assert.ok(panel().classList.contains('ascent-gipfel'),folder+': kein Gipfelzustand');
+ assert.match(panel().querySelector('.ascent-count').textContent,/Gipfel geschafft/,
+   folder+': der Gipfel wird nicht genannt');
+ /* Sichtbar steht im Bild nur der Serienzaehler. "Dein Aufstieg" stand
+    am Rechner ueber dem Gipfel und war dort im Weg; fuer Screenreader
+    bleibt der Name im aria-label. */
+ assert.equal(panel().querySelector('.ascent-label').children.length,1,
+   folder+': im Bild steht mehr als der Zaehler');
+ assert.equal(/AUFSTIEG/.test(panel().querySelector('.ascent-label').textContent.toUpperCase()),false,
+   folder+': die Beschriftung ueber dem Gipfel ist zurueck');
+ assert.match(panel().getAttribute('aria-label'),/Dein Aufstieg/,
+   folder+': der Name fuer Screenreader fehlt');
+ run('S.i=S.queue.length;render();');
+ assert.ok(panel().classList.contains('ascent-summit'),folder);
  run("S.mode='cloze';buildQueue();render();");assert.equal(panel().querySelector('.ascent-percent').textContent,'0 %');
  run("S.mode='mc';buildQueue();render();");assert.equal(w.document.querySelectorAll('.ascent-panel').length,0);
  dom.window.close();
