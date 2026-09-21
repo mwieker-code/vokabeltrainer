@@ -34,6 +34,12 @@
   if(matchMedia('(max-width:620px)').matches&&S.mode==='type'){
    const dir=document.getElementById('dirBtn'),heading=stage?.querySelector('.eyebrow');
    if(dir&&heading){dir.classList.add('ascent-direction');heading.insertBefore(dir,heading.lastElementChild);}
+  }else if(matchMedia('(max-width:620px)').matches&&S.mode==='cloze'){
+   const heading=stage?.querySelector('.eyebrow');
+   if(heading&&!heading.querySelector('.ascent-direction-label')){
+    const label=document.createElement('span');label.className='ascent-direction-label';label.textContent='DE → EN';
+    heading.insertBefore(label,heading.lastElementChild);
+   }
   }
   fitMobile();
   if(pct!==lastTarget){lastTarget=pct;animate(pct);}
