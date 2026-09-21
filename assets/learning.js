@@ -680,35 +680,162 @@ ${vocabulary}`;
   + 'Stelle \u2013 sonst hast du zwei Lernstände, die nichts voneinander '
   + 'wissen.</div>';
 
-  function startbildschirmEinsetzen(doc){
-    const kopf=[...doc.querySelectorAll('h2')].find(h=>/^Loslegen/.test(h.textContent.trim()));
-    if(!kopf){ doc.insertAdjacentHTML('beforeend',STARTBILDSCHIRM); return; }
-    let ziel=kopf.nextElementSibling;
-    while(ziel && ziel.tagName!=='H2') ziel=ziel.nextElementSibling;
-    if(ziel) ziel.insertAdjacentHTML('beforebegin',STARTBILDSCHIRM);
-    else doc.insertAdjacentHTML('beforeend',STARTBILDSCHIRM);
+  /* ---- Die Reihenfolge der Anleitung ----
+     Sie stand nirgends: Die Seite lieferte zehn Abschnitte, diese Datei
+     haengte drei davor und zwei dahinter. Das Kind las
+     hundertneunzig Woerter Detail, bevor es erfuhr, wofuer die Seite da
+     ist, und "Ohne Internet ueben" landete hinter dem Abschnitt fuer
+     Kollegen, als gehoerte es dazu.
+
+     Jetzt steht sie hier, an einer Stelle, und die Abschnitte werden am
+     Ende danach einsortiert. Wer einen ergaenzt, traegt ihn hier ein;
+     wer das vergisst, findet ihn hinten wieder statt an zufaelliger
+     Stelle - und tests/help.cjs sagt es ihm.
+
+     Der Weg des Kindes gibt die Ordnung vor: ankommen, ueben, merken,
+     das eigene Geraet, und ganz zuletzt, was Erwachsene angeht. */
+  const ANLEITUNG = [
+    'Wofür ist diese Seite?',
+    'Loslegen',
+    'Die vier Übungsarten',
+    'Abfragerichtung',
+    'Eingeben',
+    'Aussprache',
+    'Blitzrunde',
+    'Die fünf Fächer',
+    'Dein Lernstand',
+    'Alle Vokabeln nachschlagen',
+    'Schriftgröße',
+    'Basecamp auf den Startbildschirm',
+    'Ohne Internet üben',
+    'Für Kolleginnen und Kollegen'
+  ];
+
+  /* Die Anleitung in Abschnitte zerlegen: Jede Ueberschrift beginnt
+     einen, alles bis zur naechsten gehoert dazu. Der Abschnitt fuer
+     Kollegen steckt in einem eigenen div - der zaehlt samt Rahmen als
+     ein Stueck. */
+  function abschnitte(doc){
+    const liste=[]; let jetzt=null;
+    for(const kind of [...doc.children]){
+      const eigen = kind.tagName==='DIV' && kind.querySelector('h2');
+      if(kind.tagName==='H2' || eigen){
+        jetzt={titel:(eigen?kind.querySelector('h2'):kind).textContent.trim(), teile:[kind]};
+        liste.push(jetzt);
+      }
+      else if(jetzt) jetzt.teile.push(kind);
+      else liste.push({titel:null, teile:[kind]});
+    }
+    return liste;
   }
+  function abschnittSuchen(liste, titel){
+    return liste.find(a => a.titel === titel) || null;
+  }
+  function anleitungOrdnen(doc){
+    const liste=abschnitte(doc);
+    /* Was vor der ersten Ueberschrift steht, bleibt vorn; was nicht in
+       der Liste steht, faellt hinten an - sichtbar, nicht verloren. */
+    const platz=a => a.titel===null ? -1
+      : (ANLEITUNG.indexOf(a.titel)<0 ? ANLEITUNG.length : ANLEITUNG.indexOf(a.titel));
+    liste.sort((x,y)=>platz(x)-platz(y));          // stabil, also bleibt Gleiches in Reihenfolge
+    for(const a of liste) for(const teil of a.teile) doc.appendChild(teil);
+  }
+
+  /* Ein Abschnitt, den es vorher nicht gab: Das Tastenfeld auf dem
+     Telefon kann einiges, das niemand von allein findet. Er tritt an
+     die Stelle von "Tastatur am Computer", das mit zehn Woertern nur
+     die Tastenkuerzel aufzaehlte und vom Telefon gar nicht sprach. */
+  const EINGEBEN =
+    '<h2>Eingeben</h2>'
+  + '<p>Auf dem Telefon bringt Basecamp ein eigenes Tastenfeld mit. Das hat '
+  + 'zwei Gründe: Die Tastatur des Geräts verschiebt beim Aufgehen die Seite, '
+  + 'und ihre deutsche Autokorrektur macht aus englischen Wörtern gern '
+  + 'deutsche. Das Tastenfeld von Basecamp tut beides nicht.</p>'
+  + '<ul>'
+  + '<li><b>Prüfen</b> rechts unten prüft deine Antwort — wie die Eingabetaste.</li>'
+  + '<li><b>123</b> zeigt Ziffern und Satzzeichen: Fragezeichen und Punkt für den '
+  + 'Lückensatz, Bindestrich, Apostroph und ß.</li>'
+  + '<li><b>EN</b> beziehungsweise <b>DE</b> wechselt die Belegung, wenn du einmal '
+  + 'Umlaute brauchst.</li>'
+  + '<li>Die <b>Rücktaste gedrückt halten</b> löscht die ganze Zeile auf einmal.</li>'
+  + '<li>Die <b>Leertaste gedrückt halten</b> macht das Tastenfeld zum Schiebefeld: '
+  + 'Zieh den Finger nach links oder rechts, und die Schreibmarke wandert mit. '
+  + 'So verbesserst du mitten im Wort.</li>'
+  + '</ul>'
+  + '<p>Am Computer tippst du ganz normal. Dort helfen diese Tasten:</p>'
+  + '<table><tbody>'
+  + '<tr><td><span class="kbd">Leertaste</span></td><td>Karte umdrehen</td></tr>'
+  + '<tr><td><span class="kbd">1</span> <span class="kbd">2</span> <span class="kbd">3</span></td><td>Nochmal / Unsicher / Gewusst</td></tr>'
+  + '<tr><td><span class="kbd">Enter</span></td><td>Eingabe prüfen</td></tr>'
+  + '<tr><td><span class="kbd">S</span></td><td>Aussprache abspielen</td></tr>'
+  + '</tbody></table>';
+
+  /* Was frueher unter "Dein Lernumfang" stand, gehoert zu "Loslegen":
+     Beide erklaerten den Start, einmal knapp und einmal ausfuehrlich,
+     an weit auseinanderliegenden Stellen. Was die Liste dort schon
+     sagt, steht hier nicht noch einmal. */
+  const LERNUMFANG =
+    '<p><b>Alles üben</b> nimmt alle Wörter deiner Auswahl, auch die, die du schon '
+  + 'kannst. Die <b>kurze Runde</b> nimmt höchstens zehn, <b>nur fällige Vokabeln</b> '
+  + 'nimmt die, die gerade dran sind. Fehler werden nach dem ersten Durchgang '
+  + 'einmal wiederholt.</p>'
+  + '<p>Mit <b>Später fortsetzen</b> verlässt du die Runde. Auf der '
+  + 'Jahrgangsübersicht kannst du sie im selben Browser fortsetzen. Pro Jahrgang '
+  + 'wird eine Runde gespeichert; eine neue ersetzt sie. Eine noch ungeprüfte '
+  + 'Texteingabe wird nicht mitgespeichert. Wechselst du die Übungsart, startet '
+  + 'der gewählte Lernumfang neu.</p>';
+
+  const BLITZ_HILFE =
+    '<h2>Blitzrunde</h2>'
+  + '<p>60 Sekunden gegen die Zeit: Du siehst die deutsche Bedeutung und tippst '
+  + 'das englische Wort, so schnell du kannst. Falsche oder ausgelassene Wörter '
+  + 'werden am Ende aufgelistet. Die Blitzrunde zählt nicht auf deine fünf '
+  + 'Lernfächer ein; dein normaler Lernstand bleibt unberührt.</p>';
+
+  const OHNE_NETZ =
+    '<h2>Ohne Internet üben</h2>'
+  + '<p>Was du einmal geöffnet hast, bleibt auf deinem Gerät. Öffne deinen '
+  + 'Jahrgang also einmal mit Verbindung — danach kannst du im Bus oder im '
+  + 'Funkloch weiterüben. Dein Lernstand wird ohnehin auf dem Gerät '
+  + 'gespeichert, nicht im Netz.</p>';
 
   renderHelp = function(){
     originalHelp();
     const doc=view.querySelector('.doc');
-    if(doc)startbildschirmEinsetzen(doc);
-    /* Ganz unten, klein: Wer schreibt "bei mir sieht das anders aus",
-       kann diese Angabe mitschicken. */
-    if(doc&&FASSUNG){
+    if(!doc) return;
+
+    /* Anbauen darf jeder hinten - die Reihenfolge macht am Ende
+       anleitungOrdnen. */
+    doc.insertAdjacentHTML('beforeend', STARTBILDSCHIRM + BLITZ_HILFE + OHNE_NETZ);
+
+    /* "Tastatur am Computer" weicht dem groesseren Abschnitt. */
+    const liste=abschnitte(doc);
+    const tasten=abschnittSuchen(liste,'Tastatur am Computer');
+    if(tasten){
+      tasten.teile[0].insertAdjacentHTML('beforebegin', EINGEBEN);
+      for(const teil of tasten.teile) teil.remove();
+    }else{
+      doc.insertAdjacentHTML('beforeend', EINGEBEN);
+    }
+
+    /* Der Lernumfang zieht unter "Loslegen" ein. */
+    const los=abschnittSuchen(abschnitte(doc),'Loslegen');
+    if(los) los.teile[los.teile.length-1].insertAdjacentHTML('afterend', LERNUMFANG);
+    else doc.insertAdjacentHTML('beforeend','<h2>Loslegen</h2>'+LERNUMFANG);
+
+    anleitungOrdnen(doc);
+
+    /* Ganz unten, klein und ohne Ueberschrift: Wer schreibt "bei mir
+       sieht das anders aus", kann diese Angabe mitschicken. Sie steht
+       nach dem Sortieren, damit sie letzte bleibt. */
+    if(FASSUNG){
       doc.insertAdjacentHTML('beforeend',
-        '<h2>Ohne Internet üben</h2>'
-        +'<p>Was du einmal geöffnet hast, bleibt auf deinem Gerät. Öffne deinen '
-        +'Jahrgang also einmal mit Verbindung — danach kannst du im Bus oder im '
-        +'Funkloch weiterüben. Dein Lernstand wird ohnehin auf dem Gerät '
-        +'gespeichert, nicht im Netz.</p>'
-        +'<p class="lead" style="font-size:12.5px">Fassung <b>'+safe(FASSUNG)+'</b>. '
+        '<p class="lead" style="font-size:12.5px">Fassung <b>'+safe(FASSUNG)+'</b>. '
         +'Wenn etwas nicht so aussieht wie beschrieben, schicke diese Angabe mit. '
         +'<button class="switch" id="hclear" type="button">Zwischenspeicher leeren</button></p>');
       const knopf=doc.querySelector('#hclear');
       if(knopf)knopf.onclick=()=>{knopf.disabled=true;knopf.textContent='wird geleert …';lagerRaeumen();};
     }
-    if(doc)doc.insertAdjacentHTML('afterbegin','<h2>Dein Lernumfang</h2><p>Wähle einen Part, eine Unit oder ein Thema. Alles üben umfasst alle Wörter deiner Auswahl, auch bereits gelernte. Alternativ wählst du höchstens zehn Wörter, nur fällige Vokabeln oder die Blitzrunde. Fehler werden nach dem ersten Durchgang einmal wiederholt. Mit <b>Später fortsetzen</b> verlässt du die Runde. Auf der Jahrgangsübersicht kannst du sie im selben Browser fortsetzen. Pro Jahrgang wird eine Runde gespeichert; eine neue Runde ersetzt sie. Eine noch ungeprüfte Texteingabe wird nicht gespeichert. Ein Wechsel der Übungsart startet den gewählten Lernumfang neu.</p><p>Beim Tippen bleiben deine Eingabe und die Lösung sichtbar. Markierte Buchstaben zeigen Abweichungen. Falsche Antworten werden nicht als gewusst gespeichert, auch wenn du „Gewusst“ antippst.</p><h2>Blitzrunde</h2><p>60 Sekunden gegen die Zeit: Du siehst die deutsche Bedeutung und tippst das englische Wort, so schnell du kannst. Falsche oder ausgelassene Wörter werden am Ende aufgelistet. Die Blitzrunde zählt nicht auf deine fünf Lernfächer ein; dein normaler Lernstand bleibt unberührt.</p><h2>Töne und Animationen</h2><p>Unten auf der Seite kannst du Töne und Animationen getrennt ein- oder ausschalten. Töne sind anfangs ausgeschaltet. Die Einstellungen werden im Browser gespeichert. Die Aussprache über das Lautsprecher-Symbol funktioniert unabhängig vom Schalter für Rückmeldetöne. Bei reduzierter Bewegung in den Geräteeinstellungen werden Animationen unterdrückt.</p>');
   };
 
   /* =========================================================================
