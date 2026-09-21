@@ -1914,7 +1914,109 @@ ${vocabulary}`;
     location.reload();
   }
 
+  /* =========================================================================
+     KOPFZEILE: ZELT UND MENUE
+     Das Zelt fuehrt zur Startseite. Wohin das ist, steht schon im Verweis
+     daneben - jede Seite kennt dort ihre eigene Tiefe, und so muss keine
+     Seite einzeln angefasst werden.
+
+     Daneben ein Menue, das in jeder Ansicht offen steht. Anleitung und
+     Woerterbuch lagen bisher nur auf dem Startmenue: mitten in einer
+     Runde kam niemand an sie heran, ohne die Runde zu verlassen. Was im
+     Seitenfuss stand, zieht mit hinein - und zwar die Knoepfe selbst,
+     nicht Abschriften davon. So bleibt jeder Handgriff an einer Stelle.
+     ========================================================================= */
+  function kopfzeile(){
+    const kopf=document.querySelector('.masthead');
+    if(!kopf||kopf.querySelector('.kopf-menue'))return;
+    const zelt=kopf.querySelector('.brandmark');
+    const heim=kopf.querySelector('.home-link');
+    if(!zelt||!heim)return;
+
+    if(!zelt.closest('a')){
+      const a=document.createElement('a');
+      a.className='brand-link';
+      a.href=heim.getAttribute('href');
+      a.setAttribute('aria-label','Zur Startseite: '+heim.textContent.replace(/^[\s←]+/,''));
+      zelt.replaceWith(a); a.appendChild(zelt);
+    }
+
+    const feld=document.createElement('div');
+    feld.className='kopf-menue';
+    feld.innerHTML='<button type="button" class="kopf-knopf" id="menueKnopf" '
+      +'aria-expanded="false" aria-controls="menueBlatt" aria-label="Menü">'
+      +'<span class="kopf-striche" aria-hidden="true"></span></button>'
+      +'<div class="kopf-blatt" id="menueBlatt" hidden>'
+      +'<button type="button" data-menue="hilfe">So funktioniert’s</button>'
+      +'<button type="button" data-menue="liste">Vokabeln nachschlagen</button>'
+      +'<button type="button" data-menue="richtung">Abfragerichtung</button>'
+      +'<div class="kopf-teil" data-teil="fuss"></div>'
+      +'<div class="kopf-teil" data-teil="klang"></div>'
+      +'</div>';
+    kopf.appendChild(feld);
+
+    const knopf=feld.querySelector('#menueKnopf');
+    const blatt=feld.querySelector('#menueBlatt');
+    const richtung=blatt.querySelector('[data-menue="richtung"]');
+    const offen=()=>knopf.getAttribute('aria-expanded')==='true';
+    function daneben(e){ if(!feld.contains(e.target))zeigen(false); }
+    function flucht(e){ if(e.key==='Escape'&&offen()){zeigen(false);knopf.focus();} }
+    function zeigen(an){
+      knopf.setAttribute('aria-expanded',String(an));
+      blatt.hidden=!an;
+      if(an){
+        richtung.textContent='Abfragerichtung: '+dirLabel();
+        document.addEventListener('pointerdown',daneben,true);
+        document.addEventListener('keydown',flucht,true);
+      }else{
+        document.removeEventListener('pointerdown',daneben,true);
+        document.removeEventListener('keydown',flucht,true);
+      }
+    }
+    knopf.onclick=()=>zeigen(!offen());
+    blatt.addEventListener('click',e=>{
+      const wahl=e.target.closest('[data-menue]');
+      if(!wahl){
+        /* Sichern und Laden bringen ihren eigenen Handgriff mit; hier
+           faellt nur das Blatt zu, nachdem er gelaufen ist. */
+        if(e.target.closest('#exportBtn,#importBtn'))zeigen(false);
+        return;
+      }
+      if(wahl.dataset.menue==='hilfe'){ S.view='help'; render(); }
+      else if(wahl.dataset.menue==='liste'){ S.view='list'; render(); }
+      else if(wahl.dataset.menue==='richtung'){
+        S.dir = S.dir==='en2de' ? 'de2en' : 'en2de';
+        /* In einer laufenden Runde haengt die Warteschlange an der
+           Richtung - dieselben zwei Zeilen wie am Schalter in der Runde. */
+        if(S.view==='session'){ S.options=null; buildQueue(); }
+        render();
+      }
+      zeigen(false); knopf.focus();
+    });
+
+    /* Die Knoepfe aus dem Fuss ziehen um. feedback.js haengt seine Leiste
+       erst nach dieser Datei an - und wie lange deren Abruf dauert, ist
+       nicht vorherzusehen. Ein Zeitgeber waere darum zu frueh dran;
+       gewartet wird auf das Ende des Einlesens und noch einmal auf das
+       Ende des Ladens. Fehlt eine Leiste, bleibt das Menue trotzdem heil. */
+    function einraeumen(){
+      for(const id of ['exportBtn','importBtn']){
+        const b=document.getElementById(id);
+        if(b)blatt.querySelector('[data-teil="fuss"]').appendChild(b);
+      }
+      const leiste=document.querySelector('.feedback-settings');
+      if(leiste)blatt.querySelector('[data-teil="klang"]').appendChild(leiste);
+      const rest=document.querySelector('.foot-actions');
+      if(rest&&!rest.children.length)rest.remove();
+    }
+    einraeumen();
+    if(document.readyState==='loading')
+      document.addEventListener('DOMContentLoaded',einraeumen);
+    window.addEventListener('load',einraeumen);
+  }
+
   readAssignment();
+  kopfzeile();
   render();
   fassungPruefen();
   helferAnmelden();
