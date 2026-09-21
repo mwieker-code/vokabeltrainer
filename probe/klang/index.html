@@ -31,6 +31,9 @@
        ihrer Versionsnummer.
     G  Die echte Uebungsseite in einem Rahmen, von aussen belauscht:
        Kommt der Ruf an tone() ueberhaupt an?
+    I  Ton, dann Sprachausgabe, dann derselbe Ton. Bleibt der zweite
+       still, legt die Stimme den Klang still - das ist der letzte
+       Unterschied zwischen Probe und Uebung.
     D  Derselbe Klang offline gerechnet. Das misst die Abtastwerte auf
        diesem Geraet - klingt nichts, aber D zeigt Ausschlag, dann
        stimmt die Rechnung und es scheitert an der Ausgabe.
@@ -161,6 +164,22 @@ sag mir, bei welcher du etwas hörst.</p>
   <button type="button" id="h2" class="leise" style="margin-top:10px" hidden>Ablesen</button>
   <div class="werte" id="hwerte" style="margin-top:8px"></div>
   <p style="margin:8px 0 0">Ergebnis: <span class="urteil offen" id="uh">noch nicht geprüft</span></p>
+</div>
+
+<div class="karte">
+  <h2>I · Sprache und Klang zusammen</h2>
+  <p class="leise">In der Probe klingen die Töne, in der Übung nicht — und in
+  der Übung läuft davor die Sprachausgabe. WebKit gibt der Stimme am Mac eine
+  eigene Tonspur; der Verdacht ist, dass Web&nbsp;Audio danach stumm
+  weiterläuft. Dieser Versuch spielt einen Ton, lässt sprechen und spielt
+  denselben Ton noch einmal.</p>
+  <p class="leise"><b>So geht es:</b> drücken, zuhören, danach unten angeben,
+  ob der <b>zweite</b> Ton noch zu hören war.</p>
+  <button type="button" id="i">Ton – Sprache – Ton</button>
+  <button type="button" id="i1" class="leise">Zweiter Ton war hörbar</button>
+  <button type="button" id="i2" class="leise">Zweiter Ton fehlte</button>
+  <div class="werte" id="iwerte" style="margin-top:8px"></div>
+  <p style="margin:8px 0 0">Ergebnis: <span class="urteil offen" id="ui">noch nicht geprüft</span></p>
 </div>
 
 <div class="karte">
@@ -461,6 +480,54 @@ sag mir, bei welcher du etwas hörst.</p>
         : 'KEIN Ton gestartet — tone() läuft nicht durch');
     }catch(e){ urteil('uh',false,'Fehler'); log('H: Fehler —',e.message); }
   };
+
+  /* ---- I: Sprache und Klang zusammen ----
+     Der einzige Unterschied zwischen Probe und Uebung, der bisher
+     uebrig bleibt: in der Uebung spricht vorher die Stimme. Am Mac
+     bekommt die Sprachausgabe eine eigene Tonspur; wenn Safari den
+     Audiokontext dabei stillegt, meldet er weiter "running" und man
+     hoert trotzdem nichts. Genau das prueft dieser Versuch. */
+  document.getElementById('i').onclick=()=>{
+    if(!window.LearningFeedback){ urteil('ui',false,'feedback.js nicht geladen'); return; }
+    if(!('speechSynthesis' in window)){ urteil('ui',false,'keine Sprachausgabe'); return; }
+    const stand=()=>window.LearningFeedback.zustand();
+    izeig([['vor dem ersten Ton',stand()]]);
+    window.LearningFeedback.tone('ok');
+    log('I: erster Ton · Kontext',stand());
+    urteil('ui',null,'läuft — gleich spricht die Stimme');
+    setTimeout(()=>{
+      const rede=new SpeechSynthesisUtterance('house');
+      rede.lang='en-GB';
+      /* Safari laesst onend gelegentlich aus. Nach sechs Sekunden wird
+         der zweite Ton trotzdem gespielt, damit der Versuch nicht
+         haengen bleibt. */
+      let fertig=false;
+      const weiter=()=>{ if(fertig)return; fertig=true;
+        log('I: Sprache fertig · Kontext',stand());
+        setTimeout(()=>{
+          window.LearningFeedback.tone('ok');
+          log('I: zweiter Ton · Kontext',stand());
+          izeig([['vor dem ersten Ton',iv],['nach der Sprache',stand()]]);
+          urteil('ui',null,'zweiter Ton gespielt — war er zu hören?');
+        },500);
+      };
+      rede.onend=weiter;
+      setTimeout(weiter,6000);
+      rede.onerror=e=>{ log('I: Sprachfehler',e.error||''); };
+      speechSynthesis.speak(rede);
+      log('I: Sprache gestartet');
+    },1400);
+  };
+  let iv='—';
+  function izeig(z){ if(z.length===1)iv=z[0][1];
+    document.getElementById('iwerte').innerHTML=
+      z.map(([a,b])=>'<span>Kontext '+a+'</span><b>'+b+'</b>').join(''); }
+  document.getElementById('i1').onclick=()=>{
+    urteil('ui',true,'zweiter Ton hörbar — die Stimme ist es nicht');
+    log('I: Antwort — zweiter Ton hörbar'); };
+  document.getElementById('i2').onclick=()=>{
+    urteil('ui',false,'zweiter Ton fehlte — die Sprachausgabe legt den Klang still');
+    log('I: Antwort — zweiter Ton fehlte'); };
 
   document.getElementById('kopieren').onclick=()=>{
     const text=[...document.querySelectorAll('#werte span, #werte b')].map(e=>e.textContent).join(' ')
