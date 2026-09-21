@@ -56,7 +56,32 @@ function glocke(ac,grund,start,dauer,lautstaerke){
   anschlag(ac,start,0.035*lautstaerke);
   TEIL.forEach((v,i)=>teilton(ac,grund*v,start,dauer*(1-i*0.13),LAUT*ANTEIL[i]*lautstaerke,0.004));
 }
-function tone(kind){if(!prefs.sound)return;try{const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return;ctx=ctx||new Audio();ctx.resume().then(()=>{
+/* ---- Den Klang wachhalten ----
+   Safari laesst Web Audio nur zu, wenn der Kontext in einer echten
+   Fingerbewegung entsteht oder geweckt wird, und legt ihn danach
+   wieder schlafen - beim Wechsel des Tabs, nach einer Pause, beim
+   Sperren des Geraets. Bisher geschah beides erst, wenn der erste Ton
+   faellig war: ctx entstand mitten im Klick und wurde per resume()
+   geweckt, der Klang aber erst im then() gebaut. Zwischen Klick und
+   then() liegt ein Rueckgabepunkt, und genau den zaehlt Safari nicht
+   mehr zur Fingerbewegung.
+
+   Jetzt wird bei jedem Druck geweckt - nicht nur beim ersten, weil der
+   Kontext zwischendurch wieder einschlafen kann - und der Klang wird
+   ohne Umweg gebaut, solange der Kontext laeuft. */
+function wecken(){
+  try{
+    const Audio=window.AudioContext||window.webkitAudioContext;
+    if(!Audio)return null;
+    ctx=ctx||new Audio();
+    if(ctx.state!=='running')ctx.resume().catch(()=>{});
+    return ctx;
+  }catch(e){ return null; }
+}
+for(const art of ['pointerdown','keydown','touchstart'])
+  window.addEventListener(art,wecken,{passive:true});
+
+function tone(kind){if(!prefs.sound)return;try{if(!wecken())return;const bauen=()=>{
   kette(ctx);
   const t=ctx.currentTime+0.01;
   if(kind==='done'){                       /* Runde geschafft: drei Anschlaege aufwaerts */
@@ -70,7 +95,12 @@ function tone(kind){if(!prefs.sound)return;try{const Audio=window.AudioContext||
     glocke(ctx,392,t,0.8,1);
     teilton(ctx,196,t,0.6,LAUT*0.4,0.01);
   }
-}).catch(()=>{});}catch(e){}}
+};
+  /* Laeuft der Kontext schon, wird ohne Umweg gebaut - das ist der
+     Fall, der auf Safari ueberhaupt klingt. */
+  if(ctx.state==='running')bauen();
+  else ctx.resume().then(bauen).catch(()=>{});
+}catch(e){}}
 function confettiBurst(host){for(let i=0;i<16;i++){const p=document.createElement('span');p.className='confetti-piece';const angle=Math.random()*Math.PI*2,dist=44+Math.random()*76;p.style.setProperty('--dx',Math.cos(angle)*dist+'px');p.style.setProperty('--dy',Math.sin(angle)*dist+'px');p.style.setProperty('--rot',(Math.random()*360-180)+'deg');p.style.background=['var(--moss)','var(--petrol)','var(--amber)'][i%3];p.style.animationDelay=(Math.random()*30)+'ms';host.appendChild(p);p.addEventListener('animationend',()=>p.remove());}}
 /* Kurzes Vibrieren zur Antwort. Android und Chrome koennen das; auf dem
    iPhone fehlt die Schnittstelle in allen Browsern, weil alle WebKit

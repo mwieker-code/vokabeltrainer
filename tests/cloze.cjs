@@ -34,3 +34,14 @@ for(const year of ['year5','year6','year7','year8','year9','year10','oberstufe']
  console.log(year+': '+rows.length+' cloze sentences checked');dom.window.close();
 }
 console.log(total+' cloze sentences: no repeated answer or generated base-form hint');
+
+/* Der Lueckensatz steht fett. Er ist die Aufgabe - in den anderen
+   Uebungsarten steht dort das gesuchte Wort in 38 Punkt, hier ein ganzer
+   Satz, und in Grundstaerke wirkte die Karte leer. Das Loesungswort geht
+   eine Stufe hoeher, damit es sich nach dem Pruefen weiter abhebt. */
+{
+  const blatt=fs.readFileSync(path.join(root,'assets/learning.css'),'utf8');
+  assert.match(blatt,/\.cloze\{[^}]*font-weight:600/,'der Lückensatz steht nicht mehr fett');
+  assert.match(blatt,/\.cloze b\{[^}]*font-weight:700/,'das Lösungswort hebt sich nicht mehr ab');
+  console.log('Lückensatz: fett, Lösungswort eine Stufe darüber');
+}

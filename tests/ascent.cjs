@@ -1,5 +1,7 @@
 const {JSDOM}=require('jsdom'),fs=require('fs'),vm=require('vm'),assert=require('node:assert/strict');
-for(const folder of ['year5','year6','year7','year8','year9','year10','oberstufe']){
+/* bili/history gehoert dazu: Dort wird genauso getippt und geluecktet,
+   der Berg fehlte dort aber - als einzige Uebungsseite. */
+for(const folder of ['year5','year6','year7','year8','year9','year10','oberstufe','bili/history']){
  const html=fs.readFileSync(folder+'/index.html','utf8');
  assert.match(html,/ascent\.js/);assert.match(html,/inp\.focus\(\{preventScroll:true\}\)/);
  const dom=new JSDOM(html,{runScripts:'outside-only',url:'https://example.org/'+folder+'/'}),w=dom.window;
@@ -20,6 +22,10 @@ for(const folder of ['year5','year6','year7','year8','year9','year10','oberstufe
  const prozent=()=>panel().querySelector('.ascent-percent').textContent;
  const serie=()=>panel().querySelector('.ascent-streak').textContent;
 
+ /* Nicht jede kurze Runde hat zehn Woerter - bili/history hat weniger.
+    Die Etappe ist so lang wie die Runde, hoechstens zehn. */
+ const laenge=Math.min(10,run('S.initialCount'));
+ const erwartet=k=>Math.round(k/laenge*100)+' %';
  assert.equal(prozent(),'0 %',folder);
  /* Vorangehen tut nur, wer das Wort kann. Ein Fehler laesst die Figur
     stehen - er wirft nicht zurueck, bringt aber auch nichts ein. Wuerde
@@ -27,18 +33,18 @@ for(const folder of ['year5','year6','year7','year8','year9','year10','oberstufe
     danebentippt. */
  antworte('school');
  assert.equal(serie(),'1 in Folge',folder+': die Serie zaehlt nicht mit');
- assert.equal(prozent(),'10 %',folder+': das gekonnte Wort bringt keinen Schritt');
+ assert.equal(prozent(),erwartet(1),folder+': das gekonnte Wort bringt keinen Schritt');
  run('render();');
  assert.equal(w.document.querySelectorAll('.ascent-panel').length,1,folder+': der Berg steht doppelt');
  run('rate(2);');
 
  antworte('falsch');
  assert.equal(serie(),'0 in Folge',folder+': die Serie reisst beim Fehler nicht');
- assert.equal(prozent(),'10 %',folder+': der Fehler bringt die Figur trotzdem voran');
+ assert.equal(prozent(),erwartet(1),folder+': der Fehler bringt die Figur trotzdem voran');
  run('rate(0);');
 
- /* Neun weitere gekonnte Woerter fuehren auf den Gipfel der Etappe. */
- for(let k=0;k<9;k++){ antworte('school'); run('rate(2);'); }
+ /* Die restlichen gekonnten Woerter fuehren auf den Gipfel der Etappe. */
+ for(let k=1;k<laenge;k++){ antworte('school'); run('rate(2);'); }
  run('render();');
  assert.equal(prozent(),'100 %',folder+': der Gipfel wird nicht erreicht');
  assert.ok(panel().classList.contains('ascent-gipfel'),folder+': kein Gipfelzustand');
@@ -59,4 +65,4 @@ for(const folder of ['year5','year6','year7','year8','year9','year10','oberstufe
  run("S.mode='mc';buildQueue();render();");assert.equal(w.document.querySelectorAll('.ascent-panel').length,0);
  dom.window.close();
 }
-console.log('Mountain: all seven year groups, progress, streak, retries, finish and mode changes passed.');
+console.log('Mountain: alle Übungsseiten, progress, streak, retries, finish and mode changes passed.');

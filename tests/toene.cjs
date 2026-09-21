@@ -20,9 +20,25 @@ function starten(gespeichert){
   const w=dom.window;
   if(gespeichert!==undefined) w.localStorage.setItem('vt:feedback:v1',gespeichert);
   w.matchMedia=q=>({matches:false,media:q,addEventListener(){},removeEventListener(){}});
+  /* Ein Klangwerk zum Mitzaehlen: jsdom bringt keines mit. */
+  const werk={gebaut:0,geweckt:0,zustand:'suspended'};
+  w.AudioContext=function(){
+    werk.gebaut++;
+    return {get state(){return werk.zustand;},
+      resume(){werk.geweckt++;werk.zustand='running';return Promise.resolve();},
+      currentTime:0,sampleRate:44100,
+      createBuffer:(a,b)=>({getChannelData:()=>new Float32Array(b)}),
+      createConvolver:()=>({connect(){},set buffer(v){}}),
+      createGain:()=>({gain:{value:0,setValueAtTime(){},exponentialRampToValueAtTime(){}},connect(){}}),
+      createOscillator:()=>({type:'',frequency:{setValueAtTime(){}},connect(){},start(){},stop(){}}),
+      createBufferSource:()=>({connect(){},start(){},set buffer(v){}}),
+      createBiquadFilter:()=>({type:'',frequency:{value:0},Q:{value:0},connect(){}}),
+      destination:{}};
+  };
   vm.runInContext(quelle,dom.getInternalVMContext());
+  dom.__werk=werk;
   const knopf=k=>w.document.querySelector('[data-feedback-pref="'+k+'"]');
-  return {w,knopf,text:k=>knopf(k).textContent};
+  return {w,knopf,text:k=>knopf(k).textContent,werk:dom.__werk};
 }
 
 /* Ohne gespeicherte Wahl: Ton an. */
@@ -91,4 +107,29 @@ console.log('unbrauchbarer Speicherstand: Töne bleiben an');
   assert.match(ohneKommentar,/\[data-opt\][\s\S]{0,400}LearningFeedback\?\.signal/,
     'die Auswahl gibt keine Rückmeldung mehr');
   console.log('alter Tongenerator: restlos fort, Auswahl zentral vertont');
+}
+
+/* ---- Der Klang muss beim Fingerdruck wach sein ----
+   Safari laesst Web Audio nur zu, wenn der Kontext in einer echten
+   Fingerbewegung entsteht oder geweckt wird. Vorher geschah beides erst,
+   wenn der erste Ton faellig war, und der Klang wurde dann noch hinter
+   einem resume().then() gebaut - dieser Rueckgabepunkt zaehlt dort nicht
+   mehr zur Fingerbewegung. Am Mac blieb es deshalb still.
+   Geprueft wird: kein Kontext ohne Zutun, einer beim ersten Druck, und
+   das Wecken wiederholt sich - der Kontext kann zwischendurch wieder
+   einschlafen. */
+{
+  const t=starten();
+  assert.equal(t.werk.gebaut,0,'ein Klangwerk entsteht ungefragt beim Laden');
+  t.w.document.dispatchEvent(new t.w.Event('pointerdown',{bubbles:true}));
+  t.w.dispatchEvent(new t.w.Event('pointerdown'));
+  assert.equal(t.werk.gebaut,1,'beim Fingerdruck entsteht kein Klangwerk');
+  assert.ok(t.werk.geweckt>=1,'das Klangwerk wird beim Fingerdruck nicht geweckt');
+  /* Wieder eingeschlafen - der naechste Druck muss erneut wecken. */
+  t.werk.zustand='suspended';
+  const vorher=t.werk.geweckt;
+  t.w.dispatchEvent(new t.w.Event('keydown'));
+  assert.ok(t.werk.geweckt>vorher,'ein eingeschlafenes Klangwerk wird nicht wieder geweckt');
+  assert.equal(t.werk.gebaut,1,'es entsteht bei jedem Druck ein neues Klangwerk');
+  console.log('Klang: beim Druck geweckt, auch wieder und wieder');
 }
