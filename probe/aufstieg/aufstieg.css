@@ -1,0 +1,37 @@
+/* Am Rechner gibt die Zeichnung die Hoehe vor, nicht umgekehrt. Vorher
+   stand hier eine feste Hoehe; weil das SVG sein Seitenverhaeltnis
+   behaelt, blieb links und rechts ein Streifen glatter Hintergrund
+   stehen. Jetzt wird die Breite begrenzt und die Hoehe folgt. */
+.ascent-panel{position:relative;max-width:370px;margin:12px auto 18px;border-radius:20px;overflow:hidden;background:#dfebe3;border:1px solid #d1dfd4;box-shadow:0 6px 20px #234b3510}.ascent-panel svg{display:block;width:100%;height:auto}.ascent-panel .mobile-landscape{display:none}.ascent-label{position:absolute;top:14px;left:18px;right:18px;display:flex;justify-content:space-between;align-items:center;color:#335f4e;font-size:10px;letter-spacing:1.5px}.ascent-streak{background:#ffffffe0;border-radius:20px;padding:5px 10px;font-size:12px;letter-spacing:0}.ascent-footer{display:flex;justify-content:space-between;padding:8px 16px;font:500 12px system-ui;color:#285140;background:#f6f8f0}.ascent-preview-note{font:11px system-ui;color:#638373;text-align:center;padding:6px;pointer-events:none}.ascent-active .round-progress>span,.ascent-active .round-progress>progress{display:none!important}.ascent-panel .spark{opacity:0}.ascent-walking .hiker-body{animation:ascent-step .22s ease-in-out infinite alternate}.ascent-celebrate .ascent-streak{animation:ascent-pop .5s ease}.ascent-celebrate .spark{animation:ascent-spark 1s ease-out}.ascent-panel .cloud{animation:ascent-cloud 18s ease-in-out infinite alternate}@keyframes ascent-step{to{transform:translateY(-2px)}}@keyframes ascent-pop{50%{transform:scale(1.12)}}@keyframes ascent-spark{25%{opacity:1}100%{opacity:0;transform:translateY(-18px)}}@keyframes ascent-cloud{to{transform:translateX(12px)}}
+@media(max-width:620px){.ascent-active .ascent-preview-note{display:none}/* Auf dem Telefon nimmt der Berg die volle Breite - die Begrenzung
+   oben gilt nur dem Rechner. */
+.ascent-panel{margin:5px 0 8px;border-radius:12px;max-width:none}.ascent-panel>svg:not(.mobile-landscape){display:none}.ascent-panel .mobile-landscape{display:block;height:var(--ascent-height,clamp(82px,15vh,126px))}.ascent-label{top:7px;left:10px;right:10px}.ascent-label>span{display:none}.ascent-streak{margin-left:auto;font-size:10px;padding:3px 7px}.ascent-footer{padding:4px 11px;font-size:10px}.ascent-active .stage{margin-top:0!important}.ascent-active .round-progress{margin:3px 0!important;justify-content:flex-end}.ascent-panel.ascent-summit .mobile-landscape{height:var(--ascent-height,210px)}}
+@media(max-width:620px) and (max-height:720px){.ascent-panel .mobile-landscape{height:var(--ascent-height,70px)}.ascent-panel{margin-bottom:4px}}
+@media(max-height:500px) and (pointer:coarse){.ascent-panel{display:none}}
+@media(prefers-reduced-motion:reduce){.ascent-panel *{animation:none!important}}
+@media(max-width:620px){body.ascent-active.eb-tippen .vcard{padding:16px 18px}
+/* Die Karte waechst in der App von selbst, bis sie den Platz bis zum
+   Tastenfeld fuellt - learning.js setzt dafuer minHeight und einen
+   Abstand ueber dem Wort, beides direkt am Element. Solange der Berg
+   da ist, nimmt er diesen Platz, und die Karte muss stillhalten. Ohne
+   das !important gewinnt die Angabe am Element, und beide schieben
+   sich gegenseitig. */
+body.ascent-active.eb-tippen .stage{margin-top:0!important}
+body.ascent-active.eb-tippen .vcard{min-height:0!important}
+body.ascent-active.eb-tippen .vcard .prompt,
+body.ascent-active.eb-tippen .vcard .cloze{padding-top:0!important}body.ascent-active.eb-tippen .eyebrow{margin-bottom:12px}body.ascent-active.eb-tippen .typebox{margin-top:12px}body.ascent-active.eb-tippen .cloze{font-size:21px;line-height:1.4}}
+@media(max-width:620px){body.ascent-active .eyebrow:has(.ascent-direction,.ascent-direction-label){align-items:center;gap:6px}body.ascent-active .eyebrow:has(.ascent-direction,.ascent-direction-label)>span:first-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}body.ascent-active .eyebrow .ascent-direction,body.ascent-active .eyebrow .ascent-direction-label{margin-left:auto;flex:none;padding:5px 7px;font-size:10px;line-height:1.2;white-space:nowrap}body.ascent-active .eyebrow .ascent-direction-label{border:1px solid #bfd2d3;border-radius:8px;background:#f5f9f6;color:#315d56}body.ascent-active .eyebrow:has(.ascent-direction,.ascent-direction-label)>span:last-child{flex:none}}
+
+/* Keep navigation visible on short desktop windows. */
+@media(min-width:621px) and (max-height:850px){.ascent-panel{max-width:215px;margin:8px auto 12px}}
+/* A wide desktop has room for the mountain beside the exercise. This keeps the
+   card visible even when Safari's toolbar leaves a short viewport. */
+@media(min-width:900px){
+  body.ascent-active #view{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);column-gap:24px;align-items:start}
+  body.ascent-active #view>.sessionbar,body.ascent-active #view>.box-details,body.ascent-active #view>.round-progress{grid-column:1/-1}
+  body.ascent-active #view>.ascent-panel{grid-column:1;grid-row:4/span 2;width:100%;margin:0}
+  body.ascent-active #view>.stage,body.ascent-active #view>.done{grid-column:2;grid-row:4}
+  body.ascent-active #view>.controls{grid-column:2;grid-row:5}
+  body.ascent-active #view>.ascent-panel{max-width:320px}
+}
+@media(min-width:900px) and (max-height:850px){body.ascent-active #view>.ascent-panel{max-width:262px}}
