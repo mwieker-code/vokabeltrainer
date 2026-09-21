@@ -16,6 +16,13 @@ button{min-height:44px}.switch{padding:10px 12px}.topic{padding:17px 18px;margin
 .round-progress progress{accent-color:var(--petrol);width:100%;height:8px}
 .box-details{margin:12px 0 20px}.box-details summary{cursor:pointer;color:var(--ink-soft);font-size:14px;padding:10px 0}.box-details .rail{margin:10px 0}
 .slot .iv{font-size:12px}.slot .c{font-size:22px}.vcard{min-height:290px;padding:32px;border-radius:var(--radius-lg);box-shadow:0 8px 28px #1630390a}
+/* Der Lueckensatz steht fett. Er ist die Aufgabe - in den anderen
+   Uebungsarten steht dort das gesuchte Wort in 38 Punkt, hier ein
+   ganzer Satz in Grundstaerke, und die Karte wirkte dadurch leer.
+   Das Loesungswort, das nach dem Pruefen in der Luecke erscheint,
+   geht eine Stufe hoeher, damit es sich weiter abhebt. */
+.cloze{font-weight:600}
+.cloze b{font-weight:700}
 .prompt{overflow-wrap:anywhere}.eyebrow{font:14px var(--sans);text-transform:none;letter-spacing:0}.rate span{font:12px var(--sans)}
 .typebox input{font-family:var(--sans);font-size:21px}.typebox input:disabled{opacity:1;color:var(--ink);-webkit-text-fill-color:var(--ink)}
 .correction{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}.correction>div{background:var(--ground);padding:16px;border-radius:var(--radius-sm);overflow-wrap:anywhere;border-left:4px solid #b4573c}.correction>.correction-solution{background:#e8f4ee;border-color:#28704c;color:#173e2b}.correction small{display:block;color:#42545c;font-size:13px;margin-bottom:6px}.correction strong{font-weight:600;font-size:20px}.correction mark{background:#ffdf91;color:#4b3300;border-radius:var(--radius-xs);padding:0 1px;text-decoration:underline;text-underline-offset:3px}.correction-note{font-size:13px;font-weight:400}
