@@ -372,7 +372,7 @@ button.primary:hover{background:#0B4A54}
   *{animation:none!important;transition:none!important}
 }
 </style>
-<link rel="stylesheet" href="../assets/learning.css?v=20260921-aufstieg">
+<link rel="stylesheet" href="../assets/learning.css?v=20260921-aufraeumen">
 
 <div class="wrap">
     <div class="masthead">
@@ -7278,60 +7278,6 @@ function topicName(id){
   return id;
 }
 
-/* -------------------------------------------------------------------------
-   Kurze Rueckmeldetoene. Erzeugt ueber die Web Audio API, damit die Datei
-   ohne Audiodateien auskommt: aufwaerts bei richtig, abwaerts bei falsch.
-   Abschaltbar, weil Ton im Klassenraum nicht immer erwuenscht ist.
-   ------------------------------------------------------------------------- */
-const Sfx = (function(){
-  let ctx = null, on = true;
-  try{ on = localStorage.getItem("vt5:sfx") !== "0"; }catch(e){}
-  function enabled(){ return on; }
-  function toggle(){
-    on = !on;
-    try{ localStorage.setItem("vt5:sfx", on ? "1" : "0"); }catch(e){}
-    if(on) play("ok");
-    return on;
-  }
-  function play(kind){
-    if(!on) return;
-    try{
-      if(!ctx){
-        const AC = window.AudioContext || window.webkitAudioContext;
-        if(!AC) return;
-        ctx = new AC();
-      }
-      if(ctx.state === "suspended") ctx.resume();
-      const seq = kind === "ok"   ? [[660,0.02],[990,0.11]]
-                : kind === "near" ? [[560,0.02],[560,0.12]]
-                :                   [[300,0.02],[190,0.13]];
-      for(const [freq, at] of seq){
-        const t = ctx.currentTime + at;
-        const osc = ctx.createOscillator(), g = ctx.createGain();
-        osc.type = "sine";
-        osc.frequency.setValueAtTime(freq, t);
-        g.gain.setValueAtTime(0.0001, t);
-        g.gain.exponentialRampToValueAtTime(0.16, t + 0.012);
-        g.gain.exponentialRampToValueAtTime(0.0001, t + 0.13);
-        osc.connect(g); g.connect(ctx.destination);
-        osc.start(t); osc.stop(t + 0.15);
-      }
-    }catch(e){}
-  }
-  function unlock(){
-    try{
-      if(!ctx){
-        const AC = window.AudioContext || window.webkitAudioContext;
-        if(!AC) return;
-        ctx = new AC();
-      }
-      if(ctx.state === "suspended") ctx.resume();
-    }catch(e){}
-  }
-  ["pointerdown","keydown","touchstart"].forEach(ev =>
-    document.addEventListener(ev, unlock, {once:true, passive:true}));
-  return {play, toggle, enabled, unlock};
-})();
 
 /* =========================================================================
    AUSSPRACHE  –  Web Speech API des Browsers, keine externe Anbindung
@@ -7695,8 +7641,6 @@ function renderSession(){
         <button class="switch" data-mode="type" aria-pressed="${S.mode==="type"}">Tippen</button>
         <button class="switch" data-mode="cloze" aria-pressed="${S.mode==="cloze"}">Lückensatz</button>
         ${S.mode==="cloze" ? "" : `<button class="switch" id="dirBtn">${dirLabel()}</button>`}
-        <button class="switch" id="sfxBtn" aria-pressed="${Sfx.enabled()}"
-          title="Rückmeldetöne an- oder ausschalten">${Sfx.enabled() ? "Ton an" : "Ton aus"}</button>
       </div>
     </div>
     <div class="rail ${sessionUnit()}">${rail}</div>
@@ -7793,8 +7737,6 @@ function answerBlock(v, compact){
 
 function bindSession(){
   document.getElementById("back").onclick = () => { S.view="year"; S.options=null; render(); };
-  const sfxB = document.getElementById("sfxBtn");
-  if(sfxB) sfxB.onclick = () => { Sfx.toggle(); render(); };
   const dirB = document.getElementById("dirBtn");
   if(dirB) dirB.onclick = () => {
     S.dir = S.dir==="en2de" ? "de2en" : "en2de";
@@ -7811,7 +7753,6 @@ function bindSession(){
 
   view.querySelectorAll("[data-opt]").forEach(b => b.onclick = () => {
     S.answered = b.dataset.opt;
-    Sfx.play(b.dataset.opt === current().id ? "ok" : "no");
     render();
   });
 
@@ -7843,7 +7784,7 @@ function submitTyped(){
     res = checkTyped(inp.value, ansSide(v));
   }
   S.answered = res;
-  Sfx.play(res === "ok" ? "ok" : res === "near" ? "near" : "no");
+  window.LearningFeedback?.signal(res === "ok" ? "ok" : res === "near" ? "near" : "no");
   render();
   const el = document.getElementById("verdict");
   if(el){
@@ -7856,7 +7797,7 @@ function submitTyped(){
 }
 
 function rate(quality){
-  Sfx.play(quality === 0 ? "no" : quality === 1 ? "near" : "ok");
+  window.LearningFeedback?.signal(quality === 0 ? "no" : quality === 1 ? "near" : "ok");
   const v = current();
   const r = rec(S.dir, v.id);
   if(quality === 0)       r.box = 1;
@@ -8233,12 +8174,12 @@ try{
 </script>
 
 <script src="../assets/qr.js?v=20260921-anleitung"></script>
-<script src="../assets/learning.js?v=20260921-aufstieg"></script>
+<script src="../assets/learning.js?v=20260921-aufraeumen"></script>
 
 <link rel="stylesheet" href="../assets/feedback.css?v=20260921-anleitung">
 <script src="../assets/feedback.js?v=20260921-toene"></script>
 
 <link rel="stylesheet" href="design/preview.css?v=20260917-teacher-prompt">
 
-<link rel="stylesheet" href="../assets/ascent.css?v=20260921-aufstieg">
-<script src="../assets/ascent.js?v=20260921-aufstieg"></script>
+<link rel="stylesheet" href="../assets/ascent.css?v=20260921-aufraeumen">
+<script src="../assets/ascent.js?v=20260921-aufraeumen"></script>

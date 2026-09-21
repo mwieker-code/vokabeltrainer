@@ -9,7 +9,7 @@ for(const folder of ['year8','year5','year6','year7','year9','year10','oberstufe
  vm.runInContext('renderHelp()',ctx);
  const text=dom.window.document.querySelector('.doc').textContent;
  if(!irregular){
-  for(const phrase of ['Unit, Englisch, Deutsch','höchstens zehn','Später fortsetzen','Standardmäßig übst du DE → EN','als PDF speichern','Zum Home-Bildschirm','Fortschritt sichern'])assert(text.includes(phrase),folder+': '+phrase);
+  for(const phrase of ['Unit, Englisch, Deutsch','höchstens zehn','Später fortsetzen','Standardmäßig übst du DE → EN','als PDF speichern','Zum Home-Bildschirm','Fortschritt sichern','hörst du einen kurzen Ton'])assert(text.includes(phrase),folder+': '+phrase);
 
   /* Die Reihenfolge stand nirgends, sondern ergab sich daraus, in
      welcher Reihenfolge die Teile dazukamen. Jetzt steht sie in

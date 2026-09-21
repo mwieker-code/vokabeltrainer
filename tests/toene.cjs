@@ -62,3 +62,33 @@ for(const müll of ['','null','{}','nicht json','[1,2,3]']){
   assert.equal(t.text('sound'),'Töne: an','unbrauchbarer Speicherstand schaltet die Töne ab: '+JSON.stringify(müll));
 }
 console.log('unbrauchbarer Speicherstand: Töne bleiben an');
+
+/* ---- Der alte Tongenerator ist fort ----
+   Jede Jahrgangsseite brachte ein eigenes Sfx mit: neunundvierzig Zeilen
+   Web Audio, ein eigener Speicherschluessel und ein Knopf in der Runde,
+   den learning.js gleich wieder entfernte. Gespielt hat davon nichts -
+   learning.js ersetzte Sfx.play durch den Aufruf der Rueckmeldung.
+   Bleibt davon etwas stehen, gibt es wieder zwei Wege zum selben Ton. */
+{
+  const seiten=fs.readdirSync(root,{withFileTypes:true})
+    .filter(e=>e.isDirectory()&&!['dist','node_modules','.git','tests','content','probe'].includes(e.name))
+    .map(e=>path.join(root,e.name,'index.html')).filter(f=>fs.existsSync(f));
+  assert.ok(seiten.length>=7,'zu wenige Seiten gefunden: '+seiten.length);
+  for(const f of seiten){
+    const t=fs.readFileSync(f,'utf8'), kurz=path.relative(root,f);
+    for(const rest of ['const Sfx','Sfx.play','Sfx.toggle','Sfx.enabled','sfxBtn',':sfx'])
+      assert.equal(t.includes(rest),false,kurz+': vom alten Tongenerator steht noch '+rest);
+  }
+  const gemeinsam=fs.readFileSync(path.join(root,'assets/learning.js'),'utf8');
+  /* Ohne Kommentare geprueft: Der Kommentar, der die Geschichte erklaert,
+     darf den Namen nennen - der Code nicht mehr. */
+  const ohneKommentar=gemeinsam.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
+  assert.equal(/Sfx|sfxBtn/.test(ohneKommentar),false,
+    'learning.js stuetzt den alten Tongenerator noch');
+  /* Die Auswahl gibt ihre Rueckmeldung im Klick der Antwortknoepfe. Sie
+     stand frueher in jeder Jahrgangsseite und fehlte der Oberstufe und
+     Bili ganz - dort blieb dieser Modus stumm. */
+  assert.match(ohneKommentar,/\[data-opt\][\s\S]{0,400}LearningFeedback\?\.signal/,
+    'die Auswahl gibt keine Rückmeldung mehr');
+  console.log('alter Tongenerator: restlos fort, Auswahl zentral vertont');
+}
