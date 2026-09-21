@@ -42,7 +42,10 @@ assert.ok(m.icons.some(i=>i.purpose==='maskable'),
 const seiten=[];
 (function suche(dir){
   for(const e of fs.readdirSync(dir,{withFileTypes:true})){
-    if(['dist','node_modules','.git','tests','content'].includes(e.name))continue;
+    /* probe/ liegt daneben, nicht in der App: abgeloeste Vorschauen, die
+       niemand auf den Startbildschirm legt und die deshalb kein Manifest
+       brauchen. */
+    if(['dist','node_modules','.git','tests','content','probe'].includes(e.name))continue;
     const p=path.join(dir,e.name);
     if(e.isDirectory())suche(p);
     else if(e.name==='index.html')seiten.push(p);

@@ -13,7 +13,11 @@ assert.match(datei.fassung,/^\d{8}-[a-z]+$/,'fassung.json: unerwartete Form');
 const seiten=[];
 (function suche(dir){
   for(const e of fs.readdirSync(dir,{withFileTypes:true})){
-    if(['dist','node_modules','.git','tests','content'].includes(e.name))continue;
+    /* probe/ liegt daneben, nicht in der App: abgeloeste Vorschauen mit
+       eigenen Kopien von learning.js, die keine Fassung tragen und keine
+       tragen sollen. Wuerden sie mitgezaehlt, muesste jede Vorschau bei
+       jedem Release mitwandern. */
+    if(['dist','node_modules','.git','tests','content','probe'].includes(e.name))continue;
     const p=path.join(dir,e.name);
     if(e.isDirectory())suche(p);
     else if(e.name==='index.html')seiten.push(p);
