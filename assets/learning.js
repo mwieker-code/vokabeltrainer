@@ -385,6 +385,46 @@ ${vocabulary}`;
     return null;
   };
 
+  /* =========================================================================
+     JEMAND UND ETWAS
+     Im Bestand stehen die Platzhalter abgekuerzt: "to hang sth. up",
+     371 mal sth. und 193 mal sb. Getippt wird aber auch ausgeschrieben,
+     und "to hang something up" ist dieselbe Antwort.
+
+     Die Kuerzel duerfen auf beiden Seiten fallen. Sie sind keine
+     englischen Woerter, also kann nichts verwechselt werden. Der Punkt
+     ist dabei nicht noetig: "to take after sb" und "to crack down (on
+     sth)" stehen ohne ihn im Bestand und waren bis hierher nur mit
+     getipptem "sb" zu loesen.
+
+     Die ausgeschriebenen Formen sind echte Woerter und fallen deshalb
+     nur in der Eingabe weg - und auch dort nur zusaetzlich, die
+     Eingabe zaehlt weiter auch so, wie sie dasteht. Sonst verloere
+     "something" (etwas) seine eigene Loesung, und fuer "someone is
+     right" (jemand hat Recht) genuegte "is right".
+     ========================================================================= */
+  const KUERZEL = /\b(?:sb|sth)\b\.?/gi;
+  const AUSGESCHRIEBEN = /\b(?:somebody|someone|something)\b/gi;
+
+  /* Eine Klammer mit Etikett nennt keine Ergaenzung, sondern eine
+     zweite Loesung: "someone (or: somebody)", "counselor (BE:
+     counsellor)", "newspaper (also: paper)". Sechs Eintraege im
+     Bestand schreiben es so, darunter die drei mit somebody, everybody
+     und nobody. Bis hierher wurde der Klammerinhalt mitsamt Etikett
+     eingesetzt - "someone or: somebody" -, und wer das Wort in der
+     Klammer tippte, hatte falsch geantwortet. */
+  const ETIKETT = /\((?:or|oder|also|auch|BE|AE)\s*:\s*([^)]*)\)/i;
+  function nebenformen(part) {
+    const m = ETIKETT.exec(part);
+    if (!m) return [];
+    /* Das Etikett meint den ganzen Eintrag, nicht die Stelle der
+       Klammer: Bei "someone (or: somebody)" ist "somebody" die zweite
+       Loesung, nicht "someone somebody". */
+    const glatt = x => x.replace(/\s+/g, ' ').trim();
+    return [glatt(part.slice(0, m.index) + part.slice(m.index + m[0].length)),
+            glatt(m[1])].filter(Boolean);
+  }
+
   // Split alternatives BEFORE removing punctuation. Keep both optional-word forms.
   function forms(target) {
     const result = [];
@@ -393,27 +433,35 @@ ${vocabulary}`;
        "he/she/it isn't ...", wo die Schraegstriche sonst drei getrennte
        Loesungen ergeben. */
     for (const part of [String(target), ...teile(target)]) {
-      for (const variant of klammerformen(part)) {
-        const value = normalise(variant.replace(/\b(?:sb|sth)\./gi, '').replace(/^(?:AE|BE):\s*/i, ''));
+      for (const variant of [...klammerformen(part),
+                             ...nebenformen(part).flatMap(klammerformen)]) {
+        const value = normalise(variant.replace(KUERZEL, ' ').replace(/^(?:AE|BE):\s*/i, ''));
         if (value) result.push(value);
       }
     }
     return [...new Set(result)];
   }
   checkTyped = function(input, target) {
-    /* Klammern und die Platzhalter sb./sth. aus der Eingabe nehmen: Wer
-       den Eintrag abschreibt, wie er dasteht - "(to) phone sb." -,
-       meint dasselbe wie "phone". */
-    const a = normalise(String(input).replace(/[()]/g, '')
-                                     .replace(/\b(?:sb|sth)\./gi, ''));
+    /* Klammern und die Kuerzel aus der Eingabe nehmen: Wer den Eintrag
+       abschreibt, wie er dasteht - "(to) phone sb." -, meint dasselbe
+       wie "phone". */
+    const roh = String(input).replace(/[()]/g, '');
+    const a = normalise(roh.replace(KUERZEL, ' '));
     if (!a) return 'no';
+    /* Die ausgeschriebene Form zaehlt zusaetzlich, nicht anstelle der
+       Eingabe: "something" ist selbst eine Vokabel. */
+    const lang = normalise(roh.replace(KUERZEL, ' ').replace(AUSGESCHRIEBEN, ' '));
+    const eingaben = lang && lang !== a ? [a, lang] : [a];
     const choices = forms(target);
-    if (choices.includes(a)) return 'ok';
+    if (eingaben.some(e => choices.includes(e))) return 'ok';
     /* Erst danach die Kurzformen: Die Rueckmeldung vergleicht Buchstabe
        fuer Buchstabe gegen den Eintrag, wie er dasteht. */
-    const ak = kurzform(a), ck = choices.map(kurzform);
-    if (ck.includes(ak)) return 'ok';
-    return ck.some(b => distance(ak, b) <= (b.length > 6 ? 2 : b.length > 2 ? 1 : 0)) ? 'near' : 'no';
+    const ck = choices.map(kurzform);
+    if (eingaben.some(e => ck.includes(kurzform(e)))) return 'ok';
+    return eingaben.some(e => {
+      const k = kurzform(e);
+      return ck.some(b => distance(k, b) <= (b.length > 6 ? 2 : b.length > 2 ? 1 : 0));
+    }) ? 'near' : 'no';
   };
 
   // Levenshtein alignment marks substitutions, insertions and deletions on both sides.
