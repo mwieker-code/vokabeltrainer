@@ -29,6 +29,8 @@
     F  Welche feedback.js die Uebungsseite wirklich nimmt - und deren
        Klang zum Anhoeren. Die Probe holt immer frisch, die App unter
        ihrer Versionsnummer.
+    G  Die echte Uebungsseite in einem Rahmen, von aussen belauscht:
+       Kommt der Ruf an tone() ueberhaupt an?
     D  Derselbe Klang offline gerechnet. Das misst die Abtastwerte auf
        diesem Geraet - klingt nichts, aber D zeigt Ausschlag, dann
        stimmt die Rechnung und es scheitert an der Ausgabe.
@@ -132,6 +134,19 @@ sag mir, bei welcher du etwas hörst.</p>
   <button type="button" id="f2" class="leise" style="margin-top:10px" hidden>
     Den Klang aus <em>dieser</em> Datei abspielen</button>
   <p style="margin:0">Ergebnis: <span class="urteil offen" id="uf">noch nicht geprüft</span></p>
+</div>
+
+<div class="karte">
+  <h2>G · Die Übung selbst</h2>
+  <p class="leise">Hier läuft die echte Übungsseite in einem Rahmen — mit ihrer
+  eigenen <code>learning.js</code>, ihrem Berg, allem. Die Probe hängt sich an
+  <code>tone()</code> und schreibt mit, ob der Ruf überhaupt ankommt.</p>
+  <p class="leise"><b>So geht es:</b> Übung laden, dann darin eine Runde starten,
+  Tippen wählen und ein Wort beantworten. Danach steht im Verlauf, ob die App
+  den Klang gerufen hat.</p>
+  <button type="button" id="g">Übung laden</button>
+  <div id="rahmen"></div>
+  <p style="margin:8px 0 0">Ergebnis: <span class="urteil offen" id="ug">noch nicht geprüft</span></p>
 </div>
 
 <div class="karte">
@@ -327,6 +342,48 @@ sag mir, bei welcher du etwas hörst.</p>
     try{ appKlang.tone('ok'); log('F: Klang der App-Datei gerufen');
       urteil('uf',null,'gerufen — hörst du etwas?'); }
     catch(e){ log('F: Fehler —',e.message); }
+  };
+
+  /* ---- G: die echte Uebungsseite, von aussen belauscht ----
+     Gleiche Herkunft, also darf die Probe hineingreifen. Gemessen wird
+     nur eins, und das ist die offene Frage: Kommt der Ruf an? */
+  let rufe=0;
+  document.getElementById('g').onclick=()=>{
+    const wirt=document.getElementById('rahmen');
+    wirt.innerHTML='';
+    const r=document.createElement('iframe');
+    r.src='../../year5/?klangprobe='+Date.now();
+    r.style.cssText='width:100%;height:560px;border:1px solid #D9E0E2;border-radius:12px;margin-top:10px';
+    r.onload=()=>{
+      try{
+        const w=r.contentWindow;
+        const lf=w.LearningFeedback;
+        if(!lf){ urteil('ug',false,'feedback.js läuft dort nicht'); log('G: kein LearningFeedback im Rahmen'); return; }
+        const altTon=lf.tone, altSig=lf.signal;
+        lf.tone=k=>{ rufe++; log('G: tone("'+k+'") gerufen ['+rufe+']');
+          urteil('ug',null,rufe+' Ruf(e) angekommen — hörst du etwas?');
+          try{ return altTon(k); }catch(e){ log('G: tone warf —',e.message); } };
+        /* signal() ruft die interne tone() - von aussen nicht zu
+           ersetzen. Sichtbar ist deshalb der Ruf an signal und der
+           Zustand des Audiokontexts in der App, den feedback.js
+           herausgibt. Genau der ist die offene Frage. */
+        if(altSig) lf.signal=k=>{
+          const vor=lf.zustand?lf.zustand():'unbekannt';
+          rufe++;
+          const e=altSig(k);
+          const nach=lf.zustand?lf.zustand():'unbekannt';
+          log('G: signal("'+k+'") · Kontext vorher '+vor+', nachher '+nach);
+          urteil('ug',nach==='running',
+            rufe+' Ruf(e) · Kontext '+nach+(nach==='running'?' — hörst du etwas?':' — DAS ist die Ursache'));
+          return e;
+        };
+        const v=/feedback\.js\?v=([^"']+)/.exec(w.document.documentElement.innerHTML);
+        log('G: Übung geladen · feedback.js'+(v?'?v='+v[1]:' (Version unbekannt)'));
+        urteil('ug',null,'geladen — jetzt darin ein Wort beantworten');
+      }catch(e){ urteil('ug',false,'Zugriff verweigert'); log('G: Fehler —',e.message); }
+    };
+    wirt.appendChild(r);
+    log('G: Übung wird geladen …');
   };
 
   document.getElementById('kopieren').onclick=()=>{

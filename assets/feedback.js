@@ -114,6 +114,10 @@ function buzz(kind){
   }catch(e){}
 }
 function signal(kind){tone(kind);buzz(kind);const host=document.querySelector('.vcard,#feedback,.panel');if(!host)return;host.classList.remove('feedback-ok','feedback-near','feedback-no');host.querySelectorAll('.confetti-piece').forEach(p=>p.remove());void host.offsetWidth;host.classList.add('feedback-'+kind);if(kind==='ok'&&document.documentElement.classList.contains('feedback-motion'))confettiBurst(host);}
-window.LearningFeedback={signal,tone};
+/* zustand() nach aussen: Bleibt der Klang still, ist die erste Frage,
+   in welchem Zustand der Audiokontext steckt - Safari legt ihn
+   schlafen und kennt dafuer sogar einen eigenen Zustand. Von innen
+   ist er nicht zu sehen, von aussen ohne diese Zeile auch nicht. */
+window.LearningFeedback={signal,tone,zustand:()=>ctx?ctx.state:'keiner'};
 const bar=document.createElement('div');bar.className='feedback-settings';bar.setAttribute('aria-label','Rückmeldungen');bar.innerHTML='<button type="button" data-feedback-pref="sound"></button><button type="button" data-feedback-pref="animation"></button>';const host=document.querySelector('.wrap,main');if(host)host.append(bar);bar.querySelectorAll('button').forEach(b=>b.onclick=()=>{prefs[b.dataset.feedbackPref]=!prefs[b.dataset.feedbackPref];save();if(b.dataset.feedbackPref==='sound'&&prefs.sound)tone('ok');});if(motion)motion.addEventListener?.('change',sync);sync();
 })();
