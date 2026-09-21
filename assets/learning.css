@@ -112,6 +112,16 @@ a.home-link:hover,a.home-link:focus,a.home-link:active,a.grammar-back:hover,a.gr
 /* Print only expanded vocabulary sections; collapsed sections must not
    create boxes or forced page breaks in the PDF layout. */
 @media print{
+  /* Die Marke der ausgewaehlten Zeile ist ein Schatten im Inneren der
+     Zeile: drei Pixel am linken Rand. Auf dem Bildschirm steht davor
+     das Kaestchen zum Anhaken und haelt ihr den Platz frei - im Druck
+     ist das Kaestchen fort, und die Marke sass im ersten Buchstaben.
+     Aus "subway" wurde "ubway".
+
+     Die Rinne bekommt jede Zeile, nicht nur die ausgewaehlte: Sonst
+     stuenden im Druck einer Auswahl die angehakten Zeilen sieben Pixel
+     weiter rechts als die uebrigen. */
+  .vlist .vrow,.vlist .vrow3{padding-left:7px}
   .vlist .lsec:not([open]),.vlist .lsec[hidden],.vlist .vrow.off,.vlist .vrow3.off{display:none!important}
   .vlist .lsec,.vlist .lsec + .lsec{page-break-before:auto;break-before:auto;page-break-after:auto;break-after:auto}
   .vlist .lsec > summary{page-break-after:avoid;break-after:avoid}
