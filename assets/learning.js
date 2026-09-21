@@ -559,9 +559,21 @@ ${vocabulary}`;
     if(upper) S.topicId=topicFor.get(current());
     else if(S.roundSource==='today'||S.roundSource==='assignment') S.topicId=YEARS[0].id+'-all';
     checkpoint();
-    if(typeof Sfx!=='undefined'){Sfx.play=kind=>window.LearningFeedback?.signal(kind);}
     originalSession();
-    document.getElementById('sfxBtn')?.remove();
+    /* Die Auswahl gibt ihre Rueckmeldung im Klick der Antwortknoepfe,
+       nicht in rate() oder submitTyped() - deshalb faellt sie durch die
+       beiden Stellen oben hindurch. Frueher lief sie ueber Sfx.play, das
+       jede Jahrgangsseite einzeln mitbrachte; die Oberstufe und Bili
+       hatten es nie und blieben dort stumm. Jetzt steht sie hier, einmal
+       fuer alle. */
+    if(S.mode==='mc')
+      for(const knopf of view.querySelectorAll('[data-opt]')){
+        const vorher=knopf.onclick;
+        knopf.onclick=e=>{
+          window.LearningFeedback?.signal(knopf.dataset.opt===current().id?'ok':'no');
+          if(vorher)vorher.call(knopf,e);
+        };
+      }
     const back=document.getElementById('back');if(back)back.onclick=()=>{checkpoint();home();};
     if(back){back.textContent='Später fortsetzen';}
     const rail=view.querySelector('.rail');
@@ -783,7 +795,13 @@ ${vocabulary}`;
   + 'Jahrgangsübersicht kannst du sie im selben Browser fortsetzen. Pro Jahrgang '
   + 'wird eine Runde gespeichert; eine neue ersetzt sie. Eine noch ungeprüfte '
   + 'Texteingabe wird nicht mitgespeichert. Wechselst du die Übungsart, startet '
-  + 'der gewählte Lernumfang neu.</p>';
+  + 'der gewählte Lernumfang neu.</p>'
+  /* Seit die Toene von selbst an sind, braucht der Weg zum Ausschalten
+     einen Satz: Der Schalter steht ganz unten auf der Seite, und wer im
+     Unterricht oder im Bus still ueben will, findet ihn sonst nicht. */
+  + '<p>Zu jeder Antwort hörst du einen kurzen Ton. Ganz unten auf der Seite '
+  + 'schaltest du ihn mit <b>Töne</b> aus — die Einstellung bleibt gespeichert. '
+  + 'Daneben steht derselbe Schalter für die <b>Animationen</b>.</p>';
 
   const BLITZ_HILFE =
     '<h2>Blitzrunde</h2>'
