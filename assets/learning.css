@@ -23,6 +23,15 @@ button{min-height:44px}.switch{padding:10px 12px}.topic{padding:17px 18px;margin
    geht eine Stufe hoeher, damit es sich weiter abhebt. */
 .cloze{font-weight:600}
 .cloze b{font-weight:700}
+/* Die Knoepfe bleiben in Sicht. Bei einer falschen Antwort waechst die
+   Karte um Rueckmeldung, Lautschrift und Beispielsatz; zusammen mit dem
+   Berg reicht die Seite dann ueber den Bildschirm hinaus, und
+   ausgerechnet der Knopf zum Weitermachen stand unten ausserhalb. Am
+   Telefon regelt das die aufgeraeumte Runde, am Rechner bisher nichts. */
+@media(min-width:621px){
+  #view>.controls{position:sticky;bottom:0;z-index:5;padding:12px 0 10px;
+    background:linear-gradient(to top,var(--ground) 76%,transparent)}
+}
 .prompt{overflow-wrap:anywhere}.eyebrow{font:14px var(--sans);text-transform:none;letter-spacing:0}.rate span{font:12px var(--sans)}
 .typebox input{font-family:var(--sans);font-size:21px}.typebox input:disabled{opacity:1;color:var(--ink);-webkit-text-fill-color:var(--ink)}
 .correction{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}.correction>div{background:var(--ground);padding:16px;border-radius:var(--radius-sm);overflow-wrap:anywhere;border-left:4px solid #b4573c}.correction>.correction-solution{background:#e8f4ee;border-color:#28704c;color:#173e2b}.correction small{display:block;color:#42545c;font-size:13px;margin-bottom:6px}.correction strong{font-weight:600;font-size:20px}.correction mark{background:#ffdf91;color:#4b3300;border-radius:var(--radius-xs);padding:0 1px;text-decoration:underline;text-underline-offset:3px}.correction-note{font-size:13px;font-weight:400}

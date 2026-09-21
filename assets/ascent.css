@@ -41,6 +41,11 @@ body.ascent-active.eb-tippen .vcard .cloze{padding-top:0!important}body.ascent-a
 .ascent-panel .mobile-landscape{display:block;height:auto}
 @media(min-width:621px){
   .ascent-panel{max-width:520px;margin:12px auto 18px}
+  /* Steht die Loesung, braucht die Karte den Platz: Sie waechst um die
+     Rueckmeldung, die Lautschrift und den Beispielsatz - bei einer
+     falschen Antwort um gut 250 Punkte. Der Berg tritt dann zurueck.
+     Angesehen wird er beim Tippen, nicht beim Lesen der Korrektur. */
+  body[data-eb-antwort="bewertet"] .ascent-panel{max-width:320px;margin:8px auto 12px}
 }
 @media(min-width:621px) and (max-height:820px){
   .ascent-panel{max-width:420px}

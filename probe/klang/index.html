@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Basecamp · Klangprobe</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="apple-touch-icon" sizes="180x180" href="../../assets/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#F3F6F2">
+<meta name="robots" content="noindex">
+<!--
+  WEGWERFSEITE. Sie gehoert nicht zur App und wird geloescht, sobald die
+  Frage beantwortet ist.
+
+  Die Frage: Warum bleiben die Rueckmeldetoene am Mac still, obwohl die
+  Sprachausgabe laeuft und die automatische Wiedergabe erlaubt ist?
+
+  Geraten habe ich genug. Diese Seite misst vier Dinge einzeln, damit
+  sichtbar wird, wo es abbricht:
+
+    A  Ein nackter Oszillator, im Klick gebaut und sofort gestartet.
+       Bleibt der still, sperrt der Browser Web Audio ueberhaupt.
+    B  Eine Tondatei ueber <audio>. Klingt die, aber A nicht, trifft
+       die Sperre nur Web Audio.
+    C  Derselbe Klang wie in Basecamp, aus der echten feedback.js.
+    E  Dieselbe Glocke ohne Hall, ohne Vorlauf, mit linearer
+       Huellkurve - die drei Dinge, die Safari anders behandelt.
+    D  Derselbe Klang offline gerechnet. Das misst die Abtastwerte auf
+       diesem Geraet - klingt nichts, aber D zeigt Ausschlag, dann
+       stimmt die Rechnung und es scheitert an der Ausgabe.
+
+  feedback.js wird mit einer Zufallsnummer geladen, damit weder Browser
+  noch Offline-Helfer einen alten Stand liefern koennen.
+-->
+<style>
+  :root{ --grund:#F3F6F2; --karte:#fff; --tinte:#16232B; --leise:#5A6B75;
+         --petrol:#0E5A66; --rand:#D9E0E2; --warn:#C0392B; --gut:#1E7A4C; }
+  *{box-sizing:border-box}
+  body{margin:0;padding:18px 16px 60px;background:var(--grund);color:var(--tinte);
+    font:400 15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif;
+    max-width:620px;margin-inline:auto;-webkit-text-size-adjust:100%}
+  h1{font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:var(--leise);margin:0 0 4px}
+  h2{font-size:17px;margin:0 0 6px}
+  p{margin:0 0 10px}
+  .leise{color:var(--leise);font-size:13.5px}
+  .karte{background:var(--karte);border:1px solid var(--rand);border-radius:14px;
+    padding:14px 16px;margin:0 0 12px}
+  button{font:inherit;font-size:15px;font-weight:600;padding:12px 16px;border:0;
+    border-radius:10px;background:var(--petrol);color:#fff;-webkit-appearance:none;
+    min-height:46px;width:100%;margin:2px 0 8px}
+  button.leise{background:#E4E9E8;color:var(--tinte)}
+  .werte{display:grid;grid-template-columns:1fr auto;gap:3px 12px;
+    font-family:ui-monospace,Menlo,monospace;font-size:13px}
+  .werte b{font-weight:600;text-align:right;word-break:break-all}
+  .urteil{display:inline-block;padding:3px 9px;border-radius:99px;font-size:13px;font-weight:600}
+  .ja{background:#E3F2E9;color:var(--gut)} .nein{background:#FBE7E4;color:var(--warn)}
+  .offen{background:#EDF1F0;color:var(--leise)}
+  pre{font-family:ui-monospace,Menlo,monospace;font-size:12px;line-height:1.55;
+    color:var(--leise);white-space:pre-wrap;margin:8px 0 0;max-height:210px;overflow:auto}
+  .band{background:#8A4B2A;color:#fff;font:600 11px/1.6 system-ui;letter-spacing:.04em;
+    text-align:center;padding:4px 8px;border-radius:8px;margin:0 0 14px}
+</style>
+</head>
+<body>
+<div class="band">Messseite · gehört nicht zur App</div>
+<h1>Basecamp · Klangprobe</h1>
+<p class="leise">Vier Prüfungen, einzeln. Tippe sie der Reihe nach an und
+sag mir, bei welcher du etwas hörst.</p>
+
+<div class="karte">
+  <div class="werte" id="werte"></div>
+</div>
+
+<div class="karte">
+  <h2>A · Nackter Ton</h2>
+  <p class="leise">Ein einzelner Oszillator, im Fingerdruck gebaut und sofort
+  gestartet — ohne Umweg, ohne Versprechen. Bleibt das still, sperrt der
+  Browser Web Audio überhaupt.</p>
+  <button type="button" id="a">A abspielen — 440 Hz, eine halbe Sekunde</button>
+  <p style="margin:0">Ergebnis: <span class="urteil offen" id="ua">noch nicht geprüft</span></p>
+</div>
+
+<div class="karte">
+  <h2>B · Tondatei</h2>
+  <p class="leise">Derselbe Ton, aber über ein Audio-Element statt über Web
+  Audio. Klingt B und A nicht, trifft die Sperre nur Web Audio.</p>
+  <button type="button" id="b" class="leise">B abspielen</button>
+  <p style="margin:0">Ergebnis: <span class="urteil offen" id="ub">noch nicht geprüft</span></p>
+</div>
+
+<div class="karte">
+  <h2>C · Der echte Basecamp-Klang</h2>
+  <p class="leise">Aus der laufenden <code>feedback.js</code>, genau wie in der
+  Übung. Klingt A, aber C nicht, liegt es an unserem Code.</p>
+  <button type="button" id="c">C abspielen — Glocke „richtig"</button>
+  <button type="button" id="c2" class="leise">C abspielen — „falsch"</button>
+  <p style="margin:0">Ergebnis: <span class="urteil offen" id="uc">noch nicht geprüft</span></p>
+</div>
+
+<div class="karte">
+  <h2>D · Ohne Lautsprecher gerechnet</h2>
+  <p class="leise">Derselbe Klang, auf diesem Gerät offline gerendert. Das misst
+  die Abtastwerte. Zeigt D Ausschlag und du hörst trotzdem nichts, stimmt die
+  Rechnung und es scheitert an der Ausgabe.</p>
+  <button type="button" id="d" class="leise">D rechnen</button>
+  <p style="margin:0">Ergebnis: <span class="urteil offen" id="ud">noch nicht geprüft</span></p>
+</div>
+
+<div class="karte">
+  <h2>E · Glocke ohne Hall</h2>
+  <p class="leise">Derselbe Glockenklang, aber ohne den gerechneten Raum und
+  ohne Vorlauf: Der Ton beginnt sofort, nicht zehn Millisekunden später, und
+  die Hüllkurve läuft linear statt exponentiell. Genau diese drei Dinge macht
+  Safari anders als Chrome. Klingt E, aber C nicht, weiß ich, welches.</p>
+  <button type="button" id="e">E abspielen</button>
+  <p style="margin:0">Ergebnis: <span class="urteil offen" id="ue">noch nicht geprüft</span></p>
+</div>
+
+<div class="karte">
+  <h2>Verlauf</h2>
+  <pre id="log">— noch nichts —</pre>
+  <button type="button" id="kopieren" class="leise">Verlauf kopieren</button>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  const zeilen=[];
+  const log=(...t)=>{zeilen.push(t.join(' '));
+    document.getElementById('log').textContent=zeilen.join('\n');};
+  const urteil=(id,gut,text)=>{const el=document.getElementById(id);
+    el.className='urteil '+(gut===null?'offen':gut?'ja':'nein'); el.textContent=text;};
+
+  /* ---- Live-Werte ---- */
+  let ctx=null;
+  const AC=window.AudioContext||window.webkitAudioContext;
+  function werte(){
+    const z=[
+      ['Web Audio vorhanden', AC?'ja':'NEIN'],
+      ['Kontext', ctx?ctx.state:'noch keiner'],
+      ['Abtastrate', ctx?ctx.sampleRate+' Hz':'—'],
+      ['Ausgabeverzögerung', ctx&&ctx.outputLatency!=null?Math.round(ctx.outputLatency*1000)+' ms':'—'],
+      ['feedback.js geladen', window.LearningFeedback?'ja':'noch nicht'],
+      ['Töne eingeschaltet', toeneAn()],
+      ['Sprachausgabe', ('speechSynthesis' in window)?'vorhanden':'fehlt'],
+      ['Browser', navigator.userAgent.replace(/^Mozilla\/5\.0 \(/,'').slice(0,58)]
+    ];
+    document.getElementById('werte').innerHTML=
+      z.map(([k,v])=>'<span>'+k+'</span><b>'+String(v).replace(/</g,'&lt;')+'</b>').join('');
+  }
+  function toeneAn(){
+    try{const p=JSON.parse(localStorage.getItem('vt:feedback:v1'));
+      if(!p)return 'ja (nichts gespeichert)';
+      return p.sound===false?'NEIN — abgeschaltet':'ja';
+    }catch(e){ return 'unlesbar'; }
+  }
+
+  /* ---- A: nackter Oszillator, alles im Klick ---- */
+  document.getElementById('a').onclick=()=>{
+    try{
+      if(!AC){ urteil('ua',false,'Web Audio fehlt'); log('A: kein AudioContext im Browser'); return; }
+      ctx=ctx||new AC();
+      log('A: Kontext vor dem Wecken =',ctx.state);
+      if(ctx.state!=='running')ctx.resume();
+      const o=ctx.createOscillator(), g=ctx.createGain();
+      o.frequency.value=440; g.gain.value=0.12;
+      o.connect(g); g.connect(ctx.destination);
+      const t=ctx.currentTime;
+      o.start(t); o.stop(t+0.5);
+      log('A: gestartet, Kontext =',ctx.state,'· currentTime =',t.toFixed(3));
+      setTimeout(()=>{ log('A: eine Sekunde später, Kontext =',ctx.state,
+        '· currentTime =',ctx.currentTime.toFixed(3));
+        urteil('ua',null,ctx.currentTime>t?'Uhr läuft — hörst du etwas?':'Uhr steht STILL');
+        werte(); },1000);
+      werte();
+    }catch(e){ urteil('ua',false,'Fehler'); log('A: Fehler —',e.message); }
+  };
+
+  /* ---- B: dieselbe Frequenz als Datei ---- */
+  const wav=(()=>{
+    const rate=8000, n=rate*0.5, kopf=44, puffer=new ArrayBuffer(kopf+n*2);
+    const v=new DataView(puffer), s=(o,t)=>{for(let i=0;i<t.length;i++)v.setUint8(o+i,t.charCodeAt(i));};
+    s(0,'RIFF'); v.setUint32(4,36+n*2,true); s(8,'WAVEfmt ');
+    v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,1,true);
+    v.setUint32(24,rate,true); v.setUint32(28,rate*2,true); v.setUint16(32,2,true);
+    v.setUint16(34,16,true); s(36,'data'); v.setUint32(40,n*2,true);
+    for(let i=0;i<n;i++){
+      const h=Math.min(1,i/200,(n-i)/200);
+      v.setInt16(kopf+i*2, Math.round(Math.sin(2*Math.PI*440*i/rate)*9000*h), true);
+    }
+    let bin=''; const b=new Uint8Array(puffer);
+    for(let i=0;i<b.length;i++)bin+=String.fromCharCode(b[i]);
+    return 'data:audio/wav;base64,'+btoa(bin);
+  })();
+  document.getElementById('b').onclick=()=>{
+    const a=new Audio(wav); a.volume=1;
+    a.play().then(()=>{ urteil('ub',null,'gestartet — hörst du etwas?'); log('B: Wiedergabe gestartet'); })
+            .catch(e=>{ urteil('ub',false,'abgelehnt'); log('B: abgelehnt —',e.name,e.message); });
+  };
+
+  /* ---- C: der echte Klang aus feedback.js ---- */
+  function spiel(art,knopf){
+    if(!window.LearningFeedback){ urteil('uc',false,'feedback.js nicht geladen'); log('C: feedback.js fehlt'); return; }
+    const vorher=ctx?ctx.state:'—';
+    try{
+      window.LearningFeedback.tone(art);
+      log('C ('+art+'): tone() gerufen · Kontext vorher =',vorher);
+      setTimeout(werte,300);
+      urteil('uc',null,'gerufen — hörst du etwas?');
+    }catch(e){ urteil('uc',false,'Fehler'); log('C: Fehler —',e.message); }
+  }
+  document.getElementById('c').onclick=()=>spiel('ok');
+  document.getElementById('c2').onclick=()=>spiel('no');
+
+  /* ---- D: offline gerechnet ---- */
+  document.getElementById('d').onclick=async ()=>{
+    try{
+      const OC=window.OfflineAudioContext||window.webkitOfflineAudioContext;
+      if(!OC){ urteil('ud',false,'offline nicht möglich'); return; }
+      const off=new OC(2,44100*2,44100);
+      /* Denselben Glockenbau nachstellen wie in feedback.js. */
+      const LAUT=0.115, TEIL=[1,2.76,5.40,8.93], ANTEIL=[1,0.42,0.22,0.10];
+      const t=0.01;
+      TEIL.forEach((f,i)=>{
+        const o=off.createOscillator(), g=off.createGain();
+        o.type='sine'; o.frequency.setValueAtTime(784*f,t);
+        g.gain.setValueAtTime(0.0001,t);
+        g.gain.exponentialRampToValueAtTime(LAUT*ANTEIL[i],t+0.004);
+        g.gain.exponentialRampToValueAtTime(0.0001,t+1.15*(1-i*0.13));
+        o.connect(g); g.connect(off.destination);
+        o.start(t); o.stop(t+1.3);
+      });
+      const puffer=await off.startRendering();
+      const d=puffer.getChannelData(0);
+      let spitze=0; for(let i=0;i<d.length;i++){const a=Math.abs(d[i]); if(a>spitze)spitze=a;}
+      const gut=spitze>0.01;
+      urteil('ud',gut,'Spitze '+spitze.toFixed(4)+(gut?' — Rechnung stimmt':' — STILL'));
+      log('D: offline gerendert, Spitze =',spitze.toFixed(5));
+    }catch(e){ urteil('ud',false,'Fehler'); log('D: Fehler —',e.message); }
+  };
+
+  /* ---- E: Glocke ohne Hall, ohne Vorlauf, linear ---- */
+  document.getElementById('e').onclick=()=>{
+    try{
+      if(!AC){ urteil('ue',false,'Web Audio fehlt'); return; }
+      ctx=ctx||new AC();
+      if(ctx.state!=='running')ctx.resume();
+      const t=ctx.currentTime;
+      const TEIL=[1,2.76,5.40,8.93], ANTEIL=[1,0.42,0.22,0.10];
+      TEIL.forEach((f,i)=>{
+        const o=ctx.createOscillator(), g=ctx.createGain();
+        o.type='sine'; o.frequency.value=784*f;
+        g.gain.setValueAtTime(0,t);
+        g.gain.linearRampToValueAtTime(0.115*ANTEIL[i],t+0.006);
+        g.gain.linearRampToValueAtTime(0,t+1.1*(1-i*0.13));
+        o.connect(g); g.connect(ctx.destination);
+        o.start(t); o.stop(t+1.3);
+      });
+      log('E: gestartet ohne Hall, Kontext =',ctx.state);
+      urteil('ue',null,'gestartet — hörst du etwas?');
+      setTimeout(werte,300);
+    }catch(e){ urteil('ue',false,'Fehler'); log('E: Fehler —',e.message); }
+  };
+
+  document.getElementById('kopieren').onclick=()=>{
+    const text=[...document.querySelectorAll('#werte span, #werte b')].map(e=>e.textContent).join(' ')
+      +'\n\n'+zeilen.join('\n');
+    navigator.clipboard?.writeText(text).then(
+      ()=>log('— Verlauf kopiert —'), ()=>log('— Kopieren ging nicht —'));
+  };
+
+  /* feedback.js mit Zufallsnummer laden: weder Browser noch der
+     Offline-Helfer duerfen hier einen alten Stand liefern. */
+  const s=document.createElement('script');
+  s.src='../../assets/feedback.js?klangprobe='+Date.now();
+  s.onload=()=>{ log('feedback.js geladen:',s.src.replace(/^.*assets\//,'assets/')); werte(); };
+  s.onerror=()=>{ log('feedback.js konnte nicht geladen werden'); werte(); };
+  document.head.appendChild(s);
+  werte();
+})();
+</script>
+</body>
+</html>
