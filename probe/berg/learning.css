@@ -1,0 +1,650 @@
+/* Shared learning surface; preserves the existing year and unit colours. */
+:root{--r:12px;--ground:#f1f5f7;--ink:#162f39;--ink-soft:#4c626c}
+.wrap{max-width:900px;padding-top:32px}
+.masthead{margin-bottom:24px}.masthead h1{font-size:28px}
+.masthead .sub,.home-link,.switch,.foot,.t-count,.topic .t-count,.slot .n,.slot .iv{font-family:var(--sans);font-size:14px;letter-spacing:0;text-transform:none}
+button{min-height:44px}.switch{padding:10px 12px}.topic{padding:17px 18px;margin-bottom:10px}
+.topic .t-name{font-size:17px}.topic .t-row{flex-wrap:wrap}.topic .t-count{white-space:normal}
+.dashboard{background:#0e5a66;color:white;border-radius:var(--radius-lg);padding:26px;margin-bottom:28px}
+.dashboard h2{font:600 30px var(--serif);margin:0 0 8px}.dashboard p{margin:8px 0 18px;line-height:1.6}
+.dashboard .primary{background:var(--card);color:#0e5a66;border-color:white;font-weight:600;min-height:50px}
+.dashboard .controls{align-items:center}.dashboard .quiet{background:transparent;color:white;border-color:#8cb8bf}
+.dashboard small{display:block;font-size:14px;color:#d8e9ec;margin-top:14px}
+.quicklinks{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0}.quicklinks button{flex:1;min-width:150px}
+.section-title{font:600 22px var(--serif);margin:26px 0 16px}
+.round-progress{display:flex;justify-content:space-between;gap:12px;align-items:center;margin:0 0 16px;font-size:14px;flex-wrap:wrap}
+.round-progress progress{accent-color:var(--petrol);width:100%;height:8px}
+.box-details{margin:12px 0 20px}.box-details summary{cursor:pointer;color:var(--ink-soft);font-size:14px;padding:10px 0}.box-details .rail{margin:10px 0}
+.slot .iv{font-size:12px}.slot .c{font-size:22px}.vcard{min-height:290px;padding:32px;border-radius:var(--radius-lg);box-shadow:0 8px 28px #1630390a}
+.prompt{overflow-wrap:anywhere}.eyebrow{font:14px var(--sans);text-transform:none;letter-spacing:0}.rate span{font:12px var(--sans)}
+.typebox input{font-family:var(--sans);font-size:21px}.typebox input:disabled{opacity:1;color:var(--ink);-webkit-text-fill-color:var(--ink)}
+.correction{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}.correction>div{background:var(--ground);padding:16px;border-radius:var(--radius-sm);overflow-wrap:anywhere;border-left:4px solid #b4573c}.correction>.correction-solution{background:#e8f4ee;border-color:#28704c;color:#173e2b}.correction small{display:block;color:#42545c;font-size:13px;margin-bottom:6px}.correction strong{font-weight:600;font-size:20px}.correction mark{background:#ffdf91;color:#4b3300;border-radius:var(--radius-xs);padding:0 1px;text-decoration:underline;text-underline-offset:3px}.correction-note{font-size:13px;font-weight:400}
+.verdict{font-size:16px;line-height:1.5}.summary-number{font:600 48px var(--serif);color:var(--petrol)}
+@media(max-width:560px){.wrap{padding:20px 16px 40px}.dashboard{padding:22px}.dashboard h2{font-size:27px}.vcard{padding:24px 18px}.switches{gap:6px}.switch{font-size:14px}.sessionbar{align-items:flex-start}.correction{grid-template-columns:1fr}.controls{gap:8px}.rate{min-height:58px}.home-link{align-self:auto}.masthead h1{font-size:24px}}
+@media print{.dashboard,.quicklinks,.round-progress,.box-details{display:none}}
+
+.grammar-tile{display:block;text-decoration:none;color:var(--ink);background:#e2eff0;border:1px solid #b7d6d9;border-left:5px solid var(--petrol);margin-top:26px}.grammar-tile .t-name{font-size:21px;font-weight:600}.grammar-tile .t-count{display:inline-block;margin-top:6px}
+
+/* Shared, prominent navigation and masthead. */
+.masthead{background:var(--tint-petrol);border:1px solid #bfd4d8;border-left:6px solid #0e5a66;border-radius:var(--radius-lg);padding:24px;margin-bottom:26px;align-items:center;gap:18px}
+.masthead h1{font-family:var(--sans);font-size:clamp(28px,4vw,40px);font-weight:700;line-height:1.15;letter-spacing:-.035em;color:#123e49}
+.masthead .sub{font-family:var(--sans);font-size:16px;line-height:1.5;color:#3e5961;letter-spacing:0;text-transform:none;margin-top:9px}
+a.home-link,a.grammar-back{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:12px 16px;background:#0e5a66;color:#fff;border:2px solid #0e5a66;border-radius:var(--radius-sm);font:600 15px/1.4 var(--sans);text-decoration:none;white-space:normal}
+a.home-link:hover,a.grammar-back:hover{background:#093e48;border-color:#093e48}a.home-link:focus-visible,a.grammar-back:focus-visible{outline:3px solid #b96910;outline-offset:4px}
+@media(max-width:560px){.masthead{padding:20px}.masthead h1{font-size:29px}.masthead .home-link{width:100%;margin:0}}
+
+/* Local revision: typography separates the heading from navigation cards. */
+:root{--sans:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;--serif:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;--mono:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+.masthead{background:transparent;border:0;border-bottom:2px solid #c6d5d9;border-radius:0;padding:8px 0 24px;margin-bottom:28px;box-shadow:none}
+.masthead h1{color:#18323d;font-family:var(--sans);font-weight:700;font-size:clamp(30px,4vw,40px);letter-spacing:-.035em}
+.masthead .sub{color:#526670;font-size:16px;font-weight:400}
+.card .name,.topic .t-name,.section-title,.done h2{font-family:var(--sans)}
+.card .meta,.card .desc{font-family:var(--sans);font-size:14px;letter-spacing:0;text-transform:none}
+.grammar-tile{background:#eee8f8;border-color:#cbbbe3;border-left-color:#7551a2}.grammar-tile .t-name{color:#5d387f}.grammar-tile:hover{border-left-color:#5d387f;background:#e9e0f5}
+@media(max-width:560px){.masthead{padding:8px 0 20px}.masthead h1{font-size:30px}}
+
+/* Keep navigation labels readable in every interactive state. */
+a.home-link:hover,a.home-link:focus,a.home-link:active,a.grammar-back:hover,a.grammar-back:focus,a.grammar-back:active{color:#fff;background:#093e48;border-color:#093e48;text-decoration:none}
+
+/* ==== MARKE: English Basecamp =========================================
+   Wortmarke, Bildmarke und Markenfarbe stehen hier an genau einer Stelle
+   und gelten fuer die Startseite wie fuer alle Jahrgangsseiten. Auf dem
+   Telefon faellt die Bildmarke kleiner aus, damit die Kopfzeile nicht die
+   halbe erste Bildschirmseite einnimmt. */
+:root{--brand:#0E6878}
+.masthead{display:flex;align-items:center;justify-content:flex-start;gap:18px}
+.masthead .brandmark{flex:0 0 auto;color:var(--brand);display:block}
+.masthead h1{font-family:var(--serif);font-weight:600;letter-spacing:-.02em;line-height:1.02;
+  font-size:clamp(34px,8.5vw,52px)}
+.masthead h1 .title-accent{color:var(--brand);font-weight:700}
+.masthead .sub{font-size:12.5px;letter-spacing:.07em}
+.masthead .home-link{margin-left:auto}
+/* Titel und Unterzeile stehen untereinander, wie auf der Startseite. Nur so
+   passen Bildmarke, Schriftzug und der Weg zurueck in eine Zeile: der
+   Inhaltsbereich ist 860px breit, nebeneinander braeuchte die Kopfzeile bis
+   zu 1005px. */
+.masthead .mhead-text{display:block}
+.masthead .sub{margin-top:4px}
+@media(max-width:560px){
+  .masthead{gap:13px}
+  .masthead .brandmark{width:56px;height:56px}
+  .masthead h1{font-size:clamp(28px,7.5vw,38px)}
+}
+@media print{.masthead .brandmark{width:38px;height:38px}}
+
+/* ==== ENGE BILDSCHIRME ================================================
+   Auf dem Telefon stehen Fortsetzen-Knopf und Richtungsschalter in einer
+   Zeile statt uebereinander. So beginnt die Unit-Liste deutlich weiter
+   oben. Am Rechner aendert sich nichts. */
+.homebar{display:block}
+.homebar .home-resume{width:100%}
+.homebar .resume-title{display:block}
+.homebar .home-resume .t-count{display:block;margin-top:2px}
+@media(max-width:560px){
+  .homebar{display:flex;flex-wrap:nowrap;align-items:stretch;gap:9px;margin-bottom:14px}
+  .homebar .home-resume{flex:1 1 auto;min-width:0;margin-bottom:0;padding:11px 13px}
+  /* Der Titel bleibt einzeilig und wird notfalls abgeschnitten, damit der
+     Knopf nicht in die Hoehe waechst. */
+  .homebar .resume-title{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .homebar .home-resume .t-count{font-size:11px}
+  .homebar .home-resume .t-dir{display:none}   /* steht direkt daneben im Schalter */
+  .homebar .switch{flex:0 0 auto;align-self:stretch;white-space:nowrap;padding:8px 12px}
+}
+
+.csv-controls{background:var(--tint-petrol);border:1px solid var(--edge);border-radius:var(--radius-md);padding:20px;margin:18px 0}.csv-check{grid-column:1/-1;font-size:14px;display:flex;align-items:center;gap:8px;padding:8px 0}.csv-check[hidden],.csv-controls[hidden]{display:none}.csv-check input{width:20px;height:20px;accent-color:#0e5a66}@media print{.csv-controls,.csv-check{display:none!important}}
+
+/* Print only expanded vocabulary sections; collapsed sections must not
+   create boxes or forced page breaks in the PDF layout. */
+@media print{
+  .vlist .lsec:not([open]),.vlist .lsec[hidden],.vlist .vrow.off,.vlist .vrow3.off{display:none!important}
+  .vlist .lsec,.vlist .lsec + .lsec{page-break-before:auto;break-before:auto;page-break-after:auto;break-after:auto}
+  .vlist .lsec > summary{page-break-after:avoid;break-after:avoid}
+  .home-link,.grammar-back,.feedback-settings,.csv-controls,.csv-check{display:none!important}
+}
+
+/* Compact overview actions keep the Unit selection in the foreground. */
+.unit-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:20px 0 24px}
+.unit-heading .section-title{margin:0}
+.unit-actions{display:flex;gap:10px;flex-wrap:wrap}
+.unit-actions button{font:inherit;font-size:14px;font-weight:600;border:1px solid var(--edge);border-radius:var(--radius-sm);padding:11px 15px;min-height:44px;color:#234d56;background:transparent;cursor:pointer}
+.unit-actions .browse-practice{background:#e0eef0}
+.unit-actions button:hover{color:#173b43;background:#cee2e6;border-color:#527c85}
+.unit-actions button:focus-visible{outline:3px solid #327c8b;outline-offset:3px}
+@media(max-width:640px){.unit-heading{align-items:flex-start;flex-direction:column}.unit-actions{width:100%}.unit-actions button{flex:1 1 200px}}
+
+.csv-groups{border:1px solid var(--edge);border-radius:var(--radius-sm);margin-top:16px;padding:16px}.csv-groups legend{font-weight:700}.csv-groups details{margin:10px 0}.csv-groups summary{cursor:pointer;font-weight:600;padding:8px}.csv-groups label{display:block;padding:8px 12px}.csv-groups input{margin-right:6px}
+
+.test-prompt-dialog{width:min(760px,94vw);max-height:90vh;overflow:auto;border:1px solid var(--edge);border-radius:var(--radius-lg);padding:24px;color:#18343e;background:var(--card);font-family:inherit}.test-prompt-dialog::backdrop{background:#17333d88}.test-prompt-dialog fieldset{margin:18px 0;padding:16px;border:1px solid #c3d5d8;border-radius:var(--radius-sm)}.test-prompt-dialog label{display:block;margin:10px 0}.test-prompt-dialog input[type=number]{width:110px;padding:10px;font:inherit}.test-prompt-dialog textarea{width:100%;font:14px/1.5 monospace;padding:12px;box-sizing:border-box}.test-prompt-dialog #promptError{color:#982e22}.test-prompt-dialog #promptResult{margin-top:24px}.test-prompt-dialog h2{font-size:22px}
+
+/* Vocabulary selection shared by all year groups. */
+.selection-bar{position:sticky;bottom:12px;z-index:5;background:var(--card);border:1px solid var(--edge);border-radius:var(--radius-lg);padding:16px;box-shadow:0 4px 22px #173e4530;margin-top:18px}.selection-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.selection-actions button{padding:10px 14px;border-radius:var(--radius-sm)}.selection-unit{font-size:18px;font-weight:650;display:flex;align-items:center;gap:12px;margin:28px 0 12px}.direct-selection{margin-right:12px}.selecting input[type=checkbox]{width:20px;height:20px;accent-color:#286f72;cursor:pointer}
+@media screen{
+#vlist.selecting .vrow{grid-template-columns:32px minmax(0,1fr) minmax(0,1fr);padding:9px 0;align-items:start}
+#vlist.selecting .vrow .csv-check{position:static;grid-column:1;grid-row:1;margin:0;padding:2px 0;align-self:start}
+#vlist.selecting .vrow .csv-check input{margin:0;flex-shrink:0}
+#vlist.selecting .vrow>div:not(.vde):not(.vex){grid-column:2;min-width:0;overflow-wrap:anywhere}
+#vlist.selecting .vrow>.vde{grid-column:3;min-width:0;overflow-wrap:anywhere}
+#vlist.selecting .vrow>.vex{grid-column:2/-1}
+}
+@media screen and (max-width:600px){
+#vlist.selecting .vrow{grid-template-columns:28px minmax(0,1fr);column-gap:10px}
+#vlist.selecting .vrow>.vde{grid-column:2}
+}
+.selection-hidden{display:none!important}[hidden]{display:none!important}@media print{.selection-bar,.direct-selection,.selection-unit{display:none!important}}
+
+/* Test prompt options. */
+#promptAllocation>label{display:grid;grid-template-columns:minmax(0,1fr) 100px;align-items:center;gap:12px}
+#promptAllocation input[type=number]{width:100%;margin:0}
+#promptTense{display:block;width:100%;padding:12px;border:1px solid var(--edge);border-radius:var(--radius-sm);font:inherit;background:var(--card);color:#18323d}
+.selection-files{margin-top:12px;border-top:1px solid #d5e2df;padding-top:10px}
+.selection-files summary{cursor:pointer;font-weight:600}
+.selection-files label{display:block;margin:12px 0}
+.selection-files input{max-width:100%;padding:8px;font:inherit}
+#selectionFileStatus{display:block;margin-top:8px}
+
+/* Lernauftrag: teacher-shared selection link and the pupil-facing banner. */
+.assignment-dialog select,.assignment-dialog input{display:block;width:100%;padding:11px;margin:6px 0 4px;
+  border:1px solid var(--edge);border-radius:var(--radius-sm);font:inherit;background:var(--card);color:#18323d;box-sizing:border-box}
+.assignment-hint{font-size:13.5px;color:#42545c;margin:2px 0 10px}
+.assignment-qr{margin:14px 0;max-width:230px}
+/* Vollbild-QR für die digitale Tafel */
+.qr-fullscreen{width:100vw;max-width:100vw;height:100vh;max-height:100vh;border:0;padding:0;background:var(--card);color:#16232b}
+.qr-fullscreen::backdrop{background:var(--card)}
+.qr-fullscreen-inner{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(12px,3vmin,28px);padding:20px}
+.qr-fullscreen-code{width:min(74vmin,860px)}
+.qr-fullscreen-code svg{width:100%;height:auto;display:block}
+.qr-fullscreen-title{margin:0;text-align:center;font:600 clamp(17px,3.2vmin,34px) var(--sans);overflow-wrap:anywhere;max-width:32ch}
+.qr-fullscreen-close{min-height:48px;padding:12px 20px;border:1px solid var(--edge);border-radius:var(--radius-sm);
+  background:var(--card);color:#18323d;font:600 16px var(--sans);cursor:pointer}
+.qr-fullscreen-close:hover{background:#eef4f5;border-color:#0e5a66}
+@media print{.qr-fullscreen{display:none!important}}
+.assignment-qr svg{width:100%;height:auto;display:block;border:1px solid var(--rule);border-radius:var(--radius-sm)}
+.assignment-banner{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin:0 0 20px;padding:16px 18px;
+  background:var(--tint-moss);border:1px solid #6a978b;border-left:5px solid #0e5a66;border-radius:var(--radius-md)}
+.assignment-banner strong{font-size:17px}
+.assignment-banner span{color:#345c56;font-size:14.5px}
+.assignment-banner button{margin-left:auto;min-height:44px;padding:10px 16px;border:1px solid var(--edge);
+  border-radius:var(--radius-sm);background:var(--card);color:#18323d;font:600 15px var(--sans);cursor:pointer}
+.assignment-banner button+button{margin-left:0}
+.assignment-banner button.primary{background:#0e5a66;border-color:#0e5a66;color:#fff}
+.assignment-banner.stale{background:#f8ece7;border-color:#c98f7a;border-left-color:#b4573c;flex-direction:column;align-items:flex-start}
+@media(max-width:560px){.assignment-banner button{margin-left:0;flex:1 1 auto}}
+@media print{.assignment-banner{display:none}}
+
+/* Tafel-Modus: project selected vocabulary in large type for whole-class work. */
+body.board-open{overflow:hidden}
+.board{position:fixed;inset:0;z-index:100;display:flex;flex-direction:column;background:var(--card);color:var(--ink)}
+.board-bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--rule)}
+.board-bar button{min-height:44px;padding:10px 14px;border:1px solid var(--edge);border-radius:var(--radius-sm);background:var(--card);color:var(--ink);font:600 15px var(--sans);cursor:pointer}
+.board-bar button:hover{border-color:var(--petrol);background:var(--ground)}
+.board-bar button:focus-visible{outline:3px solid var(--petrol);outline-offset:2px}
+.board-count{margin-left:auto;font-family:var(--mono);font-size:16px;color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.board-stage{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:20px;padding:24px 20px;text-align:center;cursor:pointer}
+.board-word{font-family:var(--serif);font-weight:600;font-size:clamp(38px,11vw,150px);line-height:1.05;overflow-wrap:anywhere}
+.board-ipa{font-family:var(--mono);font-size:clamp(16px,3vw,32px);color:var(--ink-soft)}
+.board-answer{font-family:var(--serif);font-weight:600;font-size:clamp(30px,8vw,110px);line-height:1.1;color:var(--petrol);overflow-wrap:anywhere}
+.board-example{font-size:clamp(15px,2.4vw,28px);line-height:1.4;color:var(--ink-soft);max-width:40ch}
+.board-hint{padding:12px 18px;border-top:1px solid var(--rule);font-size:14px;color:var(--ink-soft);text-align:center}
+@media(max-width:560px){.board-hint{font-size:12.5px}.board-count{margin-left:0}}
+@media print{.board{display:none!important}}
+
+/* Blitzrunde: 60-second time attack, independent of the spaced-repetition boxes. */
+.preview-modes{margin-top:10px}
+.preview-modes .pv-blitz-start{width:100%;text-align:left;background:#fdf3e7;border-color:#c9761e}
+.preview-modes .pv-blitz-start:hover{background:#f9e7cf;border-color:#a85c14}
+.pv-tag{opacity:.85;cursor:default}
+.pv-blitz-bar{display:flex;justify-content:space-between;align-items:center;margin:0 0 16px;font-family:var(--mono);font-size:15px}
+.pv-blitz-time{font-size:28px;font-weight:700;color:#c9761e;font-variant-numeric:tabular-nums}
+.pv-blitz-score{color:var(--ink-soft)}
+.pv-blitz-missed{margin:14px 0 0;padding:0;list-style:none;display:grid;gap:6px}
+.pv-blitz-missed li{background:var(--ground);border-radius:var(--radius-sm);padding:8px 12px;font-size:14px;text-align:left}
+@media(max-width:560px){.pv-blitz-time{font-size:22px}}
+/* Gemerkte Lernaufträge auf der Übersicht */
+.assignment-saved{margin:0 0 22px}
+.assignment-saved .section-title{margin:0 0 10px}
+.assignment-card{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin:0 0 10px;
+  padding:14px 16px;background:var(--card);border:1px solid var(--rule);border-left:5px solid #6a978b;border-radius:var(--radius-md)}
+.assignment-card-main{flex:1 1 260px;display:flex;flex-direction:column;gap:4px}
+.assignment-card-main strong{font-size:16.5px}
+.assignment-card-meta{color:#345c56;font-size:14px}
+.assignment-progress{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin:4px 0 0}
+.assignment-bar{flex:1 1 160px;max-width:260px;height:10px;border-radius:var(--radius-pill);background:#dde7e6;
+  border:1px solid var(--edge);overflow:hidden}
+.assignment-bar-fill{display:block;height:100%;background:#0e5a66}
+.assignment-progress-text{color:#18323d;font-size:14px}
+.assignment-card-stale{margin:4px 0 0;color:#8a3d24;font-size:14px}
+.assignment-card-actions{display:flex;flex-wrap:wrap;gap:10px}
+.assignment-card-actions button{min-height:44px;padding:10px 16px;border:1px solid var(--edge);
+  border-radius:var(--radius-sm);background:var(--card);color:#18323d;font:600 15px var(--sans);cursor:pointer}
+.assignment-card-actions button.primary{background:#0e5a66;border-color:#0e5a66;color:#fff}
+.assignment-card-actions button:focus-visible{outline:3px solid #bd781e;outline-offset:3px}
+@media(max-width:560px){.assignment-card-actions{width:100%}.assignment-card-actions button{flex:1 1 auto}}
+@media print{.assignment-saved{display:none}}
+
+/* =========================================================================
+   DESIGNSYSTEM
+   Abstaende, Radien, Schatten und Zahlensatz als eine Skala statt als 13
+   Rundungen, 15 Schattenwerte und 72 Abstaende nebeneinander. Die Datei
+   wird nach dem seiteneigenen Stylesheet geladen und zieht die vorhandenen
+   Bauteile auf diese Skala.
+   ========================================================================= */
+:root{
+  color-scheme:light;               /* die Seite ist hell; Eingabefelder folgen */
+  --ground:#f3f6f2;                 /* der Wert, der bisher aus preview.css kam */
+  --space-1:4px;  --space-2:8px;  --space-3:12px; --space-4:16px;
+  --space-5:24px; --space-6:32px; --space-7:48px;
+  --radius-xs:3px; --radius-sm:8px; --radius-md:12px; --radius-lg:18px; --radius-pill:999px;
+  --shadow-1:0 1px 2px rgba(22,35,43,.06);
+  --shadow-2:0 3px 12px rgba(22,35,43,.10);
+  --shadow-3:0 10px 28px rgba(22,35,43,.16);
+  --r:var(--radius-md);              /* das alte Einzeltoken zeigt auf die Skala */
+  /* Flaechen mit Farbstich - bisher als feste Werte ueber die Dateien verteilt */
+  --edge:#9bb9be;
+  --tint-petrol:#e5eff1;
+  --tint-moss:#e3efec;
+  --tint-amber:#fbf2e6;
+  --focus:#bd781e;
+}
+
+
+
+
+/* Flaechen: Karten, Felder, Abschnitte */
+.topic,.vcard,.panel,.done,.dashboard,.csv-controls,.warnbox,.lsec,.bili-acc,
+.assignment-card,.homebar .home-resume,.test-prompt-dialog,.assignment-dialog{border-radius:var(--radius-md)}
+.dashboard,.done{border-radius:var(--radius-lg)}
+.assignment-banner,.bili-level,.level{border-radius:var(--radius-md)}
+
+/* Bedienelemente: eine Rundung fuer alle Knoepfe und Felder */
+button,.switch,.linkbtn,select,input[type="text"],input[type="number"],input[type="search"],
+a.home-link,a.grammar-back,.bili-head,.feedback-settings button{border-radius:var(--radius-sm)}
+.tag,.meta,.bili-meta,.bili-pill,.pill,.assignment-card-meta{border-radius:var(--radius-pill)}
+.minirail i{border-radius:var(--radius-xs)}
+.linkbtn{border-radius:0}            /* reiner Textlink, keine Flaeche */
+
+/* Hoehe: drei Stufen statt fuenfzehn Einzelwerte */
+.topic:hover,.bili-level:hover,.assignment-card{box-shadow:var(--shadow-1)}
+.dashboard,.test-prompt-dialog,.assignment-dialog{box-shadow:var(--shadow-3)}
+
+/* Typografie: Ueberschriften brechen ausgewogen, Zahlen laufen nicht mehr
+   in der Breite, waehrend sie sich aendern. */
+h1,h2,h3,.t-name,.name,.done h2,.dashboard h2,.section-title,.bili-name{text-wrap:balance}
+p,.lead,.note,.desc,.t-count{text-wrap:pretty}
+.t-count,.ycount,.board-count,.pv-blitz-time,.pv-blitz-score,#footstat,.slot .n,.slot .iv,
+.assignment-progress-text,#allocationTotal,#selectionCount{font-variant-numeric:tabular-nums}
+/* Bauteile, die im seiteneigenen Stylesheet stehen und dort eigene Werte
+   tragen; hier auf dieselbe Skala gezogen. */
+.unit-actions .browse-practice,.unit-actions .browse-list{border-radius:var(--radius-sm)}
+details.yeargroup{border-radius:var(--radius-lg)}
+.yeargroup .tag{border-radius:var(--radius-pill)}
+
+
+
+/* Ansichtswechsel: kurzes Ueberblenden statt hartem Schnitt. Die Abfrage
+   nach reduzierter Bewegung sitzt zusaetzlich im Skript, damit der Wechsel
+   dort gar nicht erst gestartet wird. */
+@media (prefers-reduced-motion: no-preference){
+  ::view-transition-old(root){animation:vt-weg .16s ease-in both}
+  ::view-transition-new(root){animation:vt-her .22s cubic-bezier(.2,.7,.3,1) both}
+}
+@keyframes vt-weg{to{opacity:0}}
+@keyframes vt-her{from{opacity:0;transform:translateY(8px)}}
+
+/* =========================================================================
+   BEWEGUNG UND RUECKMELDUNG
+   Drei Zeiten, eine Kurve. Jede Animation der Seite greift darauf zu -
+   das ist der Unterschied zwischen "irgendwie animiert" und einer
+   Oberflaeche, die sich einheitlich anfuehlt.
+   ========================================================================= */
+:root{
+  --t-fast:120ms; --t-base:180ms; --t-slow:300ms;
+  --ease-out:cubic-bezier(.2,.7,.3,1);
+}
+/* Das graue Aufblitzen beim Antippen entfaellt - an seine Stelle tritt der
+   Druckpunkt unten, der auch auf dem Telefon sichtbar ist. */
+body{-webkit-tap-highlight-color:transparent}
+
+@media (prefers-reduced-motion: no-preference){
+  .topic,.card,button,.switch,.linkbtn,a.home-link,a.grammar-back,
+  .bili-head,.bili-level,.assignment-card,.level,summary{
+    transition:transform var(--t-fast) var(--ease-out),
+               box-shadow var(--t-base) var(--ease-out),
+               border-color var(--t-base) var(--ease-out),
+               background var(--t-base) var(--ease-out)}
+  .topic:hover,.card:hover{transform:translateY(-2px)}
+  .bili-level:hover,.assignment-card:hover{transform:translateY(-1px)}
+  button:not(:disabled):hover,.switch:hover,a.home-link:hover,a.grammar-back:hover{transform:translateY(-1px)}
+  /* Der Druckpunkt: kurz und knapp, das ist der Teil, den man mit dem
+     Finger spuert. Ohne ihn passiert auf dem Telefon beim Tippen nichts. */
+  .topic:active,.card:active,button:not(:disabled):active,.switch:active,
+  a.home-link:active,a.grammar-back:active,.bili-head:active,.bili-level:active{
+    transform:scale(.975);transition-duration:80ms}
+  .bili-head .bili-chev,.card .menu-arrow{transition:transform var(--t-base) var(--ease-out)}
+  .card:hover .menu-arrow{transform:translateX(4px)}
+
+  /* Der erste Aufbau bekommt einen weichen Rand, mehr nicht: Die Liste
+     blendet als ein Stueck ein. Vorher trat jede Gruppe einzeln und
+     versetzt auf - vier getrennte Ereignisse nacheinander, die das Auge
+     als Aufblaettern liest. Ohne Versatz und ohne Bewegung gibt es nichts,
+     dem man folgen koennte, also auch nichts, das stocken kann. */
+  .eb-ein{animation:eb-einblenden 220ms var(--ease-out) both}
+  @keyframes eb-einblenden{from{opacity:0}}
+  @keyframes eb-fuellen{from{transform:scaleX(0)}}
+  .assignment-bar-fill{animation:eb-fuellen 700ms var(--ease-out) both;transform-origin:left center}
+}
+
+/* =========================================================================
+   AUSGEWAEHLTE VOKABELN
+   Bisher verriet nur das Haekchen, was ausgewaehlt ist - bei 99 Zeilen
+   uebersieht man das.
+   ========================================================================= */
+.vrow:has(.csv-check input:checked){
+  background:var(--tint-petrol);
+  box-shadow:inset 3px 0 0 var(--petrol);
+  border-radius:var(--radius-xs)}
+.csv-check input{accent-color:var(--petrol)}
+
+/* =========================================================================
+   LEERE ZUSTAENDE
+   Nackter Text wirkt wie ein Fehler; ein gestalteter Hinweis wirkt wie
+   eine Antwort.
+   ========================================================================= */
+.done-empty{background:var(--tint-petrol);border:1px solid var(--edge)}
+.done-empty .empty-art{display:block;margin:0 auto 14px;width:56px;height:56px;color:var(--petrol);opacity:.9}
+.done-empty h2{margin-top:0}
+.noresult{margin:18px 0;padding:20px 22px;background:var(--tint-amber);border:1px solid var(--amber);
+  border-radius:var(--radius-md);color:var(--ink);font-size:15px;text-align:center}
+.noresult::before{content:"";display:block;width:34px;height:34px;margin:0 auto 10px;
+  background:currentColor;opacity:.55;
+  -webkit-mask:center/contain no-repeat var(--lupe);mask:center/contain no-repeat var(--lupe)}
+:root{--lupe:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>')}
+
+/* =========================================================================
+   FUSSZEILE
+   Die beiden Sicherungsknoepfe gehoeren zusammen. Als einzelne Flex-Kinder
+   brach auf dem Handy nur der zweite um und stand allein unter dem Zaehler;
+   als Gruppe wandern sie gemeinsam in die naechste Zeile.
+   ========================================================================= */
+.foot-actions{display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+
+/* =========================================================================
+   AUSWAHLMODUS IN DER WORTLISTE
+   Die Abschnittszeile ist eine Flexzeile mit space-between. Ohne
+   Auswahlmodus ist das Kaestchen ausgeblendet, also stehen nur zwei Dinge
+   darin: Titel links, Anzahl rechts. Sobald das Kaestchen sichtbar wird,
+   verteilt space-between drei Elemente - und der Titel rutscht in die
+   Mitte. Der Titel nimmt deshalb den freien Platz selbst ein und bleibt
+   damit am Kaestchen stehen, egal wie viele Nachbarn die Zeile hat.
+   ========================================================================= */
+.lsec > summary > span:not(.lnum){flex:1 1 auto;min-width:0;text-align:left}
+
+/* =========================================================================
+   UEBEN AUF DEM TELEFON
+   Zwei Dinge, die nur auf kleinen Bildschirmen gelten.
+
+   Erstens: Waehrend einer Runde zeigt die Seite nur, was zur Runde
+   gehoert. Schriftzug, Fusszeile und die Ton-Schalter kosten zusammen
+   ueber 250px, die niemand beim Antworten ansieht.
+
+   Zweitens: Statt der Systemtastatur zeichnet die Seite ihr eigenes
+   Tastenfeld. Der Grund ist nicht Platz, sondern Verlaesslichkeit - die
+   Systemtastatur schiebt den sichtbaren Ausschnitt, und zwar auf jedem
+   Geraet anders. Was es nicht gibt, kann nichts verschieben. Nebenbei
+   entfaellt die deutsche Autokorrektur beim Tippen englischer Woerter.
+   ========================================================================= */
+@media (max-width:620px), (max-height:500px) and (pointer:coarse){
+  /* ---- Aufgeraeumte Runde ---- */
+  body.eb-runde .masthead,
+  body.eb-runde .foot,
+  body.eb-runde .feedback-settings{display:none}
+  body.eb-runde .wrap{padding-top:10px;padding-bottom:8px}
+  body.eb-runde .sessionbar{display:flex;align-items:center;gap:10px;flex-wrap:nowrap}
+  body.eb-runde .sessionbar .switches{display:flex;flex-wrap:nowrap;gap:8px;
+    overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+  body.eb-runde .sessionbar .switches::-webkit-scrollbar{display:none}
+  /* Alle Schalter muessen in die Zeile passen - eine halb sichtbare
+     Uebungsart sieht aus wie ein Fehler. Dafuer wird es enger, und
+     "Spaeter fortsetzen" schrumpft auf seinen Pfeil: Die Beschriftung
+     kostete 131 der 390 Punkte, und wohin der Pfeil fuehrt, ist an
+     dieser Stelle die kleinste Frage. */
+  body.eb-runde .sessionbar .switch{flex:0 0 auto;white-space:nowrap;
+    padding-left:9px;padding-right:9px;font-size:13px}
+  /* Kurze Beschriftungen, damit alle vier Uebungsarten nebeneinander
+     stehen. Der lange Name bleibt im Knopf und wird vorgelesen, er wird
+     nur nicht angezeigt. */
+  body.eb-runde .switch[data-mode]{font-size:0}
+  body.eb-runde .switch[data-mode]::before{font-size:13px;line-height:1.2}
+  body.eb-runde .switch[data-mode="card"]::before{content:"Karte"}
+  body.eb-runde .switch[data-mode="mc"]::before{content:"Auswahl"}
+  body.eb-runde .switch[data-mode="type"]::before{content:"Tippen"}
+  /* Das Leerzeichen nach der Escape-Sequenz beendet sie - ohne es
+     liest der Browser das folgende c als weitere Hexziffer. */
+  body.eb-runde .switch[data-mode="cloze"]::before{content:"L\00fc cke"}
+  @media (max-width:365px){
+    body.eb-runde .sessionbar .switch{padding-left:6px;padding-right:6px}
+    body.eb-runde .switch[data-mode]::before{font-size:12px}
+    body.eb-runde #back{padding:0 8px}}
+
+  /* Die Abfragerichtung wandert in die Fortschrittszeile: Sie gehoert
+     zur Runde, nicht zur Wahl der Uebungsart, und in der Schalterzeile
+     nimmt sie den Platz einer ganzen Uebungsart weg. */
+  body.eb-runde .round-progress #dirBtn{flex:0 0 auto;font-size:11px;
+    padding:5px 9px;margin-left:4px}
+  /* Zurueck ist der einzige Weg aus der Runde heraus - als blasser
+     Pfeil sah er aus wie Zierde. Jetzt ein Knopf im Akzentton, mit
+     Beschriftung, sobald die Zeile sie traegt. */
+  body.eb-runde #back{flex:0 0 auto;font-size:0;padding:0 12px;height:38px;
+    display:inline-flex;align-items:center;gap:6px;border-radius:var(--radius-sm);
+    background:var(--petrol);color:#fff;text-decoration:none;border:0}
+  body.eb-runde #back::before{content:"\2190";font-size:19px;line-height:1}
+  @media (min-width:400px){
+    body.eb-runde #back{padding:0 14px}
+    body.eb-runde #back::after{content:"Zur\00fc ck";font-size:14px;font-weight:600;line-height:1}}
+  /* Eine Zeile, auch mit dem Richtungsschalter darin: Der Name des
+     Lernumfangs weicht zurueck, bevor etwas umbricht. */
+  body.eb-runde .round-progress{display:flex;align-items:center;gap:8px;
+    flex-wrap:nowrap;font-size:12px;margin:10px 0 6px;padding:0}
+  body.eb-runde .round-progress > span:first-child{
+    min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  body.eb-runde .round-progress > span{flex:0 1 auto;white-space:nowrap}
+  body.eb-runde .round-progress progress{flex:1;height:4px;margin:0}
+  body.eb-runde .box-details summary{padding:8px 12px;font-size:13px}
+  /* Beim Tippen zaehlt jeder Punkt: Passt die Seite genau ins Fenster,
+     klappt Safari die Adressleiste nicht ein - und die Tastatur bleibt,
+     wo sie ist. Die Lernfaecher stehen in den anderen Uebungsarten. */
+  body.eb-tippen .box-details{display:none}
+  body.eb-tippen .round-progress{margin:6px 0 4px}
+
+  /* Der Fuellabstand unter dem Eingabefeld hielt frueher den Knopf auf
+     Abstand. Der Knopf steht jetzt unten. */
+  body.eb-tippen .vcard .spacer{display:none}
+
+  /* Eine blinkende Schreibmarke, damit sichtbar ist, dass sofort
+     getippt werden kann. Ihre Lage misst das Skript aus dem bereits
+     getippten Text; solange nichts dasteht, rueckt der blasse Hinweis
+     zur Seite, statt sich mit ihr zu ueberlagern. */
+  body.eb-tippen .typebox{position:relative}
+  body.eb-tippen .typebox::after{content:"";position:absolute;
+    left:calc(var(--eb-marke-links,0px) + var(--eb-marke-x,0px)
+              + var(--eb-marke-rand,16px));
+    top:var(--eb-marke-oben,0px);width:2px;height:var(--eb-marke-hoehe,24px);
+    background:var(--petrol);border-radius:1px;
+    animation:eb-blinken 1.06s steps(1) infinite}
+  body.eb-tippen .typebox.leer #typeIn{text-indent:14px}
+  body.eb-tippen #typeIn:disabled ~ .verdict,
+  body.eb-tippen .typebox.aus::after{display:none}
+  @keyframes eb-blinken{0%,50%{opacity:1}50.01%,100%{opacity:0}}
+  @media (prefers-reduced-motion:reduce){
+    body.eb-tippen .typebox::after{animation:none}}
+
+  /* ---- Eigenes Tastenfeld ---- */
+  body.eb-tippen{padding-bottom:var(--eb-tastenhoehe,296px)}
+  .eb-tasten{position:fixed;left:0;right:0;bottom:0;z-index:50;
+    padding:6px 4px calc(6px + env(safe-area-inset-bottom));
+    background:#D3D6DB;border-radius:12px 12px 0 0}
+  .eb-tasten .tr{display:flex;gap:4px;justify-content:center;margin-bottom:7px;padding:0 3px}
+  .eb-tasten .tr:last-child{margin-bottom:0}
+  .eb-tasten .tk{flex:1 1 0;min-width:0;height:var(--tk,64px);border:0;border-radius:7px;
+    background:#fff;color:var(--ink);font:400 25px/1 var(--sans);box-shadow:0 1px 0 #8A8E96;
+    cursor:pointer;-webkit-user-select:none;user-select:none;padding:0;
+    -webkit-tap-highlight-color:transparent}
+  .eb-tasten .tk:active{background:#B9BDC4}
+  /* Kein Zoom durch Doppeltippen, solange getippt wird - weder auf dem
+     Tastenfeld noch auf der Karte darueber. "manipulation" laesst
+     Schieben und das Spreizen mit zwei Fingern zu und nimmt nur die
+     Gesten weg, die hier aus Versehen entstehen. */
+  body.eb-tippen, .eb-tasten, .eb-tasten .tk{touch-action:manipulation}
+  .eb-tasten .tk.weit{flex:1.4 1 0;background:#ADB2BA;font-size:19px}
+  .eb-tasten .tk.raum{flex:2.6 1 0;font-size:15px}
+  .eb-tasten .tk.senden{flex:2.2 1 0;background:var(--petrol);color:#fff;
+    font-size:16px;font-weight:600}
+  .eb-tasten .tk.sprache{flex:1.1 1 0;background:#ADB2BA;font-size:14px;
+    font-weight:600;letter-spacing:.04em}
+  /* Die zweite Ebene: Ziffern und Satzzeichen. Der Umschalter sieht aus
+     wie der Belegungswechsel daneben - beide tauschen die Tasten aus. */
+  .eb-tasten .tk.ebene{flex:1.1 1 0;background:#ADB2BA;font-size:14px;
+    font-weight:600;letter-spacing:.04em}
+  .eb-tasten[data-sprache="de"] .tk{font-size:23px}
+  .eb-tasten[data-ebene="zeichen"] .tk{font-size:21px}
+  .eb-tasten[data-ebene="zeichen"] .tk.raum{font-size:15px}
+  .eb-tasten[data-ebene="zeichen"] .tk.senden{font-size:16px}
+  .eb-tasten[data-ebene="zeichen"] .tk.ebene{font-size:14px}
+  /* Elf Tasten je Reihe und kurze Bildschirme vertragen sich schlecht. */
+  @media (max-height:720px){.eb-tasten{--tk:50px}.eb-tasten .tk{font-size:21px}}
+  @media (max-height:640px){.eb-tasten{--tk:44px}.eb-tasten .tk{font-size:19px}}
+  /* Grosse Telefone hatten zwischen Karte und Tastenfeld 213 bis 301
+     Punkte Luft stehen. Die Tasten nehmen sich einen Teil davon: Wer
+     mit dem Daumen tippt, trifft hoehere Tasten sicherer. In der Breite
+     geht nichts, dort stehen elf Tasten nebeneinander. */
+  @media (min-height:800px){.eb-tasten{--tk:76px}}
+  @media (min-height:900px){.eb-tasten{--tk:84px}}
+
+  /* Der untere Streifen traegt beides nacheinander: beim Antworten die
+     Tasten, danach Nochmal / Unsicher / Gewusst. Gleicher Platz, kein
+     Springen. */
+  body.eb-tippen[data-eb-antwort="offen"] .controls{display:none}
+  /* Nach dem Pruefen steht kein Tastenfeld mehr da - der Platz dafuer
+     darf dann auch nicht mehr freigehalten werden, sonst wird die Seite
+     laenger als das Fenster, und Safari klappt seine Adressleiste ein. */
+  body.eb-tippen[data-eb-antwort="bewertet"]{padding-bottom:96px}
+  body.eb-tippen .controls{position:fixed;left:0;right:0;bottom:0;z-index:51;margin:0;
+    padding:10px 12px calc(10px + env(safe-area-inset-bottom));
+    background:var(--card);border-top:1px solid var(--rule);
+    display:flex;gap:8px;box-shadow:0 -4px 14px #16232b14}
+  body.eb-tippen .controls button{flex:1 1 0;min-width:0}
+
+  /* ---- Vom Startbildschirm gestartet ----
+     Nur hier, nie im Browser: Die Klasse setzt das Skript ausschliesslich,
+     wenn die Seite als eigene App laeuft.
+
+     Oben legt iOS 26 ein Glasband ueber den Inhalt - den "Scroll Edge
+     Effect". Es laesst sich weder abschalten noch ausmessen;
+     env(safe-area-inset-top) waechst nicht mit. Der einzige Hebel ist,
+     dort nichts hinzulegen. Am Geraet gemessen reicht das Band 31 Punkte
+     in die Seite hinein, die Knopfreihe beginnt also 40 Punkte tiefer - acht Punkte Luft.
+
+     Die Tasten bleiben so hoch wie im Browser. Hoehere Tasten haben den
+     gewonnenen Platz zwar aufgebraucht, aber nicht besser getroffen -
+     bei 40 Punkten Breite sahen 84 Punkte Hoehe gestreckt aus. */
+  /* Erst ab 700 Punkten Fensterhoehe: Auf kurzen Bildschirmen ist der
+     Platz zu knapp, dort waere ein Inhalt, der unter das Tastenfeld
+     rutscht, schlimmer als ein angelaufener oberer Rand. */
+  @media (min-height:700px){
+    body.eb-app .wrap{padding-top:40px}
+    body.eb-app.eb-runde .wrap{padding-top:40px}
+  }
+  /* Unten haelt die App nichts frei: Die Webansicht reicht bis an die
+     Bildschirmkante, und env(safe-area-inset-bottom) meldet dabei 0.
+     Der Streifen des Home-Indicators ist 34 Punkte hoch - so viel
+     Abstand bekommen die Bewertungsknoepfe und die unterste Tastenreihe,
+     sonst schneidet er sie an. Erst ab 700 Punkten Fensterhoehe: Geraete
+     mit Home-Knopf haben keinen solchen Streifen und keinen Platz uebrig. */
+  @media (min-height:700px){
+    body.eb-app .controls{padding-bottom:max(calc(10px + env(safe-area-inset-bottom)),34px)}
+    body.eb-app .eb-tasten{padding-bottom:max(calc(6px + env(safe-area-inset-bottom)),34px)}
+  }
+
+  /* ---- Tastenfeld in der Geometrie von iOS ----
+     Alle Masse als Anteil der Bildschirmbreite, damit die Form auf
+     jedem Telefon dieselbe ist - iOS macht es genauso. Die Zahlen
+     stammen aus einem unskalierten Screenshot (1320 px auf 440
+     Punkte, Massstab genau 3), geteilt durch drei:
+
+       Taste            37,33 breit, 45 hoch   (deutsch 33,33 breit)
+       Luecke            6 waagerecht, 11,67 senkrecht
+       Aussenrand        6,67
+       Umschalt/Rueck   50, mit 14,67 Abstand zu den Buchstaben
+       untere Reihe     48 / 48 / 210,67 / 102
+
+     Der Kern ist Reihe 2: iOS laesst ihre Tasten so breit wie die in
+     Reihe 1 und rueckt sie ein, statt sie zu dehnen. Nur so steht das
+     "a" unter dem "q" - die Fingerstellung, die jedes Kind aus jeder
+     anderen Tastatur mitbringt. */
+  /* Luecke und Aussenrand sind auf iOS feste Punktmasse, keine
+     Anteile: 6 zwischen den Tasten, 6,67 nach aussen - auf jedem
+     iPhone dieselben. Was sich mit der Bildschirmbreite aendert, ist
+     allein die Tastenbreite. Als Anteil gerechnet schrumpfte die
+     Luecke auf schmalen Geraeten und die Tasten wuchsen dafuer, in
+     jeder Reihe verschieden stark. Genau daran brach die Staffelung:
+     Das "z" stand 1,4 Punkte links vom "s" darueber, obwohl es auf
+     iOS genau darunter sitzt. */
+  /* Nur oben und an den Seiten: Den Abstand nach unten bestimmt die
+     Regel fuer den Home-Indicator weiter oben, sonst waere die unterste
+     Reihe in der App wieder angeschnitten. */
+  body.eb-tippen .eb-tasten{--tk:45px;--tb:calc((100% - 54px) / 10);
+    padding-top:6px;padding-left:6.67px;padding-right:6.67px}
+  /* Die deutsche Belegung traegt elf Buchstaben je Reihe statt zehn. */
+  body.eb-tippen .eb-tasten[data-sprache="de"][data-ebene="buchstaben"]{
+    --tb:calc((100% - 60px) / 11)}
+  body.eb-tippen .eb-tasten .tr{gap:6px;margin-bottom:11.67px;padding:0}
+  body.eb-tippen .eb-tasten .tr:last-child{margin-bottom:0}
+  /* Eine Breite fuer alle Buchstaben, in jeder Reihe dieselbe. Die
+     kuerzeren Reihen stehen mittig - damit fallen Einzug und
+     Staffelung von selbst richtig aus, statt gerechnet zu werden. */
+  body.eb-tippen .eb-tasten .tk{flex:0 0 var(--tb);
+    border-radius:5px;font-size:23px;box-shadow:0 1px 0 #8A8E96}
+  /* Umschalt und Ruecktaste: feste Breite, 14,67 Abstand zu den
+     Buchstaben daneben - 6 davon traegt schon die Luecke der Reihe. */
+  body.eb-tippen .eb-tasten .tk.weit{flex:0 0 50px;font-size:20px}
+  body.eb-tippen .eb-tasten .tr > .tk.weit:first-child{margin-right:8.67px}
+  body.eb-tippen .eb-tasten[data-sprache="de"] .tr > .tk.weit:first-child{margin-right:16.67px}
+  body.eb-tippen .eb-tasten .tr > .tk.weit:last-child{margin-left:8.67px}
+  body.eb-tippen .eb-tasten[data-sprache="de"] .tr > .tk.weit:last-child{margin-left:16.67px}
+  /* Untere Reihe auf den Plaetzen von iOS: 48, 48, Rest, 102. */
+  body.eb-tippen .eb-tasten .tk.ebene,
+  body.eb-tippen .eb-tasten .tk.sprache{flex:0 0 48px;font-size:13px}
+  body.eb-tippen .eb-tasten .tk.raum{flex:1 1 auto;font-size:15px}
+  body.eb-tippen .eb-tasten .tk.senden{flex:0 0 102px;font-size:15px}
+  body.eb-tippen .eb-tasten[data-sprache="de"] .tk{font-size:21px}
+  body.eb-tippen .eb-tasten[data-ebene="zeichen"] .tk{font-size:19px}
+  /* Gehaltene Leertaste: Das Tastenfeld wird zum Schiebefeld. Die
+     Beschriftung tritt zurueck, damit sichtbar ist, dass jetzt nicht
+     getippt, sondern gezogen wird - iOS macht es genauso. */
+  body.eb-tippen .eb-tasten[data-schieben="an"] .tk{color:transparent;
+    background:#C9CDD4;box-shadow:none}
+  body.eb-tippen .eb-tasten[data-schieben="an"] .tk.senden{background:#C9CDD4}
+  /* ---- Quer gehalten ----
+     Karte links, Tastenfeld rechts. Uebereinander ist kein Platz: 430
+     Punkte Hoehe tragen keine Karte und vier Tastenreihen zugleich.
+     Diese Regeln stehen absichtlich am Ende - sie ueberschreiben die
+     Grundform des Tastenfelds weiter oben. */
+  @media (max-height:500px) and (pointer:coarse){
+    body.eb-tippen,
+    body.eb-tippen[data-eb-antwort="bewertet"]{padding-bottom:0;padding-right:46%}
+    body.eb-tippen .round-progress{display:none}
+    /* Quer traegt die Zeile den Pfeil ohne Wort - die linke Spalte ist
+       schmaler, als ihre Breite vermuten laesst. */
+    body.eb-runde #back::after{content:none}
+    body.eb-runde .sessionbar .switch{padding-left:7px;padding-right:7px}
+    body.eb-tippen .eb-tasten{top:0;left:auto;right:0;bottom:0;width:46%;
+      border-radius:12px 0 0 12px;display:flex;flex-direction:column;
+      justify-content:center;--tk:40px;
+      padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
+    body.eb-tippen .eb-tasten .tk{font-size:18px}
+    body.eb-tippen .eb-tasten .tr{margin-bottom:5px}
+    body.eb-tippen .controls{left:auto;right:0;width:46%}
+    body.eb-tippen .vcard{margin-bottom:0}
+    body.eb-tippen .stage{margin-bottom:0}
+  }
+}
