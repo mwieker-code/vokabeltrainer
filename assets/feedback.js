@@ -1,8 +1,13 @@
 (function(){
 'use strict';
 const key='vt:feedback:v1',motion=window.matchMedia?matchMedia('(prefers-reduced-motion: reduce)'):null;
-let prefs={sound:false,animation:true},ctx;
-try{const p=JSON.parse(localStorage.getItem(key));if(p){prefs.sound=p.sound===true;prefs.animation=p.animation!==false;}}catch(e){}
+/* Toene sind an, bis jemand sie abschaltet. Vorher waren sie aus, und
+   der einzige Schalter steht ganz unten auf der Seite - ein Kind
+   findet ihn nicht und erfaehrt nie, dass es ihn gibt. Wer sie
+   ausschaltet, behaelt das: gespeichert wird nur die ausdrueckliche
+   Wahl, und sound!==false laesst sie stehen. */
+let prefs={sound:true,animation:true},ctx;
+try{const p=JSON.parse(localStorage.getItem(key));if(p){prefs.sound=p.sound!==false;prefs.animation=p.animation!==false;}}catch(e){}
 function save(){try{localStorage.setItem(key,JSON.stringify(prefs));}catch(e){}sync();}
 function sync(){document.documentElement.classList.toggle('feedback-motion',prefs.animation&&!motion?.matches);document.querySelectorAll('[data-feedback-pref]').forEach(b=>{const k=b.dataset.feedbackPref;b.setAttribute('aria-pressed',String(prefs[k]));b.textContent=(k==='sound'?'Töne':'Animationen')+': '+(prefs[k]?'an':'aus');});}
 /* =========================================================================
