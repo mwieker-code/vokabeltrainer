@@ -233,6 +233,43 @@ ${vocabulary}`;
       const bar=document.createElement('section');bar.className='selection-bar';bar.hidden=true;
       bar.innerHTML='<strong id="selectionCount" role="status"></strong><div class="selection-actions"><button id="selectionReview">Auswahl ansehen</button><button id="selectionClear">Aufheben</button><button id="selectionHits" hidden></button><button id="selectionCSV">CSV herunterladen</button><button id="selectionBoard">Tafel-Modus</button><button id="selectionAssignment">Hausaufgaben-Link</button><button id="selectionPrompt" class="primary">Test-Prompt erstellen</button></div>';
       box.after(bar);let active=false,review=false;const headings=[];
+      /* =====================================================================
+         DRUCKEN, WAS AUSGEWAEHLT IST
+         Ein zugeklappter Abschnitt druckt nichts - so steht es in der
+         Druckfassung der Liste, und so soll es auch sein, sonst kaeme
+         bei jedem Ausdruck der ganze Jahrgang mit. Wer aber Vokabeln
+         anhakt, ohne die Abschnitte zu oeffnen, bekam ein leeres Blatt:
+         99 angehakte Vokabeln, 16 zugeklappte Abschnitte, null Zeilen
+         auf dem Papier. Erst "Auswahl ansehen" klappte sie auf.
+
+         Der Umweg entfaellt. Eine bestehende Auswahl zaehlt beim
+         Drucken wie die Ansicht: Ihre Abschnitte gehen auf, alles
+         andere bleibt fort. Danach steht die Liste wieder, wie sie
+         stand - welcher Abschnitt offen war, wird vorher gemerkt.
+
+         Zwei Wege hinein, weil kein einzelner ueberall traegt: Safari
+         kannte beforeprint lange nicht, meldet den Wechsel aber ueber
+         matchMedia. Beide rufen dasselbe, und der zweite Ruf tut
+         nichts. */
+      let druckt=false, warOffen=null;
+      const nurAuswahl=()=>(review||druckt)&&csvSelected.size>0;
+      function drucken(an){
+        if(druckt===an)return;
+        druckt=an;
+        if(an){
+          warOffen=[...box.querySelectorAll('[data-sec]')].map(sec=>sec.open);
+          refresh();
+        }else{
+          refresh();
+          if(warOffen)[...box.querySelectorAll('[data-sec]')]
+            .forEach((sec,i)=>{sec.open=warOffen[i];});
+          warOffen=null;
+        }
+      }
+      window.addEventListener('beforeprint',()=>drucken(true));
+      window.addEventListener('afterprint',()=>drucken(false));
+      const druckfenster=window.matchMedia&&matchMedia('print');
+      druckfenster?.addEventListener?.('change',e=>drucken(e.matches));
       {
         const selectionYear=Number(KEY.match(/^vt(\d+):/)?.[1])||'oberstufe';
         const selectionLabel=selectionYear==='oberstufe'?'Oberstufe':'Year '+selectionYear;
@@ -272,8 +309,8 @@ ${vocabulary}`;
         bar.querySelector('#selectionCount').textContent=csvSelected.size+' Vokabeln ausgewählt';
         ['selectionCSV','selectionBoard','selectionAssignment','selectionPrompt','selectionReview','selectionClear'].forEach(id=>bar.querySelector('#'+id).disabled=!csvSelected.size);
         bar.querySelector('#selectionReview').textContent=review?'Zur gesamten Liste':'Auswahl ansehen';bar.querySelector('#selectionReview').disabled=false;
-        box.querySelectorAll('.vrow').forEach(row=>{row.classList.toggle('selection-hidden',review&&!csvSelected.has(row.querySelector('[data-csv-key]').dataset.csvKey));});
-        box.querySelectorAll('[data-sec]').forEach(sec=>{sec.classList.toggle('selection-hidden',review&&![...sec.querySelectorAll('[data-csv-key]')].some(i=>csvSelected.has(i.dataset.csvKey)));if(review)sec.open=true;});
+        box.querySelectorAll('.vrow').forEach(row=>{row.classList.toggle('selection-hidden',nurAuswahl()&&!csvSelected.has(row.querySelector('[data-csv-key]').dataset.csvKey));});
+        box.querySelectorAll('[data-sec]').forEach(sec=>{sec.classList.toggle('selection-hidden',nurAuswahl()&&![...sec.querySelectorAll('[data-csv-key]')].some(i=>csvSelected.has(i.dataset.csvKey)));if(nurAuswahl())sec.open=true;});
         box.querySelectorAll('.selection-unit').forEach(h=>{h.hidden=!active||review||!!q.value.trim();});
         const hits=[...box.querySelectorAll('.vrow:not(.off) [data-csv-key]')];const hitButton=bar.querySelector('#selectionHits');hitButton.hidden=!q.value.trim()||review;hitButton.textContent='Alle '+hits.length+' Suchtreffer auswählen';hitButton.disabled=!hits.length;
       }
