@@ -753,3 +753,42 @@ body{-webkit-tap-highlight-color:transparent}
   .kopf-blatt{min-width:220px}
 }
 @media print{.kopf-menue{display:none}}
+
+/* =========================================================================
+   PLATZ FUER DIE EINGABE
+   Die Stellschrauben zur Kaskade in learning.js. Jede Stufe nimmt sich
+   nur, was sie braucht - Schriftgroessen und Zeilenabstaende bleiben,
+   es faellt Polster weg.
+   ========================================================================= */
+@media (min-width:621px){
+  /* Stufe 1 kostet nichts und gilt in jeder Tipp- und Lueckenrunde:
+     Unter dem Pruefen-Knopf, der ohnehin am Rand klebt, stehen 64
+     Punkte Fusspolster. Und die Karte haelt 250 Punkte Mindesthoehe
+     frei, wo ihr Inhalt beim Tippen 148 misst - 90 Punkte leerer Boden
+     unter dem Eingabefeld. Auf dem Telefon faellt diese Mindesthoehe
+     schon heute fort. */
+  body.platz-frei .wrap{padding-top:18px;padding-bottom:12px}
+  body.platz-frei #view > .controls{padding-bottom:6px}
+  body.platz-frei .vcard{min-height:0}
+  body.platz-frei .ascent-panel{margin:8px auto 10px}
+
+  /* Stufe 2: Die Lernfaecher klappen zu. Die Zusammenfassung bleibt
+     stehen - man sieht, dass es sie gibt. Wer sie aufklappt, dem
+     klappt die Seite sie nicht wieder zu. */
+  body.platz-fach .box-details{margin:8px 0 10px}
+  body.platz-fach .box-details > summary{opacity:.75;padding:10px 14px}
+
+  /* Stufe 3: Die Kopfzeile wird kompakt. Zelt und Menue bleiben - nur
+     die Unterzeile geht, und das Zelt wird kleiner. */
+  body.platz-kopf .masthead{padding-bottom:8px;margin-bottom:14px;gap:12px}
+  body.platz-kopf .masthead .brandmark{width:40px;height:40px}
+  body.platz-kopf .masthead h1{font-size:clamp(22px,2.4vw,28px)}
+  body.platz-kopf .masthead .sub{display:none}
+
+  /* Stufe 4: Die Karte wird knapper gesetzt. */
+  body.platz-karte .vcard{padding:20px 24px}
+  body.platz-karte .prompt{font-size:32px}
+  body.platz-karte .cloze{font-size:20px}
+  body.platz-karte .round-progress{margin:3px 0}
+  body.platz-karte .sessionbar{margin-bottom:10px}
+}

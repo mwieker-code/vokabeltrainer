@@ -2100,9 +2100,184 @@ ${vocabulary}`;
     window.addEventListener('load',einraeumen);
   }
 
+  /* =========================================================================
+     PLATZ FUER DIE EINGABE
+     Am Rechner endete das Eingabefeld unter dem Fensterrand: Die Seite
+     ist beim Tippen 1273 Punkte hoch, ein MacBook Air zeigt 900. Das
+     Feld endete bei 983 - 83 Punkte zu tief, auf einem flachen
+     16:9-Fenster 167. Wer tippen wollte, musste erst scrollen. Auf dem
+     Telefon war das nie ein Problem: Dort ist die Kopfzeile in der
+     Runde ohnehin fort und der Berg misst sich am Tastenfeld.
+
+     Feste Zahlen helfen hier nicht. Ein 16:9-Bildschirm ist flach, ein
+     iPad hoch, ein Fenster kann jede Form haben. Gemessen wird deshalb
+     nach jedem Wort, und nachgegeben wird in dieser Reihenfolge:
+
+       1 (gilt immer, kostet nichts) 64 Punkte Fusspolster unter dem
+         Knopf, der ohnehin am Rand klebt, und 90 Punkte leerer Boden
+         in der Karte, die dort nur wegen einer Mindesthoehe stehen -
+         beim Tippen misst ihr Inhalt 148 von 250. Auf dem Telefon
+         faellt diese Mindesthoehe schon heute fort.
+       2 Die Lernfaecher klappen zu. Sie sind Auskunft, die man beim
+         Tippen nicht braucht. Wer sie von Hand aufklappt, dem klappt
+         die Seite sie nicht wieder zu.
+       3 Die Kopfzeile wird kompakt. Zelt und Menue bleiben.
+       4 Die Karte wird knapper gesetzt.
+       5 Reicht auch das nicht - ein sehr flaches Fenster gibt nicht
+         mehr her -, holt die Seite wenigstens das Feld in den Blick.
+
+     Der Berg passt sich dazwischen stufenlos an, und zwar ueber seine
+     Breite: Eine Hoehe ohne Breite liesse die Zeichnung in ihrem
+     Kasten schrumpfen und Luft daneben stehen. Nach unten ist bei 300
+     Punkten Breite Schluss, darunter bricht die Zeile unter dem Berg
+     um.
+
+     Zwei Fallen, beide beim Bauen hineingelaufen:
+
+     Gemessen wird nicht der Abstand zum Rand und dann aufaddiert - das
+     war schon beim Telefon der Fehler, der sechs Durchlaeufe brauchte:
+     Die Hoehe zu aendern verschiebt genau den Abstand, den man gerade
+     gemessen hat. Gerechnet wird mit dem Rest, und der haengt nicht am
+     Berg.
+
+     Und nicht mit scrollHeight: Das wird nie kleiner als das Fenster.
+     Auf einem hohen Bildschirm meldete es 1440 statt der 937, die der
+     Inhalt braucht - der Berg blieb dort winzig, obwohl reichlich
+     Platz war. Die Unterkante des Satzspiegels sagt die Wahrheit.
+     ========================================================================= */
+  const PLATZ_LUFT = 14;
+  const PLATZ_MIN  = 142;      /* 300 Punkte Breite, geteilt durch 380/180 */
+  const PLATZ_MAX  = 246;      /* 520 Punkte Breite - der heutige Wert */
+  /* Die Kaskade hoert nicht auf, sobald das Feld sitzt, sondern erst,
+     wenn auch der Berg eine anstaendige Groesse hat. Sonst blieb er
+     auf seinem Mindestmass stehen, obwohl daneben Auskunft stand, die
+     beim Tippen niemand braucht: Zuerst raeumt die Seite die
+     Lernfaecher weg, dann die Unterzeile der Kopfzeile - und was frei
+     wird, bekommt der Berg. */
+  const PLATZ_WUNSCH = 200;
+  const PLATZ_FORM = 380/180;
+  let fachHandisch = false, platzLaeuft = false;
+
+  const amRechner = () => matchMedia('(min-width:621px)').matches
+                       && !document.body.classList.contains('eb-runde');
+  const inTipprunde = () => document.body.classList.contains('ascent-active');
+  const fachBox = () => document.querySelector('.box-details');
+  /* Die Blitzrunde bringt ihr eigenes Feld mit - dasselbe Paar wie im
+     Tastenfeld weiter oben, dort aber in einem eigenen Block. */
+  const platzFeld = () =>
+    document.getElementById('typeIn') || document.getElementById('pvTypeIn');
+
+  function steuerHoehe(){
+    const l = document.querySelector('#view .controls');
+    return l ? l.getBoundingClientRect().height : 0;
+  }
+  /* Wie viele Punkte zu tief sitzt das Feld? Gerechnet wird mit der
+     Lage im Dokument, nicht im Fenster: Steht die Seite schon
+     gescrollt, saehe im Fenster alles gut aus - und genau das Scrollen
+     war der Beschwerdegrund. */
+  function fehltUnten(){
+    const f = platzFeld();
+    if(!f) return 0;
+    const unten = f.getBoundingClientRect().bottom + window.scrollY;
+    return Math.round(unten - (innerHeight - steuerHoehe() - PLATZ_LUFT));
+  }
+  function fachStellen(zu){
+    const d = fachBox(); if(!d) return;
+    if(zu && d.open && !fachHandisch){ d.dataset.platz = 'zu'; d.open = false; }
+    if(!zu && !d.open && d.dataset.platz === 'zu'){ delete d.dataset.platz; d.open = true; }
+  }
+  function bergStellen(){
+    const p = document.querySelector('.ascent-panel'); if(!p) return PLATZ_MAX;
+    const svg = p.querySelector('.mobile-landscape'); if(!svg) return PLATZ_MAX;
+    const wrap = document.querySelector('.wrap'); if(!wrap) return PLATZ_MAX;
+    const ende = wrap.getBoundingClientRect().bottom + window.scrollY;
+    const hoch = p.getBoundingClientRect().height;
+    const fuss = hoch - svg.getBoundingClientRect().height;   /* Zeile darunter */
+    const rest = ende - hoch;                                 /* haengt nicht am Berg */
+    const platz = innerHeight - rest - PLATZ_LUFT - fuss;
+    const hoehe = Math.max(PLATZ_MIN, Math.min(PLATZ_MAX, Math.round(platz)));
+    const breite = Math.round(hoehe * PLATZ_FORM) + 'px';
+    if(p.style.maxWidth !== breite) p.style.maxWidth = breite;
+    return hoehe;
+  }
+  /* Geschrieben wird nur, was sich aendert. Sonst schreibt die Kaskade
+     bei jedem Durchlauf dieselbe Klasse zurueck, der Beobachter
+     schlaegt darauf an und stoesst den naechsten Durchlauf an - ein
+     Kreisel, der nie zur Ruhe kommt. */
+  function klasse(name, an){
+    const hat = document.body.classList.contains(name);
+    if(an && !hat) document.body.classList.add(name);
+    else if(!an && hat) document.body.classList.remove(name);
+  }
+  function platzAufraeumen(){
+    for(const k of ['platz-frei','platz-fach','platz-kopf','platz-karte']) klasse(k, false);
+    fachStellen(false);
+    const p = document.querySelector('.ascent-panel');
+    if(p && p.style.maxWidth) p.style.removeProperty('max-width');
+  }
+  function platzSchaffen(){
+    if(platzLaeuft || !document.body) return;
+    if(!amRechner() || !inTipprunde()){ platzAufraeumen(); return; }
+    platzLaeuft = true;
+    let stufe = 1;
+    for(; stufe <= 4; stufe++){
+      klasse('platz-frei',  true);
+      klasse('platz-fach',  stufe >= 2);
+      klasse('platz-kopf',  stufe >= 3);
+      klasse('platz-karte', stufe >= 4);
+      fachStellen(stufe >= 2);
+      const hoehe = bergStellen();
+      if(fehltUnten() <= 0 && hoehe >= PLATZ_WUNSCH) break;
+    }
+    if(stufe > 4){
+      const f = platzFeld();
+      if(f) f.scrollIntoView({block:'center'});
+    }
+    platzLaeuft = false;
+  }
+  /* Kein Haken in fremdem Code: Ein Beobachter auf der Ansicht faengt
+     jede Aenderung - neues Wort, Korrektur, Moduswechsel -, der
+     Fensterwechsel kommt dazu. Zwei Bilder Verzoegerung buendeln die
+     Salven, die beim Zeichnen entstehen. */
+  let platzGeplant = false;
+  function platzAnstossen(){
+    if(platzGeplant) return;
+    platzGeplant = true;
+    const dann = () => { platzGeplant = false; platzSchaffen(); };
+    /* Zwei Bilder Verzoegerung buendeln die Salven, die beim Zeichnen
+       entstehen. Wo es keine Bilder gibt - in der Pruefumgebung, in
+       sehr alten Browsern -, tut es ein kurzer Zeitgeber. */
+    if(typeof requestAnimationFrame === 'function')
+      requestAnimationFrame(() => requestAnimationFrame(dann));
+    else setTimeout(dann, 32);
+  }
+  /* Der Handgriff wird am Klick erkannt, nicht am toggle-Ereignis: Die
+     Seite baut die Lernfaecher bei jedem Wort neu auf und setzt sie
+     dabei offen - das loest toggle aus und galt als Handgriff. Die
+     Faecher klappten deshalb kein einziges Mal zu. */
+  function platzBeobachten(){
+    if(typeof ResizeObserver === 'function'){
+      const view = document.getElementById('view');
+      if(view) new ResizeObserver(platzAnstossen).observe(view);
+    }
+    if(typeof MutationObserver === 'function')
+      new MutationObserver(platzAnstossen).observe(document.body,
+        {attributes:true, attributeFilter:['class','data-eb-antwort']});
+    addEventListener('resize', platzAnstossen);
+    addEventListener('orientationchange', platzAnstossen);
+    document.addEventListener('click', e => {
+      const s = e.target.closest && e.target.closest('.box-details > summary');
+      if(!s) return;
+      if(!s.parentElement.open) fachHandisch = true;
+      platzAnstossen();
+    }, true);
+    platzAnstossen();
+  }
+
   readAssignment();
   kopfzeile();
   render();
+  platzBeobachten();
   fassungPruefen();
   helferAnmelden();
 })();
