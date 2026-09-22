@@ -96,3 +96,34 @@ a.bili-level:focus-visible{outline:3px solid var(--unit);outline-offset:3px}
 @media (prefers-reduced-motion: no-preference){
   #cards .card:active,.bili-head:active{transform:scale(.985);transition-duration:80ms}
 }
+
+/* =========================================================================
+   DIE STARTSEITE AUF EINEN BLICK
+   Gemessen am 22.09.: Die Startseite ist 1164 Punkte hoch. Ein MacBook
+   Air zeigt 900, ein MacBook Pro 14 zeigt 982 - der braune Bili-Streifen
+   unten wurde angeschnitten. Nur ein Studio Display zeigte alles.
+
+   Die Kacheln tragen 769 der 1164 Punkte. Ihre Mindesthoehe stand fest
+   auf 185, was auf einem hohen Bildschirm grosszuegig aussieht und auf
+   einem flachen die Seite sprengt. Sie waechst jetzt mit dem Fenster
+   mit: nach oben auf dem heutigen Wert begrenzt, damit sich auf grossen
+   Bildschirmen nichts aendert, nach unten begrenzt, damit die Kachel
+   nicht zum Streifen wird. Am MacBook Air passt die Seite danach mit 19
+   Punkten Luft.
+   ========================================================================= */
+@media (min-width:621px){
+  #cards .card{min-height:clamp(104px,13vh,185px);
+    padding-top:clamp(16px,2vh,25px);padding-bottom:clamp(16px,2vh,25px)}
+  #cards .card:last-child{min-height:clamp(88px,11vh,160px)}
+  #cards{gap:clamp(12px,1.6vh,18px)}
+  /* Die Zeichnung auf der Kachel steht fest bei 76 Punkten, 42 von
+     oben. In der niedrigeren Kachel stiesse sie mit dem Pfeil unten
+     rechts zusammen, also rueckt sie mit hoch und wird kleiner. */
+  #cards .card .menu-art{width:clamp(44px,7vh,76px);height:clamp(44px,7vh,76px);
+    top:clamp(16px,2.8vh,42px)}
+  /* Kopfzeile, Fusspolster und Fusszeile geben im flachen Fenster mit nach. */
+  .wrap{padding-top:clamp(20px,3vh,40px);padding-bottom:clamp(20px,4vh,64px)}
+  .masthead{margin-bottom:clamp(16px,2.6vh,28px);padding-bottom:clamp(6px,1.2vh,10px)}
+  .masthead .brandmark{width:clamp(52px,7vh,82px);height:clamp(52px,7vh,82px)}
+  .foot{margin-top:clamp(14px,2.4vh,36px)}
+}
