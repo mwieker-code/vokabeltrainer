@@ -36,6 +36,20 @@ for(const seite of seiten){
   assert.ok(marke>html.lastIndexOf('<link rel="stylesheet" href='),kurz+': nacht-marke.css steht nicht zuletzt');
   for(const m of html.matchAll(/<link rel="stylesheet"[^>]*data-nacht[^>]*>|<style[^>]*data-nacht[^>]*>/g))
     assert.match(m[0],/media="screen"/,kurz+': Nachtfarben ohne media="screen" - sie traefen den Druck');
+  /* Hell oder Nacht: Der Schalter steht vor dem ersten Stylesheet, und
+     keine dunkle Regel gilt, wenn html data-thema="hell" traegt. */
+  const thema=html.indexOf('assets/thema.js');
+  assert.ok(thema>0&&thema<html.search(/<link rel="stylesheet"|<style/),kurz+': thema.js fehlt oder steht nach den Stylesheets');
+  for(const m of html.matchAll(/<style media="screen" data-nacht>([\s\S]*?)<\/style>/g))
+    for(const regel of m[1].matchAll(/(?:^|})\s*([^@{}][^{}]*)\{/g))
+      if(!/^(from|to|\d|@)/.test(regel[1].trim()))
+        assert.match(regel[1],/data-thema="hell"/,kurz+': dunkle Regel gilt auch im Hellen: '+regel[1].trim());
+}
+for(const datei of fs.readdirSync(path.join(root,'assets')).filter(f=>f.endsWith('-nacht.css'))){
+  const css=fs.readFileSync(path.join(root,'assets',datei),'utf8').replace(/\/\*[\s\S]*?\*\//g,'');
+  for(const regel of css.matchAll(/(?:^|})\s*([^@{}][^{}]*)\{/g))
+    if(!/^(from|to|\d|@)/.test(regel[1].trim()))
+      assert.match(regel[1],/data-thema="hell"/,datei+': dunkle Regel gilt auch im Hellen: '+regel[1].trim());
 }
 assert.ok(gezaehlt>=12,'nur '+gezaehlt+' Seiten mit Nachtfarben gefunden');
 
@@ -51,5 +65,8 @@ const start=fs.readFileSync(path.join(root,'index.html'),'utf8');
 assert.match(start,/--night:#0D1017/,'Startseite ohne Nachtgrund');
 assert.ok(!/Lager \d|Fünf Lager|Lernfächer/.test(start),'Startseite zeigt die Lernfaecher');
 assert.match(start,/fonts\.css\?v=\d+/,'Startseite laedt die Schriften nicht');
+assert.match(start,/<script src="assets\/thema\.js\?v=[^"]+"><\/script>[\s\S]*<style>/,'Startseite setzt Hell oder Nacht nicht vor den Stilen');
+assert.match(start,/:root\[data-thema="hell"\]\{/,'Startseite ohne helle Farben');
+assert.match(start,/data-thema-knopf/,'Startseite ohne Schalter fuer Hell und Nacht');
 
 console.log('Nachtaufstieg: Gegenstuecke aktuell, Marke auf '+gezaehlt+' Seiten, Druck unberuehrt');
