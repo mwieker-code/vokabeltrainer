@@ -232,23 +232,30 @@ a.subject .subject-name{color:#fff}
   .hero{padding:26px 0 8px;gap:0}
   .eyebrow{font-size:11px;letter-spacing:.1em;margin-bottom:16px}
   .cta,.ridge{display:none}
-  .section{padding-top:30px}
-  .section-head{margin-bottom:14px}
+  .section{padding-top:22px}
+  .section-head{margin-bottom:10px}
+  .section-head h2{font-size:22px;letter-spacing:-.02em}
   .section-head p{display:none}
   /* Die Etappen stehen direkt unter dem Titel - ihre Ueberschrift kostete
      die Zeile, mit der die letzte Kachel noch ins Bild passt. */
   #jahrgaenge .section-head{display:none}
-  .tiles,.bili{grid-template-columns:1fr;gap:10px}
-  .tile,.tile.summit{min-height:0;padding:14px 16px;border-radius:18px;flex-direction:row;align-items:center;gap:12px}
-  .tile-top{order:2;align-items:center}
-  .tile-top .stage,.tile-desc,.go{display:none}
-  .tile-body{flex:1 1 auto;align-items:center}
-  .tile-name,.tile.summit .tile-name{font-size:26px;letter-spacing:-.03em}
-  .tile-kicker{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.85;margin-top:3px}
-  .etappe-art{width:38px;height:38px}
-  .subject{min-height:0;padding:14px 16px;border-radius:18px}
-  .subject .bili-art{width:38px;height:38px}
-  .subject-name{font-size:22px}
+  /* Zwei Etappen nebeneinander wie auf dem Desktop, der Gipfel ueber die
+     ganze Breite; darunter die Sachfaecher zu dritt. So passen Etappen und
+     Bili zusammen ins Bild. */
+  .tiles{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .bili{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .tile,.tile.summit{display:block;min-height:0;padding:12px 14px;border-radius:18px}
+  .tile-top{display:none}
+  .tile-desc{display:none}
+  .tile-body{display:block}
+  .tile-name,.tile.summit .tile-name{font-size:24px;letter-spacing:-.03em}
+  .tile-kicker{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;opacity:.85;margin-top:4px}
+  .etappe-art{position:absolute;right:10px;top:10px;width:30px;height:30px;opacity:.85}
+  .subject{min-height:0;flex-direction:column;align-items:flex-start;gap:6px;padding:12px;border-radius:16px}
+  .subject .bili-art{width:28px;height:28px}
+  .subject-name{font-size:18px}
+  .subject-meta{display:none}
+  .pill{margin-top:4px;font-size:9px;padding:3px 6px;letter-spacing:.04em}
   .fuss{margin-top:40px}
 }
 @media (min-width:621px){.tile-kicker{display:none}}
