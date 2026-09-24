@@ -692,9 +692,23 @@ ${vocabulary}`;
       }
     }
   };
+  /* VORSCHAU-ENTWURF: Rueckblick am Rundenende (A/B/C) */
+  function rueckblick(){
+    const woerter=S.queue.slice(0,S.initialCount);
+    const falsch=woerter.filter(v=>S.missed.has(v)), richtig=woerter.filter(v=>!S.missed.has(v));
+    const art=window.__ansicht||'A';
+    const zeile=(v,ok)=>'<li class="rb-'+(ok?'ok':'no')+'"><span class="rb-zeichen" aria-hidden="true">'+(ok?'✓':'✗')+'</span><span class="rb-en">'+safe(v.en)+'</span><span class="rb-de">'+safe(v.de)+'</span></li>';
+    if(art==='A') return '<section class="rueckblick rb-a">'
+      +(falsch.length?'<h3 class="rb-kopf rb-no">Weiterüben · '+falsch.length+'</h3><ul class="rb-chips">'+falsch.map(v=>'<li class="rb-no">'+safe(v.en)+'</li>').join('')+'</ul>':'')
+      +(richtig.length?'<h3 class="rb-kopf rb-ok">Gewusst · '+richtig.length+'</h3><ul class="rb-chips">'+richtig.map(v=>'<li class="rb-ok">'+safe(v.en)+'</li>').join('')+'</ul>':'')+'</section>';
+    if(art==='B') return '<section class="rueckblick rb-b"><ul class="rb-liste">'+woerter.map(v=>zeile(v,!S.missed.has(v))).join('')+'</ul></section>';
+    return '<section class="rueckblick rb-c">'
+      +(falsch.length?'<h3 class="rb-kopf rb-no">Weiterüben · '+falsch.length+'</h3><ul class="rb-liste">'+falsch.map(v=>zeile(v,false)).join('')+'</ul>':'')
+      +(richtig.length?'<details class="rb-gewusst"><summary class="rb-kopf rb-ok">Gewusst · '+richtig.length+'</summary><ul class="rb-liste">'+richtig.map(v=>zeile(v,true)).join('')+'</ul></details>':'')+'</section>';
+  }
   renderDone = function() {
     try{localStorage.removeItem(sessionKey);}catch(e){}
-    view.innerHTML='<div class="done"><div class="summary-number">'+S.initialCount+'</div><h2>Runde geschafft</h2><p>'+S.initialCount+' Wörter · '+S.seen+' Antworten<br>'+S.missed.size+' Wörter zum Weiterüben</p><div class="controls"><button class="primary" id="nextRound">Lernumfang wählen</button><button id="doneHome">Zur Übersicht</button></div></div>';
+    view.innerHTML='<div class="done"><div class="summary-number">'+S.initialCount+'</div><h2>Runde geschafft</h2><p>'+S.initialCount+' Wörter · '+S.seen+' Antworten<br>'+S.missed.size+' Wörter zum Weiterüben</p>'+rueckblick()+'<div class="controls"><button class="primary" id="nextRound">Lernumfang wählen</button><button id="doneHome">Zur Übersicht</button></div></div>';
     document.getElementById('doneHome').onclick=home;
     document.getElementById('nextRound').onclick=()=>setup(S.roundSource);
     updateFoot();
