@@ -1,11 +1,11 @@
 /* Automatisch erzeugt von tools/nacht.cjs aus year5/design/preview.css - nicht von Hand aendern.
    Dunkle Gegenstuecke der Farbregeln, nur fuer den Bildschirm. */
-.yeargroup[class*="y5u"]{border:1px solid color-mix(in srgb,var(--unit) 24%,#292E38)}
-.yeargroup .yearhead:hover{background-color:#151A2242}
-.yeargroup[open] .yearhead{border-bottom:1px solid #292E38B3}
-.box-details{border:1px solid #313C39}
-.box-details summary{color:#BBDCDA}
-.rail .slot{background:#171C25}
-.stage .vcard{border:1px solid #303E3A}
-.round-progress{color:#BCD9D6}
-.scope-options .topic.primary{color:#BADED7;border-color:#376257}
+:where(html:not([data-thema="hell"])) .yeargroup[class*="y5u"]{border:1px solid color-mix(in srgb,var(--unit) 24%,#292E38)}
+:where(html:not([data-thema="hell"])) .yeargroup .yearhead:hover{background-color:#151A2242}
+:where(html:not([data-thema="hell"])) .yeargroup[open] .yearhead{border-bottom:1px solid #292E38B3}
+:where(html:not([data-thema="hell"])) .box-details{border:1px solid #313C39}
+:where(html:not([data-thema="hell"])) .box-details summary{color:#BBDCDA}
+:where(html:not([data-thema="hell"])) .rail .slot{background:#171C25}
+:where(html:not([data-thema="hell"])) .stage .vcard{border:1px solid #303E3A}
+:where(html:not([data-thema="hell"])) .round-progress{color:#BCD9D6}
+:where(html:not([data-thema="hell"])) .scope-options .topic.primary{color:#BADED7;border-color:#376257}

@@ -1,5 +1,5 @@
 /* Automatisch erzeugt von tools/nacht.cjs aus assets/feedback.css - nicht von Hand aendern.
    Dunkle Gegenstuecke der Farbregeln, nur fuer den Bildschirm. */
-.feedback-settings button{border:1px solid #384F56;color:#C7DFEA}
-.feedback-settings button[aria-pressed="true"]{background:#13221F}
-.feedback-settings button:focus-visible{outline:3px solid #705334}
+:where(html:not([data-thema="hell"])) .feedback-settings button{border:1px solid #384F56;color:#C7DFEA}
+:where(html:not([data-thema="hell"])) .feedback-settings button[aria-pressed="true"]{background:#13221F}
+:where(html:not([data-thema="hell"])) .feedback-settings button:focus-visible{outline:3px solid #705334}

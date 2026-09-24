@@ -1,50 +1,50 @@
 /* Automatisch erzeugt von tools/nacht.cjs aus assets/learning.css - nicht von Hand aendern.
    Dunkle Gegenstuecke der Farbregeln, nur fuer den Bildschirm. */
-:root{--ink:#C8E0EA;--ink-soft:#BFD3DC}
-.dashboard .primary{color:#A8DDE7;border-color:#292E38}
-.dashboard .quiet{border-color:#285258}
-.correction>.correction-solution{background:#14201B;color:#C0E2CF}
-.correction small{color:#C5D5DD}
-.correction mark{background:#2C2000;color:#ECD5AF}
-.grammar-tile{border:1px solid #294446}
-.masthead{border-bottom:2px solid #344043}
-.masthead h1{color:#C7DFEA}
-.masthead .sub{color:#BFD1DA}
-.grammar-tile{background:#211B2A;border-color:#493B5C}
-.grammar-tile .t-name{color:#E1C5FF}
-.grammar-tile:hover{background:#251C30}
-.unit-actions button{color:#B8DCE4}
-.unit-actions .browse-practice{background:#132123}
-.unit-actions button:hover{color:#C0DFE7;background:#11272B}
-.test-prompt-dialog{color:#C6DFE9}
-.test-prompt-dialog fieldset{border:1px solid #324143}
-.test-prompt-dialog #promptError{color:#FFBEB2}
-#promptTense{color:#C7DFEA}
-.selection-files{border-top:1px solid #313C39}
-.assignment-dialog select,.assignment-dialog input{color:#C7DFEA}
-.assignment-hint{color:#C5D5DD}
-.qr-fullscreen{color:#D3E0E9}
-.qr-fullscreen-close{color:#C7DFEA}
-.qr-fullscreen-close:hover{background:#181D1E}
-.assignment-banner{border:1px solid #376257}
-.assignment-banner span{color:#B8DAD4}
-.assignment-banner button{color:#C7DFEA}
-.assignment-banner.stale{background:#251B16;border-color:#6D4637}
-.preview-modes .pv-blitz-start{background:#231A0E;border-color:#715035}
-.preview-modes .pv-blitz-start:hover{background:#2C1B01}
-.assignment-card{border-left:5px solid #376257}
-.assignment-card-meta{color:#B8DAD4}
-.assignment-bar{background:#192322}
-.assignment-progress-text{color:#C7DFEA}
-.assignment-card-stale{color:#FFBFAB}
-.assignment-card-actions button{color:#C7DFEA}
-.assignment-card-actions button:focus-visible{outline:3px solid #705334}
-:root{--ground:#1A1C19;--shadow-1:0 1px 2px #D3E0E90F;--shadow-2:0 3px 12px #D3E0E91A;--shadow-3:0 10px 28px #D3E0E929;--edge:#334E53;--tint-petrol:#162022;--tint-moss:#15211F;--tint-amber:#231A0F}
-@media (max-width:620px), (max-height:500px) and (pointer:coarse){.eb-tasten{background:#23262B}}
-@media (max-width:620px), (max-height:500px) and (pointer:coarse){.eb-tasten .tk{background:#151A22}}
-@media (max-width:620px), (max-height:500px) and (pointer:coarse){.eb-tasten .tk:active{background:#2A2E35}}
-@media (max-width:620px), (max-height:500px) and (pointer:coarse){.eb-tasten .tk.weit{background:#2D333B}}
-@media (max-width:620px), (max-height:500px) and (pointer:coarse){.eb-tasten .tk.sprache{background:#2D333B}}
-@media (max-width:620px), (max-height:500px) and (pointer:coarse){.eb-tasten .tk.ebene{background:#2D333B}}
-@media (max-width:620px), (max-height:500px) and (pointer:coarse){body.eb-tippen .eb-tasten[data-schieben="an"] .tk{background:#252930}}
-@media (max-width:620px), (max-height:500px) and (pointer:coarse){body.eb-tippen .eb-tasten[data-schieben="an"] .tk.senden{background:#252930}}
+:root:where(:not([data-thema="hell"])){--ink:#C8E0EA;--ink-soft:#BFD3DC}
+:where(html:not([data-thema="hell"])) .dashboard .primary{color:#A8DDE7;border-color:#292E38}
+:where(html:not([data-thema="hell"])) .dashboard .quiet{border-color:#285258}
+:where(html:not([data-thema="hell"])) .correction>.correction-solution{background:#14201B;color:#C0E2CF}
+:where(html:not([data-thema="hell"])) .correction small{color:#C5D5DD}
+:where(html:not([data-thema="hell"])) .correction mark{background:#2C2000;color:#ECD5AF}
+:where(html:not([data-thema="hell"])) .grammar-tile{border:1px solid #294446}
+:where(html:not([data-thema="hell"])) .masthead{border-bottom:2px solid #344043}
+:where(html:not([data-thema="hell"])) .masthead h1{color:#C7DFEA}
+:where(html:not([data-thema="hell"])) .masthead .sub{color:#BFD1DA}
+:where(html:not([data-thema="hell"])) .grammar-tile{background:#211B2A;border-color:#493B5C}
+:where(html:not([data-thema="hell"])) .grammar-tile .t-name{color:#E1C5FF}
+:where(html:not([data-thema="hell"])) .grammar-tile:hover{background:#251C30}
+:where(html:not([data-thema="hell"])) .unit-actions button{color:#B8DCE4}
+:where(html:not([data-thema="hell"])) .unit-actions .browse-practice{background:#132123}
+:where(html:not([data-thema="hell"])) .unit-actions button:hover{color:#C0DFE7;background:#11272B}
+:where(html:not([data-thema="hell"])) .test-prompt-dialog{color:#C6DFE9}
+:where(html:not([data-thema="hell"])) .test-prompt-dialog fieldset{border:1px solid #324143}
+:where(html:not([data-thema="hell"])) .test-prompt-dialog #promptError{color:#FFBEB2}
+:where(html:not([data-thema="hell"])) #promptTense{color:#C7DFEA}
+:where(html:not([data-thema="hell"])) .selection-files{border-top:1px solid #313C39}
+:where(html:not([data-thema="hell"])) .assignment-dialog select,:where(html:not([data-thema="hell"])) .assignment-dialog input{color:#C7DFEA}
+:where(html:not([data-thema="hell"])) .assignment-hint{color:#C5D5DD}
+:where(html:not([data-thema="hell"])) .qr-fullscreen{color:#D3E0E9}
+:where(html:not([data-thema="hell"])) .qr-fullscreen-close{color:#C7DFEA}
+:where(html:not([data-thema="hell"])) .qr-fullscreen-close:hover{background:#181D1E}
+:where(html:not([data-thema="hell"])) .assignment-banner{border:1px solid #376257}
+:where(html:not([data-thema="hell"])) .assignment-banner span{color:#B8DAD4}
+:where(html:not([data-thema="hell"])) .assignment-banner button{color:#C7DFEA}
+:where(html:not([data-thema="hell"])) .assignment-banner.stale{background:#251B16;border-color:#6D4637}
+:where(html:not([data-thema="hell"])) .preview-modes .pv-blitz-start{background:#231A0E;border-color:#715035}
+:where(html:not([data-thema="hell"])) .preview-modes .pv-blitz-start:hover{background:#2C1B01}
+:where(html:not([data-thema="hell"])) .assignment-card{border-left:5px solid #376257}
+:where(html:not([data-thema="hell"])) .assignment-card-meta{color:#B8DAD4}
+:where(html:not([data-thema="hell"])) .assignment-bar{background:#192322}
+:where(html:not([data-thema="hell"])) .assignment-progress-text{color:#C7DFEA}
+:where(html:not([data-thema="hell"])) .assignment-card-stale{color:#FFBFAB}
+:where(html:not([data-thema="hell"])) .assignment-card-actions button{color:#C7DFEA}
+:where(html:not([data-thema="hell"])) .assignment-card-actions button:focus-visible{outline:3px solid #705334}
+:root:where(:not([data-thema="hell"])){--ground:#1A1C19;--shadow-1:0 1px 2px #D3E0E90F;--shadow-2:0 3px 12px #D3E0E91A;--shadow-3:0 10px 28px #D3E0E929;--edge:#334E53;--tint-petrol:#162022;--tint-moss:#15211F;--tint-amber:#231A0F}
+@media (max-width:620px), (max-height:500px) and (pointer:coarse){:where(html:not([data-thema="hell"])) .eb-tasten{background:#23262B}}
+@media (max-width:620px), (max-height:500px) and (pointer:coarse){:where(html:not([data-thema="hell"])) .eb-tasten .tk{background:#151A22}}
+@media (max-width:620px), (max-height:500px) and (pointer:coarse){:where(html:not([data-thema="hell"])) .eb-tasten .tk:active{background:#2A2E35}}
+@media (max-width:620px), (max-height:500px) and (pointer:coarse){:where(html:not([data-thema="hell"])) .eb-tasten .tk.weit{background:#2D333B}}
+@media (max-width:620px), (max-height:500px) and (pointer:coarse){:where(html:not([data-thema="hell"])) .eb-tasten .tk.sprache{background:#2D333B}}
+@media (max-width:620px), (max-height:500px) and (pointer:coarse){:where(html:not([data-thema="hell"])) .eb-tasten .tk.ebene{background:#2D333B}}
+@media (max-width:620px), (max-height:500px) and (pointer:coarse){:where(html:not([data-thema="hell"])) body.eb-tippen .eb-tasten[data-schieben="an"] .tk{background:#252930}}
+@media (max-width:620px), (max-height:500px) and (pointer:coarse){:where(html:not([data-thema="hell"])) body.eb-tippen .eb-tasten[data-schieben="an"] .tk.senden{background:#252930}}

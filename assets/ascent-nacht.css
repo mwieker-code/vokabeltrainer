@@ -1,8 +1,8 @@
 /* Automatisch erzeugt von tools/nacht.cjs aus assets/ascent.css - nicht von Hand aendern.
    Dunkle Gegenstuecke der Farbregeln, nur fuer den Bildschirm. */
-.ascent-panel{background:#17231C;border:1px solid #323E35}
-.ascent-streak{background:#151A22E0}
-.ascent-footer{color:#BADECD;background:#1A1C15}
-.ascent-preview-note{color:#B5D0C2}
-@media(max-width:620px){body.ascent-active .eyebrow .ascent-direction-label{border:1px solid #334343;background:#161B24;color:#B5DBD3}}
-.ascent-gipfel .ascent-footer{background:#211A07;color:#EAC9A2}
+:where(html:not([data-thema="hell"])) .ascent-panel{background:#17231C;border:1px solid #323E35}
+:where(html:not([data-thema="hell"])) .ascent-streak{background:#151A22E0}
+:where(html:not([data-thema="hell"])) .ascent-footer{color:#BADECD;background:#1A1C15}
+:where(html:not([data-thema="hell"])) .ascent-preview-note{color:#B5D0C2}
+@media(max-width:620px){:where(html:not([data-thema="hell"])) body.ascent-active .eyebrow .ascent-direction-label{border:1px solid #334343;background:#161B24;color:#B5DBD3}}
+:where(html:not([data-thema="hell"])) .ascent-gipfel .ascent-footer{background:#211A07;color:#EAC9A2}

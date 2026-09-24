@@ -39,6 +39,7 @@ const path = require('node:path');
 
 const ROOT = path.resolve(__dirname, '..');
 const MARKE = 'assets/nacht-marke.css';
+const THEMA = 'assets/thema.js';
 
 /* ---------------------------------------------------------------- Farben */
 function srgbZuLinear(c){ c /= 255; return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); }
@@ -290,11 +291,36 @@ function gegenstueck(css){
     zeilen.push(letzte);
   }
   return zeilen.map(z => {
-    let r = z.sel + '{' + z.texte.join(';') + '}';
+    const bild = z.kontext.some(k => /^@(-webkit-)?keyframes|^@font-face|^@page/i.test(k));
+    let r = (bild ? z.sel : nurNachts(z.sel)) + '{' + z.texte.join(';') + '}';
     for (let i = z.kontext.length - 1; i >= 0; i--) r = z.kontext[i] + '{' + r + '}';
     return r;
   }).join('\n');
 }
+/* Hell oder Nacht waehlt assets/thema.js ueber html[data-thema]. Jede
+   dunkle Regel gilt nur, solange dort nicht "hell" steht. :where() zaehlt
+   nicht mit - die Staerke jeder Regel bleibt, wie sie war. */
+const NICHT_HELL = ':not([data-thema="hell"])';
+function teile(sel){
+  const teile = [];
+  let tiefe = 0, anfang = 0;
+  for (let i = 0; i < sel.length; i++){
+    const c = sel[i];
+    if (c === '(' || c === '[') tiefe++;
+    else if (c === ')' || c === ']') tiefe--;
+    else if (c === ',' && tiefe === 0){ teile.push(sel.slice(anfang, i)); anfang = i + 1; }
+  }
+  teile.push(sel.slice(anfang));
+  return teile.map(t => t.trim()).filter(Boolean);
+}
+function nurNachts(sel){
+  return teile(sel).map(t => {
+    const m = /^(:root|html)(?![\w-])/i.exec(t);
+    if (m) return m[1] + ':where(' + NICHT_HELL + ')' + t.slice(m[1].length);
+    return ':where(html' + NICHT_HELL + ') ' + t;
+  }).join(',');
+}
+
 const KOPF = '/* Automatisch erzeugt von tools/nacht.cjs aus {QUELLE} - nicht von Hand aendern.\n'
            + '   Dunkle Gegenstuecke der Farbregeln, nur fuer den Bildschirm. */\n';
 
@@ -323,8 +349,13 @@ function baue(){
     const ordner = path.dirname(seite);
     /* Alte Gegenstuecke entfernen - dann von vorn. */
     html = html.replace(/\n?<style media="screen" data-nacht>[\s\S]*?<\/style>/g, '')
-               .replace(/\n?<link rel="stylesheet" media="screen" data-nacht href="[^"]*">/g, '');
+               .replace(/\n?<link rel="stylesheet" media="screen" data-nacht href="[^"]*">/g, '')
+               .replace(/\n?<script data-nacht src="[^"]*"><\/script>/g, '');
     if (!/<link rel="stylesheet"|<style/.test(html)) continue;
+    /* 0. Der Schalter fuer Hell und Nacht vor dem ersten Stylesheet. */
+    const thema = path.relative(ordner, path.join(ROOT, THEMA)).split(path.sep).join('/');
+    const erstes = html.search(/<link rel="stylesheet"|<style/);
+    html = html.slice(0, erstes) + '<script data-nacht src="' + thema + '?v=' + v + '"></script>\n' + html.slice(erstes);
     /* 1. Jeder <style>-Block bekommt sein Gegenstueck dahinter. */
     html = html.replace(/<style>([\s\S]*?)<\/style>/g, (ganz, css) => {
       const g = gegenstueck(css);
@@ -368,4 +399,4 @@ if (require.main === module){
   }
   console.log(pruefen ? 'Nachtfarben aktuell.' : 'Nachtfarben geschrieben.');
 }
-module.exports = { baue, wandle, gegenstueck, parse };
+module.exports = { baue, wandle, gegenstueck, parse, nurNachts };
