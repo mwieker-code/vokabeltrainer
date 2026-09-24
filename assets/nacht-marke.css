@@ -4,20 +4,30 @@
    Von Hand geschrieben und als letzte Datei geladen, nur fuer den
    Bildschirm. Die umgerechneten Farben der alten Regeln kommen aus den
    *-nacht.css-Dateien (tools/nacht.cjs); hier steht, was die Marke
-   ausmacht: Nachtgrund, Alpengluehen, Gletscher, die beiden Schriften,
-   das Tastenfeld und der Berg ueber der Karte.
+   ausmacht: Nachthimmel mit Lichtern, Glaskarte, grosse Woerter,
+   Beschriftungen in Schreibmaschinenschrift, der Grat als Fortschritt,
+   die Faecher als Saeulen, das Tastenfeld.
+   Bewegung nur, wenn die Seite sie erlaubt (html.feedback-motion - der
+   Schalter "Animationen" im Menue und die Systemeinstellung).
    Dieselben Werte stehen auf der Startseite (index.html).
    ========================================================================= */
+
+/* ---------------------------------------------------------------- Marken */
 :root{
   --night:#0D1017; --surface:#161B24; --surface-2:#1C2331;
   --line:#232A37; --line-2:#2E3646; --line-3:#3A4355;
   --snow:#F3EFE6; --soft:#C9CFD9; --mute:#9AA3B2;
   --glow:#FF7A59; --glow-hi:#FF9478; --glacier:#8FE3D2;
+  --ok:#7FD6A4; --ok-tint:#7FD6A41F; --no:#FF8A70; --no-tint:#FF7A5921;
+  --glas:linear-gradient(160deg,#FFFFFF1C,#FFFFFF08);
+  --glas-rand:#FFFFFF24;
+  --glas-licht:inset 0 1px 0 #FFFFFF33;
+  --code:"JetBrains Mono",ui-monospace,"SF Mono",Consolas,monospace;
 
   --ground:var(--night); --card:var(--surface); --ink:var(--snow); --ink-soft:#AEB6C2;
   --rule:var(--line-2); --edge:var(--line-3);
   --petrol:var(--glacier); --brand:var(--glow);
-  --amber:#FFB27A; --moss:#7FD6A4;
+  --amber:#FFB27A; --moss:var(--ok);
   --tint-petrol:#14252A; --tint-moss:#15261F; --tint-amber:#2A1D12;
   --focus:var(--glacier);
   --sans:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -25,138 +35,336 @@
   --mono:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   color-scheme:dark;
 }
-html{background:var(--night)}
-body{background:var(--night);color:var(--ink);font-family:var(--sans)}
+html,html:root{background:var(--night)}
+body{background:transparent;color:var(--ink);font-family:var(--sans)}
 ::selection{background:#FF7A5966}
 a{color:var(--glacier)}
 :focus-visible{outline-color:var(--glacier)}
 
-/* ---- Kopfzeile ---- */
+/* Die Lichter hinter allem: ein kuehles links, das Alpengluehen rechts.
+   Fest und ohne Bewegung - sie kosten beim Scrollen nichts. */
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(55vmax 45vmax at -8% 22%,#2459A63D,transparent 70%),
+    radial-gradient(45vmax 40vmax at 108% 78%,#FF7A5926,transparent 70%)}
+
+/* Beschriftungen in Schreibmaschinenschrift, wie im Entwurf */
+.eyebrow,.slot .n,.slot .iv,.t-count,.listcount,.masthead .sub,.box-details summary,
+.ascent-footer,.vpos,.lnum,.lyear,.pos,.yeargroup .yearhead .tag,.selection-unit{
+  font-family:var(--code);letter-spacing:.08em}
+
+/* ------------------------------------------------------------- Kopfzeile */
 .masthead{border-bottom:1px solid var(--line)!important}
 .masthead .brandmark,.brand-link .brandmark{color:var(--glow)}
 .masthead h1{font-family:var(--serif);font-weight:700;letter-spacing:-.035em;color:var(--snow)}
 .masthead h1 .title-accent{color:var(--glow);font-weight:700}
-.masthead .sub{color:var(--mute);font-family:"JetBrains Mono",ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;font-size:12px}
+.masthead .sub{color:var(--mute);text-transform:uppercase;font-size:12px}
 a.home-link,a.grammar-back{background:var(--glow);border-color:var(--glow);color:var(--night);border-radius:999px}
 a.home-link:hover,a.home-link:focus,a.home-link:active,a.grammar-back:hover,a.grammar-back:focus,a.grammar-back:active{
   background:var(--glow-hi);border-color:var(--glow-hi);color:var(--night)}
-.kopf-knopf{background:var(--surface);border-color:var(--line-2);color:var(--snow)}
+.kopf-knopf{background:var(--glas);border:1px solid var(--glas-rand);color:var(--snow);border-radius:14px;box-shadow:var(--glas-licht)}
 .kopf-knopf:hover{border-color:var(--line-3)}
-.kopf-blatt{background:var(--surface);border-color:var(--line-2);color:var(--snow);box-shadow:0 24px 50px -18px #000C}
-.kopf-blatt button{color:var(--snow)}
-.kopf-blatt button:hover{background:var(--surface-2)}
+.kopf-blatt{background:#161B24F2;border:1px solid var(--glas-rand);color:var(--snow);border-radius:20px;
+  box-shadow:var(--glas-licht),0 30px 60px -20px #000D;-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
+.kopf-blatt button{color:var(--snow);border-radius:12px}
+.kopf-blatt button:hover{background:#FFFFFF0F}
 
-/* ---- Schrift ---- */
-.section-title,.done h2,.doc h2,.prompt,.summary-number,.yeargroup .yearhead .name,.topic .t-name,.cloze{font-family:var(--serif)}
-.section-title,.done h2{font-weight:700;letter-spacing:-.02em}
-.prompt{font-weight:700;letter-spacing:-.03em}
-.yeargroup .yearhead .name{letter-spacing:-.015em}
+/* --------------------------------------------------------------- Schrift */
+.section-title,.done h2,.doc h2,.prompt,.summary-number,.yeargroup .yearhead .name,.topic .t-name,.cloze,
+#view>h2,.unit-heading h2{font-family:var(--serif)}
+.section-title,.done h2,#view>h2,.unit-heading h2{font-weight:700;letter-spacing:-.03em}
+.unit-heading h2,#view>h2{font-size:clamp(28px,5vw,40px)}
 
-/* ---- Knoepfe ---- */
-button{background:var(--surface);border-color:var(--line-2);color:var(--ink)}
-button:hover{border-color:var(--line-3)}
-button.primary,.dueBtn{background:var(--glow);border-color:var(--glow);color:var(--night);font-weight:600}
-button.primary:hover,.dueBtn:hover{background:var(--glow-hi);border-color:var(--glow-hi)}
-button.primary span{color:#0D101799}
-.switch[aria-pressed="true"]{background:var(--snow);border-color:var(--snow);color:var(--night)}
-.speak{color:var(--glacier)}
+/* ---------------------------------------------------------------- Knoepfe */
+button{background:#FFFFFF08;border:1px solid var(--line-2);color:var(--ink);border-radius:14px;
+  transition:background .15s,border-color .15s,transform .12s}
+button:hover{border-color:var(--line-3);background:#FFFFFF10}
+button:active{transform:scale(.98)}
+button.primary,.dueBtn,#flip,#submit,#continueCorrection,#nextRound{
+  background:var(--glow);border-color:var(--glow);color:var(--night);font-weight:600;border-radius:18px;min-height:54px}
+button.primary:hover,.dueBtn:hover,#flip:hover,#submit:hover,#continueCorrection:hover,#nextRound:hover{
+  background:var(--glow-hi);border-color:var(--glow-hi)}
+button.primary span[style],#flip span{color:var(--night)!important;opacity:.6}
+.linkbtn{color:var(--glacier);background:none;border:0}
+.speak{color:var(--glacier);border-radius:12px}
 .speak.on{background:var(--glacier);border-color:var(--glacier);color:var(--night)}
-.linkbtn{color:var(--glacier)}
-.rate.again{border-color:var(--amber);color:var(--amber)}
-.rate.good{border-color:var(--moss);color:var(--moss)}
-.rate span{color:var(--mute)}
-.unit-actions button{color:var(--soft);border-color:var(--line-3)}
-.unit-actions .browse-practice{background:var(--surface-2);color:var(--snow)}
-.unit-actions button:hover{background:var(--surface-2);color:var(--snow);border-color:var(--mute)}
 
-/* ---- Karten, Listen ---- */
-.vcard,.done,.doc,.box-details,.emptyhint,.selection-bar,.bili-level{background:var(--surface);border-color:var(--line-2)}
-.vcard{box-shadow:0 30px 60px -30px #000C}
-.stage .vcard{border-color:var(--line-2)}
-.eyebrow{border-bottom-color:var(--line-2);color:var(--mute)}
-.pos,.ipa{color:var(--mute)}
-.answer{border-top-color:var(--line-2)}
-.answer .ex{border-left-color:var(--glow)}
-.answer .ex b{color:var(--snow);box-shadow:inset 0 -.42em 0 #FF7A5940}
-.typebox input,input[type=search],input[type=text],input[type=number],select,textarea{
-  background:var(--night);color:var(--ink);border-color:var(--line-3)}
-.typebox input:focus{background:var(--night);outline-color:var(--glacier)}
-.typebox input:disabled{color:var(--ink);-webkit-text-fill-color:var(--ink)}
-progress{accent-color:var(--glow)}
-.round-progress{color:var(--soft)}
-.rail .slot,.slot{background:var(--surface-2);border-color:var(--line-2)}
-.slot.here,.rail[class*="u"] .slot.here{background:#FF7A5918;border-color:var(--glow)}
-.slot.here::after,.rail[class*="u"] .slot.here::after{background:#2A1E1F;border-color:var(--glow)}
-.correction mark{background:#FFD166;color:#1A1400}
-.foot{border-top-color:var(--line);color:var(--mute)}
+/* Umschalter: eine Leiste wie ein Segment */
+.switches{background:#FFFFFF0A;border:1px solid var(--line-2);border-radius:16px;padding:4px;gap:4px}
+.switch{border:0;background:transparent;border-radius:12px;color:var(--soft);font-family:var(--sans);
+  text-transform:none;letter-spacing:0}
+.switch:hover{background:#FFFFFF10}
+.switch[aria-pressed="true"]{background:var(--snow);color:var(--night);font-weight:600}
+#dirBtn,#homeDirection,.round-progress #dirBtn{border:1px solid var(--line-3);background:#FFFFFF0A;color:var(--soft);
+  font-family:var(--code);letter-spacing:.06em;border-radius:12px}
 
-/* Die Units: Flaeche in der dunklen Toenung ihrer Farbe, Kante und
-   Etikett in der Farbe selbst. */
-.yeargroup[class*="u"]{border-color:color-mix(in srgb,var(--unit) 45%,var(--night));box-shadow:none}
+/* --------------------------------------------------------- Unit-Uebersicht */
+.unit-actions button{color:var(--soft);border:1px solid var(--line-3);border-radius:999px;background:#FFFFFF08}
+.unit-actions .browse-practice{background:var(--glow);border-color:var(--glow);color:var(--night)}
+.unit-actions button:hover{background:#FFFFFF14;color:var(--snow)}
+.unit-actions .browse-practice:hover{background:var(--glow-hi);color:var(--night)}
+
+/* Jede Unit eine Glaskarte, die in ihrer Farbe leuchtet */
+.yeargroup,.yeargroup[class*="u"]{
+  background:radial-gradient(120% 160% at 0% 0%,color-mix(in srgb,var(--unit,#2459A6) 34%,transparent),transparent 58%),var(--glas);
+  border:1px solid color-mix(in srgb,var(--unit,#FFFFFF) 38%,transparent);border-radius:26px;
+  box-shadow:var(--glas-licht),0 24px 50px -30px #000C;overflow:hidden}
+.yeargroup .yearhead,.yeargroup[class*="u"] .yearhead{background-image:none;position:relative;border:0}
+/* Das Bild der Unit, in ihrer eigenen Farbe statt grau: das alte Bild
+   dient nur noch als Maske. */
+.yeargroup .yearhead::before{content:"";position:absolute;right:62px;top:50%;width:76px;height:76px;
+  transform:translateY(-50%);background:color-mix(in srgb,var(--unit,#8FE3D2) 55%,#fff);opacity:.85;
+  -webkit-mask:var(--place-art) center/contain no-repeat;mask:var(--place-art) center/contain no-repeat}
+@media(max-width:620px){
+  .yeargroup .yearhead::before{right:46px;width:46px;height:46px}
+}
+.yeargroup .yearhead .name{font-weight:700;letter-spacing:-.025em;color:var(--snow)!important;font-size:clamp(20px,3vw,26px)}
+.yeargroup .yearhead .tag,.yearhead .tag{background:var(--unit,#2A3140);color:#fff;border-radius:999px;
+  font-size:11px;text-transform:uppercase;padding:5px 10px}
+.yeargroup .yearhead::after{background:#FFFFFF14;color:var(--snow);border:1px solid var(--glas-rand)}
 .yeargroup .yearhead:hover{background-color:#FFFFFF08}
-.yeargroup .yearhead::after{background:var(--surface-2);color:var(--snow)}
-.yeargroup[open] .yearhead{border-bottom-color:var(--line-2)}
-.yeargroup .topic{background:var(--surface);border-color:var(--surface)}
-.yeargroup .topic:hover{background:var(--surface-2)}
-.yearhead .tag{color:#fff}
+.yeargroup[open] .yearhead{border-bottom:1px solid var(--glas-rand)}
+.yeargroup .topic,.topic{background:#0D10178C;border:1px solid var(--line-2);border-radius:16px;color:var(--ink)}
+.yeargroup .topic:hover,.topic:hover{background:#161B24;border-color:color-mix(in srgb,var(--unit,#8FE3D2) 60%,transparent);transform:translateY(-1px)}
+.topic .t-name{font-weight:600;letter-spacing:-.01em}
+/* Oberstufe: Die Themengruppen tragen ihre Farbe als Inline-Stil
+   (--year-e, --year-q1 ...). Hier wird sie zur Unit-Farbe der Glaskarte,
+   Schrift und Zeilen werden hell. */
+.yeargroup[style*="--year-e)"]{--unit:var(--year-e)}
+.yeargroup[style*="--year-q1)"]{--unit:var(--year-q1)}
+.yeargroup[style*="--year-q2)"]{--unit:var(--year-q2)}
+.yeargroup[style*="--year-all)"]{--unit:var(--year-all)}
+.yeargroup[style]{color:var(--snow)!important}
+.yeargroup>summary{font-family:var(--serif)}
+.yeargroup[open]>summary{border-bottom:1px solid var(--glas-rand)!important}
+.yeargroup>summary .name{color:var(--snow)!important;font-weight:700;letter-spacing:-.02em}
+.yeargroup>summary .ycount{color:var(--mute);font-family:var(--code);letter-spacing:.06em;font-size:11px}
+.yeargroup .topic[style]{background:#0D10178C!important;color:var(--ink)!important;border-left-color:var(--unit)!important}
 
-/* ---- Dialoge ---- */
-dialog{background:var(--surface);color:var(--ink);border-color:var(--line-2)}
-dialog::backdrop{background:#05070ACC}
+.t-count{color:var(--mute);font-size:12px}
+.t-due{color:var(--glow)!important;font-weight:600}
+.minirail{gap:3px}
+.minirail i{background:#FFFFFF14;border-radius:4px;height:5px}
+.minirail i.f,.topic[class*="u"] .minirail i.f{background:var(--glow)}
+.emptyhint{background:#FFFFFF08;border:1px dashed var(--line-3);border-radius:16px}
+.homebar .home-resume,.resume-title{font-family:var(--serif)}
 
-/* ---- Tastenfeld: dunkle Tasten, das Pruefen im Alpengluehen ---- */
-.eb-tasten{background:#090B10;box-shadow:0 -1px 0 var(--line)}
-.eb-tasten .tk{background:#2A3140;color:var(--snow);box-shadow:0 1px 0 #000}
-.eb-tasten .tk:active{background:#3A4355}
-.eb-tasten .tk.weit,.eb-tasten .tk.sprache,.eb-tasten .tk.ebene{background:#1A1F2A;color:var(--soft)}
-.eb-tasten .tk.senden{background:var(--glow);color:var(--night)}
-.eb-tasten .tk.senden:active{background:var(--glow-hi)}
-body.eb-tippen .eb-tasten[data-schieben="an"] .tk,
-body.eb-tippen .eb-tasten[data-schieben="an"] .tk.senden{background:#1A1F2A}
-body.eb-tippen .typebox::after{background:var(--glow)}
-body.eb-tippen .controls{background:var(--surface);border-top-color:var(--line)}
-body.eb-runde #back{background:var(--glow);color:var(--night)}
+/* ------------------------------------------------- Lernumfang, Abschluss */
+.scope-options .topic{border-radius:18px;padding:20px 22px;font-family:var(--serif);font-size:19px;font-weight:600}
+.scope-options .topic.primary{background:var(--glow);border-color:var(--glow);color:var(--night)}
+.scope-options .topic.primary:hover{background:var(--glow-hi)}
+.preview-modes .pv-blitz-start{background:radial-gradient(120% 140% at 100% 0%,#FFB27A33,transparent 60%),var(--glas);
+  border:1px solid #FFB27A55;border-radius:18px;font-family:var(--serif);font-size:19px;font-weight:600}
+.pv-blitz-time{color:var(--glow);font-family:var(--serif)}
+.done{background:radial-gradient(90% 90% at 50% 0%,#FF7A5930,transparent 65%),var(--glas);
+  border:1px solid var(--glas-rand);border-radius:30px;box-shadow:var(--glas-licht)}
+.done h2{font-size:clamp(30px,6vw,44px)}
+.summary-number{color:var(--glacier);font-weight:800;font-size:clamp(56px,12vw,88px);letter-spacing:-.04em}
 
-/* ---- Der Berg ueber der Karte, bei Nacht ----
-   Die Zeichnung kommt aus assets/ascent.js mit festen Farben. CSS schlaegt
-   die Farbangaben am SVG, deshalb reicht es, jede Farbe hier umzulenken. */
-.ascent-panel{background:#0D1017;border-color:var(--line-2);box-shadow:none}
-.ascent-panel stop[stop-color="#deeee8"]{stop-color:#0B0E14}
-.ascent-panel stop[stop-color="#f1edda"]{stop-color:#1B2030}
-.ascent-panel [fill="#efd594"]{fill:#FF7A59}
-.ascent-panel [fill="#b1cabe"]{fill:#1C2331}
-.ascent-panel [fill="#88aa99"]{fill:#171C27}
-.ascent-panel [fill="#537e6c"]{fill:#262E3D}
-.ascent-panel [fill="#365e50"]{fill:#1B2230}
-.ascent-panel [fill="#365e4c"]{fill:#11151D}
-.ascent-panel [fill="#426d66"],.ascent-panel [fill="#274c3e"],.ascent-panel [fill="#315446"]{fill:#0F131A}
-.ascent-panel [stroke="#315446"]{stroke:#F3EFE6}
-.ascent-panel [stroke="#e7edda"]{stroke:#3A4355}
-.ascent-panel [stroke="#f6d28a"]{stroke:#8FE3D2}
-.ascent-panel [fill="#db9b65"]{fill:#FF7A59}
-.ascent-footer{background:#11151D;color:var(--soft)}
-.ascent-streak{background:#161B24E6;color:var(--snow)}
-.ascent-preview-note{color:var(--mute)}
-body.ascent-active .eyebrow .ascent-direction-label{background:var(--surface-2);border-color:var(--line-3);color:var(--soft)}
+/* ------------------------------------------------------------ Lernrunde */
+.sessionbar{gap:10px}
+#back{border-radius:14px}
 
-/* ---- Fortschrittsbalken: eigene Farbe statt der des Systems ---- */
-progress{-webkit-appearance:none;appearance:none;border:0;border-radius:999px;background:var(--line-2);overflow:hidden}
+/* Die fuenf Faecher als Saeulen - ihre Hoehe zeigt, wie voll sie sind
+   (Anteil setzt assets/learning.js). */
+.box-details{background:var(--glas);border:1px solid var(--glas-rand);border-radius:22px;box-shadow:var(--glas-licht)}
+.box-details summary{color:var(--mute);font-size:11px;text-transform:uppercase}
+.rail,.rail[class*="u"]{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;align-items:end;margin-top:14px}
+.rail .slot,.slot{display:flex;flex-direction:column;align-items:stretch;gap:6px;background:transparent;border:0;
+  padding:0;text-align:center}
+.slot .c{order:1;font-family:var(--code);font-size:15px;line-height:1;color:var(--snow);margin:0}
+.slot::before{content:"";order:2;display:block;height:calc(14px + var(--anteil,0) * 72px);border-radius:12px 12px 4px 4px;
+  background:var(--balken,#2E3646);transition:height .6s cubic-bezier(.3,1.3,.5,1)}
+.slot:nth-child(2){--balken:#3A4355}.slot:nth-child(3){--balken:#4F5F80}
+.slot:nth-child(4){--balken:var(--glacier)}.slot:nth-child(5){--balken:var(--glow)}
+.slot .n{order:3;font-size:10px;color:var(--mute);text-transform:uppercase}
+.slot .iv{order:4;font-size:10px;color:#6F7A8A}
+.slot.here,.rail[class*="u"] .slot.here{background:transparent;border:0}
+.slot.here .n{color:var(--snow)}
+.slot.here::before{box-shadow:0 0 0 2px var(--night),0 0 0 4px var(--glacier)}
+.slot.here::after,.rail[class*="u"] .slot.here::after{display:none}
+
+.round-progress{color:var(--mute);font-size:13px}
+progress{-webkit-appearance:none;appearance:none;border:0;border-radius:999px;background:var(--line-2);overflow:hidden;height:6px}
 progress::-webkit-progress-bar{background:var(--line-2);border-radius:999px}
 progress::-webkit-progress-value{background:var(--glow);border-radius:999px}
 progress::-moz-progress-bar{background:var(--glow);border-radius:999px}
 
-/* Etiketten ohne Unit-Farbe (Verbtrainer) bekommen eine dunkle Plakette,
-   sonst stuende weisse Schrift auf der hellen Schriftfarbe. */
-.yearhead .tag{background:var(--unit,#2A3140);color:#fff}
-html:root{background:var(--night)}
+/* Die Karte: Glas, darin das Licht der Unit oben links und das
+   Alpengluehen unten rechts, dazu Hoehenlinien in der Ecke. */
+.stage{perspective:1400px}
+.stage .vcard,.vcard,.stage[class*="u"] .vcard{
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 200' fill='none' stroke='%238FE3D2' stroke-width='1.5' opacity='.22'%3E%3Cpath d='M0 200C60 120 120 100 170 40S230 10 240 0'/%3E%3Cpath d='M40 200C90 140 140 120 190 70S240 40 250 30'/%3E%3Cpath d='M80 200C120 160 170 140 210 100S250 70 260 60'/%3E%3C/svg%3E") right -20px bottom -14px/250px auto no-repeat,
+    radial-gradient(110% 80% at 0% 0%,color-mix(in srgb,var(--unit,#2459A6) 55%,transparent),transparent 62%),
+    radial-gradient(90% 70% at 100% 100%,#FF7A5930,transparent 62%),
+    var(--glas),var(--night);
+  border:1px solid var(--glas-rand);border-top:1px solid #FFFFFF33;border-radius:30px;
+  box-shadow:var(--glas-licht),0 34px 70px -34px #000E;padding:28px 28px 26px;min-height:300px}
+.eyebrow,.eyebrow[class*="u"]{border:0;color:var(--soft);font-size:11px;text-transform:uppercase;margin-bottom:26px;
+  align-items:center}
+.eyebrow>span:last-child{color:var(--snow)}
+.prompt{font-weight:700;letter-spacing:-.045em;line-height:1.02;font-size:clamp(42px,9vw,72px);color:var(--snow);
+  margin-top:auto}
+.pos{display:inline-block;align-self:flex-start;margin-top:14px;padding:5px 11px;border-radius:999px;
+  background:#FFFFFF14;color:var(--snow);font-size:11px;font-style:normal}
+.sense{border-left-color:var(--glow);color:var(--soft)}
+.phon .ipa,.ipa{font-family:var(--code);color:var(--glacier);font-size:14px}
+.answer{border-top:1px solid var(--glas-rand);margin-top:22px;padding-top:20px}
+.answer .de{font-family:var(--serif);font-weight:600;font-size:clamp(24px,4vw,30px);letter-spacing:-.02em}
+.answer .ex{border-left:2px solid var(--glow);color:#E4E0D6;font-size:17px}
+.answer .ex b{color:var(--snow);box-shadow:inset 0 -.42em 0 #FF7A5947}
 
-/* ---- Grammatik und Analysis: Kopf, Ueberschriften, Kategorien ---- */
+/* Auswahl */
+.opts{gap:10px}
+.opt{background:#0D101780;border:1px solid var(--glas-rand);border-radius:18px;padding:15px 18px;
+  font-family:var(--serif);font-size:19px;font-weight:500;color:var(--snow)}
+.opt:hover{background:#FFFFFF12;border-color:#FFFFFF40;transform:translateY(-1px)}
+.opt.right{background:var(--ok-tint);border-color:var(--ok);color:var(--ok)}
+.opt.wrong{background:var(--no-tint);border-color:var(--no);color:var(--no)}
+
+/* Tippen und Lueckensatz */
+.typebox input{height:60px;border-radius:18px;background:#0D1017B3;border:1px solid #FFFFFF33;color:var(--snow);
+  font-family:var(--sans);font-size:22px;font-weight:500;padding:0 18px}
+.typebox input:focus{outline:0;border-color:var(--glacier);box-shadow:0 0 0 4px #8FE3D233;background:#0D1017D9}
+.typebox input::placeholder{color:#7C8696}
+.typebox input:disabled{color:var(--snow);-webkit-text-fill-color:var(--snow);opacity:1}
+.verdict.ok{color:var(--ok)}.verdict.near,.verdict.no{color:var(--amber)}
+.correction>div{background:#0D101799;border-radius:14px;border-left:4px solid var(--no)}
+.correction>.correction-solution{background:var(--ok-tint);border-left-color:var(--ok);color:var(--snow)}
+.correction small{color:var(--mute);font-family:var(--code);letter-spacing:.06em;text-transform:uppercase;font-size:11px}
+.correction mark{background:#FFD166;color:#1A1400}
+.cloze{font-weight:600;font-size:clamp(22px,4.4vw,30px);line-height:1.35;letter-spacing:-.015em;color:var(--snow)}
+.cloze .gap{border-bottom:2px solid var(--glacier);color:var(--glacier);font-family:var(--code)}
+.cloze b{color:var(--glow)}
+.clue{color:var(--soft)}
+.clue span{color:var(--snow);font-weight:600}
+
+/* Bewertung */
+.controls{gap:10px}
+.rate{border-radius:18px;min-height:60px;font-weight:600;font-size:16px}
+.rate span{font-family:var(--code);color:var(--mute);font-size:11px}
+.rate.again{background:var(--no-tint);border:1px solid var(--no);color:var(--no)}
+.rate.hard{background:#FFFFFF0A;border:1px solid var(--line-3);color:var(--snow)}
+.rate.good{background:var(--ok-tint);border:1px solid var(--ok);color:var(--ok)}
+.rate.again:hover{background:#FF7A5933}.rate.good:hover{background:#7FD6A433}.rate.hard:hover{background:#FFFFFF14}
+@media(min-width:621px){#view>.controls{background:linear-gradient(to top,var(--night) 70%,transparent)}}
+
+/* Blitzrunde */
+.pv-blitz-time{font-size:34px}
+
+/* ------------------------------------------------------ Der Grat oben */
+.ascent-panel{background:transparent;border:0;box-shadow:none;border-radius:0;overflow:visible;margin:4px 0 10px;max-width:none;width:auto}
+.ascent-panel>svg.mobile-landscape,.ascent-panel>svg:not(.ascent-grat){display:none!important}
+.ascent-panel>svg.ascent-grat{display:block!important;width:100%;height:auto;overflow:visible;margin-top:18px}
+.grat-hang{fill:#FFFFFF08}
+.grat-weg{fill:none;stroke:#3A4355;stroke-width:3;stroke-linecap:round;stroke-dasharray:2 7}
+.grat-spur{fill:none;stroke:var(--glacier);stroke-width:3;stroke-linecap:round}
+.grat-mast{stroke:var(--snow);stroke-width:2}
+.grat-fahne{fill:var(--glow);transform-origin:345px 4px}
+.grat-hof{fill:#8FE3D240}.grat-punkt{fill:var(--glacier)}
+.ascent-label{top:0;left:0;right:auto}
+.ascent-streak{background:#FFFFFF14;color:var(--snow);border:1px solid var(--glas-rand);font-family:var(--code);
+  letter-spacing:.06em;font-size:11px;font-weight:500}
+.ascent-footer{background:transparent;color:var(--mute);padding:6px 2px 0;font-size:11px;text-transform:uppercase}
+.ascent-footer strong{color:var(--snow);font-weight:500}
+.ascent-preview-note{display:none}
+body.ascent-active .eyebrow .ascent-direction-label{background:#FFFFFF10;border-color:var(--line-3);color:var(--soft)}
+/* Die Karte bekommt den Platz, den das Bergbild belegt haette
+   (gemessen in assets/ascent.js). */
+@media(max-width:620px){
+  html body.ascent-active.eb-tippen .stage .vcard{min-height:var(--ascent-karte,0px)!important;display:flex;flex-direction:column}
+  body.ascent-active.eb-tippen .vcard{padding:20px 20px 18px}
+  body.ascent-active.eb-tippen .prompt{font-size:clamp(36px,11vw,52px)}
+  .ascent-panel{margin:0 0 8px}
+}
+
+/* ------------------------------------------------------------ Tastenfeld */
+.eb-tasten{background:#07090DF2;box-shadow:0 -1px 0 var(--line);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.eb-tasten .tk{background:#262D3B;color:var(--snow);box-shadow:0 2px 0 #05070A;border-radius:8px}
+.eb-tasten .tk:active{background:#3A4355;transform:translateY(1px);box-shadow:0 1px 0 #05070A}
+.eb-tasten .tk.weit,.eb-tasten .tk.sprache,.eb-tasten .tk.ebene{background:#161B24;color:var(--soft)}
+.eb-tasten .tk.senden{background:var(--glow);color:var(--night);font-weight:700}
+.eb-tasten .tk.senden:active{background:var(--glow-hi)}
+body.eb-tippen .eb-tasten[data-schieben="an"] .tk,
+body.eb-tippen .eb-tasten[data-schieben="an"] .tk.senden{background:#161B24}
+body.eb-tippen .typebox::after{background:var(--glow)}
+body.eb-tippen .controls{background:#0D1017F2;border-top:1px solid var(--line);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+body.eb-runde #back{background:var(--glow);color:var(--night);border-radius:14px}
+
+/* ------------------------------------------------------------ Nachschlagen */
+.listctl input,#lq{height:56px;border-radius:18px;background:#0D1017B3;border:1px solid #FFFFFF2E;color:var(--snow);
+  font-size:18px;padding-left:48px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239AA3B2' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-4-4'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:16px center;background-size:20px}
+.listctl input:focus,#lq:focus{outline:0;border-color:var(--glacier);box-shadow:0 0 0 4px #8FE3D233}
+.listcount{color:var(--mute);font-size:11px;text-transform:uppercase}
+.lsec{background:var(--glas);border:1px solid var(--glas-rand);border-radius:20px;overflow:hidden;box-shadow:var(--glas-licht)}
+.lsec>summary{font-family:var(--serif);font-weight:600;font-size:17px;color:var(--snow)}
+.lsec .lyear{background:var(--unit,#2A3140);color:#fff;border-radius:999px;font-size:10px;text-transform:uppercase}
+.lnum{color:var(--mute)}
+.vrow{border-color:var(--glas-rand)!important;border-radius:14px}
+.vrow:hover{background:#FFFFFF08}
+.ven{font-family:var(--serif);font-weight:600;font-size:18px;color:var(--snow);letter-spacing:-.01em}
+.vde{color:var(--soft)}
+.vipa{font-family:var(--code);color:var(--glacier);font-size:12.5px}
+.vpos{color:var(--mute);font-size:11px}
+.vex{color:#C8CEDA;font-style:italic}
+.csv-controls,.selection-bar{background:var(--glas);border:1px solid var(--glas-rand);border-radius:22px;box-shadow:var(--glas-licht)}
+
+/* ------------------------------------------------------ Anleitung, Dialoge */
+.doc{background:var(--glas);border:1px solid var(--glas-rand);border-radius:24px;box-shadow:var(--glas-licht)}
+.doc h2{font-weight:700;letter-spacing:-.02em}
+.doc code,.kbd{font-family:var(--code);background:#FFFFFF10;border-color:var(--line-3)}
+.doc th{font-family:var(--code)}
+.warn,.doc .warnbox{border-radius:14px}
+dialog{background:#161B24F7;color:var(--ink);border:1px solid var(--glas-rand);border-radius:24px;box-shadow:var(--glas-licht),0 40px 80px -30px #000}
+dialog::backdrop{background:#05070ACC;-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.typebox input,input[type=search],input[type=text],input[type=number],select,textarea{
+  background:#0D1017B3;color:var(--ink);border-color:var(--line-3);border-radius:14px}
+.foot{border-top-color:var(--line);color:var(--mute);font-family:var(--code);letter-spacing:.06em}
+.feedback-settings button,.foot button{border-radius:12px}
+.correction-note{color:var(--soft)}
+
+/* ------------------------------------ Grammatik, Simple Past, Analysis */
 main h1,main h2{font-family:var(--serif)}
+main h1{letter-spacing:-.04em}
 main>header{border-bottom-color:var(--line)}
-main>header span{color:var(--mute)}
-main>header a{background:var(--glow);color:var(--night);border-radius:999px}
+main>header span{color:var(--mute);font-family:var(--code);letter-spacing:.08em}
+main>header a{background:var(--glow);color:var(--night);border-radius:999px;text-decoration:none;padding:10px 16px;display:inline-flex;align-items:center;min-height:44px;font-weight:600}
 main>header a:hover{background:var(--glow-hi);color:var(--night)}
-[data-group] h2{color:color-mix(in srgb,var(--edge) 45%,#fff)}
-[data-group]{border-color:color-mix(in srgb,var(--edge) 70%,var(--night))}
-a.topic[href="simple-past/"],a.topic[href="irregular-verbs/"]{background:var(--surface)}
-button.primary span[style]{color:var(--night)}
+.panel{background:var(--glas);border:1px solid var(--glas-rand);border-radius:24px;box-shadow:var(--glas-licht)}
+[data-group]{background:radial-gradient(120% 140% at 0% 0%,color-mix(in srgb,var(--edge) 30%,transparent),transparent 60%),var(--glas);
+  border:1px solid color-mix(in srgb,var(--edge) 55%,transparent);border-top-width:1px}
+[data-group] h2{color:color-mix(in srgb,var(--edge) 40%,#fff)}
+[data-group]:hover{background:radial-gradient(120% 140% at 0% 0%,color-mix(in srgb,var(--edge) 42%,transparent),transparent 60%),var(--glas)}
+a.topic[href="simple-past/"],a.topic[href="irregular-verbs/"]{background:var(--glas);border:1px solid var(--glas-rand)}
+.quote{background:#0D101799;border-left-color:var(--glow);border-radius:14px}
+.feedback{background:#FFFFFF0A;border-left-color:var(--glacier);border-radius:14px}
+.options button{border-radius:16px}
+.correct{background:var(--ok-tint)!important;border-color:var(--ok)!important}
+.incorrect{background:var(--no-tint)!important;border-color:var(--no)!important}
+.stats span{background:#FFFFFF0D;border:1px solid var(--line-2);font-family:var(--code);letter-spacing:.04em}
+.task .sentence-pieces li{background:#FFFFFF10;color:var(--snow);border-color:var(--glas-rand)}
+.task .task-material{background:#0D101799;color:var(--snow);border-left-color:var(--glacier)}
+
+/* ------------------------------------------------------------- Bewegung
+   Nur mit erlaubten Animationen. Neue Karte: hereingeschoben.
+   Aufgedeckt: die Karte dreht sich um. Richtig: der Grat-Punkt leuchtet. */
+html.feedback-motion .vcard.deal{animation:karte-kommt .5s cubic-bezier(.2,1.1,.3,1) both}
+/* Nicht seitwaerts: Was beim Hereinschieben ueber den Rand ragt, macht
+   die Seite am Telefon breiter, und das Tastenfeld wuchs mit. */
+@keyframes karte-kommt{from{opacity:0;transform:translateY(22px) scale(.97)}}
+html.feedback-motion .vcard:has(.answer){animation:karte-dreht .6s cubic-bezier(.3,1.25,.5,1) both}
+@keyframes karte-dreht{from{transform:rotateY(-80deg);opacity:.2}}
+html.feedback-motion .yeargroup{animation:karte-kommt .6s cubic-bezier(.2,1,.3,1) backwards}
+html.feedback-motion .yeargroup:nth-of-type(2){animation-delay:.06s}
+html.feedback-motion .yeargroup:nth-of-type(3){animation-delay:.12s}
+html.feedback-motion .yeargroup:nth-of-type(4){animation-delay:.18s}
+html.feedback-motion .yeargroup:nth-of-type(n+5){animation-delay:.24s}
+html.feedback-motion .grat-fahne{animation:fahne 1.4s ease-in-out infinite}
+@keyframes fahne{50%{transform:skewY(-10deg) scaleX(.88)}}
+html.feedback-motion .ascent-celebrate .grat-hof{animation:hof .9s ease-out}
+@keyframes hof{0%{r:10;opacity:1}100%{r:26;opacity:0}}
+html.feedback-motion .opt,html.feedback-motion .topic{transition:transform .2s,background .15s,border-color .15s}
+@media(prefers-reduced-motion:reduce){.vcard,.yeargroup{animation:none!important}}

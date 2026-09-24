@@ -2290,3 +2290,27 @@ ${vocabulary}`;
   fassungPruefen();
   helferAnmelden();
 })();
+
+/* =========================================================================
+   LERNFAECHER ALS BALKEN
+   Das Nachtdesign zeichnet die fuenf Faecher als Saeulen, deren Hoehe
+   zeigt, wie viele Woerter darin liegen. CSS kann aus einer Zahl im Text
+   keine Hoehe machen - deshalb bekommt jedes Fach seinen Anteil am
+   vollsten Fach als Variable. Ohne das Nachtdesign bleibt sie unbenutzt.
+   ========================================================================= */
+(function(){
+  const view = document.getElementById('view');
+  if(!view || typeof MutationObserver === 'undefined') return;
+  function balken(){
+    view.querySelectorAll('.rail').forEach(rail => {
+      const faecher = [...rail.querySelectorAll('.slot')];
+      const zahlen = faecher.map(f => parseInt((f.querySelector('.c') || {}).textContent, 10) || 0);
+      const hoechste = Math.max(1, ...zahlen);
+      faecher.forEach((f, i) => f.style.setProperty('--anteil', (zahlen[i] / hoechste).toFixed(3)));
+    });
+  }
+  /* Nur auf neue Knoten hoeren: Das Setzen der Variable aendert ein
+     Attribut und loest den Beobachter deshalb nicht erneut aus. */
+  new MutationObserver(balken).observe(view, {childList: true, subtree: true});
+  balken();
+})();

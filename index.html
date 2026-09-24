@@ -66,7 +66,18 @@ a{color:inherit}
 .title .line{display:flex}
 .title .line + .line{color:var(--glow)}
 .title span[aria-hidden]{display:inline-block;font-variation-settings:'wght' 500,'opsz' 96;
-  transition:font-variation-settings .22s ease-out;animation:kin 3.2s ease-in-out infinite}
+  transition:font-variation-settings .22s ease-out;animation:kin 3.2s ease-in-out infinite;
+  animation-delay:calc(var(--n) * -.14s)}
+/* Am Telefon keine Welle: Sie aendert in jedem Bild die Schriftstaerke,
+   und damit muss der Text jedes Mal neu gesetzt werden - auf dem Handy
+   sichtbar hakelig. Stattdessen fliegen die Buchstaben einmal herein,
+   nur mit transform und opacity, die die Grafikeinheit allein rechnet. */
+@media (hover:none),(max-width:620px){
+  .title span[aria-hidden]{font-variation-settings:'wght' 700,'opsz' 96;transition:none;
+    animation:einflug .7s cubic-bezier(.2,.8,.2,1) backwards;animation-delay:calc(var(--n) * 45ms + 80ms)}
+  .title .line + .line span[aria-hidden]{font-variation-settings:'wght' 500,'opsz' 96}
+}
+@keyframes einflug{from{opacity:0;transform:translateY(.35em) rotate(4deg)}}
 .title.follow span[aria-hidden]{animation:none}
 @keyframes kin{0%,100%{font-variation-settings:'wght' 300,'opsz' 96}50%{font-variation-settings:'wght' 800,'opsz' 96}}
 .cta{margin-top:40px;display:inline-flex;align-items:center;gap:10px;min-height:56px;padding:0 28px;border-radius:999px;
@@ -464,7 +475,7 @@ function kinetik(){
   let n = 0;
   titel.querySelectorAll(".line").forEach(zeile => {
     zeile.innerHTML = zeile.dataset.word.split("").map(ch =>
-      '<span aria-hidden="true" style="animation-delay:' + (-(n++) * 0.14) + 's">' + esc(ch) + '</span>').join("");
+      '<span aria-hidden="true" style="--n:' + (n++) + '">' + esc(ch) + '</span>').join("");
   });
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   const buchstaben = [...titel.querySelectorAll("span[aria-hidden]")];

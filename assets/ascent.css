@@ -77,3 +77,6 @@ body.ascent-active.eb-tippen .vcard .cloze{padding-top:0!important}body.ascent-a
 @keyframes ascent-rutschen{0%{transform:translate(0,0)}35%{transform:translate(-3px,1.5px)}
   100%{transform:translate(0,0)}}
 .ascent-rutsch .hiker-body{animation:ascent-rutschen .45s ease-out}
+
+/* Der schmale Grat gehoert zum Nachtdesign (assets/nacht-marke.css); ohne es bleibt er verborgen. */
+.ascent-grat{display:none}
