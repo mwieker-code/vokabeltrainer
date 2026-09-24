@@ -48,9 +48,9 @@
     }catch(e){}
   }
   function stored(){try{const x=JSON.parse(localStorage.getItem(sessionKey));return x&&Array.isArray(x.queue)&&x.queue.length&&x.queue.every(k=>wordMap.has(k))&&Number.isInteger(x.i)&&x.i>=0&&x.i<x.queue.length&&['all','short','due'].includes(x.scope)&&['en2de','de2en'].includes(x.dir)?x:null;}catch(e){return null;}}
-  function resume(){const x=stored();if(!x)return;if(x.source==='assignment'&&!assignmentWords.length)assignmentWords=x.queue.map(k=>wordMap.get(k)).filter(Boolean);S.roundSource=x.source;S.topicId=x.source;S.dir=x.dir;S.mode=x.mode;S.scope=x.scope;S.onlyDue=x.scope==='due';S.roundLimit=x.scope==='short'?10:Infinity;S.queue=x.queue.map(k=>wordMap.get(k));S.i=x.i;S.seen=x.seen;S.initialCount=x.initial;for(const [field,key] of [['retried','retried'],['missed','missed'],['roundAnswered','answered']])S[field]=new Set((x[key]||[]).map(k=>wordMap.get(k)).filter(Boolean));S.answered=null;S.revealed=false;S.options=null;S.typedValue='';S.view='session';render();}
-  const wordsFor=topicId=>(topicId==='today'?allWords():topicId==='assignment'?assignmentWords:upper?(SETS[topicId]||[]):setOf(topicId)).filter(v=>v.en&&v.en.trim());
-  const topicLabel=topicId=>topicId==='today'?(seite?seite.allLabel:'Alle Themen'):topicId==='assignment'?((assignment&&assignment.name)||'Lernauftrag'):(TOPICS.find(t=>t.id===topicId)?.name||'Deine Auswahl');
+  function resume(){const x=stored();if(!x)return;if(x.source==='assignment'&&!assignmentWords.length)assignmentWords=x.queue.map(k=>wordMap.get(k)).filter(Boolean);if(x.source==='nachueben')nachuebenWords=x.queue.slice(0,x.initial).map(k=>wordMap.get(k)).filter(Boolean);S.roundSource=x.source;S.topicId=x.source;S.dir=x.dir;S.mode=x.mode;S.scope=x.scope;S.onlyDue=x.scope==='due';S.roundLimit=x.scope==='short'?10:Infinity;S.queue=x.queue.map(k=>wordMap.get(k));S.i=x.i;S.seen=x.seen;S.initialCount=x.initial;for(const [field,key] of [['retried','retried'],['missed','missed'],['roundAnswered','answered']])S[field]=new Set((x[key]||[]).map(k=>wordMap.get(k)).filter(Boolean));S.answered=null;S.revealed=false;S.options=null;S.typedValue='';S.view='session';render();}
+  const wordsFor=topicId=>(topicId==='today'?allWords():topicId==='assignment'?assignmentWords:topicId==='nachueben'?nachuebenWords:upper?(SETS[topicId]||[]):setOf(topicId)).filter(v=>v.en&&v.en.trim());
+  const topicLabel=topicId=>topicId==='today'?(seite?seite.allLabel:'Alle Themen'):topicId==='assignment'?((assignment&&assignment.name)||'Lernauftrag'):topicId==='nachueben'?'Weiterüben':(TOPICS.find(t=>t.id===topicId)?.name||'Deine Auswahl');
   function setup(topicId){
     S.roundSource=topicId;S.topicId=topicId;
     const words=wordsFor(topicId),due=words.filter(v=>isDue(record(v))).length;
@@ -557,7 +557,7 @@ ${vocabulary}`;
 
   buildQueue = function() {
     const source = S.roundSource || S.topicId;
-    let words = source==='today' ? allWords() : source==='assignment' ? assignmentWords : upper ? (SETS[source] || []) : setOf(source);
+    let words = source==='today' ? allWords() : source==='assignment' ? assignmentWords : source==='nachueben' ? nachuebenWords : upper ? (SETS[source] || []) : setOf(source);
     if(S.mode==='cloze') words=words.filter(hasCloze);
     const due=words.filter(v=>isDue(record(v)));
     const pool=S.onlyDue?due:words;
@@ -651,7 +651,7 @@ ${vocabulary}`;
     }
     if(S.i>=S.queue.length){renderDone();return;}
     if(upper) S.topicId=topicFor.get(current());
-    else if(S.roundSource==='today'||S.roundSource==='assignment') S.topicId=YEARS[0].id+'-all';
+    else if(S.roundSource==='today'||S.roundSource==='assignment'||S.roundSource==='nachueben') S.topicId=YEARS[0].id+'-all';
     checkpoint();
     originalSession();
     /* Die Auswahl gibt ihre Rueckmeldung im Klick der Antwortknoepfe,
@@ -677,7 +677,7 @@ ${vocabulary}`;
       rail.replaceWith(details);details.append(summary,rail);
     }
     const stage=view.querySelector('.stage');
-    if(stage)stage.insertAdjacentHTML('beforebegin','<div class="round-progress"><span>'+(S.i>=S.initialCount?'Fehlerwiederholung':S.scope==='short'?'Kurze Runde':S.scope==='due'?'Fällige Vokabeln':'Alles üben')+' · '+S.initialCount+' Wörter</span><span>'+(S.i>=S.initialCount?S.i-S.initialCount:S.i)+' von '+(S.i>=S.initialCount?S.queue.length-S.initialCount:S.initialCount)+' erledigt</span><progress max="'+S.queue.length+'" value="'+S.i+'" aria-label="Fortschritt dieser Runde"></progress></div>');
+    if(stage)stage.insertAdjacentHTML('beforebegin','<div class="round-progress"><span>'+(S.i>=S.initialCount?'Fehlerwiederholung':S.roundSource==='nachueben'?'Weiterüben':S.scope==='short'?'Kurze Runde':S.scope==='due'?'Fällige Vokabeln':'Alles üben')+' · '+S.initialCount+' Wörter</span><span>'+(S.i>=S.initialCount?S.i-S.initialCount:S.i)+' von '+(S.i>=S.initialCount?S.queue.length-S.initialCount:S.initialCount)+' erledigt</span><progress max="'+S.queue.length+'" value="'+S.i+'" aria-label="Fortschritt dieser Runde"></progress></div>');
     for(const b of view.querySelectorAll('[data-mode]')) b.onclick=()=>{
       S.mode=b.dataset.mode;buildQueue();render();
     };
@@ -692,11 +692,41 @@ ${vocabulary}`;
       }
     }
   };
+  /* =========================================================================
+     RUECKBLICK AM RUNDENENDE
+     Welche Woerter sassen, welche nicht. Rot ist jedes Wort, das in der
+     Runde mindestens einmal falsch oder "unsicher" war - dieselbe Zaehlung
+     wie "Woerter zum Weiterueben" darueber. Die roten stehen offen da, mit
+     Bedeutung; die gewussten sind eingeklappt, damit die Seite auch nach
+     einer langen Runde kurz bleibt. "Diese Woerter ueben" startet sofort
+     eine Runde nur mit den roten.
+     ========================================================================= */
+  let nachuebenWords=[];
+  function rueckblick(){
+    const woerter=S.queue.slice(0,S.initialCount);
+    const falsch=woerter.filter(v=>S.missed.has(v)), richtig=woerter.filter(v=>!S.missed.has(v));
+    if(!woerter.length) return '';
+    const zeile=(v,ok)=>'<li class="rb-'+(ok?'ok':'no')+'"><span class="rb-zeichen" aria-hidden="true">'+(ok?'✓':'✗')+'</span>'
+      +'<span class="rb-en" lang="en">'+safe(v.en)+'</span><span class="rb-de">'+safe(v.de)+'</span></li>';
+    return '<section class="rueckblick" aria-label="Rückblick auf die Runde">'
+      +(falsch.length?'<h3 class="rb-kopf rb-no">Weiterüben · '+falsch.length+'</h3><ul class="rb-liste">'+falsch.map(v=>zeile(v,false)).join('')+'</ul>'
+        +'<button class="rb-ueben" id="missedPractice">'+(falsch.length===1?'Dieses Wort üben':'Diese '+falsch.length+' Wörter üben')+'</button>'
+        :'<p class="rb-alle">Alles gewusst – kein Wort zum Weiterüben.</p>')
+      +(richtig.length?'<details class="rb-gewusst"'+(falsch.length?'':' open')+'><summary class="rb-kopf rb-ok">Gewusst · '+richtig.length+'</summary><ul class="rb-liste">'+richtig.map(v=>zeile(v,true)).join('')+'</ul></details>':'')
+      +'</section>';
+  }
+  function missedPractice(){
+    nachuebenWords=S.queue.slice(0,S.initialCount).filter(v=>S.missed.has(v));
+    if(!nachuebenWords.length) return;
+    S.roundSource='nachueben';S.topicId='nachueben';S.scope='all';S.onlyDue=false;S.roundLimit=Infinity;S.view='session';
+    buildQueue();render();
+  }
   renderDone = function() {
     try{localStorage.removeItem(sessionKey);}catch(e){}
-    view.innerHTML='<div class="done"><div class="summary-number">'+S.initialCount+'</div><h2>Runde geschafft</h2><p>'+S.initialCount+' Wörter · '+S.seen+' Antworten<br>'+S.missed.size+' Wörter zum Weiterüben</p><div class="controls"><button class="primary" id="nextRound">Lernumfang wählen</button><button id="doneHome">Zur Übersicht</button></div></div>';
+    view.innerHTML='<div class="done"><div class="summary-number">'+S.initialCount+'</div><h2>Runde geschafft</h2><p>'+S.initialCount+' Wörter · '+S.seen+' Antworten<br>'+S.missed.size+' Wörter zum Weiterüben</p>'+rueckblick()+'<div class="controls"><button class="primary" id="nextRound">Lernumfang wählen</button><button id="doneHome">Zur Übersicht</button></div></div>';
     document.getElementById('doneHome').onclick=home;
     document.getElementById('nextRound').onclick=()=>setup(S.roundSource);
+    const nachueben=document.getElementById('missedPractice');if(nachueben)nachueben.onclick=missedPractice;
     updateFoot();
     window.LearningFeedback?.tone('done');
   };

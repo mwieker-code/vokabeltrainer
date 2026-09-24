@@ -437,3 +437,21 @@ html.feedback-motion .opt,html.feedback-motion .topic{transition:transform .2s,b
   .round-progress #dirBtn,#dirBtn{min-height:32px;padding:4px 10px}
   .speak{min-height:34px;padding:4px 8px}
 }
+
+/* Rueckblick am Rundenende: Rot offen, Gruen eingeklappt. */
+.rueckblick{text-align:left;margin:22px 0 6px}
+.rb-kopf{font-family:var(--code);font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin:16px 0 8px;font-weight:600}
+.rb-kopf.rb-no{color:var(--no)}.rb-kopf.rb-ok{color:var(--ok)}
+.rb-liste{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.rb-liste li{display:grid;grid-template-columns:18px minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:baseline;padding:8px 12px;border-radius:12px;border-left:3px solid}
+.rb-liste li.rb-no{background:var(--no-tint);border-left-color:var(--no)}
+.rb-liste li.rb-ok{background:var(--ok-tint);border-left-color:var(--ok)}
+.rb-zeichen{font-weight:700}.rb-no .rb-zeichen{color:var(--no)}.rb-ok .rb-zeichen{color:var(--ok)}
+.rb-en{font-family:var(--serif);font-weight:600;color:var(--snow);overflow-wrap:anywhere}
+.rb-de{color:var(--soft);font-size:14px;overflow-wrap:anywhere}
+button.rb-ueben{width:100%;margin-top:10px;min-height:48px;border-radius:14px;background:var(--no-tint);border:1px solid var(--no);color:var(--no);font-weight:600}
+button.rb-ueben:hover{background:color-mix(in srgb,var(--no) 22%,transparent)}
+.rb-gewusst summary{cursor:pointer;list-style:revert}
+.rb-gewusst[open] summary{margin-bottom:8px}
+.done .rb-alle,.rb-alle{color:var(--ok);font-weight:600;text-align:center;margin:18px 0 0}
+@media print{.rb-ueben{display:none}}
