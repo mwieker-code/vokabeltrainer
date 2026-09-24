@@ -57,6 +57,17 @@ for(const folder of ['year5','year7','year8','year6','year9','year10','oberstufe
  run(`while(S.i<S.queue.length){S.revealed=true;S.answered='no';rate(0);}`);
  ok(w.document.querySelector('#doneHome'),'round ends');
  ok(run('S.seen<=20'),'round bounded to twenty attempts');
+ // Rueckblick: every word of this round was wrong, so all are red and the
+ // practice button offers exactly those words.
+ ok(w.document.querySelectorAll('.rueckblick .rb-liste li.rb-no').length===run('S.initialCount'),'summary lists every missed word');
+ ok(/Diese \d+ Wörter üben/.test(w.document.querySelector('#missedPractice').textContent),'practice button for missed words');
+ ok(Object.values(JSON.parse(w.localStorage.getItem('eb:lerntage'))||{}).some(n=>n>0),'practice day recorded');
+ ok(/"lapses":[2-9]/.test(w.localStorage.getItem(run('KEY'))),'repeated mistakes counted per word');
+ const missed=run('S.initialCount');
+ w.document.querySelector('#missedPractice').click();
+ ok(run('S.roundSource')==='nachueben'&&run('S.initialCount')===missed,'practice round holds exactly the missed words');
+ run(`while(S.i<S.queue.length){S.revealed=true;S.answered=null;rate(2);}`);
+ ok(w.document.querySelector('.fortschritt-zeile'),'progress line after a round');
  w.document.querySelector('#doneHome').click();
  ok(w.document.querySelector('[data-topic]'),'back to topic selection');
  // Existing progress record survives startup/renders; no renamed storage keys.

@@ -31,6 +31,48 @@
   const record = v => upper ? rec(topicFor.get(v), S.dir, v.id) : rec(S.dir, v.id);
   const safe = value => esc(String(value == null ? '' : value));
   const home = () => { S.view = 'home'; S.options = null; render(); };
+  /* =========================================================================
+     LERNTAGE
+     Ein Tag zaehlt, sobald an ihm eine Antwort gegeben wurde - auf jeder
+     Seite der App, deshalb ein gemeinsamer Schluessel. Gespeichert werden
+     nur Datum und Anzahl, nichts ueber die Woerter. Die Reihe zaehlt bis
+     heute; wer heute noch nicht geuebt hat, verliert sie erst morgen.
+     ========================================================================= */
+  /* Aussprache automatisch - ein Schalter im Menue, gemerkt im Browser. */
+  const AUSSPRACHE='eb:aussprache';
+  function aussprecheAuto(){try{return localStorage.getItem(AUSSPRACHE)==='an';}catch(e){return false;}}
+  const LERNTAGE='eb:lerntage';
+  const tagVon=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  function lerntage(){try{const x=JSON.parse(localStorage.getItem(LERNTAGE));return x&&typeof x==='object'?x:{};}catch(e){return {};}}
+  function lerntagZaehlen(){
+    try{const x=lerntage(),heute=tagVon(new Date());x[heute]=(x[heute]||0)+1;
+      /* Nur die letzten gut 8 Wochen behalten. */
+      const alt=tagVon(new Date(Date.now()-60*86400000));for(const k of Object.keys(x))if(k<alt)delete x[k];
+      localStorage.setItem(LERNTAGE,JSON.stringify(x));}catch(e){}
+  }
+  function lernreihe(){
+    const x=lerntage(),d=new Date();
+    if(!x[tagVon(d)])d.setDate(d.getDate()-1);
+    let n=0;while(x[tagVon(d)]){n++;d.setDate(d.getDate()-1);}
+    return n;
+  }
+  function lernwoche(){
+    /* Montag bis Sonntag der laufenden Woche. */
+    const x=lerntage(),heute=new Date(),mo=new Date(heute);mo.setDate(heute.getDate()-((heute.getDay()+6)%7));
+    return ['Mo','Di','Mi','Do','Fr','Sa','So'].map((name,i)=>{const d=new Date(mo);d.setDate(mo.getDate()+i);const k=tagVon(d);
+      return {name,geuebt:!!x[k],heute:k===tagVon(heute),zukunft:d>heute&&k!==tagVon(heute)};});
+  }
+  /* =========================================================================
+     SCHWIERIGE WOERTER
+     Jedes Mal, wenn ein Wort als falsch gewertet wird, zaehlt sein Eintrag
+     einen Fehler mehr (lapses). Schwierig ist, was mindestens zweimal
+     falsch war und noch nicht in Fach 5 liegt - wer es dorthin bringt, ist
+     es wieder los.
+     ========================================================================= */
+  const schwierig=v=>{const r=record(v);return (r.lapses||0)>=2&&r.box<5;};
+  const schwereWoerter=()=>allWords().filter(v=>v.en&&v.en.trim()&&schwierig(v));
+  let schwerWords=[];
+
   S.dir = 'de2en';
   S.roundSource = null;
   S.roundLimit = Infinity;
@@ -44,13 +86,13 @@
   const wordMap=new Map(allWords().map(v=>[wordKey(v),v]));
   function checkpoint(){
     try{if(S.view!=='session'||!S.queue.length||S.i>=S.queue.length)return;
-      localStorage.setItem(sessionKey,JSON.stringify({source:S.roundSource,dir:S.dir,mode:S.mode,scope:S.scope,i:S.i,seen:S.seen,initial:S.initialCount,queue:S.queue.map(wordKey),retried:[...S.retried].map(wordKey),missed:[...S.missed].map(wordKey),answered:[...S.roundAnswered].map(wordKey)}));
+      localStorage.setItem(sessionKey,JSON.stringify({source:S.roundSource,dir:S.dir,mode:S.mode,scope:S.scope,i:S.i,seen:S.seen,initial:S.initialCount,queue:S.queue.map(wordKey),retried:[...S.retried].map(wordKey),missed:[...S.missed].map(wordKey),answered:[...S.roundAnswered].map(wordKey),start:[...(S.startBox||new Map())].map(([v,b])=>[wordKey(v),b])}));
     }catch(e){}
   }
   function stored(){try{const x=JSON.parse(localStorage.getItem(sessionKey));return x&&Array.isArray(x.queue)&&x.queue.length&&x.queue.every(k=>wordMap.has(k))&&Number.isInteger(x.i)&&x.i>=0&&x.i<x.queue.length&&['all','short','due'].includes(x.scope)&&['en2de','de2en'].includes(x.dir)?x:null;}catch(e){return null;}}
-  function resume(){const x=stored();if(!x)return;if(x.source==='assignment'&&!assignmentWords.length)assignmentWords=x.queue.map(k=>wordMap.get(k)).filter(Boolean);if(x.source==='nachueben')nachuebenWords=x.queue.slice(0,x.initial).map(k=>wordMap.get(k)).filter(Boolean);S.roundSource=x.source;S.topicId=x.source;S.dir=x.dir;S.mode=x.mode;S.scope=x.scope;S.onlyDue=x.scope==='due';S.roundLimit=x.scope==='short'?10:Infinity;S.queue=x.queue.map(k=>wordMap.get(k));S.i=x.i;S.seen=x.seen;S.initialCount=x.initial;for(const [field,key] of [['retried','retried'],['missed','missed'],['roundAnswered','answered']])S[field]=new Set((x[key]||[]).map(k=>wordMap.get(k)).filter(Boolean));S.answered=null;S.revealed=false;S.options=null;S.typedValue='';S.view='session';render();}
-  const wordsFor=topicId=>(topicId==='today'?allWords():topicId==='assignment'?assignmentWords:topicId==='nachueben'?nachuebenWords:upper?(SETS[topicId]||[]):setOf(topicId)).filter(v=>v.en&&v.en.trim());
-  const topicLabel=topicId=>topicId==='today'?(seite?seite.allLabel:'Alle Themen'):topicId==='assignment'?((assignment&&assignment.name)||'Lernauftrag'):topicId==='nachueben'?'Weiterüben':(TOPICS.find(t=>t.id===topicId)?.name||'Deine Auswahl');
+  function resume(){const x=stored();if(!x)return;if(x.source==='assignment'&&!assignmentWords.length)assignmentWords=x.queue.map(k=>wordMap.get(k)).filter(Boolean);if(x.source==='nachueben')nachuebenWords=x.queue.slice(0,x.initial).map(k=>wordMap.get(k)).filter(Boolean);if(x.source==='schwer')schwerWords=x.queue.slice(0,x.initial).map(k=>wordMap.get(k)).filter(Boolean);S.startBox=new Map((x.start||[]).map(([k,b])=>[wordMap.get(k),b]).filter(([v])=>v));S.roundSource=x.source;S.topicId=x.source;S.dir=x.dir;S.mode=x.mode;S.scope=x.scope;S.onlyDue=x.scope==='due';S.roundLimit=x.scope==='short'?10:Infinity;S.queue=x.queue.map(k=>wordMap.get(k));S.i=x.i;S.seen=x.seen;S.initialCount=x.initial;for(const [field,key] of [['retried','retried'],['missed','missed'],['roundAnswered','answered']])S[field]=new Set((x[key]||[]).map(k=>wordMap.get(k)).filter(Boolean));S.answered=null;S.revealed=false;S.options=null;S.typedValue='';S.view='session';render();}
+  const wordsFor=topicId=>(topicId==='today'?allWords():topicId==='assignment'?assignmentWords:topicId==='nachueben'?nachuebenWords:topicId==='schwer'?schwerWords:upper?(SETS[topicId]||[]):setOf(topicId)).filter(v=>v.en&&v.en.trim());
+  const topicLabel=topicId=>topicId==='today'?(seite?seite.allLabel:'Alle Themen'):topicId==='assignment'?((assignment&&assignment.name)||'Lernauftrag'):topicId==='nachueben'?'Weiterüben':topicId==='schwer'?'Schwierige Wörter':(TOPICS.find(t=>t.id===topicId)?.name||'Deine Auswahl');
   function setup(topicId){
     S.roundSource=topicId;S.topicId=topicId;
     const words=wordsFor(topicId),due=words.filter(v=>isDue(record(v))).length;
@@ -557,7 +599,7 @@ ${vocabulary}`;
 
   buildQueue = function() {
     const source = S.roundSource || S.topicId;
-    let words = source==='today' ? allWords() : source==='assignment' ? assignmentWords : source==='nachueben' ? nachuebenWords : upper ? (SETS[source] || []) : setOf(source);
+    let words = source==='today' ? allWords() : source==='assignment' ? assignmentWords : source==='nachueben' ? nachuebenWords : source==='schwer' ? schwerWords : upper ? (SETS[source] || []) : setOf(source);
     if(S.mode==='cloze') words=words.filter(hasCloze);
     const due=words.filter(v=>isDue(record(v)));
     const pool=S.onlyDue?due:words;
@@ -567,7 +609,7 @@ ${vocabulary}`;
     S.queue=[...reviewed,...unseen].slice(0,S.roundLimit);
     S.initialCount=S.queue.length; S.i=0; S.seen=0; S.revealed=false;
     S.answered=null; S.options=null; S.typedValue=''; S.mixedDue=false;
-    S.retried=new Set(); S.missed=new Set(); S.roundAnswered=new Set();
+    S.retried=new Set(); S.missed=new Set(); S.roundAnswered=new Set(); S.startBox=new Map();
   };
   startSession = function(topicId) {
     setup(topicId);
@@ -594,6 +636,22 @@ ${vocabulary}`;
     document.getElementById('browseVocabulary').replaceWith(listButton);
     listButton.className='browse-list';listButton.removeAttribute('style');listButton.textContent='Vokabeln nachschlagen';
     document.getElementById('practiceAcross').onclick=()=>setup(upper?'today':YEARS[0].id+'-all');
+    /* Lerntage und schwierige Woerter in einer schmalen Zeile unter der
+       Ueberschrift. Ohne Lerntag und ohne schwierige Woerter bleibt sie weg. */
+    {
+      const reihe=lernreihe(),woche=lernwoche(),schwer=schwereWoerter();
+      if(reihe||woche.some(t=>t.geuebt)||schwer.length){
+        const kopf=view.querySelector('.unit-heading');
+        const leiste=document.createElement('div');leiste.className='lernleiste';
+        leiste.innerHTML='<div class="lernwoche" role="img" aria-label="'+(reihe?reihe+(reihe===1?' Lerntag':' Lerntage in Folge'):'Diese Woche')+'">'
+          +'<span class="lw-reihe">'+(reihe?reihe+(reihe===1?' Tag':' Tage in Folge'):'Diese Woche')+'</span>'
+          +woche.map(t=>'<span class="lw-tag'+(t.geuebt?' an':'')+(t.heute?' heute':'')+(t.zukunft?' spaeter':'')+'">'+t.name+'</span>').join('')+'</div>'
+          +(schwer.length?'<button class="lw-schwer" id="hardWords">Schwierige Wörter · '+schwer.length+'</button>':'');
+        if(kopf)kopf.after(leiste);
+        const knopf=document.getElementById('hardWords');
+        if(knopf)knopf.onclick=()=>wortrunde('schwer',schwereWoerter());
+      }
+    }
     /* Fortsetzen und Richtung teilen sich eine Zeile. Auf dem Telefon
        stehen sie nebeneinander und sparen einen ganzen Streifen ueber der
        Unit-Liste; am Rechner bleiben sie untereinander wie bisher. */
@@ -623,6 +681,10 @@ ${vocabulary}`;
     if((S.mode==='type'||S.mode==='cloze') && S.answered==='no') quality=0;
     if((S.mode==='type'||S.mode==='cloze') && S.answered==='near') quality=Math.min(quality,1);
     const r=record(v);
+    if(!S.startBox)S.startBox=new Map();
+    if(!S.startBox.has(v))S.startBox.set(v,r.box);
+    if(quality===0)r.lapses=(r.lapses||0)+1;
+    lerntagZaehlen();
     if(quality===0)r.box=1;
     else if(quality===1)r.box=Math.max(1,r.box-1);
     // One promotion per word per round, including its retry.
@@ -651,7 +713,7 @@ ${vocabulary}`;
     }
     if(S.i>=S.queue.length){renderDone();return;}
     if(upper) S.topicId=topicFor.get(current());
-    else if(S.roundSource==='today'||S.roundSource==='assignment'||S.roundSource==='nachueben') S.topicId=YEARS[0].id+'-all';
+    else if(S.roundSource==='today'||S.roundSource==='assignment'||S.roundSource==='nachueben'||S.roundSource==='schwer') S.topicId=YEARS[0].id+'-all';
     checkpoint();
     originalSession();
     /* Die Auswahl gibt ihre Rueckmeldung im Klick der Antwortknoepfe,
@@ -677,7 +739,7 @@ ${vocabulary}`;
       rail.replaceWith(details);details.append(summary,rail);
     }
     const stage=view.querySelector('.stage');
-    if(stage)stage.insertAdjacentHTML('beforebegin','<div class="round-progress"><span>'+(S.i>=S.initialCount?'Fehlerwiederholung':S.roundSource==='nachueben'?'Weiterüben':S.scope==='short'?'Kurze Runde':S.scope==='due'?'Fällige Vokabeln':'Alles üben')+' · '+S.initialCount+' Wörter</span><span>'+(S.i>=S.initialCount?S.i-S.initialCount:S.i)+' von '+(S.i>=S.initialCount?S.queue.length-S.initialCount:S.initialCount)+' erledigt</span><progress max="'+S.queue.length+'" value="'+S.i+'" aria-label="Fortschritt dieser Runde"></progress></div>');
+    if(stage)stage.insertAdjacentHTML('beforebegin','<div class="round-progress"><span>'+(S.i>=S.initialCount?'Fehlerwiederholung':S.roundSource==='nachueben'?'Weiterüben':S.roundSource==='schwer'?'Schwierige Wörter':S.scope==='short'?'Kurze Runde':S.scope==='due'?'Fällige Vokabeln':'Alles üben')+' · '+S.initialCount+' Wörter</span><span>'+(S.i>=S.initialCount?S.i-S.initialCount:S.i)+' von '+(S.i>=S.initialCount?S.queue.length-S.initialCount:S.initialCount)+' erledigt</span><progress max="'+S.queue.length+'" value="'+S.i+'" aria-label="Fortschritt dieser Runde"></progress></div>');
     for(const b of view.querySelectorAll('[data-mode]')) b.onclick=()=>{
       S.mode=b.dataset.mode;buildQueue();render();
     };
@@ -691,6 +753,13 @@ ${vocabulary}`;
         document.getElementById('continueCorrection').onclick=()=>rate(S.answered==='near'?1:0);
       }
     }
+    /* Aussprache automatisch: Sobald die Antwort steht - umgedreht,
+       gewaehlt oder getippt -, spricht die Seite das englische Wort. Je
+       Karte nur einmal, auch wenn danach noch einmal gezeichnet wird. */
+    if(aussprecheAuto()&&(S.revealed||S.answered)&&typeof Speech!=='undefined'&&Speech.say){
+      const v=current(),merke=S.i+'|'+(v&&v.id);
+      if(v&&S.gesprochen!==merke){S.gesprochen=merke;Speech.say(v.en);}
+    }
   };
   /* =========================================================================
      RUECKBLICK AM RUNDENENDE
@@ -702,10 +771,10 @@ ${vocabulary}`;
      eine Runde nur mit den roten.
      ========================================================================= */
   let nachuebenWords=[];
-  function rueckblick(){
-    const woerter=S.queue.slice(0,S.initialCount);
-    const falsch=woerter.filter(v=>S.missed.has(v)), richtig=woerter.filter(v=>!S.missed.has(v));
-    if(!woerter.length) return '';
+  /* Der Rueckblick fuer Lernrunde und Blitzrunde: falsch offen, gewusst
+     eingeklappt. Eine Liste ohne doppelte Woerter. */
+  function rueckblick(falsch,richtig){
+    if(!falsch.length&&!richtig.length) return '';
     const zeile=(v,ok)=>'<li class="rb-'+(ok?'ok':'no')+'"><span class="rb-zeichen" aria-hidden="true">'+(ok?'✓':'✗')+'</span>'
       +'<span class="rb-en" lang="en">'+safe(v.en)+'</span><span class="rb-de">'+safe(v.de)+'</span></li>';
     return '<section class="rueckblick" aria-label="Rückblick auf die Runde">'
@@ -715,18 +784,30 @@ ${vocabulary}`;
       +(richtig.length?'<details class="rb-gewusst"'+(falsch.length?'':' open')+'><summary class="rb-kopf rb-ok">Gewusst · '+richtig.length+'</summary><ul class="rb-liste">'+richtig.map(v=>zeile(v,true)).join('')+'</ul></details>':'')
       +'</section>';
   }
-  function missedPractice(){
-    nachuebenWords=S.queue.slice(0,S.initialCount).filter(v=>S.missed.has(v));
-    if(!nachuebenWords.length) return;
-    S.roundSource='nachueben';S.topicId='nachueben';S.scope='all';S.onlyDue=false;S.roundLimit=Infinity;S.view='session';
+  function wortrunde(quelle,woerter){
+    if(!woerter.length) return;
+    if(quelle==='nachueben')nachuebenWords=woerter; else schwerWords=woerter;
+    S.roundSource=quelle;S.topicId=quelle;S.scope='all';S.onlyDue=false;S.roundLimit=Infinity;S.view='session';S.mode=S.mode==='cloze'?'card':S.mode;
     buildQueue();render();
+  }
+  /* Eine Zeile Fortschritt: wie viele Woerter ein Fach hoeher liegen als
+     vor der Runde, wie viele neu oben angekommen sind, und der Lerntag. */
+  function fortschrittszeile(woerter){
+    let hoch=0,oben=0;
+    for(const v of woerter){const vorher=S.startBox&&S.startBox.get(v);if(vorher==null)continue;const jetzt=record(v).box;
+      if(jetzt>vorher)hoch++;if(jetzt===5&&vorher<5)oben++;}
+    const reihe=lernreihe(),teile=[];
+    if(hoch)teile.push('<span class="fz-hoch">↑ '+hoch+' '+(hoch===1?'Wort':'Wörter')+' ein Fach höher</span>');
+    if(oben)teile.push('<span>'+oben+' neu in Fach 5</span>');
+    if(reihe)teile.push('<span class="fz-reihe">'+(reihe===1?'1. Lerntag':reihe+' Lerntage in Folge')+'</span>');
+    return teile.length?'<p class="fortschritt-zeile">'+teile.join('<span aria-hidden="true"> · </span>')+'</p>':'';
   }
   renderDone = function() {
     try{localStorage.removeItem(sessionKey);}catch(e){}
-    view.innerHTML='<div class="done"><div class="summary-number">'+S.initialCount+'</div><h2>Runde geschafft</h2><p>'+S.initialCount+' Wörter · '+S.seen+' Antworten<br>'+S.missed.size+' Wörter zum Weiterüben</p>'+rueckblick()+'<div class="controls"><button class="primary" id="nextRound">Lernumfang wählen</button><button id="doneHome">Zur Übersicht</button></div></div>';
+    view.innerHTML='<div class="done"><div class="summary-number">'+S.initialCount+'</div><h2>Runde geschafft</h2><p>'+S.initialCount+' Wörter · '+S.seen+' Antworten<br>'+S.missed.size+' Wörter zum Weiterüben</p>'+fortschrittszeile(S.queue.slice(0,S.initialCount))+rueckblick(S.queue.slice(0,S.initialCount).filter(v=>S.missed.has(v)),S.queue.slice(0,S.initialCount).filter(v=>!S.missed.has(v)))+'<div class="controls"><button class="primary" id="nextRound">Lernumfang wählen</button><button id="doneHome">Zur Übersicht</button></div></div>';
     document.getElementById('doneHome').onclick=home;
     document.getElementById('nextRound').onclick=()=>setup(S.roundSource);
-    const nachueben=document.getElementById('missedPractice');if(nachueben)nachueben.onclick=missedPractice;
+    const nachueben=document.getElementById('missedPractice');if(nachueben)nachueben.onclick=()=>wortrunde('nachueben',S.queue.slice(0,S.initialCount).filter(v=>S.missed.has(v)));
     updateFoot();
     window.LearningFeedback?.tone('done');
   };
@@ -1036,7 +1117,8 @@ ${vocabulary}`;
     if(!input||!input.value.trim())return;
     const v=blitzCurrent();
     const res=checkTyped(input.value,v.en);
-    if(res==='ok')pv.correct++; else { pv.wrong++; pv.missed.push(v); }
+    if(res==='ok'){pv.correct++;(pv.right||(pv.right=[])).push(v);} else { pv.wrong++; pv.missed.push(v); }
+    lerntagZaehlen();
     window.LearningFeedback?.signal(res);
     pv.i++;
     render();
@@ -1461,15 +1543,17 @@ ${vocabulary}`;
 
   function renderBlitzDone(){
     const pv=S.pv;
-    const uniqueMissed=[...new Map(pv.missed.map(v=>[v.id,v])).values()].slice(0,12);
-    const missedList=uniqueMissed.length
-      ? '<ul class="pv-blitz-missed">'+uniqueMissed.map(v=>'<li><b>'+safe(v.en)+'</b> – '+safe(v.de)+'</li>').join('')+'</ul>'
-      : '';
+    /* Jedes Wort einmal: Wer es in der Minute auch nur einmal verfehlt
+       hat, steht bei den roten. */
+    const einmal=list=>[...new Map(list.map(v=>[v,v])).values()];
+    const falsch=einmal(pv.missed),richtig=einmal(pv.right||[]).filter(v=>!falsch.includes(v));
     view.innerHTML='<div class="done"><div class="summary-number">'+pv.correct+'</div><h2>Blitzrunde vorbei</h2>'
-      +'<p>'+pv.correct+' richtig, '+pv.wrong+' falsch in 60 Sekunden</p>'+missedList
+      +'<p>'+pv.correct+' richtig, '+pv.wrong+' falsch in 60 Sekunden</p>'+rueckblick(falsch,richtig)
       +'<div class="controls"><button class="primary" id="pvAgain">Nochmal</button><button id="pvHome">Zur Übersicht</button></div></div>';
     document.getElementById('pvAgain').onclick=()=>startBlitz(pv.topicId);
     document.getElementById('pvHome').onclick=exitBlitz;
+    const ueben=document.getElementById('missedPractice');
+    if(ueben)ueben.onclick=()=>{stopBlitzTimer();S.pv=null;wortrunde('nachueben',falsch);};
   }
 
   /* =========================================================================
@@ -2130,6 +2214,15 @@ ${vocabulary}`;
       }
       const leiste=document.querySelector('.feedback-settings');
       if(leiste)blatt.querySelector('[data-teil="klang"]').appendChild(leiste);
+      if(leiste&&!leiste.querySelector('[data-aussprache]')&&typeof Speech!=='undefined'&&Speech.available){
+        const b=document.createElement('button');b.type='button';b.setAttribute('data-aussprache','');
+        const zeigen=()=>{b.textContent='Aussprache automatisch: '+(aussprecheAuto()?'an':'aus');b.setAttribute('aria-pressed',String(aussprecheAuto()));};
+        b.onclick=()=>{try{localStorage.setItem(AUSSPRACHE,aussprecheAuto()?'aus':'an');}catch(e){}zeigen();};
+        zeigen();
+        /* Vor "Design", damit Ton, Animation und Aussprache beieinander stehen. */
+        const design=leiste.querySelector('[data-thema-knopf]');
+        if(design)leiste.insertBefore(b,design); else leiste.appendChild(b);
+      }
       const rest=document.querySelector('.foot-actions');
       if(rest&&!rest.children.length)rest.remove();
     }
