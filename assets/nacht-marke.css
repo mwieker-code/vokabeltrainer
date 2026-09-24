@@ -455,3 +455,22 @@ button.rb-ueben:hover{background:color-mix(in srgb,var(--no) 22%,transparent)}
 .rb-gewusst[open] summary{margin-bottom:8px}
 .done .rb-alle,.rb-alle{color:var(--ok);font-weight:600;text-align:center;margin:18px 0 0}
 @media print{.rb-ueben{display:none}}
+/* Fortschritt in einer Zeile unter der Zaehlung am Rundenende */
+.done .fortschritt-zeile,.fortschritt-zeile{margin:10px 0 0;font-family:var(--code);font-size:12px;letter-spacing:.04em;color:var(--mute);line-height:1.6}
+.fortschritt-zeile>span:not([aria-hidden]){white-space:nowrap}
+.fortschritt-zeile .fz-hoch{color:var(--ok);font-weight:600}
+.fortschritt-zeile .fz-reihe{color:var(--glow)}
+
+/* Lerntage und schwierige Woerter: eine schmale Zeile unter "Deine Units" */
+.lernleiste{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:0 0 14px}
+.lernwoche{display:flex;align-items:center;gap:4px}
+.lw-reihe{font-family:var(--code);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--glow);margin-right:6px;font-weight:600}
+.lw-tag{min-width:24px;height:22px;padding:0 3px;border-radius:999px;display:grid;place-items:center;font-family:var(--code);font-size:9.5px;letter-spacing:0;
+  color:var(--mute);border:1px solid var(--line-3)}
+.lw-tag.an{background:var(--glow);border-color:var(--glow);color:var(--auf-glut);font-weight:700}
+.lw-tag.heute:not(.an){border-color:var(--glow);color:var(--snow)}
+.lw-tag.spaeter{opacity:.45}
+button.lw-schwer{min-height:36px;padding:6px 14px;border-radius:999px;background:var(--no-tint);border:1px solid var(--no);color:var(--no);
+  font-size:14px;font-weight:600}
+button.lw-schwer:hover{background:color-mix(in srgb,var(--no) 22%,transparent)}
+@media print{.lernleiste{display:none}}

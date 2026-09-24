@@ -27,7 +27,7 @@ window.onerror = function(msg, src, line, col){
 };
 </script>
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../assets/fonts/inter-400-latin.woff2">
-<script data-nacht src="../../../assets/thema.js?v=20260924-rueckblick"></script>
+<script data-nacht src="../../../assets/thema.js?v=20260925-lerntage"></script>
 <link rel="stylesheet" href="../../../assets/fonts.css?v=2">
 
 <style>
@@ -416,8 +416,8 @@ button.primary:hover{background:#0B4A54}
 :where(html:not([data-thema="hell"])) .vrow3 .c2,:where(html:not([data-thema="hell"])) .vrow3 .c3{color:#C8D9E3}
 </style>
 
-<link rel="stylesheet" href="../../../assets/learning.css?v=20260924-rueckblick">
-<link rel="stylesheet" media="screen" data-nacht href="../../../assets/learning-nacht.css?v=20260924-rueckblick">
+<link rel="stylesheet" href="../../../assets/learning.css?v=20260925-lerntage">
+<link rel="stylesheet" media="screen" data-nacht href="../../../assets/learning-nacht.css?v=20260925-lerntage">
 <link rel="stylesheet" href="style.css?v=20260908-review">
 <div class="wrap">
   <div class="masthead">
@@ -1083,6 +1083,7 @@ function buildQueue(){
   var pool = S.onlyDue ? all.filter(function(v){ return isDue(rec(v.id)); }) : all;
   S.queue = shuffle(pool.length ? pool : all);
   S.i = 0; S.revealed = false; S.answered = null; S.res = null;
+  S.rundeOk = []; S.rundeNo = [];
   newTask();
 }
 function startSession(topicId){
@@ -1364,6 +1365,11 @@ function rate(quality){
   else if(S.res && S.res.indexOf('near')!==-1)quality=Math.min(quality,1);
   var r = rec(v.id);
   var before = r.box;
+  /* Fuer den Rueckblick am Ende: falsch oder unsicher ist rot. */
+  if(!S.rundeOk) { S.rundeOk = []; S.rundeNo = []; }
+  if(quality < 2){ if(S.rundeNo.indexOf(v) < 0) S.rundeNo.push(v); }
+  else if(S.rundeOk.indexOf(v) < 0) S.rundeOk.push(v);
+  lerntagZaehlen();
   if(quality === 0)      r.box = 1;
   else if(quality === 1) r.box = Math.max(1, r.box - 1);
   else                   r.box = Math.min(5, r.box + 1);
@@ -1378,17 +1384,51 @@ function rate(quality){
   setTimeout(function(){ S.landed = null; }, 500);
 }
 
+/* Lerntage - derselbe Schluessel wie auf den Vokabelseiten
+   (die gemeinsame Lerndatei), damit jede geuebte Minute zaehlt. */
+function lerntagZaehlen(){
+  try{
+    var d = new Date(), k = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    var x = JSON.parse(localStorage.getItem('eb:lerntage')) || {};
+    x[k] = (x[k] || 0) + 1;
+    localStorage.setItem('eb:lerntage', JSON.stringify(x));
+  }catch(e){}
+}
+/* Rueckblick: welche Verben sassen, welche nicht - wie auf den
+   Vokabelseiten. Rot offen mit allen drei Formen, gruen eingeklappt. */
+function rueckblick(){
+  var no = S.rundeNo || [], ok = (S.rundeOk || []).filter(function(v){ return no.indexOf(v) < 0; });
+  if(!no.length && !ok.length) return '';
+  function zeile(v, gut){
+    return '<li class="rb-' + (gut ? 'ok' : 'no') + '"><span class="rb-zeichen" aria-hidden="true">' + (gut ? '\u2713' : '\u2717') + '</span>'
+      + '<span class="rb-en" lang="en">' + esc(chainText(v)) + '</span><span class="rb-de">' + esc(v.de) + '</span></li>';
+  }
+  return '<section class="rueckblick" aria-label="R\u00fcckblick auf den Durchgang">'
+    + (no.length ? '<h3 class="rb-kopf rb-no">Weiter\u00fcben \u00b7 ' + no.length + '</h3><ul class="rb-liste">' + no.map(function(v){ return zeile(v, false); }).join('') + '</ul>'
+      + '<button class="rb-ueben" id="missedPractice">' + (no.length === 1 ? 'Dieses Verb \u00fcben' : 'Diese ' + no.length + ' Verben \u00fcben') + '</button>'
+      : '<p class="rb-alle">Alles gewusst \u2013 kein Verb zum Weiter\u00fcben.</p>')
+    + (ok.length ? '<details class="rb-gewusst"' + (no.length ? '' : ' open') + '><summary class="rb-kopf rb-ok">Gewusst \u00b7 ' + ok.length + '</summary><ul class="rb-liste">' + ok.map(function(v){ return zeile(v, true); }).join('') + '</ul></details>' : '')
+    + '</section>';
+}
 function renderDone(){
   var c = boxCounts(S.topicId);
   var total = SETS[S.topicId].length;
   view.innerHTML = '<div class="done"><h2>Durchgang beendet</h2>'
     + '<p>' + S.seen + ' Verben bearbeitet \u00b7 ' + c[4] + ' von ' + total + ' in Fach 5</p>'
+    + rueckblick()
     + '<div class="controls"><button class="primary" id="again">Weiter üben</button>'
     + '<button id="home">Übersicht</button></div></div>';
   document.getElementById("again").onclick = function(){
     S.onlyDue = false; buildQueue(); S.seen = 0; render();
   };
   document.getElementById("home").onclick = function(){ S.view="home"; render(); };
+  var ueben = document.getElementById("missedPractice");
+  if(ueben) ueben.onclick = function(){
+    S.queue = shuffle((S.rundeNo || []).slice());
+    S.i = 0; S.seen = 0; S.revealed = false; S.answered = null; S.res = null;
+    S.rundeOk = []; S.rundeNo = [];
+    newTask(); render();
+  };
   updateFoot();
 }
 
@@ -1793,8 +1833,8 @@ catch(err){
 </html>
 
 <link rel="stylesheet" href="../../../assets/feedback.css?v=20260921-anleitung">
-<link rel="stylesheet" media="screen" data-nacht href="../../../assets/feedback-nacht.css?v=20260924-rueckblick">
-<link rel="stylesheet" media="screen" data-nacht href="../../../assets/nacht-marke.css?v=20260924-rueckblick">
+<link rel="stylesheet" media="screen" data-nacht href="../../../assets/feedback-nacht.css?v=20260925-lerntage">
+<link rel="stylesheet" media="screen" data-nacht href="../../../assets/nacht-marke.css?v=20260925-lerntage">
 <script src="../../../assets/feedback.js?v=20260921-zustand"></script>
 
 <script>
