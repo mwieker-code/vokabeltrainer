@@ -251,11 +251,18 @@ a.subject .subject-name{color:#fff}
   .tile-name,.tile.summit .tile-name{font-size:24px;letter-spacing:-.03em}
   .tile-kicker{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;opacity:.85;margin-top:4px}
   .etappe-art{position:absolute;right:10px;top:10px;width:30px;height:30px;opacity:.85}
-  .subject{min-height:0;flex-direction:column;align-items:flex-start;gap:6px;padding:12px;border-radius:16px}
-  .subject .bili-art{width:28px;height:28px}
-  .subject-name{font-size:18px}
-  .subject-meta{display:none}
-  .pill{margin-top:4px;font-size:9px;padding:3px 6px;letter-spacing:.04em}
+  /* So hoch wie die Etappen: oben Hinweis und Bild, unten der Name. */
+  .subject{min-height:0;display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"hinweis bild" "name name";
+    align-items:center;gap:6px 4px;padding:10px 12px;border-radius:16px}
+  .subject-text{display:contents}
+  .subject .bili-art{grid-area:bild;width:24px;height:24px}
+  .subject-name{grid-area:name;font-size:17px;line-height:1.1}
+  .subject-meta,.subject .go{display:none}
+  .pill{grid-area:hinweis;justify-self:start;margin:0;font-size:8px;padding:2px 5px;letter-spacing:.04em}
+  /* Fuer Bild und Hinweis nebeneinander ist die Karte zu schmal - bei den
+     Faechern in Vorbereitung bleibt der Hinweis. */
+  .subject.pending{grid-template-areas:"hinweis hinweis" "name name"}
+  .subject.pending .bili-art{display:none}
   .fuss{margin-top:40px}
 }
 @media (min-width:621px){.tile-kicker{display:none}}
