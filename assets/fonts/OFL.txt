@@ -5,6 +5,12 @@ lateinischen Zeichensaetze.
 Inter
   Copyright (c) 2016 The Inter Project Authors (https://github.com/rsms/inter)
 
+Bricolage Grotesque
+  Copyright 2022 The Bricolage Grotesque Project Authors (https://github.com/ateliertriay/bricolage)
+
+Instrument Sans
+  Copyright 2022 The Instrument Sans Project Authors (https://github.com/Instrument/instrument-sans)
+
 Source Serif 4
   Copyright 2014 - 2023 Adobe (http://www.adobe.com/), with Reserved Font
   Name 'Source'. All Rights Reserved. Source is a trademark of Adobe in the

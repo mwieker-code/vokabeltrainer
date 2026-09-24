@@ -39,7 +39,10 @@ for(const seite of seiten){
 assert.equal(abweichend.length,0,
   'Seiten tragen eine andere Fassung als fassung.json ('+datei.fassung+'):\n  '
   +abweichend.slice(0,8).join('\n  '));
-assert.ok(geprueft>=10,'nur '+geprueft+' Seiten mit Versionsnummer gefunden');
+/* Die Startseite laedt seit dem Nachtaufstieg kein learning.css mehr -
+   sie bringt ihre Gestaltung selbst mit. Es bleiben die acht Lernseiten
+   und der Verbtrainer. */
+assert.ok(geprueft>=9,'nur '+geprueft+' Seiten mit Versionsnummer gefunden');
 
 /* Die Seite liest ihre eigene Fassung aus der Adresse, mit der
    learning.js geladen wurde - also muss dort eine stehen. */

@@ -1,0 +1,43 @@
+/* Automatisch erzeugt von tools/nacht.cjs aus year6/grammar/style.css - nicht von Hand aendern.
+   Dunkle Gegenstuecke der Farbregeln, nur fuer den Bildschirm. */
+:root{color:#C7DFEA;background:#181D26}
+header span,small{color:#BED3DE}
+button,.link{border:1px solid #384A51;background:#151A22;color:#C7DFEA}
+button:hover,.link:hover{background:#161F21}
+:focus-visible{outline:3px solid #6B4D2F}
+.panel{background:#151A22;border:1px solid #313B3F}
+.stats span{background:#132325}
+input,textarea,select{border:1px solid #384A51;background:#151A22;color:#C7DFEA}
+.quote{background:#171C25}
+.context{color:#BED3DE}
+.correct{background:#142117!important}
+.incorrect{background:#261907!important}
+.feedback{background:#151F20}
+mark{background:#2C1F00;color:#C7DFEA}
+.pill{color:#BED3DE}
+details{border-top:1px solid #313B3F}
+footer{border-top:1px solid #33444B}
+.muted{color:#BED3DE}
+[data-group]{--tile:#141F29;color:#C7DFEA}
+[data-group="time"]{--tile:#261A00}
+[data-group="irregular"]{--tile:#201C2C}
+[data-group="questions"]{--tile:#0F231C}
+[data-group="short"]{--tile:#0F2125}
+[data-group="wh"]{--tile:#2A181F}
+[data-group="negative"]{--tile:#2A190C}
+[data-group="repair"]{--tile:#1C2109}
+[data-group="be"]{--tile:#1B1D2C}
+.feedback-correct{background:#132218}
+.feedback-review{background:#271905}
+a.topic[href="simple-past/"]{border:1px solid #23544B}
+a.topic[href="irregular-verbs/"]{background:#151F2B;border:1px solid #304A68}
+a.topic h2{color:#BDDEEB}
+header{border-bottom:2px solid #41394C}
+header span{color:#DFC2FF}
+a.topic[href="simple-past/"]{background:#211B2A;border-color:#493B5C}
+a.topic[href="simple-past/"] h2{color:#E1C5FF}
+.breadcrumb{color:#BFD1DA}
+.breadcrumb a{color:#A8DDE7}
+.task .sentence-pieces li{background:#241D34;color:#DBCEFF;border:1px solid #4B3D60}
+.task .task-material{background:#172022;color:#BDDEEA}
+.task .task-note{color:#C0D4DC}

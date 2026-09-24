@@ -13,6 +13,12 @@ Statischer Englisch-Trainer für Jahrgang 5, 6, 9, 10 und Oberstufe. Die HTML-Se
 - Übersichtlicheres Layout, größere Bedienelemente und aufklappbare Lernfächer.
 - Nicht vorhandene Jahrgänge von der Startseite entfernt. Wiederholungsintervalle an die Anleitung angeglichen: sofort / 1 / 2 / 4 / 8 Tage. Bereits gespeicherte Fälligkeiten werden nicht nachträglich verändert.
 
+## Gestaltung: Nachtaufstieg
+
+- Dunkler Nachtgrund, Alpenglühen (#FF7A59) und Gletscher (#8FE3D2) als Akzente; Schriften Bricolage Grotesque und Instrument Sans, selbst ausgeliefert unter `assets/fonts/` (SIL Open Font License).
+- Die Startseite (`index.html`) bringt ihre Gestaltung selbst mit. Die Lernseiten behalten ihre Stylesheets; `tools/nacht.cjs` erzeugt zu jeder Farbregel ein dunkles Gegenstück (`*-nacht.css` bzw. `<style data-nacht>`), `assets/nacht-marke.css` legt die Marke darüber. Alles davon gilt nur für den Bildschirm – der Druck bleibt hell.
+- Nach jeder Farbänderung in einer Seite oder unter `assets/`: `node tools/nacht.cjs`. `npm test` meldet, wenn das vergessen wurde.
+
 ## Starten und prüfen
 
 Die Ordnerstruktur inklusive `assets/` vollständig beibehalten. Zum lokalen Start beispielsweise `python3 -m http.server 8765`, danach http://localhost:8765 öffnen. Für GitHub Pages die sechs HTML-Seiten und `assets/` gemeinsam übernehmen; die Sites-Konfiguration ist dafür nicht erforderlich.
