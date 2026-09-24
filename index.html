@@ -69,8 +69,7 @@ a{color:inherit}
   transition:font-variation-settings .22s ease-out;animation:kin 3.2s ease-in-out infinite}
 .title.follow span[aria-hidden]{animation:none}
 @keyframes kin{0%,100%{font-variation-settings:'wght' 300,'opsz' 96}50%{font-variation-settings:'wght' 800,'opsz' 96}}
-.lead{max-width:520px;font-size:20px;line-height:1.5;color:var(--soft);margin:28px 0 30px}
-.cta{display:inline-flex;align-items:center;gap:10px;min-height:56px;padding:0 28px;border-radius:999px;
+.cta{margin-top:40px;display:inline-flex;align-items:center;gap:10px;min-height:56px;padding:0 28px;border-radius:999px;
   background:var(--glow);color:var(--night);text-decoration:none;font-size:17px;font-weight:600;
   transition:transform .25s,box-shadow .25s}
 .cta:hover{transform:translateY(-2px);box-shadow:0 12px 30px -10px var(--glow)}
@@ -181,11 +180,13 @@ a.subject .subject-name{color:#fff}
   .wordmark{font-size:19px}
   .hero{padding:26px 0 8px;gap:0}
   .eyebrow{font-size:11px;letter-spacing:.1em;margin-bottom:16px}
-  .lead{font-size:16px;margin:16px 0 0}
   .cta,.ridge{display:none}
   .section{padding-top:30px}
   .section-head{margin-bottom:14px}
   .section-head p{display:none}
+  /* Die Etappen stehen direkt unter dem Titel - ihre Ueberschrift kostete
+     die Zeile, mit der die letzte Kachel noch ins Bild passt. */
+  #jahrgaenge .section-head{display:none}
   .tiles,.bili{grid-template-columns:1fr;gap:10px}
   .tile,.tile.summit{min-height:0;padding:14px 16px;border-radius:18px;flex-direction:row;align-items:center;gap:12px}
   .tile-top{order:2;align-items:center}
@@ -223,7 +224,6 @@ a.subject .subject-name{color:#fff}
     <div>
       <p class="eyebrow">Wortschatz · Grammatik · Bilingualer Unterricht</p>
       <h1 class="title" id="title" aria-label="English Basecamp"><span class="line" data-word="English"></span><span class="line" data-word="Basecamp"></span></h1>
-      <p class="lead">Kurze Lernrunden direkt aus deinen Units – Wort für Wort nach oben.</p>
       <a class="cta" href="#jahrgaenge">Jahrgang wählen
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
     </div>
