@@ -636,22 +636,6 @@ ${vocabulary}`;
     document.getElementById('browseVocabulary').replaceWith(listButton);
     listButton.className='browse-list';listButton.removeAttribute('style');listButton.textContent='Vokabeln nachschlagen';
     document.getElementById('practiceAcross').onclick=()=>setup(upper?'today':YEARS[0].id+'-all');
-    /* Lerntage und schwierige Woerter in einer schmalen Zeile unter der
-       Ueberschrift. Ohne Lerntag und ohne schwierige Woerter bleibt sie weg. */
-    {
-      const reihe=lernreihe(),woche=lernwoche(),schwer=schwereWoerter();
-      if(reihe||woche.some(t=>t.geuebt)||schwer.length){
-        const kopf=view.querySelector('.unit-heading');
-        const leiste=document.createElement('div');leiste.className='lernleiste';
-        leiste.innerHTML='<div class="lernwoche" role="img" aria-label="'+(reihe?reihe+(reihe===1?' Lerntag':' Lerntage in Folge'):'Diese Woche')+'">'
-          +'<span class="lw-reihe">'+(reihe?reihe+(reihe===1?' Tag':' Tage in Folge'):'Diese Woche')+'</span>'
-          +woche.map(t=>'<span class="lw-tag'+(t.geuebt?' an':'')+(t.heute?' heute':'')+(t.zukunft?' spaeter':'')+'">'+t.name+'</span>').join('')+'</div>'
-          +(schwer.length?'<button class="lw-schwer" id="hardWords">Schwierige Wörter · '+schwer.length+'</button>':'');
-        if(kopf)kopf.after(leiste);
-        const knopf=document.getElementById('hardWords');
-        if(knopf)knopf.onclick=()=>wortrunde('schwer',schwereWoerter());
-      }
-    }
     /* Fortsetzen und Richtung teilen sich eine Zeile. Auf dem Telefon
        stehen sie nebeneinander und sparen einen ganzen Streifen ueber der
        Unit-Liste; am Rechner bleiben sie untereinander wie bisher. */
@@ -665,9 +649,40 @@ ${vocabulary}`;
       +'<button class="switch" id="homeDirection">'+dirLabel()+'</button></div>');
     if(savedRound)document.getElementById('resumeRound').onclick=resume;
     document.getElementById('homeDirection').onclick=()=>{S.dir=S.dir==='en2de'?'de2en':'en2de';render();};
+    heuteKarte();
     assignmentList();
     assignmentBanner();
   };
+  /* =========================================================================
+     DIE KARTE "HEUTE"
+     Alles, was heute zu tun ist, in einem Block ueber den Units: Lerntage
+     und Woche, die unterbrochene Runde, unitueebergreifend ueben und die
+     schwierigen Woerter. Richtung und Nachschlagen stehen am Telefon nur
+     noch im Menue (dort gab es sie schon); am Rechner bleiben sie in der
+     Karte. Die Knoepfe behalten ihre ids - sie werden nur umgesetzt.
+     ========================================================================= */
+  function heuteKarte(){
+    const kopf=view.querySelector('.unit-heading');if(!kopf)return;
+    const reihe=lernreihe(),woche=lernwoche(),schwer=schwereWoerter();
+    const karte=document.createElement('section');karte.className='heute';karte.setAttribute('aria-label','Heute');
+    karte.innerHTML='<div class="heute-kopf"><h2 class="heute-titel">Heute'+(reihe?' <span class="heute-reihe">· '+reihe+(reihe===1?' Lerntag':' Lerntage in Folge')+'</span>':'')+'</h2>'
+      +(woche.some(t=>t.geuebt)?'<div class="lernwoche" role="img" aria-label="Diese Woche geübt: '+woche.filter(t=>t.geuebt).map(t=>t.name).join(', ')+'">'
+        +woche.map(t=>'<span class="lw-tag'+(t.geuebt?' an':'')+(t.heute?' lw-heute':'')+(t.zukunft?' spaeter':'')+'">'+t.name+'</span>').join('')+'</div>':'')
+      +'</div><div class="heute-knoepfe"><div class="heute-zeile"></div></div>';
+    const knoepfe=karte.querySelector('.heute-knoepfe'),zeile=karte.querySelector('.heute-zeile');
+    const weiter=document.getElementById('resumeRound');if(weiter)knoepfe.prepend(weiter);
+    const quer=document.getElementById('practiceAcross');if(quer)zeile.append(quer);
+    if(schwer.length){
+      const b=document.createElement('button');b.className='lw-schwer';b.id='hardWords';
+      b.innerHTML='Schwierige<span class="nur-gross"> Wörter</span> · '+schwer.length;
+      b.onclick=()=>wortrunde('schwer',schwereWoerter());zeile.append(b);
+    }
+    const rest=document.createElement('div');rest.className='heute-rest';
+    for(const id of ['homeDirection','allBtn']){const el=document.getElementById(id);if(el)rest.append(el);}
+    if(rest.children.length)knoepfe.append(rest);
+    view.querySelector('.sessionbar.homebar')?.remove();
+    kopf.before(karte);
+  }
   // All overview/back actions share the direct Unit dashboard.
   if(!upper) renderYear = (function(original){return function(){
     if(S.view==='year'){S.view='home';return renderHome();}

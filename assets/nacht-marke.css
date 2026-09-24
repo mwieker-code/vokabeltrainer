@@ -461,16 +461,51 @@ button.rb-ueben:hover{background:color-mix(in srgb,var(--no) 22%,transparent)}
 .fortschritt-zeile .fz-hoch{color:var(--ok);font-weight:600}
 .fortschritt-zeile .fz-reihe{color:var(--glow)}
 
-/* Lerntage und schwierige Woerter: eine schmale Zeile unter "Deine Units" */
-.lernleiste{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:0 0 14px}
-.lernwoche{display:flex;align-items:center;gap:4px}
-.lw-reihe{font-family:var(--code);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--glow);margin-right:6px;font-weight:600}
-.lw-tag{min-width:24px;height:22px;padding:0 3px;border-radius:999px;display:grid;place-items:center;font-family:var(--code);font-size:9.5px;letter-spacing:0;
+/* Die Karte "Heute" ueber den Units: Lerntage, Woche, Fortsetzen,
+   unitueebergreifend und schwierige Woerter in einem Block. */
+.heute{background:var(--glas);border:1px solid var(--glas-rand);border-radius:22px;box-shadow:var(--glas-licht);
+  padding:14px 16px;margin:0 0 18px}
+.heute-kopf{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.heute-titel{font-family:var(--serif);font-size:19px;font-weight:700;letter-spacing:-.02em;margin:0;color:var(--snow)}
+.heute-reihe{color:var(--glow)}
+.heute-knoepfe{display:grid;gap:8px}
+.heute-knoepfe>*{margin:0!important}
+.heute #resumeRound{width:100%;min-height:0;padding:10px 14px;text-align:left;display:flex;flex-direction:column;gap:2px}
+.heute #resumeRound .t-dir{display:none}
+.heute-zeile{display:flex;gap:8px}
+.heute-zeile>*{margin:0!important}
+.heute-zeile #practiceAcross{flex:1 1 auto;min-height:46px;white-space:nowrap;background:var(--glow);border-color:var(--glow);color:var(--auf-glut);font-weight:600}
+.heute-zeile #practiceAcross:hover{background:var(--glow-hi);border-color:var(--glow-hi)}
+.heute-rest{display:flex;gap:8px;flex-wrap:wrap}
+.heute-rest>*{margin:0!important}
+.lernwoche{display:flex;align-items:center;gap:3px}
+.lw-tag{min-width:22px;height:20px;padding:0 3px;border-radius:999px;display:grid;place-items:center;font-family:var(--code);font-size:9px;letter-spacing:0;
   color:var(--mute);border:1px solid var(--line-3)}
 .lw-tag.an{background:var(--glow);border-color:var(--glow);color:var(--auf-glut);font-weight:700}
-.lw-tag.heute:not(.an){border-color:var(--glow);color:var(--snow)}
+.lw-tag.lw-heute:not(.an){border-color:var(--glow);color:var(--snow)}
 .lw-tag.spaeter{opacity:.45}
-button.lw-schwer{min-height:36px;padding:6px 14px;border-radius:999px;background:var(--no-tint);border:1px solid var(--no);color:var(--no);
-  font-size:14px;font-weight:600}
+button.lw-schwer{flex:0 0 auto;min-height:46px;padding:6px 14px;border-radius:14px;background:var(--no-tint);border:1px solid var(--no);color:var(--no);
+  font-size:14px;font-weight:600;white-space:nowrap}
 button.lw-schwer:hover{background:color-mix(in srgb,var(--no) 22%,transparent)}
-@media print{.lernleiste{display:none}}
+@media print{.heute{display:none}}
+/* Am Telefon: Kopfzeile in einer Reihe (Zelt, Titel, Rueckweg als
+   Pfeil, Menue), keine Ueberschrift ueber den Units, Richtung und
+   Nachschlagen nur im Menue. */
+@media(max-width:620px){
+  .masthead:has(.kopf-menue){display:grid!important;grid-template-columns:auto minmax(0,1fr) auto auto;align-items:center;gap:10px;
+    padding-bottom:12px!important;margin-bottom:14px!important}
+  .masthead:has(.kopf-menue) .brand-link{grid-column:1;grid-row:1}
+  .masthead:has(.kopf-menue) .mhead-text{grid-column:2;grid-row:1;min-width:0}
+  .masthead:has(.kopf-menue) h1{font-size:23px!important;white-space:nowrap}
+  .masthead:has(.kopf-menue) .brand-link svg{width:36px;height:36px}
+  .masthead:has(.kopf-menue) .sub{font-size:9.5px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .masthead:has(.kopf-menue) a.home-link{grid-column:3;grid-row:1;width:44px!important;height:44px;min-height:44px!important;padding:0!important;
+    border-radius:14px!important;font-size:0!important;display:grid!important;place-items:center;margin:0!important;flex:none!important}
+  .masthead:has(.kopf-menue) a.home-link::before{content:"←";font-size:20px;font-weight:700;line-height:1}
+  .masthead:has(.kopf-menue) .kopf-menue{grid-column:4;grid-row:1}
+  .heute ~ .unit-heading,.heute-rest,.heute .nur-gross{display:none!important}
+  .heute{padding:12px 14px}
+  .heute-titel{font-size:17px}
+  .heute-zeile #practiceAcross{font-size:14px;padding:0 10px}
+  .heute-kopf{flex-wrap:nowrap}
+}
