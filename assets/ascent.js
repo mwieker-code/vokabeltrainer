@@ -12,7 +12,17 @@
  let streak=0,position=0,raf=0,queue=null,credited=new Set(),lastTarget=-1,gekonnt=0;
  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
  const panel=document.createElement('section');panel.className='ascent-panel';panel.setAttribute('aria-label','Dein Aufstieg');
- panel.innerHTML='<div class="ascent-label"><b class="ascent-streak">0 in Folge</b></div>'+scenes.small+'<div class="ascent-footer"><span class="ascent-count"></span><strong class="ascent-percent"></strong></div>';
+ /* Der Grat: dieselbe Idee als schmales Band - ein Weg, ein Punkt, der
+    ihm folgt, oben die Fahne. Das Nachtdesign zeigt ihn statt des
+    Bergbilds und gibt der Karte den Platz, den das Bild belegt haette.
+    Ohne das Nachtdesign bleibt er verborgen. */
+ const grat='<svg class="ascent-grat" viewBox="0 0 360 64" aria-hidden="true">'
+  +'<path d="M8 58C48 56 70 46 100 42S152 32 182 29S246 19 276 16S330 13 344 12V64H8Z" class="grat-hang"/>'
+  +'<path id="gratRoute" d="M8 58C48 56 70 46 100 42S152 32 182 29S246 19 276 16S330 13 344 12" class="grat-weg"/>'
+  +'<path id="gratTrail" d="M8 58C48 56 70 46 100 42S152 32 182 29S246 19 276 16S330 13 344 12" class="grat-spur"/>'
+  +'<path d="M344 12V1" class="grat-mast"/><path d="M345 1L359 4.5L345 8Z" class="grat-fahne"/>'
+  +'<g id="gratDot" transform="translate(8 58)"><circle r="10" class="grat-hof"/><circle r="6" class="grat-punkt"/></g></svg>';
+ panel.innerHTML='<div class="ascent-label"><b class="ascent-streak">0 in Folge</b></div>'+scenes.small+grat+'<div class="ascent-footer"><span class="ascent-count"></span><strong class="ascent-percent"></strong></div>';
  const oldBuild=buildQueue;buildQueue=function(){streak=0;position=0;lastTarget=-1;gekonnt=0;credited=new Set();oldBuild();queue=S.queue;};
  /* Die Figur und der zurueckgelegte Weg an die Stelle "position"
     setzen - fuer beide Zeichnungen, die grosse und die flache. */
@@ -25,6 +35,14 @@
   const linie=panel.querySelector('#mobileTrail');
   linie.style.strokeDasharray=laenge;
   linie.style.strokeDashoffset=laenge*(1-position);
+  const kamm=panel.querySelector('#gratRoute');
+  if(kamm){
+   const l=kamm.getTotalLength(),p=kamm.getPointAtLength(position*l);
+   panel.querySelector('#gratDot').setAttribute('transform',`translate(${p.x} ${p.y})`);
+   const spur=panel.querySelector('#gratTrail');
+   spur.style.strokeDasharray=l;
+   spur.style.strokeDashoffset=l*(1-position);
+  }
  }
  function animate(target){
   cancelAnimationFrame(raf);
@@ -61,8 +79,10 @@
   const art=panel.querySelector('.mobile-landscape');
   if(!art||!panel.isConnected)return;
   art.style.removeProperty('--ascent-height');
+  const stage=document.querySelector('.stage');
+  if(stage)stage.style.removeProperty('--ascent-karte');
   if(!matchMedia('(max-width:620px)').matches)return;
-  const tasten=document.querySelector('.eb-tasten'),stage=document.querySelector('.stage');
+  const tasten=document.querySelector('.eb-tasten');
   if(!tasten||!stage)return;
   /* Was der Rahmen ausser der Zeichnung noch traegt: Fusszeile und
      Raender. Bleibt gleich, egal wie hoch die Zeichnung ist. */
@@ -74,6 +94,14 @@
   const platz=tasten.getBoundingClientRect().top
              -panel.getBoundingClientRect().top
              -stage.getBoundingClientRect().height-rahmen-LUFT;
+  /* Zeigt das Blatt den schmalen Grat statt des Bilds, bekommt die
+     Karte den freien Platz. Gemessen wurde oben ohne ihre Mindesthoehe,
+     also stimmt auch das im ersten Durchlauf. */
+  const kamm=panel.querySelector('.ascent-grat'),karte=stage.querySelector('.vcard');
+  if(kamm&&karte&&getComputedStyle(kamm).display!=='none'){
+   stage.style.setProperty('--ascent-karte',Math.max(0,Math.round(karte.getBoundingClientRect().height+platz))+'px');
+   return;
+  }
   art.style.setProperty('--ascent-height',Math.max(44,Math.min(240,Math.round(platz)))+'px');
  }
  function update(){
