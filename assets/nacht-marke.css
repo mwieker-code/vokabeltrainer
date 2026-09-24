@@ -1,0 +1,162 @@
+/* =========================================================================
+   NACHTAUFSTIEG - die Marke auf den Lernseiten
+   -------------------------------------------------------------------------
+   Von Hand geschrieben und als letzte Datei geladen, nur fuer den
+   Bildschirm. Die umgerechneten Farben der alten Regeln kommen aus den
+   *-nacht.css-Dateien (tools/nacht.cjs); hier steht, was die Marke
+   ausmacht: Nachtgrund, Alpengluehen, Gletscher, die beiden Schriften,
+   das Tastenfeld und der Berg ueber der Karte.
+   Dieselben Werte stehen auf der Startseite (index.html).
+   ========================================================================= */
+:root{
+  --night:#0D1017; --surface:#161B24; --surface-2:#1C2331;
+  --line:#232A37; --line-2:#2E3646; --line-3:#3A4355;
+  --snow:#F3EFE6; --soft:#C9CFD9; --mute:#9AA3B2;
+  --glow:#FF7A59; --glow-hi:#FF9478; --glacier:#8FE3D2;
+
+  --ground:var(--night); --card:var(--surface); --ink:var(--snow); --ink-soft:#AEB6C2;
+  --rule:var(--line-2); --edge:var(--line-3);
+  --petrol:var(--glacier); --brand:var(--glow);
+  --amber:#FFB27A; --moss:#7FD6A4;
+  --tint-petrol:#14252A; --tint-moss:#15261F; --tint-amber:#2A1D12;
+  --focus:var(--glacier);
+  --sans:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --serif:"Bricolage Grotesque","Instrument Sans",system-ui,sans-serif;
+  --mono:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:dark;
+}
+html{background:var(--night)}
+body{background:var(--night);color:var(--ink);font-family:var(--sans)}
+::selection{background:#FF7A5966}
+a{color:var(--glacier)}
+:focus-visible{outline-color:var(--glacier)}
+
+/* ---- Kopfzeile ---- */
+.masthead{border-bottom:1px solid var(--line)!important}
+.masthead .brandmark,.brand-link .brandmark{color:var(--glow)}
+.masthead h1{font-family:var(--serif);font-weight:700;letter-spacing:-.035em;color:var(--snow)}
+.masthead h1 .title-accent{color:var(--glow);font-weight:700}
+.masthead .sub{color:var(--mute);font-family:"JetBrains Mono",ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;font-size:12px}
+a.home-link,a.grammar-back{background:var(--glow);border-color:var(--glow);color:var(--night);border-radius:999px}
+a.home-link:hover,a.home-link:focus,a.home-link:active,a.grammar-back:hover,a.grammar-back:focus,a.grammar-back:active{
+  background:var(--glow-hi);border-color:var(--glow-hi);color:var(--night)}
+.kopf-knopf{background:var(--surface);border-color:var(--line-2);color:var(--snow)}
+.kopf-knopf:hover{border-color:var(--line-3)}
+.kopf-blatt{background:var(--surface);border-color:var(--line-2);color:var(--snow);box-shadow:0 24px 50px -18px #000C}
+.kopf-blatt button{color:var(--snow)}
+.kopf-blatt button:hover{background:var(--surface-2)}
+
+/* ---- Schrift ---- */
+.section-title,.done h2,.doc h2,.prompt,.summary-number,.yeargroup .yearhead .name,.topic .t-name,.cloze{font-family:var(--serif)}
+.section-title,.done h2{font-weight:700;letter-spacing:-.02em}
+.prompt{font-weight:700;letter-spacing:-.03em}
+.yeargroup .yearhead .name{letter-spacing:-.015em}
+
+/* ---- Knoepfe ---- */
+button{background:var(--surface);border-color:var(--line-2);color:var(--ink)}
+button:hover{border-color:var(--line-3)}
+button.primary,.dueBtn{background:var(--glow);border-color:var(--glow);color:var(--night);font-weight:600}
+button.primary:hover,.dueBtn:hover{background:var(--glow-hi);border-color:var(--glow-hi)}
+button.primary span{color:#0D101799}
+.switch[aria-pressed="true"]{background:var(--snow);border-color:var(--snow);color:var(--night)}
+.speak{color:var(--glacier)}
+.speak.on{background:var(--glacier);border-color:var(--glacier);color:var(--night)}
+.linkbtn{color:var(--glacier)}
+.rate.again{border-color:var(--amber);color:var(--amber)}
+.rate.good{border-color:var(--moss);color:var(--moss)}
+.rate span{color:var(--mute)}
+.unit-actions button{color:var(--soft);border-color:var(--line-3)}
+.unit-actions .browse-practice{background:var(--surface-2);color:var(--snow)}
+.unit-actions button:hover{background:var(--surface-2);color:var(--snow);border-color:var(--mute)}
+
+/* ---- Karten, Listen ---- */
+.vcard,.done,.doc,.box-details,.emptyhint,.selection-bar,.bili-level{background:var(--surface);border-color:var(--line-2)}
+.vcard{box-shadow:0 30px 60px -30px #000C}
+.stage .vcard{border-color:var(--line-2)}
+.eyebrow{border-bottom-color:var(--line-2);color:var(--mute)}
+.pos,.ipa{color:var(--mute)}
+.answer{border-top-color:var(--line-2)}
+.answer .ex{border-left-color:var(--glow)}
+.answer .ex b{color:var(--snow);box-shadow:inset 0 -.42em 0 #FF7A5940}
+.typebox input,input[type=search],input[type=text],input[type=number],select,textarea{
+  background:var(--night);color:var(--ink);border-color:var(--line-3)}
+.typebox input:focus{background:var(--night);outline-color:var(--glacier)}
+.typebox input:disabled{color:var(--ink);-webkit-text-fill-color:var(--ink)}
+progress{accent-color:var(--glow)}
+.round-progress{color:var(--soft)}
+.rail .slot,.slot{background:var(--surface-2);border-color:var(--line-2)}
+.slot.here,.rail[class*="u"] .slot.here{background:#FF7A5918;border-color:var(--glow)}
+.slot.here::after,.rail[class*="u"] .slot.here::after{background:#2A1E1F;border-color:var(--glow)}
+.correction mark{background:#FFD166;color:#1A1400}
+.foot{border-top-color:var(--line);color:var(--mute)}
+
+/* Die Units: Flaeche in der dunklen Toenung ihrer Farbe, Kante und
+   Etikett in der Farbe selbst. */
+.yeargroup[class*="u"]{border-color:color-mix(in srgb,var(--unit) 45%,var(--night));box-shadow:none}
+.yeargroup .yearhead:hover{background-color:#FFFFFF08}
+.yeargroup .yearhead::after{background:var(--surface-2);color:var(--snow)}
+.yeargroup[open] .yearhead{border-bottom-color:var(--line-2)}
+.yeargroup .topic{background:var(--surface);border-color:var(--surface)}
+.yeargroup .topic:hover{background:var(--surface-2)}
+.yearhead .tag{color:#fff}
+
+/* ---- Dialoge ---- */
+dialog{background:var(--surface);color:var(--ink);border-color:var(--line-2)}
+dialog::backdrop{background:#05070ACC}
+
+/* ---- Tastenfeld: dunkle Tasten, das Pruefen im Alpengluehen ---- */
+.eb-tasten{background:#090B10;box-shadow:0 -1px 0 var(--line)}
+.eb-tasten .tk{background:#2A3140;color:var(--snow);box-shadow:0 1px 0 #000}
+.eb-tasten .tk:active{background:#3A4355}
+.eb-tasten .tk.weit,.eb-tasten .tk.sprache,.eb-tasten .tk.ebene{background:#1A1F2A;color:var(--soft)}
+.eb-tasten .tk.senden{background:var(--glow);color:var(--night)}
+.eb-tasten .tk.senden:active{background:var(--glow-hi)}
+body.eb-tippen .eb-tasten[data-schieben="an"] .tk,
+body.eb-tippen .eb-tasten[data-schieben="an"] .tk.senden{background:#1A1F2A}
+body.eb-tippen .typebox::after{background:var(--glow)}
+body.eb-tippen .controls{background:var(--surface);border-top-color:var(--line)}
+body.eb-runde #back{background:var(--glow);color:var(--night)}
+
+/* ---- Der Berg ueber der Karte, bei Nacht ----
+   Die Zeichnung kommt aus assets/ascent.js mit festen Farben. CSS schlaegt
+   die Farbangaben am SVG, deshalb reicht es, jede Farbe hier umzulenken. */
+.ascent-panel{background:#0D1017;border-color:var(--line-2);box-shadow:none}
+.ascent-panel stop[stop-color="#deeee8"]{stop-color:#0B0E14}
+.ascent-panel stop[stop-color="#f1edda"]{stop-color:#1B2030}
+.ascent-panel [fill="#efd594"]{fill:#FF7A59}
+.ascent-panel [fill="#b1cabe"]{fill:#1C2331}
+.ascent-panel [fill="#88aa99"]{fill:#171C27}
+.ascent-panel [fill="#537e6c"]{fill:#262E3D}
+.ascent-panel [fill="#365e50"]{fill:#1B2230}
+.ascent-panel [fill="#365e4c"]{fill:#11151D}
+.ascent-panel [fill="#426d66"],.ascent-panel [fill="#274c3e"],.ascent-panel [fill="#315446"]{fill:#0F131A}
+.ascent-panel [stroke="#315446"]{stroke:#F3EFE6}
+.ascent-panel [stroke="#e7edda"]{stroke:#3A4355}
+.ascent-panel [stroke="#f6d28a"]{stroke:#8FE3D2}
+.ascent-panel [fill="#db9b65"]{fill:#FF7A59}
+.ascent-footer{background:#11151D;color:var(--soft)}
+.ascent-streak{background:#161B24E6;color:var(--snow)}
+.ascent-preview-note{color:var(--mute)}
+body.ascent-active .eyebrow .ascent-direction-label{background:var(--surface-2);border-color:var(--line-3);color:var(--soft)}
+
+/* ---- Fortschrittsbalken: eigene Farbe statt der des Systems ---- */
+progress{-webkit-appearance:none;appearance:none;border:0;border-radius:999px;background:var(--line-2);overflow:hidden}
+progress::-webkit-progress-bar{background:var(--line-2);border-radius:999px}
+progress::-webkit-progress-value{background:var(--glow);border-radius:999px}
+progress::-moz-progress-bar{background:var(--glow);border-radius:999px}
+
+/* Etiketten ohne Unit-Farbe (Verbtrainer) bekommen eine dunkle Plakette,
+   sonst stuende weisse Schrift auf der hellen Schriftfarbe. */
+.yearhead .tag{background:var(--unit,#2A3140);color:#fff}
+html:root{background:var(--night)}
+
+/* ---- Grammatik und Analysis: Kopf, Ueberschriften, Kategorien ---- */
+main h1,main h2{font-family:var(--serif)}
+main>header{border-bottom-color:var(--line)}
+main>header span{color:var(--mute)}
+main>header a{background:var(--glow);color:var(--night);border-radius:999px}
+main>header a:hover{background:var(--glow-hi);color:var(--night)}
+[data-group] h2{color:color-mix(in srgb,var(--edge) 45%,#fff)}
+[data-group]{border-color:color-mix(in srgb,var(--edge) 70%,var(--night))}
+a.topic[href="simple-past/"],a.topic[href="irregular-verbs/"]{background:var(--surface)}
+button.primary span[style]{color:var(--night)}
