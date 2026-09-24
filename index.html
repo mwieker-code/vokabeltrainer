@@ -266,6 +266,10 @@ a.subject .subject-name{color:#fff}
   .fuss{margin-top:40px}
 }
 @media (min-width:621px){.tile-kicker{display:none}}
+/* Am Telefon heisst der bilinguale Unterricht oben und unten nur "Bili" -
+   sonst bricht die Zeile um. */
+.kurz{display:none}
+@media (max-width:620px){.lang{display:none}.kurz{display:inline}}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none !important;transition:none !important}
   .draw{stroke-dashoffset:0}
@@ -294,7 +298,7 @@ a.subject .subject-name{color:#fff}
 
   <section class="hero">
     <div>
-      <p class="eyebrow">Wortschatz · Grammatik · Bilingualer Unterricht</p>
+      <p class="eyebrow">Wortschatz · Grammatik · <span class="lang">Bilingualer Unterricht</span><span class="kurz">Bili</span></p>
       <h1 class="title" id="title" aria-label="English Basecamp"><span class="line" data-word="English"></span><span class="line" data-word="Basecamp"></span></h1>
       <a class="cta" href="#jahrgaenge">Jahrgang wählen
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg></a>
@@ -344,7 +348,7 @@ a.subject .subject-name{color:#fff}
     <div class="bili" id="bili-list"></div>
   </section>
 
-  <footer class="fuss"><span>English Basecamp</span><span>Wortschatz · Grammatik · Bilingualer Unterricht</span></footer>
+  <footer class="fuss"><span>English Basecamp</span><span>Wortschatz · Grammatik · <span class="lang">Bilingualer Unterricht</span><span class="kurz">Bili</span></span></footer>
 </div>
 
 <div class="sighting" id="sighting" role="dialog" aria-labelledby="sighting-title" hidden>
