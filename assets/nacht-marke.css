@@ -457,7 +457,7 @@ button.rb-ueben:hover{background:color-mix(in srgb,var(--no) 22%,transparent)}
 @media print{.rb-ueben{display:none}}
 /* Fortschritt in einer Zeile unter der Zaehlung am Rundenende */
 .done .fortschritt-zeile,.fortschritt-zeile{margin:10px 0 0;font-family:var(--code);font-size:12px;letter-spacing:.04em;color:var(--mute);line-height:1.6}
-.fortschritt-zeile>span{white-space:nowrap}
+.fortschritt-zeile>span:not([aria-hidden]){white-space:nowrap}
 .fortschritt-zeile .fz-hoch{color:var(--ok);font-weight:600}
 .fortschritt-zeile .fz-reihe{color:var(--glow)}
 
