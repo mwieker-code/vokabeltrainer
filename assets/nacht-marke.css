@@ -501,7 +501,11 @@ button.lw-schwer:hover{background:color-mix(in srgb,var(--no) 22%,transparent)}
   .masthead:has(.kopf-menue) .sub{font-size:9.5px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .masthead:has(.kopf-menue) a.home-link{grid-column:3;grid-row:1;width:44px!important;height:44px;min-height:44px!important;padding:0!important;
     border-radius:14px!important;font-size:0!important;display:grid!important;place-items:center;margin:0!important;flex:none!important}
-  .masthead:has(.kopf-menue) a.home-link::before{content:"←";font-size:20px;font-weight:700;line-height:1}
+  /* Der Pfeil als Zeichnung statt als Schriftzeichen: Ein Zeichen sitzt
+     je nach Schrift auf seiner Grundlinie und nie genau in der Mitte. */
+  .masthead:has(.kopf-menue) a.home-link::before{content:"";width:24px;height:24px;background:currentColor;
+    -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 12H5M11 6l-6 6 6 6'/%3E%3C/svg%3E") center/contain no-repeat;
+    mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 12H5M11 6l-6 6 6 6'/%3E%3C/svg%3E") center/contain no-repeat}
   .masthead:has(.kopf-menue) .kopf-menue{grid-column:4;grid-row:1}
   .heute ~ .unit-heading,.heute-rest,.heute .nur-gross{display:none!important}
   .heute{padding:12px 14px}
