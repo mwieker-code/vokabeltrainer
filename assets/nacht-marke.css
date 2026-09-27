@@ -164,6 +164,7 @@ button.primary span[style],#flip span{color:var(--auf-glut)!important;opacity:.6
 .yeargroup[style*="--year-e)"]{--unit:var(--year-e)}
 .yeargroup[style*="--year-q1)"]{--unit:var(--year-q1)}
 .yeargroup[style*="--year-q2)"]{--unit:var(--year-q2)}
+.yeargroup[style*="--year-lit)"]{--unit:var(--year-lit)}
 .yeargroup[style*="--year-all)"]{--unit:var(--year-all)}
 .yeargroup[style]{color:var(--snow)!important}
 .yeargroup>summary{font-family:var(--serif)}

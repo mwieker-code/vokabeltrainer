@@ -28,7 +28,7 @@ window.onerror = function(msg, src, line, col){
 };
 </script>
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../assets/fonts/inter-400-latin.woff2">
-<script data-nacht src="../assets/thema.js?v=20260925-pfeil"></script>
+<script data-nacht src="../assets/thema.js?v=20260927-lektuere"></script>
 <link rel="stylesheet" href="../assets/fonts.css?v=2">
 
 <style>
@@ -45,10 +45,12 @@ window.onerror = function(msg, src, line, col){
   --year-q1:#2E6E52;
   --year-q2:#AC6428;
   --year-all:#6B6358;
+  --year-lit:#7A3E6E;
   --year-e-bg:#E4EAF1;
   --year-q1-bg:#E4EFE9;
   --year-q2-bg:#F4E8D9;
   --year-all-bg:#E9E7E2;
+  --year-lit-bg:#F1E5EE;
   --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
   --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
   --mono:"JetBrains Mono",ui-monospace,"SF Mono",Consolas,monospace;
@@ -364,7 +366,7 @@ button.primary:hover{background:#0B4A54}
 }
 </style>
 <style media="screen" data-nacht>
-:root:where(:not([data-thema="hell"])){--ground:#181D26;--card:#151A22;--ink:#D3E0E9;--ink-soft:#C0CFD8;--rule:#363B3E;--year-e-bg:#1A2026;--year-q1-bg:#17211C;--year-q2-bg:#281D0E;--year-all-bg:#22201B}
+:root:where(:not([data-thema="hell"])){--ground:#181D26;--card:#151A22;--ink:#D3E0E9;--ink-soft:#C0CFD8;--rule:#363B3E;--year-e-bg:#1A2026;--year-q1-bg:#17211C;--year-q2-bg:#281D0E;--year-all-bg:#22201B;--year-lit-bg:#261B24}
 :where(html:not([data-thema="hell"])) .yeargroup .minirail i{background:#151A228C}
 :where(html:not([data-thema="hell"])) .slot.here{background:#172021}
 :where(html:not([data-thema="hell"])) .slot.here::after{background:#172021}
@@ -379,8 +381,8 @@ button.primary:hover{background:#0B4A54}
 :where(html:not([data-thema="hell"])) .doc .warnbox{background:#231A0F}
 :where(html:not([data-thema="hell"])) .vex{color:#C8D9E3}
 </style>
-<link rel="stylesheet" href="../assets/learning.css?v=20260925-pfeil">
-<link rel="stylesheet" media="screen" data-nacht href="../assets/learning-nacht.css?v=20260925-pfeil">
+<link rel="stylesheet" href="../assets/learning.css?v=20260927-lektuere">
+<link rel="stylesheet" media="screen" data-nacht href="../assets/learning-nacht.css?v=20260927-lektuere">
 
 <div class="wrap">
     <div class="masthead">
@@ -531,6 +533,12 @@ const TOPICS = [
   "name": "The world of work"
  },
  {
+  "id": "lit-mlu-1-2",
+  "year": "Lektüre",
+  "yearName": "Machines Like Us",
+  "name": "Chapter 1–2"
+ },
+ {
   "id": "general-academic",
   "year": "ALL",
   "yearName": "Jahrgangsübergreifend",
@@ -545,6 +553,812 @@ const TOPICS = [
 ];
 
 const SETS = {
+ /* Lektuere: Vokabeln zur Schullektuere (Ian McEwan, "Machines Like Us").
+    Voruebergehend fuer die Testvorbereitung - zum Entfernen diesen Eintrag
+    und das Thema "lit-mlu-1-2" in TOPICS loeschen. Unter "collocations"
+    steht die Fundstelle im Buch. */
+ "lit-mlu-1-2": [
+  {
+   "id": "mlu-01",
+   "en": "reckless",
+   "de": "leichtsinnig, rücksichtslos",
+   "pos": "adjective",
+   "collocations": "Chapter 1 · p. 24, l. 4",
+   "example_en": "Spending his whole inheritance on an android was a reckless decision."
+  },
+  {
+   "id": "mlu-02",
+   "en": "avid",
+   "de": "begeistert, eifrig",
+   "pos": "adjective",
+   "collocations": "Chapter 1 · p. 25, l. 5",
+   "example_en": "She is an avid reader of historical novels."
+  },
+  {
+   "id": "mlu-03",
+   "en": "pensive",
+   "de": "nachdenklich",
+   "pos": "adjective",
+   "collocations": "Chapter 1 · p. 26, l. 5",
+   "example_en": "He sat by the window with a pensive expression, lost in thought."
+  },
+  {
+   "id": "mlu-04",
+   "en": "hard-bitten",
+   "de": "abgebrüht, hartgesotten",
+   "pos": "adjective",
+   "collocations": "Chapter 1 · p. 26, l. 30",
+   "example_en": "After years of failed schemes, Charlie sees himself as hard-bitten and cynical."
+  },
+  {
+   "id": "mlu-05",
+   "en": "reticent",
+   "de": "zurückhaltend, verschlossen",
+   "pos": "adjective",
+   "collocations": "Chapter 1 · p. 31, l. 28",
+   "example_en": "Miranda is reticent about her past and rarely talks about herself."
+  },
+  {
+   "id": "mlu-06",
+   "en": "boastful",
+   "de": "prahlerisch, angeberisch",
+   "pos": "adjective",
+   "collocations": "Chapter 1 · p. 29, l. 23",
+   "example_en": "Nobody likes a boastful classmate who keeps talking about his grades."
+  },
+  {
+   "id": "mlu-07",
+   "en": "morose",
+   "de": "missmutig, verdrießlich",
+   "pos": "adjective",
+   "collocations": "Chapter 1 · p. 29, l. 28",
+   "example_en": "After losing money on the markets, he was morose all evening."
+  },
+  {
+   "id": "mlu-08",
+   "en": "obliging",
+   "de": "entgegenkommend, gefällig",
+   "pos": "adjective",
+   "collocations": "Chapter 1 · p. 46, l. 19",
+   "example_en": "The assistant was polite and obliging, but never servile."
+  },
+  {
+   "id": "mlu-09",
+   "en": "clumsy",
+   "de": "ungeschickt, tollpatschig",
+   "pos": "adjective",
+   "collocations": "Chapter 1 · p. 36, l. 14",
+   "example_en": "My first attempts at soldering were clumsy."
+  },
+  {
+   "id": "mlu-10",
+   "en": "mischievous",
+   "de": "schelmisch, verschmitzt",
+   "pos": "adjective",
+   "collocations": "Chapter 1 · p. 51, l. 4",
+   "example_en": "The little boy gave him a mischievous grin."
+  },
+  {
+   "id": "mlu-11",
+   "en": "tetchy",
+   "de": "gereizt, reizbar",
+   "pos": "adjective",
+   "collocations": "Chapter 1 · p. 51, l. 22",
+   "example_en": "I get tetchy when people give me advice I didn't ask for."
+  },
+  {
+   "id": "mlu-12",
+   "en": "generous",
+   "de": "großzügig",
+   "pos": "adjective",
+   "collocations": "Chapter 2 · p. 54, l. 22",
+   "example_en": "It was generous of her to lend me her notes."
+  },
+  {
+   "id": "mlu-13",
+   "en": "self-esteem",
+   "de": "Selbstwertgefühl",
+   "pos": "noun",
+   "collocations": "Chapter 2 · p. 58, l. 15",
+   "example_en": "Constant comparison on social media can damage young people's self-esteem."
+  },
+  {
+   "id": "mlu-14",
+   "en": "vanity",
+   "de": "Eitelkeit",
+   "pos": "noun",
+   "collocations": "Chapter 2 · p. 58, l. 26",
+   "example_en": "It was pure vanity to expect her to fall in love with him at once."
+  },
+  {
+   "id": "mlu-15",
+   "en": "irritable",
+   "de": "reizbar",
+   "pos": "adjective",
+   "collocations": "Chapter 2 · p. 60, l. 13",
+   "example_en": "Lack of sleep makes most people irritable."
+  },
+  {
+   "id": "mlu-16",
+   "en": "conscientious",
+   "de": "gewissenhaft",
+   "pos": "adjective",
+   "collocations": "Chapter 2 · p. 66, l. 15",
+   "example_en": "A conscientious student checks every quotation before handing in an essay."
+  },
+  {
+   "id": "mlu-17",
+   "en": "stoical",
+   "de": "stoisch, gelassen",
+   "pos": "adjective",
+   "collocations": "Chapter 2 · p. 67, l. 11",
+   "example_en": "She remained stoical even when she heard the bad news."
+  },
+  {
+   "id": "mlu-18",
+   "en": "squeamish",
+   "de": "zimperlich, empfindlich",
+   "pos": "adjective",
+   "collocations": "Chapter 2 · p. 75, l. 8",
+   "example_en": "I'm too squeamish to watch operations on TV."
+  },
+  {
+   "id": "mlu-19",
+   "en": "witty",
+   "de": "geistreich, witzig",
+   "pos": "adjective",
+   "collocations": "Chapter 2 · p. 76, l. 22",
+   "example_en": "The speech was witty and full of clever remarks."
+  },
+  {
+   "id": "mlu-20",
+   "en": "deviousness",
+   "de": "Hinterhältigkeit, Verschlagenheit",
+   "pos": "noun",
+   "collocations": "Chapter 2 · p. 81, l. 21",
+   "example_en": "Charlie wonders whether Adam's silence is a sign of deviousness."
+  },
+  {
+   "id": "mlu-21",
+   "en": "yearning",
+   "de": "Sehnsucht, Verlangen",
+   "pos": "noun",
+   "collocations": "Chapter 1 · p. 23, l. 1",
+   "example_en": "Humans have always had a yearning to create life."
+  },
+  {
+   "id": "mlu-22",
+   "en": "reluctant",
+   "de": "widerwillig, zögerlich",
+   "pos": "adjective",
+   "collocations": "Chapter 1 · p. 27, l. 17",
+   "example_en": "She was reluctant to talk about her nightmare."
+  },
+  {
+   "id": "mlu-23",
+   "en": "at ease",
+   "de": "entspannt, ungezwungen",
+   "pos": "phrase",
+   "collocations": "Chapter 1 · p. 27, l. 8",
+   "example_en": "New students often don't feel at ease in their first week."
+  },
+  {
+   "id": "mlu-24",
+   "en": "remorse",
+   "de": "Reue",
+   "pos": "noun",
+   "collocations": "Chapter 1 · p. 28, l. 5",
+   "example_en": "After spending so much money, he was overcome by buyer's remorse."
+  },
+  {
+   "id": "mlu-25",
+   "en": "foreboding",
+   "de": "böse Vorahnung",
+   "pos": "noun",
+   "collocations": "Chapter 1 · p. 30, l. 1",
+   "example_en": "She had a sense of foreboding before the phone rang."
+  },
+  {
+   "id": "mlu-26",
+   "en": "to reassure",
+   "de": "beruhigen, versichern",
+   "pos": "verb",
+   "collocations": "Chapter 1 · p. 30, l. 25",
+   "example_en": "The doctor reassured the patient that the operation was routine."
+  },
+  {
+   "id": "mlu-27",
+   "en": "eerie",
+   "de": "unheimlich",
+   "pos": "adjective",
+   "collocations": "Chapter 1 · p. 31, l. 4",
+   "example_en": "There was an eerie silence in the empty church."
+  },
+  {
+   "id": "mlu-28",
+   "en": "to take sb/sth for granted",
+   "de": "jdn./etw. als selbstverständlich ansehen",
+   "pos": "verb",
+   "collocations": "Chapter 1 · p. 31, l. 26",
+   "example_en": "Many people take their friends for granted until they lose them."
+  },
+  {
+   "id": "mlu-29",
+   "en": "infatuation",
+   "de": "Vernarrtheit, Schwärmerei",
+   "pos": "noun",
+   "collocations": "Chapter 1 · p. 33, l. 4",
+   "example_en": "His infatuation with new technology cost him a fortune."
+  },
+  {
+   "id": "mlu-30",
+   "en": "to be repelled by sth",
+   "de": "von etw. abgestoßen sein",
+   "pos": "verb",
+   "collocations": "Chapter 1 · p. 45, l. 4",
+   "example_en": "Some people are repelled by robots that look almost human."
+  },
+  {
+   "id": "mlu-31",
+   "en": "consolation",
+   "de": "Trost",
+   "pos": "noun",
+   "collocations": "Chapter 1 · p. 45, l. 17",
+   "example_en": "Winning second prize was only a small consolation."
+  },
+  {
+   "id": "mlu-32",
+   "en": "anticipation",
+   "de": "Vorfreude, Erwartung",
+   "pos": "noun",
+   "collocations": "Chapter 1 · p. 45, l. 28",
+   "example_en": "The class waited for the results in anxious anticipation."
+  },
+  {
+   "id": "mlu-33",
+   "en": "to despise",
+   "de": "verachten",
+   "pos": "verb",
+   "collocations": "Chapter 2 · p. 55, l. 13",
+   "example_en": "He despised himself for spying on her."
+  },
+  {
+   "id": "mlu-34",
+   "en": "confidant",
+   "de": "Vertraute(r)",
+   "pos": "noun",
+   "collocations": "Chapter 2 · p. 58, l. 31",
+   "example_en": "A good friend can be a confidant you share your secrets with."
+  },
+  {
+   "id": "mlu-35",
+   "en": "to soothe",
+   "de": "beruhigen, lindern",
+   "pos": "verb",
+   "collocations": "Chapter 2 · p. 67, l. 27",
+   "example_en": "Quiet music can soothe a nervous mind."
+  },
+  {
+   "id": "mlu-36",
+   "en": "suspicion",
+   "de": "Verdacht, Misstrauen",
+   "pos": "noun",
+   "collocations": "Chapter 2 · p. 71, l. 6",
+   "example_en": "Adam's warning filled Charlie with suspicion."
+  },
+  {
+   "id": "mlu-37",
+   "en": "distress",
+   "de": "Kummer, Not, Leid",
+   "pos": "noun",
+   "collocations": "Chapter 2 · p. 72, l. 24",
+   "example_en": "The child's distress was obvious to everyone in the playground."
+  },
+  {
+   "id": "mlu-38",
+   "en": "humiliating",
+   "de": "demütigend",
+   "pos": "adjective",
+   "collocations": "Chapter 2 · p. 75, l. 2",
+   "example_en": "Failing the test in front of the whole class was humiliating."
+  },
+  {
+   "id": "mlu-39",
+   "en": "to detest",
+   "de": "verabscheuen",
+   "pos": "verb",
+   "collocations": "Chapter 2 · p. 78, l. 4",
+   "example_en": "He detests mobile phones and still writes his books by hand."
+  },
+  {
+   "id": "mlu-40",
+   "en": "to fret",
+   "de": "sich sorgen, sich grämen",
+   "pos": "verb",
+   "collocations": "Chapter 2 · p. 78, l. 26",
+   "example_en": "Stop fretting about the exam – you're well prepared."
+  },
+  {
+   "id": "mlu-41",
+   "en": "feasible",
+   "de": "machbar, durchführbar",
+   "pos": "adjective",
+   "collocations": "Chapter 1 · p. 23, l. 4",
+   "example_en": "Twenty years ago, self-driving cars did not seem feasible."
+  },
+  {
+   "id": "mlu-42",
+   "en": "mortality",
+   "de": "Sterblichkeit",
+   "pos": "noun",
+   "collocations": "Chapter 1 · p. 23, l. 6",
+   "example_en": "Creating artificial humans may be a way of escaping our own mortality."
+  },
+  {
+   "id": "mlu-43",
+   "en": "to devise",
+   "de": "ersinnen, entwickeln",
+   "pos": "verb",
+   "collocations": "Chapter 1 · p. 23, l. 7",
+   "example_en": "Engineers devised a new system to recognise faces."
+  },
+  {
+   "id": "mlu-44",
+   "en": "faulty",
+   "de": "fehlerhaft, defekt",
+   "pos": "adjective",
+   "collocations": "Chapter 1 · p. 23, l. 12",
+   "example_en": "The company recalled the faulty batteries."
+  },
+  {
+   "id": "mlu-45",
+   "en": "phony",
+   "de": "falsch, unecht",
+   "pos": "adjective",
+   "collocations": "Chapter 1 · p. 23, l. 21",
+   "example_en": "The salesman's phony smile didn't convince anyone."
+  },
+  {
+   "id": "mlu-46",
+   "en": "to retrieve",
+   "de": "abrufen, zurückholen",
+   "pos": "verb",
+   "collocations": "Chapter 1 · p. 25, l. 24",
+   "example_en": "The AI can retrieve every conversation it has ever recorded."
+  },
+  {
+   "id": "mlu-47",
+   "en": "to animate",
+   "de": "beleben, zum Leben erwecken",
+   "pos": "verb",
+   "collocations": "Chapter 1 · p. 26, l. 20",
+   "example_en": "In Frankenstein, electricity is used to animate a dead body."
+  },
+  {
+   "id": "mlu-48",
+   "en": "to replicate",
+   "de": "nachbilden, kopieren",
+   "pos": "verb",
+   "collocations": "Chapter 1 · p. 29, l. 19",
+   "example_en": "Scientists try to replicate the human brain in software."
+  },
+  {
+   "id": "mlu-49",
+   "en": "to go awry",
+   "de": "schiefgehen",
+   "pos": "verb",
+   "collocations": "Chapter 1 · p. 30, l. 3",
+   "example_en": "The experiment went awry when the program crashed."
+  },
+  {
+   "id": "mlu-50",
+   "en": "inanimate",
+   "de": "leblos, unbelebt",
+   "pos": "adjective",
+   "collocations": "Chapter 1 · p. 32, l. 19",
+   "example_en": "Is an android an inanimate object or a living being?"
+  },
+  {
+   "id": "mlu-51",
+   "en": "approximation",
+   "de": "Annäherung, Näherungswert",
+   "pos": "noun",
+   "collocations": "Chapter 2 · p. 55, l. 26",
+   "example_en": "His answer was only an approximation of the truth."
+  },
+  {
+   "id": "mlu-52",
+   "en": "to merge",
+   "de": "verschmelzen, zusammenführen",
+   "pos": "verb",
+   "collocations": "Chapter 1 · p. 44, l. 27",
+   "example_en": "Their two sets of choices merged into one new personality."
+  },
+  {
+   "id": "mlu-53",
+   "en": "default",
+   "de": "Standard(einstellung), Voreinstellung",
+   "pos": "noun",
+   "collocations": "Chapter 1 · p. 48, l. 26",
+   "example_en": "Most users never change the default settings of their phones."
+  },
+  {
+   "id": "mlu-54",
+   "en": "sentience",
+   "de": "Empfindungsfähigkeit",
+   "pos": "noun",
+   "collocations": "Chapter 1 · p. 49, l. 7",
+   "example_en": "Philosophers disagree on whether machines could ever achieve sentience."
+  },
+  {
+   "id": "mlu-55",
+   "en": "ingenuity",
+   "de": "Einfallsreichtum, Erfindungsgeist",
+   "pos": "noun",
+   "collocations": "Chapter 1 · p. 50, l. 19",
+   "example_en": "The first moon landing was a triumph of human ingenuity."
+  },
+  {
+   "id": "mlu-56",
+   "en": "heuristic",
+   "de": "heuristisch, auf Versuch und Irrtum beruhend",
+   "pos": "adjective",
+   "collocations": "Chapter 2 · p. 56, l. 21",
+   "example_en": "Children often learn in a heuristic way, by simply trying things out."
+  },
+  {
+   "id": "mlu-57",
+   "en": "supremacy",
+   "de": "Vorherrschaft, Überlegenheit",
+   "pos": "noun",
+   "collocations": "Chapter 2 · p. 60, l. 1",
+   "example_en": "The computer's victory ended human supremacy in the game of go."
+  },
+  {
+   "id": "mlu-58",
+   "en": "probabilistic",
+   "de": "auf Wahrscheinlichkeit beruhend",
+   "pos": "adjective",
+   "collocations": "Chapter 2 · p. 61, l. 30",
+   "example_en": "Language models work in a probabilistic way: they predict the most likely next word."
+  },
+  {
+   "id": "mlu-59",
+   "en": "coherent",
+   "de": "schlüssig, zusammenhängend",
+   "pos": "adjective",
+   "collocations": "Chapter 2 · p. 81, l. 20",
+   "example_en": "Your essay needs a coherent structure."
+  },
+  {
+   "id": "mlu-60",
+   "en": "indistinguishable",
+   "de": "nicht zu unterscheiden",
+   "pos": "adjective",
+   "collocations": "Chapter 2 · p. 82, l. 16",
+   "example_en": "The android's skin was indistinguishable from human skin."
+  },
+  {
+   "id": "mlu-61",
+   "en": "hostile",
+   "de": "feindselig",
+   "pos": "adjective",
+   "collocations": "Chapter 1 · p. 33, l. 2",
+   "example_en": "The audience was hostile and kept interrupting the speaker."
+  },
+  {
+   "id": "mlu-62",
+   "en": "to impoverish",
+   "de": "arm machen, verarmen lassen",
+   "pos": "verb",
+   "collocations": "Chapter 1 · p. 33, l. 5",
+   "example_en": "The long strike impoverished many families."
+  },
+  {
+   "id": "mlu-63",
+   "en": "to be struck off",
+   "de": "die Berufszulassung verlieren",
+   "pos": "verb",
+   "collocations": "Chapter 1 · p. 34, l. 11",
+   "example_en": "The lawyer was struck off after the fraud was discovered."
+  },
+  {
+   "id": "mlu-64",
+   "en": "to prosper",
+   "de": "florieren, zu Wohlstand kommen",
+   "pos": "verb",
+   "collocations": "Chapter 1 · p. 34, l. 17",
+   "example_en": "Some companies prospered during the crisis."
+  },
+  {
+   "id": "mlu-65",
+   "en": "wicked",
+   "de": "böse, schlecht",
+   "pos": "adjective",
+   "collocations": "Chapter 1 · p. 38, l. 26",
+   "example_en": "In fairy tales, the wicked character is usually punished."
+  },
+  {
+   "id": "mlu-66",
+   "en": "venture",
+   "de": "(riskantes) Unternehmen, Wagnis",
+   "pos": "noun",
+   "collocations": "Chapter 1 · p. 41, l. 2",
+   "example_en": "Starting your own business is a risky venture."
+  },
+  {
+   "id": "mlu-67",
+   "en": "decent",
+   "de": "anständig",
+   "pos": "adjective",
+   "collocations": "Chapter 1 · p. 41, l. 3",
+   "example_en": "Most people want a decent job and a safe home."
+  },
+  {
+   "id": "mlu-68",
+   "en": "virtuous",
+   "de": "tugendhaft",
+   "pos": "adjective",
+   "collocations": "Chapter 1 · p. 42, l. 3",
+   "example_en": "He felt virtuous after donating money to charity."
+  },
+  {
+   "id": "mlu-69",
+   "en": "to consolidate",
+   "de": "festigen",
+   "pos": "verb",
+   "collocations": "Chapter 2 · p. 64, l. 21",
+   "example_en": "The victory helped the regime consolidate its power."
+  },
+  {
+   "id": "mlu-70",
+   "en": "to implicate",
+   "de": "verwickeln, belasten",
+   "pos": "verb",
+   "collocations": "Chapter 2 · p. 64, l. 24",
+   "example_en": "The documents implicated several politicians in the scandal."
+  },
+  {
+   "id": "mlu-71",
+   "en": "scapegoat",
+   "de": "Sündenbock",
+   "pos": "noun",
+   "collocations": "Chapter 2 · p. 65, l. 5",
+   "example_en": "Politicians often look for a scapegoat when things go wrong."
+  },
+  {
+   "id": "mlu-72",
+   "en": "vested interests",
+   "de": "Eigeninteressen, Interessengruppen",
+   "pos": "noun",
+   "collocations": "Chapter 2 · p. 65, l. 20",
+   "example_en": "Reforms often fail because of powerful vested interests."
+  },
+  {
+   "id": "mlu-73",
+   "en": "inevitable",
+   "de": "unvermeidlich",
+   "pos": "adjective",
+   "collocations": "Chapter 2 · p. 67, l. 8",
+   "example_en": "With prices rising so fast, a strike seemed inevitable."
+  },
+  {
+   "id": "mlu-74",
+   "en": "dignity",
+   "de": "Würde",
+   "pos": "noun",
+   "collocations": "Chapter 2 · p. 68, l. 21",
+   "example_en": "Every human being has the right to be treated with dignity."
+  },
+  {
+   "id": "mlu-75",
+   "en": "to obey",
+   "de": "gehorchen, befolgen",
+   "pos": "verb",
+   "collocations": "Chapter 2 · p. 69, l. 26",
+   "example_en": "A robot must obey its owner – or must it?"
+  },
+  {
+   "id": "mlu-76",
+   "en": "assault",
+   "de": "Angriff, Übergriff",
+   "pos": "noun",
+   "collocations": "Chapter 2 · p. 70, l. 22",
+   "example_en": "Hitting a child is a form of assault."
+  },
+  {
+   "id": "mlu-77",
+   "en": "bravery",
+   "de": "Tapferkeit, Mut",
+   "pos": "noun",
+   "collocations": "Chapter 2 · p. 72, l. 7",
+   "example_en": "The firefighters were praised for their bravery."
+  },
+  {
+   "id": "mlu-78",
+   "en": "cowardice",
+   "de": "Feigheit",
+   "pos": "noun",
+   "collocations": "Chapter 2 · p. 72, l. 11",
+   "example_en": "Looking away when someone is bullied can be a form of cowardice."
+  },
+  {
+   "id": "mlu-79",
+   "en": "surrender",
+   "de": "Kapitulation, Aufgabe",
+   "pos": "noun",
+   "collocations": "Chapter 2 · p. 72, l. 12",
+   "example_en": "He raised his hands in a gesture of surrender."
+  },
+  {
+   "id": "mlu-80",
+   "en": "inglorious",
+   "de": "ruhmlos, schmachvoll",
+   "pos": "adjective",
+   "collocations": "Chapter 2 · p. 77, l. 9",
+   "example_en": "The war ended in an inglorious retreat."
+  },
+  {
+   "id": "mlu-81",
+   "en": "to be bound to do sth",
+   "de": "etw. zwangsläufig tun (werden)",
+   "pos": "verb",
+   "collocations": "Chapter 1 · p. 28, l. 8",
+   "example_en": "If you don't revise, you're bound to forget the words."
+  },
+  {
+   "id": "mlu-82",
+   "en": "undeniable",
+   "de": "unbestreitbar",
+   "pos": "adjective",
+   "collocations": "Chapter 1 · p. 35, l. 14",
+   "example_en": "It is undeniable that smartphones have changed how we communicate."
+  },
+  {
+   "id": "mlu-83",
+   "en": "to derive sth from sth",
+   "de": "etw. von/aus etw. ableiten",
+   "pos": "verb",
+   "collocations": "Chapter 1 · p. 38, l. 28",
+   "example_en": "Many English words are derived from Latin."
+  },
+  {
+   "id": "mlu-84",
+   "en": "to grasp",
+   "de": "begreifen, erfassen",
+   "pos": "verb",
+   "collocations": "Chapter 1 · p. 47, l. 12",
+   "example_en": "It took me a while to grasp the main idea of the text."
+  },
+  {
+   "id": "mlu-85",
+   "en": "dismissive",
+   "de": "abweisend, geringschätzig",
+   "pos": "adjective",
+   "collocations": "Chapter 1 · p. 47, l. 21",
+   "example_en": "Don't be dismissive of other people's opinions."
+  },
+  {
+   "id": "mlu-86",
+   "en": "to evoke",
+   "de": "hervorrufen, heraufbeschwören",
+   "pos": "verb",
+   "collocations": "Chapter 1 · p. 47, l. 22",
+   "example_en": "The image evokes memories of the Second World War."
+  },
+  {
+   "id": "mlu-87",
+   "en": "to diminish",
+   "de": "verringern, schmälern",
+   "pos": "verb",
+   "collocations": "Chapter 1 · p. 48, l. 2",
+   "example_en": "The machine's victory did not diminish the popularity of the game."
+  },
+  {
+   "id": "mlu-88",
+   "en": "implication",
+   "de": "Folge, Tragweite",
+   "pos": "noun",
+   "collocations": "Chapter 1 · p. 49, l. 2",
+   "example_en": "We need to discuss the implications of AI for the job market."
+  },
+  {
+   "id": "mlu-89",
+   "en": "stark",
+   "de": "krass, deutlich",
+   "pos": "adjective",
+   "collocations": "Chapter 1 · p. 49, l. 5",
+   "example_en": "The report reveals a stark contrast between rich and poor."
+  },
+  {
+   "id": "mlu-90",
+   "en": "momentous",
+   "de": "bedeutsam, folgenschwer",
+   "pos": "adjective",
+   "collocations": "Chapter 1 · p. 52, l. 22",
+   "example_en": "The invention of the internet was a momentous event."
+  },
+  {
+   "id": "mlu-91",
+   "en": "to prompt",
+   "de": "veranlassen, auslösen",
+   "pos": "verb",
+   "collocations": "Chapter 2 · p. 58, l. 22",
+   "example_en": "The scandal prompted the minister to resign."
+  },
+  {
+   "id": "mlu-92",
+   "en": "to endorse",
+   "de": "befürworten, unterstützen",
+   "pos": "verb",
+   "collocations": "Chapter 2 · p. 59, l. 15",
+   "example_en": "Several experts endorsed the proposal."
+  },
+  {
+   "id": "mlu-93",
+   "en": "to attain",
+   "de": "erreichen, erlangen",
+   "pos": "verb",
+   "collocations": "Chapter 2 · p. 59, l. 29",
+   "example_en": "Few people attain complete mastery of a musical instrument."
+  },
+  {
+   "id": "mlu-94",
+   "en": "profound",
+   "de": "tiefgreifend, tiefgründig",
+   "pos": "adjective",
+   "collocations": "Chapter 2 · p. 60, l. 1",
+   "example_en": "The novel raises profound questions about what it means to be human."
+  },
+  {
+   "id": "mlu-95",
+   "en": "reminiscent of",
+   "de": "erinnernd an",
+   "pos": "phrase",
+   "collocations": "Chapter 2 · p. 65, l. 6",
+   "example_en": "The ending is reminiscent of a classic detective story."
+  },
+  {
+   "id": "mlu-96",
+   "en": "to dissuade sb from sth",
+   "de": "jdn. von etw. abbringen",
+   "pos": "verb",
+   "collocations": "Chapter 2 · p. 67, l. 9",
+   "example_en": "His friends tried to dissuade him from buying the android."
+  },
+  {
+   "id": "mlu-97",
+   "en": "negligible",
+   "de": "vernachlässigbar, geringfügig",
+   "pos": "adjective",
+   "collocations": "Chapter 2 · p. 67, l. 11",
+   "example_en": "According to the study, the risk is negligible."
+  },
+  {
+   "id": "mlu-98",
+   "en": "to contemplate",
+   "de": "nachdenken über, in Erwägung ziehen",
+   "pos": "verb",
+   "collocations": "Chapter 2 · p. 75, l. 20",
+   "example_en": "She contemplated studying abroad for a year."
+  },
+  {
+   "id": "mlu-99",
+   "en": "to envisage",
+   "de": "sich vorstellen, vorhersehen",
+   "pos": "verb",
+   "collocations": "Chapter 2 · p. 78, l. 2",
+   "example_en": "It is hard to envisage a future without artificial intelligence."
+  },
+  {
+   "id": "mlu-100",
+   "en": "to be compelled to do sth",
+   "de": "gezwungen sein, etw. zu tun",
+   "pos": "verb",
+   "collocations": "Chapter 2 · p. 82, l. 8",
+   "example_en": "The witness was compelled to tell the truth."
+  }
+ ],
  "e-digital": [
   {
    "id": "dig-01",
@@ -17303,7 +18117,7 @@ function renderHome(){
       <summary>
         <span class="tag" style="background:${yc}">${y}</span>
         <span class="name">${esc(group[0].yearName)}</span>
-        <span class="ycount">${group.length + (y === "ALL" ? 1 : 0)} Themen${groupDue ? " · " + groupDue + " fällig" : ""}</span>
+        <span class="ycount">${group.length + (y === "ALL" ? 1 : 0)} ${group.length + (y === "ALL" ? 1 : 0) === 1 ? "Thema" : "Themen"}${groupDue ? " · " + groupDue + " fällig" : ""}</span>
       </summary>`;
     for(const t of group){
       const total = SETS[t.id] ? SETS[t.id].length : 0;
@@ -17538,12 +18352,14 @@ function yearColor(year){
   if(year === "E")  return "var(--year-e)";
   if(year === "Q1") return "var(--year-q1)";
   if(year === "Q2") return "var(--year-q2)";
+  if(year === "Lektüre") return "var(--year-lit)";
   return "var(--year-all)";
 }
 function yearBg(year){
   if(year === "E")  return "var(--year-e-bg)";
   if(year === "Q1") return "var(--year-q1-bg)";
   if(year === "Q2") return "var(--year-q2-bg)";
+  if(year === "Lektüre") return "var(--year-lit-bg)";
   return "var(--year-all-bg)";
 }
 
@@ -18150,16 +18966,16 @@ try{
 </script>
 
 <script src="../assets/qr.js?v=20260921-anleitung"></script>
-<script src="../assets/learning.js?v=20260925-pfeil"></script>
+<script src="../assets/learning.js?v=20260927-lektuere"></script>
 
 <link rel="stylesheet" href="../assets/feedback.css?v=20260921-anleitung">
-<link rel="stylesheet" media="screen" data-nacht href="../assets/feedback-nacht.css?v=20260925-pfeil">
+<link rel="stylesheet" media="screen" data-nacht href="../assets/feedback-nacht.css?v=20260927-lektuere">
 <script src="../assets/feedback.js?v=20260921-zustand"></script>
 
 <link rel="stylesheet" href="design/preview.css?v=20260917-teacher-prompt">
-<link rel="stylesheet" media="screen" data-nacht href="design/preview-nacht.css?v=20260925-pfeil">
+<link rel="stylesheet" media="screen" data-nacht href="design/preview-nacht.css?v=20260927-lektuere">
 
-<link rel="stylesheet" href="../assets/ascent.css?v=20260925-pfeil">
-<link rel="stylesheet" media="screen" data-nacht href="../assets/ascent-nacht.css?v=20260925-pfeil">
-<link rel="stylesheet" media="screen" data-nacht href="../assets/nacht-marke.css?v=20260925-pfeil">
-<script src="../assets/ascent.js?v=20260925-pfeil"></script>
+<link rel="stylesheet" href="../assets/ascent.css?v=20260927-lektuere">
+<link rel="stylesheet" media="screen" data-nacht href="../assets/ascent-nacht.css?v=20260927-lektuere">
+<link rel="stylesheet" media="screen" data-nacht href="../assets/nacht-marke.css?v=20260927-lektuere">
+<script src="../assets/ascent.js?v=20260927-lektuere"></script>
