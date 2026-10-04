@@ -514,3 +514,12 @@ button.lw-schwer:hover{background:color-mix(in srgb,var(--no) 22%,transparent)}
   .heute-zeile #practiceAcross{font-size:14px;padding:0 10px}
   .heute-kopf{flex-wrap:nowrap}
 }
+
+/* Fachseiten des bilingualen Unterrichts: Am Telefon heisst der Untertitel
+   nur "History · Bili" bzw. "Geography · Bili" - der volle Text wurde
+   abgeschnitten. Am Rechner und im Druck steht der ganze Name. */
+.masthead .sub .sub-kurz{display:none}
+@media(max-width:620px){
+  .masthead .sub .sub-lang{display:none}
+  .masthead .sub .sub-kurz{display:inline}
+}

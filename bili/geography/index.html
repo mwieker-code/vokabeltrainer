@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Basecamp">
 <meta name="theme-color" content="#0D1017">
-<title>English Basecamp – History (Bili)</title>
+<title>English Basecamp – Geography (Bili)</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20fill%3D%22none%22%20stroke%3D%22%230E6878%22%20stroke-width%3D%225%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M32%2012%20L55%2051%20H9%20Z%22%2F%3E%3Cpath%20d%3D%22M32%2026%20L41%2051%22%2F%3E%3Cpath%20d%3D%22M32%2026%20L23%2051%22%2F%3E%3Cpath%20d%3D%22M4%2051%20H60%22%2F%3E%3C%2Fsvg%3E">
 <script>
 /* Faengt Fehler ab, die sonst zu einer leeren Seite fuehren, und zeigt sie an. */
@@ -387,7 +387,7 @@ button.primary:hover{background:#0B4A54}
     <svg class="brandmark" width="68" height="68" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M32 12 L55 51 H9 Z"/><path d="M32 26 L41 51"/><path d="M32 26 L23 51"/><path d="M4 51 H60"/></svg>
     <div class="mhead-text">
       <h1>English <span class="title-accent">Basecamp</span></h1>
-      <div class="sub">History · <span class="sub-lang">Bilingualer Unterricht</span><span class="sub-kurz">Bili</span></div>
+      <div class="sub">Geography · <span class="sub-lang">Bilingualer Unterricht</span><span class="sub-kurz">Bili</span></div>
     </div>
     <a class="home-link" href="../../">&larr; Alle Jahrg&auml;nge</a>
   </div>
@@ -417,342 +417,1067 @@ button.primary:hover{background:#0B4A54}
    ========================================================================= */
 const TOPICS = [
  {
-  "id": "h9-industrial",
-  "year": "Year 9",
-  "yearName": "Industrial Age to World War I",
-  "name": "The Industrial Revolution"
+  "id": "g8-us-farm",
+  "year": "Year 8",
+  "yearName": "United States",
+  "name": "Agriculture · Farm and Landscape"
  },
  {
-  "id": "h9-empire",
-  "year": "Year 9",
-  "yearName": "Industrial Age to World War I",
-  "name": "Imperialism and Empire"
+  "id": "g8-us-crops",
+  "year": "Year 8",
+  "yearName": "United States",
+  "name": "Agriculture · Crops and Livestock"
  },
  {
-  "id": "h9-ww1",
-  "year": "Year 9",
-  "yearName": "Industrial Age to World War I",
-  "name": "The First World War"
+  "id": "g8-us-modern",
+  "year": "Year 8",
+  "yearName": "United States",
+  "name": "Agriculture · Modern Farming and Its Problems"
  },
  {
-  "id": "h10-weimar",
-  "year": "Year 10",
-  "yearName": "Dictatorship, War and Division",
-  "name": "The Weimar Republic"
+  "id": "g8-us-economy",
+  "year": "Year 8",
+  "yearName": "United States",
+  "name": "Economy · Basics"
  },
  {
-  "id": "h10-ns",
-  "year": "Year 10",
-  "yearName": "Dictatorship, War and Division",
-  "name": "National Socialism and the Holocaust"
+  "id": "g8-us-industry",
+  "year": "Year 8",
+  "yearName": "United States",
+  "name": "Industry · Raw Materials and Production"
  },
  {
-  "id": "h10-coldwar",
-  "year": "Year 10",
-  "yearName": "Dictatorship, War and Division",
-  "name": "The Cold War and a Divided Germany"
+  "id": "g8-us-location",
+  "year": "Year 8",
+  "yearName": "United States",
+  "name": "Industry · Choice of Location"
+ },
+ {
+  "id": "g8-us-cities",
+  "year": "Year 8",
+  "yearName": "United States",
+  "name": "Cities"
+ },
+ {
+  "id": "g8-us-oilsands",
+  "year": "Year 8",
+  "yearName": "United States",
+  "name": "Oil Sands"
  }
 ];
 
 const SETS = {
- "h9-industrial": [
+ "g8-us-farm": [
+  {
+   "id": "far-01",
+   "en": "altitude, elevation",
+   "de": "Höhe (über NN)",
+   "pos": "noun",
+   "example_en": "Denver lies at an elevation of about 1,600 metres, so the air there is thinner."
+  },
+  {
+   "id": "far-02",
+   "en": "plantation",
+   "de": "Plantage",
+   "pos": "noun",
+   "example_en": "Cotton was once grown on large plantations in the American South."
+  },
+  {
+   "id": "far-03",
+   "en": "checkerboard pattern",
+   "de": "Schachbrettmuster",
+   "pos": "noun",
+   "example_en": "From the air, the fields of the Midwest form a checkerboard pattern."
+  },
+  {
+   "id": "far-04",
+   "en": "migrant farmworker",
+   "de": "Wanderarbeiter",
+   "pos": "noun",
+   "example_en": "A migrant farmworker moves from farm to farm to pick fruit and vegetables."
+  },
+  {
+   "id": "far-05",
+   "en": "machinery shed",
+   "de": "Geräteschuppen",
+   "pos": "noun",
+   "example_en": "The farmer keeps his tractor in the machinery shed."
+  },
+  {
+   "id": "far-06",
+   "en": "storage space / depot",
+   "de": "Lagerraum, Lagerhalle",
+   "pos": "noun",
+   "example_en": "A large depot offers enough storage space for all the machines."
+  },
+  {
+   "id": "far-07",
+   "en": "barn",
+   "de": "Scheune",
+   "pos": "noun",
+   "example_en": "In winter the cows stay in the barn."
+  },
+  {
+   "id": "far-08",
+   "en": "greenhouse",
+   "de": "Treibhaus",
+   "pos": "noun",
+   "example_en": "Tomatoes can grow all year round in a greenhouse."
+  },
+  {
+   "id": "far-09",
+   "en": "dairy farm",
+   "de": "Milchviehbetrieb, Milchwirtschaftsbetrieb",
+   "pos": "noun",
+   "example_en": "Wisconsin is famous for its dairy farms and its cheese."
+  },
+  {
+   "id": "far-10",
+   "en": "dirt track",
+   "de": "Feldweg",
+   "pos": "noun",
+   "example_en": "A dirt track leads from the main road to the farm."
+  },
+  {
+   "id": "far-11",
+   "en": "densely / sparsely populated",
+   "de": "dicht / spärlich besiedelt",
+   "pos": "adjective",
+   "example_en": "Parts of the East Coast are densely populated, but the Great Plains are sparsely populated."
+  },
+  {
+   "id": "far-12",
+   "en": "to stretch",
+   "de": "sich erstrecken",
+   "pos": "verb",
+   "example_en": "The Great Plains stretch from Canada all the way down to Texas."
+  },
+  {
+   "id": "far-13",
+   "en": "pasture",
+   "de": "Weide",
+   "pos": "noun",
+   "example_en": "The cows eat fresh grass on the pasture behind the farmhouse."
+  },
+  {
+   "id": "far-14",
+   "en": "fallow land",
+   "de": "Brachland",
+   "pos": "noun",
+   "example_en": "Farmers sometimes leave a field as fallow land so that the soil can recover."
+  },
+  {
+   "id": "far-15",
+   "en": "arable land",
+   "de": "Ackerland",
+   "pos": "noun",
+   "example_en": "Iowa has some of the best arable land in the USA."
+  },
+  {
+   "id": "far-16",
+   "en": "(in)fertile",
+   "de": "(un)fruchtbar",
+   "pos": "adjective",
+   "example_en": "The soil in the Mississippi valley is very fertile."
+  },
+  {
+   "id": "far-17",
+   "en": "irrigated land",
+   "de": "Bewässerungsland",
+   "pos": "noun",
+   "example_en": "In dry states like California, many farmers depend on irrigated land."
+  },
+  {
+   "id": "far-18",
+   "en": "ditch",
+   "de": "Graben, Bewässerungsgraben",
+   "pos": "noun",
+   "example_en": "Water flows through a ditch to the dry fields."
+  },
+  {
+   "id": "far-19",
+   "en": "to drain water off",
+   "de": "Wasser ableiten, entwässern",
+   "pos": "verb",
+   "example_en": "Farmers dig ditches to drain water off wet fields."
+  },
+  {
+   "id": "far-20",
+   "en": "drainage ditch",
+   "de": "Entwässerungsgraben",
+   "pos": "noun",
+   "example_en": "A drainage ditch runs along the edge of the field."
+  },
+  {
+   "id": "far-21",
+   "en": "drought",
+   "de": "Dürre, Trockenheit",
+   "pos": "noun",
+   "example_en": "A long drought can destroy a whole harvest."
+  },
+  {
+   "id": "far-22",
+   "en": "to fail",
+   "de": "ausbleiben (Niederschlag)",
+   "pos": "verb",
+   "example_en": "If the rains fail, the crops dry out."
+  },
+  {
+   "id": "far-23",
+   "en": "dust storm",
+   "de": "Staubsturm",
+   "pos": "noun",
+   "example_en": "In the 1930s, huge dust storms swept across the Great Plains."
+  },
+  {
+   "id": "far-24",
+   "en": "humus",
+   "de": "Humus",
+   "pos": "noun",
+   "example_en": "Humus is the dark part of the soil that comes from rotting plants."
+  },
+  {
+   "id": "far-25",
+   "en": "topsoil",
+   "de": "Oberboden",
+   "pos": "noun",
+   "example_en": "Wind and rain can wash away the fertile topsoil."
+  },
+  {
+   "id": "far-26",
+   "en": "to leach, exhaust",
+   "de": "auslaugen (Boden)",
+   "pos": "verb",
+   "example_en": "Heavy rain can leach minerals out of the soil, and growing the same crop every year can exhaust it."
+  },
+  {
+   "id": "far-27",
+   "en": "fenced",
+   "de": "eingezäunt",
+   "pos": "adjective",
+   "example_en": "The cattle stay in a fenced area."
+  },
+  {
+   "id": "far-28",
+   "en": "suitable for",
+   "de": "geeignet für",
+   "pos": "adjective",
+   "example_en": "Flat land with deep soil is suitable for growing wheat."
+  }
+ ],
+ "g8-us-crops": [
+  {
+   "id": "crp-01",
+   "en": "primary job",
+   "de": "Hauptberuf, landwirtschaftliche Tätigkeit",
+   "pos": "noun",
+   "example_en": "For many people in Kansas, farming is their primary job."
+  },
+  {
+   "id": "crp-02",
+   "en": "livestock farming",
+   "de": "Tierhaltung, Viehwirtschaft",
+   "pos": "noun",
+   "example_en": "Livestock farming is common in Texas, where ranchers keep large herds of cattle."
+  },
+  {
+   "id": "crp-03",
+   "en": "to breed",
+   "de": "züchten",
+   "pos": "verb",
+   "example_en": "Farmers breed cows that give a lot of milk."
+  },
+  {
+   "id": "crp-04",
+   "en": "to rear",
+   "de": "aufziehen",
+   "pos": "verb",
+   "example_en": "Many farms rear chickens, pigs and cattle for meat."
+  },
+  {
+   "id": "crp-05",
+   "en": "to graze",
+   "de": "weiden",
+   "pos": "verb",
+   "example_en": "Cattle graze on the open range for most of the year."
+  },
+  {
+   "id": "crp-06",
+   "en": "grazing",
+   "de": "Weidewirtschaft",
+   "pos": "noun",
+   "example_en": "Grazing is the most important form of farming in the dry West."
+  },
+  {
+   "id": "crp-07",
+   "en": "cattle industry",
+   "de": "Rinder-/Rindfleischindustrie",
+   "pos": "noun",
+   "example_en": "The cattle industry is very important for the economy of Texas."
+  },
+  {
+   "id": "crp-08",
+   "en": "feedlot",
+   "de": "Feedlot (Mastbetrieb mit offenen Pferchen)",
+   "pos": "noun",
+   "example_en": "Before slaughter, the cattle are fattened in a feedlot."
+  },
+  {
+   "id": "crp-09",
+   "en": "pork / beef",
+   "de": "Schweine- / Rindfleisch",
+   "pos": "noun",
+   "example_en": "The USA produces a lot of pork and beef."
+  },
+  {
+   "id": "crp-10",
+   "en": "to process",
+   "de": "weiterverarbeiten",
+   "pos": "verb",
+   "example_en": "The meat is processed in large plants and then sent to supermarkets."
+  },
+  {
+   "id": "crp-11",
+   "en": "processing plant",
+   "de": "Verarbeitungsbetrieb",
+   "pos": "noun",
+   "example_en": "A processing plant turns fresh milk into cheese and butter."
+  },
+  {
+   "id": "crp-12",
+   "en": "grain",
+   "de": "Getreide",
+   "pos": "noun",
+   "example_en": "Wheat, corn and other grain grow well on the plains."
+  },
+  {
+   "id": "crp-13",
+   "en": "crop",
+   "de": "Feldfrucht, Nutzpflanze; Ernte, Ertrag",
+   "pos": "noun",
+   "example_en": "Corn is the most important crop in the Midwest."
+  },
+  {
+   "id": "crp-14",
+   "en": "agricultural cycle",
+   "de": "Anbauzyklus",
+   "pos": "noun",
+   "example_en": "The agricultural cycle begins with ploughing in spring and ends with the harvest in autumn."
+  },
+  {
+   "id": "crp-15",
+   "en": "to cultivate, to grow",
+   "de": "anbauen",
+   "pos": "verb",
+   "example_en": "In the Corn Belt, farmers grow mainly corn and soybeans."
+  },
+  {
+   "id": "crp-16",
+   "en": "to plough",
+   "de": "pflügen",
+   "pos": "verb",
+   "collocations": "American English: to plow",
+   "example_en": "In spring, the farmer ploughs his fields with a tractor."
+  },
+  {
+   "id": "crp-17",
+   "en": "to fertilize / spread fertilizer",
+   "de": "düngen (chemisch)",
+   "pos": "verb",
+   "example_en": "Farmers fertilize their fields to get a bigger harvest."
+  },
+  {
+   "id": "crp-18",
+   "en": "to manure",
+   "de": "düngen (Vieh, natürlich)",
+   "pos": "verb",
+   "example_en": "Organic farmers manure their fields with animal waste instead of chemicals."
+  },
+  {
+   "id": "crp-19",
+   "en": "to plant",
+   "de": "säen",
+   "pos": "verb",
+   "example_en": "Farmers plant wheat in autumn and corn in spring."
+  },
+  {
+   "id": "crp-20",
+   "en": "to ripen",
+   "de": "reifen",
+   "pos": "verb",
+   "example_en": "In summer, the corn ripens in the sun."
+  },
+  {
+   "id": "crp-21",
+   "en": "to mow",
+   "de": "mähen",
+   "pos": "verb",
+   "example_en": "In June, farmers mow the meadows and make hay."
+  },
+  {
+   "id": "crp-22",
+   "en": "to bear fruit",
+   "de": "Früchte tragen",
+   "pos": "verb",
+   "example_en": "Apple trees need several years before they bear fruit."
+  },
+  {
+   "id": "crp-23",
+   "en": "to harvest",
+   "de": "ernten",
+   "pos": "verb",
+   "example_en": "In autumn, farmers harvest the corn."
+  },
+  {
+   "id": "crp-24",
+   "en": "combine harvester",
+   "de": "Mähdrescher",
+   "pos": "noun",
+   "example_en": "A combine harvester cuts the wheat and separates the grains."
+  }
+ ],
+ "g8-us-modern": [
+  {
+   "id": "mod-01",
+   "en": "green revolution",
+   "de": "Grüne Revolution",
+   "pos": "noun",
+   "example_en": "The green revolution brought new seeds and machines to farming around the world."
+  },
+  {
+   "id": "mod-02",
+   "en": "high-yielding variety",
+   "de": "Hochertragssorte",
+   "pos": "noun",
+   "example_en": "A high-yielding variety of wheat produces much more grain per hectare."
+  },
+  {
+   "id": "mod-03",
+   "en": "hybrid seed",
+   "de": "Hybridsaat",
+   "pos": "noun",
+   "example_en": "Farmers buy hybrid seed every year because it gives bigger harvests."
+  },
+  {
+   "id": "mod-04",
+   "en": "genetic engineering",
+   "de": "Gentechnik, Gentechnologie",
+   "pos": "noun",
+   "example_en": "Genetic engineering can make crops resistant to insects."
+  },
+  {
+   "id": "mod-05",
+   "en": "surplus",
+   "de": "Überschuss",
+   "pos": "noun",
+   "example_en": "The USA often has a surplus of corn and sells it abroad."
+  },
+  {
+   "id": "mod-06",
+   "en": "resistant",
+   "de": "widerstandsfähig",
+   "pos": "adjective",
+   "example_en": "Some plants are resistant to drought and disease."
+  },
+  {
+   "id": "mod-07",
+   "en": "salinization",
+   "de": "Versalzung(sprozess)",
+   "pos": "noun",
+   "example_en": "Salinization can happen when too much water evaporates from irrigated fields."
+  },
+  {
+   "id": "mod-08",
+   "en": "overcultivation",
+   "de": "übermäßige Landnutzung",
+   "pos": "noun",
+   "example_en": "Overcultivation can leave the soil poor and dry."
+  },
+  {
+   "id": "mod-09",
+   "en": "soil erosion",
+   "de": "Bodenerosion",
+   "pos": "noun",
+   "example_en": "Soil erosion was a huge problem during the Dust Bowl."
+  },
+  {
+   "id": "mod-10",
+   "en": "advancing",
+   "de": "voranschreitend",
+   "pos": "adjective",
+   "example_en": "Advancing technology has made farming much more productive."
+  },
+  {
+   "id": "mod-11",
+   "en": "to specialize",
+   "de": "sich spezialisieren",
+   "pos": "verb",
+   "example_en": "Many farms specialize in one product, such as corn or milk."
+  },
+  {
+   "id": "mod-12",
+   "en": "competition",
+   "de": "Wettbewerb",
+   "pos": "noun",
+   "example_en": "Small farms often cannot survive the competition from big companies."
+  },
+  {
+   "id": "mod-13",
+   "en": "efficient",
+   "de": "produktiv",
+   "pos": "adjective",
+   "example_en": "Modern machines make farming more efficient."
+  },
+  {
+   "id": "mod-14",
+   "en": "to abandon",
+   "de": "aufgeben, verlassen",
+   "pos": "verb",
+   "example_en": "Many small farmers had to abandon their farms in the 1930s."
+  },
+  {
+   "id": "mod-15",
+   "en": "to provide/supply sb with sth",
+   "de": "jmdn. mit etw. versorgen; versorgen",
+   "pos": "verb",
+   "example_en": "The Mississippi River provides farmers with water for their fields."
+  }
+ ],
+ "g8-us-economy": [
+  {
+   "id": "eco-01",
+   "en": "average",
+   "de": "Durchschnitt",
+   "pos": "noun",
+   "example_en": "The average American household has more than one car."
+  },
+  {
+   "id": "eco-02",
+   "en": "abroad",
+   "de": "im Ausland",
+   "pos": "adverb",
+   "example_en": "Many American companies produce their goods abroad."
+  },
+  {
+   "id": "eco-03",
+   "en": "bargain",
+   "de": "Handel, Schnäppchen",
+   "pos": "noun",
+   "example_en": "At the mall, you can often find a bargain in the sales."
+  },
+  {
+   "id": "eco-04",
+   "en": "foods",
+   "de": "Lebensmittel",
+   "pos": "noun",
+   "example_en": "Frozen foods are very popular in American supermarkets."
+  },
+  {
+   "id": "eco-05",
+   "en": "disposable income",
+   "de": "verfügbares Einkommen",
+   "pos": "noun",
+   "example_en": "Americans with a high disposable income can spend more on cars and holidays."
+  },
+  {
+   "id": "eco-06",
+   "en": "GNP (gross national product)",
+   "de": "Bruttonationaleinkommen (BNE)",
+   "pos": "noun",
+   "example_en": "The GNP shows how much money a country earns in one year."
+  },
+  {
+   "id": "eco-07",
+   "en": "to be tied to",
+   "de": "einhergehen mit",
+   "pos": "verb",
+   "example_en": "A farmer's income can be tied to the weather."
+  },
+  {
+   "id": "eco-08",
+   "en": "sector",
+   "de": "Sektor, Bereich",
+   "pos": "noun",
+   "example_en": "The service sector employs most people in the USA."
+  },
+  {
+   "id": "eco-09",
+   "en": "income tax",
+   "de": "Einkommensteuer",
+   "pos": "noun",
+   "example_en": "Workers in the USA pay income tax on the money they earn."
+  },
+  {
+   "id": "eco-10",
+   "en": "tax burden",
+   "de": "Steuerlast",
+   "pos": "noun",
+   "example_en": "A high tax burden can make a country less attractive for companies."
+  },
+  {
+   "id": "eco-11",
+   "en": "CEO (Chief Executive Officer)",
+   "de": "Geschäftsführer",
+   "pos": "noun",
+   "example_en": "The CEO is the person who runs a big company."
+  },
+  {
+   "id": "eco-12",
+   "en": "customer",
+   "de": "Kunde",
+   "pos": "noun",
+   "example_en": "A good shop always listens to its customers."
+  }
+ ],
+ "g8-us-industry": [
   {
    "id": "ind-01",
-   "en": "factory",
-   "de": "die Fabrik",
+   "en": "raw materials",
+   "de": "Rohstoffe",
    "pos": "noun",
-   "collocations": "to work in a factory",
-   "example_en": "Thousands of workers moved to the cities to work in a factory."
+   "example_en": "Coal and ore are important raw materials for the steel industry."
   },
   {
    "id": "ind-02",
-   "en": "steam engine",
-   "de": "die Dampfmaschine",
+   "en": "iron ore",
+   "de": "Eisenerz",
    "pos": "noun",
-   "collocations": "to power a steam engine",
-   "example_en": "The steam engine made it possible to produce goods far more quickly."
+   "example_en": "Iron ore is mined in Minnesota."
   },
   {
    "id": "ind-03",
-   "en": "working conditions",
-   "de": "die Arbeitsbedingungen",
+   "en": "limestone",
+   "de": "Kalkstein",
    "pos": "noun",
-   "collocations": "harsh / poor working conditions",
-   "example_en": "Reformers described the harsh working conditions in the mills."
+   "example_en": "Limestone is added in steel production to remove impurities."
   },
   {
    "id": "ind-04",
-   "en": "to urbanise",
-   "de": "verstädtern",
-   "pos": "verb",
-   "collocations": "rapidly urbanising regions",
-   "example_en": "The regions around the coalfields urbanised within a single generation."
+   "en": "steel",
+   "de": "Stahl",
+   "pos": "noun",
+   "example_en": "Steel is used to build bridges, cars and skyscrapers."
   },
   {
    "id": "ind-05",
-   "en": "child labour",
-   "de": "die Kinderarbeit",
+   "en": "iron",
+   "de": "Eisen",
    "pos": "noun",
-   "collocations": "to ban child labour",
-   "example_en": "Parliament slowly began to restrict child labour in the mines."
+   "example_en": "Iron is a hard metal that rusts easily."
   },
   {
    "id": "ind-06",
-   "en": "trade union",
-   "de": "die Gewerkschaft",
+   "en": "to manufacture",
+   "de": "fertigen, herstellen",
+   "pos": "verb",
+   "example_en": "The company manufactures car parts in Michigan."
+  },
+  {
+   "id": "ind-07",
+   "en": "industrialisation",
+   "de": "Industrialisierung",
    "pos": "noun",
-   "collocations": "to join a trade union",
-   "example_en": "Workers joined a trade union to demand shorter hours."
+   "example_en": "Industrialisation turned small towns into big industrial cities."
+  },
+  {
+   "id": "ind-08",
+   "en": "metal industry",
+   "de": "Metallindustrie",
+   "pos": "noun",
+   "example_en": "The metal industry makes products such as steel pipes and aluminium cans."
+  },
+  {
+   "id": "ind-09",
+   "en": "steel mill",
+   "de": "Stahlwerk",
+   "pos": "noun",
+   "example_en": "Pittsburgh was once famous for its steel mills."
+  },
+  {
+   "id": "ind-10",
+   "en": "assembly line",
+   "de": "Fließband",
+   "pos": "noun",
+   "example_en": "Henry Ford introduced the assembly line to build cars faster."
+  },
+  {
+   "id": "ind-11",
+   "en": "supply industries",
+   "de": "Zulieferindustrien",
+   "pos": "noun",
+   "example_en": "Supply industries make parts for the big car companies."
+  },
+  {
+   "id": "ind-12",
+   "en": "opencast mining",
+   "de": "Tagebau",
+   "pos": "noun",
+   "collocations": "British English",
+   "example_en": "Opencast mining changes the landscape and destroys large areas of land."
+  },
+  {
+   "id": "ind-13",
+   "en": "headquarters",
+   "de": "Hauptquartier, Firmenhauptsitz",
+   "pos": "noun",
+   "example_en": "The company's headquarters are in New York, but its factories are in Mexico."
+  },
+  {
+   "id": "ind-14",
+   "en": "decline",
+   "de": "sinken, ablehnen",
+   "pos": "verb",
+   "example_en": "The number of jobs in the steel industry has declined since the 1970s."
+  },
+  {
+   "id": "ind-15",
+   "en": "automation",
+   "de": "Automatisierung",
+   "pos": "noun",
+   "example_en": "Automation means that machines do the work that people used to do."
+  },
+  {
+   "id": "ind-16",
+   "en": "demand",
+   "de": "Nachfrage",
+   "pos": "noun",
+   "example_en": "The demand for electric cars is growing."
+  },
+  {
+   "id": "ind-17",
+   "en": "revival",
+   "de": "Wiederbelebung",
+   "pos": "noun",
+   "example_en": "The city hopes for an economic revival after the factory closures."
+  },
+  {
+   "id": "ind-18",
+   "en": "structural change",
+   "de": "Strukturwandel",
+   "pos": "noun",
+   "example_en": "Structural change turned old industrial areas into centres for services and technology."
+  },
+  {
+   "id": "ind-19",
+   "en": "growth industry",
+   "de": "Wachstumsbranche",
+   "pos": "noun",
+   "example_en": "Renewable energy is a growth industry in the USA."
+  },
+  {
+   "id": "ind-20",
+   "en": "key industry",
+   "de": "Schlüsselindustrie",
+   "pos": "noun",
+   "example_en": "Car making is a key industry in Michigan."
+  },
+  {
+   "id": "ind-21",
+   "en": "manufacturing industry",
+   "de": "Fertigungsindustrie",
+   "pos": "noun",
+   "example_en": "The manufacturing industry has moved many jobs to countries with lower wages."
+  },
+  {
+   "id": "ind-22",
+   "en": "secondary industry",
+   "de": "sekundäre/verarbeitende Industrie",
+   "pos": "noun",
+   "example_en": "Secondary industry turns raw materials into finished products."
   }
  ],
- "h9-empire": [
+ "g8-us-location": [
   {
-   "id": "emp-01",
-   "en": "colony",
-   "de": "die Kolonie",
+   "id": "loc-01",
+   "en": "location",
+   "de": "Lage, Standort",
    "pos": "noun",
-   "collocations": "to establish a colony",
-   "example_en": "European powers established a colony wherever they saw profit."
+   "example_en": "The location of a factory is important for its success."
   },
   {
-   "id": "emp-02",
-   "en": "to exploit",
-   "de": "ausbeuten",
+   "id": "loc-02",
+   "en": "choice of location",
+   "de": "Standortwahl",
+   "pos": "noun",
+   "example_en": "When a company looks for a site, the choice of location depends on costs, workers and transport."
+  },
+  {
+   "id": "loc-03",
+   "en": "footloose industries",
+   "de": "ungebundene Industrien",
+   "pos": "noun",
+   "example_en": "Footloose industries can be built almost anywhere, for example software firms."
+  },
+  {
+   "id": "loc-04",
+   "en": "bulky raw materials",
+   "de": "sperrige Rohstoffe",
+   "pos": "noun",
+   "example_en": "Bulky raw materials such as iron ore are expensive to transport."
+  },
+  {
+   "id": "loc-05",
+   "en": "research and development (R & D)",
+   "de": "Forschung und Entwicklung",
+   "pos": "noun",
+   "example_en": "Many high-tech companies spend a lot of money on research and development."
+  },
+  {
+   "id": "loc-06",
+   "en": "skilled worker",
+   "de": "Facharbeiter",
+   "pos": "noun",
+   "example_en": "A skilled worker has learned a trade and can do special jobs."
+  },
+  {
+   "id": "loc-07",
+   "en": "unskilled worker",
+   "de": "ungelernter Arbeiter",
+   "pos": "noun",
+   "example_en": "An unskilled worker has no special training."
+  },
+  {
+   "id": "loc-08",
+   "en": "access (to)",
+   "de": "Zugang (zu)",
+   "pos": "noun",
+   "example_en": "Factories need good access to roads and railways."
+  },
+  {
+   "id": "loc-09",
+   "en": "glassfibre cable links",
+   "de": "Glasfaserkabelverbindungen",
+   "pos": "noun",
+   "example_en": "Modern offices need glassfibre cable links for a fast internet connection."
+  },
+  {
+   "id": "loc-10",
+   "en": "public transport",
+   "de": "öffentliche Verkehrsmittel",
+   "pos": "noun",
+   "example_en": "Many workers get to the factory by public transport."
+  },
+  {
+   "id": "loc-11",
+   "en": "to be available",
+   "de": "zur Verfügung stehen",
    "pos": "verb",
-   "collocations": "to exploit resources / labour",
-   "example_en": "The company exploited the region's resources for decades."
+   "example_en": "Enough workers must be available near the factory."
   },
   {
-   "id": "emp-03",
-   "en": "missionary",
-   "de": "der Missionar / die Missionarin",
+   "id": "loc-12",
+   "en": "pollution",
+   "de": "Verschmutzung",
    "pos": "noun",
-   "collocations": "a missionary society",
-   "example_en": "A missionary society funded the first school in the district."
+   "example_en": "Pollution from factories can harm the air and the water."
   },
   {
-   "id": "emp-04",
-   "en": "resistance",
-   "de": "der Widerstand",
+   "id": "loc-13",
+   "en": "laws against pollution",
+   "de": "Gesetze gegen Umweltverschmutzung",
    "pos": "noun",
-   "collocations": "armed / peaceful resistance",
-   "example_en": "Local rulers organised armed resistance against the occupation."
+   "example_en": "Strict laws against pollution protect the environment."
   },
   {
-   "id": "emp-05",
-   "en": "scramble for Africa",
-   "de": "das Wettrennen um Afrika",
+   "id": "loc-14",
+   "en": "pleasant",
+   "de": "angenehm",
+   "pos": "adjective",
+   "example_en": "Many companies choose a pleasant place with a mild climate and nice scenery."
+  },
+  {
+   "id": "loc-15",
+   "en": "thriving",
+   "de": "gedeihend",
+   "pos": "adjective",
+   "example_en": "Silicon Valley is a thriving centre for high-tech companies."
+  },
+  {
+   "id": "loc-16",
+   "en": "entrepreneur",
+   "de": "Existenzgründer/Unternehmer",
    "pos": "noun",
-   "collocations": "the scramble for Africa",
-   "example_en": "The scramble for Africa divided a continent at a conference table."
+   "example_en": "An entrepreneur starts a new business and takes a risk."
   },
   {
-   "id": "emp-06",
-   "en": "to justify",
-   "de": "rechtfertigen",
-   "pos": "verb",
-   "collocations": "to justify a policy",
-   "example_en": "Politicians tried to justify expansion as a civilising mission."
+   "id": "loc-17",
+   "en": "incubator",
+   "de": "Gründerzentrum",
+   "pos": "noun",
+   "example_en": "A business incubator helps young companies with advice and cheap offices."
   }
  ],
- "h9-ww1": [
+ "g8-us-cities": [
   {
-   "id": "ww1-01",
-   "en": "alliance",
-   "de": "das Bündnis",
+   "id": "cit-01",
+   "en": "grid (street pattern)",
+   "de": "Gitter",
    "pos": "noun",
-   "collocations": "a system of alliances",
-   "example_en": "A system of alliances turned a local crisis into a world war."
+   "example_en": "Many American cities have a grid, with streets crossing at right angles."
   },
   {
-   "id": "ww1-02",
-   "en": "trench warfare",
-   "de": "der Grabenkrieg",
+   "id": "cit-02",
+   "en": "CBD (central business district)",
+   "de": "zentrales Geschäftsviertel",
    "pos": "noun",
-   "collocations": "the reality of trench warfare",
-   "example_en": "Trench warfare made rapid victory impossible."
+   "example_en": "In the CBD you find tall office buildings, banks and big shops."
   },
   {
-   "id": "ww1-03",
-   "en": "mobilisation",
-   "de": "die Mobilmachung",
+   "id": "cit-03",
+   "en": "residential area",
+   "de": "Wohngebiet",
    "pos": "noun",
-   "collocations": "general mobilisation",
-   "example_en": "General mobilisation was ordered within days."
+   "example_en": "People who work in the city often live in a quiet residential area."
   },
   {
-   "id": "ww1-04",
-   "en": "armistice",
-   "de": "der Waffenstillstand",
+   "id": "cit-04",
+   "en": "suburb",
+   "de": "Vorort",
    "pos": "noun",
-   "collocations": "to sign an armistice",
-   "example_en": "The armistice was signed in a railway carriage."
+   "example_en": "The family lives in a suburb of Chicago and drives to work."
   },
   {
-   "id": "ww1-05",
-   "en": "propaganda",
-   "de": "die Propaganda",
-   "pos": "noun",
-   "collocations": "wartime propaganda",
-   "example_en": "Wartime propaganda presented the enemy as a monster."
-  },
-  {
-   "id": "ww1-06",
-   "en": "to surrender",
-   "de": "kapitulieren",
+   "id": "cit-05",
+   "en": "to commute",
+   "de": "pendeln",
    "pos": "verb",
-   "collocations": "to surrender unconditionally",
-   "example_en": "The garrison surrendered after a three-week siege."
+   "example_en": "Millions of Americans commute to work by car every day."
+  },
+  {
+   "id": "cit-06",
+   "en": "to spread",
+   "de": "sich ausbreiten",
+   "pos": "verb",
+   "example_en": "The city is spreading further into the countryside every year."
+  },
+  {
+   "id": "cit-07",
+   "en": "urban sprawl",
+   "de": "Zersiedelung",
+   "pos": "noun",
+   "example_en": "Urban sprawl takes up farmland and increases traffic."
+  },
+  {
+   "id": "cit-08",
+   "en": "to redevelop",
+   "de": "sanieren",
+   "pos": "verb",
+   "example_en": "The city wants to redevelop the old harbour area and build new flats there."
+  },
+  {
+   "id": "cit-09",
+   "en": "gentrification",
+   "de": "Gentrifizierung",
+   "pos": "noun",
+   "example_en": "Gentrification makes poor areas more expensive and pushes out the people who live there."
+  },
+  {
+   "id": "cit-10",
+   "en": "mall",
+   "de": "Einkaufszentrum",
+   "pos": "noun",
+   "example_en": "Teenagers often meet their friends at the mall."
+  },
+  {
+   "id": "cit-11",
+   "en": "metropolitan area",
+   "de": "Metropolregion",
+   "pos": "noun",
+   "example_en": "Millions of people live in the New York metropolitan area."
+  },
+  {
+   "id": "cit-12",
+   "en": "outskirts",
+   "de": "Stadtrand",
+   "pos": "noun",
+   "example_en": "New shopping centres are built on the outskirts of the city."
+  },
+  {
+   "id": "cit-13",
+   "en": "suburbia",
+   "de": "Vorstadt",
+   "pos": "noun",
+   "example_en": "Life in suburbia often means a house with a garden and two cars."
   }
  ],
- "h10-weimar": [
+ "g8-us-oilsands": [
   {
-   "id": "wei-01",
-   "en": "republic",
-   "de": "die Republik",
+   "id": "oil-01",
+   "en": "non-renewable resource",
+   "de": "nicht-erneuerbare Ressource",
    "pos": "noun",
-   "collocations": "to proclaim a republic",
-   "example_en": "The republic was proclaimed from a window in Berlin."
+   "example_en": "Oil is a non-renewable resource, so one day it will run out."
   },
   {
-   "id": "wei-02",
-   "en": "constitution",
-   "de": "die Verfassung",
+   "id": "oil-02",
+   "en": "bitumen",
+   "de": "Bitumen",
    "pos": "noun",
-   "collocations": "to draft a constitution",
-   "example_en": "The constitution guaranteed rights that were rarely defended."
+   "example_en": "Bitumen is a thick, black and sticky kind of oil."
   },
   {
-   "id": "wei-03",
-   "en": "hyperinflation",
-   "de": "die Hyperinflation",
+   "id": "oil-03",
+   "en": "oil sand",
+   "de": "Ölsand",
    "pos": "noun",
-   "collocations": "the hyperinflation of 1923",
-   "example_en": "During the hyperinflation wages lost their value within hours."
+   "example_en": "Oil sand is a mixture of sand, water and bitumen."
   },
   {
-   "id": "wei-04",
-   "en": "coalition government",
-   "de": "die Koalitionsregierung",
-   "pos": "noun",
-   "collocations": "a fragile coalition government",
-   "example_en": "A fragile coalition government collapsed after eight months."
+   "id": "oil-04",
+   "en": "land-locked",
+   "de": "landumschlossen",
+   "pos": "adjective",
+   "example_en": "Alberta is a land-locked province, so oil has to be moved by pipeline."
   },
   {
-   "id": "wei-05",
-   "en": "reparations",
-   "de": "die Reparationen",
+   "id": "oil-05",
+   "en": "open-pit mining",
+   "de": "Tagebau",
    "pos": "noun",
-   "collocations": "to pay reparations",
-   "example_en": "The country was required to pay reparations it could not afford."
+   "collocations": "American English",
+   "example_en": "In open-pit mining, huge trucks carry the sand away from a big hole in the ground."
   },
   {
-   "id": "wei-06",
-   "en": "to undermine",
-   "de": "untergraben",
+   "id": "oil-06",
+   "en": "in-situ mining",
+   "de": "Bergbau vor Ort / im In-situ-Verfahren",
+   "pos": "noun",
+   "example_en": "With in-situ mining, hot steam is pumped underground to make the bitumen flow."
+  },
+  {
+   "id": "oil-07",
+   "en": "to mine (bitumen)",
+   "de": "abbauen (Bitumen)",
    "pos": "verb",
-   "collocations": "to undermine democracy",
-   "example_en": "Street violence undermined trust in democracy."
-  }
- ],
- "h10-ns": [
-  {
-   "id": "ns-01",
-   "en": "dictatorship",
-   "de": "die Diktatur",
-   "pos": "noun",
-   "collocations": "to establish a dictatorship",
-   "example_en": "Within months the government had established a dictatorship."
+   "example_en": "Companies mine bitumen from the ground in northern Alberta."
   },
   {
-   "id": "ns-02",
-   "en": "persecution",
-   "de": "die Verfolgung",
+   "id": "oil-08",
+   "en": "crude oil",
+   "de": "Rohöl",
    "pos": "noun",
-   "collocations": "the persecution of minorities",
-   "example_en": "The persecution of Jewish citizens was written into law."
+   "example_en": "Crude oil is made into petrol, diesel and plastics."
   },
   {
-   "id": "ns-03",
-   "en": "perpetrator",
-   "de": "der Täter / die Täterin",
-   "pos": "noun",
-   "collocations": "perpetrators and bystanders",
-   "example_en": "Historians distinguish between perpetrators, bystanders and victims."
-  },
-  {
-   "id": "ns-04",
-   "en": "bystander",
-   "de": "der Zuschauer / die Zuschauerin",
-   "pos": "noun",
-   "collocations": "an indifferent bystander",
-   "example_en": "Many people chose to remain bystanders."
-  },
-  {
-   "id": "ns-05",
-   "en": "to deport",
-   "de": "deportieren",
+   "id": "oil-09",
+   "en": "to transform",
+   "de": "verwandeln, umwandeln",
    "pos": "verb",
-   "collocations": "to deport to a camp",
-   "example_en": "Families were deported to camps in the occupied east."
+   "example_en": "Refineries transform crude oil into petrol and diesel."
   },
   {
-   "id": "ns-06",
-   "en": "remembrance",
-   "de": "das Gedenken, die Erinnerung",
+   "id": "oil-10",
+   "en": "oil sand deposit",
+   "de": "Ölsandvorkommen",
    "pos": "noun",
-   "collocations": "a culture of remembrance",
-   "example_en": "A culture of remembrance keeps these events present."
-  }
- ],
- "h10-coldwar": [
-  {
-   "id": "cw-01",
-   "en": "superpower",
-   "de": "die Supermacht",
-   "pos": "noun",
-   "collocations": "the two superpowers",
-   "example_en": "The two superpowers divided Europe into spheres of influence."
+   "example_en": "Alberta has one of the largest oil sand deposits in the world."
   },
   {
-   "id": "cw-02",
-   "en": "iron curtain",
-   "de": "der Eiserne Vorhang",
+   "id": "oil-11",
+   "en": "reserve",
+   "de": "Reserve",
    "pos": "noun",
-   "collocations": "behind the iron curtain",
-   "example_en": "Families behind the iron curtain were separated for decades."
-  },
-  {
-   "id": "cw-03",
-   "en": "arms race",
-   "de": "das Wettrüsten",
-   "pos": "noun",
-   "collocations": "the nuclear arms race",
-   "example_en": "The arms race consumed enormous resources on both sides."
-  },
-  {
-   "id": "cw-04",
-   "en": "reunification",
-   "de": "die Wiedervereinigung",
-   "pos": "noun",
-   "collocations": "German reunification",
-   "example_en": "Reunification raised questions that took years to answer."
-  },
-  {
-   "id": "cw-05",
-   "en": "to defect",
-   "de": "sich absetzen, überlaufen",
-   "pos": "verb",
-   "collocations": "to defect to the West",
-   "example_en": "Athletes who defected to the West became political symbols."
-  },
-  {
-   "id": "cw-06",
-   "en": "checkpoint",
-   "de": "der Kontrollpunkt",
-   "pos": "noun",
-   "collocations": "to pass a checkpoint",
-   "example_en": "Passing a checkpoint could take several hours."
+   "example_en": "Canada has large oil reserves, most of them in the oil sands."
   }
  ]
 };
@@ -787,15 +1512,15 @@ const Store = (function(){
    assets/learning.js jede Themenseite fuer die Oberstufe und beschriftet
    entsprechend. */
 const PAGE = {
-  "name": "History · Bilingualer Unterricht",
+  "name": "Geography · Bilingualer Unterricht",
   "crossLabel": "Jahrgangsübergreifend üben",
   "allLabel": "Alle Jahrgänge",
   "groupName": "Jahrgang",
-  "promptLevel": "History (bilingual) \u2013 Year 9 und Year 10",
-  "promptLanguage": "Englische Fachsprache des Geschichtsunterrichts, altersgerecht für Year 9 und Year 10; Fachbegriffe korrekt verwenden, Satzbau der Mittelstufe."
+  "promptLevel": "Geography (bilingual) \u2013 Year 8",
+  "promptLanguage": "Englische Fachsprache des Geographieunterrichts (Thema USA), altersgerecht für Year 8; Fachbegriffe korrekt verwenden, Satzbau der Mittelstufe."
 };
 
-const KEY = "vt:bili:history:progress";
+const KEY = "vt:bili:geography:progress";
 const INTERVALS = [0,0,1,2,4,8];      // Fach 1..5 -> Tage bis zur Wiedervorlage
 const DAY = 86400000;
 
@@ -1204,13 +1929,11 @@ function renderSession(){
 /* Ordnet einem Jahrgang eine feste Farbe zu. "ALL" (jahrgangsuebergreifend)
    bekommt einen neutralen Ton statt einer der drei Jahrgangsfarben. */
 function yearColor(year){
-  if(year === "Year 9")  return "var(--year-e)";
-  if(year === "Year 10") return "var(--year-q1)";
+  if(year === "Year 8")  return "var(--year-q1)";
   return "var(--year-all)";
 }
 function yearBg(year){
-  if(year === "Year 9")  return "var(--year-e-bg)";
-  if(year === "Year 10") return "var(--year-q1-bg)";
+  if(year === "Year 8")  return "var(--year-q1-bg)";
   return "var(--year-all-bg)";
 }
 

@@ -48,7 +48,7 @@ const RICHTIG=[
 const FALSCH=[['stay','to go'],['were','we are'],['its','it is'],['shed','she would'],
   ['well','we will'],['ill','i will'],['do','do not'],['not','is not'],['cat','dog']];
 
-for(const folder of ['year5','year7','oberstufe','bili/history']){
+for(const folder of ['year5','year7','oberstufe','bili/history','bili/geography']){
   const {pruefe,sets}=seite(folder);
   for(const [antwort,eintrag] of RICHTIG)
     assert.equal(pruefe(antwort,eintrag),'ok',

@@ -7,7 +7,7 @@ const vm=require('node:vm');
 const fs=require('fs'),path=require('path'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..');
 
-for(const fach of ['bili/history']){
+for(const fach of ['bili/history','bili/geography']){
  const html=fs.readFileSync(path.join(root,fach,'index.html'),'utf8');
  const dom=new JSDOM(html,{runScripts:'outside-only',url:'https://example.org/'+fach+'/'});
  const w=dom.window;w.scrollTo=()=>{};
@@ -27,7 +27,9 @@ for(const fach of ['bili/history']){
  /* Jede Gruppe ist ein Jahrgang, und alle Jahrgaenge liegen auf dieser
     einen Seite - das ist die Voraussetzung fuers Querueben. */
  const jahrgaenge=[...new Set(vm.runInContext('TOPICS',c).map(t=>t.year))];
- assert.ok(jahrgaenge.length>1,'Eine Fachseite braucht mehr als einen Jahrgang');
+ /* Geography hat zunaechst nur Year 8; weitere Jahrgaenge kommen mit ihren
+    Vokabeln dazu. Ein Jahrgang genuegt, solange die Gruppen stimmen. */
+ assert.ok(jahrgaenge.length>=1,'Eine Fachseite braucht mindestens einen Jahrgang');
  const gruppen=[...d.querySelectorAll('.yeargroup > summary .tag')].map(e=>e.textContent);
  assert.deepEqual(gruppen,jahrgaenge,'Gruppenueberschriften stimmen nicht mit den Jahrgaengen ueberein');
 

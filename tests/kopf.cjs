@@ -17,7 +17,7 @@ const fs=require('fs'),vm=require('vm'),path=require('path');
 const assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..');
 
-const SEITEN=['year5','year6','year7','year8','year9','year10','oberstufe','bili/history'];
+const SEITEN=['year5','year6','year7','year8','year9','year10','oberstufe','bili/history','bili/geography'];
 
 function seite(folder){
   const html=fs.readFileSync(path.join(root,folder,'index.html'),'utf8');

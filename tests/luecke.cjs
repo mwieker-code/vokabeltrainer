@@ -31,7 +31,7 @@ function gehoertDazu(wort, teile){
     || wort.length>=3 && t.startsWith(wort.slice(0,Math.min(4,wort.length))));
 }
 
-const seiten=['year5','year6','year7','year8','year9','year10','oberstufe','bili/history'];
+const seiten=['year5','year6','year7','year8','year9','year10','oberstufe','bili/history','bili/geography'];
 let geprueft=0, ohne=0;
 const fremd=[], strich=[];
 for(const f of seiten){
