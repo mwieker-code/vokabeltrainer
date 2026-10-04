@@ -1,7 +1,7 @@
 const {JSDOM}=require('jsdom'),fs=require('fs'),vm=require('vm'),assert=require('node:assert/strict');
 /* bili/history gehoert dazu: Dort wird genauso getippt und geluecktet,
    der Berg fehlte dort aber - als einzige Uebungsseite. */
-for(const folder of ['year5','year6','year7','year8','year9','year10','oberstufe','bili/history']){
+for(const folder of ['year5','year6','year7','year8','year9','year10','oberstufe','bili/history','bili/geography']){
  const html=fs.readFileSync(folder+'/index.html','utf8');
  assert.match(html,/ascent\.js/);assert.match(html,/inp\.focus\(\{preventScroll:true\}\)/);
  const dom=new JSDOM(html,{runScripts:'outside-only',url:'https://example.org/'+folder+'/'}),w=dom.window;

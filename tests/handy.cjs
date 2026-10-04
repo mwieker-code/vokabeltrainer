@@ -127,7 +127,7 @@ const modus=(s,name)=>[...s.d.querySelectorAll('button')].find(b=>b.textContent.
   console.log('Blitzrunde: eigenes Tastenfeld, englische Belegung, Prüfen-Taste');
 }
 
-for(const folder of ['year5','year9','oberstufe','bili/history']){
+for(const folder of ['year5','year9','oberstufe','bili/history','bili/geography']){
   /* ---- Telefon ---- */
   const t=seite(folder,390);
   inRunde(t); modus(t,'Tippen');

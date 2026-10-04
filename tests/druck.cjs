@@ -37,7 +37,7 @@ assert.ok(!/\.vrow:has\([^)]*\)\s*\{[^}]*padding-left/.test(rinne.input),
   'die Rinne haengt an der Auswahl - dann stehen die Zeilen versetzt');
 
 /* ---- Und die Seiten holen diese Datei auch ---- */
-for(const seite of ['year5','year6','year7','year8','year9','year10','oberstufe','bili/history']){
+for(const seite of ['year5','year6','year7','year8','year9','year10','oberstufe','bili/history','bili/geography']){
   const html=fs.readFileSync(path.join(root,seite,'index.html'),'utf8');
   assert.match(html,/learning\.css\?v=/,seite+': ohne learning.css bleibt die Rinne aus');
   assert.match(html,/@media print\{[\s\S]*?\.lbody\{[^}]*columns:2/,
