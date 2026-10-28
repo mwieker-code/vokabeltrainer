@@ -317,6 +317,8 @@ function workshop(step){
     +'<section class="panel workshop">'+body+'</section>'
     +'<div class="actions"><button id="prev"'+(step?'':' disabled')+'>← Previous</button>'
     +(step<STEPS.length-1?'<button id="next" class="primary">Next: '+STEPS[step+1]+' →</button>':'<button id="home">Writing a discussion</button>')+'</div>');
+  /* Wie in der Klassenarbeit: keine Rechtschreibpruefung, keine Autokorrektur. */
+  app.querySelectorAll('input,textarea').forEach(el=>{el.spellcheck=false;el.setAttribute('spellcheck','false');el.setAttribute('autocorrect','off');});
   document.getElementById('back').onclick=home;
   document.getElementById('prev').onclick=()=>workshop(step-1);
   const next=document.getElementById('next');if(next)next.onclick=()=>workshop(step+1);
