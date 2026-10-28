@@ -94,6 +94,7 @@ ok(again.window.localStorage.getItem('vt9:progress')===null,'Vokabel-Lernstand u
  doc.querySelector('[data-answer="1"]').click();
  doc.querySelector('#next').click();
  ok(doc.querySelectorAll('textarea[data-part]').length===4,'vier Textfelder');
+ ok([...doc.querySelectorAll('textarea,input')].every(el=>el.getAttribute('spellcheck')==='false'&&el.getAttribute('autocorrect')==='off'),'keine Rechtschreibpruefung in den Textfeldern');
  ok(doc.querySelectorAll('.part')[1].textContent.includes('practice helps'),'Notizen der Gegenseite bei Teil 2');
  ok(doc.querySelectorAll('.part')[2].textContent.includes('Answer: parents see progress'),'gewaehltes Gegenargument bei Teil 3');
  doc.querySelector('[data-insert="0"]').click();
