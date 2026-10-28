@@ -27,3 +27,33 @@ ul.bank li:first-child{border-top:0}
 .feedback ul{margin:8px 0;padding-left:20px}
 .stats span{white-space:nowrap}
 @media(max-width:650px){.stats span{flex:0 1 auto}}
+
+/* Schreibwerkstatt */
+ol.steps{list-style:none;display:flex;flex-wrap:wrap;gap:6px;padding:0;margin:14px 0 0}
+ol.steps button{min-height:38px;padding:6px 12px;font-size:14px;flex-grow:0}
+.table{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.table h2{margin:8px 0 0}
+ol.order{list-style:none;padding:0;margin:0 0 10px}
+ol.order li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-top:1px solid #d4e0e5}
+ol.order li:first-child{border-top:0}
+.order .move{display:inline-flex;gap:6px;flex:none}
+.order .move button{min-height:38px;padding:4px 12px;flex-grow:0}
+.part{border-top:1px solid #d4e0e5;padding-top:6px;margin-top:20px}
+.part:first-of-type{border-top:0;margin-top:0}
+.part h2{margin:12px 0 4px}
+.part h2 label{font:inherit;margin:0}
+.part textarea{min-height:150px}
+ul.notes{margin:6px 0 10px;padding-left:20px;color:#49616d;font-size:15px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chips button{min-height:38px;padding:6px 10px;font-size:14px;flex-grow:0;text-align:left}
+.count{font-weight:600}
+.nowrap{white-space:nowrap}
+.quote.text{font-size:17px;line-height:1.6}
+.quote.text p{margin:0 0 12px}
+ul.checklist{list-style:none;padding:0;margin:0}
+ul.checklist li{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 0;border-top:1px solid #d4e0e5}
+ul.checklist li:first-child{border-top:0}
+.marks{display:inline-flex;gap:6px;flex:none}
+.marks button{min-height:40px;min-width:48px;padding:4px 8px;flex-grow:0}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media(max-width:650px){.table{grid-template-columns:1fr;gap:0}ul.checklist li{flex-direction:column;align-items:flex-start}}

@@ -24,3 +24,7 @@
 :where(html:not([data-thema="hell"])) .options small{color:#BED3DE}
 :where(html:not([data-thema="hell"])) ul.bank li{border-top:1px solid #313B3F}
 :where(html:not([data-thema="hell"])) .bank .de{color:#BED3DE}
+:where(html:not([data-thema="hell"])) ol.order li{border-top:1px solid #313B3F}
+:where(html:not([data-thema="hell"])) .part{border-top:1px solid #313B3F}
+:where(html:not([data-thema="hell"])) ul.notes{color:#BED3DE}
+:where(html:not([data-thema="hell"])) ul.checklist li{border-top:1px solid #313B3F}

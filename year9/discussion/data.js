@@ -702,3 +702,25 @@ window.DISCUSSION_DATA = {
   }
  ]
 };
+
+/* Schreibwerkstatt: Uebungsfragen (bewusst nicht das Thema der Klassenarbeit
+   und nicht die Themen der Mustertexte), Tipps und passende Kaesten der
+   Phrase bank fuer jeden der vier Teile. */
+window.DISCUSSION_DATA.workshop = {
+ topics: [
+  "Should homework be banned?",
+  "Should school start later in the morning?",
+  "Should the voting age be lowered to 16?",
+  "Is social media good for teenagers?",
+  "Should fast food be sold at school?",
+  "Should young people do a voluntary social year after school?"
+ ],
+ parts: [
+  {tip: "Name the topic and say why people discuss it. No opinion yet.", boxes: ["intro"], words: "about 40 words"},
+  {tip: "Present at least two arguments of the other side: Point – Reason – Example.", boxes: ["other", "reasons"], words: "about 80 words"},
+  {tip: "Turn to your side. Strongest argument last. Answer the other side at least once.", boxes: ["turn", "reasons", "answer"], words: "about 100 words"},
+  {tip: "Sum up and give your opinion with a reason.", boxes: ["opinion"], words: "about 40 words"}
+ ],
+ min: 250,
+ max: 300
+};
