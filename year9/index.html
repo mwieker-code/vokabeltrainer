@@ -28,7 +28,7 @@ window.onerror = function(msg, src, line, col){
 };
 </script>
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../assets/fonts/inter-400-latin.woff2">
-<script data-nacht src="../assets/thema.js?v=20261004-bilikurz"></script>
+<script data-nacht src="../assets/thema.js?v=20261028-discussion"></script>
 <link rel="stylesheet" href="../assets/fonts.css?v=2">
 
 <style>
@@ -373,6 +373,7 @@ button.primary:hover{background:#0B4A54}
   *{animation:none!important;transition:none!important}
 }
 .y9u-linking{--unit:#527F78;--unit-bg:#E5F0ED;--unit-ink:#284C46}
+.y9u-discussion{--unit:#7A4E8C;--unit-bg:#EFE7F3;--unit-ink:#4A2D57}
 </style>
 <style media="screen" data-nacht>
 :root:where(:not([data-thema="hell"])){--ground:#181D26;--card:#151A22;--ink:#D3E0E9;--ink-soft:#C0CFD8;--rule:#363B3E}
@@ -397,9 +398,10 @@ button.primary:hover{background:#0B4A54}
 :where(html:not([data-thema="hell"])) .doc .warnbox{background:#231A0F}
 :where(html:not([data-thema="hell"])) .vex{color:#C8D9E3}
 :where(html:not([data-thema="hell"])) .y9u-linking{--unit-bg:#16211E;--unit-ink:#BDDDD7}
+:where(html:not([data-thema="hell"])) .y9u-discussion{--unit-bg:#231C27;--unit-ink:#E7CCF5}
 </style>
-<link rel="stylesheet" href="../assets/learning.css?v=20261004-bilikurz">
-<link rel="stylesheet" media="screen" data-nacht href="../assets/learning-nacht.css?v=20261004-bilikurz">
+<link rel="stylesheet" href="../assets/learning.css?v=20261028-discussion">
+<link rel="stylesheet" media="screen" data-nacht href="../assets/learning-nacht.css?v=20261028-discussion">
 
 <div class="wrap">
     <div class="masthead">
@@ -454,6 +456,10 @@ const YEARS = [
    {
     "id": "y9u-linking",
     "name": "Skills – Linking words"
+   },
+   {
+    "id": "y9u-discussion",
+    "name": "Skills – Writing a discussion"
    }
   ]
  }
@@ -619,10 +625,214 @@ const TOPICS = [
   "unit": "y9u-linking",
   "unitName": "Skills – Linking words",
   "name": "Linking words"
+ },
+ {
+  "id": "y9-discussion-phrases",
+  "year": "9",
+  "yearName": "Mittelstufe",
+  "unit": "y9u-discussion",
+  "unitName": "Skills – Writing a discussion",
+  "name": "Phrase bank"
  }
 ];
 
 const SETS = {
+ "y9-discussion-phrases": [
+  {
+   "id": "y9-discussion-001",
+   "en": "A question that people often discuss is …",
+   "de": "Eine Frage, die oft diskutiert wird, ist …",
+   "pos": "phrase",
+   "example_en": "A question that people often discuss is whether homework should be abolished."
+  },
+  {
+   "id": "y9-discussion-002",
+   "en": "It is often said that …",
+   "de": "Es wird oft gesagt, dass …",
+   "pos": "phrase",
+   "example_en": "It is often said that teenagers spend too much time online."
+  },
+  {
+   "id": "y9-discussion-003",
+   "en": "Nowadays, many people argue that …",
+   "de": "Heutzutage meinen viele Menschen, dass …",
+   "pos": "phrase",
+   "example_en": "Nowadays, many people argue that school should start later in the morning."
+  },
+  {
+   "id": "y9-discussion-004",
+   "en": "This raises the question whether …",
+   "de": "Das wirft die Frage auf, ob …",
+   "pos": "phrase",
+   "example_en": "Almost every teenager has a smartphone. This raises the question whether phones should be allowed at school."
+  },
+  {
+   "id": "y9-discussion-005",
+   "en": "There are good arguments on both sides.",
+   "de": "Es gibt gute Argumente für beide Seiten.",
+   "pos": "phrase",
+   "example_en": "Some parents like school uniforms and others do not – there are good arguments on both sides."
+  },
+  {
+   "id": "y9-discussion-006",
+   "en": "On the one hand, some people think …",
+   "de": "Einerseits denken manche Leute …",
+   "pos": "phrase",
+   "example_en": "On the one hand, some people think that phones make students feel safer."
+  },
+  {
+   "id": "y9-discussion-007",
+   "en": "One of the main reasons why …",
+   "de": "Einer der Hauptgründe, warum …",
+   "pos": "phrase",
+   "example_en": "One of the main reasons why parents buy phones for their children is safety."
+  },
+  {
+   "id": "y9-discussion-008",
+   "en": "Supporters of … claim that …",
+   "de": "Befürworter von … behaupten, dass …",
+   "pos": "phrase",
+   "example_en": "Supporters of school uniforms claim that they reduce bullying.",
+   "cloze": "Supporters of"
+  },
+  {
+   "id": "y9-discussion-009",
+   "en": "Opponents of … argue that …",
+   "de": "Gegner von … argumentieren, dass …",
+   "pos": "phrase",
+   "example_en": "Opponents of homework argue that students need more free time.",
+   "cloze": "Opponents of"
+  },
+  {
+   "id": "y9-discussion-010",
+   "en": "There is, however, another way of looking at it.",
+   "de": "Man kann es jedoch auch anders sehen.",
+   "pos": "phrase",
+   "example_en": "There is, however, another way of looking at it: a part-time job can teach responsibility."
+  },
+  {
+   "id": "y9-discussion-011",
+   "en": "Furthermore, you could argue that …",
+   "de": "Außerdem könnte man argumentieren, dass …",
+   "pos": "phrase",
+   "example_en": "Furthermore, you could argue that uniforms are expensive for families."
+  },
+  {
+   "id": "y9-discussion-012",
+   "en": "On the other hand, …",
+   "de": "Andererseits …",
+   "pos": "phrase",
+   "example_en": "On the other hand, phones can distract students from learning."
+  },
+  {
+   "id": "y9-discussion-013",
+   "en": "Another important point is that …",
+   "de": "Ein weiterer wichtiger Punkt ist, dass …",
+   "pos": "phrase",
+   "example_en": "Another important point is that teenagers need enough sleep."
+  },
+  {
+   "id": "y9-discussion-014",
+   "en": "This is because …",
+   "de": "Das liegt daran, dass …",
+   "pos": "phrase",
+   "example_en": "Many students are tired in the morning. This is because they go to bed late."
+  },
+  {
+   "id": "y9-discussion-015",
+   "en": "For example, …",
+   "de": "Zum Beispiel …",
+   "pos": "phrase",
+   "example_en": "For example, a student who works every Saturday may be too tired on Monday."
+  },
+  {
+   "id": "y9-discussion-016",
+   "en": "For instance, …",
+   "de": "Zum Beispiel …, beispielsweise …",
+   "pos": "phrase",
+   "example_en": "For instance, you can look up new words in an online dictionary."
+  },
+  {
+   "id": "y9-discussion-017",
+   "en": "A big advantage of … is …",
+   "de": "Ein großer Vorteil von … ist …",
+   "pos": "phrase",
+   "example_en": "A big advantage of a part-time job is that you earn your own money.",
+   "cloze": "A big advantage of"
+  },
+  {
+   "id": "y9-discussion-018",
+   "en": "As a result, …",
+   "de": "Folglich …, Infolgedessen …",
+   "pos": "phrase",
+   "example_en": "Phones are always within reach. As a result, many students check them during lessons."
+  },
+  {
+   "id": "y9-discussion-019",
+   "en": "Admittedly, … However, …",
+   "de": "Zugegeben, … Allerdings …",
+   "pos": "phrase",
+   "example_en": "Admittedly, a job takes time. However, a few hours a week are usually enough.",
+   "cloze": "Admittedly"
+  },
+  {
+   "id": "y9-discussion-020",
+   "en": "While it is true that …",
+   "de": "Es stimmt zwar, dass …",
+   "pos": "phrase",
+   "example_en": "While it is true that uniforms can reduce bullying, students will always find other things to compare."
+  },
+  {
+   "id": "y9-discussion-021",
+   "en": "Although I understand …, I still think …",
+   "de": "Obwohl ich … verstehe, denke ich trotzdem …",
+   "pos": "phrase",
+   "example_en": "Although I understand that parents worry, I still think that phones should stay in students' bags during lessons.",
+   "cloze": "Although I understand"
+  },
+  {
+   "id": "y9-discussion-022",
+   "en": "That may be true, but …",
+   "de": "Das mag stimmen, aber …",
+   "pos": "phrase",
+   "example_en": "That may be true, but a canteen can also offer healthy food that tastes good."
+  },
+  {
+   "id": "y9-discussion-023",
+   "en": "After looking at both sides, …",
+   "de": "Nachdem ich beide Seiten betrachtet habe, …",
+   "pos": "phrase",
+   "example_en": "After looking at both sides, I believe that homework is useful."
+  },
+  {
+   "id": "y9-discussion-024",
+   "en": "Personally, I believe that …",
+   "de": "Ich persönlich glaube, dass …",
+   "pos": "phrase",
+   "example_en": "Personally, I believe that school should start later in the morning."
+  },
+  {
+   "id": "y9-discussion-025",
+   "en": "In my opinion, …",
+   "de": "Meiner Meinung nach …",
+   "pos": "phrase",
+   "example_en": "In my opinion, phones should not be used during lessons."
+  },
+  {
+   "id": "y9-discussion-026",
+   "en": "All in all, …",
+   "de": "Alles in allem …",
+   "pos": "phrase",
+   "example_en": "All in all, the advantages of a part-time job are greater than the disadvantages."
+  },
+  {
+   "id": "y9-discussion-027",
+   "en": "Weighing up the arguments, …",
+   "de": "Wenn ich die Argumente abwäge, …",
+   "pos": "phrase",
+   "example_en": "Weighing up the arguments, I am against school uniforms."
+  }
+ ],
  "u1-introduction": [
   {
    "id": "u1-001",
@@ -8380,16 +8590,16 @@ try{
 </script>
 
 <script src="../assets/qr.js?v=20260921-anleitung"></script>
-<script src="../assets/learning.js?v=20261004-bilikurz"></script>
+<script src="../assets/learning.js?v=20261028-discussion"></script>
 
 <link rel="stylesheet" href="../assets/feedback.css?v=20260921-anleitung">
-<link rel="stylesheet" media="screen" data-nacht href="../assets/feedback-nacht.css?v=20261004-bilikurz">
+<link rel="stylesheet" media="screen" data-nacht href="../assets/feedback-nacht.css?v=20261028-discussion">
 <script src="../assets/feedback.js?v=20260921-zustand"></script>
 
 <link rel="stylesheet" href="design/preview.css?v=20260917-teacher-prompt">
-<link rel="stylesheet" media="screen" data-nacht href="design/preview-nacht.css?v=20261004-bilikurz">
+<link rel="stylesheet" media="screen" data-nacht href="design/preview-nacht.css?v=20261028-discussion">
 
-<link rel="stylesheet" href="../assets/ascent.css?v=20261004-bilikurz">
-<link rel="stylesheet" media="screen" data-nacht href="../assets/ascent-nacht.css?v=20261004-bilikurz">
-<link rel="stylesheet" media="screen" data-nacht href="../assets/nacht-marke.css?v=20261004-bilikurz">
-<script src="../assets/ascent.js?v=20261004-bilikurz"></script>
+<link rel="stylesheet" href="../assets/ascent.css?v=20261028-discussion">
+<link rel="stylesheet" media="screen" data-nacht href="../assets/ascent-nacht.css?v=20261028-discussion">
+<link rel="stylesheet" media="screen" data-nacht href="../assets/nacht-marke.css?v=20261028-discussion">
+<script src="../assets/ascent.js?v=20261028-discussion"></script>
