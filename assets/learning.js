@@ -758,6 +758,7 @@ ${vocabulary}`;
       const summary=document.createElement('summary');summary.textContent='Deine fünf Lernfächer';
       rail.replaceWith(details);details.append(summary,rail);
     }
+    const karte=view.querySelector('.vcard');if(karte)karte.classList.toggle('en-gross',S.mode==='card'&&S.revealed&&S.dir==='de2en');
     const stage=view.querySelector('.stage');
     if(stage)stage.insertAdjacentHTML('beforebegin','<div class="round-progress"><span>'+(S.i>=S.initialCount?'Fehlerwiederholung':S.roundSource==='nachueben'?'Weiterüben':S.roundSource==='schwer'?'Schwierige Wörter':S.scope==='short'?'Kurze Runde':S.scope==='due'?'Fällige Vokabeln':'Alles üben')+' · '+S.initialCount+' Wörter</span><span>'+(S.i>=S.initialCount?S.i-S.initialCount:S.i)+' von '+(S.i>=S.initialCount?S.queue.length-S.initialCount:S.initialCount)+' erledigt</span><progress max="'+S.queue.length+'" value="'+S.i+'" aria-label="Fortschritt dieser Runde"></progress></div>');
     for(const b of view.querySelectorAll('[data-mode]')) b.onclick=()=>{
