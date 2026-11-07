@@ -523,3 +523,11 @@ button.lw-schwer:hover{background:color-mix(in srgb,var(--no) 22%,transparent)}
   .masthead .sub .sub-lang{display:none}
   .masthead .sub .sub-kurz{display:inline}
 }
+
+/* Aufgedeckte Karteikarte Deutsch -> Englisch: das englische Wort ist die
+   Hauptsache und steht gross, das deutsche Stichwort tritt zurueck. */
+.vcard.en-gross .prompt{font-weight:600;font-size:clamp(24px,4vw,30px);letter-spacing:-.02em;line-height:1.15}
+.vcard.en-gross .answer .de{font-weight:700;letter-spacing:-.045em;line-height:1.02;font-size:clamp(42px,9vw,72px);color:var(--snow)}
+@media(max-width:620px){
+  .vcard.en-gross .answer .de{font-size:clamp(34px,10vw,46px)}
+}
