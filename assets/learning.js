@@ -91,8 +91,14 @@
   }
   function stored(){try{const x=JSON.parse(localStorage.getItem(sessionKey));return x&&Array.isArray(x.queue)&&x.queue.length&&x.queue.every(k=>wordMap.has(k))&&Number.isInteger(x.i)&&x.i>=0&&x.i<x.queue.length&&['all','short','due'].includes(x.scope)&&['en2de','de2en'].includes(x.dir)?x:null;}catch(e){return null;}}
   function resume(){const x=stored();if(!x)return;if(x.source==='assignment'&&!assignmentWords.length)assignmentWords=x.queue.map(k=>wordMap.get(k)).filter(Boolean);if(x.source==='nachueben')nachuebenWords=x.queue.slice(0,x.initial).map(k=>wordMap.get(k)).filter(Boolean);if(x.source==='schwer')schwerWords=x.queue.slice(0,x.initial).map(k=>wordMap.get(k)).filter(Boolean);S.startBox=new Map((x.start||[]).map(([k,b])=>[wordMap.get(k),b]).filter(([v])=>v));S.roundSource=x.source;S.topicId=x.source;S.dir=x.dir;S.mode=x.mode;S.scope=x.scope;S.onlyDue=x.scope==='due';S.roundLimit=x.scope==='short'?10:Infinity;S.queue=x.queue.map(k=>wordMap.get(k));S.i=x.i;S.seen=x.seen;S.initialCount=x.initial;for(const [field,key] of [['retried','retried'],['missed','missed'],['roundAnswered','answered']])S[field]=new Set((x[key]||[]).map(k=>wordMap.get(k)).filter(Boolean));S.answered=null;S.revealed=false;S.options=null;S.typedValue='';S.view='session';render();}
-  const wordsFor=topicId=>(topicId==='today'?allWords():topicId==='assignment'?assignmentWords:topicId==='nachueben'?nachuebenWords:topicId==='schwer'?schwerWords:upper?(SETS[topicId]||[]):setOf(topicId)).filter(v=>v.en&&v.en.trim());
-  const topicLabel=topicId=>topicId==='today'?(seite?seite.allLabel:'Alle Themen'):topicId==='assignment'?((assignment&&assignment.name)||'Lernauftrag'):topicId==='nachueben'?'Weiterüben':topicId==='schwer'?'Schwierige Wörter':(TOPICS.find(t=>t.id===topicId)?.name||'Deine Auswahl');
+  /* Oberkategorie (Jahrgang + yearName) als Ganzes: "gruppe:Year 9|Imperialism and Empire". */
+  const gruppeVon=t=>t.year+'|'+(t.yearName||'');
+  const istGruppe=id=>typeof id==='string'&&id.startsWith('gruppe:');
+  const gruppenThemen=id=>TOPICS.filter(t=>gruppeVon(t)===id.slice(7));
+  const gruppenWorte=id=>gruppenThemen(id).flatMap(t=>SETS[t.id]||[]);
+  const gruppenName=id=>{const t=gruppenThemen(id)[0];return t?(t.yearName||t.year)+' · alle Themen':'Alle Themen';};
+  const wordsFor=topicId=>(topicId==='today'?allWords():istGruppe(topicId)?gruppenWorte(topicId):topicId==='assignment'?assignmentWords:topicId==='nachueben'?nachuebenWords:topicId==='schwer'?schwerWords:upper?(SETS[topicId]||[]):setOf(topicId)).filter(v=>v.en&&v.en.trim());
+  const topicLabel=topicId=>topicId==='today'?(seite?seite.allLabel:'Alle Themen'):topicId==='assignment'?((assignment&&assignment.name)||'Lernauftrag'):topicId==='nachueben'?'Weiterüben':topicId==='schwer'?'Schwierige Wörter':istGruppe(topicId)?gruppenName(topicId):(TOPICS.find(t=>t.id===topicId)?.name||'Deine Auswahl');
   function setup(topicId){
     S.roundSource=topicId;S.topicId=topicId;
     const words=wordsFor(topicId),due=words.filter(v=>isDue(record(v))).length;
@@ -603,7 +609,7 @@ ${vocabulary}`;
 
   buildQueue = function() {
     const source = S.roundSource || S.topicId;
-    let words = source==='today' ? allWords() : source==='assignment' ? assignmentWords : source==='nachueben' ? nachuebenWords : source==='schwer' ? schwerWords : upper ? (SETS[source] || []) : setOf(source);
+    let words = source==='today' ? allWords() : source==='assignment' ? assignmentWords : source==='nachueben' ? nachuebenWords : source==='schwer' ? schwerWords : istGruppe(source) ? gruppenWorte(source) : upper ? (SETS[source] || []) : setOf(source);
     if(S.mode==='cloze') words=words.filter(hasCloze);
     const due=words.filter(v=>isDue(record(v)));
     const pool=S.onlyDue?due:words;
@@ -622,6 +628,24 @@ ${vocabulary}`;
     if(upper){
       originalHome();
       const oldDue=document.getElementById('dueBtn');if(oldDue)oldDue.remove();
+      /* Jede Oberkategorie mit mehreren Themen bekommt oben eine Kachel fuer
+         alle ihre Vokabeln. Der Lernstand bleibt der der einzelnen Themen. */
+      view.querySelectorAll('details.yeargroup').forEach(gruppe=>{
+        const erste=gruppe.querySelector('.topic[data-topic]');
+        const thema=erste&&TOPICS.find(t=>t.id===erste.dataset.topic);
+        if(!thema||thema.year==='ALL')return;
+        const id='gruppe:'+gruppeVon(thema),themen=gruppenThemen(id);
+        if(themen.length<2)return;
+        const worte=gruppenWorte(id).filter(v=>v.en&&v.en.trim());if(!worte.length)return;
+        const faellig=worte.filter(v=>isDue(record(v))).length;
+        const kachel=document.createElement('button');
+        kachel.className='topic topic-gruppe';kachel.dataset.gruppe=id;kachel.setAttribute('style',erste.getAttribute('style')||'');
+        kachel.innerHTML='<span class="t-row"><span class="t-name"><span aria-hidden="true">↗ </span>Alle Themen</span><span class="t-count">'
+          +(faellig?'<span class="t-due">'+faellig+' fällig</span> · ':'')+worte.length+' Vok.</span></span>';
+        kachel.setAttribute('aria-label','Alle Themen von '+(thema.yearName||thema.year)+' üben, '+worte.length+' Vokabeln');
+        kachel.onclick=()=>setup(id);
+        erste.before(kachel);
+      });
 
 
 
@@ -645,7 +669,7 @@ ${vocabulary}`;
        stehen sie nebeneinander und sparen einen ganzen Streifen ueber der
        Unit-Liste; am Rechner bleiben sie untereinander wie bisher. */
     const savedRound=stored();
-    const roundName=savedRound?(TOPICS.find(t=>t.id===savedRound.source)?.name||(savedRound.source==='today'?(seite?seite.allLabel:'Alle Themen'):'Alle Vokabeln')):'';
+    const roundName=savedRound?(TOPICS.find(t=>t.id===savedRound.source)?.name||(savedRound.source==='today'?(seite?seite.allLabel:'Alle Themen'):istGruppe(savedRound.source)?gruppenName(savedRound.source):'Alle Vokabeln')):'';
     view.insertAdjacentHTML('afterbegin','<div class="sessionbar homebar">'
       +(savedRound?'<button class="topic home-resume" id="resumeRound">'
         +'<span class="resume-title">Runde fortsetzen · '+safe(roundName)+'</span>'
