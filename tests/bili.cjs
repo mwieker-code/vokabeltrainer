@@ -30,8 +30,13 @@ for(const fach of ['bili/history','bili/geography']){
  /* Geography hat zunaechst nur Year 8; weitere Jahrgaenge kommen mit ihren
     Vokabeln dazu. Ein Jahrgang genuegt, solange die Gruppen stimmen. */
  assert.ok(jahrgaenge.length>=1,'Eine Fachseite braucht mindestens einen Jahrgang');
+ /* Ein Jahrgang darf mehrere Oberkategorien haben (Year 9 in History):
+    je Jahrgang und Oberkategorie eine Gruppe, beschriftet mit dem Jahrgang. */
+ const kombis=[...new Map(vm.runInContext('TOPICS',c).map(t=>[t.year+'|'+t.yearName,t])).values()];
  const gruppen=[...d.querySelectorAll('.yeargroup > summary .tag')].map(e=>e.textContent);
- assert.deepEqual(gruppen,jahrgaenge,'Gruppenueberschriften stimmen nicht mit den Jahrgaengen ueberein');
+ assert.deepEqual(gruppen,kombis.map(t=>t.year),'Gruppenueberschriften stimmen nicht mit den Jahrgaengen ueberein');
+ assert.deepEqual([...d.querySelectorAll('.yeargroup > summary .name')].map(e=>e.textContent),kombis.map(t=>t.yearName),'Oberkategorien stimmen nicht');
+ for(const j of jahrgaenge)assert.ok(gruppen.includes(j),'Jahrgang fehlt: '+j);
 
  /* Der Knopf zieht ueber alle Jahrgaenge, nicht nur ueber einen. */
  const quer=d.querySelector('#practiceAcross');

@@ -28,7 +28,7 @@ window.onerror = function(msg, src, line, col){
 };
 </script>
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../assets/fonts/inter-400-latin.woff2">
-<script data-nacht src="../../assets/thema.js?v=20261108-comparison"></script>
+<script data-nacht src="../../assets/thema.js?v=20261108-imperialism"></script>
 <link rel="stylesheet" href="../../assets/fonts.css?v=2">
 
 <style>
@@ -379,8 +379,8 @@ button.primary:hover{background:#0B4A54}
 :where(html:not([data-thema="hell"])) .doc .warnbox{background:#231A0F}
 :where(html:not([data-thema="hell"])) .vex{color:#C8D9E3}
 </style>
-<link rel="stylesheet" href="../../assets/learning.css?v=20261108-comparison">
-<link rel="stylesheet" media="screen" data-nacht href="../../assets/learning-nacht.css?v=20261108-comparison">
+<link rel="stylesheet" href="../../assets/learning.css?v=20261108-imperialism">
+<link rel="stylesheet" media="screen" data-nacht href="../../assets/learning-nacht.css?v=20261108-imperialism">
 
 <div class="wrap">
     <div class="masthead">
@@ -423,16 +423,46 @@ const TOPICS = [
   "name": "The Industrial Revolution"
  },
  {
-  "id": "h9-empire",
-  "year": "Year 9",
-  "yearName": "Industrial Age to World War I",
-  "name": "Imperialism and Empire"
- },
- {
   "id": "h9-ww1",
   "year": "Year 9",
   "yearName": "Industrial Age to World War I",
   "name": "The First World War"
+ },
+ {
+  "id": "h9-imp-colonial",
+  "year": "Year 9",
+  "yearName": "Imperialism and Empire",
+  "name": "Imperialism & colonialism"
+ },
+ {
+  "id": "h9-imp-rule",
+  "year": "Year 9",
+  "yearName": "Imperialism and Empire",
+  "name": "Colonial rule & resistance"
+ },
+ {
+  "id": "h9-imp-founding",
+  "year": "Year 9",
+  "yearName": "Imperialism and Empire",
+  "name": "Founding the German Empire"
+ },
+ {
+  "id": "h9-imp-diplomacy",
+  "year": "Year 9",
+  "yearName": "Imperialism and Empire",
+  "name": "Diplomacy & alliances"
+ },
+ {
+  "id": "h9-imp-rivalry",
+  "year": "Year 9",
+  "yearName": "Imperialism and Empire",
+  "name": "Rivalry & tension before 1914"
+ },
+ {
+  "id": "h9-imp-sources",
+  "year": "Year 9",
+  "yearName": "Imperialism and Empire",
+  "name": "Working with sources"
  },
  {
   "id": "h10-weimar",
@@ -505,65 +535,7 @@ const SETS = {
    "example_en": "Workers joined a trade union to demand shorter hours."
   }
  ],
- "h9-empire": [
-  {
-   "id": "emp-01",
-   "en": "colony",
-   "de": "die Kolonie",
-   "pos": "noun",
-   "collocations": "to establish a colony",
-   "example_en": "European powers established a colony wherever they saw profit."
-  },
-  {
-   "id": "emp-02",
-   "en": "to exploit",
-   "de": "ausbeuten",
-   "pos": "verb",
-   "collocations": "to exploit resources / labour",
-   "example_en": "The company exploited the region's resources for decades."
-  },
-  {
-   "id": "emp-03",
-   "en": "missionary",
-   "de": "der Missionar / die Missionarin",
-   "pos": "noun",
-   "collocations": "a missionary society",
-   "example_en": "A missionary society funded the first school in the district."
-  },
-  {
-   "id": "emp-04",
-   "en": "resistance",
-   "de": "der Widerstand",
-   "pos": "noun",
-   "collocations": "armed / peaceful resistance",
-   "example_en": "Local rulers organised armed resistance against the occupation."
-  },
-  {
-   "id": "emp-05",
-   "en": "scramble for Africa",
-   "de": "das Wettrennen um Afrika",
-   "pos": "noun",
-   "collocations": "the scramble for Africa",
-   "example_en": "The scramble for Africa divided a continent at a conference table."
-  },
-  {
-   "id": "emp-06",
-   "en": "to justify",
-   "de": "rechtfertigen",
-   "pos": "verb",
-   "collocations": "to justify a policy",
-   "example_en": "Politicians tried to justify expansion as a civilising mission."
-  }
- ],
  "h9-ww1": [
-  {
-   "id": "ww1-01",
-   "en": "alliance",
-   "de": "das Bündnis",
-   "pos": "noun",
-   "collocations": "a system of alliances",
-   "example_en": "A system of alliances turned a local crisis into a world war."
-  },
   {
    "id": "ww1-02",
    "en": "trench warfare",
@@ -605,6 +577,382 @@ const SETS = {
    "example_en": "The garrison surrendered after a three-week siege."
   }
  ],
+ "h9-imp-colonial": [
+  {
+   "id": "col-01",
+   "en": "imperialism",
+   "de": "Imperialismus",
+   "pos": "noun",
+   "example_en": "In the age of imperialism, European powers tried to rule large parts of the world."
+  },
+  {
+   "id": "col-02",
+   "en": "colony / colonial power",
+   "de": "Kolonie / Kolonialmacht",
+   "pos": "noun",
+   "example_en": "Britain was the largest colonial power, and India was its most important colony."
+  },
+  {
+   "id": "col-03",
+   "en": "Scramble for Africa",
+   "de": "Wettlauf um Afrika",
+   "pos": "noun",
+   "example_en": "During the Scramble for Africa, European powers divided almost the whole continent among themselves."
+  },
+  {
+   "id": "col-04",
+   "en": "raw materials",
+   "de": "Rohstoffe",
+   "pos": "noun",
+   "example_en": "The colonies supplied raw materials such as rubber, cotton and palm oil."
+  },
+  {
+   "id": "col-05",
+   "en": "market",
+   "de": "Absatzmarkt",
+   "pos": "noun",
+   "example_en": "Industrialists hoped that the colonies would become a new market for their goods."
+  },
+  {
+   "id": "col-06",
+   "en": "to exploit",
+   "de": "ausbeuten",
+   "pos": "verb",
+   "example_en": "The colonial powers exploited the land and the people of their colonies."
+  },
+  {
+   "id": "col-07",
+   "en": "missionary",
+   "de": "Missionar",
+   "pos": "noun",
+   "example_en": "A missionary travelled to Africa to spread the Christian faith."
+  },
+  {
+   "id": "col-08",
+   "en": "civilising mission",
+   "de": "„Zivilisierungsmission“",
+   "pos": "noun",
+   "example_en": "Europeans used the idea of a civilising mission to justify their rule over other peoples."
+  },
+  {
+   "id": "col-09",
+   "en": "racism",
+   "de": "Rassismus",
+   "pos": "noun",
+   "example_en": "Racism led many Europeans to believe that they were superior to the people in the colonies."
+  },
+  {
+   "id": "col-10",
+   "en": "protectorate",
+   "de": "Schutzgebiet",
+   "pos": "noun",
+   "example_en": "Officially, Germany called its colonies \"protectorates\"."
+  }
+ ],
+ "h9-imp-rule": [
+  {
+   "id": "rul-01",
+   "en": "settler",
+   "de": "Siedler",
+   "pos": "noun",
+   "example_en": "German settlers took over the best farmland in South West Africa."
+  },
+  {
+   "id": "rul-02",
+   "en": "resistance",
+   "de": "Widerstand",
+   "pos": "noun",
+   "example_en": "There was resistance against colonial rule in many parts of Africa."
+  },
+  {
+   "id": "rul-03",
+   "en": "uprising",
+   "de": "Aufstand",
+   "pos": "noun",
+   "example_en": "In 1904, the Herero started an uprising against German rule."
+  },
+  {
+   "id": "rul-04",
+   "en": "genocide",
+   "de": "Völkermord",
+   "pos": "noun",
+   "example_en": "The German army's war against the Herero and Nama is regarded as the first genocide of the 20th century."
+  },
+  {
+   "id": "rul-05",
+   "en": "forced labour",
+   "de": "Zwangsarbeit",
+   "pos": "noun",
+   "example_en": "In the Congo, millions of people had to collect rubber as forced labour."
+  },
+  {
+   "id": "rul-06",
+   "en": "to take away land",
+   "de": "Land wegnehmen, enteignen",
+   "pos": "verb",
+   "example_en": "The colonial government took away land from the local people and gave it to settlers."
+  },
+  {
+   "id": "rul-07",
+   "en": "legacy",
+   "de": "Erbe, Nachwirkung",
+   "pos": "noun",
+   "example_en": "Many borders in Africa today are part of the legacy of colonialism."
+  }
+ ],
+ "h9-imp-founding": [
+  {
+   "id": "fou-01",
+   "en": "unification",
+   "de": "Einigung",
+   "pos": "noun",
+   "example_en": "Many Germans wanted the unification of the German states into one nation."
+  },
+  {
+   "id": "fou-02",
+   "en": "to found / founding",
+   "de": "gründen / Gründung",
+   "pos": "verb",
+   "example_en": "The German Empire was founded in 1871."
+  },
+  {
+   "id": "fou-03",
+   "en": "German Empire",
+   "de": "Deutsches Kaiserreich",
+   "pos": "noun",
+   "example_en": "The German Empire lasted from 1871 until 1918."
+  },
+  {
+   "id": "fou-04",
+   "en": "emperor",
+   "de": "Kaiser",
+   "pos": "noun",
+   "example_en": "King Wilhelm I of Prussia became the first German emperor."
+  },
+  {
+   "id": "fou-05",
+   "en": "chancellor",
+   "de": "Kanzler",
+   "pos": "noun",
+   "example_en": "Otto von Bismarck was the first chancellor of the German Empire."
+  },
+  {
+   "id": "fou-06",
+   "en": "to proclaim",
+   "de": "ausrufen, proklamieren",
+   "pos": "verb",
+   "example_en": "The German Empire was proclaimed in the Hall of Mirrors at Versailles."
+  },
+  {
+   "id": "fou-07",
+   "en": "Franco-Prussian War",
+   "de": "Deutsch-Französischer Krieg",
+   "pos": "noun",
+   "example_en": "After the Franco-Prussian War, France had to give Alsace-Lorraine to Germany."
+  },
+  {
+   "id": "fou-08",
+   "en": "constitution",
+   "de": "Verfassung",
+   "pos": "noun",
+   "example_en": "The constitution of 1871 gave the emperor the power to appoint the chancellor."
+  },
+  {
+   "id": "fou-09",
+   "en": "Realpolitik",
+   "de": "Realpolitik (Politik nach Macht und Nutzen)",
+   "pos": "noun",
+   "example_en": "Bismarck's Realpolitik was based on power and national interest, not on ideals."
+  }
+ ],
+ "h9-imp-diplomacy": [
+  {
+   "id": "dip-01",
+   "en": "foreign policy",
+   "de": "Außenpolitik",
+   "pos": "noun",
+   "example_en": "Bismarck's foreign policy aimed to keep peace in Europe."
+  },
+  {
+   "id": "dip-02",
+   "en": "treaty",
+   "de": "Vertrag",
+   "pos": "noun",
+   "example_en": "In 1887, Germany signed a secret treaty with Russia."
+  },
+  {
+   "id": "dip-03",
+   "en": "alliance",
+   "de": "Bündnis",
+   "pos": "noun",
+   "example_en": "In 1879, Germany formed an alliance with Austria-Hungary."
+  },
+  {
+   "id": "dip-04",
+   "en": "ally",
+   "de": "Verbündeter",
+   "pos": "noun",
+   "example_en": "Austria-Hungary became Germany's most important ally."
+  },
+  {
+   "id": "dip-05",
+   "en": "to renew",
+   "de": "erneuern, verlängern",
+   "pos": "verb",
+   "example_en": "In 1890, Germany decided not to renew the treaty with Russia."
+  },
+  {
+   "id": "dip-06",
+   "en": "neutral",
+   "de": "neutral, unbeteiligt",
+   "pos": "adjective",
+   "example_en": "Belgium was a neutral country, so it did not belong to any alliance."
+  },
+  {
+   "id": "dip-07",
+   "en": "isolated",
+   "de": "isoliert",
+   "pos": "adjective",
+   "example_en": "Bismarck wanted to keep France isolated so that it could not find any allies."
+  },
+  {
+   "id": "dip-08",
+   "en": "two-front war",
+   "de": "Zweifrontenkrieg",
+   "pos": "noun",
+   "example_en": "Germany feared a two-front war against France in the west and Russia in the east."
+  },
+  {
+   "id": "dip-09",
+   "en": "balance of power",
+   "de": "Machtgleichgewicht",
+   "pos": "noun",
+   "example_en": "Britain wanted to keep the balance of power in Europe, so that no country became too strong."
+  },
+  {
+   "id": "dip-10",
+   "en": "dispatch",
+   "de": "Depesche",
+   "pos": "noun",
+   "example_en": "Bismarck changed the wording of the Ems Dispatch to provoke France."
+  },
+  {
+   "id": "dip-11",
+   "en": "to dismiss / dismissal",
+   "de": "entlassen / Entlassung",
+   "pos": "verb",
+   "example_en": "In 1890, the young Emperor Wilhelm II dismissed Bismarck."
+  }
+ ],
+ "h9-imp-rivalry": [
+  {
+   "id": "riv-01",
+   "en": "rivalry",
+   "de": "Rivalität",
+   "pos": "noun",
+   "example_en": "The rivalry between Germany and Britain grew stronger after 1900."
+  },
+  {
+   "id": "riv-02",
+   "en": "tension",
+   "de": "Spannung",
+   "pos": "noun",
+   "example_en": "By 1914, there was a lot of tension between the great powers of Europe."
+  },
+  {
+   "id": "riv-03",
+   "en": "world policy",
+   "de": "Weltpolitik",
+   "pos": "noun",
+   "example_en": "Under Wilhelm II, Germany followed a world policy and wanted more colonies."
+  },
+  {
+   "id": "riv-04",
+   "en": "a place in the sun",
+   "de": "„Platz an der Sonne“",
+   "pos": "phrase",
+   "example_en": "In 1897, Bernhard von Bülow demanded \"a place in the sun\" for Germany."
+  },
+  {
+   "id": "riv-05",
+   "en": "naval race",
+   "de": "Flottenwettrüsten",
+   "pos": "noun",
+   "example_en": "In the naval race, Britain and Germany built more and more battleships."
+  },
+  {
+   "id": "riv-06",
+   "en": "to challenge",
+   "de": "herausfordern",
+   "pos": "verb",
+   "example_en": "The growing German navy challenged Britain's control of the seas."
+  },
+  {
+   "id": "riv-07",
+   "en": "suspicious",
+   "de": "misstrauisch",
+   "pos": "adjective",
+   "example_en": "Britain became suspicious of Germany's plans."
+  },
+  {
+   "id": "riv-08",
+   "en": "encircled / encirclement",
+   "de": "eingekreist / Einkreisung",
+   "pos": "adjective",
+   "example_en": "After the Triple Entente of 1907, many Germans felt encircled by Britain, France and Russia."
+  },
+  {
+   "id": "riv-09",
+   "en": "reliable",
+   "de": "verlässlich",
+   "pos": "adjective",
+   "example_en": "Germany saw Austria-Hungary as its only reliable ally."
+  },
+  {
+   "id": "riv-10",
+   "en": "nationalism",
+   "de": "Nationalismus",
+   "pos": "noun",
+   "example_en": "Nationalism made many people believe that their own nation was better than others."
+  },
+  {
+   "id": "riv-11",
+   "en": "revenge",
+   "de": "Rache, Revanche",
+   "pos": "noun",
+   "example_en": "Many French people wanted revenge for the loss of Alsace-Lorraine."
+  }
+ ],
+ "h9-imp-sources": [
+  {
+   "id": "sou-01",
+   "en": "source",
+   "de": "Quelle",
+   "pos": "noun",
+   "example_en": "A letter written by a soldier in 1914 is a primary source."
+  },
+  {
+   "id": "sou-02",
+   "en": "political cartoon",
+   "de": "politische Karikatur",
+   "pos": "noun",
+   "example_en": "The political cartoon \"Dropping the Pilot\" shows Bismarck leaving the ship of state."
+  },
+  {
+   "id": "sou-03",
+   "en": "to convey a message",
+   "de": "eine Botschaft vermitteln",
+   "pos": "verb",
+   "example_en": "The cartoonist uses symbols to convey a message about the Kaiser."
+  },
+  {
+   "id": "sou-04",
+   "en": "perspective",
+   "de": "Perspektive, Sichtweise",
+   "pos": "noun",
+   "example_en": "Always ask from whose perspective a source was written."
+  }
+ ],
  "h10-weimar": [
   {
    "id": "wei-01",
@@ -613,14 +961,6 @@ const SETS = {
    "pos": "noun",
    "collocations": "to proclaim a republic",
    "example_en": "The republic was proclaimed from a window in Berlin."
-  },
-  {
-   "id": "wei-02",
-   "en": "constitution",
-   "de": "die Verfassung",
-   "pos": "noun",
-   "collocations": "to draft a constitution",
-   "example_en": "The constitution guaranteed rights that were rarely defended."
   },
   {
    "id": "wei-03",
@@ -964,10 +1304,13 @@ const ansSide  = v => S.dir==="en2de" ? v.de : v.en;
    STARTSEITE
    ========================================================================= */
 function renderHome(){
-  const years = [...new Set(TOPICS.map(t=>t.year))];
+  /* Gruppen nach Jahrgang und Oberkategorie: Year 9 kann mehrere haben. */
+  const groupKey = t => t.year + "|" + t.yearName;
+  const keys = [...new Set(TOPICS.map(groupKey))];
   let h = "";
-  for(const y of years){
-    const group = TOPICS.filter(t=>t.year===y);
+  for(const key of keys){
+    const group = TOPICS.filter(t=>groupKey(t)===key);
+    const y = group[0].year;
     const yc = yearColor(y);
     const bg = yearBg(y);
     const groupDue = group.reduce((n,t) => {
@@ -1817,16 +2160,16 @@ try{
 </script>
 
 <script src="../../assets/qr.js?v=20260921-anleitung"></script>
-<script src="../../assets/learning.js?v=20261108-comparison"></script>
+<script src="../../assets/learning.js?v=20261108-imperialism"></script>
 
 <link rel="stylesheet" href="../../assets/feedback.css?v=20260921-anleitung">
-<link rel="stylesheet" media="screen" data-nacht href="../../assets/feedback-nacht.css?v=20261108-comparison">
+<link rel="stylesheet" media="screen" data-nacht href="../../assets/feedback-nacht.css?v=20261108-imperialism">
 <script src="../../assets/feedback.js?v=20260921-zustand"></script>
 
 <link rel="stylesheet" href="design/preview.css?v=20260917-teacher-prompt">
-<link rel="stylesheet" media="screen" data-nacht href="design/preview-nacht.css?v=20261108-comparison">
+<link rel="stylesheet" media="screen" data-nacht href="design/preview-nacht.css?v=20261108-imperialism">
 
-<link rel="stylesheet" href="../../assets/ascent.css?v=20261108-comparison">
-<link rel="stylesheet" media="screen" data-nacht href="../../assets/ascent-nacht.css?v=20261108-comparison">
-<link rel="stylesheet" media="screen" data-nacht href="../../assets/nacht-marke.css?v=20261108-comparison">
-<script src="../../assets/ascent.js?v=20261108-comparison"></script>
+<link rel="stylesheet" href="../../assets/ascent.css?v=20261108-imperialism">
+<link rel="stylesheet" media="screen" data-nacht href="../../assets/ascent-nacht.css?v=20261108-imperialism">
+<link rel="stylesheet" media="screen" data-nacht href="../../assets/nacht-marke.css?v=20261108-imperialism">
+<script src="../../assets/ascent.js?v=20261108-imperialism"></script>

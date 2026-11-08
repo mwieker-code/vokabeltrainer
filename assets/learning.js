@@ -262,7 +262,7 @@ ${vocabulary}`;
       label.append(input,document.createTextNode(' '+title));parent.append(label);groupInputs.push({input,keys});
     };
     const grouped=new Map();
-    TOPICS.forEach(t=>{const key=upper?t.year:t.unit;if(!grouped.has(key))grouped.set(key,[]);grouped.get(key).push(t);});
+    TOPICS.forEach(t=>{const key=upper?t.year+'|'+(t.yearName||''):t.unit;if(!grouped.has(key))grouped.set(key,[]);grouped.get(key).push(t);});
     grouped.forEach(topics=>{
       const section=document.createElement('details'),summary=document.createElement('summary');
       summary.textContent=upper?(topics[0].yearName||topics[0].year):(topics[0].unitName||topics[0].unit);
@@ -350,7 +350,7 @@ ${vocabulary}`;
       }
 
       const check=(parent,title,keys)=>{const label=document.createElement('label');label.className='direct-selection';label.hidden=true;const input=document.createElement('input');input.type='checkbox';input.setAttribute('aria-label',title);label.append(input);label.addEventListener('click',e=>e.stopPropagation());input.onchange=()=>{keys.forEach(k=>input.checked?csvSelected.add(k):csvSelected.delete(k));refresh();};parent.prepend(label);headings.push({input,keys});};
-      const units=new Map();TOPICS.forEach(t=>{const key=upper?t.year:t.unit;if(!units.has(key))units.set(key,[]);units.get(key).push(t);});
+      const units=new Map();TOPICS.forEach(t=>{const key=upper?t.year+'|'+(t.yearName||''):t.unit;if(!units.has(key))units.set(key,[]);units.get(key).push(t);});
       units.forEach(topics=>{const first=box.querySelector('[data-sec="'+topics[0].id+'"]');const heading=document.createElement('div');heading.className='selection-unit';const title=upper?(topics[0].yearName||topics[0].year):(topics[0].unitName||topics[0].unit);heading.textContent=title;first.before(heading);check(heading,'Alle Vokabeln: '+title,topics.flatMap(t=>(SETS[t.id]||[]).map((_,i)=>t.id+':'+i)));});
       box.querySelectorAll('[data-sec]').forEach(sec=>check(sec.querySelector('summary'),'Abschnitt '+TOPICS.find(t=>t.id===sec.dataset.sec).name,[...sec.querySelectorAll('[data-csv-key]')].map(i=>i.dataset.csvKey)));
       box.querySelectorAll('.csv-check').forEach(label=>{label.lastChild.textContent='';label.closest('.vrow').prepend(label);label.querySelector('input').addEventListener('change',()=>refresh());});
