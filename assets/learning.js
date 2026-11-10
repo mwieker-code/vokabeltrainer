@@ -523,6 +523,11 @@ ${vocabulary}`;
             glatt(m[1])].filter(Boolean);
   }
 
+  /* Auslassungspunkte sind Platzhalter ("by ...", "von …"): Sie zaehlen
+     nicht mit. Die Seiten entfernen Punkte erst nach dem Trimmen - aus
+     "by ..." wurde "by " mit Leerzeichen, und "by" galt als Tippfehler. */
+  const glatt = s => normalise(String(s).replace(/\.{2,}|…/g, ' ')).replace(/\s+/g, ' ').trim();
+
   // Split alternatives BEFORE removing punctuation. Keep both optional-word forms.
   function forms(target) {
     const result = [];
@@ -533,7 +538,7 @@ ${vocabulary}`;
     for (const part of [String(target), ...teile(target)]) {
       for (const variant of [...klammerformen(part),
                              ...nebenformen(part).flatMap(klammerformen)]) {
-        const value = normalise(variant.replace(KUERZEL, ' ').replace(/^(?:AE|BE):\s*/i, ''));
+        const value = glatt(variant.replace(KUERZEL, ' ').replace(/^(?:AE|BE):\s*/i, ''));
         if (value) result.push(value);
       }
     }
@@ -544,11 +549,11 @@ ${vocabulary}`;
        abschreibt, wie er dasteht - "(to) phone sb." -, meint dasselbe
        wie "phone". */
     const roh = String(input).replace(/[()]/g, '');
-    const a = normalise(roh.replace(KUERZEL, ' '));
+    const a = glatt(roh.replace(KUERZEL, ' '));
     if (!a) return 'no';
     /* Die ausgeschriebene Form zaehlt zusaetzlich, nicht anstelle der
        Eingabe: "something" ist selbst eine Vokabel. */
-    const lang = normalise(roh.replace(KUERZEL, ' ').replace(AUSGESCHRIEBEN, ' '));
+    const lang = glatt(roh.replace(KUERZEL, ' ').replace(AUSGESCHRIEBEN, ' '));
     const eingaben = lang && lang !== a ? [a, lang] : [a];
     const choices = forms(target);
     if (eingaben.some(e => choices.includes(e))) return 'ok';
@@ -566,7 +571,7 @@ ${vocabulary}`;
   function comparison(input, target) {
     const a = Array.from(String(input).trim());
     const candidates = forms(target);
-    const closest=candidates.sort((x,y) => distance(normalise(input),x)-distance(normalise(input),y))[0] || target;
+    const closest=candidates.sort((x,y) => distance(glatt(input),x)-distance(glatt(input),y))[0] || target;
     const near=checkTyped(input,target)==='near';
     if(!near)return '<div class="correction"><div class="correction-input"><small>Deine Antwort</small><strong>'+safe(input)+'</strong></div><div class="correction-solution"><small>Richtige Lösung</small><strong>'+safe(target)+'</strong></div></div>';
     const b = Array.from(closest);
