@@ -661,6 +661,7 @@ ${vocabulary}`;
       view.querySelector('.topic.uall')?.remove();
       if(KEY==='vt6:progress')view.insertAdjacentHTML('beforeend','<a class="topic grammar-tile" href="grammar/"><span class="t-name">Grammar</span><br><span class="t-count">Hier kannst du Grammatik üben.</span></a>');
       if(KEY==='vt6:progress')view.insertAdjacentHTML('beforeend','<a class="topic grammar-tile" href="climb/"><span class="t-name">Summit Climb</span><br><span class="t-count">Kletterspiel mit den Vokabeln aus Unit 2.</span></a>');
+      if(KEY==='vt6:progress')view.insertAdjacentHTML('beforeend','<a class="topic grammar-tile" href="sled/"><span class="t-name">Sled Run</span><br><span class="t-count">Schlittenrennen mit den Vokabeln aus Unit 2.</span></a>');
       if(KEY==='vt9:progress')view.insertAdjacentHTML('beforeend','<a class="topic grammar-tile" href="discussion/"><span class="t-name">Writing a discussion</span><br><span class="t-count">Aufbau, Regeln und Redemittel für deine discussion.</span></a>');
       view.insertAdjacentHTML('beforeend','<div class="quicklinks"><button id="allBtn">Vokabeln nachschlagen</button><button id="helpBtn">So funktioniert’s</button></div>');
       document.getElementById('allBtn').onclick=()=>{S.view='list';render();};
