@@ -77,6 +77,22 @@ item('seil');C.choose(right());settle();ok(G.seil,'Seil aufgenommen');
 clear();const k0=G.k;C.choose(right());settle();ok(G.k===k0+2||G.mode==='over'||G.k===C.GOAL,'Seil: naechster Zug doppelt hoch');
 item('edelweiss');let t=0;while(G.bonus&&t++<200)C.update(0.05);ok(!G.bonus,'Item verschwindet nach Ablauf der Zeit');
 
+/* Steuerung: Wischrichtung, Kraftleiste, perfekter Sprung */
+ok(C.laneFromSwipe(-60,-60)===0&&C.laneFromSwipe(0,-80)===1&&C.laneFromSwipe(60,-60)===2,'Wischen nach links oben, oben, rechts oben');
+ok(C.laneFromSwipe(4,-6)===undefined,'kurze Bewegung zaehlt als Tippen');
+ok(C.laneFromSwipe(5,60)===null,'nach unten wischen bricht ab');
+ok(C.powerAt(0)===0&&Math.abs(C.powerAt(C.CHARGE)-1)<1e-9&&Math.abs(C.powerAt(C.CHARGE*1.5)-0.5)<1e-9,'Kraftleiste steigt und faellt');
+ok(C.isPerfect(0.8)&&!C.isPerfect(0.5)&&!C.isPerfect(0.98),'gruener Bereich');
+clear();score=G.score;const mp=C.multiplier(),fp=G.fog,pf=G.perfects;C.choose(right(),0.8);
+ok(G.score-score===Math.round(100*mp/10)*10+50&&G.perfects===pf+1&&G.fog<fp-0.3*C.P,'perfekter Sprung: +50 und Nebel zurueck');settle();
+clear();score=G.score;const mq=C.multiplier();C.choose(right(),0.3);ok(G.score-score===Math.round(100*mq/10)*10,'ohne Timing kein Bonus');settle();
+clear();const pw=G.perfects,bad2=wrong();C.choose(bad2,0.8);ok(G.perfects===pw,'perfektes Timing rettet keine falsche Antwort');settle();
+/* Tastatur: halten laedt, loslassen springt */
+clear();const r2=right(),key=['1','2','3'][r2],k2=G.k;
+d.dispatchEvent(new w.KeyboardEvent('keydown',{key}));ok(G.aim&&G.aim.lane===r2,'Taste halten zielt');
+for(let i=0;i<16;i++)C.update(0.05);
+d.dispatchEvent(new w.KeyboardEvent('keyup',{key}));ok(G.mode==='jump','Loslassen springt');settle();ok(G.k>k2,'Zug geschafft');
+
 /* Steinschlag sperrt einen Griff */
 S2:{
  d.getElementById('quit').click();d.querySelector('[data-part="y6u2-partc"]').click();clear();
@@ -132,6 +148,6 @@ ok(fs.readFileSync(path.join(root,'assets/learning.js'),'utf8').includes('href="
 const M=w.ClimbMusik;
 ok(M._song.length===4&&M._bars.length===32,'Lied: A B A B, 32 Takte');
 for(const part of M._song)for(const bar of part.melody){const tk=bar.split(' ');ok(tk.length===8&&tk.every(x=>x==='_'||x==='-'||M._midi(x)!==null),'Takt lesbar: '+bar);}
-ok(M.geraeusche.length===13,'dreizehn Geraeusche');
+ok(M.geraeusche.length===14&&M.geraeusche.includes('perfekt'),'vierzehn Geraeusche');
 dom.window.close();
 console.log(checks+' climb checks passed');
