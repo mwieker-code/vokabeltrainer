@@ -1,0 +1,35 @@
+<!doctype html><html lang="de" data-eigenes-design><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="apple-touch-icon" sizes="180x180" href="../../assets/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Basecamp">
+<meta name="theme-color" content="#0D1017"><title>Sled Run · Year 6</title>
+<link rel="stylesheet" href="../../assets/fonts.css?v=2"><link rel="stylesheet" href="style.css?v=20261111-sled">
+</head><body><main class="sled">
+<header><a href="../">← Year 6</a><span>SLED RUN · UNIT 2</span></header>
+<section id="menu">
+ <h1>Sled Run</h1>
+ <p class="lead">Rase mit den Vokabeln aus Unit 2 – A School Day ins Tal.</p>
+ <ol class="how">
+  <li>Oben steht das deutsche Wort, darunter drei Antworten – eine für jede Spur.</li>
+  <li>Wische nach links oder rechts und fahre in der richtigen Spur durchs Tor.</li>
+  <li>Sammle Sterne und weiche den Felsen aus.</li>
+  <li>Du hast drei Herzen. Nach 20 Toren bist du im Ziel.</li>
+ </ol>
+ <div id="levels"></div>
+ <p class="muted">Das Spiel ist zum Wiederholen da. Deine Lernfächer ändern sich dadurch nicht.</p>
+</section>
+<section id="stage" hidden>
+ <div class="bar"><button id="quit" aria-label="Spiel beenden">✕</button><span class="stat" id="gates">Tor 1/20</span><span class="stat" id="points">0 P</span><span class="stat" id="hearts">♥♥♥</span><button id="pause" aria-label="Pause">II</button></div>
+ <div class="ask"><small>WIE HEISST DAS AUF ENGLISCH?</small><div id="prompt" lang="de" aria-live="polite"></div></div>
+ <div id="chips" role="group" aria-label="Antworten: links, Mitte, rechts"></div>
+ <canvas id="piste" aria-label="Piste mit drei Spuren. Die Antworten stehen als Knöpfe darüber."></canvas>
+ <p class="hint">Wischen oder tippen: links · rechts &nbsp;|&nbsp; Tastatur: ← → oder 1 2 3</p>
+</section>
+<section id="over" hidden></section>
+<footer><p>Sled Run · Vokabeln aus Year 6, Unit 2</p></footer>
+</main>
+<script src="../climb/data.js?v=20261111-sled"></script><script src="game.js?v=20261111-sled"></script>
+<script src="../../assets/feedback.js"></script>
+</body></html>
