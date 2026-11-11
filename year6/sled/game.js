@@ -80,7 +80,7 @@ function distractors(q){
   const others=pool.filter(w=>w.id!==q.id&&w.en!==q.en&&w.de!==q.de);
   const out=[];
   for(const w of [...shuffle(others.filter(w=>w.pos===q.pos)),...shuffle(others.filter(w=>w.pos!==q.pos))]){
-    if(!out.some(o=>o.en===w.en))out.push(w);if(out.length===2)break;}
+    if(!out.some(o=>o.en===w.en||o.de===w.de))out.push(w);if(out.length===2)break;}
   return out;
 }
 function next(){

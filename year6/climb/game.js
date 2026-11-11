@@ -57,7 +57,7 @@ function distractors(q){
   const others=pool.filter(w=>w.id!==q.id&&w.en!==q.en&&w.de!==q.de);
   const same=shuffle(others.filter(w=>w.pos===q.pos)),rest=shuffle(others.filter(w=>w.pos!==q.pos));
   const out=[];
-  for(const w of [...same,...rest]){if(!out.some(o=>o.en===w.en))out.push(w);if(out.length===2)break;}
+  for(const w of [...same,...rest]){if(!out.some(o=>o.en===w.en||o.de===w.de))out.push(w);if(out.length===2)break;}
   return out;
 }
 function next(){
