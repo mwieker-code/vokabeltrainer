@@ -134,8 +134,9 @@ function pause(on){
   if(on){if(laeuft){clearInterval(timer);timer=null;}ac.suspend?.();}
   else{ac.resume?.();if(laeuft&&!timer){next=ac.currentTime+0.06;timer=setInterval(takt,25);}}
 }
-/* Spiel-Tempo 1 ... 2 auf 128 ... 168 Schlaege */
-function tempo(f){ziel=128+Math.max(0,Math.min(1,(f-1)/1.03))*40;}
+/* Spiel-Tempo 1 ... 2 auf 128 ... 168 Schlaege, im Profi-Modus bis 192 */
+const clamp01=v=>Math.max(0,Math.min(1,v));
+function tempo(f){ziel=128+clamp01((f-1)/1.03)*40+clamp01((f-2.03)/0.87)*24;}
 function turbo(on){turboAn=!!on;}
 function fehler(){
   if(!laeuft||!ac)return;const t=ac.currentTime;
