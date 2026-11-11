@@ -7,7 +7,7 @@ const {JSDOM,VirtualConsole}=require('jsdom'),fs=require('node:fs'),path=require
 const root=path.join(__dirname,'..'),dir=path.join(root,'year6/sled');let checks=0;const ok=(v,m)=>{assert.ok(v,m);checks++;};
 const dom=new JSDOM(fs.readFileSync(path.join(dir,'index.html'),'utf8'),{runScripts:'outside-only',url:'https://example.org/year6/sled/',virtualConsole:new VirtualConsole()});
 const w=dom.window,d=w.document;
-w.eval(fs.readFileSync(path.join(root,'year6/climb/data.js'),'utf8'));w.eval(fs.readFileSync(path.join(dir,'game.js'),'utf8'));
+w.eval(fs.readFileSync(path.join(root,'year6/climb/data.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'year6/figuren.js'),'utf8'));w.eval(fs.readFileSync(path.join(dir,'game.js'),'utf8'));
 const S=w.SledGame,G=S.G,D=w.CLIMB_DATA;
 const step=()=>S.update(0.02);
 /* Faehrt bis zum naechsten Tor; weicht Felsen aus, wenn dodge gesetzt ist. */

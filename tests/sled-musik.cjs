@@ -23,7 +23,7 @@ function setup(stored){
  const w=dom.window;fakeAudio(w,log);
  if(stored)w.localStorage.setItem('vt6:sled:musik',stored);
  let timers=[];w.setInterval=(f)=>{timers.push(f);return timers.length;};w.clearInterval=(i)=>{timers[i-1]=null;};
- w.eval(fs.readFileSync(path.join(root,'year6/climb/data.js'),'utf8'));
+ w.eval(fs.readFileSync(path.join(root,'year6/climb/data.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'year6/figuren.js'),'utf8'));
  for(const f of ['musik.js','game.js'])w.eval(fs.readFileSync(path.join(dir,f),'utf8'));
  return {dom,w,d:w.document,log,timers,M:w.SledMusik,S:w.SledGame};
 }
@@ -99,7 +99,7 @@ function setup(stored){
 /* Ohne Web Audio passiert nichts - und nichts geht kaputt */
 {
  const dom=new JSDOM(fs.readFileSync(path.join(dir,'index.html'),'utf8'),{runScripts:'outside-only',url:'https://example.org/year6/sled/',virtualConsole:new VirtualConsole()});
- const w=dom.window;w.eval(fs.readFileSync(path.join(root,'year6/climb/data.js'),'utf8'));
+ const w=dom.window;w.eval(fs.readFileSync(path.join(root,'year6/climb/data.js'),'utf8'));w.eval(fs.readFileSync(path.join(root,'year6/figuren.js'),'utf8'));
  for(const f of ['musik.js','game.js'])w.eval(fs.readFileSync(path.join(dir,f),'utf8'));
  ok(!w.SledMusik.verfuegbar&&w.document.getElementById('musik').hidden,'ohne Web Audio kein Schalter');
  w.document.querySelector('[data-part="y6u2-parta"]').click();w.SledMusik.fehler();w.SledMusik.ziel();
