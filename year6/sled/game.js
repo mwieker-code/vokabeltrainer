@@ -11,6 +11,8 @@
    hinterher, jeder hebt die Punkte um ein Zehntel; ein falsches Tor kostet
    die Haelfte von ihnen. Eine Mindestlesezeit gilt immer, auch im Turbo.
    Nach drei Zieleinlaeufen faehrt auf Wunsch ein Pinguin den Schlitten.
+   Im Profi-Modus geht es schneller und mit weniger Lesezeit, dafuer gibt
+   es anderthalbfache Punkte und eigene Bestwerte.
 
    Wie beim Kletterspiel zaehlt nichts in die Lernfaecher; gespeichert
    werden nur Bestwerte (vt6:sled:v1). Die Vokabeln kommen aus
@@ -33,15 +35,20 @@ const ruhig=window.matchMedia?matchMedia('(prefers-reduced-motion: reduce)').mat
 /* ----------------------------------------------------------------- Regeln */
 const GOAL=20,HEARTS=3,MAX_PENGUINS=12,UNLOCK=3;
 const GAP=150;                         // Strecke zwischen zwei Toren (Welteinheiten)
-const MIN_READ=3.5;                    // so viele Sekunden bleiben immer zum Lesen
-const secondsFor=k=>k===0?8:Math.max(4.2,6.6-0.12*k);   // Grundzeit bis zum naechsten Tor
-const tempoOf=streak=>1+0.05*Math.min(streak,8);        // Serie macht schneller, bis x1,4
+/* Zwei Stufen. Normal: mindestens 3,5 s Lesezeit, Tempo bis x1,4.
+   Profi: 20 % schneller ab Start, Tempo bis x2, mindestens 2,5 s, Punkte x1,5. */
+const MODI={normal:{name:'Normal',min:3.5,stufen:8,start:1,punkte:1},profi:{name:'Profi',min:2.5,stufen:20,start:0.8,punkte:1.5}};
+const MIN_READ=MODI.normal.min;
+const modus=()=>MODI[G.modus]||MODI.normal;
+const secondsFor=k=>(k===0?8:Math.max(4.2,6.6-0.12*k))*modus().start;   // Grundzeit bis zum naechsten Tor
+const tempoOf=streak=>1+0.05*Math.min(streak,modus().stufen);            // Serie macht schneller
 const TURBO_GATES=3,TURBO_SPEED=1.45;
-const gateSpeed=()=>GAP/Math.max(MIN_READ,secondsFor(G.k)/(tempoOf(G.streak)*(G.turbo>0?TURBO_SPEED:1)));
-const multiplier=()=>tempoOf(G.streak)*(G.turbo>0?2:1)*(1+0.1*G.penguins);
+const gateSpeed=()=>GAP/Math.max(modus().min,secondsFor(G.k)/(tempoOf(G.streak)*(G.turbo>0?TURBO_SPEED:1)));
+const multiplier=()=>tempoOf(G.streak)*(G.turbo>0?2:1)*(1+0.1*G.penguins)*modus().punkte;
+const bestKey=id=>(G.modus==='profi'?'profi:':'')+id;
 
-let saved={best:{},finishes:{},rider:'kid'};
-try{const p=JSON.parse(localStorage.getItem(KEY));if(p&&p.best&&typeof p.best==='object'&&p.finishes&&typeof p.finishes==='object')saved={best:p.best,finishes:p.finishes,rider:p.rider==='penguin'?'penguin':'kid'};}catch(e){}
+let saved={best:{},finishes:{},rider:'kid',modus:'normal'};
+try{const p=JSON.parse(localStorage.getItem(KEY));if(p&&p.best&&typeof p.best==='object'&&p.finishes&&typeof p.finishes==='object')saved={best:p.best,finishes:p.finishes,rider:p.rider==='penguin'?'penguin':'kid',modus:p.modus==='profi'?'profi':'normal'};}catch(e){}
 const totalFinishes=()=>Object.values(saved.finishes).reduce((a,b)=>a+(Number(b)||0),0);
 const unlocked=()=>totalFinishes()>=UNLOCK;
 const rider=()=>saved.rider==='penguin'&&unlocked()?'penguin':'kid';
@@ -54,16 +61,16 @@ const pool=D.parts.flatMap(p=>p.words);
 const G={mode:'menu',part:null,queue:[],k:0,q:null,options:[],gate:null,items:[],lane:1,x:0,
   speed:0,dist:0,hearts:HEARTS,score:0,streak:0,correct:0,stars:0,missed:new Map(),requeued:new Set(),
   t:0,result:null,paused:false,time:0,boost:0,shake:0,bits:[],won:false,finishZ:null,
-  turbo:0,shield:false,penguins:0,maxPenguins:0,lost:[],popups:[],spray:[],sparks:[],trail:[],fov:1,shieldFx:0};
+  turbo:0,shield:false,penguins:0,maxPenguins:0,lost:[],popups:[],spray:[],sparks:[],trail:[],fov:1,shieldFx:0,crew:[],modus:saved.modus};
 
 /* ------------------------------------------------------------- Ablauf */
 function start(partId){
   const words=wordsOf(partId);if(words.length<3)return;
   let queue=[];while(queue.length<GOAL)queue=queue.concat(shuffle(words));
   Object.assign(G,{mode:'ride',part:partId,queue,k:0,q:null,options:[],gate:null,items:[],lane:1,x:0,
-    speed:GAP/secondsFor(0),dist:0,hearts:HEARTS,score:0,streak:0,correct:0,stars:0,missed:new Map(),requeued:new Set(),
+    speed:0,dist:0,hearts:HEARTS,score:0,streak:0,correct:0,stars:0,missed:new Map(),requeued:new Set(),
     t:0,result:null,paused:false,boost:0,shake:0,bits:[],won:false,finishZ:null,
-    turbo:0,shield:false,penguins:0,maxPenguins:0,lost:[],popups:[],spray:[],sparks:[],trail:[],fov:1,shieldFx:0});
+    turbo:0,shield:false,penguins:0,maxPenguins:0,lost:[],popups:[],spray:[],sparks:[],trail:[],fov:1,shieldFx:0,crew:[],modus:saved.modus});
   menu.hidden=true;over.hidden=true;stage.hidden=false;
   resize();next();hud();loop();
   M?.stop();M?.start();musikKnopf();
@@ -84,15 +91,17 @@ function next(){
      dem vierten Tor Felsen - nie mehr als einer je Reihe. */
   const lane=()=>Math.floor(Math.random()*3);
   const starLane=lane();
-  for(let n=0;n<3;n++)G.items.push({type:'star',lane:starLane,z:28+n*10});
+  for(let n=0;n<3;n++)G.items.push({type:'star',lane:starLane,z:22+n*8});
   let power=null;
   if(G.k>=1&&G.turbo===0&&Math.random()<0.35)power='turbo';
   else if(G.k>=3&&!G.shield&&Math.random()<0.3)power='shield';
-  if(power)G.items.push({type:power,lane:lane(),z:62});
+  if(power)G.items.push({type:power,lane:lane(),z:50});
+  /* Zwei Pinguine stehen hintereinander, nicht nebeneinander - so lassen
+     sich beide einsammeln. */
   const pengs=G.k<2?1:Math.random()<0.5?2:1,pl=shuffle([0,1,2]);
-  for(let n=0;n<pengs;n++)G.items.push({type:'penguin',lane:pl[n],z:78,seed:Math.random()});
+  for(let n=0;n<pengs;n++)G.items.push({type:'penguin',lane:pl[n],z:66+n*22,seed:Math.random()});
   const rocks=G.k<3?0:G.k<10?1:2,rl=shuffle([0,1,2]);
-  for(let n=0;n<rocks;n++)G.items.push({type:'rock',lane:rl[n],z:94+n*16});
+  for(let n=0;n<rocks;n++)G.items.push({type:'rock',lane:rl[n],z:104+n*14});
   promptEl.textContent=G.q.de;
   chips.innerHTML=G.options.map((w,i)=>'<button data-lane="'+i+'" lang="en">'+esc(w.en)+'</button>').join('');
   chips.querySelectorAll('[data-lane]').forEach(b=>b.onclick=()=>steer(Number(b.dataset.lane)));
@@ -139,7 +148,7 @@ function passGate(){
   mark();hud();
 }
 function loosePenguins(n){
-  for(let i=0;i<n&&G.penguins>0;i++){G.penguins--;G.lost.push({x:(Math.random()-.5)*60,y:30+i*6,vx:(Math.random()<.5?-1:1)*(80+Math.random()*120),vy:-140-Math.random()*120,rot:0,vr:(Math.random()-.5)*12,life:1.4});}
+  for(let i=0;i<n&&G.penguins>0;i++){G.penguins--;G.crew.pop();G.lost.push({x:(Math.random()-.5)*60,y:30+i*6,vx:(Math.random()<.5?-1:1)*(80+Math.random()*120),vy:-140-Math.random()*120,rot:0,vr:(Math.random()-.5)*12,life:1.4});}
   if(n>0)popup('−'+n+' Pinguin'+(n>1?'e':''),'#A9D8FF');
 }
 function passItem(it){
@@ -147,13 +156,13 @@ function passItem(it){
   if(it.type==='star'){G.score+=10;G.stars++;it.taken=true;burst(0,['#FFC857','#FFE9A8'],6);}
   else if(it.type==='penguin'){
     it.taken=true;
-    if(G.penguins<MAX_PENGUINS){G.penguins++;G.maxPenguins=Math.max(G.maxPenguins,G.penguins);popup('+1 Pinguin','#FFFFFF');}
+    if(G.penguins<MAX_PENGUINS){G.penguins++;G.crew.push({t:G.time,seed:it.seed||Math.random()});G.maxPenguins=Math.max(G.maxPenguins,G.penguins);popup('+1 Pinguin','#FFFFFF');}
     else{G.score+=20;popup('+20','#FFFFFF');}
   }
   else if(it.type==='turbo'){
     it.taken=true;G.turbo=TURBO_GATES;popup('TURBO ×2','#FF9A3C');
     /* sofort schneller - aber nie unter die Mindestlesezeit */
-    G.speed=Math.max(G.speed,Math.min(G.speed*TURBO_SPEED,GAP/MIN_READ));
+    G.speed=Math.max(G.speed,Math.min(G.speed*TURBO_SPEED,GAP/modus().min));
     burst(0,['#FF9A3C','#FFC857','#FF5A4F'],16);
   }
   else if(it.type==='shield'){it.taken=true;G.shield=true;popup('Schild','#7FE0D0');burst(0,['#7FE0D0','#FFFFFF'],14);}
@@ -211,8 +220,8 @@ function firework(){
 function finish(won){
   G.mode='over';G.won=won;
   if(!won)M?.sturz();
-  const id=G.part,old=saved.best[id]||0,record=G.score>old;
-  if(record)saved.best[id]=G.score;
+  const id=G.part,key=bestKey(id),old=saved.best[key]||0,record=G.score>old;
+  if(record)saved.best[key]=G.score;
   const before=unlocked();
   if(won)saved.finishes[id]=(saved.finishes[id]||0)+1;
   const fresh=!before&&unlocked();
@@ -223,7 +232,7 @@ function finish(won){
     +'<p class="result">'+G.k+' von '+GOAL+' Toren · '+G.score+' Punkte'+(record&&G.score?' · <strong>neuer Bestwert!</strong>':'')+'</p>'
     +'<p class="penguins">'+(won?'🐧 Du hast '+G.penguins+' Pinguin'+(G.penguins===1?'':'e')+' ins Tal gebracht!':'🐧 Bis zu '+G.maxPenguins+' Pinguin'+(G.maxPenguins===1?'':'e')+' sind mitgerutscht.')+'</p>'
     +(fresh?'<p class="unlock">Neu freigeschaltet: Der Pinguin kann jetzt deinen Schlitten fahren!</p>':'')
-    +'<p class="muted">'+G.correct+' Tore richtig · '+G.stars+' Sterne · Bestwert: '+(saved.best[id]||0)+' Punkte</p>'
+    +'<p class="muted">'+G.correct+' Tore richtig · '+G.stars+' Sterne · Bestwert'+(G.modus==='profi'?' (Profi)':'')+': '+(saved.best[key]||0)+' Punkte</p>'
     +'<div class="actions"><button id="again" class="go">Nochmal fahren</button><button id="toMenu">Anderen Abschnitt wählen</button></div>'
     +(missed.length?'<h2>Diese Wörter solltest du noch üben</h2><ul class="missed">'+missed.map(w=>'<li><span>'+esc(w.de)+'</span><strong lang="en">'+esc(w.en)+'</strong></li>').join('')
       +'</ul><p><a class="train" href="../">Unit 2 im Vokabeltrainer üben →</a></p>':'<p class="muted">Jedes Tor richtig – stark!</p>');
@@ -245,10 +254,16 @@ function showRiders(){
     +(unlocked()?'':'<small>noch '+missing+'× ins Ziel</small>')+'</span></button>';
   box.querySelectorAll('[data-rider]').forEach(b=>b.onclick=()=>{if(b.disabled)return;saved.rider=b.dataset.rider;save();showRiders();});
 }
+function showModes(){
+  const box=$('modes');if(!box)return;
+  box.innerHTML=Object.entries(MODI).map(([k,m])=>'<button data-modus="'+k+'" aria-pressed="'+(saved.modus===k)+'"><span>'+m.name+'</span><small>'
+    +(k==='profi'?'schneller, weniger Lesezeit, Punkte ×1,5':'mit Zeit zum Lesen')+'</small></button>').join('');
+  box.querySelectorAll('[data-modus]').forEach(b=>b.onclick=()=>{saved.modus=b.dataset.modus;G.modus=saved.modus;save();showMenu();});
+}
 function showMenu(){
-  G.mode='menu';stage.hidden=true;over.hidden=true;menu.hidden=false;showRiders();M?.stop();musikKnopf();
+  G.mode='menu';G.modus=saved.modus;stage.hidden=true;over.hidden=true;menu.hidden=false;showRiders();showModes();M?.stop();musikKnopf();
   $('levels').innerHTML=[...D.parts,ALL].map(p=>{
-    const n=wordsOf(p.id).length,best=saved.best[p.id]||0,fin=saved.finishes[p.id]||0;
+    const n=wordsOf(p.id).length,best=saved.best[bestKey(p.id)]||0,fin=saved.finishes[p.id]||0;
     return '<button data-part="'+p.id+'"'+(p.id==='all'?' class="all"':'')+'><span class="l-name">'+esc(p.name)+'</span>'
       +'<span class="l-info">'+n+' Wörter'+(best?' · Bestwert '+best+' P':'')+(fin?' · '+fin+'× im Ziel':'')+'</span></button>';
   }).join('');
@@ -517,16 +532,46 @@ function drawPenguin(X,Y,k,o){
   if(o.goggles){ctx.fillStyle='#FFC857';ctx.beginPath();ctx.arc(0,-38,10.5,Math.PI,0);ctx.fill();ctx.fillStyle='#FF7A59';ctx.beginPath();ctx.arc(0,-48,3.6,0,7);ctx.fill();}
   ctx.restore();
 }
-/* Die Pinguin-Kette rutscht in Schlangenlinie hinterher - sie folgt der
-   Spur, die der Schlitten vor ein paar Augenblicken gefahren ist. */
+/* Der Pinguin-Anhaenger: ein kleiner Holzschlitten am Seil, in dem die
+   eingesammelten Pinguine aufrecht in Reihen zu viert sitzen. Er folgt der
+   Spur des Schlittens mit etwas Verzoegerung und schlingert in Kurven. */
 function drawChain(){
-  for(let i=G.penguins-1;i>=0;i--){
-    const lag=Math.min(G.trail.length-1,6+i*5),x=(G.trail[lag]??G.x),side=i%2?1:-1;
-    const X=W/2+x*LW+side*(16+Math.min(i,6)*2),Y=GY+30+Math.floor(i/2)*15,k=0.62-Math.min(i,10)*0.012;
-    if(Y>H+20)continue;
-    drawPenguin(X,Y,k,{slide:true,wave:Math.sin(G.time*10+i)});
+  const n=G.penguins;
+  if(n>0){
+    const lag=Math.min(G.trail.length-1,9),tx=G.trail[lag]??G.x,X=W/2+tx*LW,Y=GY+64;
+    const sway=clamp((G.x-tx)*0.5,-0.3,0.3),rows=Math.ceil(n/4),wid=118,dep=18+rows*13;
+    /* Seil vom Schlitten zur Deichsel */
+    ctx.strokeStyle='#5A4636';ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(W/2+G.x*LW,GY+8);
+    ctx.quadraticCurveTo((W/2+G.x*LW+X)/2,GY+30+Math.abs(G.x-tx)*10,X,Y-dep-2);ctx.stroke();
+    ctx.save();ctx.translate(X,Y);ctx.rotate(sway);
+    ctx.fillStyle='rgba(50,90,150,.28)';ctx.beginPath();ctx.ellipse(0,6,wid*0.6,9,0,0,7);ctx.fill();
+    /* Kufen */
+    ctx.strokeStyle='#B5362F';ctx.lineWidth=4;ctx.lineCap='round';
+    for(const sx of [-wid/2+8,wid/2-8]){ctx.beginPath();ctx.moveTo(sx,4);ctx.lineTo(sx,-dep+6);ctx.quadraticCurveTo(sx,-dep-4,sx*0.8,-dep-6);ctx.stroke();}
+    /* Ladeflaeche (hinten) */
+    ctx.fillStyle='#A66E36';rounded(-wid/2,-dep,wid,dep,6);ctx.fill();
+    /* Pinguine: hintere Reihe zuerst, jede Reihe etwas tiefer und groesser */
+    for(let r=rows-1;r>=0;r--){
+      const inRow=Math.min(4,n-r*4),gap=25;
+      for(let c=0;c<inRow;c++){
+        const i=r*4+c,crew=G.crew[i]||{t:-9,seed:i*0.37},age=G.time-crew.t;
+        const drop=age<0.45?(1-age/0.45)*(1-age/0.45)*70:0,squash=age<0.6?1+Math.sin(age*20)*0.12*(1-age/0.6):1;
+        const px=(c-(inRow-1)/2)*gap+Math.sin(crew.seed*20)*1.5,py=-dep+11+(rows-1-r)*13;
+        const bob=ruhig?0:Math.abs(Math.sin(G.time*8+crew.seed*12))*1.6;
+        ctx.save();ctx.translate(px,py-drop-bob);ctx.scale(1,1/squash);
+        drawPenguin(0,0,0.56,{wave:Math.sin(G.time*(6+crew.seed*4)+crew.seed*9)*(age<1.2?1:0.35),blush:crew.seed>0.6});
+        ctx.restore();
+      }
+    }
+    /* Bordwand vorn */
+    ctx.fillStyle='#C98A4B';rounded(-wid/2,-10,wid,14,5);ctx.fill();
+    ctx.fillStyle='#A66E36';for(let i=-2;i<=2;i++)ctx.fillRect(i*wid/5-1,-10,2,14);
+    ctx.fillStyle='#FFFFFF';ctx.font='800 10px '+FONT;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(n+' / '+MAX_PENGUINS,0,-3);
+    ctx.restore();
   }
-  for(const b of G.lost){ctx.globalAlpha=clamp(b.life,0,1);drawPenguin(W/2+G.x*LW+b.x,GY+b.y,0.6,{slide:true,rot:b.rot,wave:1});}
+  /* Herausgefallene Pinguine purzeln durch die Luft */
+  for(const b of G.lost){ctx.globalAlpha=clamp(b.life,0,1);
+    ctx.save();ctx.translate(W/2+G.x*LW+b.x,GY+40+b.y);ctx.rotate(b.rot);drawPenguin(0,0,0.5,{wave:1});ctx.restore();}
   ctx.globalAlpha=1;
 }
 function drawSled(){
@@ -649,8 +694,9 @@ function drawStatus(){
   pills.push({w:112,draw:(x,y)=>{
     ctx.fillStyle='#A9B4C8';ctx.font='700 10px '+FONT;ctx.fillText('TEMPO',x+10,y+14);
     ctx.fillStyle='rgba(255,255,255,.18)';rounded(x+52,y+9,50,10,5);ctx.fill();
-    const f=clamp((tempo-1)/1.03,0,1);ctx.fillStyle=G.turbo>0?'#FF8A3C':f>0.3?'#FFC857':'#7FE0D0';rounded(x+52,y+9,Math.max(8,50*f),10,5);ctx.fill();}});
+    const f=clamp((tempo-1)/(tempoOf(99)*TURBO_SPEED-1),0,1);ctx.fillStyle=G.turbo>0?'#FF8A3C':f>0.3?'#FFC857':'#7FE0D0';rounded(x+52,y+9,Math.max(8,50*f),10,5);ctx.fill();}});
   pills.push({w:58,draw:(x,y)=>{ctx.fillStyle='#FFFFFF';ctx.font='800 13px '+FONT;ctx.fillText('×'+multiplier().toFixed(1).replace('.',','),x+10,y+14);}});
+  if(G.modus==='profi')pills.push({w:52,bg:'rgba(185,147,255,.92)',draw:(x,y)=>{ctx.fillStyle='#1A0B33';ctx.font='900 11px '+FONT;ctx.fillText('PROFI',x+10,y+14);}});
   if(G.turbo>0)pills.push({w:76,bg:'rgba(255,122,40,.92)',draw:(x,y)=>{ctx.fillStyle='#1B0A00';ctx.font='900 12px '+FONT;ctx.fillText('TURBO '+G.turbo,x+10,y+14);}});
   if(G.shield)pills.push({w:34,bg:'rgba(60,207,190,.92)',draw:(x,y)=>{ctx.fillStyle='#06201C';ctx.font='900 14px '+FONT;ctx.fillText('⛨',x+10,y+14);}});
   if(G.penguins>0)pills.push({w:58,draw:(x,y)=>{drawPenguin(x+16,y+24,0.4,{});ctx.fillStyle='#FFFFFF';ctx.font='800 13px '+FONT;ctx.fillText('×'+G.penguins,x+28,y+14);}});
@@ -673,6 +719,6 @@ function loop(){
   requestAnimationFrame(frame);
 }
 
-window.SledGame={G,start,steer,move,update,finish,showMenu,pause,GOAL,HEARTS,GAP,MIN_READ,TURBO_GATES,MAX_PENGUINS,UNLOCK,tempoOf,multiplier,gateSpeed,rider,unlocked};
+window.SledGame={G,start,_next:next,steer,move,update,finish,showMenu,pause,GOAL,HEARTS,GAP,MIN_READ,MODI,modus,TURBO_GATES,MAX_PENGUINS,UNLOCK,tempoOf,multiplier,gateSpeed,rider,unlocked};
 showMenu();
 })();

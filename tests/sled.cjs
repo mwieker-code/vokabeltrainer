@@ -97,6 +97,58 @@ ok(S.tempoOf(G.streak)===1,'Tempo faellt zurueck');settle();
 grab('rock');ok(G.penguins===1,'Fels kostet einen Pinguin');
 for(let i=0;i<20;i++)grab('penguin');ok(G.penguins===S.MAX_PENGUINS,'Kette hat eine Hoechstlaenge');
 
+
+/* Profi-Modus: schneller, weniger Lesezeit, mehr Punkte, eigene Bestwerte */
+d.getElementById('toMenu')?.click();S.showMenu();
+ok(d.querySelector('[data-modus="normal"]').getAttribute('aria-pressed')==='true','Normal ist voreingestellt');
+const normalBest=JSON.parse(w.localStorage.getItem('vt6:sled:v1')).best;
+d.querySelector('[data-modus="profi"]').click();
+ok(JSON.parse(w.localStorage.getItem('vt6:sled:v1')).modus==='profi'&&d.querySelector('[data-modus="profi"]').getAttribute('aria-pressed')==='true','Profi gewaehlt und gespeichert');
+ok(!/Bestwert/.test(d.querySelector('[data-part="y6u2-partb"]').textContent),'Profi hat eigene Bestwerte');
+d.querySelector('[data-part="y6u2-parta"]').click();
+ok(G.modus==='profi'&&S.modus().min===2.5,'Profi-Fahrt laeuft');
+const t0=S.GAP/G.speed;ok(Math.abs(t0-8*0.8)<1e-9,'Profi startet schneller ('+t0.toFixed(1)+' s)');
+ok(Math.abs(S.multiplier()-1.5)<1e-9,'Profi gibt anderthalbfache Punkte');
+G.items.length=0;toGate(G.gate.right,false);ok(G.score===150,'erstes Tor im Profi: 150 Punkte');settle();
+G.streak=30;G.turbo=3;G.k=19;
+ok(Math.abs(S.tempoOf(G.streak)-2)<1e-9,'Profi-Tempo bis x2');
+ok(Math.abs(S.GAP/S.gateSpeed()-2.5)<1e-9,'Profi: Mindestlesezeit 2,5 s');
+G.streak=0;G.turbo=0;
+let pf=0;while(G.mode!=='over'&&pf++<40){G.items.length=0;toGate(G.gate?.right??1,false);settle();let n=0;while((G.mode==='finish'||G.mode==='celebrate')&&n++<4000)step();}
+const after=JSON.parse(w.localStorage.getItem('vt6:sled:v1'));
+ok(after.best['profi:y6u2-parta']>0&&JSON.stringify(after.best).includes('profi:'),'Profi-Bestwert getrennt gespeichert');
+ok(/Profi/.test(d.getElementById('over').textContent),'Abschluss nennt den Profi-Bestwert');
+d.getElementById('toMenu').click();d.querySelector('[data-modus="normal"]').click();
+ok(G.modus==='normal'&&S.modus().min===3.5,'zurueck auf Normal');
+
+/* Zwei Pinguine stehen hintereinander und lassen sich beide holen */
+let zweier=0,beide=0;
+for(let i=0;i<80;i++){
+ S.start('y6u2-partb');G.k=5;G.items.length=0;S._next();
+ const pg=G.items.filter(x=>x.type==='penguin').sort((x,y)=>x.z-y.z);
+ if(pg.length<2)continue;zweier++;
+ ok(pg[0].lane!==pg[1].lane&&pg[1].z-pg[0].z>=20,'zwei Pinguine versetzt hintereinander');
+ G.items=pg;G.lane=1;G.x=0;G.penguins=0;G.crew=[];
+ S.steer(pg[0].lane);let n=0;while(pg[0].z>0&&n++<500)step();
+ S.steer(pg[1].lane);while(pg[1].z>0&&n++<1000)step();
+ if(G.penguins===2)beide++;
+}
+ok(zweier>10&&beide===zweier,'beide Pinguine erreichbar ('+beide+' von '+zweier+')');
+/* auch im Profi-Tempo */
+d.getElementById('quit').click();S.showMenu();d.querySelector('[data-modus="profi"]').click();
+zweier=0;beide=0;
+for(let i=0;i<60;i++){
+ S.start('y6u2-partb');G.k=15;G.streak=30;G.turbo=3;G.items.length=0;S._next();
+ const pg=G.items.filter(x=>x.type==='penguin').sort((x,y)=>x.z-y.z);
+ if(pg.length<2)continue;zweier++;
+ G.items=pg;G.lane=1;G.x=0;G.penguins=0;G.crew=[];
+ S.steer(pg[0].lane);let n=0;while(pg[0].z>0&&n++<500)step();
+ S.steer(pg[1].lane);while(pg[1].z>0&&n++<1000)step();
+ if(G.penguins===2)beide++;
+}
+ok(zweier>5&&beide===zweier,'auch bei Hoechsttempo beide erreichbar ('+beide+' von '+zweier+')');
+d.getElementById('quit').click();S.showMenu();d.querySelector('[data-modus="normal"]').click();
+
 /* Falsches Tor */
 S.start('y6u2-partc');
 G.items.length=0;const q=G.q;toGate((G.gate.right+1)%3,false);
