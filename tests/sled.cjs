@@ -24,6 +24,11 @@ const settle=()=>{let n=0;while(G.mode==='result'&&n++<500)step();};
 
 ok(d.querySelectorAll('#levels [data-part]').length===6,'Auswahl: fuenf Abschnitte und die ganze Unit');
 ok(d.querySelector('[data-rider="penguin"]').disabled&&S.rider()==='kid','Pinguin als Fahrer anfangs gesperrt');
+ok(d.querySelectorAll('#riders [data-rider]').length===3,'drei Fahrer zur Wahl');
+ok(!d.querySelector('[data-rider="silky"]').disabled&&/Silky/.test(d.querySelector('[data-rider="silky"]').textContent),'Silky sofort waehlbar');
+d.querySelector('[data-rider="silky"]').click();
+ok(S.rider()==='silky'&&JSON.parse(w.localStorage.getItem('vt6:sled:v1')).rider==='silky','Silky gewaehlt und gespeichert');
+d.querySelector('[data-rider="kid"]').click();ok(S.rider()==='kid','zurueck zum Rodelkind');
 ok(/noch 3× ins Ziel/.test(d.querySelector('[data-rider="penguin"]').textContent),'Sperre nennt die fehlenden Zieleinlaeufe');
 for(const id of [...D.parts.map(p=>p.id),'all']){
  d.querySelector('[data-part="'+id+'"]').click();

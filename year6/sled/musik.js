@@ -6,6 +6,9 @@
      turbo(on)  im Turbo kommt Schlagzeug dazu
      fehler()   ein falsches Tor daempft die Musik kurz ab
      ziel()     Fanfare im Ziel, sturz() ein Abgesang beim Spielende
+     sfx(name)  Geraeusche beim Einsammeln: stern, pinguin, turbo, schild,
+                fels, schildbruch, pinguinweg. Sie haengen nicht an der
+                Musik, sondern am Schalter "Toene" der App.
    Die Einstellung an/aus steht in vt6:sled:musik; ohne Wahl ist sie an.
    Wo es kein Web Audio gibt (oder in den Tests), tut die Musik nichts.
    ========================================================================= */
@@ -43,7 +46,7 @@ const BARS=SONG.flatMap(part=>part.melody.map((m,i)=>({chord:part.chords[i],melo
 
 /* ----------------------------------------------------------- Klang */
 const AC=window.AudioContext||window.webkitAudioContext;
-let ac=null,bus=null,filter=null,master=null,noise=null;
+let ac=null,bus=null,filter=null,master=null,noise=null,fx=null;
 let timer=null,step=0,next=0,bpm=128,ziel=128,turboAn=false,laeuft=false;
 function bereit(){
   if(!AC)return false;
@@ -52,6 +55,7 @@ function bereit(){
     master=ac.createGain();master.gain.value=0.3;master.connect(ac.destination);
     filter=ac.createBiquadFilter();filter.type='lowpass';filter.frequency.value=18000;filter.connect(master);
     bus=ac.createGain();bus.gain.value=1;bus.connect(filter);
+    fx=ac.createGain();fx.gain.value=0.5;fx.connect(ac.destination);
     const len=ac.sampleRate*0.5;noise=ac.createBuffer(1,len,ac.sampleRate);
     const d=noise.getChannelData(0);for(let i=0;i<len;i++)d[i]=Math.random()*2-1;
   }
@@ -159,10 +163,44 @@ function sturz(){
   stop();
   melodie([[67,0,0.22,0.09],[65,0.22,0.22,0.09],[64,0.44,0.22,0.09],[62,0.66,0.22,0.09],[60,0.88,0.9,0.1]],'triangle');
 }
+/* ------------------------------------------------------- Geraeusche */
+function toene(){try{const p=JSON.parse(localStorage.getItem('vt:feedback:v1'));return !p||p.sound!==false;}catch(e){return true;}}
+function piep(t,f1,f2,dauer,typ,laut){
+  const o=ac.createOscillator(),g=ac.createGain();o.type=typ;
+  o.frequency.setValueAtTime(f1,t);o.frequency.exponentialRampToValueAtTime(f2,t+dauer*0.85);
+  g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(laut,t+0.01);g.gain.exponentialRampToValueAtTime(0.0001,t+dauer);
+  o.connect(g);g.connect(fx);o.start(t);o.stop(t+dauer+0.02);
+}
+function zisch(t,f1,f2,dauer,laut,q){
+  const s=ac.createBufferSource(),f=ac.createBiquadFilter(),g=ac.createGain();
+  s.buffer=noise;f.type='bandpass';f.Q.value=q||1.2;f.frequency.setValueAtTime(f1,t);f.frequency.exponentialRampToValueAtTime(f2,t+dauer);
+  g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(laut,t+dauer*0.3);g.gain.exponentialRampToValueAtTime(0.0001,t+dauer);
+  s.connect(f);f.connect(g);g.connect(fx);s.start(t,Math.random()*0.2);s.stop(t+dauer+0.02);
+}
+const GERAEUSCH={
+  /* Stern: zwei helle Glitzertoene nach oben */
+  stern:t=>{piep(t,1319,1319,0.12,'sine',0.35);piep(t+0.06,1976,1976,0.16,'sine',0.3);piep(t+0.06,3951,3951,0.08,'sine',0.06);},
+  /* Pinguin: zweimal kurz quieken */
+  pinguin:t=>{piep(t,700,1250,0.09,'triangle',0.4);piep(t+0.11,900,1500,0.11,'triangle',0.38);zisch(t,2000,3000,0.05,0.08,3);},
+  /* Turbo: aufheulendes Rauschen und ein steigender Ton */
+  turbo:t=>{zisch(t,300,5000,0.55,0.6,1.5);piep(t,180,900,0.5,'sawtooth',0.12);piep(t+0.05,360,1800,0.45,'square',0.05);},
+  /* Schild: schimmernder Dur-Dreiklang */
+  schild:t=>{[1047,1319,1568,2093].forEach((f,i)=>piep(t+i*0.05,f,f*1.003,0.4-i*0.04,'triangle',0.2));},
+  /* Fels: dumpfer Aufprall */
+  fels:t=>{piep(t,140,45,0.25,'sine',0.7);zisch(t,600,150,0.2,0.4,0.8);},
+  /* Schild bricht: glaesern abwaerts */
+  schildbruch:t=>{[2637,2093,1568].forEach((f,i)=>piep(t+i*0.06,f,f*0.97,0.18,'triangle',0.22));zisch(t,6000,3000,0.25,0.15,4);},
+  /* Pinguine purzeln: ein trauriges Oh-oh */
+  pinguinweg:t=>{piep(t+0.05,660,620,0.14,'triangle',0.3);piep(t+0.22,520,430,0.22,'triangle',0.3);}
+};
+function sfx(name){
+  if(!toene()||!GERAEUSCH[name]||!bereit())return;
+  try{GERAEUSCH[name](ac.currentTime+0.01);}catch(e){}
+}
 function setze(on){
   an=!!on;try{localStorage.setItem(KEY,an?'an':'aus');}catch(e){}
   if(!an)stop();
 }
-window.SledMusik={start,stop,pause,tempo,turbo,fehler,ziel:ziel_,sturz,setze,
+window.SledMusik={start,stop,pause,tempo,turbo,fehler,ziel:ziel_,sturz,setze,sfx,geraeusche:Object.keys(GERAEUSCH),
   get an(){return an;},get laeuft(){return laeuft;},verfuegbar:!!AC,_bars:BARS,_song:SONG,_midi:midi};
 })();

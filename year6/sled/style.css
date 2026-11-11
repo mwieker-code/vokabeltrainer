@@ -92,3 +92,10 @@ footer button,[data-feedback-pref]{font-size:13px;min-height:40px;border-radius:
 #modes button small{font-size:12px;font-weight:500;color:var(--soft)}
 #modes button[aria-pressed="true"]{background:rgba(127,224,208,.16);border-color:var(--glacier);box-shadow:inset 0 0 0 1px var(--glacier)}
 #modes button[data-modus="profi"][aria-pressed="true"]{background:rgba(185,147,255,.16);border-color:#B993FF;box-shadow:inset 0 0 0 1px #B993FF}
+
+/* Drei Fahrer mit Vorschaubild */
+#riders{grid-template-columns:repeat(3,1fr);gap:8px}
+#riders button{flex-direction:column;align-items:center;text-align:center;gap:2px;padding:8px 6px 10px;font-size:15px}
+#riders button span:last-child{align-items:center}
+#riders .r-bild{width:76px;height:76px;display:block}
+#riders button:disabled .r-bild{filter:grayscale(1) brightness(.7)}

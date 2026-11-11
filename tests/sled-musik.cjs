@@ -79,6 +79,23 @@ function setup(stored){
  M.fehler();ok(log.filters.some(f=>f.frequency.value<18000),'Fehler daempft die Musik');
  M.sturz();ok(!M.laeuft&&log.notes.length>n1+4,'Abgesang beim Sturz');
 }
+/* Geraeusche beim Einsammeln: jedes Item klingt anders, auch bei Musik aus;
+   der App-Schalter "Toene" schaltet sie ab. */
+{
+ const {log,M,S,w}=setup('aus');
+ S.start('y6u2-parta');
+ const klang={};
+ for(const name of M.geraeusche){const n0=log.notes.length,z0=log.noise.length;M.sfx(name);
+   klang[name]=log.notes.slice(n0).map(n=>n.type+':'+Math.round(n.f)).join(',')+'|'+(log.noise.length-z0);
+   ok(log.notes.length>n0,'Geraeusch spielt: '+name);}
+ ok(M.geraeusche.length===7&&new Set(Object.values(klang)).size===7,'sieben verschiedene Geraeusche');
+ /* im Spiel ausgeloest */
+ const G=S.G;const hole=type=>{const n0=log.notes.length;G.items.length=0;G.items.push({type,lane:G.lane,z:0.1,seed:0.2});G.x=G.lane-1;S.update(0.02);return log.notes.length>n0;};
+ for(const type of ['star','penguin','turbo','shield','rock'])ok(hole(type),'Einsammeln klingt: '+type);
+ w.localStorage.setItem('vt:feedback:v1',JSON.stringify({sound:false,animation:true}));
+ const n0=log.notes.length;M.sfx('stern');hole('star');
+ ok(log.notes.length===n0,'Toene aus: keine Geraeusche');
+}
 /* Ohne Web Audio passiert nichts - und nichts geht kaputt */
 {
  const dom=new JSDOM(fs.readFileSync(path.join(dir,'index.html'),'utf8'),{runScripts:'outside-only',url:'https://example.org/year6/sled/',virtualConsole:new VirtualConsole()});
