@@ -77,3 +77,10 @@ footer button,[data-feedback-pref]{font-size:13px;min-height:40px;border-radius:
 .r-icon{font-size:26px;line-height:1}
 #over .penguins{font-size:17px;font-weight:700;color:#DDEBFF;margin:4px 0}
 #over .unlock{background:rgba(127,224,208,.14);border:1px solid var(--glacier);border-radius:14px;padding:10px 14px;font-weight:700;color:var(--glacier)}
+
+/* Musik an/aus */
+.bar #musik.aus{opacity:.45;text-decoration:line-through}
+.bar{gap:6px}
+.bar button{width:40px}
+.musik-menu{min-height:44px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.07);color:var(--snow);font-weight:700;padding:8px 16px}
+.musik-menu.aus{opacity:.6}

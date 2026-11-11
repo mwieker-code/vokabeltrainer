@@ -21,7 +21,7 @@
    ========================================================================= */
 (function(){
 'use strict';
-const D=window.CLIMB_DATA,KEY='vt6:sled:v1';
+const D=window.CLIMB_DATA,KEY='vt6:sled:v1',M=window.SledMusik||null;
 const $=id=>document.getElementById(id);
 const menu=$('menu'),stage=$('stage'),over=$('over'),canvas=$('piste'),promptEl=$('prompt'),chips=$('chips');
 let ctx=null;try{ctx=canvas.getContext?canvas.getContext('2d'):null;}catch(e){ctx=null;}
@@ -66,6 +66,7 @@ function start(partId){
     turbo:0,shield:false,penguins:0,maxPenguins:0,lost:[],popups:[],spray:[],sparks:[],trail:[],fov:1,shieldFx:0});
   menu.hidden=true;over.hidden=true;stage.hidden=false;
   resize();next();hud();loop();
+  M?.stop();M?.start();musikKnopf();
 }
 function distractors(q){
   const others=pool.filter(w=>w.id!==q.id&&w.en!==q.en&&w.de!==q.de);
@@ -127,6 +128,7 @@ function passGate(){
     window.LearningFeedback?.signal('ok');
   }else{
     G.streak=0;G.shake=0.5;G.turbo=0;G.missed.set(G.q.id,G.q);
+    M?.fehler();
     if(G.shield){G.shield=false;G.shieldFx=1;popup('Schild hält!','#7FE0D0');}
     else G.hearts--;
     const lost=Math.ceil(G.penguins/2);loosePenguins(lost);
@@ -175,6 +177,7 @@ function update(dt){
   G.sparks=G.sparks.filter(f=>f.life>0);
   G.fov+=((G.turbo>0?1.07:1)-G.fov)*Math.min(1,dt*3);
   G.trail.unshift(G.x);if(G.trail.length>90)G.trail.length=90;
+  if(M&&G.mode!=='celebrate'){M.tempo(tempoOf(G.streak)*(G.turbo>0?TURBO_SPEED:1));M.turbo(G.turbo>0);}
   G.x+=((G.lane-1)-G.x)*Math.min(1,dt*(ruhig?40:11));
   /* Nach einem falschen Tor bremst der Schlitten kurz ab. */
   const factor=G.mode==='result'&&!G.result.ok?0.45:G.boost>0?1.2:1;
@@ -193,7 +196,7 @@ function update(dt){
       else next();
     }
   }else if(G.mode==='finish'){
-    if(G.finishZ<=-6){G.mode='celebrate';G.t=0;promptEl.textContent='Im Ziel!';}
+    if(G.finishZ<=-6){G.mode='celebrate';G.t=0;promptEl.textContent='Im Ziel!';M?.ziel();}
   }else if(G.mode==='celebrate'){
     /* Feuerwerk ueber dem Ziel, dann der Abschluss */
     G.t+=dt;G.speed*=1-Math.min(1,dt*1.2);
@@ -207,6 +210,7 @@ function firework(){
 }
 function finish(won){
   G.mode='over';G.won=won;
+  if(!won)M?.sturz();
   const id=G.part,old=saved.best[id]||0,record=G.score>old;
   if(record)saved.best[id]=G.score;
   const before=unlocked();
@@ -242,7 +246,7 @@ function showRiders(){
   box.querySelectorAll('[data-rider]').forEach(b=>b.onclick=()=>{if(b.disabled)return;saved.rider=b.dataset.rider;save();showRiders();});
 }
 function showMenu(){
-  G.mode='menu';stage.hidden=true;over.hidden=true;menu.hidden=false;showRiders();
+  G.mode='menu';stage.hidden=true;over.hidden=true;menu.hidden=false;showRiders();M?.stop();musikKnopf();
   $('levels').innerHTML=[...D.parts,ALL].map(p=>{
     const n=wordsOf(p.id).length,best=saved.best[p.id]||0,fin=saved.finishes[p.id]||0;
     return '<button data-part="'+p.id+'"'+(p.id==='all'?' class="all"':'')+'><span class="l-name">'+esc(p.name)+'</span>'
@@ -253,6 +257,20 @@ function showMenu(){
 function pause(on){
   if(G.mode==='menu'||G.mode==='over')return;
   G.paused=on;$('pause').textContent=on?'▶':'II';$('pause').setAttribute('aria-label',on?'Weiter':'Pause');
+  M?.pause(on);
+}
+/* Musik an/aus - im Spiel und im Menue, die Wahl bleibt gespeichert */
+function musikKnopf(){
+  const an=!M||M.an;
+  for(const id of ['musik','musikMenu']){const b=$(id);if(!b)continue;
+    b.setAttribute('aria-pressed',String(an));b.classList.toggle('aus',!an);
+    if(id==='musikMenu')b.textContent=an?'♫ Musik: an':'♫ Musik: aus';
+    b.hidden=!M||!M.verfuegbar;}
+}
+function musikUmschalten(){
+  if(!M)return;M.setze(!M.an);
+  if(M.an&&!stage.hidden&&G.mode!=='over'&&G.mode!=='celebrate'){M.start();if(G.paused)M.pause(true);}
+  musikKnopf();
 }
 
 /* ----------------------------------------------------------- Steuerung */
@@ -278,8 +296,11 @@ document.addEventListener('keydown',e=>{
   else if(e.key==='ArrowRight'||e.key==='d'){e.preventDefault();move(1);}
   else if(e.key==='1'||e.key==='2'||e.key==='3'){e.preventDefault();steer(Number(e.key)-1);}
   else if(e.key===' '||e.key==='p'||e.key==='Escape'){e.preventDefault();pause(!G.paused);}
+  else if(e.key==='m'){e.preventDefault();musikUmschalten();}
 });
 $('pause').onclick=()=>pause(!G.paused);
+if($('musik'))$('musik').onclick=musikUmschalten;
+if($('musikMenu'))$('musikMenu').onclick=musikUmschalten;
 $('quit').onclick=showMenu;
 document.addEventListener('visibilitychange',()=>{if(document.hidden)pause(true);});
 window.addEventListener('resize',resize);
