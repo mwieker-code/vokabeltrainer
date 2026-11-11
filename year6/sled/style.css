@@ -65,3 +65,15 @@ a.train{color:var(--glacier);font-weight:700}
 footer{margin-top:auto;padding-top:18px;font-size:13px;color:var(--soft)}
 footer p{margin:0 0 8px}
 footer button,[data-feedback-pref]{font-size:13px;min-height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:var(--snow);padding:6px 12px;margin:0 6px 6px 0}
+
+/* Fahrerwahl und Pinguine */
+#riders{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px}
+#riders button{display:flex;align-items:center;gap:10px;text-align:left;padding:12px 14px;border-radius:16px;min-height:62px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:var(--snow);font-weight:700;font-size:16px}
+#riders button span:last-child{display:flex;flex-direction:column}
+#riders button small{font-size:12px;font-weight:500;color:var(--soft)}
+#riders button[aria-pressed="true"]{background:rgba(127,224,208,.16);border-color:var(--glacier);box-shadow:inset 0 0 0 1px var(--glacier)}
+#riders button:disabled{opacity:.55;cursor:default}
+.r-icon{font-size:26px;line-height:1}
+#over .penguins{font-size:17px;font-weight:700;color:#DDEBFF;margin:4px 0}
+#over .unlock{background:rgba(127,224,208,.14);border:1px solid var(--glacier);border-radius:14px;padding:10px 14px;font-weight:700;color:var(--glacier)}

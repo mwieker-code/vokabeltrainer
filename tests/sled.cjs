@@ -23,6 +23,8 @@ function toGate(lane,dodge){
 const settle=()=>{let n=0;while(G.mode==='result'&&n++<500)step();};
 
 ok(d.querySelectorAll('#levels [data-part]').length===6,'Auswahl: fuenf Abschnitte und die ganze Unit');
+ok(d.querySelector('[data-rider="penguin"]').disabled&&S.rider()==='kid','Pinguin als Fahrer anfangs gesperrt');
+ok(/noch 3× ins Ziel/.test(d.querySelector('[data-rider="penguin"]').textContent),'Sperre nennt die fehlenden Zieleinlaeufe');
 for(const id of [...D.parts.map(p=>p.id),'all']){
  d.querySelector('[data-part="'+id+'"]').click();
  ok(!d.getElementById('stage').hidden&&G.mode==='ride'&&G.hearts===S.HEARTS,'Fahrt laeuft: '+id);
@@ -38,8 +40,9 @@ for(const id of [...D.parts.map(p=>p.id),'all']){
   settle();
  }
  ok(slowest>=3.2,'auch spaet bleibt Zeit zum Lesen ('+slowest.toFixed(1)+' s)');
+ ok(G.items.every(i=>i.z<G.gate?.z-20||!G.gate),'Gegenstaende liegen vor dem Tor');
  ok(G.mode==='finish'&&G.hearts===S.HEARTS,'nach zwanzig Toren kommt das Ziel');
- let n=0;while(G.mode==='finish'&&n++<2000)step();
+ let n=0;while((G.mode==='finish'||G.mode==='celebrate')&&n++<4000)step();
  ok(G.mode==='over'&&G.won&&/Im Ziel/.test(d.querySelector('#over h1').textContent),'im Ziel: '+id);
  ok(/Jedes Tor richtig/.test(d.getElementById('over').textContent),'Abschluss ohne Fehlerliste');
  d.getElementById('toMenu').click();
@@ -61,7 +64,41 @@ G.items.length=0;G.items.push({type:'rock',lane:1,z:1});G.streak=4;G.score=100;c
 ok(G.streak===0&&G.score===70&&G.hearts===hearts,'Fels kostet Serie und Punkte, aber kein Herz');
 G.items.length=0;G.items.push({type:'rock',lane:0,z:1});G.streak=2;step();step();step();ok(G.streak===2,'Fels in anderer Spur trifft nicht');
 
+
+/* Fahrer freigeschaltet: sechs Zieleinlaeufe oben, gebraucht werden drei */
+ok(S.unlocked()&&!d.querySelector('[data-rider="penguin"]').disabled,'Pinguin nach drei Zieleinlaeufen frei');
+d.querySelector('[data-rider="penguin"]').click();
+ok(S.rider()==='penguin'&&JSON.parse(w.localStorage.getItem('vt6:sled:v1')).rider==='penguin','Pinguin als Fahrer gewaehlt und gespeichert');
+ok(d.querySelector('[data-rider="penguin"]').getAttribute('aria-pressed')==='true','Auswahl sichtbar');
+
+/* Tempo, Turbo, Schild, Pinguine */
+d.querySelector('[data-part="y6u2-partc"]').click();
+const clear=()=>{G.items.length=0;};
+const grab=type=>{clear();G.items.push({type,lane:G.lane,z:0.5,seed:0.3});G.x=G.lane-1;step();};
+ok(S.multiplier()===1,'Grundwert x1');
+clear();toGate(G.gate.right,false);ok(G.score===100,'erstes Tor: 100 Punkte');settle();
+for(let i=0;i<5;i++){clear();toGate(G.gate.right,false);settle();}
+ok(S.tempoOf(G.streak)>1.2&&G.speed>S.GAP/6.6,'Serie macht schneller');
+let before=G.score,m=S.multiplier();clear();toGate(G.gate.right,false);
+ok(G.score-before===Math.round(100*m/10)*10&&G.score-before>100,'schneller gibt mehr Punkte');settle();
+grab('turbo');ok(G.turbo===S.TURBO_GATES,'Turbo aufgenommen');
+before=G.score;m=S.multiplier();clear();toGate(G.gate.right,false);
+ok(G.score-before===Math.round(100*m/10)*10&&m>=2,'Turbo verdoppelt die Punkte');
+ok(G.turbo===S.TURBO_GATES-1,'Turbo zaehlt die Tore herunter');settle();
+ok(S.GAP/G.speed>=S.MIN_READ-1e-9,'auch im Turbo bleibt die Mindestlesezeit ('+(S.GAP/G.speed).toFixed(2)+' s)');
+grab('penguin');grab('penguin');grab('penguin');grab('penguin');
+ok(G.penguins===4,'Pinguine rutschen mit');
+before=G.score;m=S.multiplier();ok(Math.abs(m-S.tempoOf(G.streak)*2*1.4)<1e-9,'jeder Pinguin hebt die Punkte um ein Zehntel');
+grab('shield');ok(G.shield,'Schild aufgenommen');
+const herzen=G.hearts;clear();toGate((G.gate.right+1)%3,false);
+ok(G.hearts===herzen&&!G.shield,'Schild faengt das falsche Tor ab');
+ok(G.penguins===2&&G.turbo===0&&G.streak===0,'falsches Tor: halbe Kette weg, Turbo und Serie vorbei');
+ok(S.tempoOf(G.streak)===1,'Tempo faellt zurueck');settle();
+grab('rock');ok(G.penguins===1,'Fels kostet einen Pinguin');
+for(let i=0;i<20;i++)grab('penguin');ok(G.penguins===S.MAX_PENGUINS,'Kette hat eine Hoechstlaenge');
+
 /* Falsches Tor */
+S.start('y6u2-partc');
 G.items.length=0;const q=G.q;toGate((G.gate.right+1)%3,false);
 ok(G.mode==='result'&&!G.result.ok&&G.hearts===S.HEARTS-1,'falsches Tor kostet ein Herz');
 ok(G.missed.has(q.id)&&G.queue.slice(0,4).includes(q),'Wort gemerkt und kommt bald wieder');
