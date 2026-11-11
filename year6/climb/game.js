@@ -15,6 +15,11 @@
    zurueck). Richtige Antworten in Folge machen schneller und bringen mehr
    Punkte.
 
+   Steuerung: zum Griff wischen (links oben, oben, rechts oben) oder tippen.
+   Wer den Finger kurz haelt, laedt die Kraftleiste; wird im gruenen Bereich
+   losgelassen, gelingt ein perfekter Sprung (Bonus, Nebel weicht zurueck).
+   Das Timing entscheidet nur ueber den Bonus, nie ueber die Antwort.
+
    Das Spiel zaehlt nicht in die Lernfaecher; gespeichert werden nur
    Bestwerte und die Wahl der Figur (vt6:climb:v1).
 
@@ -45,6 +50,17 @@ const UNLOCK=3;
 const ITEMS=[['kristall',35],['edelweiss',15],['karabiner',20],['seil',15],['pickel',15]];
 const fogSpeed=()=>P/Math.max(5.5,8.5-0.2*G.k);           // Nebel: Sekunden je Zug, erst 8,5, spaeter 5,5
 const multiplier=()=>1+0.1*Math.min(G.streak,10);
+/* Kraftleiste: steigt in 0,8 s auf voll und faellt wieder (hin und her) */
+const CHARGE=0.8,PERFECT=[0.72,0.92];
+const powerAt=held=>{const u=(held/CHARGE)%2;return u<1?u:2-u;};
+const isPerfect=p=>p>=PERFECT[0]&&p<=PERFECT[1];
+/* Wischrichtung auf Griff: Winkel zur Senkrechten; nach unten heisst abbrechen */
+function laneFromSwipe(dx,dy){
+  if(Math.hypot(dx,dy)<18)return undefined;          // kein Wisch, sondern Tippen
+  if(dy>12&&Math.abs(dx)<Math.abs(dy))return null;   // nach unten: abbrechen
+  const a=Math.atan2(dx,-dy)*180/Math.PI;
+  return a<-22?0:a>22?2:1;
+}
 
 /* ---------------------------------------------------------------- Stand */
 let saved={best:{},summits:{},rider:'kid'};
@@ -67,7 +83,8 @@ const pool=D.parts.flatMap(p=>p.words);
 const G={mode:'menu',part:null,queue:[],k:0,goal:GOAL,q:null,tries:0,holds:[],old:[],
   climber:{x:W/2,y:0},from:null,to:null,t:0,rows:1,fog:0,cam:0,score:0,streak:0,correct:0,hearts:HEARTS,
   missed:new Map(),requeued:new Set(),seen:[],paused:false,banner:'',bannerT:0,bits:[],sparks:[],popups:[],time:0,won:false,
-  bonus:null,karabiner:false,seil:false,rock:null,eagle:null,eagles:0,challenge:null,challenges:0,hurtT:0,iceT:0,shake:0,flag:0};
+  bonus:null,karabiner:false,seil:false,rock:null,eagle:null,eagles:0,challenge:null,challenges:0,hurtT:0,iceT:0,shake:0,flag:0,
+  aim:null,perfects:0,perfectT:0,anim:{theta:0,omega:0,squash:0,idle:0,puffT:0,happyT:0,lead:1}};
 
 /* ------------------------------------------------------------- Ablauf */
 function start(partId){
@@ -78,7 +95,8 @@ function start(partId){
   Object.assign(G,{mode:'play',part:partId,queue,k:0,goal:GOAL,q:null,tries:0,holds:[],old:[],
     climber:{x:W/2,y:0},fog:-HEAD_START*P,cam:-H*0.3,score:0,streak:0,correct:0,hearts:HEARTS,
     missed:new Map(),requeued:new Set(),seen:[],paused:false,banner:'',bannerT:0,bits:[],sparks:[],popups:[],won:false,
-    bonus:null,karabiner:false,seil:false,rock:null,eagle:null,eagles:0,challenge:null,challenges:0,hurtT:0,iceT:0,shake:0,flag:0});
+    bonus:null,karabiner:false,seil:false,rock:null,eagle:null,eagles:0,challenge:null,challenges:0,hurtT:0,iceT:0,shake:0,flag:0,
+    aim:null,perfects:0,perfectT:0,anim:{theta:0,omega:0,squash:0,idle:0,puffT:0,happyT:0,lead:1}});
   menu.hidden=true;over.hidden=true;stage.hidden=false;box.hidden=true;
   resize();next();hud();loop();
   M?.stop();M?.start();musikKnopf();
@@ -117,7 +135,8 @@ function next(){
 }
 function popup(text,color){G.popups.push({text,color:color||'#FFC857',life:1.3});}
 const blocked=h=>G.rock&&G.rock.phase==='fall'&&G.rock.lane===h.lane;
-function choose(i){
+function choose(i,power){
+  G.aim=null;
   if(G.mode!=='play'||G.paused)return;
   const h=G.holds[i];if(!h||h.state!=='ok')return;
   if(blocked(h)){
@@ -131,11 +150,15 @@ function choose(i){
       G.score+=pts;G.streak++;G.correct++;popup('+'+pts);
     }else G.streak=0;
     if(G.eagle&&!G.eagle.done){G.score+=150;G.eagles++;popup('Adler-Bonus +150','#FFD27A');M?.sfx('adler');}
+    /* Perfekter Sprung: Kraftleiste im gruenen Bereich losgelassen */
+    if(power!==undefined&&isPerfect(power)){G.score+=50;G.perfects++;G.perfectT=0.9;G.fog-=0.4*P;popup('PERFEKT! +50','#FFE066');M?.sfx('perfekt');
+      for(let n=0;n<14;n++)G.sparks.push({x:h.x,y:h.y,vx:(Math.random()-.5)*220,vy:(Math.random()-.2)*220,life:1,c:['#FFE066','#FFFFFF','#FFC857'][n%3]});}
     /* Erst den Zug bestimmen, dann einsammeln: ein frisches Seil gilt fuer den naechsten Zug */
     G.rows=G.seil?2:1;if(G.seil){G.seil=false;popup('Seilsprung!','#7FE0D0');}
     if(G.bonus&&!G.bonus.got&&G.bonus.t>0)collect(G.bonus);
     const y=h.y+(G.rows-1)*P;
     G.from={x:G.climber.x,y:G.climber.y};G.to={x:h.x,y,icy:h.icy};G.t=0;G.mode='jump';h.state='taken';
+    G.anim.lead=h.x>=G.climber.x?1:-1;
     window.LearningFeedback?.signal('ok');
   }else{
     G.tries++;G.streak=0;h.state='broken';
@@ -146,7 +169,7 @@ function choose(i){
     else{G.fog+=0.35*P;M?.fehler();}
     for(let n=0;n<10;n++)G.bits.push({x:h.x+(Math.random()-.5)*30,y:h.y,vx:(Math.random()-.5)*90,vy:60+Math.random()*90,r:3+Math.random()*4,life:1});
     const b=choices.querySelector('[data-choice="'+i+'"]');if(b)b.disabled=true;
-    G.t=0;G.mode='slip';G.shake=0.25;
+    G.t=0;G.mode='slip';G.shake=0.25;G.anim.omega+=(Math.random()<0.5?-1:1)*2.4;
     window.LearningFeedback?.signal('no');
   }
   hud();
@@ -171,7 +194,13 @@ function hurt(){
 function update(dt){
   if(G.paused||G.mode==='menu'||G.mode==='over')return;
   G.time+=dt;
-  if(G.shake>0)G.shake-=dt;if(G.iceT>0)G.iceT-=dt;
+  if(G.shake>0)G.shake-=dt;if(G.iceT>0)G.iceT-=dt;if(G.perfectT>0)G.perfectT-=dt;
+  /* Pendeln, Stauchen, Leerlauf */
+  const A=G.anim;A.omega+=(-18*A.theta-3*A.omega)*dt;A.theta+=A.omega*dt;
+  if(A.squash>0)A.squash=Math.max(0,A.squash-dt*4);if(A.happyT>0)A.happyT-=dt;if(A.puffT>0)A.puffT-=dt;
+  if(G.mode==='play'){A.idle+=dt;if(A.idle>4.5){A.idle=0;A.puffT=0.8;
+    for(let n=0;n<8;n++)G.sparks.push({x:G.climber.x+(Math.random()-.5)*16,y:G.climber.y-4,vx:(Math.random()-.5)*40,vy:20+Math.random()*30,life:0.7,c:'rgba(255,255,255,.85)'});}}
+  else A.idle=0;
   for(const b of G.bits){b.x+=b.vx*dt;b.y-=b.vy*dt;b.vy+=420*dt;b.life-=dt*1.1;}
   G.bits=G.bits.filter(b=>b.life>0);
   for(const s of G.sparks){s.x+=s.vx*dt;s.y-=s.vy*dt;s.vy-=60*dt;s.life-=dt*0.9;}
@@ -219,6 +248,7 @@ function update(dt){
 }
 function land(){
   const before=G.k;
+  G.anim.omega+=(G.to.x-G.from.x)*0.012;G.anim.squash=1;G.anim.happyT=0.9;
   G.climber={x:G.to.x,y:G.to.y};G.old.push({x:G.to.x,y:G.to.y});if(G.old.length>10)G.old.shift();
   G.k=Math.min(G.goal,G.k+G.rows);G.rows=1;M?.sfx('griff');
   if(G.to.icy){G.fog+=0.3*P;G.iceT=0.6;popup('Rutschig!','#BFE6FF');M?.sfx('eis');}
@@ -276,7 +306,7 @@ function finish(won){
     +'<p class="result">'+(G.k*METER)+' m von '+(G.goal*METER)+' m · '+G.score+' Punkte'+(record&&G.score?' · <strong>neuer Bestwert!</strong>':'')+'</p>'
     +(won&&G.hearts?'<p class="muted">Gipfelbonus: '+G.hearts+' Herz'+(G.hearts>1?'en':'')+' × 50 Punkte</p>':'')
     +(fresh?'<p class="unlock">Neu freigeschaltet: Der Pinguin klettert jetzt mit!</p>':'')
-    +'<p class="muted">'+G.correct+' Wörter beim ersten Versuch richtig · '+G.challenges+' Bonusfragen · '+G.eagles+' Adler-Boni · Bestwert: '+(saved.best[id]||0)+' Punkte</p>'
+    +'<p class="muted">'+G.correct+' Wörter beim ersten Versuch richtig · '+G.perfects+' perfekte Sprünge · '+G.challenges+' Bonusfragen · '+G.eagles+' Adler-Boni · Bestwert: '+(saved.best[id]||0)+' Punkte</p>'
     +'<div class="actions"><button id="again" class="go">Nochmal klettern</button><button id="toMenu">Anderen Abschnitt wählen</button></div>'
     +(missed.length?'<h2>Diese Wörter solltest du noch üben</h2><ul class="missed">'+missed.map(w=>'<li><span>'+esc(w.de)+'</span><strong lang="en">'+esc(w.en)+'</strong></li>').join('')
       +'</ul><p><a class="train" href="../">Unit 2 im Vokabeltrainer üben →</a></p>':'<p class="muted">Kein einziger Fehlgriff – stark!</p>');
@@ -312,6 +342,7 @@ function showMenu(){
 }
 function pause(on){
   if(G.mode==='menu'||G.mode==='over')return;
+  G.aim=null;
   G.paused=on;$('pause').textContent=on?'▶':'II';$('pause').setAttribute('aria-label',on?'Weiter':'Pause');
   M?.pause(on);
 }
@@ -329,17 +360,38 @@ function musikUmschalten(){
 }
 
 /* ----------------------------------------------------------- Steuerung */
+/* Wischen und Halten: Richtung waehlt den Griff, Haltedauer die Kraft */
+const toCanvas=e=>{const r=canvas.getBoundingClientRect();return r.width?{x:(e.clientX-r.left)/r.width*W,y:(e.clientY-r.top)/r.height*H}:null;};
 canvas.addEventListener('pointerdown',e=>{
   if(G.paused)return pause(false);
-  const r=canvas.getBoundingClientRect();if(!r.width)return;
-  const x=(e.clientX-r.left)/r.width*W;
-  choose(x<W/3?0:x<2*W/3?1:2);
+  if(G.mode!=='play')return;
+  const p=toCanvas(e);if(!p)return;
+  G.aim={x0:p.x,y0:p.y,t0:G.time,lane:p.x<W/3?0:p.x<2*W/3?1:2,swipe:false};
+  try{canvas.setPointerCapture(e.pointerId);}catch(err){}
+});
+canvas.addEventListener('pointermove',e=>{
+  if(!G.aim||G.aim.key)return;const p=toCanvas(e);if(!p)return;
+  const l=laneFromSwipe(p.x-G.aim.x0,p.y-G.aim.y0);
+  if(l!==undefined){G.aim.swipe=true;G.aim.lane=l;}
+});
+canvas.addEventListener('pointerup',()=>{
+  const a=G.aim;if(!a||a.key)return;
+  if(a.lane===null){G.aim=null;return;}
+  choose(a.lane,powerAt(G.time-a.t0));
+});
+canvas.addEventListener('pointercancel',()=>{G.aim=null;});
+const KEYS={ArrowLeft:0,'1':0,a:0,ArrowUp:1,ArrowDown:1,'2':1,s:1,ArrowRight:2,'3':2,d:2};
+document.addEventListener('keyup',e=>{
+  if(stage.hidden||!G.aim||!G.aim.key||G.aim.code!==e.key)return;
+  e.preventDefault();choose(G.aim.lane,powerAt(G.time-G.aim.t0));
 });
 document.addEventListener('keydown',e=>{
   if(stage.hidden)return;
-  const map={ArrowLeft:0,'1':0,a:0,ArrowUp:1,ArrowDown:1,'2':1,s:1,ArrowRight:2,'3':2,d:2};
+  const map=KEYS;
   if(G.mode==='camp'&&['1','2','3'].includes(e.key)){e.preventDefault();answerChallenge(Number(e.key)-1);return;}
-  if(e.key in map){e.preventDefault();choose(map[e.key]);}
+  if(e.key in map){e.preventDefault();if(e.repeat)return;
+    /* Taste halten laedt die Kraft, Loslassen springt */
+    if(G.mode==='play'&&!G.paused)G.aim={lane:map[e.key],t0:G.time,key:true,code:e.key,swipe:true};}
   else if(e.key===' '||e.key==='p'||e.key==='Escape'){e.preventDefault();pause(!G.paused);}
   else if(e.key==='m'){e.preventDefault();musikUmschalten();}
 });
@@ -614,9 +666,49 @@ function drawClimber(){
     else F.kindKlettern(ctx,x,gy-70,1,{reach:0,kick:0,wave:Math.sin(G.time*8)*4});
     return;
   }
-  if(wer==='silky')F.silky(ctx,x,y+56+reach*-6,0.82,{hoch:true,wave,blink:G.time});
-  else if(wer==='penguin')F.pinguin(ctx,x,y+50+reach*-6,0.9,{hoch:true,wave,scarf:true,goggles:true});
-  else F.kindKlettern(ctx,x,y,1,{reach,kick,wave});
+  /* Stimmung: Freude nach dem Landen, Angst wenn der Nebel nah ist */
+  const A=G.anim,near=clamp(1-(G.climber.y-G.fog-50)/(MAX_GAP*P-50),0,1);
+  const scared=near>0.6||G.mode==='slip'||G.mode==='hurt';
+  const mood=A.happyT>0&&!scared?'happy':scared?'scared':'focus';
+  const sweat=near>0.6?G.time:0,look=Math.sin(G.time*0.8)*0.7;
+  const tilt=ruhig?0:A.theta+(G.mode==='slip'?Math.sin(G.t*20)*0.3*(1-G.t):0);
+  const squash=1-0.12*A.squash+(ruhig?0:Math.sin(G.time*2.2)*0.012);
+  if(G.perfectT>0){const gl=ctx.createRadialGradient(x,y+30,4,x,y+30,70);gl.addColorStop(0,'rgba(255,224,102,'+(0.5*G.perfectT)+')');gl.addColorStop(1,'rgba(255,224,102,0)');ctx.fillStyle=gl;ctx.fillRect(x-70,y-40,140,140);}
+  if(wer==='kid'){
+    if(jumping&&!ruhig){
+      /* Kletterzug: erst greift die fuehrende Hand, dann zieht sich der Koerper hoch */
+      const t=clamp(G.t,0,1),e2=v=>v<.5?2*v*v:1-Math.pow(-2*v+2,2)/2;
+      const u1=e2(clamp(t/0.45,0,1)),u2=e2(clamp((t-0.4)/0.6,0,1));
+      const fx=G.from.x,fy=sy(G.from.y),tx=G.to.x,ty=sy(G.to.y);
+      const ax=fx+(tx-fx)*u2,ay=fy+(ty-fy)*u2;          // Koerper folgt
+      const lead={x:fx+(tx-fx)*u1-ax,y:fy+(ty-fy)*u1-ay-Math.sin(u1*Math.PI)*10};
+      const trail={x:fx+(tx-fx)*Math.pow(u2,1.4)-ax,y:fy+(ty-fy)*Math.pow(u2,1.4)-ay};
+      const lh=A.lead>0?{x:trail.x-9,y:trail.y}:{x:lead.x-9,y:lead.y},rh=A.lead>0?{x:lead.x+9,y:lead.y}:{x:trail.x+9,y:trail.y};
+      F.kindKlettern(ctx,ax,ay,1,{lh,rh,stretch:1+0.22*Math.sin(u1*Math.PI)*(1-u2),push:Math.sin(t*Math.PI),kick:0.2,mood:G.perfectT>0?'happy':'focus',tilt:A.theta*0.5});
+    }else F.kindKlettern(ctx,x,y,1,{reach,kick,wave,tilt,stretch:squash,mood,look,sweat,einhand:G.mode==='slip'&&G.t<0.7});
+    return;
+  }
+  /* Silky und Pinguin: dieselbe Bewegung ueber Kippen, Strecken und Stauchen */
+  let bx=x,by=y,stretch=squash;
+  if(jumping&&!ruhig){const t=clamp(G.t,0,1);stretch=1+0.18*Math.sin(clamp(t/0.5,0,1)*Math.PI);}
+  ctx.save();ctx.translate(bx,by);ctx.rotate(tilt);ctx.scale(2-stretch,stretch);ctx.translate(-bx,-by);
+  if(wer==='silky')F.silky(ctx,bx,by+56+reach*-6,0.82,{hoch:true,wave,blink:G.time,mood,look,sweat,einhand:G.mode==='slip'&&G.t<0.7});
+  else F.pinguin(ctx,bx,by+50+reach*-6,0.9,{hoch:true,wave,scarf:true,goggles:true,mood,look,sweat,einhand:G.mode==='slip'&&G.t<0.7});
+  ctx.restore();
+}
+/* Zielhilfe beim Wischen: markierter Griff, Bahn und Kraftleiste */
+function drawAim(){
+  const a=G.aim;if(!a||G.mode!=='play'||a.lane===null)return;
+  const h=G.holds[a.lane];if(!h||h.state!=='ok')return;
+  const p=powerAt(G.time-a.t0),hx=h.x,hy=sy(h.y),cx=G.climber.x,cy=sy(G.climber.y);
+  ctx.strokeStyle='rgba(255,255,255,.9)';ctx.lineWidth=3;ctx.beginPath();ctx.ellipse(hx,hy,30,16,0,0,7);ctx.stroke();
+  ctx.setLineDash([6,6]);ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(cx,cy);ctx.quadraticCurveTo((cx+hx)/2,Math.min(cy,hy)-30,hx,hy);ctx.stroke();ctx.setLineDash([]);
+  if(G.time-a.t0<0.12)return;          /* kurzes Tippen: keine Kraftleiste */
+  const bx=Math.min(W-30,Math.max(18,cx+36)),by=cy-10,bh=70;
+  ctx.fillStyle='rgba(13,16,23,.75)';rounded(bx-5,by-5,16,bh+10,8);ctx.fill();
+  ctx.fillStyle='rgba(255,255,255,.18)';rounded(bx,by,6,bh,3);ctx.fill();
+  ctx.fillStyle='rgba(53,196,106,.9)';ctx.fillRect(bx,by+bh*(1-PERFECT[1]),6,bh*(PERFECT[1]-PERFECT[0]));
+  ctx.fillStyle=isPerfect(p)?'#FFE066':'#FFFFFF';rounded(bx-2,by+bh*(1-p)-3,10,6,3);ctx.fill();
 }
 function drawFog(){
   const Y=sy(G.fog);if(Y>H+120)return;
@@ -657,14 +749,15 @@ function draw(){
   ctx.save();
   if(G.shake>0&&!ruhig)ctx.translate((Math.random()-.5)*12*G.shake,(Math.random()-.5)*12*G.shake);
   drawSky(p);drawValley(p);drawWall(p);
-  drawRock();drawBonus();drawHolds();drawClimber();drawEagle();
+  drawRock();drawBonus();drawHolds();drawAim();drawClimber();drawEagle();
   for(const s of G.sparks){ctx.globalAlpha=clamp(s.life,0,1);ctx.fillStyle=s.c;ctx.beginPath();ctx.arc(s.x,sy(s.y),1.8+s.life*1.4,0,7);ctx.fill();}
   ctx.globalAlpha=1;
   drawFog();
   ctx.restore();
   ctx.textAlign='center';ctx.textBaseline='middle';
-  G.popups.forEach((q,i)=>{const a=clamp(q.life,0,1),y=sy(G.climber.y)-30-(1.3-q.life)*50-(G.popups.length-1-i)*26;
-    ctx.globalAlpha=a;ctx.font='900 '+(q.text.length>12?15:22)+'px '+FONT;ctx.lineWidth=5;ctx.strokeStyle='rgba(13,16,23,.75)';ctx.strokeText(q.text,W/2,y);ctx.fillStyle=q.color;ctx.fillText(q.text,W/2,y);});
+  /* Meldungen oben unter der Anzeige - nie ueber den Woertern der naechsten Frage */
+  G.popups.forEach((q,i)=>{const a=clamp(q.life,0,1),y=58+(G.popups.length-1-i)*24-(1.3-q.life)*10;
+    ctx.globalAlpha=a;ctx.font='900 '+(q.text.length>12?14:18)+'px '+FONT;ctx.lineWidth=5;ctx.strokeStyle='rgba(13,16,23,.75)';ctx.strokeText(q.text,W/2,y);ctx.fillStyle=q.color;ctx.fillText(q.text,W/2,y);});
   ctx.globalAlpha=1;
   drawStatus();
   if(G.mode==='hurt'){ctx.fillStyle='rgba(255,60,60,'+(0.25*G.hurtT/1.3)+')';ctx.fillRect(0,0,W,H);}
@@ -698,6 +791,6 @@ function loop(){
   requestAnimationFrame(frame);
 }
 
-window.ClimbGame={G,start,choose,update,finish,showMenu,pause,answerChallenge,_next:next,P,GOAL,CAMP,METER,HEARTS,MAX_HEARTS,BONUS_TIME,MAX_GAP,rider,unlocked,multiplier};
+window.ClimbGame={G,start,choose,update,finish,showMenu,pause,answerChallenge,_next:next,powerAt,isPerfect,laneFromSwipe,PERFECT,CHARGE,P,GOAL,CAMP,METER,HEARTS,MAX_HEARTS,BONUS_TIME,MAX_GAP,rider,unlocked,multiplier};
 showMenu();
 })();

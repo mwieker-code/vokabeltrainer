@@ -9,7 +9,7 @@
      lager()    kleiner Jingle im Lager, gipfel() Fanfare, sturz() Abgesang
      sfx(name)  Geraeusche: kristall, edelweiss, karabiner, seil, pickel,
                 steinschlag, rumpeln, adler, eis, herz, griff, karabinerhalt,
-                feuerwerk - sie folgen dem Schalter "Toene" der App
+                perfekt, feuerwerk - sie folgen dem Schalter "Toene" der App
    Musik an/aus steht in vt6:climb:musik; ohne Wahl ist sie an.
    Wo es kein Web Audio gibt (oder in den Tests), tut sie nichts.
    ========================================================================= */
@@ -206,6 +206,8 @@ const GERAEUSCH={
   griff:t=>{piep(t,420,260,0.06,'triangle',0.12);zisch(t,1800,900,0.04,0.06,2);},
   /* Karabiner faengt einen Fehler ab */
   karabinerhalt:t=>{piep(t,2600,2600,0.06,'square',0.08);piep(t+0.07,2000,2000,0.12,'triangle',0.15);},
+  /* Perfekter Sprung: goldener Glitzerlauf */
+  perfekt:t=>{[1047,1319,1568,2093,2637].forEach((f,i)=>piep(t+i*0.035,f,f,0.22,'sine',0.18));zisch(t,3000,9000,0.3,0.12,3);},
   /* Feuerwerk: Knall und Knistern */
   feuerwerk:t=>{piep(t,200,60,0.2,'sine',0.35);for(let i=0;i<6;i++)zisch(t+0.05+i*0.04,6000,4000,0.05,0.08,3);}
 };
