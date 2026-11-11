@@ -28,4 +28,4 @@ for(const f of ['data.js','app.js'])new vm.Script(fs.readFileSync(path.join(out,
 for(const f of ['data.js','app.js'])new vm.Script(fs.readFileSync(path.join(out,'year6/grammar/simple-past',f),'utf8'));
 for(const f of ['data.js','app.js'])new vm.Script(fs.readFileSync(path.join(out,'year6/grammar/comparison',f),'utf8'));
 for(const f of ['data.js','game.js'])new vm.Script(fs.readFileSync(path.join(out,'year6/climb',f),'utf8'));
-new vm.Script(fs.readFileSync(path.join(out,'year6/sled/game.js'),'utf8'));
+for(const f of ['musik.js','game.js'])new vm.Script(fs.readFileSync(path.join(out,'year6/sled',f),'utf8'));
