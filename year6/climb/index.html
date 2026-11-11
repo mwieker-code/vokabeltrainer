@@ -1,0 +1,35 @@
+<!doctype html><html lang="de" data-eigenes-design><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="apple-touch-icon" sizes="180x180" href="../../assets/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Basecamp">
+<meta name="theme-color" content="#0D1017"><title>Summit Climb · Year 6</title>
+<link rel="stylesheet" href="../../assets/fonts.css?v=2"><link rel="stylesheet" href="style.css?v=20261111-climb">
+</head><body><main class="climb">
+<header><a href="../">← Year 6</a><span>SUMMIT CLIMB · UNIT 2</span></header>
+<section id="menu">
+ <h1>Summit Climb</h1>
+ <p class="lead">Klettere mit den Vokabeln aus Unit 2 – A School Day bis zum Gipfel.</p>
+ <ol class="how">
+  <li>Oben steht das deutsche Wort.</li>
+  <li>Tippe auf den Griff mit dem passenden englischen Wort: links, Mitte oder rechts.</li>
+  <li>Ein falscher Griff bröckelt – und der Nebel holt auf.</li>
+  <li>Alle 250 m wartet ein Lager. Der Gipfel liegt auf 1000 m.</li>
+ </ol>
+ <div id="levels"></div>
+ <p class="muted">Das Spiel ist zum Wiederholen da. Deine Lernfächer ändern sich dadurch nicht.</p>
+</section>
+<section id="stage" hidden>
+ <div class="bar"><button id="quit" aria-label="Spiel beenden">✕</button><span class="stat" id="height">0 m</span><span class="stat" id="points">0 P</span><button id="pause" aria-label="Pause">II</button></div>
+ <div class="ask"><small>WIE HEISST DAS AUF ENGLISCH?</small><div id="prompt" lang="de" aria-live="polite"></div></div>
+ <canvas id="wall" aria-label="Kletterwand mit drei Griffen. Die Antworten stehen auch als Knöpfe darunter."></canvas>
+ <div id="choices"></div>
+ <p class="hint">Tippen: links · Mitte · rechts &nbsp;|&nbsp; Tastatur: ← ↑ → oder 1 2 3</p>
+</section>
+<section id="over" hidden></section>
+<footer><p>Summit Climb · Vokabeln aus Year 6, Unit 2</p></footer>
+</main>
+<script src="data.js?v=20261111-climb"></script><script src="game.js?v=20261111-climb"></script>
+<script src="../../assets/feedback.js"></script>
+</body></html>

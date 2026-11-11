@@ -352,6 +352,9 @@ function baue(){
                .replace(/\n?<link rel="stylesheet" media="screen" data-nacht href="[^"]*">/g, '')
                .replace(/\n?<script data-nacht src="[^"]*"><\/script>/g, '');
     if (!/<link rel="stylesheet"|<style/.test(html)) continue;
+    /* Seiten mit eigenem Design (das Kletterspiel) bleiben, wie sie sind:
+       Sie tragen data-eigenes-design am <html> und kennen kein Hell und Nacht. */
+    if (/<html[^>]*\sdata-eigenes-design/.test(html)) continue;
     /* 0. Der Schalter fuer Hell und Nacht vor dem ersten Stylesheet. */
     const thema = path.relative(ordner, path.join(ROOT, THEMA)).split(path.sep).join('/');
     const erstes = html.search(/<link rel="stylesheet"|<style/);
