@@ -1,0 +1,93 @@
+/* Find your way!: eigenes Design, unabhaengig von Hell und Nacht der App. */
+:root{--navy:#14213D;--ink:#1E2A44;--paper:#FBF7EE;--soft:#AFC0D8;--amber:#FFB020;--coral:#FF7A59;--green:#5FB37A}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--navy);color:var(--paper);font:17px/1.5 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-text-size-adjust:100%}
+body{background:radial-gradient(120% 70% at 50% 0%,#2A3D66 0%,#18264A 55%,var(--navy) 100%) fixed}
+body.im-spiel{overflow:hidden;overscroll-behavior:none}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+main.schule{max-width:520px;margin:0 auto;padding:12px 14px 24px}
+#menu>header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:10px}
+#menu>header a{color:var(--navy);background:var(--amber);text-decoration:none;font-weight:700;padding:8px 14px;border-radius:999px;font-size:15px}
+#menu>header span{font:600 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.14em;color:var(--soft)}
+h1{font-size:34px;line-height:1.05;letter-spacing:-.03em;margin:14px 0 8px}
+h1[tabindex="-1"]:focus{outline:none}
+h2{font-size:19px;margin:22px 0 8px}
+.lead{color:var(--soft);margin:0 0 14px}
+.muted{color:var(--soft);font-size:15px}
+ol.how,ul.steuerung{margin:0 0 8px;padding:14px 16px 14px 36px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;font-size:15px}
+ol.how li,ul.steuerung li{margin:3px 0}
+.modi{display:grid;gap:10px}
+.modi button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;padding:14px 16px;border-radius:16px;
+ background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-left:5px solid var(--green);color:var(--paper);min-height:62px}
+.modi button:hover{background:rgba(255,255,255,.1)}
+.modi button.profi{border-left-color:var(--coral)}
+.modi button.frei{border-left-color:var(--soft)}
+.m-name{font-weight:700;font-size:18px}
+.m-info{font-size:13px;color:var(--soft)}
+.m-best{font-size:13px;color:var(--amber);font-weight:700}
+.m-best:empty{display:none}
+
+/* Spiel: ganzer Bildschirm */
+#stage{position:fixed;inset:0;z-index:5;background:#A9D3F0;touch-action:none;user-select:none;-webkit-user-select:none}
+#stage[hidden],#menu[hidden],#over[hidden]{display:none}
+#welt{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;-webkit-tap-highlight-color:transparent}
+.blende{position:absolute;inset:0;background:#000;opacity:0;pointer-events:none}
+.blende.an{animation:blende .5s ease-out}
+@keyframes blende{0%{opacity:.85}100%{opacity:0}}
+.hud{position:absolute;left:0;right:0;top:0;display:flex;gap:8px;align-items:flex-start;padding:max(10px,env(safe-area-inset-top)) 10px 0;pointer-events:none}
+.hud>*{pointer-events:auto}
+.rund{width:44px;height:44px;flex:none;border-radius:14px;border:1px solid rgba(255,255,255,.25);background:rgba(20,33,61,.82);color:var(--paper);font-weight:800}
+.auftrag{flex:1;max-width:460px;background:rgba(251,247,238,.95);color:var(--ink);border-radius:16px;padding:8px 12px 10px;box-shadow:0 6px 20px rgba(0,0,0,.25);max-height:calc(100dvh - 210px);overflow:auto}
+.a-kopf{display:flex;align-items:center;gap:8px}
+.a-titel{display:flex;flex-direction:column;min-width:0;flex:1}
+.a-kopf b{font-size:18px;line-height:1.2}
+.a-nr{font:700 11px/1 ui-monospace,Menlo,monospace;background:var(--ink);color:var(--paper);border-radius:999px;padding:5px 8px}
+.a-etage{font-size:12px;color:#5B667C;white-space:nowrap}
+.a-kopf .klein{margin-left:auto}
+#aSchritte{margin:6px 0 6px;padding-left:22px;font-size:16px;line-height:1.35}
+#aSchritte li{margin:2px 0}
+.a-knoepfe{display:flex;gap:6px;flex-wrap:wrap}
+.klein{border:1px solid #CBD3E1;background:#fff;color:var(--ink);border-radius:999px;padding:5px 11px;font-size:14px;font-weight:600;min-height:34px}
+.klein:disabled{opacity:.6;cursor:default}
+#woerter{display:grid;grid-template-columns:1fr 1fr;gap:3px 10px;margin:8px 0 0;font-size:14px;line-height:1.3}
+#woerter[hidden]{display:none}
+#woerter dt{font-weight:700}
+#woerter dd{margin:0;color:#4A5568}
+.auftrag.zu #aSchritte,.auftrag.zu .a-knoepfe,.auftrag.zu #woerter{display:none}
+body.erkunden .auftrag{display:none}
+.erkunden-info{display:none}
+body.erkunden .erkunden-info{display:block;position:absolute;top:max(14px,env(safe-area-inset-top));left:64px;right:12px;background:rgba(20,33,61,.82);color:var(--paper);border-radius:14px;padding:10px 12px;font-weight:600;pointer-events:none}
+.kartenbox{position:absolute;right:10px;bottom:max(12px,env(safe-area-inset-bottom));width:150px}
+#karte{display:block;width:150px;height:150px;border-radius:18px;border:2px solid rgba(255,255,255,.85);box-shadow:0 6px 18px rgba(0,0,0,.3);background:#22301F;cursor:zoom-in}
+#etage{display:block;text-align:center;margin-top:4px;font:700 12px/1.4 Inter,system-ui,sans-serif;color:var(--ink);background:rgba(251,247,238,.9);border-radius:999px}
+#treppe{position:absolute;left:50%;transform:translateX(-50%);bottom:max(24px,env(safe-area-inset-bottom));padding:14px 22px;border-radius:999px;border:0;background:var(--amber);color:var(--ink);font-weight:800;font-size:18px;box-shadow:0 6px 18px rgba(0,0,0,.3)}
+#treppe[hidden]{display:none}
+#stick{position:absolute;width:96px;height:96px;margin:-48px 0 0 -48px;border-radius:50%;border:2px solid rgba(255,255,255,.7);background:rgba(20,33,61,.25);pointer-events:none}
+#stick[hidden]{display:none}
+#stick span{position:absolute;left:30px;top:30px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.85)}
+.geschafft{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(340px,calc(100% - 32px));background:var(--paper);color:var(--ink);border-radius:22px;padding:18px 20px;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.4)}
+.geschafft[hidden]{display:none}
+.geschafft p{margin:4px 0}
+.g-gut{font-size:28px;font-weight:800;color:#2F7D4A}
+.g-sterne{font-size:34px;color:var(--amber);letter-spacing:4px}
+.g-sterne span,.liste i{color:#D5D9E0;font-style:normal}
+.g-info{font-size:14px;color:#5B667C}
+.primaer{margin-top:10px;border:0;background:var(--coral);color:#fff;font-weight:800;padding:12px 20px;border-radius:999px;font-size:17px}
+#grosskarte{position:absolute;inset:0;background:rgba(10,16,30,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px}
+#grosskarte[hidden]{display:none}
+#grosskarte canvas{width:min(100%,900px);height:min(75dvh,760px);border-radius:16px}
+#grosskarte p{margin:8px 0 0;color:var(--soft);font-size:14px}
+#laden{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(20,33,61,.85);padding:12px 18px;border-radius:14px;font-weight:700}
+#laden[hidden]{display:none}
+#over h1{margin-top:24px}
+#over .gross{font-size:30px;margin:4px 0 10px}
+#over .neu{color:var(--amber);font-weight:800}
+.liste{list-style:none;padding:0;margin:0 0 14px;display:grid;gap:6px}
+.liste li{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:8px 12px}
+.liste span{color:var(--amber);letter-spacing:2px}
+.liste small{margin-left:auto;color:var(--soft)}
+#over button:not(.primaer){border:1px solid rgba(255,255,255,.3);background:transparent;color:var(--paper);padding:11px 18px;border-radius:999px;font-weight:700}
+@media (min-width:900px){
+ .kartenbox{width:220px}#karte{width:220px;height:220px}
+}

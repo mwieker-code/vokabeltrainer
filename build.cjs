@@ -7,7 +7,7 @@ fs.mkdirSync(out,{recursive:true});
 for(const item of ['index.html','manifest.webmanifest','fassung.json','sw.js','year8','year5','year7','year6','year9','year10','oberstufe','bili','all','assets','probe']){
  fs.cpSync(path.join(root,item),path.join(out,item),{recursive:true});
 }
-for(const dir of ['', 'year8','year5','year7','year6','year9','year10','oberstufe','oberstufe/analysis','bili/history','bili/geography','all','all/analysis','year9/discussion','year6/grammar','year6/grammar/simple-past','year6/grammar/irregular-verbs','year6/grammar/comparison','year6/climb','year6/sled']){
+for(const dir of ['', 'year8','year5','year7','year6','year9','year10','oberstufe','oberstufe/analysis','bili/history','bili/geography','all','all/analysis','year9/discussion','year6/grammar','year6/grammar/simple-past','year6/grammar/irregular-verbs','year6/grammar/comparison','year6/climb','year6/sled','year6/schule']){
  const html=fs.readFileSync(path.join(out,dir,'index.html'),'utf8');
  for(const match of html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g))new vm.Script(match[1]);
  for(const match of html.replace(/<script[\s\S]*?<\/script>/g,'').matchAll(/(?:href|src)="([^"#]+)"/g)){
@@ -30,3 +30,5 @@ for(const f of ['data.js','app.js'])new vm.Script(fs.readFileSync(path.join(out,
 for(const f of ['data.js','musik.js','game.js'])new vm.Script(fs.readFileSync(path.join(out,'year6/climb',f),'utf8'));
 new vm.Script(fs.readFileSync(path.join(out,'year6/figuren.js'),'utf8'));
 for(const f of ['musik.js','game.js'])new vm.Script(fs.readFileSync(path.join(out,'year6/sled',f),'utf8'));
+for(const f of ['karte.js','logik.js','spiel.js'])new vm.Script(fs.readFileSync(path.join(out,'year6/schule',f),'utf8'));
+for(const f of ['render.js','vendor/three.module.min.js'])if(!fs.existsSync(path.join(out,'year6/schule',f)))throw new Error('Missing '+f);

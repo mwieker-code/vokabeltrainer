@@ -1,0 +1,71 @@
+<!doctype html><html lang="de" data-eigenes-design><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="apple-touch-icon" sizes="180x180" href="../../assets/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Basecamp">
+<meta name="theme-color" content="#0D1017"><title>Find your way! · Year 6</title>
+<link rel="stylesheet" href="../../assets/fonts.css?v=2"><link rel="stylesheet" href="style.css?v=20261116-schule">
+</head><body><main class="schule">
+<section id="menu">
+ <header><a href="../">← Year 6</a><span>FIND YOUR WAY!</span></header>
+ <h1>Find your way!</h1>
+ <p class="lead">Unsere Schule in 3D. Lies die Wegbeschreibung auf Englisch und finde den richtigen Raum.</p>
+ <ol class="how">
+  <li>Oben steht dein Auftrag, zum Beispiel <i lang="en">„Find room 0.32.“</i>, und darunter der Weg dorthin.</li>
+  <li>Geh los und achte auf die Raumschilder an den Türen. Stehst du vor der richtigen Tür, ist die Aufgabe geschafft.</li>
+  <li>Auf einer Treppe erscheint ein Knopf: <i lang="en">Go upstairs</i> oder <i lang="en">Go downstairs</i>.</li>
+  <li>Je näher dein Weg am kürzesten Weg liegt, desto mehr Sterne. „Weg zeigen“ hilft, gibt aber nur einen Stern.</li>
+ </ol>
+ <h2>Spielart</h2>
+ <div class="modi">
+  <button data-modus="karte"><span class="m-name">Mit Ziel auf der Karte</span><span class="m-info">Fünf Räume. Das Ziel ist auf der Karte und im Gang markiert.</span><span class="m-best" data-best="karte"></span></button>
+  <button data-modus="profi" class="profi"><span class="m-name">Profi: nur die Wegbeschreibung</span><span class="m-info">Fünf Räume. Die Karte zeigt nur, wo du bist.</span><span class="m-best" data-best="profi"></span></button>
+  <button data-modus="frei" class="frei"><span class="m-name">Frei erkunden</span><span class="m-info">Ohne Aufgabe durch die Schule laufen.</span></button>
+ </div>
+ <h2>Steuerung</h2>
+ <ul class="steuerung">
+  <li><b>Handy und Tablet:</b> links auf dem Bild ziehen = gehen, rechts ziehen = umsehen.</li>
+  <li><b>Computer:</b> W A S D oder Pfeiltasten, mit der Maus ziehen = umsehen, M = große Karte.</li>
+ </ul>
+ <p class="muted">Das Spiel ist zum Üben da. Deine Lernfächer ändern sich dadurch nicht.</p>
+</section>
+<section id="stage" hidden>
+ <canvas id="welt" aria-label="3D-Ansicht der Schule. Die Wegbeschreibung steht im Auftrag oben."></canvas>
+ <div class="blende" aria-hidden="true"></div>
+ <div class="hud">
+  <button id="quit" class="rund" aria-label="Spiel beenden">✕</button>
+  <div id="auftrag" class="auftrag">
+   <div class="a-kopf"><span id="aNr" class="a-nr"></span><span class="a-titel"><b id="aTitel" lang="en"></b><span id="aEtage" class="a-etage" lang="en"></span></span><button id="falten" class="klein" aria-label="Aufgabe zuklappen">▴</button></div>
+   <ol id="aSchritte" lang="en" aria-live="polite"></ol>
+   <div class="a-knoepfe"><button id="vorlesen" class="klein">🔊 Vorlesen</button><button id="woerterKnopf" class="klein" aria-expanded="false">Wörter</button><button id="zeigen" class="klein">Weg zeigen</button></div>
+   <dl id="woerter" hidden>
+    <dt lang="en">go straight on</dt><dd>geradeaus gehen</dd>
+    <dt lang="en">turn left / right</dt><dd>links / rechts abbiegen</dd>
+    <dt lang="en">turn around</dt><dd>umdrehen</dd>
+    <dt lang="en">on your left / right</dt><dd>auf der linken / rechten Seite</dd>
+    <dt lang="en">in front of you</dt><dd>vor dir</dd>
+    <dt lang="en">opposite</dt><dd>gegenüber</dd>
+    <dt lang="en">the end of the corridor</dt><dd>das Ende des Flurs</dd>
+    <dt lang="en">go up / down the stairs</dt><dd>die Treppe hinauf / hinunter gehen</dd>
+    <dt lang="en">at the top / bottom of the stairs</dt><dd>oben / unten an der Treppe</dd>
+    <dt lang="en">ground floor / first floor</dt><dd>Erdgeschoss / erster Stock</dd>
+    <dt lang="en">courtyard / playground</dt><dd>Innenhof / Schulhof</dd>
+    <dt lang="en">about 20 metres</dt><dd>ungefähr 20 Meter</dd>
+   </dl>
+  </div>
+ </div>
+ <div class="erkunden-info" lang="en">Explore the school! Tap the map for the floor plan.</div>
+ <div class="kartenbox"><canvas id="karte" aria-label="Karte: tippen für den ganzen Grundriss"></canvas><span id="etage" lang="en">Ground floor</span></div>
+ <button id="treppe" hidden></button>
+ <div id="stick" hidden aria-hidden="true"><span></span></div>
+ <div id="geschafft" class="geschafft" hidden role="dialog" aria-label="Aufgabe geschafft"></div>
+ <div id="grosskarte" hidden role="dialog" aria-label="Grundriss, tippen zum Schließen"><canvas></canvas><p>Tippen zum Schließen</p></div>
+ <div id="laden">3D wird geladen …</div>
+</section>
+<section id="over" hidden></section>
+</main>
+<script src="karte.js?v=20261116-schule"></script><script src="logik.js?v=20261116-schule"></script><script src="spiel.js?v=20261116-schule"></script>
+<script type="module" src="render.js?v=20261116-schule"></script>
+<script src="../../assets/feedback.js"></script>
+</body></html>
