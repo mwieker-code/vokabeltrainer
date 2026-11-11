@@ -29,6 +29,12 @@ let gezaehlt=0;
 for(const seite of seiten){
   const html=fs.readFileSync(seite,'utf8');
   if(!/<link rel="stylesheet"|<style/.test(html))continue;
+  /* Seiten mit eigenem Design (das Kletterspiel) kennen kein Hell und Nacht;
+     tools/nacht.cjs laesst sie aus, und hier gilt dasselbe. */
+  if(/<html[^>]*\sdata-eigenes-design/.test(html)){
+    assert.ok(!/data-nacht/.test(html),path.relative(root,seite)+': eigenes Design, aber mit Nacht-Dateien');
+    continue;
+  }
   gezaehlt++;
   const kurz=path.relative(root,seite);
   const marke=html.lastIndexOf('nacht-marke.css');
