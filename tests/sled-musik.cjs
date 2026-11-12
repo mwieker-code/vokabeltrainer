@@ -88,7 +88,7 @@ function setup(stored){
  for(const name of M.geraeusche){const n0=log.notes.length,z0=log.noise.length;M.sfx(name);
    klang[name]=log.notes.slice(n0).map(n=>n.type+':'+Math.round(n.f)).join(',')+'|'+(log.noise.length-z0);
    ok(log.notes.length>n0,'Geraeusch spielt: '+name);}
- ok(M.geraeusche.length===7&&new Set(Object.values(klang)).size===7,'sieben verschiedene Geraeusche');
+ ok(M.geraeusche.length===8&&new Set(Object.values(klang)).size===8&&M.geraeusche.includes('fisch'),'acht verschiedene Geraeusche, darunter der Fisch');
  /* im Spiel ausgeloest */
  const G=S.G;const hole=type=>{const n0=log.notes.length;G.items.length=0;G.items.push({type,lane:G.lane,z:0.1,seed:0.2});G.x=G.lane-1;S.update(0.02);return log.notes.length>n0;};
  for(const type of ['star','penguin','turbo','shield','rock'])ok(hole(type),'Einsammeln klingt: '+type);

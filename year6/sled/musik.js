@@ -6,7 +6,7 @@
      turbo(on)  im Turbo kommt Schlagzeug dazu
      fehler()   ein falsches Tor daempft die Musik kurz ab
      ziel()     Fanfare im Ziel, sturz() ein Abgesang beim Spielende
-     sfx(name)  Geraeusche beim Einsammeln: stern, pinguin, turbo, schild,
+     sfx(name)  Geraeusche beim Einsammeln: stern, fisch, pinguin, turbo, schild,
                 fels, schildbruch, pinguinweg. Sie haengen nicht an der
                 Musik, sondern am Schalter "Toene" der App.
    Die Einstellung an/aus steht in vt6:sled:musik; ohne Wahl ist sie an.
@@ -180,6 +180,8 @@ function zisch(t,f1,f2,dauer,laut,q){
 const GERAEUSCH={
   /* Stern: zwei helle Glitzertoene nach oben */
   stern:t=>{piep(t,1319,1319,0.12,'sine',0.35);piep(t+0.06,1976,1976,0.16,'sine',0.3);piep(t+0.06,3951,3951,0.08,'sine',0.06);},
+  /* Fisch (Silky, Pinguin): ein Platscher und ein froehliches Blubb nach oben */
+  fisch:t=>{zisch(t,1800,600,0.12,0.25,1.5);piep(t+0.02,420,900,0.1,'sine',0.35);piep(t+0.1,620,1300,0.12,'sine',0.3);},
   /* Pinguin: zweimal kurz quieken */
   pinguin:t=>{piep(t,700,1250,0.09,'triangle',0.4);piep(t+0.11,900,1500,0.11,'triangle',0.38);zisch(t,2000,3000,0.05,0.08,3);},
   /* Turbo: aufheulendes Rauschen und ein steigender Ton */
