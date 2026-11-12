@@ -1,15 +1,19 @@
 /* =========================================================================
    PENGUIN SLIDE - Kapitel 1 von Black & White (Year 6, Unit 2)
 
-   Draufsicht. Der Pinguin rutscht auf dem Bauch eine kurvige Eisrinne
-   hinab, die Welt zieht von unten nach oben vorbei. Gelenkt wird mit
-   Schwung: Finger auf das Bild legen und nach links oder rechts ziehen -
-   der Pinguin schlittert hinterher (oder Pfeiltasten, oder die drei
-   Knoepfe fuer links, Mitte, rechts).
+   Draufsicht. Der Pinguin rutscht auf dem Bauch eine leicht kurvige
+   Eisrinne mit drei Spuren hinab, die Welt zieht von unten nach oben
+   vorbei. Gelenkt wird wie bei Sled Run: wischen oder tippen wechselt
+   genau eine Spur (oder Pfeiltasten, 1 2 3, die drei Knoepfe).
 
-   Oben steht das deutsche Wort. Ein Eistor mit drei Durchgaengen kommt
-   entgegen, jeder mit einem englischen Wort. Durch den richtigen rutschen!
-   Der falsche zerbricht und kostet ein Herz.
+   Oben steht das deutsche Wort, die drei englischen Woerter stehen gross
+   und fest oben im Bild, in den Spurfarben. Das Eistor kommt entgegen -
+   durch den Durchgang mit dem richtigen Wort rutschen! Der falsche
+   zerbricht und kostet ein Herz.
+
+   Die Strecke hat einen Rhythmus: Gleich nach einem Tor kommt die Action
+   (Fische, Schanze, Robbe, Items), danach eine ruhige Lesezone ohne
+   Hindernisse bis zum naechsten Tor.
 
    Dazu:
    - Gletscherspalten quer ueber die Rinne: Davor liegt eine Schanze. Wer
@@ -22,7 +26,7 @@
    - Jede richtige Antwort in Folge macht schneller. Eine Mindestlesezeit
      gilt immer.
 
-   Die Logik (start, update, steerX, lane) braucht keine Zeichenflaeche.
+   Die Logik (start, update, lane, schritt) braucht keine Zeichenflaeche.
    ========================================================================= */
 (function(){
 'use strict';
@@ -33,12 +37,12 @@ const mische=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Ma
 const rnd=n=>{const x=Math.sin(n*127.1+311.7)*43758.5453;return x-Math.floor(x);};
 const ruhig=typeof matchMedia==='function'?matchMedia('(prefers-reduced-motion: reduce)').matches:false;
 
-const O={mode:'aus',H:560,k:0,hearts:HEARTS,score:0,streak:0,best:0,dist:0,x:W/2,vx:0,tx:W/2,laneZiel:-1,
+const O={mode:'aus',H:560,k:0,hearts:HEARTS,score:0,streak:0,best:0,dist:0,x:W/2,vx:0,tx:W/2,spurNr:1,
  sprung:0,stun:0,bremse:0,time:0,gate:null,old:[],items:[],pops:[],parts:[],spur:[],turbo:0,shield:false,anim:0,
  q:null,queue:[],pool:[],missed:new Map(),fish:0,jumps:0,onEnd:null,onFrage:null};
-const PY=()=>O.H*0.27;
+const PY=()=>Math.max(150,O.H*0.3);
 /* die Rinne: Mitte und halbe Breite je Strecke */
-const mitte=z=>W/2+46*Math.sin(z*0.0042)+16*Math.sin(z*0.0016+1.3);
+const mitte=z=>W/2+24*Math.sin(z*0.0032)+8*Math.sin(z*0.0013+1.3);
 const halb=z=>117-Math.min(20,O.k*1.3);
 const laneX=(i,z)=>mitte(z)+(i-1)*halb(z)*2/3;
 function laneAt(x,z){const rel=(x-mitte(z))/(halb(z)*2/3);return rel<-0.5?0:rel>0.5?2:1;}
@@ -49,10 +53,10 @@ const gapFor=v=>Math.max(600,v*MINREAD);
 
 /* ---------------------------------------------------------------- Ablauf */
 function start(opt){
- Object.assign(O,{mode:'play',H:opt.H||O.H,k:0,hearts:HEARTS,score:opt.score||0,streak:0,best:0,dist:0,vx:0,laneZiel:-1,
+ Object.assign(O,{mode:'play',H:opt.H||O.H,k:0,hearts:HEARTS,score:opt.score||0,streak:0,best:0,dist:0,vx:0,
   sprung:0,stun:0,bremse:0,time:0,old:[],items:[],pops:[],parts:[],spur:[],turbo:0,shield:false,anim:0,missed:new Map(),fish:0,jumps:0,
   onEnd:opt.onEnd||null,onFrage:opt.onFrage||null,pool:opt.words,queue:mische(opt.words)});
- O.x=O.tx=mitte(0);
+ O.spurNr=1;O.x=O.tx=laneX(1,0);
  neuesTor(780);
 }
 function falsche(q){
@@ -70,12 +74,12 @@ function neuesTor(abstand){
  const von=O.dist,lang=z-von;
  if(O.k>0){
   const fl=Math.floor(Math.random()*3);
-  for(let i=0;i<5;i++)O.items.push({typ:'fisch',z:von+lang*0.2+i*26,lane:fl});
-  if(O.k%3===2){const rl=Math.floor(Math.random()*3),zc=von+lang*0.55;
+  for(let i=0;i<5;i++)O.items.push({typ:'fisch',z:von+lang*0.1+i*24,lane:fl});
+  if(O.k%3===2){const rl=Math.floor(Math.random()*3),zc=von+lang*0.38;
    O.items.push({typ:'schanze',z:zc-70,lane:rl});O.items.push({typ:'spalte',z:zc});
    for(let i=0;i<3;i++)O.items.push({typ:'fisch',z:zc-26+i*26,lane:rl,hoch:true});}
-  else if(O.k>=2){O.items.push({typ:'robbe',z:von+lang*0.55,lane:Math.floor(Math.random()*3)});}
-  if(O.k%4===1)O.items.push({typ:Math.random()<0.5?'turbo':'schal',z:von+lang*0.8,lane:Math.floor(Math.random()*3)});
+  else if(O.k>=2){O.items.push({typ:'robbe',z:von+lang*0.34,lane:Math.floor(Math.random()*3)});}
+  if(O.k%4===1)O.items.push({typ:Math.random()<0.5?'turbo':'schal',z:von+lang*0.24,lane:(fl+1+Math.floor(Math.random()*2))%3});
  }
  if(O.onFrage)O.onFrage(O.q,O.gate.opts);
 }
@@ -107,8 +111,8 @@ function torAuswerten(){
  if(O.k>=GOAL){O.mode='ziel';O.anim=0;O.gate=null;musik(M=>M.ziel());sfx('ziel');return;}
  neuesTor();
 }
-function steerX(x){O.laneZiel=-1;O.tx=clamp(x,0,W);}
-function lane(i){O.laneZiel=i;}
+function lane(i){if(O.mode!=='play'&&O.mode!=='aus')return;const alt=O.spurNr;O.spurNr=clamp(i|0,0,2);if(alt!==O.spurNr&&O.mode==='play')sfx('wechsel');}
+function schritt(r){lane(O.spurNr+r);}
 
 function update(dt){
  dt=Math.min(dt,0.05);O.time+=dt;
@@ -124,11 +128,9 @@ function update(dt){
  const v=speed(),d=v*dt;O.dist+=d;
  if(O.stun>0)O.stun-=dt;if(O.bremse>0)O.bremse-=dt;
  musik(M=>{M.tempo(tempo());M.turbo(O.turbo>0);});
- /* Lenken mit Schwung: der Pinguin schlittert dem Ziel hinterher */
- if(O.laneZiel>=0)O.tx=laneX(O.laneZiel,O.dist+120);
+ /* Spurwechsel: weich hinueber, ohne Nachsteuern */
  if(O.sprung>0){O.sprung-=dt;if(O.sprung<=0){teilchen(O.x,PY()+6,16,['#FFFFFF','#CFEFFF'],120);sfx('landen');}}
- else{const k=24,da=5.2;O.vx+=((O.tx-O.x)*k-O.vx*da)*dt;}
- O.vx=clamp(O.vx,-420,420);O.x+=O.vx*dt;
+ O.tx=laneX(O.spurNr,O.dist);const x0=O.x;O.x+=(O.tx-O.x)*Math.min(1,dt*13);O.vx=(O.x-x0)/Math.max(dt,0.001);
  /* Rand der Rinne */
  const m=mitte(O.dist),h=halb(O.dist)-16;
  if(Math.abs(O.x-m)>h){const s=Math.sign(O.x-m);O.x=m+s*h;
@@ -177,6 +179,7 @@ const KLANG={
  fisch:t=>{ton(t,1046,1568,0.08,'sine',0.14);},
  robbe:t=>{ton(t,220,170,0.25,'sawtooth',0.1);ton(t+0.15,200,150,0.3,'sawtooth',0.09);},
  rand:t=>{zisch(t,4000,1500,0.15,0.15,1);},
+ wechsel:t=>{zisch(t,5000,2500,0.12,0.12,1.5);},
  item:t=>{[523,784,1047].forEach((f,i)=>ton(t+i*0.05,f,f,0.25,'triangle',0.16));},
  schild:t=>{[1047,1319,1568].forEach((f,i)=>ton(t+i*0.05,f,f*1.003,0.35,'triangle',0.16));},
  ziel:t=>{[523,659,784,1047,1319].forEach((f,i)=>ton(t+i*0.09,f,f,0.6,'triangle',0.15));}
@@ -266,18 +269,22 @@ function torZeichnen(g,alt){
  /* Querbalken mit Farbe je Durchgang */
  if(!alt||alt.richtig){ctx.globalAlpha=alt?Math.max(0,1-alt.t*2):1;for(let i=0;i<3;i++){const x0=m-h+i*b;ctx.fillStyle=LANE_COL[i];rund(x0+9,y-24,b-18,10,5);ctx.fill();}ctx.globalAlpha=1;}
 }
-function etikett(opt,g,H){
- const x0=laneX(opt.lane,g.z),y=sy(g.z),farbe=LANE_COL[opt.lane];
- ctx.font='700 13px Inter, system-ui, sans-serif';
- const text=opt.w.en,tw=Math.min(150,ctx.measureText(text).width),bw=tw+26,bh=24,stufe=opt.lane===1?30:0;
- const ly=clamp(y-44-stufe,PY()+70,H-bh/2-8-stufe),lx=clamp(x0,bw/2+4,W-bw/2-4);
- ctx.fillStyle='rgba(16,21,28,.92)';rund(lx-bw/2,ly-bh/2,bw,bh,12);ctx.fill();
- ctx.fillStyle=farbe;ctx.beginPath();ctx.arc(lx-bw/2+12,ly,7,0,7);ctx.fill();
- ctx.fillStyle='#10151C';ctx.font='800 8px Inter, system-ui, sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(LANE_ZEICHEN[opt.lane],lx-bw/2+12,ly+0.5);
- ctx.fillStyle='#FFFFFF';ctx.font='700 13px Inter, system-ui, sans-serif';ctx.textAlign='left';
- let t=text;while(ctx.measureText(t).width>tw&&t.length>3)t=t.slice(0,-2);if(t!==text)t=t.slice(0,-1)+'…';
- ctx.fillText(t,lx-bw/2+22,ly+0.5);
- if(ly<y-45-stufe){ctx.fillStyle=farbe;ctx.beginPath();ctx.moveTo(lx-5,ly+bh/2+1);ctx.lineTo(lx,ly+bh/2+7);ctx.lineTo(lx+5,ly+bh/2+1);ctx.fill();}
+/* die drei Woerter: gross und fest oben im Bild, in den Spurfarben */
+function wortleiste(){
+ const g=O.gate;if(!g)return;const y0=56,bh=50,gap=6,bw=(W-gap*4)/3;
+ for(const opt of g.opts){
+  const i=opt.lane,x=gap+i*(bw+gap),farbe=LANE_COL[i],hier=O.spurNr===i;
+  ctx.fillStyle='rgba(16,21,28,.9)';rund(x,y0,bw,bh,12);ctx.fill();
+  ctx.fillStyle=farbe;rund(x,y0,bw,7,4);ctx.fill();
+  if(hier){ctx.strokeStyle=farbe;ctx.lineWidth=3;rund(x+1.5,y0+1.5,bw-3,bh-3,11);ctx.stroke();}
+  ctx.fillStyle='#FFFFFF';ctx.textAlign='center';ctx.textBaseline='middle';
+  let fs=15;ctx.font='700 '+fs+'px Inter, system-ui, sans-serif';
+  const worte=opt.w.en.split(' ');let zeilen=[];
+  for(;;){zeilen=[];let z='';for(const w of worte){const t=z?z+' '+w:w;if(ctx.measureText(t).width>bw-12&&z){zeilen.push(z);z=w;}else z=t;}zeilen.push(z);
+   if((zeilen.length<=2&&zeilen.every(l=>ctx.measureText(l).width<=bw-8))||fs<=10)break;fs--;ctx.font='700 '+fs+'px Inter, system-ui, sans-serif';}
+  zeilen.slice(0,2).forEach((l,n,a)=>ctx.fillText(l,x+bw/2,y0+bh/2+3+(n-(a.length-1)/2)*fs*1.15));
+ }
+ const x=gap+O.spurNr*(bw+gap)+bw/2;ctx.fillStyle=LANE_COL[O.spurNr];ctx.beginPath();ctx.moveTo(x-7,y0+bh+3);ctx.lineTo(x,y0+bh+10);ctx.lineTo(x+7,y0+bh+3);ctx.fill();
 }
 /* der Pinguin von oben, auf dem Bauch, Kopf voraus nach unten */
 function pinguin(x,y,k,neigung,flossen){
@@ -335,17 +342,19 @@ function zeichne(cv){
  ctx.fillStyle='rgba(255,255,255,.9)';
  for(let i=0;i<40;i++){const x=((rnd(i)*W+Math.sin(O.time*0.8+i)*12)%W+W)%W,y=((rnd(i*2.3)*H-O.dist*0.25*(0.6+rnd(i*4))+O.time*20)%H+H)%H;ctx.globalAlpha=0.5+0.5*rnd(i*9);ctx.beginPath();ctx.arc(x,y,1+rnd(i*7)*1.6,0,7);ctx.fill();}
  ctx.globalAlpha=1;
- if(O.gate&&O.mode==='play')for(const opt of O.gate.opts)etikett(opt,O.gate,H);
+ if(O.gate&&O.mode==='play')wortleiste();
  ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='800 18px Inter, system-ui, sans-serif';
- O.pops.forEach((p,n)=>{const a=Math.max(0,1-p.t/1.2),y=Math.max(62,PY()-52-n*22-p.t*24);ctx.globalAlpha=a;ctx.strokeStyle='rgba(16,21,28,.85)';ctx.lineWidth=4;ctx.strokeText(p.text,W/2,y);ctx.fillStyle=p.farbe;ctx.fillText(p.text,W/2,y);});
+ O.pops.forEach((p,n)=>{const a=Math.max(0,1-p.t/1.2),y=PY()+58+n*22+p.t*20;ctx.globalAlpha=a;ctx.strokeStyle='rgba(16,21,28,.85)';ctx.lineWidth=4;ctx.strokeText(p.text,W/2,y);ctx.fillStyle=p.farbe;ctx.fillText(p.text,W/2,y);});
  ctx.globalAlpha=1;
  hud(H);
  if(O.mode==='ziel'){ctx.fillStyle='rgba(255,255,255,'+Math.min(0.85,O.anim*0.6)+')';ctx.fillRect(0,0,W,H);}
 }
-function zeiger(cv,clientX,clientY){const r=cv.getBoundingClientRect();steerX((clientX-r.left)/r.width*W);}
-function taste(richtung,dt){steerX(O.tx+richtung*300*dt);}
+/* Wischen nach links oder rechts = eine Spur weiter; Tippen = die Spur unter dem Finger */
+function wisch(cv,x0,x1){const r=cv.getBoundingClientRect(),dx=x1-x0;
+ if(Math.abs(dx)>24)schritt(dx>0?1:-1);
+ else{const gx=(x1-r.left)/r.width*W;lane(laneAt(gx,O.dist));}}
 
-window.BWPinguin={O,start,update,zeichne,steerX,lane,laneX,laneAt,mitte,halb,zeiger,taste,GOAL,HEARTS,MINREAD,JUMP,speed,gapFor,mult,PY,LANE_COL,LANE_ZEICHEN,
- ding:'Tor',hinweis:'Ziehen = lenken, der Pinguin schlittert hinterher | Tastatur: ← → oder 1 2 3 · P = Pause',
+window.BWPinguin={O,start,update,zeichne,lane,schritt,wisch,laneX,laneAt,mitte,halb,GOAL,HEARTS,MINREAD,JUMP,speed,gapFor,mult,PY,LANE_COL,LANE_ZEICHEN,
+ ding:'Tor',hinweis:'Wischen oder tippen = Spur wechseln | Tastatur: ← → oder 1 2 3 · P = Pause',
  pause(an){if(an&&O.mode==='play')O.mode='pause';else if(!an&&O.mode==='pause')O.mode='play';}};
 })();

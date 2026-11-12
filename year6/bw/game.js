@@ -154,7 +154,7 @@ function schleife(jetzt){
  if(G.mode==='menu'||G.mode==='over'){laeuft=false;return;}
  if(G.mode==='play'||G.mode==='pause'){
   const s=S(),k=G.keys,minus=k.has('ArrowUp')||k.has('ArrowLeft')||k.has('w')||k.has('a'),plus=k.has('ArrowDown')||k.has('ArrowRight')||k.has('s')||k.has('d');
-  if(G.mode==='play'&&(minus||plus))s.taste(plus-minus,Math.min(dt,0.05));
+  if(G.mode==='play'&&(minus||plus)&&s.taste)s.taste(plus-minus,Math.min(dt,0.05));
   s.update(dt);if(G.mode==='play'||G.mode==='pause')s.zeichne($('spiel'));stand();
  }
  requestAnimationFrame(schleife);
@@ -164,16 +164,20 @@ function schleife(jetzt){
 const cv=$('spiel');
 if(cv){
  let aktiv=null;
- cv.addEventListener('pointerdown',e=>{if(G.mode!=='play')return;aktiv=e.pointerId;try{cv.setPointerCapture(e.pointerId);}catch(_){}S().zeiger(cv,e.clientX,e.clientY);e.preventDefault();});
- cv.addEventListener('pointermove',e=>{if(G.mode!=='play')return;if(e.pointerType==='mouse'||aktiv===e.pointerId)S().zeiger(cv,e.clientX,e.clientY);});
- const los=e=>{if(aktiv===e.pointerId)aktiv=null;};cv.addEventListener('pointerup',los);cv.addEventListener('pointercancel',los);
+ /* Orca: der Finger zieht direkt. Pinguin: wischen oder tippen wechselt die Spur. */
+ let x0=0;
+ cv.addEventListener('pointerdown',e=>{if(G.mode!=='play')return;aktiv=e.pointerId;x0=e.clientX;try{cv.setPointerCapture(e.pointerId);}catch(_){}if(S().zeiger)S().zeiger(cv,e.clientX,e.clientY);e.preventDefault();});
+ cv.addEventListener('pointermove',e=>{if(G.mode!=='play'||!S().zeiger)return;if(e.pointerType==='mouse'||aktiv===e.pointerId)S().zeiger(cv,e.clientX,e.clientY);});
+ cv.addEventListener('pointerup',e=>{if(aktiv!==e.pointerId)return;aktiv=null;if(G.mode==='play'&&S().wisch)S().wisch(cv,x0,e.clientX);});
+ cv.addEventListener('pointercancel',e=>{if(aktiv===e.pointerId)aktiv=null;});
  document.addEventListener('keydown',e=>{
   if(e.key==='m'||e.key==='M'){if(G.mode!=='menu'){musikUmschalten();e.preventDefault();}return;}
   if(G.mode!=='play'&&G.mode!=='pause')return;
   if(e.key==='p'||e.key==='P'||e.key==='Escape'){pause(G.mode==='play');e.preventDefault();return;}
   if(G.mode!=='play')return;
   const i={'1':0,'2':1,'3':2}[e.key];if(i!=null){S().lane(i);e.preventDefault();return;}
-  if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d'].includes(e.key)){G.keys.add(e.key);e.preventDefault();}
+  if(S().schritt&&['ArrowLeft','ArrowRight','a','d'].includes(e.key)){S().schritt(e.key==='ArrowLeft'||e.key==='a'?-1:1);e.preventDefault();return;}
+  if(S().taste&&['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d'].includes(e.key)){G.keys.add(e.key);e.preventDefault();}
   if(e.key===' '&&S().sprung){S().sprung();e.preventDefault();}
  });
  document.addEventListener('keyup',e=>G.keys.delete(e.key));
