@@ -13,28 +13,28 @@
  <p class="lead">Eine Reise mit vier schwarz-weißen Tieren um die halbe Welt – mit den Vokabeln aus Unit 2 – A School Day.</p>
  <ol class="kapitel" id="kapitel"></ol>
  <ol class="how">
-  <li>Oben steht das deutsche Wort. Tippe auf das passende englische Wort im Bild – oder auf den Knopf darunter.</li>
-  <li><b>Pinguin:</b> Hüpfe auf die richtige Eisscholle. Falsche Schollen versinken, und deine eigene Scholle schmilzt.</li>
-  <li><b>Orca:</b> Schnapp dir den richtigen Fisch. Ein falscher Fisch ist ein Kugelfisch, und die Luft wird knapp.</li>
-  <li>Jeder Fehler kostet ein Herz. Schnelle Antworten bringen mehr Punkte.</li>
-  <li>Nach zwölf richtigen Antworten verwandelt sich dein Tier und reist weiter. Dafür gibt es einen Stempel im Reisepass.</li>
+  <li><b>Kapitel 2 – Orca Rush:</b> Oben steht das deutsche Wort. Drei Fischschwärme schwimmen dir entgegen, jeder mit einem englischen Wort. Schwimm durch den richtigen!</li>
+  <li>Lenken: Finger auf das Bild legen und nach oben oder unten ziehen. Oder die Knöpfe ▲ ● ▼ unter dem Bild, am Computer die Pfeiltasten.</li>
+  <li>Unter Wasser wird die Luft knapp. Schwimm an die Oberfläche zum Atmen – ziehst du schnell nach oben, springt der Orca aus dem Wasser.</li>
+  <li>Im Sprung durch ein Nordlicht fliegen gibt viele Punkte. Krill sammeln, Quallen ausweichen. Strömung = doppelte Punkte, Blase = Schutz vor einem Fehler.</li>
+  <li>Jede richtige Antwort in Folge macht schneller. Nach 16 Schwärmen ist die Küste erreicht – und die Reise geht weiter.</li>
  </ol>
  <h2>Reisepass</h2>
  <ul class="passliste" id="pass"></ul>
- <h2>Abschnitt wählen und losspielen</h2>
+ <h2>Abschnitt wählen und losschwimmen</h2>
  <div id="levels"></div>
  <p class="muted">Das Spiel ist zum Wiederholen da. Deine Lernfächer ändern sich dadurch nicht.</p>
 </section>
 <section id="stage" hidden>
- <div class="bar"><button id="quit" aria-label="Spiel beenden">✕</button><span class="stat" id="floe">Scholle 1/12</span><span class="stat" id="points">0 P</span><span class="stat" id="hearts">♥♥♥</span></div>
+ <div class="bar"><button id="quit" aria-label="Spiel beenden">✕</button><span class="stat" id="floe">Schwarm 1/16</span><span class="stat" id="points">0 P</span><span class="stat" id="hearts">♥♥♥</span><button id="pause" aria-label="Pause">II</button></div>
  <div class="ask"><small>WIE HEISST DAS AUF ENGLISCH?</small><div id="prompt" lang="de" aria-live="polite"></div></div>
- <div class="bild"><canvas id="eis" aria-label="Spielbild mit englischen Wörtern. Die Antworten stehen auch als Knöpfe darunter."></canvas></div>
+ <div class="bild"><canvas id="meer" aria-label="Der Orca schwimmt durchs Meer, drei Fischschwärme mit englischen Wörtern kommen entgegen. Die Antworten stehen auch als Knöpfe darunter."></canvas></div>
  <div id="choices"></div>
- <p class="hint" id="hint"></p>
+ <p class="hint">Ziehen = lenken · schnell nach oben = Sprung &nbsp;|&nbsp; Tastatur: ↑ ↓ oder 1 2 3 · Leertaste = Sprung · P = Pause</p>
  <div id="reise" hidden role="dialog" aria-label="Reise zum nächsten Ort"></div>
 </section>
 <section id="over" hidden></section>
 </main>
-<script src="../climb/data.js?v=20261119-fische"></script><script src="../figuren.js?v=20261119-fische"></script><script src="morph.js?v=20261119-fische"></script><script src="reise.js?v=20261119-fische"></script><script src="game.js?v=20261119-fische"></script>
+<script src="../climb/data.js?v=20261119-fische"></script><script src="../figuren.js?v=20261119-fische"></script><script src="morph.js?v=20261119-fische"></script><script src="reise.js?v=20261119-fische"></script><script src="orca.js?v=20261119-fische"></script><script src="game.js?v=20261119-fische"></script>
 <script src="../../assets/feedback.js"></script>
 </body></html>
