@@ -152,9 +152,12 @@ function loosePenguins(n){
   for(let i=0;i<n&&G.penguins>0;i++){G.penguins--;G.crew.pop();G.lost.push({x:(Math.random()-.5)*60,y:30+i*6,vx:(Math.random()<.5?-1:1)*(80+Math.random()*120),vy:-140-Math.random()*120,rot:0,vr:(Math.random()-.5)*12,life:1.4});}
   if(n>0){popup('−'+n+' Pinguin'+(n>1?'e':''),'#A9D8FF');M?.sfx('pinguinweg');}
 }
+/* Silky und der Pinguin sammeln Fische statt Sterne */
+const fische=()=>rider()==='silky'||rider()==='penguin';
 function passItem(it){
   if(Math.abs(G.x-(it.lane-1))>=0.5)return;
-  if(it.type==='star'){G.score+=10;G.stars++;it.taken=true;burst(0,['#FFC857','#FFE9A8'],6);M?.sfx('stern');}
+  if(it.type==='star'){G.score+=10;G.stars++;it.taken=true;
+    if(fische())burst(0,['#9FD3F2','#E8F4FB','#5B9CC9'],6),M?.sfx('fisch');else burst(0,['#FFC857','#FFE9A8'],6),M?.sfx('stern');}
   else if(it.type==='penguin'){
     it.taken=true;
     if(G.penguins<MAX_PENGUINS){G.penguins++;G.crew.push({t:G.time,seed:it.seed||Math.random()});G.maxPenguins=Math.max(G.maxPenguins,G.penguins);popup('+1 Pinguin','#FFFFFF');}
@@ -234,7 +237,7 @@ function finish(won){
     +'<p class="result">'+G.k+' von '+GOAL+' Toren · '+G.score+' Punkte'+(record&&G.score?' · <strong>neuer Bestwert!</strong>':'')+'</p>'
     +'<p class="penguins">'+(won?'🐧 Du hast '+G.penguins+' Pinguin'+(G.penguins===1?'':'e')+' ins Tal gebracht!':'🐧 Bis zu '+G.maxPenguins+' Pinguin'+(G.maxPenguins===1?'':'e')+' sind mitgerutscht.')+'</p>'
     +(fresh?'<p class="unlock">Neu freigeschaltet: Der Pinguin kann jetzt deinen Schlitten fahren!</p>':'')
-    +'<p class="muted">'+G.correct+' Tore richtig · '+G.stars+' Sterne · Bestwert'+(G.modus==='profi'?' (Profi)':'')+': '+(saved.best[key]||0)+' Punkte</p>'
+    +'<p class="muted">'+G.correct+' Tore richtig · '+G.stars+(fische()?(G.stars===1?' Fisch':' Fische'):' Sterne')+' · Bestwert'+(G.modus==='profi'?' (Profi)':'')+': '+(saved.best[key]||0)+' Punkte</p>'
     +'<div class="actions"><button id="again" class="go">Nochmal fahren</button><button id="toMenu">Anderen Abschnitt wählen</button></div>'
     +(missed.length?'<h2>Diese Wörter solltest du noch üben</h2><ul class="missed">'+missed.map(w=>'<li><span>'+esc(w.de)+'</span><strong lang="en">'+esc(w.en)+'</strong></li>').join('')
       +'</ul><p><a class="train" href="../">Unit 2 im Vokabeltrainer üben →</a></p>':'<p class="muted">Jedes Tor richtig – stark!</p>');
@@ -475,7 +478,21 @@ function drawGate(z,finish){
 function drawItem(it){
   const s=sc(it.z),X=PX(it.lane-1,it.z),Y=PY(it.z);
   ctx.globalAlpha=clamp((s-0.115)*9,0,1);
-  if(it.type==='star'){
+  if(it.type==='star'&&fische()){
+    /* Silky und der Pinguin sammeln Fische statt Sterne */
+    const r=18*s,cy=Y-22*s+Math.sin(G.time*5+it.z)*3*s,zappel=Math.sin(G.time*9+it.z*1.7)*0.25;
+    ctx.fillStyle='rgba(60,100,160,.2)';ctx.beginPath();ctx.ellipse(X,Y,r*0.8,r*0.22,0,0,7);ctx.fill();
+    ctx.save();ctx.translate(X,cy);ctx.rotate(zappel);
+    if(!lite){ctx.shadowColor='#9FD3F2';ctx.shadowBlur=12*s;}
+    ctx.fillStyle='#5B9CC9';ctx.beginPath();ctx.moveTo(r*0.55,0);ctx.lineTo(r*1.15,-r*0.5);ctx.lineTo(r*1.05,0);ctx.lineTo(r*1.15,r*0.5);ctx.closePath();ctx.fill();
+    ctx.fillStyle='#8EC6EA';ctx.beginPath();ctx.ellipse(0,0,r*0.75,r*0.42,0,0,7);ctx.fill();ctx.shadowBlur=0;
+    ctx.fillStyle='#E8F4FB';ctx.beginPath();ctx.ellipse(-r*0.05,r*0.14,r*0.55,r*0.18,0,0,7);ctx.fill();
+    ctx.fillStyle='#5B9CC9';ctx.beginPath();ctx.moveTo(-r*0.1,-r*0.38);ctx.lineTo(r*0.25,-r*0.62);ctx.lineTo(r*0.35,-r*0.32);ctx.closePath();ctx.fill();
+    ctx.strokeStyle='rgba(30,70,110,.55)';ctx.lineWidth=1.4*s;ctx.beginPath();ctx.arc(-r*0.32,0,r*0.3,-1.1,1.1);ctx.stroke();
+    ctx.fillStyle='#FFFFFF';ctx.beginPath();ctx.arc(-r*0.5,-r*0.08,r*0.13,0,7);ctx.fill();
+    ctx.fillStyle='#1B2B3F';ctx.beginPath();ctx.arc(-r*0.53,-r*0.08,r*0.07,0,7);ctx.fill();
+    ctx.restore();
+  }else if(it.type==='star'){
     const r=15*s,cy=Y-22*s+Math.sin(G.time*5+it.z)*3*s,spin=Math.cos(G.time*4+it.lane);
     ctx.fillStyle='rgba(60,100,160,.2)';ctx.beginPath();ctx.ellipse(X,Y,r*0.8,r*0.22,0,0,7);ctx.fill();
     ctx.shadowColor='#FFC857';ctx.shadowBlur=lite?0:14*s;ctx.fillStyle='#FFC857';ctx.beginPath();

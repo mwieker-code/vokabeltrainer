@@ -168,6 +168,15 @@ ok(d.querySelector('.missed li').textContent.includes(q.en),'Fehlerliste zeigt d
 const saved=JSON.parse(w.localStorage.getItem('vt6:sled:v1'));
 ok(saved.best.all>0&&saved.finishes['y6u2-partb']===1,'Bestwert und Zieleinlauf gespeichert');
 ok(w.localStorage.getItem('vt6:progress')===null&&w.localStorage.getItem('vt6:climb:v1')===null,'Lernfaecher und Kletterspiel unberuehrt');
+/* Silky und der Pinguin sammeln Fische statt Sterne */
+for(const r of ['penguin','silky','kid']){
+ S.showMenu();d.querySelector('[data-rider="'+r+'"]').click();d.querySelector('[data-part="y6u2-parta"]').click();
+ G.items.length=0;G.items.push({type:'star',lane:G.lane,z:0.5});G.x=G.lane-1;const s0=G.score;S.update(0.05);
+ ok(G.stars===1&&G.score===s0+10,r+': Einsammeln zaehlt wie ein Stern');
+ S.finish(false);const t=d.getElementById('over').textContent;
+ ok(r==='kid'?/1 Sterne/.test(t)&&!/Fisch/.test(t):/1 Fisch\b/.test(t)&&!/Stern/.test(t),r+': Ergebnis nennt '+(r==='kid'?'Sterne':'Fische'));
+}
+ok(/mit Silky oder dem Pinguin sind es Fische/.test(fs.readFileSync(path.join(dir,'index.html'),'utf8')),'Anleitung nennt die Fische');
 const html=fs.readFileSync(path.join(dir,'index.html'),'utf8');
 ok(/data-eigenes-design/.test(html)&&!/data-nacht/.test(html),'eigenes Design ohne Hell und Nacht');
 ok(fs.readFileSync(path.join(root,'assets/learning.js'),'utf8').includes('href="sled/"'),'Kachel in Year 6');
