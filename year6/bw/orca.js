@@ -24,7 +24,7 @@
    ========================================================================= */
 (function(){
 'use strict';
-const W=360,GOAL=16,HEARTS=3,MINREAD=3.3,AIR_DRAIN=1/17,TURBO_GATES=3;
+const W=360,GOAL=16,HEARTS=3,MINREAD=3.3,AIR_DRAIN=1/15,TURBO_GATES=3;
 const LANE_COL=['#FF8A5B','#3CCFBE','#FFC857'],LANE_ZEICHEN=['▲','●','▼'];
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),lerp=(a,b,t)=>a+(b-a)*t;
 const mische=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
@@ -85,6 +85,7 @@ function neuesTor(abstand){
  }
  if(O.onFrage)O.onFrage(O.q,O.gate.opts);
 }
+function musik(f){try{if(window.BWMusik)f(window.BWMusik);}catch(e){}}
 function pop(text,farbe,y){O.pops.push({text,farbe:farbe||'#FFFFFF',t:0,y:y==null?O.y-40:y});}
 function teilchen(x,y,n,farben,kraft,art){
  if(ruhig)n=Math.ceil(n/3);
@@ -104,12 +105,12 @@ function torAuswerten(){
   O.missed.set(O.q.en,O.q);
   if(!O.queue.includes(O.q))O.queue.splice(Math.min(2,O.queue.length),0,O.q);
   if(O.shield){O.shield=false;pop('Die Blase hält!','#9FD3F2');teilchen(ORCA_X,O.y,22,['#CFEFFF','#FFFFFF'],160);sfx('blase');}
-  else{O.hearts--;O.streak=0;O.turbo=0;pop(l<0?'Verpasst – zu hoch!':'Falscher Schwarm!','#FF9A8A');sfx('falsch');O.anim=0;
-   if(O.hearts<=0){O.mode='lost';O.anim=0;}}
+  else{O.hearts--;O.streak=0;O.turbo=0;pop(l<0?'Verpasst – zu hoch!':'Falscher Schwarm!','#FF9A8A');sfx('falsch');O.anim=0;musik(M=>M.fehler());
+   if(O.hearts<=0){O.mode='lost';O.anim=0;musik(M=>M.ende());}}
  }
  O.k++;
  if(O.mode==='lost')return;
- if(O.k>=GOAL){O.mode='ziel';O.anim=0;O.gate=null;sfx('ziel');return;}
+ if(O.k>=GOAL){O.mode='ziel';O.anim=0;O.gate=null;sfx('ziel');musik(M=>M.ziel());return;}
  neuesTor();
 }
 function steerTo(y){O.ty=clamp(y,SURF()-70,BED()-14);}
@@ -128,6 +129,7 @@ function update(dt){
   return;
  }
  const v=speed(),d=v*dt;O.scroll+=d;O.tail+=dt*(5+v/40);
+ musik(M=>{M.tempo(tempo());M.turbo(O.turbo>0);});
  if(O.stun>0)O.stun-=dt;
  /* Bewegung: Feder zum Ziel, an der Oberflaeche der Sprung */
  const s=SURF();
@@ -148,7 +150,7 @@ function update(dt){
  /* Luft */
  if(!O.airborne&&O.y<s+16){if(O.air<1&&Math.random()<dt*6)teilchen(ORCA_X+18,s-4,2,['#FFFFFF'],60,'spritzer');O.air=Math.min(1,O.air+dt*0.9);}
  else if(!O.airborne){O.air-=dt*AIR_DRAIN;
-  if(O.air<=0){O.air=0.45;O.hearts--;O.streak=0;pop('Luft holen!','#FF9A8A');sfx('falsch');if(O.hearts<=0){O.mode='lost';O.anim=0;return;}}}
+  if(O.air<=0){O.air=0.45;O.hearts--;O.streak=0;pop('Luft holen!','#FF9A8A');sfx('falsch');musik(M=>M.fehler());if(O.hearts<=0){O.mode='lost';O.anim=0;musik(M=>M.ende());return;}}}
  /* Blasen hinter dem Orca */
  if(!O.airborne&&Math.random()<dt*(6+v/30))O.parts.push({x:ORCA_X-40,y:O.y+(Math.random()-0.5)*10,vx:-v*0.4,vy:-20-Math.random()*30,life:1,farbe:'#DFF5FF',r:1.5+Math.random()*2.5,art:'blasen'});
  /* Welt bewegt sich */
@@ -394,6 +396,10 @@ function zeichne(cv){
 /* Zeiger -> Tiefe in Spielkoordinaten */
 function zeigerY(cv,clientY){const r=cv.getBoundingClientRect();return (clientY-r.top)/r.width*W;}
 
-window.BWOrca={O,start,update,zeichne,steerTo,lane,laneY,laneOf,SURF,BED,zeigerY,GOAL,HEARTS,MINREAD,ORCA_X,speed,gapFor,mult,LANE_COL,LANE_ZEICHEN,
+function zeiger(cv,clientX,clientY){steerTo(zeigerY(cv,clientY));}
+function taste(richtung,dt){steerTo(O.ty+richtung*330*dt);}
+window.BWOrca={O,start,update,zeichne,steerTo,lane,laneY,laneOf,SURF,BED,zeigerY,zeiger,taste,GOAL,HEARTS,MINREAD,ORCA_X,speed,gapFor,mult,LANE_COL,LANE_ZEICHEN,
+ ding:'Schwarm',hinweis:'Ziehen = lenken · schnell nach oben = Sprung | Tastatur: ↑ ↓ oder 1 2 3 · Leertaste = Sprung · P = Pause',
+ sprung(){steerTo(SURF()-70);},
  pause(an){if(an&&O.mode==='play')O.mode='pause';else if(!an&&O.mode==='pause')O.mode='play';}};
 })();

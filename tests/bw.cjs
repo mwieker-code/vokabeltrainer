@@ -1,4 +1,5 @@
-/* Black & White (Year 6, Unit 2) - Kapitel 2 "Orca Rush": Jeder Schwarm-Satz
+/* Black & White (Year 6, Unit 2). Teil 1: Kapitel 2 "Orca Rush" (Teil 2 und
+   Musik stehen in bw-pinguin.cjs). Jeder Schwarm-Satz
    hat genau ein richtiges und zwei verschiedene falsche Woerter in drei
    Tiefen. Wer in der richtigen Tiefe ist, frisst den Schwarm; die falsche
    Tiefe kostet ein Herz (oder die Schutzblase). Luft, Sprung, Krill,
@@ -8,7 +9,7 @@
 const {JSDOM,VirtualConsole}=require('jsdom'),fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const root=path.join(__dirname,'..'),dir=path.join(root,'year6/bw');let checks=0;const ok=(v,m)=>{assert.ok(v,m);checks++;};
 const dom=new JSDOM(fs.readFileSync(path.join(dir,'index.html'),'utf8'),{runScripts:'outside-only',url:'https://example.org/year6/bw/',virtualConsole:new VirtualConsole()});
-for(const f of ['year6/climb/data.js','year6/figuren.js','year6/bw/morph.js','year6/bw/reise.js','year6/bw/orca.js','year6/bw/game.js'])dom.window.eval(fs.readFileSync(path.join(root,f),'utf8'));
+for(const f of ['year6/climb/data.js','year6/figuren.js','year6/bw/musik.js','year6/bw/morph.js','year6/bw/reise.js','year6/bw/pinguin.js','year6/bw/orca.js','year6/bw/game.js'])dom.window.eval(fs.readFileSync(path.join(root,f),'utf8'));
 const w=dom.window,d=w.document,B=w.BWGame,R=w.BWOrca,O=R.O,D=w.CLIMB_DATA;
 const richtig=()=>O.gate.opts.find(o=>o.w===O.q),falsch=()=>O.gate.opts.find(o=>o.w!==O.q);
 /* bis zum naechsten Schwarm schwimmen; Luft auffuellen, damit nur die Antwort zaehlt */
@@ -16,8 +17,8 @@ const zumTor=(lane,maxT=30)=>{const k=O.k;let t=0;R.lane(lane);while(O.k===k&&O.
 const ruhe=()=>{let n=0;while((O.mode==='ziel'||O.mode==='lost')&&n++<200)R.update(0.05);};
 
 ok(d.querySelectorAll('#levels [data-part]').length===D.parts.length+1,'Auswahl: alle Abschnitte und die ganze Unit');
-ok(d.querySelector('#kapitel li.frei')&&/Orca/.test(d.querySelector('#kapitel li.frei').textContent)&&d.querySelectorAll('#kapitel li.frei').length===1,'nur das Orca-Kapitel ist spielbar');
-ok(/wird neu gebaut/.test(d.getElementById('kapitel').textContent),'Pinguin-Kapitel als "wird neu gebaut" markiert');
+ok(d.querySelectorAll('#kapitel [data-kap]:not([disabled])').length===2&&d.querySelector('[data-kap="2"]').disabled,'Pinguin und Orca spielbar, Panda folgt');
+d.querySelector('[data-kap="1"]').click();ok(B.G.startKap===1&&d.querySelector('[data-kap="1"]').getAttribute('aria-pressed')==='true','Orca als Start gewaehlt');
 /* drei Tiefen, sauber getrennt */
 ok(R.laneY(0)<R.laneY(1)&&R.laneY(1)<R.laneY(2)&&R.laneY(0)>R.SURF(),'drei Tiefen unter der Oberflaeche');
 for(let i=0;i<3;i++)ok(R.laneOf(R.laneY(i))===i,'Tiefe '+i+' wird erkannt');
@@ -25,7 +26,7 @@ ok(R.laneOf(R.SURF()-20)===-1,'ueber dem Wasser: keine Tiefe');
 /* jeder Abschnitt fehlerfrei bis zur Kueste */
 for(const id of [...D.parts.map(p=>p.id),'all']){
  d.querySelector('[data-part="'+id+'"]').click();
- ok(B.G.mode==='play'&&O.mode==='play'&&!d.getElementById('stage').hidden,id+': Spiel laeuft (ohne Zeichenflaeche ohne Verwandlung)');
+ ok(B.G.mode==='play'&&B.G.kap===1&&O.mode==='play'&&!d.getElementById('stage').hidden&&/^Schwarm 1\/16/.test(d.getElementById('floe').textContent),id+': Orca-Kapitel laeuft');
  for(let k=0;k<R.GOAL;k++){
   const g=O.gate;
   ok(g.opts.length===3&&g.opts.filter(o=>o.w===O.q).length===1,id+': genau ein richtiger Schwarm');
@@ -39,7 +40,7 @@ for(const id of [...D.parts.map(p=>p.id),'all']){
  ok(B.G.mode==='reise'&&!d.getElementById('reise').hidden,id+': an der Kueste die Reise');
  const A=w.BWReise.ORTE[1];ok(d.getElementById('reise').textContent.includes(A.satz)&&d.getElementById('reise').textContent.includes(A.de),id+': Stempel mit englischem Satz');
  d.getElementById('weiter').click();
- ok(B.G.mode==='over'&&/Küste erreicht/.test(d.getElementById('over').textContent)&&O.hearts===R.HEARTS&&O.k===R.GOAL,id+': Ergebnis');
+ ok(B.G.mode==='over'&&/Etappe geschafft/.test(d.getElementById('over').textContent)&&O.hearts===R.HEARTS&&O.k===R.GOAL&&/Orca: 16\/16/.test(d.getElementById('over').textContent),id+': Ergebnis');
  d.getElementById('toMenu').click();
 }
 ok(JSON.stringify(B.saved().stempel)==='["orca"]'&&d.querySelectorAll('#pass li.da').length===1,'ein Stempel, nicht doppelt');
@@ -76,7 +77,7 @@ O.items.push({typ:'krill',x:0,y:R.laneY(2)});const kr=O.krill;R.update(0.01);ok(
 O.shield=false;const h1=O.hearts;O.gate.x=1;O.airborne=true;O.y=R.SURF()-40;O.vy=-50;R.update(0.05);ok(O.hearts===h1-1,'ueber dem Wasser am Schwarm vorbei: Fehler');
 /* verlieren */
 n=0;while(O.mode==='play'&&n++<20){O.airborne=false;O.y=O.ty=R.laneY(falsch().lane);O.vy=0;O.gate.x=1;R.update(0.05);}
-ruhe();ok(B.G.mode==='over'&&/Pause/.test(d.getElementById('over').textContent)&&/noch üben/.test(d.getElementById('over').textContent),'ohne Herzen ist Schluss, mit Uebungsliste');
+ruhe();ok(B.G.mode==='over'&&/braucht eine Pause/.test(d.getElementById('over').textContent)&&/noch üben/.test(d.getElementById('over').textContent),'ohne Herzen ist Schluss, mit Uebungsliste');
 d.getElementById('again').click();ok(O.mode==='play'&&O.hearts===R.HEARTS&&O.k===0&&O.score===0,'Nochmal schwimmen');
 /* Steuerung */
 d.querySelector('#choices [data-lane="2"]').click();ok(O.ty===R.laneY(2),'Knopf steuert die Tiefe');

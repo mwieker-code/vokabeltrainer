@@ -15,8 +15,12 @@ h2{font-size:19px;margin:22px 0 8px}
 .lead{color:var(--soft);margin:0 0 14px}
 .muted{color:var(--soft);font-size:15px}
 .kapitel{list-style:none;margin:0 0 14px;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.kapitel li{display:flex;flex-direction:column;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);opacity:.55}
-.kapitel li.frei{opacity:1;background:var(--snow);color:var(--ink)}
+.kapitel button{width:100%;height:100%;display:flex;flex-direction:column;align-items:flex-start;text-align:left;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.18);color:var(--snow)}
+.kapitel button:disabled{opacity:.45;cursor:default}
+.kapitel button[aria-pressed="true"]{background:var(--snow);color:var(--ink);border-color:var(--ice)}
+.musik-menu{border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.06);color:var(--snow);border-radius:999px;padding:9px 16px;font-weight:700}
+.musik-menu[hidden]{display:none}
+.bar button[hidden]{display:none}
 .kapitel span{font-size:13px}
 .passliste{list-style:none;margin:0;padding:0;display:grid;gap:6px}
 .passliste li{display:flex;flex-direction:column;padding:8px 12px;border-radius:12px;border:1px dashed rgba(255,255,255,.25);color:var(--soft);font-size:14px}
@@ -33,23 +37,23 @@ ol.how li{margin:3px 0}
 #stage{flex:1;display:flex;flex-direction:column;min-height:0;height:calc(100dvh - 70px)}
 #stage[hidden],#menu[hidden],#over[hidden]{display:none}
 .bar{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.bar button{width:44px;height:44px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.07);color:var(--snow);font-weight:800;flex:none}
-.bar .stat{flex:1;text-align:center;font:700 15px/1 ui-monospace,Menlo,monospace;padding:13px 4px;border-radius:14px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);white-space:nowrap}
+.bar button{width:40px;height:44px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.07);color:var(--snow);font-weight:800;flex:none}
+.bar .stat{flex:1;text-align:center;font:700 14px/1 ui-monospace,Menlo,monospace;padding:13px 3px;border-radius:14px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);white-space:nowrap}
 .bar #hearts{color:var(--warn)}
 .ask{background:var(--snow);color:var(--ink);border-radius:18px;padding:10px 16px 12px;margin-bottom:8px;text-align:center;min-height:74px;display:flex;flex-direction:column;justify-content:center}
 .ask small{font:600 10px/1 ui-monospace,Menlo,monospace;letter-spacing:.14em;color:#5B667C;margin-bottom:4px}
 #prompt{font-weight:800;font-size:21px;line-height:1.2;overflow-wrap:anywhere}
 .bild{flex:1;min-height:0;position:relative}
-#meer{position:absolute;inset:0;width:100%;height:100%;display:block;border-radius:22px;border:1px solid rgba(255,255,255,.14);background:var(--sea);touch-action:none;-webkit-tap-highlight-color:transparent;user-select:none}
+#spiel{position:absolute;inset:0;width:100%;height:100%;display:block;border-radius:22px;border:1px solid rgba(255,255,255,.14);background:var(--sea);touch-action:none;-webkit-tap-highlight-color:transparent;user-select:none}
 #choices{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
 #choices button{min-height:54px;padding:8px 6px;border-radius:14px;border:0;border-top:5px solid var(--farbe,#fff);background:var(--snow);color:var(--ink);font-weight:700;font-size:15px;line-height:1.2;overflow-wrap:anywhere}
 #choices i{display:block;font-style:normal;font-size:11px;color:var(--farbe);filter:brightness(.75)}
-body.pausiert #meer{filter:saturate(.4) brightness(.7)}
+body.pausiert #spiel{filter:saturate(.4) brightness(.7)}
 #choices button:disabled{opacity:.3}
 .hint{color:var(--soft);font-size:13px;text-align:center;margin:8px 0 0}
 /* waehrend der Verwandlung gehoert das ganze Bild dem Tier */
 body.morph .ask,body.morph #choices,body.morph .hint,body.morph .bar{visibility:hidden}
-body.morph #meer{position:fixed;inset:0;width:100%;height:100%;border-radius:0;border:0;z-index:10}
+body.morph #spiel{position:fixed;inset:0;width:100%;height:100%;border-radius:0;border:0;z-index:10}
 .result{font-size:20px;font-weight:700}
 .actions{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
 .actions button{padding:13px 18px;border-radius:999px;border:1px solid rgba(255,255,255,.3);background:transparent;color:var(--snow);font-weight:700}
