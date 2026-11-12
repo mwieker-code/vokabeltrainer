@@ -165,7 +165,7 @@ window.CLIMB_DATA = {
     {
      "id": "y6u2-partb-007",
      "en": "large",
-     "de": "groß",
+     "de": "groß (Fläche, Menge)",
      "pos": "adjective"
     },
     {
@@ -219,7 +219,7 @@ window.CLIMB_DATA = {
     {
      "id": "y6u2-partb-016",
      "en": "tall",
-     "de": "groß",
+     "de": "groß (Körpergröße, Höhe)",
      "pos": "adjective"
     },
     {
