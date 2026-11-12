@@ -10,33 +10,31 @@
 <header><a href="../">← Year 6</a><span>BLACK &amp; WHITE · UNIT 2</span></header>
 <section id="menu">
  <h1>Black &amp; White</h1>
- <p class="lead">Eine Reise mit vier schwarz-weißen Tieren – und den Vokabeln aus Unit 2 – A School Day.</p>
- <ol class="kapitel">
-  <li class="frei"><b>1 · Pinguin</b><span>Antarktis · Eisschollen-Hüpfen</span></li>
-  <li><b>2 · Orca</b><span>Südpolarmeer · folgt</span></li>
-  <li><b>3 · Panda</b><span>Bambuswald · folgt</span></li>
-  <li><b>4 · Zebra</b><span>Savanne · folgt</span></li>
- </ol>
+ <p class="lead">Eine Reise mit vier schwarz-weißen Tieren um die halbe Welt – mit den Vokabeln aus Unit 2 – A School Day.</p>
+ <ol class="kapitel" id="kapitel"></ol>
  <ol class="how">
-  <li>Oben steht das deutsche Wort. Tippe auf die Eisscholle mit dem passenden englischen Wort – oder auf den Knopf darunter.</li>
-  <li>Eine falsche Scholle versinkt und kostet ein Herz.</li>
-  <li>Deine eigene Scholle schmilzt. Wartest du zu lange, kostet das auch ein Herz. Schnelle Antworten bringen mehr Punkte.</li>
-  <li>Manche Schollen tragen einen Fisch: Bonuspunkte!</li>
-  <li>Nach zwölf Schollen erreichst du das offene Meer – und der Pinguin verwandelt sich.</li>
+  <li>Oben steht das deutsche Wort. Tippe auf das passende englische Wort im Bild – oder auf den Knopf darunter.</li>
+  <li><b>Pinguin:</b> Hüpfe auf die richtige Eisscholle. Falsche Schollen versinken, und deine eigene Scholle schmilzt.</li>
+  <li><b>Orca:</b> Schnapp dir den richtigen Fisch. Ein falscher Fisch ist ein Kugelfisch, und die Luft wird knapp.</li>
+  <li>Jeder Fehler kostet ein Herz. Schnelle Antworten bringen mehr Punkte.</li>
+  <li>Nach zwölf richtigen Antworten verwandelt sich dein Tier und reist weiter. Dafür gibt es einen Stempel im Reisepass.</li>
  </ol>
- <h2>Abschnitt wählen</h2>
+ <h2>Reisepass</h2>
+ <ul class="passliste" id="pass"></ul>
+ <h2>Abschnitt wählen und losspielen</h2>
  <div id="levels"></div>
  <p class="muted">Das Spiel ist zum Wiederholen da. Deine Lernfächer ändern sich dadurch nicht.</p>
 </section>
 <section id="stage" hidden>
  <div class="bar"><button id="quit" aria-label="Spiel beenden">✕</button><span class="stat" id="floe">Scholle 1/12</span><span class="stat" id="points">0 P</span><span class="stat" id="hearts">♥♥♥</span></div>
  <div class="ask"><small>WIE HEISST DAS AUF ENGLISCH?</small><div id="prompt" lang="de" aria-live="polite"></div></div>
- <canvas id="eis" aria-label="Der Pinguin steht auf einer Eisscholle, vor ihm drei Schollen mit englischen Wörtern. Die Antworten stehen auch als Knöpfe darunter."></canvas>
+ <div class="bild"><canvas id="eis" aria-label="Spielbild mit englischen Wörtern. Die Antworten stehen auch als Knöpfe darunter."></canvas></div>
  <div id="choices"></div>
- <p class="hint">Scholle antippen oder Knopf drücken &nbsp;|&nbsp; Tastatur: 1 2 3 oder ← ↑ →</p>
+ <p class="hint" id="hint"></p>
+ <div id="reise" hidden role="dialog" aria-label="Reise zum nächsten Ort"></div>
 </section>
 <section id="over" hidden></section>
 </main>
-<script src="../climb/data.js?v=20261119-fische"></script><script src="../figuren.js?v=20261119-fische"></script><script src="morph.js?v=20261119-fische"></script><script src="game.js?v=20261119-fische"></script>
+<script src="../climb/data.js?v=20261119-fische"></script><script src="../figuren.js?v=20261119-fische"></script><script src="morph.js?v=20261119-fische"></script><script src="reise.js?v=20261119-fische"></script><script src="game.js?v=20261119-fische"></script>
 <script src="../../assets/feedback.js"></script>
 </body></html>

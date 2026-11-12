@@ -15,9 +15,14 @@ h2{font-size:19px;margin:22px 0 8px}
 .lead{color:var(--soft);margin:0 0 14px}
 .muted{color:var(--soft);font-size:15px}
 .kapitel{list-style:none;margin:0 0 14px;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.kapitel li{display:flex;flex-direction:column;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);opacity:.55}
-.kapitel li.frei{opacity:1;background:var(--snow);color:var(--ink)}
+.kapitel button{width:100%;height:100%;display:flex;flex-direction:column;align-items:flex-start;text-align:left;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.18);color:var(--snow)}
+.kapitel button:disabled{opacity:.45;cursor:default}
+.kapitel button[aria-pressed="true"]{background:var(--snow);color:var(--ink);border-color:var(--ice)}
 .kapitel span{font-size:13px}
+.passliste{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.passliste li{display:flex;flex-direction:column;padding:8px 12px;border-radius:12px;border:1px dashed rgba(255,255,255,.25);color:var(--soft);font-size:14px}
+.passliste li.da{border:2px solid var(--ice);color:var(--snow);background:rgba(159,211,242,.08)}
+.passliste b{letter-spacing:.06em;text-transform:uppercase;font-size:13px}
 ol.how{margin:0 0 8px;padding:14px 16px 14px 36px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;font-size:15px}
 ol.how li{margin:3px 0}
 #levels{display:grid;gap:10px}
@@ -35,8 +40,11 @@ ol.how li{margin:3px 0}
 .ask{background:var(--snow);color:var(--ink);border-radius:18px;padding:10px 16px 12px;margin-bottom:8px;text-align:center;min-height:74px;display:flex;flex-direction:column;justify-content:center}
 .ask small{font:600 10px/1 ui-monospace,Menlo,monospace;letter-spacing:.14em;color:#5B667C;margin-bottom:4px}
 #prompt{font-weight:800;font-size:21px;line-height:1.2;overflow-wrap:anywhere}
-#eis{flex:1;min-height:0;width:100%;display:block;border-radius:22px;border:1px solid rgba(255,255,255,.14);background:var(--sea);touch-action:none;-webkit-tap-highlight-color:transparent;user-select:none}
+.bild{flex:1;min-height:0;position:relative}
+#eis{position:absolute;inset:0;width:100%;height:100%;display:block;border-radius:22px;border:1px solid rgba(255,255,255,.14);background:var(--sea);touch-action:none;-webkit-tap-highlight-color:transparent;user-select:none}
 #choices{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+#choices.n4{grid-template-columns:repeat(2,1fr)}
+#choices.n4 button{min-height:46px}
 #choices button{min-height:54px;padding:8px 6px;border-radius:14px;border:0;background:var(--snow);color:var(--ink);font-weight:700;font-size:15px;line-height:1.2;overflow-wrap:anywhere}
 #choices button:disabled{opacity:.3}
 .hint{color:var(--soft);font-size:13px;text-align:center;margin:8px 0 0}
@@ -50,3 +58,15 @@ body.morph #eis{position:fixed;inset:0;width:100%;height:100%;border-radius:0;bo
 .missed{list-style:none;padding:0;margin:0;display:grid;gap:6px}
 .missed li{display:flex;justify-content:space-between;gap:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:8px 12px}
 .missed span{color:var(--soft)}
+/* Reise: Karte im Vollbild, Stempel darueber */
+#reise{position:fixed;left:0;right:0;bottom:0;z-index:20;padding:14px 14px max(16px,env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:center;gap:10px;background:linear-gradient(180deg,rgba(16,21,28,0),rgba(16,21,28,.92) 22%)}
+#reise[hidden]{display:none}
+.pass{display:flex;gap:14px;align-items:center;max-width:430px;width:100%;background:var(--snow);color:var(--ink);border-radius:18px;padding:14px 16px;box-shadow:0 10px 30px rgba(0,0,0,.45)}
+.stempel{flex:none;width:104px;height:104px;border-radius:50%;border:3px double #B3261E;color:#B3261E;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;transform:rotate(-12deg);font:700 10px/1.25 ui-monospace,Menlo,monospace;padding:8px;animation:stempel .45s cubic-bezier(.2,1.6,.4,1) both}
+.stempel b{font-size:12px;letter-spacing:.04em}
+.stempel i{font-style:normal}
+@keyframes stempel{0%{transform:rotate(-12deg) scale(2.4);opacity:0}100%{transform:rotate(-12deg) scale(1);opacity:.92}}
+.p-text small{font:600 10px/1 ui-monospace,Menlo,monospace;letter-spacing:.12em;color:#5B667C}
+.p-text p{margin:4px 0 0;font-weight:700;font-size:17px;line-height:1.25}
+.p-text p.de{font-weight:400;font-size:14px;color:#4A5568}
+#reise .go{border:0;border-radius:999px;padding:13px 22px;font-weight:800;font-size:17px;background:#FFB020;color:var(--ink)}

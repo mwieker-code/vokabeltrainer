@@ -5,8 +5,6 @@
    BWMorph.start(canvas, fertig, {ton}) spielt die Verwandlung einmal ab. */
 (function(){
 'use strict';
-function start(cv,fertig,opt){
-const ctx=cv.getContext('2d');opt=opt||{};
 const N=3400,DAUER=4.2,TAU=Math.PI*2;
 const lerp=(a,b,t)=>a+(b-a)*t,clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const smooth=(a,b,t)=>{t=clamp((t-a)/(b-a),0,1);return t*t*(3-2*t);};
@@ -40,7 +38,12 @@ function bauen(zeichne){
  wahl.sort((a,b)=>(a.hell-b.hell)||(a.w-b.w));
  return {bild:c,cx,cy,gr,punkte:wahl};
 }
-const TIERE={pinguin:bauen(zeichnePinguin),orca:bauen(zeichneOrca)};
+/* erst bei Bedarf zeichnen - ohne Zeichenflaeche (Tests) passiert nichts */
+let TIERE=null;const tiere=()=>TIERE||(TIERE={pinguin:bauen(zeichnePinguin),orca:bauen(zeichneOrca)});
+function sprite(name){try{return tiere()[name]||null;}catch(e){return null;}}
+
+function start(cv,fertig,opt){
+const ctx=cv.getContext('2d');opt=opt||{};
 
 /* ---------- Punkte ---------- */
 const P=[];for(let i=0;i<N;i++)P.push({s1:rnd(),s2:rnd(),s3:rnd(),s4:rnd()});
@@ -85,7 +88,7 @@ function umgebung(w,h,u,risse){
 
 /* ---------- ein Bild ---------- */
 function tierBild(name,cx,cy,gr,alpha,extra){
- if(alpha<=0)return;const T=TIERE[name],k=gr/T.gr;
+ if(alpha<=0)return;const T=tiere()[name],k=gr/T.gr;
  ctx.save();ctx.globalAlpha=alpha;ctx.translate(cx,cy);if(extra)extra();ctx.scale(k,k);ctx.drawImage(T.bild,-T.cx,-T.cy);ctx.restore();
 }
 function bild(){
@@ -110,7 +113,7 @@ function bild(){
  /* Punkte mit Leuchtspur */
  sg.save();sg.globalCompositeOperation='destination-out';sg.fillStyle='rgba(0,0,0,'+(t<0?1:0.22)+')';sg.fillRect(0,0,w,h);sg.restore();
  if(t>=0&&tt>0.7&&tt<3.75){
-  const A=TIERE[von].punkte,B=TIERE[nach].punkte,sichtbar=smooth(0.7,1.0,tt)*(1-smooth(3.35,3.75,tt));
+  const A=tiere()[von].punkte,B=tiere()[nach].punkte,sichtbar=smooth(0.7,1.0,tt)*(1-smooth(3.35,3.75,tt));
   const dreh=tt*2.6,R=gr*0.5;
   for(let i=0;i<N;i++){
    const a=A[i],b=B[i],p=P[i];
@@ -175,5 +178,5 @@ if(typeof requestAnimationFrame==='function')requestAnimationFrame(schleife);
 /* fuer Standbilder */
 return {standbild(sek){manuell=true;sg.clearRect(0,0,W(),H());for(let k=8;k>=0;k--){t=sek-k*0.016;zeit=2+Math.max(0,t);bild();}}};
 }
-window.BWMorph={start,DAUER:4.2};
+window.BWMorph={start,sprite,DAUER:4.2};
 })();
