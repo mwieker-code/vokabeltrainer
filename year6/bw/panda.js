@@ -20,6 +20,8 @@
    ========================================================================= */
 (function(){
 'use strict';
+/* Lichtung: die Buendel stehen schraeg versetzt, hinten weiter rechts */
+const VERSATZ=[48,0,-48];
 const W=360,GOAL=16,HEARTS=3,PX=92,MINREAD=3.2,LICHTUNG_ALLE=4;
 const LANE_COL=['#FF8A5B','#3CCFBE','#FFC857'],LANE_ZEICHEN=['▲','●','▼'];
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),lerp=(a,b,t)=>a+(b-a)*t;
@@ -79,7 +81,7 @@ function abschnitt(s0){
 function lichtungBauen(s0,opts){
  const L=320;
  O.gate=null;
- O.lichtung={x0:s0,stopp:s0+L,ziel:s0+L+220,opts:opts.map(o=>({...o,kaputt:0})),phase:'anrollen',v:grundTempo(),zug:null,wahl:-1,t:0,
+ O.lichtung={x0:s0,stopp:s0+L,ziel:s0+L+190,opts:opts.map(o=>({...o,kaputt:0})),phase:'anrollen',v:grundTempo(),zug:null,wahl:-1,t:0,
   baby:SCHLEIFEN()[O.naechsteSchleife++%SCHLEIFEN().length],ergebnis:null,ersteMal:O.k===LICHTUNG_ALLE-1};
 }
 function pop(text,farbe,y){O.pops.push({text,farbe:farbe||'#FFFFFF',t:0,y:y==null?laneY(0)-90:y});}
@@ -157,7 +159,7 @@ function wand(){
 function babyVerlieren(){
  if(O.babys<=0)return;
  O.babys--;O.verloren++;const b=O.kette.pop();
- pop('Baby purzelt weg – es wartet weiter vorn','#FFD6E5',laneY(0)-40);
+ pop('Baby purzelt weg!','#FFD6E5',laneY(0)-40);
  teilchen(PX-40,yAus(O.lane)-10,10,['#FFFFFF','#FFD6E5'],100);
  return b;
 }
@@ -222,12 +224,12 @@ function lichtungUpdate(L,dt){
   if(rest<2){O.x=L.stopp;L.v=0;L.phase='zielen';L.t=0;}
  }else if(L.phase==='flug'){
   const dauer=0.5,t=Math.min(1,L.t/dauer),e=1-Math.pow(1-t,2);
-  const ziel=L.ziel-40;O.x=lerp(L.x0f,ziel,e);O.lane=lerp(L.l0,L.wahl,e);O.dreh+=dt*22*L.kraft;spurMerken();
+  const ziel=L.ziel+VERSATZ[L.wahl]-40;O.x=lerp(L.x0f,ziel,e);O.lane=lerp(L.l0,L.wahl,e);O.dreh+=dt*22*L.kraft;spurMerken();
   if(t>=1)treffen(L);
  }else if(L.phase==='treffer'){
   if(L.t>(L.ergebnis==='richtig'?1.0:1.1)){
    /* weiter auf dem Weg; die uebrigen Buendel fallen um */
-   for(const o of L.opts)if(o.kaputt<1){o.kaputt=1;teilchen(sx(L.ziel),laneY(o.lane)-30*SKALA[o.lane],14,['#8BC34A','#C5E1A5','#6D9F3A'],160,'splitter');}
+   for(const o of L.opts)if(o.kaputt<1){o.kaputt=1;teilchen(sx(L.ziel)+VERSATZ[o.lane],laneY(o.lane)-30*SKALA[o.lane],14,['#8BC34A','#C5E1A5','#6D9F3A'],160,'splitter');}
    O.lichtung=null;O.ziel=Math.round(O.lane);weiter();
   }else if(L.ergebnis!=='richtig'){const t=L.t/0.5;if(t<1){O.x-=(1-t)*160*dt;O.dreh-=(1-t)*160*dt/ROLL_R;}}
  }
@@ -243,7 +245,7 @@ function treffen(L){
   teilchen(PX+40,y-30,46,['#8BC34A','#C5E1A5','#6D9F3A','#FFFFFF','#FFD6E5'],300,'splitter');sfx('rumms');sfx('baby');
  }else{
   L.ergebnis='falsch';wortFalsch();O.hearts--;O.stun=1.1;O.shake=ruhig?0:5;opt.kaputt=0.3;
-  pop('Daneben – das Baby wartet auf der nächsten Lichtung','#FF9A8A');sfx('abprall');musik(M=>M.fehler());
+  pop('Daneben! Das Baby wartet.','#FF9A8A');sfx('abprall');musik(M=>M.fehler());
   L.baby=null;O.naechsteSchleife--;
   if(O.hearts<=0){O.mode='lost';O.anim=0;musik(M=>M.ende());}
  }
@@ -382,9 +384,8 @@ function lichtungZeichnen(L,H){
 }
 function lichtungVorn(L){
  /* Buendel und Schilder, von hinten nach vorn */
- const bx=sx(L.ziel);
  for(const o of L.opts.slice().sort((a,b)=>a.lane-b.lane)){
-  buendel(o,bx);
+  const bx=sx(L.ziel)+VERSATZ[o.lane];
   if(L.ergebnis==='richtig'&&o.kaputt>=1&&o.w===O.q&&L.t<1){/* Baby purzelt heraus */
    const t=L.t,y=laneY(o.lane)-Math.sin(Math.min(1,t*1.6)*Math.PI)*70;if(window.PandaFigur)window.PandaFigur.panda(ctx,bx-t*60,y,0.45*SKALA[o.lane],{baby:true,arme:1,mood:'lachen',schleife:O.kette.length?O.kette[O.kette.length-1].schleife:'#FF6FA3'});}
  }
@@ -393,7 +394,7 @@ function lichtungVorn(L){
   if(L.ergebnis){if(o.w===O.q)zust='richtig';else if(o.lane===L.wahl)zust='falsch';else a=0.3;}
   else if(L.phase==='zielen'&&L.zug&&zielVonZug(L.zug).lane===o.lane)zust='hell';
   if(L.ergebnis==='richtig'&&L.t>0.7)a*=Math.max(0,1-(L.t-0.7)*3);
-  wortschild(Math.min(bx,W-66*sk),laneY(o.lane)-74*sk,o,zust,a,sk);}
+  const bx=sx(L.ziel)+VERSATZ[o.lane];wortschild(Math.min(bx,W-66*sk),laneY(o.lane)-74*sk,o,zust,a,sk);}
 }
 function zielhilfe(L){
  if(L.phase!=='zielen')return;
@@ -406,7 +407,7 @@ function zielhilfe(L){
   ctx.fillText('Zurückziehen, zielen und loslassen!',W/2,73.5);
   return;
  }
- const z=zielVonZug(L.zug),ty=laneY(z.lane)-30*SKALA[z.lane],tx=sx(L.ziel);
+ const z=zielVonZug(L.zug),ty=laneY(z.lane)-30*SKALA[z.lane],tx=sx(L.ziel)+VERSATZ[z.lane];
  /* Gummiband */
  ctx.strokeStyle='rgba(255,255,255,.8)';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(PX,py);ctx.lineTo(PX-(L.zug.x0-L.zug.x)*-1*0.6,py-(L.zug.y0-L.zug.y)*-1*0.6);ctx.stroke();
  /* Flugbahn */
@@ -477,7 +478,7 @@ function zeichne(cv,breite,hoehe){
  for(let i=0;i<3;i++){
   for(const it of O.items)if(it.lane===i)itemZeichnen(it);
   if(O.gate)wandZeichnen(O.gate,i);
-  if(L){const o=L.opts.find(o=>o.lane===i);if(o)buendel(o,sx(L.ziel));}
+  if(L){const o=L.opts.find(o=>o.lane===i);if(o)buendel(o,sx(L.ziel)+VERSATZ[i]);}
   if(i===pl)pandaZeichnen();
  }
  if(L)lichtungVorn(L);
