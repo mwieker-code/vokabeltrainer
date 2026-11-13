@@ -2,7 +2,7 @@
    BLACK & WHITE - Musik. Jedes Kapitel hat ein eigenes Stueck, das der
    Browser selbst spielt (Web Audio): keine Dateien, keine Lizenzfragen,
    auch ohne Netz.
-     spiele(id)  Stueck starten: 'pinguin' oder 'orca'
+     spiele(id)  Stueck starten: 'pinguin', 'orca' oder 'panda'
      tempo(f)    die Musik wird mit dem Spiel schneller (f = 1 ... 1,6)
      turbo(on)   im Turbo kommt Schlagzeug dazu
      fehler()    ein Fehler daempft die Musik kurz ab
@@ -54,7 +54,18 @@ const PINGUIN={bpm:132,max:176,echo:0.12,
    'E5 _ G5 _ C6 _ B5 A5','F#5 _ A5 _ D6 _ C6 _','B5 _ D6 _ G6 _ D6 B5','G5 _ B5 _ E6 _ - -',
    'E5 _ G5 _ C6 _ E6 D6','C6 _ A5 _ F#5 _ A5 _','G5 B5 D6 G6 _ D6 B5 _','G5 _ _ _ - - - -']}},
  folge:['A','A','B','A']};
-const STUECKE={orca:ORCA,pinguin:PINGUIN};
+/* PANDA - F-Dur, gezupft und froehlich, mit tiefen Trommeln fuer die Wucht */
+const PANDA={bpm:104,max:140,echo:0.16,
+ akkorde:{F:[41,[0,4,7]],C:[48,[0,4,7]],Dm:[50,[0,3,7]],Bb:[46,[0,4,7]],Am:[45,[0,3,7]]},
+ teile:{
+  A:{chords:['F','C','Dm','Bb','F','C','Bb','C'],melody:[
+   'F5 _ A5 C6 _ A5 G5 F5','E5 _ G5 _ C6 _ - -','D5 F5 A5 _ G5 F5 D5 _','Bb4 D5 F5 _ D5 _ - -',
+   'F5 _ A5 C6 _ D6 C6 A5','G5 _ E5 _ C5 E5 G5 _','F5 _ D5 _ Bb4 D5 F5 G5','A5 _ G5 _ E5 _ - -']},
+  B:{chords:['Bb','C','Am','Dm','Bb','C','F','F'],melody:[
+   'D6 _ C6 Bb5 A5 _ F5 _','E5 G5 C6 _ Bb5 _ A5 G5','A5 _ C6 _ E6 _ D6 C6','D6 _ A5 _ F5 _ - -',
+   'Bb5 _ D6 _ F6 _ D6 Bb5','C6 _ E6 _ G6 _ F6 E6','F6 _ C6 _ A5 _ C6 _','F5 _ _ _ - - - -']}},
+ folge:['A','A','B','A']};
+const STUECKE={orca:ORCA,pinguin:PINGUIN,panda:PANDA};
 for(const s of Object.values(STUECKE))s.takte=takte(s.teile,s.folge);
 
 /* ----------------------------------------------------------- Klang */
@@ -127,6 +138,17 @@ function plane(s,t){
   if(i%4===2)shaker(t,0.05);
   if(i===8)rauschen(t,0.18,'bandpass',900,0.08,0.7);
   if(turboAn){hat(t,i%2?0.04:0.07);if(i===4||i===12)snare(t,0.15);if(i%4===0)kick(t,0.4);}
+ }else if(S===PANDA){
+  /* Panda: gezupfte Melodie, runder Bass, tiefe Trommeln */
+  for(const n of bar.melody)if(n.step===i){ton(hz(n.n),t,0.3,'triangle',0.15,{halt:0.22,cut:3200,echo:true});ton(hz(n.n+12),t,0.09,'sine',0.035);}
+  if(i===0||i===8){ton(hz(root-12),t,d*6,'sine',0.32,{cut:420});}
+  if(i===6||i===14)ton(hz(root-12+7),t,d*2,'sine',0.22,{cut:420});
+  if(i%4===2){for(const x of iv)ton(hz(root+12+x),t,d*1.2,'triangle',bar.refrain?0.035:0.022,{halt:0.1,cut:2400});}
+  if(i===0||i===8)kick(t,0.62,true);
+  if(i===10)kick(t,0.38,true);
+  if(i===4||i===12)klatsch(t,0.14);
+  if(i%2===1)shaker(t,0.035);
+  if(turboAn){if(i===14||i===15)kick(t,0.4,true);hat(t,i%2?0.035:0.06);if(i===12)snare(t,0.14);}
  }else{
   /* Pinguin: Xylophon-Melodie, Zupfbass, Klatschen */
   for(const n of bar.melody)if(n.step===i){xylo(hz(n.n),t,0.16);if(n.len>=4)ton(hz(n.n),t,n.len*d*0.9,'square',0.025,{cut:2200});}

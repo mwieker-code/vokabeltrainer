@@ -9,7 +9,7 @@
 const {JSDOM,VirtualConsole}=require('jsdom'),fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const root=path.join(__dirname,'..'),dir=path.join(root,'year6/bw');let checks=0;const ok=(v,m)=>{assert.ok(v,m);checks++;};
 const dom=new JSDOM(fs.readFileSync(path.join(dir,'index.html'),'utf8'),{runScripts:'outside-only',url:'https://example.org/year6/bw/',virtualConsole:new VirtualConsole()});
-for(const f of ['year6/climb/data.js','year6/figuren.js','year6/bw/musik.js','year6/bw/morph.js','year6/bw/reise.js','year6/bw/pinguin.js','year6/bw/orca.js','year6/bw/game.js'])dom.window.eval(fs.readFileSync(path.join(root,f),'utf8'));
+for(const f of ['year6/climb/data.js','year6/figuren.js','year6/bw/musik.js','year6/bw/morph.js','year6/bw/reise.js','year6/bw/pinguin.js','year6/bw/orca.js','year6/bw/pandafigur.js','year6/bw/panda.js','year6/bw/game.js'])dom.window.eval(fs.readFileSync(path.join(root,f),'utf8'));
 const w=dom.window,d=w.document,B=w.BWGame,R=w.BWOrca,O=R.O,D=w.CLIMB_DATA;
 const richtig=()=>O.gate.opts.find(o=>o.w===O.q),falsch=()=>O.gate.opts.find(o=>o.w!==O.q);
 /* bis zum naechsten Schwarm schwimmen; Luft auffuellen, damit nur die Antwort zaehlt */
@@ -17,7 +17,7 @@ const zumTor=(lane,maxT=30)=>{const k=O.k;let t=0;R.lane(lane);while(O.k===k&&O.
 const ruhe=()=>{let n=0;while((O.mode==='ziel'||O.mode==='lost')&&n++<200)R.update(0.05);};
 
 ok(d.querySelectorAll('#levels [data-part]').length===D.parts.length+1,'Auswahl: alle Abschnitte und die ganze Unit');
-ok(d.querySelectorAll('#kapitel [data-kap]:not([disabled])').length===2&&d.querySelector('[data-kap="2"]').disabled,'Pinguin und Orca spielbar, Panda folgt');
+ok(d.querySelectorAll('#kapitel [data-kap]:not([disabled])').length===3&&d.querySelector('[data-kap="3"]').disabled,'Pinguin, Orca und Panda spielbar, Zebra folgt');
 d.querySelector('[data-kap="1"]').click();ok(B.G.startKap===1&&d.querySelector('[data-kap="1"]').getAttribute('aria-pressed')==='true','Orca als Start gewaehlt');
 /* drei Tiefen, sauber getrennt */
 ok(R.laneY(0)<R.laneY(1)&&R.laneY(1)<R.laneY(2)&&R.laneY(0)>R.SURF(),'drei Tiefen unter der Oberflaeche');
@@ -39,12 +39,12 @@ for(const id of [...D.parts.map(p=>p.id),'all']){
  ruhe();
  ok(B.G.mode==='reise'&&!d.getElementById('reise').hidden,id+': an der Kueste die Reise');
  const A=w.BWReise.ORTE[1];ok(d.getElementById('reise').textContent.includes(A.satz)&&d.getElementById('reise').textContent.includes(A.de),id+': Stempel mit englischem Satz');
- d.getElementById('weiter').click();
- ok(B.G.mode==='over'&&/Etappe geschafft/.test(d.getElementById('over').textContent)&&O.hearts===R.HEARTS&&O.k===R.GOAL&&/Orca: 16\/16/.test(d.getElementById('over').textContent),id+': Ergebnis');
- d.getElementById('toMenu').click();
+ ok(/Weiter: China/.test(d.getElementById('reise').textContent),id+': weiter nach China');
+ const punkte=O.score;d.getElementById('weiter').click();
+ ok(B.G.kap===2&&w.BWPandaRoll.O.mode==='play'&&w.BWPandaRoll.O.score===punkte,id+': Panda-Kapitel mit den Punkten');
+ d.getElementById('quit').click();
 }
 ok(JSON.stringify(B.saved().stempel)==='["orca"]'&&d.querySelectorAll('#pass li.da').length===1,'ein Stempel, nicht doppelt');
-ok(B.saved().best.all>0&&/Bestwert/.test(d.querySelector('[data-part="all"]').textContent),'Bestwert im Menue');
 
 /* Fehler, Schild, Tempo */
 d.querySelector('[data-part="y6u2-partb"]').click();

@@ -448,7 +448,8 @@ function tipp(cv,clientX,clientY){
 
 /* nach Karte und Stempel: der Pinguin springt vom Eisberg (morph.js uebernimmt danach) */
 function tauchen(){O.mode='tauchen';O.anim=0;O.weg=false;O.tx0=W/2;O.ty0=yTop();O.rot=0;O.pops=[];}
-window.BWPinguin={O,start,tauchen,update,zeichne,lane,sprung,tipp,zielX,zielY,yBase,yTop,wetter,finale,zeitFuer,richtigIdx,GOAL,HEARTS,FINALE,D,mult,LANE_COL,LANE_ZEICHEN,
+const abgangPunkt=cv=>{const k=cv.clientWidth/W;return {x:O.px*k,y:(yBase()+10)*k};};
+window.BWPinguin={O,start,tauchen,abgang:tauchen,abgangPunkt,ABGANG_RICHTUNG:1,update,zeichne,lane,sprung,tipp,zielX,zielY,yBase,yTop,wetter,finale,zeitFuer,richtigIdx,GOAL,HEARTS,FINALE,D,mult,LANE_COL,LANE_ZEICHEN,
  ding:'Scholle',hinweis:'Tippe auf die Scholle mit dem richtigen Wort – bevor deine Scholle schmilzt! | Tastatur: 1 2 3 · P = Pause',
  pause(an){if(an&&O.mode==='play')O.mode='pause';else if(!an&&O.mode==='pause')O.mode='play';}};
 })();

@@ -95,7 +95,8 @@ function bauen(zeichne){
  return {bild:c,cx,cy,gr,punkte:wahl};
 }
 /* erst bei Bedarf zeichnen - ohne Zeichenflaeche (Tests) passiert nichts */
-let TIERE=null;const tiere=()=>TIERE||(TIERE={pinguin:bauen(zeichnePinguin),orca:bauen(zeichneOrca)});
+function zeichnePanda(g){if(window.PandaFigur)window.PandaFigur.panda(g,256,440,3.3,{mood:'froh'});}
+let TIERE=null;const tiere=()=>TIERE||(TIERE={pinguin:bauen(zeichnePinguin),orca:bauen(zeichneOrca),panda:bauen(zeichnePanda)});
 function sprite(name){try{return tiere()[name]||null;}catch(e){return null;}}
 
 /* opt.fluss (Pinguin -> Orca ohne Schnitt):
@@ -110,7 +111,7 @@ let schnapp=null,sprung=null,off=null,uiDa=false;
 
 /* ---------- Punkte ---------- */
 const P=[];for(let i=0;i<N;i++)P.push({s1:rnd(),s2:rnd(),s3:rnd(),s4:rnd()});
-let von='pinguin',nach='orca',t=-VOR,zeit=2,manuell=false,ende=false;
+let von=opt.von||'pinguin',nach=opt.nach||'orca',t=-VOR,zeit=2,manuell=false,ende=false;
 const W=()=>cv.clientWidth,H=()=>cv.clientHeight;
 function groesse(){const d=Math.min(window.devicePixelRatio||1,2);cv.width=Math.round(W()*d);cv.height=Math.round(H()*d);ctx.setTransform(d,0,0,d,0,0);spur.width=cv.width;spur.height=cv.height;sg.setTransform(d,0,0,d,0,0);}
 const spur=document.createElement('canvas'),sg=spur.getContext('2d');
@@ -135,13 +136,24 @@ function meer(w,h){
  ctx.restore();
  ctx.strokeStyle='rgba(220,245,255,.5)';ctx.lineWidth=1.5;for(const b of blasen){const y=(1-((b.y+zeit*b.v)%1))*h,x=(b.x+Math.sin(zeit+b.y*20)*0.01)*w;ctx.beginPath();ctx.arc(x,y,b.r,0,TAU);ctx.stroke();}
 }
+/* Bambuswald fuer den Panda */
+function wald(w,h){
+ const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#BFE3D0');g.addColorStop(0.55,'#EEF5E0');g.addColorStop(0.56,'#9CCB7A');g.addColorStop(1,'#5E9A45');
+ ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+ ctx.fillStyle='#A9C9B6';ctx.beginPath();ctx.moveTo(0,h*0.56);for(let i=0;i<=8;i++){const x=w*i/8,hh=h*(0.18+((i*37)%5)*0.03);ctx.quadraticCurveTo(x-w/16,h*0.56-hh,x,h*0.56-hh*0.2);}ctx.lineTo(w,h*0.56);ctx.fill();
+ for(let i=0;i<14;i++){const x=(i/13)*w+Math.sin(i*7)*12,dx=Math.sin(zeit*0.8+i)*4,d=6+(i%3)*3;ctx.fillStyle=i%2?'#6FA64E':'#5F9450';ctx.fillRect(x+dx-d/2,0,d,h*0.6);
+  ctx.fillStyle='rgba(30,60,20,.3)';for(let y=h*0.58;y>0;y-=46)ctx.fillRect(x+dx-d/2-1,y,d+2,2.4);}
+ ctx.fillStyle='rgba(140,195,100,.85)';for(const f of flocken){const y=((f.y+zeit*f.v*0.6)%1)*h,x=(f.x+Math.sin(zeit*0.9+f.y*9)*0.03)*w;ctx.beginPath();ctx.ellipse(x,y,f.r*2.2,f.r*0.9,zeit+f.x*9,0,TAU);ctx.fill();}
+}
+const land=(w,h,risse)=>nach==='panda'||von==='panda'?wald(w,h):eis(w,h,risse);
+const welt=(w,h)=>nach==='orca'?meer(w,h):nach==='panda'?wald(w,h):eis(w,h,0);
 function umgebung(w,h,u,risse){
  /* u: 0 = Welt des Starttiers, 1 = Welt des Zieltiers; dazwischen steigt bzw. faellt das Wasser */
- if(F)return meer(w,h);
+ if(F&&nach==='orca')return meer(w,h);
  const zuMeer=nach==='orca',wasser=zuMeer?u:1-u;
- if(wasser<=0)return eis(w,h,risse);
+ if(wasser<=0)return land(w,h,risse);
  if(wasser>=1)return meer(w,h);
- eis(w,h,zuMeer?1:0);
+ land(w,h,zuMeer?1:0);
  const kante=h*(1.08-wasser*1.2);
  ctx.save();ctx.beginPath();ctx.moveTo(0,h);ctx.lineTo(0,kante);
  for(let x=0;x<=w;x+=12)ctx.lineTo(x,kante+Math.sin(x*0.02+zeit*5)*10+Math.sin(x*0.05-zeit*7)*5);
@@ -167,7 +179,7 @@ function bild(){
  const zoom=1+0.12*Math.sin(Math.PI*smooth(0,3.6,tt)),beben=tt>3.3&&tt<3.8?(1-(tt-3.3)/0.5)*8:0;
  ctx.save();ctx.translate(w/2,h/2);ctx.scale(zoom,zoom);ctx.translate(-w/2+Math.sin(zeit*60)*beben,-h/2+Math.cos(zeit*53)*beben);
  umgebung(w,h,smooth(1.9,3.3,tt),nach==='orca'?laden:0);
- if(F&&schnapp&&tt<0.95){const e=smooth(0,0.9,tt);ctx.globalAlpha=1-smooth(0.55,0.95,tt);ctx.drawImage(schnapp,0,-h*e*0.9,w,h);ctx.globalAlpha=1;}
+ if(F&&schnapp&&tt<0.95){const e=smooth(0,0.9,tt);ctx.globalAlpha=1-smooth(0.55,0.95,tt);ctx.drawImage(schnapp,0,-h*e*0.9*(F.richtung||1),w,h);ctx.globalAlpha=1;}
  /* Lichthof beim Aufladen */
  if(tt>0&&tt<3.9){const a=Math.sin(Math.PI*clamp(tt/3.9,0,1));const g=ctx.createRadialGradient(cx,cy,0,cx,cy,gr*0.95);
   g.addColorStop(0,'rgba(255,255,255,'+0.55*a+')');g.addColorStop(0.5,'rgba(190,230,255,'+0.22*a+')');g.addColorStop(1,'rgba(190,230,255,0)');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);}
@@ -221,12 +233,19 @@ function gleiten(){
  const R={x:lerp(0,fr.x,e),y:lerp(0,fr.y,e),w:lerp(w,fr.w,e),h:lerp(h,fr.h,e)},rad=lerp(0,22,e);
  ctx.clearRect(0,0,w,h);
  ctx.save();ctx.beginPath();if(ctx.roundRect)ctx.roundRect(R.x,R.y,R.w,R.h,rad);else ctx.rect(R.x,R.y,R.w,R.h);ctx.clip();
- meer(w,h);
+ welt(w,h);
  off=off||document.createElement('canvas');
  try{F.nachher.zeichne(off,fr.w,fr.h);}catch(err){}
  const d=Math.min(window.devicePixelRatio||1,2);ctx.setTransform(d,0,0,d,0,0);
  ctx.globalAlpha=smooth(0.05,0.75,e);ctx.drawImage(off,R.x,R.y,R.w,R.h);ctx.globalAlpha=1;
  ctx.restore();
+ if(nach!=='orca'){
+  /* Panda: aus der Sitz-Pose wird die Kugel an ihrem Platz im Spiel */
+  const T=tiere()[nach],p=F.nachher.pose(),s1=R.w/360,f=smooth(GL0,GL1-0.2,t),x1=R.x+p.x*s1,y1=R.y+p.y*s1,k1=p.k*s1;
+  tierBild(nach,lerp(cx,x1,f),lerp(cy,y1-35*k1,f),lerp(gr,80*k1,f),1-smooth(0.55,0.92,f));
+  if(window.PandaFigur&&f>0.5){ctx.save();ctx.globalAlpha=smooth(0.55,0.92,f);window.PandaFigur.panda(ctx,x1,y1,k1,{pose:'kugel',dreh:(p.dreh||0)+(1-f)*-6,mood:'froh'});ctx.restore();}
+  return;
+ }
  /* Orca: von der Sprung-Pose in die Schwimm-Pose */
  const T=tiere()[nach],ks=gr/T.gr,p=F.nachher.pose(),s1=R.w/360,f=smooth(GL0,GL1-0.15,t);
  const x=lerp(cx+(SPR.x-T.cx)*ks,R.x+p.x*s1,f),y=lerp(cy+(SPR.y-T.cy)*ks,R.y+p.y*s1,f);

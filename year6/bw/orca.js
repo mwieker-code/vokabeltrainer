@@ -121,6 +121,13 @@ function update(dt){
  for(const p of O.pops)p.t+=dt;O.pops=O.pops.filter(p=>p.t<1.2);
  for(const p of O.parts){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=(p.art==='spritzer'?520:-18)*dt;p.vx*=0.98;p.life-=dt*(p.art==='blasen'?0.7:1.3);}
  O.parts=O.parts.filter(p=>p.life>0);
+ if(O.mode==='absprung'){
+  /* grosser Sprung aus dem Wasser Richtung Land - der Uebergang zum Panda */
+  O.anim+=dt;O.scroll+=dt*120;const t=Math.min(1,O.anim/1.0),s=SURF();
+  O.abX=t*150;O.y=lerp(s+50,s-230,1-Math.pow(1-t,2));O.rot=-0.85+t*0.35;O.tail+=dt*14;
+  if(!O.raus&&O.y<s){O.raus=true;teilchen(ORCA_X+20,s,40,['#FFFFFF','#CFEFFF','#9FD3F2'],280,'spritzer');sfx('sprung');}
+  return;
+ }
  if(O.mode==='aus'||O.mode==='pause')return;
  if(O.mode==='lost'||O.mode==='ziel'){
   O.anim+=dt;O.scroll+=dt*(O.mode==='ziel'?speed():30);
@@ -363,7 +370,7 @@ function zeichne(cv,breite,hoehe){
  ctx.globalAlpha=lostA;
  if(O.shield){ctx.save();ctx.globalAlpha=0.35*lostA;ctx.strokeStyle='#CFEFFF';ctx.lineWidth=2;ctx.fillStyle='rgba(207,239,255,.12)';ctx.beginPath();ctx.ellipse(ORCA_X+4,O.y-6,64,40,O.rot,0,7);ctx.fill();ctx.stroke();ctx.restore();}
  if(O.turbo>0&&!ruhig){ctx.save();ctx.globalAlpha=0.5;ctx.strokeStyle='#7FE0D0';ctx.lineWidth=2;for(let i=0;i<4;i++){const y=O.y-14+i*9;ctx.beginPath();ctx.moveTo(ORCA_X-60-i*8,y);ctx.lineTo(ORCA_X-100-((O.time*300+i*30)%60),y);ctx.stroke();}ctx.restore();}
- const xr=ORCA_X+(O.mode==='ziel'?O.anim*O.anim*180:0);
+ const xr=ORCA_X+(O.mode==='ziel'?O.anim*O.anim*180:O.mode==='absprung'?O.abX:0);
  if(!O.intro)orca(xr,O.y,GROESSE,O.rot,O.tail);
  ctx.globalAlpha=1;
  for(const p of O.parts)if(p.art!=='blasen'){ctx.globalAlpha=Math.max(0,p.life);ctx.fillStyle=p.farbe;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,7);ctx.fill();}
@@ -382,8 +389,11 @@ function zeigerY(cv,clientY){const r=cv.getBoundingClientRect();return (clientY-
 function zeiger(cv,clientX,clientY){steerTo(zeigerY(cv,clientY));}
 function taste(richtung,dt){steerTo(O.ty+richtung*330*dt);}
 /* wo der Orca im Spiel schwimmt (fuer den Uebergang aus morph.js) */
+/* nach Karte und Stempel: Sprung aus dem Wasser (morph.js uebernimmt danach) */
+function abgang(){Object.assign(O,{mode:'absprung',anim:0,abX:0,raus:false,y:SURF()+50,rot:-0.85,gate:null,old:[],pops:[]});}
+const abgangPunkt=cv=>{const k=cv.clientWidth/W;return {x:(ORCA_X+O.abX)*k,y:O.y*k};};
 const pose=()=>({x:ORCA_X,y:O.y,k:GROESSE,rot:O.rot||0,schlag:O.tail||0});
-window.BWOrca={O,start,pose,update,zeichne,steerTo,lane,laneY,laneOf,SURF,BED,zeigerY,zeiger,taste,GOAL,HEARTS,MINREAD,ORCA_X,speed,gapFor,mult,LANE_COL,LANE_ZEICHEN,
+window.BWOrca={O,start,pose,abgang,abgangPunkt,ABGANG_RICHTUNG:-1,update,zeichne,steerTo,lane,laneY,laneOf,SURF,BED,zeigerY,zeiger,taste,GOAL,HEARTS,MINREAD,ORCA_X,speed,gapFor,mult,LANE_COL,LANE_ZEICHEN,
  ding:'Schwarm',hinweis:'Ziehen = lenken · schnell nach oben = Sprung | Tastatur: ↑ ↓ oder 1 2 3 · Leertaste = Sprung · P = Pause',
  sprung(){steerTo(SURF()-70);},
  pause(an){if(an&&O.mode==='play')O.mode='pause';else if(!an&&O.mode==='pause')O.mode='play';}};

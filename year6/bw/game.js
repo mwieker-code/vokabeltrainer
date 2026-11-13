@@ -7,7 +7,8 @@
    Reiseroute (reise.js) und Ergebnis. Die Kapitel sind eigene Spiele:
      1  Penguin Hop   (pinguin.js)
      2  Orca Rush     (orca.js)
-   Panda und Zebra folgen. Eine Runde laeuft vom gewaehlten Kapitel bis zum
+   3  Panda Roll    (panda.js, Figuren in pandafigur.js)
+   Das Zebra folgt. Eine Runde laeuft vom gewaehlten Kapitel bis zum
    letzten fertigen; die Punkte werden mitgenommen.
 
    Die Lernfaecher der App bleiben unberuehrt; gespeichert werden nur
@@ -21,7 +22,7 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 const KAPITEL=[
  {id:'pinguin',name:'Pinguin',spiel:()=>window.BWPinguin,titel:'Penguin Hop'},
  {id:'orca',name:'Orca',spiel:()=>window.BWOrca,titel:'Orca Rush'},
- {id:'panda',name:'Panda',status:'folgt'},
+ {id:'panda',name:'Panda',spiel:()=>window.BWPandaRoll,titel:'Panda Roll'},
  {id:'zebra',name:'Zebra',status:'folgt'}
 ];
 const FERTIG=KAPITEL.filter(k=>k.spiel).length;
@@ -68,7 +69,7 @@ let reise=null;
 function kapitelEnde(won){
  const s=S(),O=s.O;
  G.score=O.score;for(const [k,w] of O.missed)G.missed.set(k,w);
- G.stats[KAPITEL[G.kap].id]={k:O.k,best:O.best,jumps:O.jumps,extra:O.fish!=null?O.fish:O.krill};
+ G.stats[KAPITEL[G.kap].id]={k:O.k,best:O.best,jumps:O.jumps,extra:O.babys!=null?O.babys:O.fish!=null?O.fish:O.krill};
  if(!won)return finish(false);
  const id=KAPITEL[G.kap].id;if(!saved.stempel.includes(id))saved.stempel.push(id);save();
  /* erst Karte und Stempel; die Verwandlung kommt danach, ohne Schnitt ins naechste Kapitel */
@@ -90,26 +91,28 @@ function weiter(){
  if(G.mode!=='reise')return;
  if(reise){reise.stop();reise=null;}
  if($('reise'))$('reise').hidden=true;
- if(G.kap===0&&FERTIG>1&&zeichnet()&&window.BWMorph&&window.BWPinguin.tauchen)return uebergang();
+ if(G.kap+1<FERTIG&&zeichnet()&&window.BWMorph&&S().abgang)return uebergang();
  if(G.kap+1<FERTIG)kapitel(G.kap+1);else finish(true);
 }
-/* Pinguin springt vom Eisberg, verwandelt sich im Wasser, der Orca schwimmt direkt ins Spiel */
+/* Das alte Tier verlaesst sein Spiel (Kopfsprung, Sprung aus dem Wasser), verwandelt sich,
+   und das neue Tier gleitet ohne Schnitt in sein Spiel */
 function uebergang(){
  G.mode='morph';document.body.classList.add('morph');
- const P=window.BWPinguin,R=window.BWOrca,cv=$('spiel');
- P.tauchen();
- kapitel(1,true);G.mode='morph';
+ const vonK=G.kap,nachK=G.kap+1,A=S(),B=KAPITEL[nachK].spiel(),cv=$('spiel');
+ A.abgang();
+ kapitel(nachK,true);G.mode='morph';
  window.BWMorph.start(cv,()=>{
   document.body.classList.remove('morph','einblenden');
-  R.O.intro=false;if(R.O.mode==='pause')R.O.mode='play';G.mode='play';
+  B.O.intro=false;if(B.O.mode==='pause')B.O.mode='play';G.mode='play';
   /* sofort im normalen Rahmen zeichnen, sonst blitzt das letzte Vollbild verkleinert auf */
-  R.zeichne(cv);
-  const m=M();if(m)m.spiele('orca');stand();
- },{ton:toene(),fluss:{
-  vorher:{update:dt=>P.update(dt),zeichne:c=>P.zeichne(c),punkt:()=>{const k=cv.clientWidth/360;return {x:P.O.px*k,y:(P.yBase()+10)*k};}},
-  nachher:{feld:()=>{const r=cv.parentElement.getBoundingClientRect();return {x:r.left,y:r.top,w:r.width,h:r.height};},zeichne:(c,b,h)=>R.zeichne(c,b,h),pose:()=>R.pose()},
+  B.zeichne(cv);
+  const m=M();if(m)m.spiele(KAPITEL[nachK].id);stand();
+ },{ton:toene(),von:KAPITEL[vonK].id,nach:KAPITEL[nachK].id,fluss:{richtung:A.ABGANG_RICHTUNG||1,
+  vorher:{update:dt=>A.update(dt),zeichne:c=>A.zeichne(c),punkt:()=>A.abgangPunkt(cv)},
+  nachher:{feld:()=>{const r=cv.parentElement.getBoundingClientRect();return {x:r.left,y:r.top,w:r.width,h:r.height};},zeichne:(c,b,h)=>B.zeichne(c,b,h),pose:()=>B.pose()},
   ui:()=>document.body.classList.add('einblenden')}});
 }
+
 function finish(won){
  if(G.mode==='over')return;
  G.mode='over';document.body.classList.remove('morph','pausiert');
@@ -120,8 +123,9 @@ function finish(won){
  const zeilen=[];
  if(st.pinguin)zeilen.push('Pinguin: '+st.pinguin.k+'/'+window.BWPinguin.GOAL+' Schollen · Serie '+st.pinguin.best+' · Fische '+st.pinguin.extra);
  if(st.orca)zeilen.push('Orca: '+st.orca.k+'/'+window.BWOrca.GOAL+' Schwärme · Serie '+st.orca.best+' · Sprünge '+st.orca.jumps+' · Krill '+st.orca.extra);
- o.innerHTML='<h1 tabindex="-1">'+(won?'Etappe geschafft!':(k.id==='pinguin'?'Bauchlandung!':'Der Orca braucht eine Pause.'))+'</h1>'
-  +'<p class="lead">'+(won?'Weiter geht die Reise nach China – zum Panda (folgt).':'Kapitel '+(G.kap+1)+' ('+esc(k.titel)+') ist noch nicht geschafft.')+'</p>'
+ if(st.panda)zeilen.push('Panda: '+st.panda.k+'/'+window.BWPandaRoll.GOAL+' Wände · Serie '+st.panda.best+' · Baby-Pandas '+st.panda.extra);
+ o.innerHTML='<h1 tabindex="-1">'+(won?'Etappe geschafft!':({pinguin:'Bauchlandung!',orca:'Der Orca braucht eine Pause.',panda:'Der Panda braucht ein Nickerchen.'}[k.id]||'Pause!'))+'</h1>'
+  +'<p class="lead">'+(won?(KAPITEL[FERTIG]?'Weiter geht die Reise nach '+esc(ORTE()[FERTIG].ort)+' – zum '+esc(KAPITEL[FERTIG].name)+' (folgt).':'Die Reise ist geschafft!'):'Kapitel '+(G.kap+1)+' ('+esc(k.titel)+') ist noch nicht geschafft.')+'</p>'
   +'<p class="result">'+G.score+' Punkte'+(rekord&&G.score?' · <strong>neuer Bestwert!</strong>':'')+'</p>'
   +zeilen.map(z=>'<p class="muted">'+esc(z)+'</p>').join('')
   +'<div class="actions"><button id="again" class="go">'+(won?'Nochmal spielen':'Kapitel '+(G.kap+1)+' nochmal')+'</button><button id="toMenu">Zum Menü</button></div>'
