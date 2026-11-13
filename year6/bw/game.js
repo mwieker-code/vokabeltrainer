@@ -5,7 +5,7 @@
    Dieser Teil ist der Rahmen: Menue mit Kapiteln und Reisepass, Start,
    Steuerung, Musik (musik.js), Verwandlung (morph.js), Weltkarte mit
    Reiseroute (reise.js) und Ergebnis. Die Kapitel sind eigene Spiele:
-     1  Penguin Run   (pinguin.js)
+     1  Penguin Hop   (pinguin.js)
      2  Orca Rush     (orca.js)
    Panda und Zebra folgen. Eine Runde laeuft vom gewaehlten Kapitel bis zum
    letzten fertigen; die Punkte werden mitgenommen.
@@ -19,7 +19,7 @@ const D=window.CLIMB_DATA,$=id=>document.getElementById(id);
 const KEY='vt6:bw:v1';
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const KAPITEL=[
- {id:'pinguin',name:'Pinguin',spiel:()=>window.BWPinguin,titel:'Penguin Run'},
+ {id:'pinguin',name:'Pinguin',spiel:()=>window.BWPinguin,titel:'Penguin Hop'},
  {id:'orca',name:'Orca',spiel:()=>window.BWOrca,titel:'Orca Rush'},
  {id:'panda',name:'Panda',status:'folgt'},
  {id:'zebra',name:'Zebra',status:'folgt'}
@@ -96,7 +96,7 @@ function finish(won){
  const o=$('over');if(!o)return;
  const missed=[...G.missed.values()],k=KAPITEL[G.kap],st=G.stats;
  const zeilen=[];
- if(st.pinguin)zeilen.push('Pinguin: '+st.pinguin.k+'/'+window.BWPinguin.GOAL+' Tore · Serie '+st.pinguin.best+' · Sprünge '+st.pinguin.jumps+' · Fische '+st.pinguin.extra);
+ if(st.pinguin)zeilen.push('Pinguin: '+st.pinguin.k+'/'+window.BWPinguin.GOAL+' Schollen · Serie '+st.pinguin.best+' · Fische '+st.pinguin.extra);
  if(st.orca)zeilen.push('Orca: '+st.orca.k+'/'+window.BWOrca.GOAL+' Schwärme · Serie '+st.orca.best+' · Sprünge '+st.orca.jumps+' · Krill '+st.orca.extra);
  o.innerHTML='<h1 tabindex="-1">'+(won?'Etappe geschafft!':(k.id==='pinguin'?'Bauchlandung!':'Der Orca braucht eine Pause.'))+'</h1>'
   +'<p class="lead">'+(won?'Weiter geht die Reise nach China – zum Panda (folgt).':'Kapitel '+(G.kap+1)+' ('+esc(k.titel)+') ist noch nicht geschafft.')+'</p>'
@@ -164,7 +164,7 @@ function schleife(jetzt){
 const cv=$('spiel');
 if(cv){
  let aktiv=null;
- /* Orca: der Finger zieht direkt. Pinguin: Tippen = springen oder Bruecke waehlen. */
+ /* Orca: der Finger zieht direkt. Pinguin: Tippen auf eine Scholle. */
  let x0=0;
  cv.addEventListener('pointerdown',e=>{if(G.mode!=='play')return;aktiv=e.pointerId;x0=e.clientX;try{cv.setPointerCapture(e.pointerId);}catch(_){}if(S().tipp)S().tipp(cv,e.clientX,e.clientY);else if(S().zeiger)S().zeiger(cv,e.clientX,e.clientY);e.preventDefault();});
  cv.addEventListener('pointermove',e=>{if(G.mode!=='play'||!S().zeiger)return;if(e.pointerType==='mouse'||aktiv===e.pointerId)S().zeiger(cv,e.clientX,e.clientY);});
@@ -176,7 +176,7 @@ if(cv){
   if(e.key==='p'||e.key==='P'||e.key==='Escape'){pause(G.mode==='play');e.preventDefault();return;}
   if(G.mode!=='play')return;
   const i={'1':0,'2':1,'3':2}[e.key];if(i!=null){S().lane(i);e.preventDefault();return;}
-  if(S().tipp&&['ArrowUp','w'].includes(e.key)){S().sprung();e.preventDefault();return;}
+  if(S().tipp&&S().sprung&&['ArrowUp','w'].includes(e.key)){S().sprung();e.preventDefault();return;}
   if(S().schritt&&['ArrowLeft','ArrowRight','a','d'].includes(e.key)){S().schritt(e.key==='ArrowLeft'||e.key==='a'?-1:1);e.preventDefault();return;}
   if(S().taste&&['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d'].includes(e.key)){G.keys.add(e.key);e.preventDefault();}
   if(e.key===' '&&S().sprung){S().sprung();e.preventDefault();}
