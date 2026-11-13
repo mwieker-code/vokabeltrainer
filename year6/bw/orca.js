@@ -315,27 +315,10 @@ function itemZeichnen(it){
 }
 /* der Orca, nach rechts schwimmend, Schwanzschlag auf und ab */
 function orca(x,y,k,rot,schlag){
- ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.scale(k,k);
- const blink=O.stun>0&&Math.floor(O.time*16)%2===0;if(blink)ctx.globalAlpha=0.55;
- /* Schwanz */
- ctx.save();ctx.translate(-44,0);ctx.rotate(Math.sin(schlag)*0.32);
- ctx.fillStyle='#10151C';ctx.beginPath();ctx.moveTo(4,-8);ctx.bezierCurveTo(-8,-7,-18,-4,-26,-1);ctx.lineTo(-26,1);ctx.bezierCurveTo(-18,4,-8,7,4,8);ctx.closePath();ctx.fill();
- ctx.beginPath();ctx.moveTo(-22,0);ctx.bezierCurveTo(-28,-9,-36,-17,-46,-20);ctx.bezierCurveTo(-41,-10,-38,-4,-33,0);ctx.bezierCurveTo(-38,4,-41,10,-46,20);ctx.bezierCurveTo(-36,17,-28,9,-22,0);ctx.fill();
- ctx.restore();
- /* Koerper */
- const koerper=new Path2D('M62,3 C60,-14 32,-25 2,-25 C-22,-25 -38,-15 -48,-7 L-48,7 C-36,13 -10,21 16,21 C40,21 60,15 62,3 Z');
- ctx.fillStyle='#10151C';ctx.fill(koerper);
- ctx.beginPath();ctx.moveTo(-6,-22);ctx.bezierCurveTo(-4,-40,2,-55,10,-62);ctx.bezierCurveTo(9,-46,13,-32,22,-22);ctx.closePath();ctx.fill();
- ctx.save();ctx.clip(koerper);
- ctx.fillStyle='#F7F9FB';ctx.beginPath();ctx.moveTo(62,6);ctx.bezierCurveTo(44,15,22,17,2,15);ctx.bezierCurveTo(-14,13,-26,11,-38,9);ctx.bezierCurveTo(-22,22,12,26,32,23);ctx.bezierCurveTo(48,21,58,14,62,6);ctx.fill();
- ctx.fillStyle='#A7B4C2';ctx.beginPath();ctx.ellipse(-16,-20,15,4.5,-0.08,0,7);ctx.fill();
- ctx.fillStyle='rgba(255,255,255,.12)';ctx.beginPath();ctx.ellipse(18,-16,30,5,-0.1,0,7);ctx.fill();
- ctx.restore();
- ctx.fillStyle='#F7F9FB';ctx.beginPath();ctx.ellipse(38,-9,10,4.2,-0.25,0,7);ctx.fill();
- ctx.fillStyle='#10151C';ctx.save();ctx.translate(14,15);ctx.rotate(Math.sin(schlag+1)*0.2);ctx.beginPath();ctx.moveTo(0,0);ctx.bezierCurveTo(-2,14,-12,24,-22,24);ctx.bezierCurveTo(-18,14,-10,4,-6,0);ctx.closePath();ctx.fill();ctx.restore();
- ctx.fillStyle='#FFFFFF';ctx.beginPath();ctx.arc(48,-4,1.8,0,7);ctx.fill();
- ctx.strokeStyle='rgba(255,255,255,.35)';ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(61,5);ctx.quadraticCurveTo(52,9,44,8);ctx.stroke();
- ctx.restore();
+ /* Form aus morph.js (BWMorph.orcaForm), damit Spiel, Karte und Verwandlung denselben Orca zeigen */
+ if(!window.BWMorph||!window.BWMorph.orcaForm)return;
+ const blink=O.stun>0&&Math.floor(O.time*16)%2===0;
+ window.BWMorph.orcaForm(ctx,x,y,k,{rot,schlag,alpha:blink?0.55:1});
 }
 function hud(H){
  /* Strecke zur Kueste */
@@ -381,7 +364,7 @@ function zeichne(cv){
  if(O.shield){ctx.save();ctx.globalAlpha=0.35*lostA;ctx.strokeStyle='#CFEFFF';ctx.lineWidth=2;ctx.fillStyle='rgba(207,239,255,.12)';ctx.beginPath();ctx.ellipse(ORCA_X+4,O.y-6,64,40,O.rot,0,7);ctx.fill();ctx.stroke();ctx.restore();}
  if(O.turbo>0&&!ruhig){ctx.save();ctx.globalAlpha=0.5;ctx.strokeStyle='#7FE0D0';ctx.lineWidth=2;for(let i=0;i<4;i++){const y=O.y-14+i*9;ctx.beginPath();ctx.moveTo(ORCA_X-60-i*8,y);ctx.lineTo(ORCA_X-100-((O.time*300+i*30)%60),y);ctx.stroke();}ctx.restore();}
  const xr=ORCA_X+(O.mode==='ziel'?O.anim*O.anim*180:0);
- orca(xr,O.y,0.72,O.rot,O.tail);
+ orca(xr,O.y,0.7,O.rot,O.tail);
  ctx.globalAlpha=1;
  for(const p of O.parts)if(p.art!=='blasen'){ctx.globalAlpha=Math.max(0,p.life);ctx.fillStyle=p.farbe;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,7);ctx.fill();}
  ctx.globalAlpha=1;
