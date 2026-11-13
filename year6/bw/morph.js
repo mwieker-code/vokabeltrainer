@@ -41,7 +41,8 @@ function orcaForm(g,X,Y,k,o){
   return 0.5*(2*p1+(-p0+p2)*u+(2*p0-5*p1+4*p2-p3)*u*u+(-p0+3*p1-3*p2+p3)*u*u*u);}return T[T.length-1][1];};
  /* Punkt in einem lokalen Rahmen (Ursprung, Laengsrichtung d, Normale n) */
  const rahmen=(ox,oy,d,n)=>(l,w)=>[ox+d.x*l+n.x*w,oy+d.y*l+n.y*w];
- const SCHWARZ='#10151C',WEISS='#F7F9FB',GRAU='#B9C3CE';
+ /* o.farbe: nur Umriss in einer Farbe (Silhouette im Hintergrund) */
+ const SCHWARZ=o.farbe||'#10151C',WEISS='#F7F9FB',GRAU='#B9C3CE',flach=!!o.farbe;
  g.save();g.translate(X,Y);if(o.rot)g.rotate(o.rot);g.scale(k,k);if(o.alpha!=null)g.globalAlpha*=o.alpha;
  g.lineJoin='round';
  /* Schwanzflosse: zwei runde Flunken mit Kerbe */
@@ -55,6 +56,7 @@ function orcaForm(g,X,Y,k,o){
  /* Koerper */
  const umriss=[...reihe(0,1,s=>P(s,-1)),...reihe(1,0,s=>P(s,1))];
  g.fillStyle=SCHWARZ;weich(umriss,true);g.fill();
+ if(!flach){
  g.save();weich(umriss,true);g.clip();
  /* weisser Bauch, der hinten zu einem grossen Flankenfleck aufsteigt */
  const KANTE=[[0,0.25],[0.06,0.36],[0.16,0.5],[0.28,0.6],[0.38,0.62],[0.45,0.5],[0.5,0.18],[0.55,-0.22],[0.6,-0.52],[0.66,-0.66],[0.71,-0.62],[0.74,-0.3],[0.77,0.2],[0.8,0.75],[0.84,1.4]];
@@ -67,14 +69,15 @@ function orcaForm(g,X,Y,k,o){
  g.fillStyle='rgba(255,255,255,.09)';weich([...reihe(0.05,0.42,s=>P(s,-0.84)),...reihe(0.42,0.05,s=>P(s,-0.84+0.24*Math.sin((s-0.05)/0.37*Math.PI)))],true);g.fill();
  g.restore();
  /* Augenfleck: laengliches Oval, hinten nach oben */
- {const a=[];for(let i=0;i<20;i++){const w=i/20*Math.PI*2;a.push(P(0.15+0.055*Math.cos(w),-0.32+0.15*Math.sin(w)-0.12*Math.cos(w)));}g.fillStyle=WEISS;weich(a,true);g.fill();}
+ }
+ if(!flach){const a=[];for(let i=0;i<20;i++){const w=i/20*Math.PI*2;a.push(P(0.15+0.055*Math.cos(w),-0.32+0.15*Math.sin(w)-0.12*Math.cos(w)));}g.fillStyle=WEISS;weich(a,true);g.fill();}
  /* Brustflosse: rundes Paddel nach hinten unten */
  {const s0=0.2,wurzel=P(s0,0.75),t=tang(s0),n=oben(s0),dw=0.6+Math.sin(schlag+1)*0.15*welle;
   const d={x:t.x*Math.cos(dw)-n.x*Math.sin(dw),y:t.y*Math.cos(dw)-n.y*Math.sin(dw)},q={x:-d.y,y:d.x},F=rahmen(wurzel[0],wurzel[1],d,q);
   g.fillStyle=SCHWARZ;weich([F(-2,-4.5),F(5,-6.5),F(14,-6.5),F(21,-4),F(24,0),F(21,3.5),F(12,4.5),F(4,4.5),F(-2,4)],true);g.fill();}
  /* Auge und Maulspalte */
- const au=P(0.085,-0.02);g.fillStyle='#FFFFFF';g.beginPath();g.arc(au[0],au[1],1.5,0,TAU);g.fill();
- const m1=P(0.004,0.15),m2=P(0.05,0.28),m3=P(0.1,0.3);g.strokeStyle='rgba(16,21,28,.5)';g.lineWidth=1.1;g.lineCap='round';g.beginPath();g.moveTo(m1[0],m1[1]);g.quadraticCurveTo(m2[0],m2[1],m3[0],m3[1]);g.stroke();
+ if(!flach){const au=P(0.085,-0.02);g.fillStyle='#FFFFFF';g.beginPath();g.arc(au[0],au[1],1.5,0,TAU);g.fill();
+ const m1=P(0.004,0.15),m2=P(0.05,0.28),m3=P(0.1,0.3);g.strokeStyle='rgba(16,21,28,.5)';g.lineWidth=1.1;g.lineCap='round';g.beginPath();g.moveTo(m1[0],m1[1]);g.quadraticCurveTo(m2[0],m2[1],m3[0],m3[1]);g.stroke();}
  g.restore();
 }
 /* Sprung-Pose fuer die Verwandlung (auch der Startpunkt fuer das Gleiten ins Spiel) */

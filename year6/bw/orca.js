@@ -36,7 +36,7 @@ const O={mode:'aus',H:560,k:0,hearts:HEARTS,score:0,streak:0,best:0,air:1,y:0,vy
  airborne:false,rot:0,tail:0,scroll:0,time:0,gate:null,old:[],items:[],pops:[],parts:[],
  turbo:0,shield:false,stun:0,anim:0,q:null,queue:[],pool:[],missed:new Map(),krill:0,jumps:0,rings:0,
  onEnd:null,onFrage:null};
-const ORCA_X=96;
+const ORCA_X=96,GROESSE=0.86;   // Groesse des Orcas im Spiel
 const SURF=()=>O.H*0.24,BED=()=>O.H-26;
 const laneY=i=>{const s=SURF(),b=BED();return s+(b-s)*[0.2,0.5,0.8][i];};
 function laneOf(y){
@@ -235,7 +235,7 @@ function wasser(H,s){
  const wo=wiederhole(900,0.35);
  for(const o of [wo-900,wo]){silhouette(o+250,s+(H-s)*0.62,0.9);silhouette(o+690,s+(H-s)*0.4,0.6);}
 }
-function silhouette(x,y,k){ctx.save();ctx.translate(x,y+Math.sin(O.time*0.8+x)*3);ctx.scale(k,k);ctx.beginPath();ctx.moveTo(60,0);ctx.bezierCurveTo(50,-16,0,-20,-30,-10);ctx.lineTo(-60,-22);ctx.lineTo(-52,0);ctx.lineTo(-60,22);ctx.lineTo(-30,10);ctx.bezierCurveTo(0,20,50,16,60,0);ctx.fill();ctx.beginPath();ctx.moveTo(-2,-16);ctx.lineTo(8,-38);ctx.lineTo(14,-15);ctx.fill();ctx.restore();}
+function silhouette(x,y,k){if(window.BWMorph&&window.BWMorph.orcaForm)window.BWMorph.orcaForm(ctx,x,y+Math.sin(O.time*0.8+x)*3,k*0.78,{farbe:ctx.fillStyle,schlag:O.time*2+x*0.01,welle:0.6});}
 function grund(H){
  const b=H-26;
  ctx.fillStyle='#071E33';ctx.beginPath();ctx.moveTo(0,H);const o=wiederhole(240,1);
@@ -364,7 +364,7 @@ function zeichne(cv,breite,hoehe){
  if(O.shield){ctx.save();ctx.globalAlpha=0.35*lostA;ctx.strokeStyle='#CFEFFF';ctx.lineWidth=2;ctx.fillStyle='rgba(207,239,255,.12)';ctx.beginPath();ctx.ellipse(ORCA_X+4,O.y-6,64,40,O.rot,0,7);ctx.fill();ctx.stroke();ctx.restore();}
  if(O.turbo>0&&!ruhig){ctx.save();ctx.globalAlpha=0.5;ctx.strokeStyle='#7FE0D0';ctx.lineWidth=2;for(let i=0;i<4;i++){const y=O.y-14+i*9;ctx.beginPath();ctx.moveTo(ORCA_X-60-i*8,y);ctx.lineTo(ORCA_X-100-((O.time*300+i*30)%60),y);ctx.stroke();}ctx.restore();}
  const xr=ORCA_X+(O.mode==='ziel'?O.anim*O.anim*180:0);
- if(!O.intro)orca(xr,O.y,0.7,O.rot,O.tail);
+ if(!O.intro)orca(xr,O.y,GROESSE,O.rot,O.tail);
  ctx.globalAlpha=1;
  for(const p of O.parts)if(p.art!=='blasen'){ctx.globalAlpha=Math.max(0,p.life);ctx.fillStyle=p.farbe;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,7);ctx.fill();}
  ctx.globalAlpha=1;
@@ -382,7 +382,7 @@ function zeigerY(cv,clientY){const r=cv.getBoundingClientRect();return (clientY-
 function zeiger(cv,clientX,clientY){steerTo(zeigerY(cv,clientY));}
 function taste(richtung,dt){steerTo(O.ty+richtung*330*dt);}
 /* wo der Orca im Spiel schwimmt (fuer den Uebergang aus morph.js) */
-const pose=()=>({x:ORCA_X,y:O.y,k:0.7,rot:O.rot||0,schlag:O.tail||0});
+const pose=()=>({x:ORCA_X,y:O.y,k:GROESSE,rot:O.rot||0,schlag:O.tail||0});
 window.BWOrca={O,start,pose,update,zeichne,steerTo,lane,laneY,laneOf,SURF,BED,zeigerY,zeiger,taste,GOAL,HEARTS,MINREAD,ORCA_X,speed,gapFor,mult,LANE_COL,LANE_ZEICHEN,
  ding:'Schwarm',hinweis:'Ziehen = lenken · schnell nach oben = Sprung | Tastatur: ↑ ↓ oder 1 2 3 · Leertaste = Sprung · P = Pause',
  sprung(){steerTo(SURF()-70);},

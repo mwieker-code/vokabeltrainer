@@ -102,6 +102,8 @@ function uebergang(){
  window.BWMorph.start(cv,()=>{
   document.body.classList.remove('morph','einblenden');
   R.O.intro=false;if(R.O.mode==='pause')R.O.mode='play';G.mode='play';
+  /* sofort im normalen Rahmen zeichnen, sonst blitzt das letzte Vollbild verkleinert auf */
+  R.zeichne(cv);
   const m=M();if(m)m.spiele('orca');stand();
  },{ton:toene(),fluss:{
   vorher:{update:dt=>P.update(dt),zeichne:c=>P.zeichne(c),punkt:()=>{const k=cv.clientWidth/360;return {x:P.O.px*k,y:(P.yBase()+10)*k};}},
