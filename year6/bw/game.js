@@ -8,7 +8,8 @@
      1  Penguin Hop   (pinguin.js)
      2  Orca Rush     (orca.js)
    3  Panda Roll    (panda.js, Figuren in pandafigur.js)
-   Das Zebra folgt. Eine Runde laeuft vom gewaehlten Kapitel bis zum
+     4  Zebra Dash    (zebra.js, Figuren in zebrafigur.js)
+   Die deutsche Vokabel steht als Karte im Spielbild (frage.js). Eine Runde laeuft vom gewaehlten Kapitel bis zum
    letzten fertigen; die Punkte werden mitgenommen.
 
    Die Lernfaecher der App bleiben unberuehrt; gespeichert werden nur
@@ -23,7 +24,7 @@ const KAPITEL=[
  {id:'pinguin',name:'Pinguin',spiel:()=>window.BWPinguin,titel:'Penguin Hop'},
  {id:'orca',name:'Orca',spiel:()=>window.BWOrca,titel:'Orca Rush'},
  {id:'panda',name:'Panda',spiel:()=>window.BWPandaRoll,titel:'Panda Roll'},
- {id:'zebra',name:'Zebra',status:'folgt'}
+ {id:'zebra',name:'Zebra',spiel:()=>window.BWZebra,titel:'Zebra Dash'}
 ];
 const FERTIG=KAPITEL.filter(k=>k.spiel).length;
 let saved={best:{},stempel:[]};
@@ -69,15 +70,16 @@ let reise=null;
 function kapitelEnde(won){
  const s=S(),O=s.O;
  G.score=O.score;for(const [k,w] of O.missed)G.missed.set(k,w);
- G.stats[KAPITEL[G.kap].id]={k:O.k,best:O.best,jumps:O.jumps,extra:O.babys!=null?O.babys:O.fish!=null?O.fish:O.krill};
+ G.stats[KAPITEL[G.kap].id]={k:O.k,best:O.best,jumps:O.jumps,extra:O.babys!=null?O.babys:O.gras!=null?O.gras:O.fish!=null?O.fish:O.krill};
  if(!won)return finish(false);
  const id=KAPITEL[G.kap].id;if(!saved.stempel.includes(id))saved.stempel.push(id);save();
  /* erst Karte und Stempel; die Verwandlung kommt danach, ohne Schnitt ins naechste Kapitel */
  karte();
 }
 function karte(){
- G.mode='reise';document.body.classList.add('morph');
+ G.mode='reise';
  const von=G.kap,A=ORTE()[von],B=ORTE()[von+1],weiterGeht=von+1<FERTIG,box=$('reise');
+ if(B)document.body.classList.add('morph');
  const stempel=()=>{
   if(!box)return;
   box.innerHTML='<div class="pass"><div class="stempel" aria-hidden="true"><b>'+esc(A.ort.toUpperCase())+'</b><span>CHAPTER '+(von+1)+' ✓</span><i>'+esc(A.tier.toUpperCase())+'</i></div>'
@@ -85,6 +87,8 @@ function karte(){
    +'<button id="weiter" class="go">'+(weiterGeht?'Weiter: '+esc(B.ort)+' →':'Zum Ergebnis →')+'</button>';
   box.hidden=false;$('weiter').onclick=weiter;try{$('weiter').focus();}catch(e){}
  };
+ /* letzte Station: kein Reiseweg mehr, der Stempel kommt ueber das Schlussbild */
+ if(!B){stempel();return;}
  reise=window.BWReise.start($('spiel'),von,von+1,stempel);
 }
 function weiter(){
@@ -124,8 +128,9 @@ function finish(won){
  if(st.pinguin)zeilen.push('Pinguin: '+st.pinguin.k+'/'+window.BWPinguin.GOAL+' Schollen · Serie '+st.pinguin.best+' · Fische '+st.pinguin.extra);
  if(st.orca)zeilen.push('Orca: '+st.orca.k+'/'+window.BWOrca.GOAL+' Schwärme · Serie '+st.orca.best+' · Sprünge '+st.orca.jumps+' · Krill '+st.orca.extra);
  if(st.panda)zeilen.push('Panda: '+st.panda.k+'/'+window.BWPandaRoll.GOAL+' Wände · Serie '+st.panda.best+' · Baby-Pandas '+st.panda.extra);
- o.innerHTML='<h1 tabindex="-1">'+(won?'Etappe geschafft!':({pinguin:'Bauchlandung!',orca:'Der Orca braucht eine Pause.',panda:'Der Panda braucht ein Nickerchen.'}[k.id]||'Pause!'))+'</h1>'
-  +'<p class="lead">'+(won?(KAPITEL[FERTIG]?'Weiter geht die Reise nach '+esc(ORTE()[FERTIG].ort)+' – zum '+esc(KAPITEL[FERTIG].name)+' (folgt).':'Die Reise ist geschafft!'):'Kapitel '+(G.kap+1)+' ('+esc(k.titel)+') ist noch nicht geschafft.')+'</p>'
+ if(st.zebra)zeilen.push('Zebra: '+st.zebra.k+'/'+window.BWZebra.GOAL+' Tore · Serie '+st.zebra.best+' · Gras '+st.zebra.extra);
+ o.innerHTML='<h1 tabindex="-1">'+(won?'Etappe geschafft!':({pinguin:'Bauchlandung!',orca:'Der Orca braucht eine Pause.',panda:'Der Panda braucht ein Nickerchen.',zebra:'Der Löwe war schneller – nochmal!'}[k.id]||'Pause!'))+'</h1>'
+  +'<p class="lead">'+(won?(KAPITEL[FERTIG]?'Weiter geht die Reise nach '+esc(ORTE()[FERTIG].ort)+' – zum '+esc(KAPITEL[FERTIG].name)+' (folgt).':'Alle vier Stempel – die Reise ist geschafft!'):'Kapitel '+(G.kap+1)+' ('+esc(k.titel)+') ist noch nicht geschafft.')+'</p>'
   +'<p class="result">'+G.score+' Punkte'+(rekord&&G.score?' · <strong>neuer Bestwert!</strong>':'')+'</p>'
   +zeilen.map(z=>'<p class="muted">'+esc(z)+'</p>').join('')
   +'<div class="actions"><button id="again" class="go">'+(won?'Nochmal spielen':'Kapitel '+(G.kap+1)+' nochmal')+'</button><button id="toMenu">Zum Menü</button></div>'

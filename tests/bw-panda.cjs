@@ -10,7 +10,7 @@
 const {JSDOM,VirtualConsole}=require('jsdom'),fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const root=path.join(__dirname,'..'),dir=path.join(root,'year6/bw');let checks=0;const ok=(v,m)=>{assert.ok(v,m);checks++;};
 const dom=new JSDOM(fs.readFileSync(path.join(dir,'index.html'),'utf8'),{runScripts:'outside-only',url:'https://example.org/year6/bw/',virtualConsole:new VirtualConsole()});
-for(const f of ['year6/climb/data.js','year6/figuren.js','year6/bw/musik.js','year6/bw/morph.js','year6/bw/reise.js','year6/bw/frage.js','year6/bw/pinguin.js','year6/bw/orca.js','year6/bw/pandafigur.js','year6/bw/panda.js','year6/bw/game.js'])dom.window.eval(fs.readFileSync(path.join(root,f),'utf8'));
+for(const f of ['year6/climb/data.js','year6/figuren.js','year6/bw/musik.js','year6/bw/morph.js','year6/bw/reise.js','year6/bw/frage.js','year6/bw/pinguin.js','year6/bw/orca.js','year6/bw/pandafigur.js','year6/bw/panda.js','year6/bw/zebrafigur.js','year6/bw/zebra.js','year6/bw/game.js'])dom.window.eval(fs.readFileSync(path.join(root,f),'utf8'));
 const w=dom.window,d=w.document,B=w.BWGame,P=w.BWPandaRoll,O=P.O,D=w.CLIMB_DATA;
 const tick=(n=1,dt=1/30)=>{for(let i=0;i<n;i++)P.update(dt);};
 const richtigLane=()=>{const o=(O.gate?O.gate.opts:O.lichtung.opts).find(o=>o.w===O.q);return o.lane;};
@@ -51,14 +51,12 @@ for(const id of [...D.parts.map(p=>p.id),'all']){
  ruhe();
  ok(O.gerettet===4&&O.babys>=4,id+': vier Babys von den Lichtungen');
  ok(B.G.mode==='reise'&&!d.getElementById('reise').hidden,id+': am Nest die Reise');
- const A=w.BWReise.ORTE[2];ok(d.getElementById('reise').textContent.includes(A.satz)&&/Zum Ergebnis/.test(d.getElementById('reise').textContent),id+': Stempel China, dann Ergebnis');
- d.getElementById('weiter').click();
- const t=d.getElementById('over').textContent;
- ok(B.G.mode==='over'&&/Etappe geschafft/.test(t)&&/Panda: 16\/16/.test(t)&&/Tanzania/.test(t)&&/Zebra/.test(t),id+': Ergebnis, weiter zum Zebra (folgt)');
- d.getElementById('toMenu').click();
+ const A=w.BWReise.ORTE[2];ok(d.getElementById('reise').textContent.includes(A.satz)&&/Weiter: Tanzania/.test(d.getElementById('reise').textContent),id+': Stempel China, weiter nach Tanzania');
+ const punkte=O.score;d.getElementById('weiter').click();
+ ok(B.G.kap===3&&w.BWZebra.O.mode==='play'&&w.BWZebra.O.score===punkte,id+': Zebra-Kapitel mit den Punkten');
+ d.getElementById('quit').click();
 }
 ok(B.saved().stempel.includes('panda'),'Stempel fuer den Panda');
-ok(B.saved().best.all>0&&/Bestwert/.test(d.querySelector('[data-part="all"]').textContent),'Bestwert im Menue');
 
 /* falsches Tor: Abprall, Herz, offenes richtiges Tor, Baby purzelt weg */
 d.querySelector('[data-kap="2"]').click();d.querySelector('[data-part="y6u2-partb"]').click();

@@ -2,7 +2,7 @@
    BLACK & WHITE - Musik. Jedes Kapitel hat ein eigenes Stueck, das der
    Browser selbst spielt (Web Audio): keine Dateien, keine Lizenzfragen,
    auch ohne Netz.
-     spiele(id)  Stueck starten: 'pinguin', 'orca' oder 'panda'
+     spiele(id)  Stueck starten: 'pinguin', 'orca', 'panda' oder 'zebra'
      tempo(f)    die Musik wird mit dem Spiel schneller (f = 1 ... 1,6)
      turbo(on)   im Turbo kommt Schlagzeug dazu
      fehler()    ein Fehler daempft die Musik kurz ab
@@ -65,7 +65,18 @@ const PANDA={bpm:104,max:140,echo:0.16,
    'D6 _ C6 Bb5 A5 _ F5 _','E5 G5 C6 _ Bb5 _ A5 G5','A5 _ C6 _ E6 _ D6 C6','D6 _ A5 _ F5 _ - -',
    'Bb5 _ D6 _ F6 _ D6 Bb5','C6 _ E6 _ G6 _ F6 E6','F6 _ C6 _ A5 _ C6 _','F5 _ _ _ - - - -']}},
  folge:['A','A','B','A']};
-const STUECKE={orca:ORCA,pinguin:PINGUIN,panda:PANDA};
+/* ZEBRA - D-Dur, galoppierend, Handtrommeln und Marimba-Klang */
+const ZEBRA={bpm:120,max:160,echo:0.1,
+ akkorde:{D:[50,[0,4,7]],G:[43,[0,4,7]],A:[45,[0,4,7]],Bm:[47,[0,3,7]],Em:[52,[0,3,7]]},
+ teile:{
+  A:{chords:['D','G','A','D','Bm','G','Em','A'],melody:[
+   'F#5 A5 D6 _ A5 F#5 A5 _','G5 B5 D6 _ B5 G5 B5 _','A5 _ C#6 E6 _ C#6 A5 _','D6 _ A5 F#5 D5 _ - -',
+   'F#5 _ B5 D6 _ B5 F#5 _','G5 _ B5 _ D6 _ E6 D6','E5 G5 B5 _ G5 E5 G5 _','A5 _ E5 _ C#5 _ A4 -']},
+  B:{chords:['G','A','D','Bm','G','A','D','D'],melody:[
+   'B5 _ D6 _ G6 _ F#6 E6','E6 _ C#6 _ A5 _ - -','F#6 _ D6 _ A5 _ D6 F#6','F#6 _ D6 _ B5 _ - -',
+   'G5 B5 D6 G6 _ D6 B5 _','A5 C#6 E6 A6 _ E6 C#6 _','D6 _ F#6 _ A6 _ F#6 D6','D6 _ _ _ - - - -']}},
+ folge:['A','A','B','A']};
+const STUECKE={orca:ORCA,pinguin:PINGUIN,panda:PANDA,zebra:ZEBRA};
 for(const s of Object.values(STUECKE))s.takte=takte(s.teile,s.folge);
 
 /* ----------------------------------------------------------- Klang */
@@ -149,6 +160,17 @@ function plane(s,t){
   if(i===4||i===12)klatsch(t,0.14);
   if(i%2===1)shaker(t,0.035);
   if(turboAn){if(i===14||i===15)kick(t,0.4,true);hat(t,i%2?0.035:0.06);if(i===12)snare(t,0.14);}
+ }else if(S===ZEBRA){
+  /* Zebra: Marimba-Melodie, Galopp-Rhythmus auf Handtrommeln */
+  for(const n of bar.melody)if(n.step===i){ton(hz(n.n),t,0.22,'sine',0.16,{halt:0.15,cut:3800});ton(hz(n.n*1+19),t,0.06,'sine',0.03);}
+  if(i===0||i===8){ton(hz(root-12),t,d*4,'triangle',0.3,{halt:0.3,cut:700});}
+  if(i===6||i===14)ton(hz(root-12+7),t,d*2,'triangle',0.22,{halt:0.2,cut:700});
+  /* Galopp: ba-da-dum */
+  if(i===0||i===8)kick(t,0.5,true);if(i===3||i===11)kick(t,0.3);if(i===5||i===13)kick(t,0.38);
+  if(i===4||i===12)klatsch(t,0.12);
+  if(i%2===0)shaker(t,i%4===0?0.05:0.03);
+  if(bar.refrain&&i%4===2){for(const x of iv)ton(hz(root+12+x),t,d*1.1,'triangle',0.03,{halt:0.1,cut:2600});}
+  if(turboAn){hat(t,i%2?0.035:0.06);if(i===14||i===15)snare(t,0.13);}
  }else{
   /* Pinguin: Xylophon-Melodie, Zupfbass, Klatschen */
   for(const n of bar.melody)if(n.step===i){xylo(hz(n.n),t,0.16);if(n.len>=4)ton(hz(n.n),t,n.len*d*0.9,'square',0.025,{cut:2200});}

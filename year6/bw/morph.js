@@ -96,7 +96,8 @@ function bauen(zeichne){
 }
 /* erst bei Bedarf zeichnen - ohne Zeichenflaeche (Tests) passiert nichts */
 function zeichnePanda(g){if(window.PandaFigur)window.PandaFigur.panda(g,256,440,3.3,{mood:'froh'});}
-let TIERE=null;const tiere=()=>TIERE||(TIERE={pinguin:bauen(zeichnePinguin),orca:bauen(zeichneOrca),panda:bauen(zeichnePanda)});
+function zeichneZebra(g){if(window.ZebraFigur)window.ZebraFigur.seite(g,236,440,2.6,{mood:'froh'});}
+let TIERE=null;const tiere=()=>TIERE||(TIERE={pinguin:bauen(zeichnePinguin),orca:bauen(zeichneOrca),panda:bauen(zeichnePanda),zebra:bauen(zeichneZebra)});
 function sprite(name){try{return tiere()[name]||null;}catch(e){return null;}}
 
 /* opt.fluss (Pinguin -> Orca ohne Schnitt):
@@ -145,11 +146,24 @@ function wald(w,h){
   ctx.fillStyle='rgba(30,60,20,.3)';for(let y=h*0.58;y>0;y-=46)ctx.fillRect(x+dx-d/2-1,y,d+2,2.4);}
  ctx.fillStyle='rgba(140,195,100,.85)';for(const f of flocken){const y=((f.y+zeit*f.v*0.6)%1)*h,x=(f.x+Math.sin(zeit*0.9+f.y*9)*0.03)*w;ctx.beginPath();ctx.ellipse(x,y,f.r*2.2,f.r*0.9,zeit+f.x*9,0,TAU);ctx.fill();}
 }
-const land=(w,h,risse)=>nach==='panda'||von==='panda'?wald(w,h):eis(w,h,risse);
-const welt=(w,h)=>nach==='orca'?meer(w,h):nach==='panda'?wald(w,h):eis(w,h,0);
+/* Savanne fuer das Zebra */
+function savanne(w,h){
+ const g=ctx.createLinearGradient(0,0,0,h);g.addColorStop(0,'#F7A65C');g.addColorStop(0.5,'#FDE7B5');g.addColorStop(0.51,'#D9B26A');g.addColorStop(1,'#B98F47');
+ ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+ ctx.fillStyle='#FFF1C9';ctx.beginPath();ctx.arc(w*0.68,h*0.36,Math.min(w,h)*0.09,0,TAU);ctx.fill();
+ ctx.fillStyle='#C98F6B';ctx.beginPath();ctx.moveTo(w*0.05,h*0.51);ctx.quadraticCurveTo(w*0.3,h*0.36,w*0.42,h*0.34);ctx.lineTo(w*0.52,h*0.34);ctx.quadraticCurveTo(w*0.65,h*0.38,w*0.9,h*0.51);ctx.fill();
+ for(let i=0;i<5;i++){const x=w*(0.1+i*0.2)+Math.sin(i*5)*20,y=h*(0.62+0.06*(i%2)),s=Math.min(w,h)/360*(0.8+0.3*(i%2));
+  ctx.fillStyle='#6B4A2E';ctx.fillRect(x-2*s,y-40*s,4*s,40*s);ctx.fillStyle='#6E9440';ctx.beginPath();ctx.ellipse(x,y-46*s,38*s,10*s,0,0,TAU);ctx.fill();}
+ ctx.fillStyle='rgba(255,240,200,.6)';for(const f of flocken){const y=((f.y+zeit*f.v*0.3)%1)*h,x=(f.x+Math.sin(zeit*0.5+f.y*9)*0.02)*w;ctx.beginPath();ctx.arc(x,y,f.r*0.8,0,TAU);ctx.fill();}
+}
+const LANDSCHAFT={pinguin:(w,h,r)=>eis(w,h,r),panda:(w,h)=>wald(w,h),zebra:(w,h)=>savanne(w,h)};
+const land=(w,h,risse)=>(LANDSCHAFT[nach==='orca'?von:nach]||LANDSCHAFT.pinguin)(w,h,risse);
+const welt=(w,h)=>nach==='orca'?meer(w,h):(LANDSCHAFT[nach]||LANDSCHAFT.pinguin)(w,h,0);
 function umgebung(w,h,u,risse){
  /* u: 0 = Welt des Starttiers, 1 = Welt des Zieltiers; dazwischen steigt bzw. faellt das Wasser */
  if(F&&nach==='orca')return meer(w,h);
+ /* zwischen zwei Landschaften: ueberblenden */
+ if(von!=='orca'&&nach!=='orca'){(LANDSCHAFT[von]||LANDSCHAFT.pinguin)(w,h,0);if(u>0){ctx.save();ctx.globalAlpha=u;LANDSCHAFT[nach](w,h,0);ctx.restore();}return;}
  const zuMeer=nach==='orca',wasser=zuMeer?u:1-u;
  if(wasser<=0)return land(w,h,risse);
  if(wasser>=1)return meer(w,h);
@@ -240,10 +254,10 @@ function gleiten(){
  ctx.globalAlpha=smooth(0.05,0.75,e);ctx.drawImage(off,R.x,R.y,R.w,R.h);ctx.globalAlpha=1;
  ctx.restore();
  if(nach!=='orca'){
-  /* Panda: aus der Sitz-Pose wird die Kugel an ihrem Platz im Spiel */
-  const T=tiere()[nach],p=F.nachher.pose(),s1=R.w/360,f=smooth(GL0,GL1-0.2,t),x1=R.x+p.x*s1,y1=R.y+p.y*s1,k1=p.k*s1;
-  tierBild(nach,lerp(cx,x1,f),lerp(cy,y1-35*k1,f),lerp(gr,80*k1,f),1-smooth(0.55,0.92,f));
-  if(window.PandaFigur&&f>0.5){ctx.save();ctx.globalAlpha=smooth(0.55,0.92,f);window.PandaFigur.panda(ctx,x1,y1,k1,{pose:'kugel',dreh:(p.dreh||0)+(1-f)*-6,mood:'froh'});ctx.restore();}
+  /* Panda, Zebra: das Bild aus der Verwandlung wird zur Spielfigur an ihrem Platz */
+  const p=F.nachher.pose(),s1=R.w/360,f=smooth(GL0,GL1-0.2,t),x1=R.x+p.x*s1,y1=R.y+p.y*s1,k1=p.k*s1,hh=(p.hoehe||80)*k1;
+  tierBild(nach,lerp(cx,x1,f),lerp(cy,y1-hh*0.5,f),lerp(gr,hh*1.05,f),1-smooth(0.55,0.92,f));
+  if(p.figur&&f>0.5){ctx.save();ctx.globalAlpha=smooth(0.55,0.92,f);p.figur(ctx,x1,y1,k1);ctx.restore();}
   return;
  }
  /* Orca: von der Sprung-Pose in die Schwimm-Pose */

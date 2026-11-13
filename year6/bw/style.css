@@ -54,7 +54,7 @@ body.pausiert #spiel{filter:saturate(.4) brightness(.7)}
 .hint{color:var(--soft);font-size:13px;text-align:center;margin:8px 0 0}
 /* waehrend der Verwandlung gehoert das ganze Bild dem Tier */
 body.morph .ask,body.morph #choices,body.morph .hint,body.morph .bar{visibility:hidden}
-body.morph #spiel{position:fixed;inset:0;width:100%;height:100%;border-radius:0;border:0;z-index:10}
+body.morph #spiel{position:fixed;inset:0;width:100%;height:100%;border-radius:0;border:0;z-index:10;background:transparent}
 /* Uebergang ins naechste Kapitel: Leiste, Frage und Knoepfe kommen sanft dazu */
 body.morph.einblenden .ask,body.morph.einblenden #choices,body.morph.einblenden .hint,body.morph.einblenden .bar{visibility:visible;animation:einblenden .9s ease both}
 body.morph.einblenden #spiel{background:transparent;pointer-events:none}

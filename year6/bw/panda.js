@@ -176,6 +176,8 @@ function update(dt){
  for(const p of O.parts){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=(p.art==='splitter'?520:p.art==='staub'?-20:60)*dt;p.vx*=0.98;p.rot+=p.vr*dt;p.life-=dt*(p.art==='staub'?1.6:1.1);}
  O.parts=O.parts.filter(p=>p.life>0);
  if(O.shake>0)O.shake=Math.max(0,O.shake-dt*30);
+ if(O.mode==='abgang'){/* der Panda rollt mit Schwung davon - Uebergang zum Zebra */
+  O.anim+=dt;O.abX=(O.abX||0)+(200+O.anim*500)*dt;O.dreh+=dt*14;O.lane+=(1-O.lane)*Math.min(1,dt*5);return;}
  if(O.mode==='aus'||O.mode==='pause')return;
  if(O.mode==='lost'||O.mode==='ziel'){
   O.anim+=dt;
@@ -437,7 +439,7 @@ function pandaZeichnen(){
   window.PandaFigur.panda(ctx,PX-(42+n*30)*sk2,yAus(l2)-hop,0.95*sk2,{pose:'kugel',baby:true,dreh:O.dreh*1.4+n,schleife:b.schleife,mood:'froh'});});
  const mood=O.stun>0?'schwindlig':(O.gate&&O.gate.ergebnis==='richtig'&&O.x<O.gate.x+60)||(O.lichtung&&O.lichtung.ergebnis==='richtig')?'lachen':'froh';
  const quetsch=O.hitstop>0?1.12:1;
- ctx.save();ctx.translate(PX,y);ctx.scale(quetsch,2-quetsch);
+ ctx.save();ctx.translate(PX+(O.mode==='abgang'?O.abX:0),y-(O.mode==='abgang'?Math.abs(Math.sin(O.anim*7))*30:0));ctx.scale(quetsch,2-quetsch);
  window.PandaFigur.panda(ctx,0,0,PK*sk,{pose:'kugel',dreh:O.dreh,mood,zeit:O.time});
  ctx.restore();
  if(O.stun>0){for(let i=0;i<3;i++){const a=O.time*6+i*2.1;ctx.fillStyle='#FFE08A';stern(PX+Math.cos(a)*22*sk,y-ROLL_R*2*sk-6+Math.sin(a)*6,4.5);}}
@@ -509,9 +511,11 @@ function tipp(cv,cx,cy){
  zeiger(cv,cx,cy);
 }
 /* Lage der Panda-Kugel (fuer den Uebergang aus morph.js) */
-const pose=()=>({x:PX,y:yAus(O.lane),k:PK*skala(O.lane),rot:0,dreh:O.dreh});
+const pose=()=>({x:PX,y:yAus(O.lane),k:PK*skala(O.lane),rot:0,dreh:O.dreh,hoehe:75,figur:(c,x,y,k)=>window.PandaFigur&&window.PandaFigur.panda(c,x,y,k,{pose:'kugel',dreh:O.dreh,mood:'froh'})});
+function abgang(){Object.assign(O,{mode:'abgang',anim:0,abX:0,gate:null,lichtung:null,pops:[],kette:[]});O.items=[];}
+const abgangPunkt=cv=>{const k=cv.clientWidth/W;return {x:Math.min(W-30,PX+O.abX)*k,y:(yAus(O.lane)-35)*k};};
 
-window.BWPandaRoll={O,start,update,zeichne,lane,zeiger,wisch,taste,tipp,pose,werfen,zielVonZug,laneY,laneOf,yAus,GOAL,HEARTS,MINREAD,PX,LICHTUNG_ALLE,
+window.BWPandaRoll={O,start,abgang,abgangPunkt,ABGANG_RICHTUNG:1,update,zeichne,lane,zeiger,wisch,taste,tipp,pose,werfen,zielVonZug,laneY,laneOf,yAus,GOAL,HEARTS,MINREAD,PX,LICHTUNG_ALLE,
  speed,grundTempo,ruheStrecke,mult,istLichtung,LANE_COL,LANE_ZEICHEN,ding:'Wand',
  hinweis:'Ziehen = Weg wählen · durch das richtige Tor krachen | Lichtung: zurückziehen und loslassen | Tastatur: 1 2 3 · P = Pause',
  pause(an){if(an&&O.mode==='play')O.mode='pause';else if(!an&&O.mode==='pause')O.mode='play';}};
