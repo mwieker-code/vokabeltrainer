@@ -5,7 +5,7 @@
    Dieser Teil ist der Rahmen: Menue mit Kapiteln und Reisepass, Start,
    Steuerung, Musik (musik.js), Verwandlung (morph.js), Weltkarte mit
    Reiseroute (reise.js) und Ergebnis. Die Kapitel sind eigene Spiele:
-     1  Penguin Slide (pinguin.js)
+     1  Penguin Run   (pinguin.js)
      2  Orca Rush     (orca.js)
    Panda und Zebra folgen. Eine Runde laeuft vom gewaehlten Kapitel bis zum
    letzten fertigen; die Punkte werden mitgenommen.
@@ -19,7 +19,7 @@ const D=window.CLIMB_DATA,$=id=>document.getElementById(id);
 const KEY='vt6:bw:v1';
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const KAPITEL=[
- {id:'pinguin',name:'Pinguin',spiel:()=>window.BWPinguin,titel:'Penguin Slide'},
+ {id:'pinguin',name:'Pinguin',spiel:()=>window.BWPinguin,titel:'Penguin Run'},
  {id:'orca',name:'Orca',spiel:()=>window.BWOrca,titel:'Orca Rush'},
  {id:'panda',name:'Panda',status:'folgt'},
  {id:'zebra',name:'Zebra',status:'folgt'}
@@ -164,9 +164,9 @@ function schleife(jetzt){
 const cv=$('spiel');
 if(cv){
  let aktiv=null;
- /* Orca: der Finger zieht direkt. Pinguin: wischen oder tippen wechselt die Spur. */
+ /* Orca: der Finger zieht direkt. Pinguin: Tippen = springen oder Bruecke waehlen. */
  let x0=0;
- cv.addEventListener('pointerdown',e=>{if(G.mode!=='play')return;aktiv=e.pointerId;x0=e.clientX;try{cv.setPointerCapture(e.pointerId);}catch(_){}if(S().zeiger)S().zeiger(cv,e.clientX,e.clientY);e.preventDefault();});
+ cv.addEventListener('pointerdown',e=>{if(G.mode!=='play')return;aktiv=e.pointerId;x0=e.clientX;try{cv.setPointerCapture(e.pointerId);}catch(_){}if(S().tipp)S().tipp(cv,e.clientX,e.clientY);else if(S().zeiger)S().zeiger(cv,e.clientX,e.clientY);e.preventDefault();});
  cv.addEventListener('pointermove',e=>{if(G.mode!=='play'||!S().zeiger)return;if(e.pointerType==='mouse'||aktiv===e.pointerId)S().zeiger(cv,e.clientX,e.clientY);});
  cv.addEventListener('pointerup',e=>{if(aktiv!==e.pointerId)return;aktiv=null;if(G.mode==='play'&&S().wisch)S().wisch(cv,x0,e.clientX);});
  cv.addEventListener('pointercancel',e=>{if(aktiv===e.pointerId)aktiv=null;});
@@ -176,6 +176,7 @@ if(cv){
   if(e.key==='p'||e.key==='P'||e.key==='Escape'){pause(G.mode==='play');e.preventDefault();return;}
   if(G.mode!=='play')return;
   const i={'1':0,'2':1,'3':2}[e.key];if(i!=null){S().lane(i);e.preventDefault();return;}
+  if(S().tipp&&['ArrowUp','w'].includes(e.key)){S().sprung();e.preventDefault();return;}
   if(S().schritt&&['ArrowLeft','ArrowRight','a','d'].includes(e.key)){S().schritt(e.key==='ArrowLeft'||e.key==='a'?-1:1);e.preventDefault();return;}
   if(S().taste&&['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d'].includes(e.key)){G.keys.add(e.key);e.preventDefault();}
   if(e.key===' '&&S().sprung){S().sprung();e.preventDefault();}
