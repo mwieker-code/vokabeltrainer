@@ -51,7 +51,7 @@ const gapFor=v=>Math.max(430,v*MINREAD);
 
 /* ---------------------------------------------------------------- Ablauf */
 function start(opt){
- Object.assign(O,{mode:'play',H:opt.H||O.H,k:0,hearts:HEARTS,score:opt.score||0,streak:0,best:0,air:1,vy:0,airborne:false,rot:0,
+ Object.assign(O,{mode:'play',intro:false,H:opt.H||O.H,k:0,hearts:HEARTS,score:opt.score||0,streak:0,best:0,air:1,vy:0,airborne:false,rot:0,
   scroll:0,time:0,old:[],items:[],pops:[],parts:[],turbo:0,shield:false,stun:0,anim:0,missed:new Map(),krill:0,jumps:0,rings:0,
   onEnd:opt.onEnd||null,onFrage:opt.onFrage||null,pool:opt.words,queue:mische(opt.words)});
  O.y=O.ty=laneY(1);
@@ -337,9 +337,9 @@ function hud(H){
  ctx.fillStyle=O.turbo>0?'#7FE0D0':'#FFE08A';ctx.textAlign='center';ctx.font='800 11px Inter, system-ui, sans-serif';ctx.fillText('×'+mult().toFixed(1).replace('.',','),W-41,ay+9.5);
  if(O.shield){ctx.fillStyle='rgba(207,239,255,.9)';ctx.beginPath();ctx.arc(W-90,ay+9,7,0,7);ctx.fill();}
 }
-function zeichne(cv){
- if(!cv||!cv.getContext)return;ctx=ctx||cv.getContext('2d');if(!ctx)return;
- const dpr=Math.min(window.devicePixelRatio||1,2),cw=cv.clientWidth,ch=cv.clientHeight;
+function zeichne(cv,breite,hoehe){
+ if(!cv||!cv.getContext)return;ctx=cv.getContext('2d');if(!ctx)return;
+ const dpr=Math.min(window.devicePixelRatio||1,2),cw=breite||cv.clientWidth,ch=hoehe||cv.clientHeight;
  if(cv.width!==Math.round(cw*dpr)||cv.height!==Math.round(ch*dpr)){cv.width=Math.round(cw*dpr);cv.height=Math.round(ch*dpr);}
  const sk=cw/W,H=ch/sk;
  if(Math.abs(H-O.H)>1){const alt=O.H;O.H=H;const f=(y)=>SURF()+(y-alt*0.24)*(BED()-SURF())/(alt-26-alt*0.24);O.y=f(O.y);O.ty=f(O.ty);for(const it of O.items)it.y=f(it.y);}
@@ -364,7 +364,7 @@ function zeichne(cv){
  if(O.shield){ctx.save();ctx.globalAlpha=0.35*lostA;ctx.strokeStyle='#CFEFFF';ctx.lineWidth=2;ctx.fillStyle='rgba(207,239,255,.12)';ctx.beginPath();ctx.ellipse(ORCA_X+4,O.y-6,64,40,O.rot,0,7);ctx.fill();ctx.stroke();ctx.restore();}
  if(O.turbo>0&&!ruhig){ctx.save();ctx.globalAlpha=0.5;ctx.strokeStyle='#7FE0D0';ctx.lineWidth=2;for(let i=0;i<4;i++){const y=O.y-14+i*9;ctx.beginPath();ctx.moveTo(ORCA_X-60-i*8,y);ctx.lineTo(ORCA_X-100-((O.time*300+i*30)%60),y);ctx.stroke();}ctx.restore();}
  const xr=ORCA_X+(O.mode==='ziel'?O.anim*O.anim*180:0);
- orca(xr,O.y,0.7,O.rot,O.tail);
+ if(!O.intro)orca(xr,O.y,0.7,O.rot,O.tail);
  ctx.globalAlpha=1;
  for(const p of O.parts)if(p.art!=='blasen'){ctx.globalAlpha=Math.max(0,p.life);ctx.fillStyle=p.farbe;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,7);ctx.fill();}
  ctx.globalAlpha=1;
@@ -381,7 +381,9 @@ function zeigerY(cv,clientY){const r=cv.getBoundingClientRect();return (clientY-
 
 function zeiger(cv,clientX,clientY){steerTo(zeigerY(cv,clientY));}
 function taste(richtung,dt){steerTo(O.ty+richtung*330*dt);}
-window.BWOrca={O,start,update,zeichne,steerTo,lane,laneY,laneOf,SURF,BED,zeigerY,zeiger,taste,GOAL,HEARTS,MINREAD,ORCA_X,speed,gapFor,mult,LANE_COL,LANE_ZEICHEN,
+/* wo der Orca im Spiel schwimmt (fuer den Uebergang aus morph.js) */
+const pose=()=>({x:ORCA_X,y:O.y,k:0.7,rot:O.rot||0,schlag:O.tail||0});
+window.BWOrca={O,start,pose,update,zeichne,steerTo,lane,laneY,laneOf,SURF,BED,zeigerY,zeiger,taste,GOAL,HEARTS,MINREAD,ORCA_X,speed,gapFor,mult,LANE_COL,LANE_ZEICHEN,
  ding:'Schwarm',hinweis:'Ziehen = lenken · schnell nach oben = Sprung | Tastatur: ↑ ↓ oder 1 2 3 · Leertaste = Sprung · P = Pause',
  sprung(){steerTo(SURF()-70);},
  pause(an){if(an&&O.mode==='play')O.mode='pause';else if(!an&&O.mode==='pause')O.mode='play';}};

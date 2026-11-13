@@ -40,7 +40,8 @@ function start(cv,von,nach,angekommen){
  if(!ctx||typeof requestAnimationFrame!=='function'){if(angekommen)angekommen();return {stop(){}};}
  let t=0,zuletzt=0,aus=false,gemeldet=false;
  const A=ORTE[von],B=ORTE[nach];
- const spriteName=(window.BWMorph&&window.BWMorph.sprite&&window.BWMorph.sprite(B.id))?B.id:A.id;
+ /* es reist das Tier, das gerade fertig ist - verwandelt wird erst danach */
+ const spriteName=A.id;
  function bild(){
   const dpr=Math.min(window.devicePixelRatio||1,2),w=cv.clientWidth,h=cv.clientHeight;
   if(cv.width!==Math.round(w*dpr)||cv.height!==Math.round(h*dpr)){cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);}

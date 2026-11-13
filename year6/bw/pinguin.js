@@ -48,11 +48,13 @@ const leuchtet=()=>O.streak>=3;
 /* Wetter: 0..1 Schnee, 0..1 Nacht */
 const wetter=()=>({schnee:clamp((O.k-4)/3,0,1),nacht:clamp((O.k-10)/3,0,1)});
 const richtigIdx=()=>O.ziele.findIndex(z=>z.w===O.q);
+/* Schlussbild auf dem Eisberg (auch waehrend der Pinguin abtaucht) */
+const amZiel=()=>O.mode==='ziel'||O.mode==='tauchen'||(O.mode==='aus'&&O.k>=GOAL);
 
 /* ---------------------------------------------------------------- Ablauf */
 function start(opt){
  Object.assign(O,{mode:'play',H:opt.H||O.H,k:0,hearts:HEARTS,score:opt.score||0,streak:0,best:0,missed:new Map(),fish:0,jumps:0,gold:0,
-  anim:0,basis:{x:COLX[1]},alt:null,vorwahl:-1,super:false,px:COLX[1],rot:0,spr:null,shield:false,time:0,wasser:0,pops:[],parts:[],tick:0,
+  anim:0,weg:false,basis:{x:COLX[1]},alt:null,vorwahl:-1,super:false,px:COLX[1],rot:0,spr:null,shield:false,time:0,wasser:0,pops:[],parts:[],tick:0,
   onEnd:opt.onEnd||null,onFrage:opt.onFrage||null,pool:opt.words,queue:mische(opt.words)});
  O.py=yBase();
  neueFrage();phase('ankunft');
@@ -141,6 +143,13 @@ function update(dt){
  for(const p of O.pops)p.t+=dt;O.pops=O.pops.filter(p=>p.t<1.3);
  for(const p of O.parts){p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=(p.art==='spritzer'||p.art==='fontaene'?700:60)*dt;p.vx*=0.98;p.life-=dt*1.2;}
  O.parts=O.parts.filter(p=>p.life>0);
+ if(O.mode==='tauchen'){
+  /* Kopfsprung vom Eisberg ins Meer - der Uebergang zum Orca */
+  O.anim+=dt;const t=Math.min(1,O.anim/0.95),e=t*t;
+  O.px=lerp(O.tx0,O.tx0+110,t);O.py=lerp(O.ty0,yBase()+40,e)-Math.sin(t*Math.PI)*70;O.rot=t*2.1;
+  if(t>=1&&!O.weg){O.weg=true;sfx('platsch');teilchen(O.px,yBase()+10,40,['#FFFFFF','#9FD3F2','#2479AE'],230,'spritzer');}
+  return;
+ }
  if(O.mode==='aus'||O.mode==='pause')return;
  if(O.mode==='lost'||O.mode==='ziel'){
   O.anim+=dt;
@@ -249,7 +258,7 @@ function himmel(H,hz){
   ctx.fillStyle=berg;ctx.beginPath();ctx.moveTo(x-b/2,hz+1);ctx.lineTo(x-b*0.2,hz-h);ctx.lineTo(x+b*0.1,hz-h*0.8);ctx.lineTo(x+b/2,hz+1);ctx.fill();
   ctx.fillStyle=schatten;ctx.beginPath();ctx.moveTo(x+b*0.1,hz-h*0.8);ctx.lineTo(x+b/2,hz+1);ctx.lineTo(x,hz+1);ctx.fill();}
  /* Finale: grosser Eisberg waechst hinter den Schollen empor */
- if(finale()||O.mode==='ziel'){const f=O.mode==='ziel'?1:clamp((O.k-(GOAL-FINALE)+1)/FINALE,0,1),top=lerp(hz-30,hz-170,f);
+ if(finale()||amZiel()){const f=amZiel()?1:clamp((O.k-(GOAL-FINALE)+1)/FINALE,0,1),top=lerp(hz-30,hz-170,f);
   const gb=ctx.createLinearGradient(0,top,0,hz+40);gb.addColorStop(0,mix('#FFFFFF','#8FA3D6',w.nacht));gb.addColorStop(1,mix('#9FCBE8','#2C3B6B',w.nacht));
   ctx.fillStyle=gb;ctx.beginPath();ctx.moveTo(30,hz+40);ctx.lineTo(90,top+60);ctx.lineTo(150,top+10);ctx.lineTo(180,top);ctx.lineTo(215,top+18);ctx.lineTo(270,top+70);ctx.lineTo(330,hz+40);ctx.closePath();ctx.fill();
   ctx.fillStyle='rgba(255,255,255,.35)';ctx.beginPath();ctx.moveTo(150,top+10);ctx.lineTo(180,top);ctx.lineTo(168,top+60);ctx.lineTo(120,top+90);ctx.closePath();ctx.fill();}
@@ -333,7 +342,7 @@ function pinguinZeichnen(){
  if(!window.Figuren)return;
  const imWasser=O.phase==='wasser'&&O.mode==='play'||O.mode==='lost';
  const luft=O.phase==='sprung'||O.phase==='rettung'||(O.phase==='jubel'&&O.super);
- const mood=imWasser||O.phase==='kipp'?'scared':(O.phase==='jubel'||O.mode==='ziel'?'happy':'focus');
+ const mood=imWasser||O.phase==='kipp'?'scared':(O.phase==='jubel'||amZiel()?'happy':'focus');
  if(imWasser){
   ctx.save();ctx.beginPath();ctx.rect(0,0,W,O.py-30);ctx.clip();
   window.Figuren.pinguin(ctx,O.px,O.py,1.15,{wave:Math.sin(O.time*12),hoch:true,blush:true,mood,scarf:O.shield});ctx.restore();
@@ -343,7 +352,7 @@ function pinguinZeichnen(){
  if(!luft){ctx.fillStyle='rgba(20,50,80,.25)';ctx.beginPath();ctx.ellipse(O.px,O.py+1,15,4,0,0,7);ctx.fill();}
  if(luft&&leuchtet()&&!ruhig){ctx.fillStyle='rgba(255,224,138,.8)';for(let i=0;i<5;i++){const a=O.time*12+i;ctx.globalAlpha=0.5;ctx.beginPath();ctx.arc(O.px+Math.cos(a)*16,O.py-24+Math.sin(a)*16,2,0,7);ctx.fill();}ctx.globalAlpha=1;}
  const wipp=O.phase==='wahl'?Math.sin(O.time*3)*1.2:0;
- window.Figuren.pinguin(ctx,O.px,O.py,1.15,{hop:Math.max(0,wipp),wave:luft?1:Math.sin(O.time*2)*0.3,hoch:luft&&O.phase!=='jubel'||O.mode==='ziel',blush:true,rot:O.rot,mood,scarf:O.shield});
+ window.Figuren.pinguin(ctx,O.px,O.py,1.15,{hop:Math.max(0,wipp),wave:luft?1:Math.sin(O.time*2)*0.3,hoch:luft&&O.phase!=='jubel'||amZiel(),blush:true,rot:O.rot,mood,scarf:O.shield});
 }
 function schneefall(H){
  const s=wetter().schnee;if(s<=0)return;const n=Math.round((ruhig?20:70)*s);
@@ -364,9 +373,9 @@ function hud(H){
  ctx.fillStyle=leuchtet()?'#FFE08A':'#FFFFFF';ctx.textAlign='center';ctx.font='800 11px Inter, system-ui, sans-serif';ctx.fillText('×'+mult().toFixed(2).replace(/0$/,'').replace('.',','),W-41,39.5);
  if(O.streak>=2){ctx.fillStyle='rgba(16,21,28,.6)';rund(8,30,92,18,9);ctx.fill();ctx.fillStyle=leuchtet()?'#FFE08A':'#FFFFFF';ctx.textAlign='left';ctx.fillText('Serie '+O.streak+(O.streak%5===4?' · Super!':''),16,39.5);}
 }
-function zeichne(cv){
- if(!cv||!cv.getContext)return;ctx=ctx||cv.getContext('2d');if(!ctx)return;
- const dpr=Math.min(window.devicePixelRatio||1,2),cw=cv.clientWidth,ch=cv.clientHeight;
+function zeichne(cv,breite,hoehe){
+ if(!cv||!cv.getContext)return;ctx=cv.getContext('2d');if(!ctx)return;
+ const dpr=Math.min(window.devicePixelRatio||1,2),cw=breite||cv.clientWidth,ch=hoehe||cv.clientHeight;
  if(cv.width!==Math.round(cw*dpr)||cv.height!==Math.round(ch*dpr)){cv.width=Math.round(cw*dpr);cv.height=Math.round(ch*dpr);}
  const sk=cw/W,H=ch/sk;
  if(Math.abs(H-O.H)>1){O.H=H;if(O.phase==='wahl'||O.phase==='ankunft')O.py=yBase();}
@@ -382,7 +391,7 @@ function zeichne(cv){
   O.ziele.forEach((z,i)=>{const y=zielY(i)-DY()*(1-e);scholle(zielX(i),y,1,{alpha:e,glow,ledge:fin,seed:O.k*3+i});fund(z.item,zielX(i),y);});
   scholle(a.x,lerp(a.y0,yb,e),lerp(1,1.08,e),{ledge:a.ledge&&fin,seed:O.k+4});
   O.ziele.forEach((z,i)=>wortschild(zielX(i),zielY(i)-DY()*(1-e)-66,z,'normal',e));
- }else if(O.mode==='ziel'||(O.mode==='aus'&&O.k>=GOAL)){
+ }else if(amZiel()){
   scholle(W/2,yTop(),1.2,{ledge:true,seed:99});
  }else if(O.mode!=='aus'||O.ziele.length){
   /* Zielschollen */
@@ -416,8 +425,9 @@ function zeichne(cv){
   });
   if(p==='wahl'&&spielt)zeitbalken(O.basis.x,yb);
  }
- pinguinZeichnen();
- if(O.mode==='ziel'){ctx.strokeStyle='#5D4632';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(W/2+34,yTop());ctx.lineTo(W/2+34,yTop()-70);ctx.stroke();
+ if(!O.weg)pinguinZeichnen();
+ if(O.weg){ctx.strokeStyle='rgba(255,255,255,.8)';ctx.lineWidth=2.5;for(let i=0;i<3;i++){const r=(O.anim*60+i*18)%60+8;ctx.globalAlpha=Math.max(0,1-r/68);ctx.beginPath();ctx.ellipse(O.px,yBase()+14,r,r*0.3,0,0,7);ctx.stroke();}ctx.globalAlpha=1;}
+ if(amZiel()){ctx.strokeStyle='#5D4632';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(W/2+34,yTop());ctx.lineTo(W/2+34,yTop()-70);ctx.stroke();
   ctx.fillStyle='#E7413C';ctx.beginPath();ctx.moveTo(W/2+35,yTop()-70);ctx.lineTo(W/2+35+30+Math.sin(O.time*8)*3,yTop()-60);ctx.lineTo(W/2+35,yTop()-50);ctx.fill();}
  for(const q of O.parts){ctx.globalAlpha=Math.max(0,q.life);ctx.fillStyle=q.farbe;ctx.beginPath();ctx.arc(q.x,q.y,q.r,0,7);ctx.fill();}
  ctx.globalAlpha=1;
@@ -427,7 +437,6 @@ function zeichne(cv){
  ctx.globalAlpha=1;
  if(fin&&p==='ankunft'||(fin&&O.k===GOAL-FINALE&&p==='weiter')){ctx.globalAlpha=0.9;ctx.fillStyle='rgba(16,21,28,.8)';rund(W/2-110,56,220,28,14);ctx.fill();ctx.fillStyle='#FFFFFF';ctx.font='800 13px Inter, system-ui, sans-serif';ctx.fillText('Finale: rauf auf den Eisberg!',W/2,70.5);ctx.globalAlpha=1;}
  hud(H);
- if(O.mode==='ziel'){ctx.fillStyle='rgba(255,255,255,'+Math.max(0,Math.min(0.85,(O.anim-0.8)*0.9))+')';ctx.fillRect(0,0,W,H);}
 }
 /* Tippen: die naechstgelegene Scholle im oberen Bereich */
 function tipp(cv,clientX,clientY){
@@ -437,7 +446,9 @@ function tipp(cv,clientX,clientY){
  return lane(best);
 }
 
-window.BWPinguin={O,start,update,zeichne,lane,sprung,tipp,zielX,zielY,yBase,yTop,wetter,finale,zeitFuer,richtigIdx,GOAL,HEARTS,FINALE,D,mult,LANE_COL,LANE_ZEICHEN,
+/* nach Karte und Stempel: der Pinguin springt vom Eisberg (morph.js uebernimmt danach) */
+function tauchen(){O.mode='tauchen';O.anim=0;O.weg=false;O.tx0=W/2;O.ty0=yTop();O.rot=0;O.pops=[];}
+window.BWPinguin={O,start,tauchen,update,zeichne,lane,sprung,tipp,zielX,zielY,yBase,yTop,wetter,finale,zeitFuer,richtigIdx,GOAL,HEARTS,FINALE,D,mult,LANE_COL,LANE_ZEICHEN,
  ding:'Scholle',hinweis:'Tippe auf die Scholle mit dem richtigen Wort – bevor deine Scholle schmilzt! | Tastatur: 1 2 3 · P = Pause',
  pause(an){if(an&&O.mode==='play')O.mode='pause';else if(!an&&O.mode==='pause')O.mode='play';}};
 })();

@@ -12,63 +12,74 @@ const rnd=(s=>()=>{s=(s*16807)%2147483647;return s/2147483647;})(4711);
 
 /* ---------- die Tiere ---------- */
 function zeichnePinguin(g){Figuren.pinguin(g,256,400,2.6,{wave:0.2,blush:true});}
-/* ---------- der Orca: schlanke Form ueber einer Wirbelsaeule ----------
-   orcaForm(ctx, x, y, k, {rot, schlag, bogen, alpha})
+/* ---------- der Orca: schlanke Form ueber einer gebogenen Wirbelsaeule ----------
+   orcaForm(ctx, x, y, k, {rot, schlag, bogen, welle, alpha})
    Blick nach rechts. s = 0 Schnauze ... 1 Schwanzansatz, v = -1 Ruecken ... 1 Bauch.
-   bogen = Koerper biegt sich wie beim Sprung, schlag = Schwimmwelle. */
-/* Dicke oben/unten entlang des Koerpers: runder Kopf, kraeftige Mitte, schlanker Schwanz */
+   bogen = Koerper biegt sich wie beim Sprung, schlag = Schwimmwelle.
+   Alle Kanten werden als weiche Kurven gezeichnet. */
 function dicke(s){
- const f=s<0.36?Math.pow(Math.sin(Math.PI/2*s/0.36),0.42):0.2+0.8*Math.cos(Math.PI/2*(s-0.36)/0.64);
- return [Math.max(0.8,16.5*f),Math.max(0.6,13*f)];
+ /* kraeftiger runder Kopf, Mitte, langer schlanker Schwanzstiel */
+ const f=s<0.28?Math.pow(Math.sin(Math.PI/2*s/0.28),0.5):0.17+0.83*Math.pow(Math.cos(Math.PI/2*Math.min(1,(s-0.28)/0.72)),1.15);
+ const stirn=2.2*Math.exp(-Math.pow((s-0.09)/0.07,2));
+ return [Math.max(0.9,17*f+stirn),Math.max(0.7,13.5*f)];
 }
 function orcaForm(g,X,Y,k,o){
  o=o||{};const schlag=o.schlag||0,bogen=o.bogen||0,welle=o.welle==null?1:o.welle;
- const ruecken=s=>({x:68-134*s,y:bogen*64*s*s-bogen*10*s+Math.sin(schlag-s*2.6)*s*s*7*welle});
+ const ruecken=s=>({x:66-128*s,y:bogen*(30*s*s*s-24*Math.sin(Math.PI*s))+Math.sin(schlag-s*2.6)*s*s*7*welle});
  const tang=s=>{const a=ruecken(Math.max(0,s-0.01)),b=ruecken(Math.min(1,s+0.01)),l=Math.hypot(b.x-a.x,b.y-a.y)||1;return {x:(b.x-a.x)/l,y:(b.y-a.y)/l};};
- /* Normale nach oben (Ruecken) */
  const oben=s=>{const t=tang(s);return {x:-t.y,y:t.x};};
  const P=(s,v,aus)=>{const r=ruecken(s),n=oben(s),[ht,hb]=dicke(s),d=(v<0?-v*ht:-v*hb)+(aus||0);return [r.x+n.x*d,r.y+n.y*d];};
- const poly=pts=>{g.beginPath();pts.forEach((p,i)=>i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]));g.closePath();};
- const N=48,reihe=(a,b,f)=>{const out=[];for(let i=0;i<=N;i++){const s=lerp(a,b,i/N);out.push(f(s));}return out;};
- /* weiche Kurve durch die Stuetzpunkte (Catmull-Rom) */
+ /* weicher Linienzug: Kurven durch die Mittelpunkte */
+ const weich=(pts,zu)=>{g.beginPath();const n=pts.length;
+  if(zu){const m=(a,b)=>[(a[0]+b[0])/2,(a[1]+b[1])/2],s0=m(pts[n-1],pts[0]);g.moveTo(s0[0],s0[1]);
+   for(let i=0;i<n;i++){const a=pts[i],b=pts[(i+1)%n],mm=m(a,b);g.quadraticCurveTo(a[0],a[1],mm[0],mm[1]);}}
+  else{g.moveTo(pts[0][0],pts[0][1]);for(let i=1;i<n-1;i++){const mm=[(pts[i][0]+pts[i+1][0])/2,(pts[i][1]+pts[i+1][1])/2];g.quadraticCurveTo(pts[i][0],pts[i][1],mm[0],mm[1]);}g.lineTo(pts[n-1][0],pts[n-1][1]);}
+  g.closePath();};
+ const N=40,reihe=(a,b,f)=>{const out=[];for(let i=0;i<=N;i++)out.push(f(lerp(a,b,i/N)));return out;};
+ /* weiche Kurve durch Stuetzpunkte (Catmull-Rom) */
  const tab=(T,s)=>{for(let i=1;i<T.length;i++)if(s<=T[i][0]){const u=(s-T[i-1][0])/(T[i][0]-T[i-1][0]),p0=T[Math.max(0,i-2)][1],p1=T[i-1][1],p2=T[i][1],p3=T[Math.min(T.length-1,i+1)][1];
   return 0.5*(2*p1+(-p0+p2)*u+(2*p0-5*p1+4*p2-p3)*u*u+(-p0+3*p1-3*p2+p3)*u*u*u);}return T[T.length-1][1];};
- const SCHWARZ='#10151C',WEISS='#F7F9FB';
+ /* Punkt in einem lokalen Rahmen (Ursprung, Laengsrichtung d, Normale n) */
+ const rahmen=(ox,oy,d,n)=>(l,w)=>[ox+d.x*l+n.x*w,oy+d.y*l+n.y*w];
+ const SCHWARZ='#10151C',WEISS='#F7F9FB',GRAU='#B9C3CE';
  g.save();g.translate(X,Y);if(o.rot)g.rotate(o.rot);g.scale(k,k);if(o.alpha!=null)g.globalAlpha*=o.alpha;
- /* Brustflosse hinten (dunkler, halb verdeckt) */
- const flosse=(s0,laenge,dreh,farbe)=>{const a=P(s0,0.9),b=P(s0+0.08,0.9),n=oben(s0+0.04),t=tang(s0+0.04);
-  const c=Math.cos(dreh),sn=Math.sin(dreh),dx=-n.x*laenge*0.6+t.x*laenge*0.8,dy=-n.y*laenge*0.6+t.y*laenge*0.8,tip=[a[0]+dx*c-dy*sn,a[1]+dx*sn+dy*c];
-  g.fillStyle=farbe;g.beginPath();g.moveTo(a[0],a[1]);g.quadraticCurveTo(tip[0]-t.x*6,tip[1]-t.y*6+2,tip[0],tip[1]);g.quadraticCurveTo(b[0]+(tip[0]-b[0])*0.3,b[1]+(tip[1]-b[1])*0.6,b[0],b[1]);g.closePath();g.fill();};
- /* Schwanzflosse */
- const T=ruecken(1),d=tang(1),n=oben(1),fa=Math.sin(schlag)*0.35*welle,ca=Math.cos(fa),sa=Math.sin(fa);
- const rot2=(vx,vy)=>[vx*ca-vy*sa,vx*sa+vy*ca],pt=(l,w)=>{const [vx,vy]=rot2(d.x*l+n.x*w,d.y*l+n.y*w);return [T.x+vx,T.y+vy];};
- g.fillStyle=SCHWARZ;g.beginPath();const f0=pt(-4,0),o1=pt(31,20),o2=pt(22,5),m=pt(20,0),u2=pt(22,-5),u1=pt(31,-20);
- g.moveTo(f0[0],f0[1]);const c1=pt(10,12);g.quadraticCurveTo(c1[0],c1[1],o1[0],o1[1]);g.quadraticCurveTo(o2[0],o2[1],m[0],m[1]);g.quadraticCurveTo(u2[0],u2[1],u1[0],u1[1]);const c2=pt(10,-12);g.quadraticCurveTo(c2[0],c2[1],f0[0],f0[1]);g.fill();
- /* Rueckenflosse: hoch, leicht nach hinten gebogen */
- const fv=P(0.29,-0.9),fh=P(0.43,-0.9),spitze=P(0.5,-1,33),kv=P(0.34,-1,26),kh=P(0.45,-1,10);
- g.beginPath();g.moveTo(fv[0],fv[1]);g.quadraticCurveTo(kv[0],kv[1],spitze[0],spitze[1]);g.quadraticCurveTo(kh[0],kh[1],fh[0],fh[1]);g.closePath();g.fill();
+ g.lineJoin='round';
+ /* Schwanzflosse: zwei runde Flunken mit Kerbe */
+ {const T=ruecken(1),d0=tang(1),n0=oben(1),fa=Math.sin(schlag)*0.35*welle+bogen*0.25,ca=Math.cos(fa),sa=Math.sin(fa);
+  const d={x:d0.x*ca-d0.y*sa,y:d0.x*sa+d0.y*ca},n={x:-d.y,y:d.x},F=rahmen(T.x,T.y,d,n);
+  const q=[F(-6,3.5),F(6,5),F(14,10),F(24,19),F(30,22),F(28,15),F(22,6),F(19,0),F(22,-6),F(28,-15),F(30,-22),F(24,-19),F(14,-10),F(6,-5),F(-6,-3.5)];
+  g.fillStyle=SCHWARZ;weich(q,true);g.fill();}
+ /* Rueckenflosse: hoch, vorne gewoelbt, hinten eingebuchtet, Spitze nach hinten */
+ {const pts=[P(0.27,-0.92),P(0.29,-1,8),P(0.32,-1,18),P(0.37,-1,28),P(0.43,-1,35),P(0.47,-1,37),P(0.465,-1,31),P(0.445,-1,21),P(0.44,-1,11),P(0.455,-1,3),P(0.49,-0.9)];
+  g.fillStyle=SCHWARZ;weich(pts,false);g.fill();}
  /* Koerper */
  const umriss=[...reihe(0,1,s=>P(s,-1)),...reihe(1,0,s=>P(s,1))];
- poly(umriss);g.fill();
- g.save();poly(umriss);g.clip();
- /* weisser Bauch mit Flankenfleck */
- const KANTE=[[0,0.15],[0.1,0.32],[0.2,0.48],[0.3,0.6],[0.4,0.68],[0.47,0.6],[0.53,0.3],[0.59,-0.05],[0.645,-0.32],[0.68,-0.42],[0.705,-0.2],[0.73,0.3],[0.76,0.85],[0.8,1.3]];
- g.fillStyle=WEISS;poly([...reihe(0.005,0.8,s=>P(s,tab(KANTE,s))),...reihe(0.8,0.005,s=>P(s,1.4))]);g.fill();
- /* Sattelfleck und Glanz */
- g.fillStyle='#A7B4C2';poly([...reihe(0.42,0.58,s=>P(s,-1.1)),...reihe(0.58,0.42,s=>P(s,-1+0.42*Math.sin((s-0.42)/0.16*Math.PI)))]);g.fill();
- g.fillStyle='rgba(255,255,255,.1)';poly([...reihe(0.06,0.4,s=>P(s,-0.82)),...reihe(0.4,0.06,s=>P(s,-0.82+0.22*Math.sin((s-0.06)/0.34*Math.PI)))]);g.fill();
+ g.fillStyle=SCHWARZ;weich(umriss,true);g.fill();
+ g.save();weich(umriss,true);g.clip();
+ /* weisser Bauch, der hinten zu einem grossen Flankenfleck aufsteigt */
+ const KANTE=[[0,0.25],[0.06,0.36],[0.16,0.5],[0.28,0.6],[0.38,0.62],[0.45,0.5],[0.5,0.18],[0.55,-0.22],[0.6,-0.52],[0.66,-0.66],[0.71,-0.62],[0.74,-0.3],[0.77,0.2],[0.8,0.75],[0.84,1.4]];
+ g.fillStyle=WEISS;weich([...reihe(0.004,0.84,s=>P(s,tab(KANTE,s))),...reihe(0.84,0.004,s=>P(s,1.5))],true);g.fill();
+ /* grauer Unterkiefer und Kehle wie auf der Vorlage */
+ g.fillStyle=GRAU;weich([...reihe(0.02,0.42,s=>P(s,0.98-0.3*Math.sin((s-0.02)/0.4*Math.PI))),...reihe(0.42,0.02,s=>P(s,1.5))],true);g.fill();
+ /* Sattelfleck hinter der Rueckenflosse */
+ g.fillStyle='#A7B4C2';weich([...reihe(0.44,0.6,s=>P(s,-1.1)),...reihe(0.6,0.44,s=>P(s,-1+0.36*Math.sin((s-0.44)/0.16*Math.PI)))],true);g.fill();
+ /* Glanz auf dem Ruecken */
+ g.fillStyle='rgba(255,255,255,.09)';weich([...reihe(0.05,0.42,s=>P(s,-0.84)),...reihe(0.42,0.05,s=>P(s,-0.84+0.24*Math.sin((s-0.05)/0.37*Math.PI)))],true);g.fill();
  g.restore();
- /* Augenfleck */
- const auge=[];for(let i=0;i<24;i++){const a=i/24*Math.PI*2;auge.push(P(0.135+0.048*Math.cos(a),-0.3+0.17*Math.sin(a)-0.14*Math.cos(a)));}
- g.fillStyle=WEISS;poly(auge);g.fill();
- /* Brustflosse vorn */
- flosse(0.17,22,Math.sin(schlag+1)*0.18*welle,SCHWARZ);
- /* Auge und Maul */
- const a=P(0.075,-0.05);g.fillStyle='#FFFFFF';g.beginPath();g.arc(a[0],a[1],1.6,0,TAU);g.fill();
- const m1=P(0.005,0.2),m2=P(0.07,0.32);g.strokeStyle='rgba(16,21,28,.45)';g.lineWidth=1.2;g.beginPath();g.moveTo(m1[0],m1[1]);g.lineTo(m2[0],m2[1]);g.stroke();
+ /* Augenfleck: laengliches Oval, hinten nach oben */
+ {const a=[];for(let i=0;i<20;i++){const w=i/20*Math.PI*2;a.push(P(0.15+0.055*Math.cos(w),-0.32+0.15*Math.sin(w)-0.12*Math.cos(w)));}g.fillStyle=WEISS;weich(a,true);g.fill();}
+ /* Brustflosse: rundes Paddel nach hinten unten */
+ {const s0=0.2,wurzel=P(s0,0.75),t=tang(s0),n=oben(s0),dw=0.6+Math.sin(schlag+1)*0.15*welle;
+  const d={x:t.x*Math.cos(dw)-n.x*Math.sin(dw),y:t.y*Math.cos(dw)-n.y*Math.sin(dw)},q={x:-d.y,y:d.x},F=rahmen(wurzel[0],wurzel[1],d,q);
+  g.fillStyle=SCHWARZ;weich([F(-2,-4.5),F(5,-6.5),F(14,-6.5),F(21,-4),F(24,0),F(21,3.5),F(12,4.5),F(4,4.5),F(-2,4)],true);g.fill();}
+ /* Auge und Maulspalte */
+ const au=P(0.085,-0.02);g.fillStyle='#FFFFFF';g.beginPath();g.arc(au[0],au[1],1.5,0,TAU);g.fill();
+ const m1=P(0.004,0.15),m2=P(0.05,0.28),m3=P(0.1,0.3);g.strokeStyle='rgba(16,21,28,.5)';g.lineWidth=1.1;g.lineCap='round';g.beginPath();g.moveTo(m1[0],m1[1]);g.quadraticCurveTo(m2[0],m2[1],m3[0],m3[1]);g.stroke();
  g.restore();
 }
-function zeichneOrca(g){orcaForm(g,262,236,2.55,{rot:-0.2,bogen:0.7,welle:0});}
+/* Sprung-Pose fuer die Verwandlung (auch der Startpunkt fuer das Gleiten ins Spiel) */
+const SPR={x:262,y:230,k:2.4,rot:-0.22,bogen:1};
+function zeichneOrca(g){orcaForm(g,SPR.x,SPR.y,SPR.k,{rot:SPR.rot,bogen:SPR.bogen,welle:0});}
 function bauen(zeichne){
  const c=document.createElement('canvas');c.width=c.height=512;const g=c.getContext('2d');zeichne(g);
  const d=g.getImageData(0,0,512,512).data;let x0=512,y0=512,x1=0,y1=0;const pts=[];
@@ -84,12 +95,19 @@ function bauen(zeichne){
 let TIERE=null;const tiere=()=>TIERE||(TIERE={pinguin:bauen(zeichnePinguin),orca:bauen(zeichneOrca)});
 function sprite(name){try{return tiere()[name]||null;}catch(e){return null;}}
 
+/* opt.fluss (Pinguin -> Orca ohne Schnitt):
+   vorher  {update(dt), zeichne(cv), punkt()}  das alte Spiel laeuft noch kurz (Kopfsprung),
+           punkt() = wo das Tier ins Wasser taucht (Bildschirm-Pixel)
+   nachher {feld(), zeichne(cv,b,h), pose()}   das neue Spiel: Rahmen, Bild, Lage des Orcas
+   ui()    wird aufgerufen, wenn Leiste und Knoepfe einblenden sollen */
 function start(cv,fertig,opt){
 const ctx=cv.getContext('2d');opt=opt||{};
+const F=opt.fluss||null,VOR=F?1.25:0,GL0=4.2,GL1=5.5,ENDE=F?GL1+0.05:DAUER+0.9;
+let schnapp=null,sprung=null,off=null,uiDa=false;
 
 /* ---------- Punkte ---------- */
 const P=[];for(let i=0;i<N;i++)P.push({s1:rnd(),s2:rnd(),s3:rnd(),s4:rnd()});
-let von='pinguin',nach='orca',t=0,zeit=2,manuell=false,ende=false;
+let von='pinguin',nach='orca',t=-VOR,zeit=2,manuell=false,ende=false;
 const W=()=>cv.clientWidth,H=()=>cv.clientHeight;
 function groesse(){const d=Math.min(window.devicePixelRatio||1,2);cv.width=Math.round(W()*d);cv.height=Math.round(H()*d);ctx.setTransform(d,0,0,d,0,0);spur.width=cv.width;spur.height=cv.height;sg.setTransform(d,0,0,d,0,0);}
 const spur=document.createElement('canvas'),sg=spur.getContext('2d');
@@ -116,6 +134,7 @@ function meer(w,h){
 }
 function umgebung(w,h,u,risse){
  /* u: 0 = Welt des Starttiers, 1 = Welt des Zieltiers; dazwischen steigt bzw. faellt das Wasser */
+ if(F)return meer(w,h);
  const zuMeer=nach==='orca',wasser=zuMeer?u:1-u;
  if(wasser<=0)return eis(w,h,risse);
  if(wasser>=1)return meer(w,h);
@@ -134,6 +153,10 @@ function tierBild(name,cx,cy,gr,alpha,extra){
  ctx.save();ctx.globalAlpha=alpha;ctx.translate(cx,cy);if(extra)extra();ctx.scale(k,k);ctx.drawImage(T.bild,-T.cx,-T.cy);ctx.restore();
 }
 function bild(){
+ if(F&&t<0&&!manuell){F.vorher.zeichne(cv);return;}
+ {const d=Math.min(window.devicePixelRatio||1,2);if(cv.width!==Math.round(W()*d)||cv.height!==Math.round(H()*d))groesse();ctx.setTransform(d,0,0,d,0,0);}
+ if(F&&!schnapp){schnapp=document.createElement('canvas');schnapp.width=cv.width;schnapp.height=cv.height;schnapp.getContext('2d').drawImage(cv,0,0);sprung=F.vorher.punkt();}
+ if(F&&t>=GL0)return gleiten();
  const w=W(),h=H(),m=Math.min(w,h);
  const cx=w/2,cy=h*0.52,gr=m*0.62;
  const tt=t<0?0:Math.min(t,DAUER);
@@ -141,6 +164,7 @@ function bild(){
  const zoom=1+0.12*Math.sin(Math.PI*smooth(0,3.6,tt)),beben=tt>3.3&&tt<3.8?(1-(tt-3.3)/0.5)*8:0;
  ctx.save();ctx.translate(w/2,h/2);ctx.scale(zoom,zoom);ctx.translate(-w/2+Math.sin(zeit*60)*beben,-h/2+Math.cos(zeit*53)*beben);
  umgebung(w,h,smooth(1.9,3.3,tt),nach==='orca'?laden:0);
+ if(F&&schnapp&&tt<0.95){const e=smooth(0,0.9,tt);ctx.globalAlpha=1-smooth(0.55,0.95,tt);ctx.drawImage(schnapp,0,-h*e*0.9,w,h);ctx.globalAlpha=1;}
  /* Lichthof beim Aufladen */
  if(tt>0&&tt<3.9){const a=Math.sin(Math.PI*clamp(tt/3.9,0,1));const g=ctx.createRadialGradient(cx,cy,0,cx,cy,gr*0.95);
   g.addColorStop(0,'rgba(255,255,255,'+0.55*a+')');g.addColorStop(0.5,'rgba(190,230,255,'+0.22*a+')');g.addColorStop(1,'rgba(190,230,255,0)');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);}
@@ -148,7 +172,8 @@ function bild(){
  const wippen=Math.sin(zeit*2.2)*m*0.008;
  if(t<0)tierBild(von,cx,cy+wippen,gr,1,von==='orca'?()=>ctx.rotate(Math.sin(zeit*1.6)*0.05):null);
  else{
-  tierBild(von,cx,cy,gr*(1+laden*0.06),1-smooth(0.75,1.05,tt));
+  if(F&&sprung){const e=smooth(0,0.7,tt);tierBild(von,lerp(sprung.x,cx,e),lerp(sprung.y+gr*0.2,cy,e),gr*lerp(0.22,1+laden*0.06,e),(1-smooth(0.75,1.05,tt))*smooth(0,0.15,tt),()=>ctx.rotate((1-e)*2.1));}
+  else tierBild(von,cx,cy,gr*(1+laden*0.06),1-smooth(0.75,1.05,tt));
   tierBild(nach,cx,cy,gr*(1.1-0.1*smooth(3.2,3.9,tt)),smooth(3.15,3.6,tt),nach==='orca'?()=>ctx.rotate((1-smooth(3.2,4.2,tt))*-0.5):()=>ctx.translate(0,-(1-smooth(3.2,4.0,tt))*m*0.05));
  }
  ctx.restore();
@@ -186,11 +211,33 @@ function bild(){
   ctx.strokeStyle='rgba(16,21,28,'+0.5*(1-k)+')';ctx.lineWidth=6*(1-k)+1;ctx.beginPath();ctx.arc(cx,cy,gr*(0.2+k*0.9),0,TAU);ctx.stroke();}
 }
 
+/* ---------- Gleiten: der Orca schwimmt in sein Spiel ---------- */
+function gleiten(){
+ const w=W(),h=H(),m=Math.min(w,h),cx=w/2,cy=h*0.52,gr=m*0.62,e=smooth(GL0,GL1,t),fr=F.nachher.feld();
+ if(!uiDa&&t>=GL0+0.4){uiDa=true;if(F.ui)F.ui();}
+ const R={x:lerp(0,fr.x,e),y:lerp(0,fr.y,e),w:lerp(w,fr.w,e),h:lerp(h,fr.h,e)},rad=lerp(0,22,e);
+ ctx.clearRect(0,0,w,h);
+ ctx.save();ctx.beginPath();if(ctx.roundRect)ctx.roundRect(R.x,R.y,R.w,R.h,rad);else ctx.rect(R.x,R.y,R.w,R.h);ctx.clip();
+ meer(w,h);
+ off=off||document.createElement('canvas');
+ try{F.nachher.zeichne(off,fr.w,fr.h);}catch(err){}
+ const d=Math.min(window.devicePixelRatio||1,2);ctx.setTransform(d,0,0,d,0,0);
+ ctx.globalAlpha=smooth(0.05,0.75,e);ctx.drawImage(off,R.x,R.y,R.w,R.h);ctx.globalAlpha=1;
+ ctx.restore();
+ /* Orca: von der Sprung-Pose in die Schwimm-Pose */
+ const T=tiere()[nach],ks=gr/T.gr,p=F.nachher.pose(),s1=R.w/360,f=smooth(GL0,GL1-0.15,t);
+ const x=lerp(cx+(SPR.x-T.cx)*ks,R.x+p.x*s1,f),y=lerp(cy+(SPR.y-T.cy)*ks,R.y+p.y*s1,f);
+ orcaForm(ctx,x,y,lerp(SPR.k*ks,p.k*s1,f),{rot:lerp(SPR.rot,p.rot,f),bogen:lerp(SPR.bogen,0,f),schlag:zeit*7,welle:f});
+ /* Blasen hinter dem Orca */
+ ctx.strokeStyle='rgba(220,245,255,'+0.6*(1-e)+')';ctx.lineWidth=1.5;
+ for(let i=0;i<14;i++){const u=((zeit*0.9+i/14)%1),bx=x-(30+u*120)*lerp(ks*2,s1,f),by=y-u*40+Math.sin(i*3+zeit*4)*8;ctx.beginPath();ctx.arc(bx,by,2+((i*7)%5),0,TAU);ctx.stroke();}
+}
+
 /* ---------- Klang ---------- */
 let ac=null;
-function klang(){
+function klang(spaeter){
  try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();if(ac.state==='suspended')ac.resume();}catch(e){return;}
- const t0=ac.currentTime+0.02,aus=ac.createGain();aus.gain.value=0.5;aus.connect(ac.destination);
+ const t0=ac.currentTime+0.02+(spaeter||0),aus=ac.createGain();aus.gain.value=0.5;aus.connect(ac.destination);
  const buf=ac.createBuffer(1,ac.sampleRate*3.5,ac.sampleRate),d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
  const s=ac.createBufferSource(),f=ac.createBiquadFilter(),g=ac.createGain();s.buffer=buf;f.type='bandpass';f.Q.value=2.5;
  f.frequency.setValueAtTime(180,t0);f.frequency.exponentialRampToValueAtTime(4200,t0+3.3);
@@ -211,14 +258,15 @@ function schleife(jetzt){
  if(!manuell){
   /* waehrend des Aufladens laeuft die Welt in Zeitlupe */
   zeit+=dt*(t>=0&&t<1?0.35:1);
-  t+=dt;if(t>=DAUER+0.9&&!ende){ende=true;removeEventListener('resize',groesse);if(fertig)fertig();return;}
+  if(F&&t<0)F.vorher.update(dt);
+  t+=dt;if(t>=ENDE&&!ende){ende=true;removeEventListener('resize',groesse);if(fertig)fertig();return;}
  }
  bild();if(!ende)requestAnimationFrame(schleife);
 }
-addEventListener('resize',groesse);groesse();if(opt.ton)klang();
+addEventListener('resize',groesse);groesse();if(opt.ton)klang(VOR);
 if(typeof requestAnimationFrame==='function')requestAnimationFrame(schleife);
 /* fuer Standbilder */
 return {standbild(sek){manuell=true;sg.clearRect(0,0,W(),H());for(let k=8;k>=0;k--){t=sek-k*0.016;zeit=2+Math.max(0,t);bild();}}};
 }
-window.BWMorph={start,sprite,orcaForm,DAUER:4.2};
+window.BWMorph={start,sprite,orcaForm,DAUER:4.2,FLUSS:5.55+1.25};
 })();

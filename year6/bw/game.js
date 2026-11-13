@@ -42,14 +42,19 @@ function start(id){
  Object.assign(G,{part:id,score:0,missed:new Map(),stats:{}});
  kapitel(G.startKap);
 }
-function kapitel(n){
- G.kap=n;G.mode='play';zeige('stage');document.body.classList.remove('morph','pausiert');
+/* Groesse des Spielbilds (auch wenn die Leinwand gerade bildschirmfuellend ist) */
+function feld(){const c=$('spiel'),b=c&&c.parentElement;return b&&b.clientWidth?{w:b.clientWidth,h:b.clientHeight}:null;}
+function kapitel(n,intro){
+ G.kap=n;zeige('stage');
+ if(!intro){G.mode='play';document.body.classList.remove('morph','pausiert','einblenden');}
  if($('reise'))$('reise').hidden=true;
  document.body.dataset.kap=KAPITEL[n].id;
  if($('hint'))$('hint').textContent=S().hinweis;
- const cv=$('spiel');
- S().start({words:wortliste(G.part),onFrage:frage,onEnd:kapitelEnde,score:G.score,H:cv&&cv.clientWidth?cv.clientHeight/cv.clientWidth*360:560});
- const m=M();if(m)m.spiele(KAPITEL[n].id);
+ const fl=feld();
+ S().start({words:wortliste(G.part),onFrage:frage,onEnd:kapitelEnde,score:G.score,H:fl?fl.h/fl.w*360:560});
+ /* beim Uebergang wartet das neue Kapitel eingefroren, bis der Orca da ist */
+ if(intro){S().O.mode='pause';S().O.intro=true;}
+ const m=M();if(m&&!intro)m.spiele(KAPITEL[n].id);
  stand();
  if(!laeuft&&typeof requestAnimationFrame==='function'){laeuft=true;zuletzt=0;requestAnimationFrame(schleife);}
 }
@@ -66,9 +71,8 @@ function kapitelEnde(won){
  G.stats[KAPITEL[G.kap].id]={k:O.k,best:O.best,jumps:O.jumps,extra:O.fish!=null?O.fish:O.krill};
  if(!won)return finish(false);
  const id=KAPITEL[G.kap].id;if(!saved.stempel.includes(id))saved.stempel.push(id);save();
- /* Pinguin -> Orca: erst die Verwandlung, dann die Karte */
- if(G.kap===0&&zeichnet()&&window.BWMorph){G.mode='morph';document.body.classList.add('morph');window.BWMorph.start($('spiel'),karte,{ton:toene()});}
- else karte();
+ /* erst Karte und Stempel; die Verwandlung kommt danach, ohne Schnitt ins naechste Kapitel */
+ karte();
 }
 function karte(){
  G.mode='reise';document.body.classList.add('morph');
@@ -86,7 +90,23 @@ function weiter(){
  if(G.mode!=='reise')return;
  if(reise){reise.stop();reise=null;}
  if($('reise'))$('reise').hidden=true;
+ if(G.kap===0&&FERTIG>1&&zeichnet()&&window.BWMorph&&window.BWPinguin.tauchen)return uebergang();
  if(G.kap+1<FERTIG)kapitel(G.kap+1);else finish(true);
+}
+/* Pinguin springt vom Eisberg, verwandelt sich im Wasser, der Orca schwimmt direkt ins Spiel */
+function uebergang(){
+ G.mode='morph';document.body.classList.add('morph');
+ const P=window.BWPinguin,R=window.BWOrca,cv=$('spiel');
+ P.tauchen();
+ kapitel(1,true);G.mode='morph';
+ window.BWMorph.start(cv,()=>{
+  document.body.classList.remove('morph','einblenden');
+  R.O.intro=false;if(R.O.mode==='pause')R.O.mode='play';G.mode='play';
+  const m=M();if(m)m.spiele('orca');stand();
+ },{ton:toene(),fluss:{
+  vorher:{update:dt=>P.update(dt),zeichne:c=>P.zeichne(c),punkt:()=>{const k=cv.clientWidth/360;return {x:P.O.px*k,y:(P.yBase()+10)*k};}},
+  nachher:{feld:()=>{const r=cv.parentElement.getBoundingClientRect();return {x:r.left,y:r.top,w:r.width,h:r.height};},zeichne:(c,b,h)=>R.zeichne(c,b,h),pose:()=>R.pose()},
+  ui:()=>document.body.classList.add('einblenden')}});
 }
 function finish(won){
  if(G.mode==='over')return;
