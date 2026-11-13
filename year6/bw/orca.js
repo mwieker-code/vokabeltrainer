@@ -83,6 +83,7 @@ function neuesTor(abstand){
   if(O.k%3===1)O.items.push({typ:'ring',x:x*0.42,y:SURF()-58});
   if(O.k%4===2)O.items.push({typ:Math.random()<0.5?'turbo':'blase',x:x*0.7,y:laneY(Math.floor(Math.random()*3))});
  }
+ O.frageT=O.time;
  if(O.onFrage)O.onFrage(O.q,O.gate.opts);
 }
 function musik(f){try{if(window.BWMusik)f(window.BWMusik);}catch(e){}}
@@ -380,6 +381,8 @@ function zeichne(cv,breite,hoehe){
  ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='800 18px Inter, system-ui, sans-serif';
  O.pops.forEach(p=>{const a=Math.max(0,1-p.t/1.2),y=clamp(p.y,64,H-30)-p.t*30;ctx.globalAlpha=a;ctx.strokeStyle='rgba(16,21,28,.8)';ctx.lineWidth=4;ctx.strokeText(p.text,ORCA_X+70,y);ctx.fillStyle=p.farbe;ctx.fillText(p.text,ORCA_X+70,y);});
  ctx.globalAlpha=1;
+ /* deutsche Vokabel als Karte ueber den drei Schwaermen */
+ if(window.BWFrage&&O.gate&&(O.mode==='play'||O.mode==='pause')&&!O.intro)window.BWFrage.karte(ctx,{text:O.q.de,cx:clamp(ORCA_X+O.gate.x,ORCA_X+110,W),unten:laneY(0)-56,W,H,t:O.time-(O.frageT||0)});
  hud(H);
  if(O.mode==='ziel'){ctx.fillStyle='rgba(255,255,255,'+Math.min(0.85,O.anim*0.6)+')';ctx.fillRect(0,0,W,H);}
 }

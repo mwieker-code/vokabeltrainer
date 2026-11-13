@@ -68,6 +68,7 @@ const istLichtung=k=>k%LICHTUNG_ALLE===LICHTUNG_ALLE-1;
 const ruheStrecke=()=>grundTempo()*MINREAD;
 function abschnitt(s0){
  const opts=frage();
+ O.frageT=O.time;
  if(istLichtung(O.k)){lichtungBauen(s0,opts);if(O.onFrage)O.onFrage(O.q,opts);return;}
  const ruhe=ruheStrecke(),L=Math.max(900,ruhe+520),F=s0+L,action=L-ruhe;
  /* Bambussprossen in Reihen, ein, zwei Steine, ab und zu ein Baby am Wegrand */
@@ -84,7 +85,7 @@ function lichtungBauen(s0,opts){
  O.lichtung={x0:s0,stopp:s0+L,ziel:s0+L+190,opts:opts.map(o=>({...o,kaputt:0})),phase:'anrollen',v:grundTempo(),zug:null,wahl:-1,t:0,
   baby:SCHLEIFEN()[O.naechsteSchleife++%SCHLEIFEN().length],ergebnis:null,ersteMal:O.k===LICHTUNG_ALLE-1};
 }
-function pop(text,farbe,y){O.pops.push({text,farbe:farbe||'#FFFFFF',t:0,y:y==null?laneY(0)-90:y});}
+function pop(text,farbe,y){O.pops.push({text,farbe:farbe||'#FFFFFF',t:0,y:y==null?yAus(O.lane)-90:y});}
 function teilchen(x,y,n,farben,kraft,art){
  if(ruhig)n=Math.ceil(n/3);
  for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,v=(0.3+Math.random())*kraft;
@@ -494,6 +495,10 @@ function zeichne(cv,breite,hoehe){
  O.pops.forEach((p,n)=>{const a=Math.max(0,1-p.t/1.4),y=Math.max(70,p.y-n*22-p.t*24);ctx.globalAlpha=a;ctx.strokeStyle='rgba(16,21,28,.85)';ctx.lineWidth=4;ctx.strokeText(p.text,W/2,y);ctx.fillStyle=p.farbe;ctx.fillText(p.text,W/2,y);});
  ctx.globalAlpha=1;
  if(O.hitstop>0){ctx.fillStyle='rgba(255,255,255,'+Math.min(0.35,O.hitstop*3)+')';ctx.fillRect(0,0,W,H);}
+ /* deutsche Vokabel als Karte ueber der Wand bzw. den Buendeln */
+ if(window.BWFrage&&(O.mode==='play'||O.mode==='pause')&&!O.intro&&(O.gate||L)){
+  const cx=O.gate?Math.min(sx(O.gate.x),W-66*SKALA[0]):sx(L.ziel)+VERSATZ[0],vorbei=(O.gate&&O.gate.ergebnis==='richtig')||(L&&L.ergebnis);
+  window.BWFrage.karte(ctx,{text:O.q.de,cx,unten:laneY(0)-64,W,H,t:O.time-(O.frageT||0),alpha:vorbei?0.25:1});}
  hud(H);
 
 }

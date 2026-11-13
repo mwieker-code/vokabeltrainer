@@ -76,6 +76,7 @@ function neueFrage(){
  else if(O.k>0&&Math.random()<0.7)irgendeine().item='fische';
  O.wahl=-1;O.ergebnis=null;O.kipp=-1;O.super=false;O.tick=0;
  O.zeitMax=zeitFuer(O.k);O.zeit=O.zeitMax;
+ O.frageT=O.time;
  if(O.onFrage)O.onFrage(O.q,O.ziele.map(z=>({w:z.w,lane:z.lane})));
 }
 function pop(text,farbe){O.pops.push({text,farbe:farbe||'#FFFFFF',t:0});}
@@ -433,9 +434,12 @@ function zeichne(cv,breite,hoehe){
  ctx.globalAlpha=1;
  schneefall(H);
  ctx.textAlign='center';ctx.textBaseline='middle';ctx.font='800 18px Inter, system-ui, sans-serif';
- O.pops.forEach((q,n)=>{const a=Math.max(0,1-q.t/1.3),y=yTop()-150-n*24-q.t*26;ctx.globalAlpha=a;ctx.strokeStyle='rgba(16,21,28,.85)';ctx.lineWidth=4;ctx.strokeText(q.text,W/2,y);ctx.fillStyle=q.farbe;ctx.fillText(q.text,W/2,y);});
+ O.pops.forEach((q,n)=>{const a=Math.max(0,1-q.t/1.3),y=yTop()-178-n*24-q.t*26;ctx.globalAlpha=a;ctx.strokeStyle='rgba(16,21,28,.85)';ctx.lineWidth=4;ctx.strokeText(q.text,W/2,y);ctx.fillStyle=q.farbe;ctx.fillText(q.text,W/2,y);});
  ctx.globalAlpha=1;
  if(fin&&p==='ankunft'||(fin&&O.k===GOAL-FINALE&&p==='weiter')){ctx.globalAlpha=0.9;ctx.fillStyle='rgba(16,21,28,.8)';rund(W/2-110,56,220,28,14);ctx.fill();ctx.fillStyle='#FFFFFF';ctx.font='800 13px Inter, system-ui, sans-serif';ctx.fillText('Finale: rauf auf den Eisberg!',W/2,70.5);ctx.globalAlpha=1;}
+ /* deutsche Vokabel als Karte ueber den drei Schollen; nach der Wahl tritt sie zurueck */
+ if(window.BWFrage&&O.q&&(O.mode==='play'||O.mode==='pause')){const vorbei=['sprung','jubel','kipp','wasser','rettung'].includes(O.phase);
+  window.BWFrage.karte(ctx,{text:O.q&&O.q.de,cx:W/2,unten:yTop()-80,W,H,t:O.time-(O.frageT||0),alpha:vorbei?Math.max(0,1-O.pt*5):1});}
  hud(H);
 }
 /* Tippen: die naechstgelegene Scholle im oberen Bereich */

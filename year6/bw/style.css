@@ -40,7 +40,8 @@ ol.how li{margin:3px 0}
 .bar button{width:40px;height:44px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.07);color:var(--snow);font-weight:800;flex:none}
 .bar .stat{flex:1;text-align:center;font:700 14px/1 ui-monospace,Menlo,monospace;padding:13px 3px;border-radius:14px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);white-space:nowrap}
 .bar #hearts{color:var(--warn)}
-.ask{background:var(--snow);color:var(--ink);border-radius:18px;padding:10px 16px 12px;margin-bottom:8px;text-align:center;min-height:74px;display:flex;flex-direction:column;justify-content:center}
+/* die Vokabel steht als Karte im Spielbild (frage.js); dieser Kasten bleibt nur fuer Screenreader */
+.ask{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .ask small{font:600 10px/1 ui-monospace,Menlo,monospace;letter-spacing:.14em;color:#5B667C;margin-bottom:4px}
 #prompt{font-weight:800;font-size:21px;line-height:1.2;overflow-wrap:anywhere}
 .bild{flex:1;min-height:0;position:relative}
