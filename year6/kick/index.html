@@ -1,0 +1,44 @@
+<!doctype html><html lang="de" data-eigenes-design><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="apple-touch-icon" sizes="180x180" href="../../assets/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Basecamp">
+<meta name="theme-color" content="#0D1017"><title>Free Kick Tour · Year 6</title>
+<link rel="stylesheet" href="../../assets/fonts.css?v=2"><link rel="stylesheet" href="style.css?v=20261120-kick">
+</head><body><main class="kick">
+<header><a href="../">← Year 6</a><span>FREE KICK TOUR · UNIT 2</span></header>
+<section id="menu">
+ <h1>Free Kick Tour</h1>
+ <p class="lead">Schieß dich mit den Vokabeln aus Unit 2 – A School Day vom Bolzplatz ins Stadion.</p>
+ <ol class="how">
+  <li>Über dem Tor steht das deutsche Wort. Im Tor hängen vier englische Wörter – eins in jeder Ecke.</li>
+  <li>Wische vom Ball zum richtigen Wort. Wo dein Finger loslässt, fliegt der Ball hin.</li>
+  <li>Wische zügig: zu langsam sackt der Ball ab, zu schnell steigt er übers Tor. Wischst du im Bogen, bekommt der Ball Kurve.</li>
+  <li>Ein falsches Wort kostet ein Herz. Hält der Torwart oder triffst du Mauer oder Pfosten, ist nur deine Serie weg.</li>
+  <li>Drei Stationen mit je fünf Schüssen: Bolzplatz, Schulhof mit Mauer und Wind, zum Schluss das Stadion.</li>
+  <li>Extrapunkte gibt es für Tore in den Winkel, Kurven um die Mauer, perfekte Schüsse und schnelle Antworten. Der Goldball zählt doppelt.</li>
+  <li>Ohne Wischen: Antwortknopf einmal tippen zielt, nochmal tippen schießt. Tastatur: Pfeile oder 1–4 zielen, Leertaste halten und loslassen.</li>
+ </ol>
+ <h2>Schwierigkeit</h2>
+ <div id="modes" role="group" aria-label="Schwierigkeit wählen"></div>
+ <h2>Dein Spieler</h2>
+ <div id="players" role="group" aria-label="Spieler wählen"></div>
+ <p><button id="musikMenu" class="musik-menu" aria-pressed="true">♫ Musik: an</button></p>
+ <h2>Abschnitt wählen</h2>
+ <div id="levels"></div>
+ <p class="muted">Das Spiel ist zum Wiederholen da. Deine Lernfächer ändern sich dadurch nicht.</p>
+</section>
+<section id="stage" hidden>
+ <div class="bar"><button id="quit" aria-label="Spiel beenden">✕</button><span class="stat" id="shots" aria-label="Schuss 1 von 15">⚽ 1/15</span><span class="stat" id="points">0 P</span><span class="stat" id="hearts">♥♥♥</span><button id="musik" aria-label="Musik" aria-pressed="true">♫</button><button id="pause" aria-label="Pause">II</button></div>
+ <p class="sr-only" aria-live="polite">Gesucht: <span id="prompt" lang="de"></span></p>
+ <canvas id="feld" aria-label="Fußballfeld mit Tor. Die vier Antworten stehen auch als Knöpfe darunter."></canvas>
+ <div id="chips" role="group" aria-label="Antworten: einmal tippen zielt, nochmal tippen schießt"></div>
+ <p class="hint">Zum Wort wischen · Bogen = Kurve · Knopf 2× = Schuss</p>
+</section>
+<section id="over" hidden></section>
+<footer><p>Free Kick Tour · Vokabeln aus Year 6, Unit 2</p></footer>
+</main>
+<script src="../climb/data.js?v=20261120-kick"></script><script src="spieler.js?v=20261120-kick"></script><script src="musik.js?v=20261120-kick"></script><script src="game.js?v=20261120-kick"></script>
+<script src="../../assets/feedback.js"></script>
+</body></html>
