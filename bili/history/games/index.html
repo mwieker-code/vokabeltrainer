@@ -1,0 +1,84 @@
+<!doctype html><html lang="de" data-eigenes-design><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="../../../manifest.webmanifest">
+<link rel="apple-touch-icon" sizes="180x180" href="../../../assets/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Basecamp">
+<meta name="theme-color" content="#0D1017"><title>Games · History</title>
+<link rel="stylesheet" href="../../../assets/fonts.css?v=2">
+<style>
+:root{--night:#0D1017;--snow:#F4F7FB;--soft:#9AA6B8;--ink:#10151C}
+html,body{margin:0;min-height:100%;background:var(--night);color:var(--snow);font:17px/1.5 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-text-size-adjust:100%}
+body{background:linear-gradient(180deg,#1B2A40 0%,#101826 60%,var(--night) 100%) fixed}
+main{max-width:720px;margin:0 auto;padding:max(14px,env(safe-area-inset-top)) 16px 32px}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
+header a{background:var(--snow);color:var(--ink);text-decoration:none;font-weight:700;border-radius:999px;padding:8px 16px}
+header span{font:600 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.14em;color:var(--soft)}
+h1{font-size:34px;line-height:1.1;margin:6px 0 6px}
+.lead{color:#C9D3E1;margin:0 0 20px}
+.spiele{display:grid;gap:16px;grid-template-columns:1fr}
+@media (min-width:640px){.spiele{grid-template-columns:1fr 1fr}}
+.spiel{display:block;border-radius:22px;overflow:hidden;text-decoration:none;color:inherit;background:#162033;border:1px solid rgba(255,255,255,.1);box-shadow:0 10px 26px rgba(0,0,0,.35);transition:transform .15s ease}
+.spiel:hover,.spiel:focus-visible{transform:translateY(-2px)}
+.spiel:focus-visible{outline:3px solid #FFC857;outline-offset:3px}
+.spiel canvas{display:block;width:100%;aspect-ratio:2/1;background:#24324A}
+.spiel .text{padding:14px 18px 18px}
+.spiel h2{margin:0 0 4px;font-size:22px}
+.spiel p{margin:0;color:#C9D3E1;font-size:15px}
+.spiel .stand{margin-top:10px;font:600 12px/1.4 ui-monospace,Menlo,monospace;letter-spacing:.04em;color:#FFC857}
+.muted{color:var(--soft);font-size:14px;margin-top:22px}
+@media (prefers-reduced-motion:reduce){.spiel{transition:none}}
+</style>
+</head><body><main>
+<header><a href="../">← History</a><span>GAMES · HISTORY</span></header>
+<h1>Games</h1>
+<p class="lead">Spiele mit den Vokabeln aus History – zum Wiederholen. Du wählst im Spiel die Unit und den Abschnitt.</p>
+<div class="spiele">
+ <a class="spiel" href="../sled/"><canvas data-bild="sled" width="640" height="320" aria-hidden="true"></canvas><div class="text"><h2>Sled Run</h2><p>Schlittenrennen: Wische in die Spur mit dem richtigen Wort und sammle Pinguine ein.</p><p class="stand" data-stand="sled"></p></div></a>
+ <a class="spiel" href="../climb/"><canvas data-bild="climb" width="640" height="320" aria-hidden="true"></canvas><div class="text"><h2>Summit Climb</h2><p>Kletterspiel: Greif nach dem richtigen Wort und klettere vor dem Nebel bis zum Gipfel.</p><p class="stand" data-stand="climb"></p></div></a>
+</div>
+<p class="muted">Die Spiele zählen nicht in deine Lernfächer. Gespeichert werden nur Bestwerte.</p>
+</main>
+<script src="data.js?v=20261117-controller"></script><script src="../../../year6/figuren.js?v=20261117-controller"></script>
+<script>
+/* Spieleseite: Vorschaubilder und eigener Stand je Spiel */
+(function(){
+'use strict';
+const Q=window.GAME_DATA||{schluessel:'vt6'};
+const lies=k=>{try{return JSON.parse(localStorage.getItem(k))||null;}catch(e){return null;}};
+const summe=o=>Object.values(o||{}).reduce((a,b)=>a+(Number(b)||0),0);
+const besterWert=o=>Object.values(o||{}).reduce((a,b)=>Math.max(a,Number(b)||0),0);
+const sled=lies(Q.schluessel+':sled:v1'),climb=lies(Q.schluessel+':climb:v1');
+const text=(best,n,wort)=>best?'Bestwert '+best+' P · '+n+'× '+wort:'Noch nicht gespielt';
+document.querySelector('[data-stand="sled"]').textContent=text(besterWert(sled&&sled.best),summe(sled&&sled.finishes),'im Ziel');
+document.querySelector('[data-stand="climb"]').textContent=text(besterWert(climb&&climb.best),summe(climb&&climb.summits),'am Gipfel');
+const F=window.Figuren;
+function bild(cv,art){
+ const g=cv.getContext&&cv.getContext('2d');if(!g)return;const W=cv.width,H=cv.height;
+ if(art==='sled'){
+  let v=g.createLinearGradient(0,0,0,H);v.addColorStop(0,'#5E9ED6');v.addColorStop(1,'#CDE8F7');g.fillStyle=v;g.fillRect(0,0,W,H);
+  g.fillStyle='#E9F4FB';g.beginPath();g.moveTo(0,H*0.55);g.quadraticCurveTo(W*0.5,H*0.35,W,H*0.5);g.lineTo(W,H);g.lineTo(0,H);g.fill();
+  g.fillStyle='#FFFFFF';g.beginPath();g.moveTo(0,H*0.75);g.quadraticCurveTo(W*0.45,H*0.55,W,H*0.8);g.lineTo(W,H);g.lineTo(0,H);g.fill();
+  for(const [x,y,s] of [[80,170,1],[150,150,0.8],[520,160,1.1],[590,180,0.9]]){g.fillStyle='#2F6B4F';g.beginPath();g.moveTo(x,y-50*s);g.lineTo(x-22*s,y);g.lineTo(x+22*s,y);g.fill();g.fillStyle='#FFFFFF';g.beginPath();g.moveTo(x,y-50*s);g.lineTo(x-9*s,y-30*s);g.lineTo(x+9*s,y-30*s);g.fill();}
+  g.strokeStyle='rgba(120,170,210,.6)';g.lineWidth=5;g.beginPath();g.moveTo(300,320);g.quadraticCurveTo(290,280,262,250);g.moveTo(360,320);g.quadraticCurveTo(350,280,322,250);g.stroke();
+  /* Rodelkind auf dem Schlitten, ein Pinguin faehrt mit */
+  g.save();g.translate(320,262);g.scale(2.3,2.3);g.rotate(-0.08);
+  g.fillStyle='#8D5A34';g.beginPath();g.moveTo(-40,-14);g.lineTo(40,-14);g.quadraticCurveTo(52,-14,50,-4);g.lineTo(-40,-4);g.closePath();g.fill();
+  g.strokeStyle='#5D3A1F';g.lineWidth=3;g.lineCap='round';g.beginPath();g.moveTo(-42,0);g.lineTo(44,0);g.quadraticCurveTo(54,0,52,-8);g.stroke();
+  if(F){F.kind(g,0.6,0.1);F.pinguin(g,-30,-14,0.55,{wave:0.4,scarf:true,blush:true});}
+  g.restore();
+  for(let i=0;i<4;i++){const x=420+i*36;g.fillStyle='#FFE08A';g.beginPath();for(let k=0;k<10;k++){const a=k*Math.PI/5-Math.PI/2,r=k%2?6:14;g.lineTo(x+Math.cos(a)*r,130+i*10+Math.sin(a)*r);}g.fill();}
+ }else{
+  let v=g.createLinearGradient(0,0,0,H);v.addColorStop(0,'#7FB2E0');v.addColorStop(1,'#E3C7A6');g.fillStyle=v;g.fillRect(0,0,W,H);
+  g.fillStyle='#A9BDD1';g.beginPath();g.moveTo(0,H);g.lineTo(140,90);g.lineTo(230,170);g.lineTo(330,40);g.lineTo(450,160);g.lineTo(560,80);g.lineTo(W,H);g.fill();
+  g.fillStyle='#FFFFFF';g.beginPath();g.moveTo(330,40);g.lineTo(300,80);g.lineTo(318,74);g.lineTo(334,90);g.lineTo(352,70);g.lineTo(366,80);g.closePath();g.fill();
+  v=g.createLinearGradient(220,0,440,0);v.addColorStop(0,'#8D6E63');v.addColorStop(1,'#6D4C41');g.fillStyle=v;g.beginPath();g.moveTo(230,H);g.lineTo(250,60);g.lineTo(420,40);g.lineTo(440,H);g.fill();
+  for(const [x,y,c] of [[290,120,'#FF7A59'],[360,90,'#3CCFBE'],[400,150,'#FFC857'],[310,210,'#3CCFBE'],[380,250,'#FF7A59']]){g.fillStyle=c;g.beginPath();g.ellipse(x,y,14,10,0,0,7);g.fill();}
+  g.fillStyle='rgba(255,255,255,.55)';g.fillRect(0,H*0.82,W,H*0.18);
+  if(F)F.kindKlettern(g,325,150,2,{reach:0.4,mood:'happy',lh:{x:-12,y:-28},rh:{x:22,y:0}});
+ }
+}
+document.querySelectorAll('[data-bild]').forEach(cv=>{try{bild(cv,cv.dataset.bild);}catch(e){}});
+})();
+</script>
+</body></html>

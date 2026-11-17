@@ -1,0 +1,81 @@
+/* Black & White: eigenes Design, unabhaengig von Hell und Nacht der App. */
+:root{--night:#0D1017;--ink:#10151C;--snow:#F7F9FB;--soft:#A9B8CC;--ice:#9FD3F2;--sea:#2479AE;--warn:#FF7A59}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--night);color:var(--snow);font:17px/1.5 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-text-size-adjust:100%}
+body{background:linear-gradient(180deg,#1B2A40 0%,#101826 60%,var(--night) 100%) fixed}
+main.bw{max-width:460px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;padding:12px 14px 16px}
+main.bw>header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:10px}
+main.bw>header a{color:var(--ink);background:var(--snow);text-decoration:none;font-weight:700;padding:8px 14px;border-radius:999px;font-size:15px}
+main.bw>header span{font:600 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.14em;color:var(--soft)}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--ice);outline-offset:3px}
+h1{font-size:34px;line-height:1.05;letter-spacing:-.03em;margin:14px 0 8px}
+h1[tabindex="-1"]:focus{outline:none}
+h2{font-size:19px;margin:22px 0 8px}
+.lead{color:var(--soft);margin:0 0 14px}
+.muted{color:var(--soft);font-size:15px}
+.kapitel{list-style:none;margin:0 0 14px;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.kapitel button{width:100%;height:100%;display:flex;flex-direction:column;align-items:flex-start;text-align:left;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.18);color:var(--snow)}
+.kapitel button:disabled{opacity:.45;cursor:default}
+.kapitel button[aria-pressed="true"]{background:var(--snow);color:var(--ink);border-color:var(--ice)}
+.musik-menu{border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.06);color:var(--snow);border-radius:999px;padding:9px 16px;font-weight:700}
+.musik-menu[hidden]{display:none}
+.bar button[hidden]{display:none}
+.kapitel span{font-size:13px}
+.passliste{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.passliste li{display:flex;flex-direction:column;padding:8px 12px;border-radius:12px;border:1px dashed rgba(255,255,255,.25);color:var(--soft);font-size:14px}
+.passliste li.da{border:2px solid var(--ice);color:var(--snow);background:rgba(159,211,242,.08)}
+.passliste b{letter-spacing:.06em;text-transform:uppercase;font-size:13px}
+ol.how{margin:0 0 8px;padding:14px 16px 14px 36px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;font-size:15px}
+ol.how li{margin:3px 0}
+#levels{display:grid;gap:10px}
+#levels button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;padding:14px 16px;border-radius:16px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-left:5px solid var(--ice);color:var(--snow);min-height:62px}
+#levels button:hover{background:rgba(255,255,255,.1)}
+#levels button.all{border-left-color:var(--snow);background:rgba(255,255,255,.12)}
+.l-name{font-weight:700;font-size:18px}
+.l-info{font-size:13px;color:var(--soft)}
+#stage{flex:1;display:flex;flex-direction:column;min-height:0;height:calc(100dvh - 70px)}
+#stage[hidden],#menu[hidden],#over[hidden]{display:none}
+.bar{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.bar button{width:40px;height:44px;border-radius:14px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.07);color:var(--snow);font-weight:800;flex:none}
+.bar .stat{flex:1;text-align:center;font:700 14px/1 ui-monospace,Menlo,monospace;padding:13px 3px;border-radius:14px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);white-space:nowrap}
+.bar #hearts{color:var(--warn)}
+/* die Vokabel steht als Karte im Spielbild (frage.js); dieser Kasten bleibt nur fuer Screenreader */
+.ask{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.ask small{font:600 10px/1 ui-monospace,Menlo,monospace;letter-spacing:.14em;color:#5B667C;margin-bottom:4px}
+#prompt{font-weight:800;font-size:21px;line-height:1.2;overflow-wrap:anywhere}
+.bild{flex:1;min-height:0;position:relative}
+#spiel{position:absolute;inset:0;width:100%;height:100%;display:block;border-radius:22px;border:1px solid rgba(255,255,255,.14);background:var(--sea);touch-action:none;-webkit-tap-highlight-color:transparent;user-select:none}
+#choices{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+#choices button{min-height:54px;padding:8px 6px;border-radius:14px;border:0;border-top:5px solid var(--farbe,#fff);background:var(--snow);color:var(--ink);font-weight:700;font-size:15px;line-height:1.2;overflow-wrap:anywhere}
+#choices i{display:block;font-style:normal;font-size:11px;color:var(--farbe);filter:brightness(.75)}
+body.pausiert #spiel{filter:saturate(.4) brightness(.7)}
+#choices button:disabled{opacity:.3}
+.hint{color:var(--soft);font-size:13px;text-align:center;margin:8px 0 0}
+/* waehrend der Verwandlung gehoert das ganze Bild dem Tier */
+body.morph .ask,body.morph #choices,body.morph .hint,body.morph .bar{visibility:hidden}
+body.morph #spiel{position:fixed;inset:0;width:100%;height:100%;border-radius:0;border:0;z-index:10;background:transparent}
+/* Uebergang ins naechste Kapitel: Leiste, Frage und Knoepfe kommen sanft dazu */
+body.morph.einblenden .ask,body.morph.einblenden #choices,body.morph.einblenden .hint,body.morph.einblenden .bar{visibility:visible;animation:einblenden .9s ease both}
+body.morph.einblenden #spiel{background:transparent;pointer-events:none}
+@keyframes einblenden{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){body.morph.einblenden .ask,body.morph.einblenden #choices,body.morph.einblenden .hint,body.morph.einblenden .bar{animation:none}}
+.result{font-size:20px;font-weight:700}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
+.actions button{padding:13px 18px;border-radius:999px;border:1px solid rgba(255,255,255,.3);background:transparent;color:var(--snow);font-weight:700}
+.actions .go{background:var(--snow);color:var(--ink);border-color:var(--snow)}
+.missed{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+.missed li{display:flex;justify-content:space-between;gap:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:8px 12px}
+.missed span{color:var(--soft)}
+/* Reise: Karte im Vollbild, Stempel darueber */
+#reise{position:fixed;left:0;right:0;bottom:0;z-index:20;padding:14px 14px max(16px,env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:center;gap:10px;background:linear-gradient(180deg,rgba(16,21,28,0),rgba(16,21,28,.92) 22%)}
+#reise[hidden]{display:none}
+.pass{display:flex;gap:14px;align-items:center;max-width:430px;width:100%;background:var(--snow);color:var(--ink);border-radius:18px;padding:14px 16px;box-shadow:0 10px 30px rgba(0,0,0,.45)}
+.stempel{flex:none;width:104px;height:104px;border-radius:50%;border:3px double #B3261E;color:#B3261E;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;transform:rotate(-12deg);font:700 10px/1.25 ui-monospace,Menlo,monospace;padding:8px;animation:stempel .45s cubic-bezier(.2,1.6,.4,1) both}
+.stempel b{font-size:12px;letter-spacing:.04em}
+.stempel i{font-style:normal}
+@keyframes stempel{0%{transform:rotate(-12deg) scale(2.4);opacity:0}100%{transform:rotate(-12deg) scale(1);opacity:.92}}
+.p-text small{font:600 10px/1 ui-monospace,Menlo,monospace;letter-spacing:.12em;color:#5B667C}
+.p-text p{margin:4px 0 0;font-weight:700;font-size:17px;line-height:1.25}
+.p-text p.de{font-weight:400;font-size:14px;color:#4A5568}
+#reise .go{border:0;border-radius:999px;padding:13px 22px;font-weight:800;font-size:17px;background:#FFB020;color:var(--ink)}

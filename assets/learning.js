@@ -629,9 +629,12 @@ ${vocabulary}`;
   startSession = function(topicId) {
     setup(topicId);
   };
+  /* Games-Kachel mit Controller-Symbol */
+  const GAMES_KACHEL='<a class="topic grammar-tile games-tile" href="games/"><svg class="g-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 15h18c5.5 0 9 4 10 10l1.5 8c.6 3.6-2 6-5 6-2.2 0-3.6-1.2-4.8-3l-2.4-3.6H15.7l-2.4 3.6C12.1 37.8 10.7 39 8.5 39c-3 0-5.6-2.4-5-6L5 25c1-6 4.5-10 10-10z"/><path d="M14 22v8M10 26h8"/><circle cx="32" cy="24" r="1.7" fill="currentColor"/><circle cx="36.5" cy="28.5" r="1.7" fill="currentColor"/><path d="M21 21h6"/></svg><span class="t-name">Games</span><br><span class="t-count">Sled Run und Summit Climb mit deinen Vokabeln.</span></a>';
   renderHome = function() {
     if(upper){
       originalHome();
+      if(KEY==='vt:bili:history:progress')view.insertAdjacentHTML('beforeend',GAMES_KACHEL);
       const oldDue=document.getElementById('dueBtn');if(oldDue)oldDue.remove();
       /* Jede Oberkategorie mit mehreren Themen bekommt oben eine Kachel fuer
          alle ihre Vokabeln. Der Lernstand bleibt der der einzelnen Themen. */
@@ -660,9 +663,8 @@ ${vocabulary}`;
       const bar=view.querySelector('.sessionbar'); if(bar)bar.remove();
       view.querySelector('.topic.uall')?.remove();
       if(KEY==='vt6:progress')view.insertAdjacentHTML('beforeend','<a class="topic grammar-tile" href="grammar/"><span class="t-name">Grammar</span><br><span class="t-count">Hier kannst du Grammatik üben.</span></a>');
-      if(KEY==='vt6:progress')view.insertAdjacentHTML('beforeend','<a class="topic grammar-tile" href="climb/"><span class="t-name">Summit Climb</span><br><span class="t-count">Kletterspiel mit den Vokabeln aus Unit 2.</span></a>');
-      if(KEY==='vt6:progress')view.insertAdjacentHTML('beforeend','<a class="topic grammar-tile" href="sled/"><span class="t-name">Sled Run</span><br><span class="t-count">Schlittenrennen mit den Vokabeln aus Unit 2.</span></a>');
-      if(KEY==='vt6:progress')view.insertAdjacentHTML('beforeend','<a class="topic grammar-tile" href="kick/"><span class="t-name">Free Kick Tour</span><br><span class="t-count">Freistöße mit den Vokabeln aus Unit 2.</span></a>');
+      /* Games: eine Kachel je Fach, die Spieleseite liegt in games/ (tools/spiele.cjs) */
+      if(KEY==='vt6:progress'||KEY==='vt9:progress')view.insertAdjacentHTML('beforeend',GAMES_KACHEL);
       /* "Find your way!" (schule/) ist vorerst versteckt - noch nicht fertig. */
       if(KEY==='vt9:progress')view.insertAdjacentHTML('beforeend','<a class="topic grammar-tile" href="discussion/"><span class="t-name">Writing a discussion</span><br><span class="t-count">Aufbau, Regeln und Redemittel für deine discussion.</span></a>');
       view.insertAdjacentHTML('beforeend','<div class="quicklinks"><button id="allBtn">Vokabeln nachschlagen</button><button id="helpBtn">So funktioniert’s</button></div>');
