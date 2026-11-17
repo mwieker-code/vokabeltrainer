@@ -27,6 +27,7 @@ function glied(ctx,x1,y1,x2,y2,knick,w,c1,c2){
 const KADER={
   leo:  {name:'LEO',  nr:'9', trikot:'#E63946',dunkel:'#B4232F',schrift:'#FFFFFF',hose:'#F4F1EA',stutzen:'#E63946',haut:'#EDB98F',haar:'#4A2E1F'},
   mia:  {name:'MIA',  nr:'10',trikot:'#12B5A5',dunkel:'#0B8478',schrift:'#0E2A47',hose:'#0E2A47',stutzen:'#12B5A5',haut:'#B87A52',haar:'#1C1414'},
+  messi:{name:'MESSI',nr:'10',trikot:'#75AADB',dunkel:'#4F86BC',schrift:'#14213D',hose:'#1A1F2B',stutzen:'#F4F1EA',haut:'#E6B08A',haar:'#5A3A22',streifen:'#FFFFFF'},
   flash:{name:'FLASH',nr:'7', trikot:'#7C4DFF',dunkel:'#5A2FD6',schrift:'#FFD447',hose:'#2A1B5C',stutzen:'#2A1B5C',haut:'#F08A3C',haar:'#F08A3C',fuchs:true}
 };
 function schuetze(ctx,X,Y,k,wer,o){
@@ -87,6 +88,13 @@ function schuetze(ctx,X,Y,k,wer,o){
   const g=ctx.createLinearGradient(-20,0,20,0);g.addColorStop(0,K.dunkel);g.addColorStop(0.35,K.trikot);g.addColorStop(0.7,K.trikot);g.addColorStop(1,K.dunkel);
   ctx.fillStyle=g;ctx.beginPath();ctx.moveTo(-21,schulter);ctx.quadraticCurveTo(0,schulter-5,21,schulter);
   ctx.lineTo(17,huefte-8);ctx.quadraticCurveTo(0,huefte-5,-17,huefte-8);ctx.closePath();ctx.fill();
+  /* Laengsstreifen (Argentinien: hellblau-weiss) */
+  if(K.streifen){
+    ctx.save();ctx.clip();ctx.fillStyle=K.streifen;
+    for(const sx of [-14,-3.5,7])ctx.fillRect(sx,schulter-6,6,huefte-schulter+2);
+    const sh=ctx.createLinearGradient(-21,0,21,0);sh.addColorStop(0,'rgba(0,0,0,.16)');sh.addColorStop(0.35,'rgba(0,0,0,0)');sh.addColorStop(0.7,'rgba(0,0,0,0)');sh.addColorStop(1,'rgba(0,0,0,.16)');
+    ctx.fillStyle=sh;ctx.fillRect(-22,schulter-6,44,huefte-schulter+2);ctx.restore();
+  }
   ctx.fillStyle=K.dunkel;ctx.fillRect(-17,huefte-12,34,3);
   ctx.fillStyle=K.schrift;ctx.textAlign='center';ctx.textBaseline='middle';
   ctx.font='800 7px Inter,system-ui,sans-serif';ctx.fillText(K.name,0,schulter+9);
@@ -104,7 +112,11 @@ function schuetze(ctx,X,Y,k,wer,o){
     ctx.fillStyle=K.haut;ctx.beginPath();ctx.ellipse(-13,-1,3,4.5,0,0,TAU);ctx.ellipse(13,-1,3,4.5,0,0,TAU);ctx.fill();
     ctx.beginPath();ctx.arc(0,-2,12.5,0,TAU);ctx.fill();
     ctx.fillStyle=K.haar;
-    if(wer==='mia'){
+    if(wer==='messi'){
+      /* glattes Haar, im Nacken etwas laenger */
+      ctx.beginPath();ctx.arc(0,-3,13.2,Math.PI*0.88,Math.PI*2.12);ctx.lineTo(12.5,6);ctx.quadraticCurveTo(0,11,-12.5,6);ctx.closePath();ctx.fill();
+      ctx.strokeStyle='rgba(255,255,255,.1)';ctx.lineWidth=1;for(const sx of [-6,0,6]){ctx.beginPath();ctx.moveTo(sx,-14);ctx.quadraticCurveTo(sx*1.3,-4,sx*1.1,6);ctx.stroke();}
+    }else if(wer==='mia'){
       ctx.beginPath();ctx.arc(0,-3,13,Math.PI*0.92,Math.PI*2.08);ctx.lineTo(12,4);ctx.quadraticCurveTo(0,8,-12,4);ctx.closePath();ctx.fill();
       /* Pferdeschwanz schwingt mit */
       const sw=Math.sin(t*5)*5+(pose==='anlauf'?Math.sin(p*TAU*2)*6:0)+(pose==='jubel'?Math.sin(t*14)*7:0);

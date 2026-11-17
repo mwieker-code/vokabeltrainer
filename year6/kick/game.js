@@ -69,10 +69,10 @@ function tafelAn(x,y,zeit){
 }
 
 let saved={best:{},tours:{},player:'leo',modus:'normal',torwart:'normal'};
-try{const p=JSON.parse(localStorage.getItem(KEY));if(p&&p.best&&typeof p.best==='object'&&p.tours&&typeof p.tours==='object')saved={best:p.best,tours:p.tours,player:['mia','flash'].includes(p.player)?p.player:'leo',modus:p.modus==='profi'?'profi':'normal',torwart:TORWART[p.torwart]?p.torwart:'normal'};}catch(e){}
+try{const p=JSON.parse(localStorage.getItem(KEY));if(p&&p.best&&typeof p.best==='object'&&p.tours&&typeof p.tours==='object')saved={best:p.best,tours:p.tours,player:['mia','messi','flash'].includes(p.player)?p.player:'leo',modus:p.modus==='profi'?'profi':'normal',torwart:TORWART[p.torwart]?p.torwart:'normal'};}catch(e){}
 const totalTours=()=>Object.values(saved.tours).reduce((a,b)=>a+(Number(b)||0),0);
 const unlocked=()=>totalTours()>=UNLOCK;
-const player=()=>saved.player==='mia'?'mia':saved.player==='flash'&&unlocked()?'flash':'leo';
+const player=()=>saved.player==='mia'||saved.player==='messi'?saved.player:saved.player==='flash'&&unlocked()?'flash':'leo';
 function save(){try{localStorage.setItem(KEY,JSON.stringify(saved));}catch(e){}}
 
 const ALL={id:'all',name:'Ganze Unit'};
@@ -278,7 +278,7 @@ function showPlayers(){
   const box=$('players');if(!box)return;
   const missing=Math.max(0,UNLOCK-totalTours());
   const knopf=(id,name,frei,info)=>'<button data-player="'+id+'" aria-pressed="'+(player()===id)+'"'+(frei?'':' disabled')+'><canvas class="p-bild" width="120" height="132" aria-hidden="true"></canvas><span>'+name+(info?'<small>'+info+'</small>':'')+'</span></button>';
-  box.innerHTML=knopf('leo','Leo',true,'Nr. 9')+knopf('mia','Mia',true,'Nr. 10')+knopf('flash','Flash',unlocked(),unlocked()?'der Fuchs':'noch '+missing+'× Tour');
+  box.innerHTML=knopf('leo','Leo',true,'Nr. 9')+knopf('mia','Mia',true,'Nr. 10')+knopf('messi','Messi (GOAT)',true,'Nr. 10')+knopf('flash','Flash',unlocked(),unlocked()?'der Fuchs':'noch '+missing+'× Tour');
   box.querySelectorAll('[data-player]').forEach(b=>{
     b.onclick=()=>{if(b.disabled)return;saved.player=b.dataset.player;save();showPlayers();};
     vorschau(b.querySelector('canvas'),b.dataset.player);

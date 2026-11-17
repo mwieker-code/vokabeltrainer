@@ -24,7 +24,12 @@ let last=null;
 const fire=inp=>{const R=S.shoot(inp);last=R;until(()=>G.mode==='result');const k=R&&R.kind;until(()=>G.mode!=='result');return k;};
 
 ok(d.querySelectorAll('#levels [data-part]').length===D.parts.length+1,'Auswahl: alle Abschnitte und die ganze Unit');
-ok(d.querySelectorAll('#players [data-player]').length===3,'drei Spieler zur Wahl');
+ok(d.querySelectorAll('#players [data-player]').length===4,'vier Spieler zur Wahl');
+{const m=d.querySelector('[data-player="messi"]');
+ ok(!m.disabled&&/Messi \(GOAT\)/.test(m.textContent)&&/Nr\. 10/.test(m.textContent),'Messi (GOAT) mit Nr. 10 sofort waehlbar');
+ m.click();ok(S.player()==='messi'&&JSON.parse(w.localStorage.getItem('vt6:kick:v1')).player==='messi','Messi gewaehlt und gespeichert');
+ ok(w.Spieler.KADER.messi.name==='MESSI'&&w.Spieler.KADER.messi.nr==='10'&&w.Spieler.KADER.messi.streifen,'Trikot: MESSI, 10, gestreift');
+ d.querySelector('[data-player="leo"]').click();}
 ok(d.querySelector('[data-player="flash"]').disabled&&S.player()==='leo','Flash anfangs gesperrt, Leo voreingestellt');
 ok(/noch 3× Tour/.test(d.querySelector('[data-player="flash"]').textContent),'Sperre nennt die fehlenden Touren');
 d.querySelector('[data-player="mia"]').click();
