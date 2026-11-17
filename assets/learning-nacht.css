@@ -48,3 +48,4 @@
 @media (max-width:620px), (max-height:500px) and (pointer:coarse){:where(html:not([data-thema="hell"])) .eb-tasten .tk.ebene{background:#2D333B}}
 @media (max-width:620px), (max-height:500px) and (pointer:coarse){:where(html:not([data-thema="hell"])) body.eb-tippen .eb-tasten[data-schieben="an"] .tk{background:#252930}}
 @media (max-width:620px), (max-height:500px) and (pointer:coarse){:where(html:not([data-thema="hell"])) body.eb-tippen .eb-tasten[data-schieben="an"] .tk.senden{background:#252930}}
+:where(html:not([data-thema="hell"])) .games-tile .g-icon{color:#E1C5FF}
