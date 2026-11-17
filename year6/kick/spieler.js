@@ -28,6 +28,7 @@ const KADER={
   leo:  {name:'LEO',  nr:'9', trikot:'#E63946',dunkel:'#B4232F',schrift:'#FFFFFF',hose:'#F4F1EA',stutzen:'#E63946',haut:'#EDB98F',haar:'#4A2E1F'},
   mia:  {name:'MIA',  nr:'10',trikot:'#12B5A5',dunkel:'#0B8478',schrift:'#0E2A47',hose:'#0E2A47',stutzen:'#12B5A5',haut:'#B87A52',haar:'#1C1414'},
   messi:{name:'MESSI',nr:'10',trikot:'#75AADB',dunkel:'#4F86BC',schrift:'#14213D',hose:'#1A1F2B',stutzen:'#F4F1EA',haut:'#E6B08A',haar:'#5A3A22',streifen:'#FFFFFF'},
+  popp: {name:'POPP', nr:'11',trikot:'#F7F7F5',dunkel:'#D5D9DE',schrift:'#14161C',hose:'#F4F1EA',stutzen:'#F4F1EA',haut:'#F0C4A0',haar:'#D9B26A',flammen:true,binde:true},
   flash:{name:'FLASH',nr:'7', trikot:'#7C4DFF',dunkel:'#5A2FD6',schrift:'#FFD447',hose:'#2A1B5C',stutzen:'#2A1B5C',haut:'#F08A3C',haar:'#F08A3C',fuchs:true}
 };
 function schuetze(ctx,X,Y,k,wer,o){
@@ -81,6 +82,8 @@ function schuetze(ctx,X,Y,k,wer,o){
   const arm=(sx,h,el)=>{
     const [ex,ey]=glied(ctx,sx,schulter+4,h[0],h[1],el,7.5,K.trikot,K.fuchs?'#E0752A':K.haut);
     linie(ctx,sx,schulter+4,sx+(ex-sx)*0.55,schulter+4+(ey-schulter-4)*0.55,9.5,K.trikot);
+    if(K.flammen)linie(ctx,sx,schulter+4,sx+(ex-sx)*0.3,schulter+4+(ey-schulter-4)*0.3,9.6,'#DD3B2A');
+    if(K.binde&&sx<0)linie(ctx,sx+(ex-sx)*0.62,schulter+4+(ey-schulter-4)*0.62,sx+(ex-sx)*0.8,schulter+4+(ey-schulter-4)*0.8,9.8,'#FF9A1F');
     ctx.fillStyle=K.fuchs?'#3A2418':K.haut;ctx.beginPath();ctx.arc(h[0],h[1],4.6,0,TAU);ctx.fill();
   };
   arm(-19,hL,ellL);arm(19,hR,ellR);
@@ -94,6 +97,16 @@ function schuetze(ctx,X,Y,k,wer,o){
     for(const sx of [-14,-3.5,7])ctx.fillRect(sx,schulter-6,6,huefte-schulter+2);
     const sh=ctx.createLinearGradient(-21,0,21,0);sh.addColorStop(0,'rgba(0,0,0,.16)');sh.addColorStop(0.35,'rgba(0,0,0,0)');sh.addColorStop(0.7,'rgba(0,0,0,0)');sh.addColorStop(1,'rgba(0,0,0,.16)');
     ctx.fillStyle=sh;ctx.fillRect(-22,schulter-6,44,huefte-schulter+2);ctx.restore();
+  }
+  /* Schultern in Schwarz, Rot, Gold (Deutschland) */
+  if(K.flammen){
+    ctx.save();ctx.clip();
+    for(const s of [-1,1]){
+      const fg=ctx.createLinearGradient(s*21,schulter-2,s*8,schulter+16);
+      fg.addColorStop(0,'#1A1A1A');fg.addColorStop(0.4,'#DD3B2A');fg.addColorStop(0.85,'#F5C518');fg.addColorStop(1,'rgba(245,197,24,0)');
+      ctx.fillStyle=fg;ctx.beginPath();ctx.moveTo(s*23,schulter-6);ctx.lineTo(s*4,schulter-6);
+      ctx.quadraticCurveTo(s*10,schulter+4,s*23,schulter+18);ctx.closePath();ctx.fill();}
+    ctx.restore();
   }
   ctx.fillStyle=K.dunkel;ctx.fillRect(-17,huefte-12,34,3);
   ctx.fillStyle=K.schrift;ctx.textAlign='center';ctx.textBaseline='middle';
@@ -112,7 +125,13 @@ function schuetze(ctx,X,Y,k,wer,o){
     ctx.fillStyle=K.haut;ctx.beginPath();ctx.ellipse(-13,-1,3,4.5,0,0,TAU);ctx.ellipse(13,-1,3,4.5,0,0,TAU);ctx.fill();
     ctx.beginPath();ctx.arc(0,-2,12.5,0,TAU);ctx.fill();
     ctx.fillStyle=K.haar;
-    if(wer==='messi'){
+    if(wer==='popp'){
+      /* blondes Haar, straff nach hinten, Dutt mit Haargummi */
+      ctx.beginPath();ctx.arc(0,-3,13,Math.PI*0.9,Math.PI*2.1);ctx.lineTo(11,4);ctx.quadraticCurveTo(0,8,-11,4);ctx.closePath();ctx.fill();
+      ctx.strokeStyle='rgba(120,85,30,.35)';ctx.lineWidth=1;for(const sx of [-8,-3,3,8]){ctx.beginPath();ctx.moveTo(sx,4);ctx.quadraticCurveTo(sx*0.5,-6,0,-11);ctx.stroke();}
+      ctx.fillStyle=K.haar;ctx.beginPath();ctx.arc(0,-13,5.6,0,TAU);ctx.fill();
+      ctx.fillStyle='#1A1A1A';ctx.fillRect(-3.5,-9.6,7,2);
+    }else if(wer==='messi'){
       /* glattes Haar, im Nacken etwas laenger */
       ctx.beginPath();ctx.arc(0,-3,13.2,Math.PI*0.88,Math.PI*2.12);ctx.lineTo(12.5,6);ctx.quadraticCurveTo(0,11,-12.5,6);ctx.closePath();ctx.fill();
       ctx.strokeStyle='rgba(255,255,255,.1)';ctx.lineWidth=1;for(const sx of [-6,0,6]){ctx.beginPath();ctx.moveTo(sx,-14);ctx.quadraticCurveTo(sx*1.3,-4,sx*1.1,6);ctx.stroke();}

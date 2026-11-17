@@ -24,7 +24,11 @@ let last=null;
 const fire=inp=>{const R=S.shoot(inp);last=R;until(()=>G.mode==='result');const k=R&&R.kind;until(()=>G.mode!=='result');return k;};
 
 ok(d.querySelectorAll('#levels [data-part]').length===D.parts.length+1,'Auswahl: alle Abschnitte und die ganze Unit');
-ok(d.querySelectorAll('#players [data-player]').length===4,'vier Spieler zur Wahl');
+ok(d.querySelectorAll('#players [data-player]').length===5,'fuenf Spieler zur Wahl');
+{const pp=d.querySelector('[data-player="popp"]');
+ ok(!pp.disabled&&/Popp/.test(pp.textContent)&&/Nr\. 11/.test(pp.textContent),'Popp mit Nr. 11 sofort waehlbar');
+ pp.click();ok(S.player()==='popp'&&JSON.parse(w.localStorage.getItem('vt6:kick:v1')).player==='popp','Popp gewaehlt und gespeichert');
+ ok(w.Spieler.KADER.popp.name==='POPP'&&w.Spieler.KADER.popp.nr==='11'&&w.Spieler.KADER.popp.flammen&&w.Spieler.KADER.popp.binde,'Trikot: POPP, 11, Schulterflammen, Kapitaensbinde');}
 {const m=d.querySelector('[data-player="messi"]');
  ok(!m.disabled&&/Messi \(GOAT\)/.test(m.textContent)&&/Nr\. 10/.test(m.textContent),'Messi (GOAT) mit Nr. 10 sofort waehlbar');
  m.click();ok(S.player()==='messi'&&JSON.parse(w.localStorage.getItem('vt6:kick:v1')).player==='messi','Messi gewaehlt und gespeichert');
@@ -118,7 +122,7 @@ G.noKeeper=true;
 /* Mauer und Kurve, Wind */
 G.k=S.PER;G.mode='result';G.t=99;G.shot=Object.assign(G.shot||{},{kind:'tor'});step();toAim();
 ok(S.ort().id==='schulhof'&&S.ort().wall===3,'Schulhof mit Mauer');
-const seite=Math.sign(G.wallX),unten=seite<0?2:3,mu=S.mitte(unten,G.time+1);
+const seite=G.wallSide,unten=seite<0?2:3,mu=S.mitte(unten,G.time+1);
 const gerade=S.plan({tx:mu.x-G.wind,ty:mu.y,u:1300,c:0});
 ok(gerade.blocked,'flacher Schuss auf der Mauerseite bleibt haengen');
 const kurve=S.plan({tx:mu.x-G.wind,ty:mu.y,u:1300,c:seite*-2.2});
@@ -144,7 +148,7 @@ ok(G.score-before===Math.round(200*m2/10)*10+last.bonus.reduce((a,b)=>a+b[1],0),
 
 /* Wischen: Ende = Ziel, Bogen = Kurve, Tempo aus der letzten Zehntelsekunde */
 toAim();
-const o=S.ort(),zx=S.SX(1.9,o.D),zy=S.SY(1.8,o.D),bx=S.SX(0,0),by=S.SY(0,0);
+const o=S.ort(),zx=S.SX(1.9,o.D),zy=S.SY(1.8,o.D),bx=S.ballSX(),by=S.ballSY();
 const zug=(n,dauer,bogen)=>Array.from({length:n+1},(_,i)=>{const f=i/n;return {x:bx+(zx-bx)*f+(bogen||0)*Math.sin(f*Math.PI),y:by+(zy-by)*f,t:f*dauer};});
 let a=S.auswerten(zug(10,0.15));
 ok(Math.abs(a.tx-1.9)<0.02&&Math.abs(a.ty-1.8)<0.02&&a.c===0,'gerader Wisch zielt auf das Ende');
@@ -177,6 +181,25 @@ ok(!/Bestwert/.test(d.querySelector('[data-part="y6u2-intro"]').textContent),'Pr
 d.querySelector('[data-part="y6u2-intro"]').click();toAim();
 ok(G.modus==='profi'&&Math.abs(S.multiplier()-1.5)<1e-9,'Profi gibt anderthalbfache Punkte');
 ok(S.modus().sweet[1]-S.modus().sweet[0]<S.MODI.normal.sweet[1]-S.MODI.normal.sweet[0],'Profi: engeres Wischtempo');
+
+/* Winkel: Der erste Schuss jeder Station kommt von vorn, danach seitlich -
+   je Station hoechstens so schraeg wie erlaubt. Kamera, Wischen und Mauer
+   folgen dem Ball. */
+d.getElementById('quit').click();
+d.querySelector('[data-part="all"]').click();
+let schraeg=0;
+for(let k=0;k<S.SHOTS;k++){
+ toAim();const o=S.ort(),grad=Math.abs(Math.atan2(G.bx,o.D))*180/Math.PI;
+ if(k%S.PER===0)ok(G.bx===0,'erster Schuss der Station von vorn');
+ else{ok(grad<=S.WINKEL[G.station]+1e-9&&grad>0,'Winkel in der Station erlaubt ('+grad.toFixed(1)+'°)');schraeg++;}
+ ok(Math.abs(S.ballSX()-180)<1e-6,'Ball liegt mittig im Bild, die Kamera blickt ueber ihn zum Tor');
+ for(const [x,y] of [[-2.5,0.6],[1.9,1.8],[3.0,2.1]]){const e=S.ebene(S.SX(x,o.D),S.SY(y,o.D,x));ok(Math.abs(e.x-x)<1e-6&&Math.abs(e.y-y)<1e-6,'Wischziel trifft auch schraeg genau ('+x+', '+y+')');}
+ if(o.wall){const tw=S.WALLZ/o.D,ziel=G.wallSide*1.85,x=G.bx+(ziel-G.bx)*tw;ok(Math.abs(x-G.wallX)<1e-9,'Mauer steht auf der Linie zum Tor');}
+ const R=S.plan({tx:0,ty:1,u:1300,c:0});ok(R.at(0).x===G.bx&&Math.abs(R.at(1).x-G.wind)<1e-9,'Ball fliegt vom Freistosspunkt los');
+ fire(ideal(G.right));
+}
+ok(schraeg===12,'zwoelf Schuesse aus dem Winkel');
+until(()=>G.mode==='over');d.getElementById('toMenu').click();
 
 /* Torwart-Staerke: frei waehlbar, gespeichert, Punkte gleichen aus */
 d.getElementById('quit').click();
