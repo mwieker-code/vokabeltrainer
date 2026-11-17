@@ -30,7 +30,7 @@ const r10=v=>Math.round(v/10)*10;
 const ruhig=window.matchMedia?matchMedia('(prefers-reduced-motion: reduce)').matches:false;
 
 /* ----------------------------------------------------------------- Regeln */
-const SHOTS=15,PER=5,HEARTS=3,UNLOCK=3;
+const SHOTS=15,PER=5,HEARTS=3,UNLOCK=3,HECHT=2.0;   // HECHT: weitester Sprung des Torwarts (m)
 const GW=3.66,GH=2.44,BR=0.11,POST=0.12,WALLZ=9.15,WALLH=1.95;
 const RUNUP=0.3,KRAFT_MAX=2800;      // Anlauf (s), hoechstes Tempo der Kraftleiste
 /* Zeitlupe: Der Flug wird etwas gedehnt gezeigt, aber nie laenger als 1,25 s. */
@@ -39,12 +39,12 @@ const zeitlupe=T=>clamp(T*1.35,0.55,1.25)/T;
    Seitenwind am Tor (m), move: wie weit die Tafeln wandern (m). Der Torwart:
    read = wie oft er die Ecke ahnt, react = Reaktionszeit (s), dive = m/s. */
 const ORTE=[
-  {id:'bolzplatz',name:'Bolzplatz',D:14,wall:0,wind:0,  move:0,   read:0.35,react:0.34,dive:4.4,info:'Nur du und der Torwart. Wische vom Ball zum richtigen Wort!'},
-  {id:'schulhof', name:'Schulhof', D:17,wall:3,wind:0.9,move:0,   read:0.45,react:0.3, dive:4.6,info:'Jetzt mit Mauer und Wind. Wische im Bogen für Kurve!'},
-  {id:'stadion',  name:'Stadion',  D:20,wall:4,wind:1.3,move:0.32,read:0.5, react:0.27,dive:4.8,info:'Flutlicht! Die Wörter wandern – ziel genau.'}];
+  {id:'bolzplatz',name:'Bolzplatz',D:14,wall:0,wind:0,  move:0,   read:0.25,react:0.34,dive:4.4,info:'Nur du und der Torwart. Wische vom Ball zum richtigen Wort!'},
+  {id:'schulhof', name:'Schulhof', D:17,wall:3,wind:0.9,move:0,   read:0.3, react:0.3, dive:4.6,info:'Jetzt mit Mauer und Wind. Wische im Bogen für Kurve!'},
+  {id:'stadion',  name:'Stadion',  D:20,wall:4,wind:1.3,move:0.32,read:0.36,react:0.27,dive:4.8,info:'Flutlicht! Die Wörter wandern – ziel genau.'}];
 /* Normal und Profi. sweet: Wischtempo fuer einen sauberen Schuss (Einheiten/s). */
 const MODI={normal:{name:'Normal',punkte:1,sweet:[600,2400],read:0,react:0,dive:1,wind:1},
-            profi:{name:'Profi',punkte:1.5,sweet:[750,2000],read:0.1,react:0.04,dive:1.12,wind:1.25}};
+            profi:{name:'Profi',punkte:1.5,sweet:[750,2000],read:0.08,react:0.04,dive:1.12,wind:1.25}};
 const modus=()=>MODI[G.modus]||MODI.normal;
 const ort=()=>ORTE[Math.min(ORTE.length-1,Math.floor(G.k/PER))];
 const multiplier=()=>(1+0.1*Math.min(G.streak,10))*modus().punkte;
@@ -102,7 +102,7 @@ function next(){
   const o=ort(),md=modus(),neu=G.k%PER===0;G.station=ORTE.indexOf(o);
   G.wind=o.wind?(Math.random()<0.5?-1:1)*o.wind*md.wind*(0.35+0.65*Math.random()):0;
   G.wallX=o.wall?(Math.random()<0.5?-1:1)*1.85*WALLZ/o.D:0;
-  G.lean=Math.random()<0.45?(Math.random()<0.5?-1:1)*(0.45+Math.random()*0.35):0;G.kx=G.lean;
+  G.lean=Math.random()<0.45?(Math.random()<0.5?-1:1)*(0.3+Math.random()*0.25):0;G.kx=G.lean;
   G.golden=G.k>=2&&Math.random()<0.16;
   G.mode=neu?'intro':'aim';G.t=0;
   layout();
@@ -149,13 +149,14 @@ function plan(inp){
   const inGoal=Math.abs(fx)<=GW-BR&&fy<=GH-BR,frame=!inGoal&&Math.abs(fx)<GW+POST+BR&&fy<GH+POST+BR;
   const zone=inGoal?tafelAn(fx,fy,zeit):-1;
   R.zone=zone;R.knew=zone===G.right;R.blocked=blocked;
-  /* Torwart: ahnt er die Ecke, fliegt er dorthin, sonst zur Seite, zu der er
-     sich lehnt (oder auf gut Glueck). */
+  /* Torwart: ahnt er die Ecke, fliegt er dorthin, sonst bleibt er stehen oder
+     springt auf gut Glueck in eine Ecke. Weiter als HECHT Meter kommt er nicht - ein scharfer Schuss nah an
+     den Pfosten ist immer drin, auch wenn er sich schon zur Ecke lehnt. */
   const read=clamp(o.read+md.read,0,0.95),react=Math.max(0.12,o.react-md.react),dive=o.dive*md.dive,kx0=G.kx;
   const reads=Math.random()<read;
-  const aimX=reads?fx:(G.lean?Math.sign(G.lean):(Math.random()<0.5?-1:1))*2.4;
-  const reach=Math.max(0,T-react),dist=aimX-kx0,kxT=kx0+Math.sign(dist)*Math.min(Math.abs(dist),dive*reach);
-  const weit=fy>1.95?0.62:0.82;
+  const aimX=reads?fx:Math.random()<0.3?kx0:(Math.random()<0.5?-1:1)*2.4;
+  const reach=Math.max(0,T-react),dist=aimX-kx0,kxT=kx0+Math.sign(dist)*Math.min(Math.abs(dist),dive*reach,HECHT);
+  const weit=fy>1.95?0.55:fy<0.45?0.6:0.75;
   const saved_=!G.noKeeper&&(Math.abs(fx-kxT)<weit||(Math.abs(kxT-kx0)<0.5&&Math.abs(fx-kx0)<0.55&&fy<1.4));
   R.keeper={kx0,kxT,aimX,aimY:reads?fy:1.25,react,reads,saved:saved_,caught:saved_&&Math.abs(fx-kxT)<0.4};
   if(zone>=0&&zone!==G.right)R.kind='falsch';
@@ -816,7 +817,7 @@ function ergebnis(){
     ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle='#A9B4C8';ctx.font='600 12px '+FONT;ctx.fillText('Richtig wäre:',W/2,by+17);
     const f=fitText(G.q.en,W-90,18,12,800);ctx.fillStyle='#7FE0D0';ctx.font='800 '+f.size+'px '+FONT;ctx.fillText(f.lines.join(' ').length>40?f.lines[0]+'…':f.lines.join(' '),W/2,by+39);
   }else if(R.kind!=='tor'){
-    const sub={gehalten:'Richtiges Wort – der Torwart war schneller.',mauer:R.knew?'Richtiges Wort – schieß mit Kurve um die Mauer!':'Die Mauer stand im Weg.',
+    const sub={gehalten:'Richtiges Wort! Schärfer und näher an den Pfosten.',mauer:R.knew?'Richtiges Wort – schieß mit Kurve um die Mauer!':'Die Mauer stand im Weg.',
       pfosten:'Knapp! Ziel etwas weiter nach innen.',latte:'Knapp! Etwas flacher oder sanfter wischen.',zwischen:'Ziele mitten auf eine Tafel.',
       daneben:R.kraft==='fest'?'Zu fest – wische etwas ruhiger.':'Ziele auf eine Tafel im Tor.',drueber:R.kraft==='fest'?'Zu fest – wische etwas ruhiger.':'Ziele etwas tiefer.'}[R.kind];
     if(sub)banner(sub,y+36,12);

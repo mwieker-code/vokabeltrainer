@@ -93,9 +93,16 @@ G.noKeeper=false;const rand=w.Math.random;
 w.Math.random=()=>0;G.kx=S.mitte(G.right,G.time).x;
 const sicher=S.plan({tx:S.mitte(G.right,G.time).x,ty:S.mitte(G.right,G.time).y,u:900,c:0});
 ok(sicher.kind==='gehalten'&&sicher.keeper.reads,'Torwart haelt, wenn er die Ecke ahnt und dort steht');
-G.kx=0;w.Math.random=()=>0.99;G.lean=-0.7;G.kx=-0.7;
-const rechts=S.plan({tx:3.0,ty:1.9,u:2200,c:0});
-ok(rechts.keeper.aimX<0,'nicht geahnt: Torwart fliegt zur Seite, zu der er sich lehnt');
+w.Math.random=()=>0.99;G.lean=-0.55;G.kx=-0.55;
+ok(S.plan({tx:3.0,ty:1.9,u:2200,c:0}).keeper.aimX>0,'nicht geahnt: Lehnen zwingt ihn nicht in diese Ecke');
+/* Auch wenn er sich zur Ecke lehnt und sie ahnt: Ein scharfer Schuss nah an
+   den Pfosten ist im Normalmodus nicht zu halten, in jeder Station. */
+w.Math.random=()=>0;
+for(const station of [0,1,2])for(const md of ['normal']){
+ const k0=G.k,m0d=G.modus;G.k=station*S.PER;G.modus=md;G.lean=0.55;G.kx=0.55;
+ for(const ty of [0.4,1.9]){const r=S.plan({tx:3.15,ty,u:2300,c:0});
+  ok(!r.keeper.saved&&r.keeper.reads,'scharf an den Pfosten schlaegt den Torwart ('+S.ORTE[station].name+', '+md+', '+(ty<1?'unten':'oben')+')');}
+ G.k=k0;G.modus=m0d;}
 w.Math.random=rand;
 G.kx=S.mitte(G.right,G.time).x;G.lean=G.kx;w.Math.random=()=>0;h=G.hearts;G.streak=2;const gehaltenId=G.q.id;
 kind=fire({tx:S.mitte(G.right,G.time+1).x,ty:S.mitte(G.right,G.time+1).y,u:900,c:0});w.Math.random=rand;
