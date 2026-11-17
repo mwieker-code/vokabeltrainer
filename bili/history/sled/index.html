@@ -1,0 +1,46 @@
+<!doctype html><html lang="de" data-eigenes-design><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="../../../manifest.webmanifest">
+<link rel="apple-touch-icon" sizes="180x180" href="../../../assets/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Basecamp">
+<meta name="theme-color" content="#0D1017"><title>Sled Run · History</title>
+<link rel="stylesheet" href="../../../assets/fonts.css?v=2"><link rel="stylesheet" href="../../../year6/sled/style.css?v=20261117-games">
+</head><body><main class="sled">
+<header><a href="../games/">← Games</a><span>SLED RUN · HISTORY</span></header>
+<section id="menu">
+ <h1>Sled Run</h1>
+ <p class="lead">Rase mit den Vokabeln aus History ins Tal.</p>
+ <ol class="how">
+  <li>Oben steht das deutsche Wort, darunter drei Antworten – eine für jede Spur.</li>
+  <li>Wische nach links oder rechts und fahre in der richtigen Spur durchs Tor.</li>
+  <li>Weiche den Felsen aus und sammle Sterne – mit Silky oder dem Pinguin sind es Fische.</li>
+  <li>Je mehr richtige Tore hintereinander, desto schneller – und desto mehr Punkte.</li>
+  <li>Sammle Pinguine ein: Sie fahren in deinem Anhänger mit und bringen Extrapunkte. Bei einem falschen Tor purzelt die Hälfte heraus.</li>
+  <li>🚀 Turbo: drei Tore lang doppelte Punkte. 🛡 Schild: ein falsches Tor kostet kein Herz.</li>
+  <li>Du hast drei Herzen. Nach 20 Toren bist du im Ziel.</li>
+  <li>Profi: schneller und mit weniger Lesezeit – dafür anderthalbfache Punkte.</li>
+  <li>Fahre als Rodelkind oder als Robbe Silky. Nach drei Zieleinläufen steigt auch ein Pinguin auf den Schlitten.</li>
+ </ol>
+ <h2>Schwierigkeit</h2>
+ <div id="modes" role="group" aria-label="Schwierigkeit wählen"></div>
+ <h2>Dein Fahrer</h2>
+ <div id="riders" role="group" aria-label="Fahrer wählen"></div>
+ <p><button id="musikMenu" class="musik-menu" aria-pressed="true">♫ Musik: an</button></p>
+ <h2>Unit und Abschnitt wählen</h2>
+ <div id="levels"></div>
+ <p class="muted">Das Spiel ist zum Wiederholen da. Deine Lernfächer ändern sich dadurch nicht.</p>
+</section>
+<section id="stage" hidden>
+ <div class="bar"><button id="quit" aria-label="Spiel beenden">✕</button><span class="stat" id="gates">Tor 1/20</span><span class="stat" id="points">0 P</span><span class="stat" id="hearts">♥♥♥</span><button id="musik" aria-label="Musik" aria-pressed="true">♫</button><button id="pause" aria-label="Pause">II</button></div>
+ <div class="ask"><small>WIE HEISST DAS AUF ENGLISCH?</small><div id="prompt" lang="de" aria-live="polite"></div></div>
+ <div id="chips" role="group" aria-label="Antworten: links, Mitte, rechts"></div>
+ <canvas id="piste" aria-label="Piste mit drei Spuren. Die Antworten stehen als Knöpfe darüber."></canvas>
+ <p class="hint">Wischen oder tippen: links · rechts &nbsp;|&nbsp; Tastatur: ← → oder 1 2 3 · M Musik</p>
+</section>
+<section id="over" hidden></section>
+<footer><p>Sled Run · Vokabeln aus History</p></footer>
+</main>
+<script src="../games/data.js?v=20261117-games"></script><script src="../../../year6/figuren.js?v=20261117-games"></script><script src="../../../year6/sled/musik.js?v=20261117-games"></script><script src="../../../year6/sled/game.js?v=20261117-games"></script>
+<script src="../../../assets/feedback.js"></script>
+</body></html>

@@ -1,0 +1,43 @@
+<!doctype html><html lang="de" data-eigenes-design><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="apple-touch-icon" sizes="180x180" href="../../assets/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Basecamp">
+<meta name="theme-color" content="#0D1017"><title>Black &amp; White · Year 6</title>
+<link rel="stylesheet" href="../../assets/fonts.css?v=2"><link rel="stylesheet" href="style.css?v=20261117-games">
+</head><body><main class="bw">
+<header><a href="../">← Year 6</a><span>BLACK &amp; WHITE · UNIT 2</span></header>
+<section id="menu">
+ <h1>Black &amp; White</h1>
+ <p class="lead">Eine Reise mit vier schwarz-weißen Tieren um die halbe Welt – mit den Vokabeln aus Unit 2 – A School Day.</p>
+ <ol class="kapitel" id="kapitel"></ol>
+ <ol class="how">
+  <li>Oben steht das deutsche Wort. Im Bild stehen drei englische Wörter – wähle das richtige! Falsch kostet ein Herz.</li>
+  <li><b>1 · Penguin Hop:</b> Dein Pinguin steht auf einer Eisscholle. Vor ihm treiben drei Schollen mit Wörtern – tippe auf die richtige, und er springt hinüber. Falsche Schollen kippen! Warte nicht zu lange, deine Scholle schmilzt. Fische, Goldfische und Schals gibt es nur auf der richtigen Scholle. Zum Schluss geht es einen Eisberg hinauf.</li>
+  <li><b>2 · Orca Rush:</b> Der Orca schwimmt durchs Meer. Nach oben oder unten ziehen, durch den richtigen Fischschwarm. Oben atmen – und schnell nach oben ziehen für einen Sprung durchs Nordlicht.</li>
+  <li><b>3 · Panda Roll:</b> Der Panda rollt als Kugel durch den Bambuswald. Zieh ihn auf einen der drei Wege und brich durch das Tor mit dem richtigen Wort. Sammle Baby-Pandas ein – sie rollen hinter dir her und bringen mehr Punkte. Auf jeder Lichtung: zurückziehen, zielen, loslassen – im richtigen Bambusbündel wartet ein Baby.</li>
+  <li><b>4 · Zebra Dash:</b> Das Zebra galoppiert durch die Savanne, ein Löwe ist ihm auf den Fersen. Wisch nach links oder rechts (oder tippe auf eine Bildseite), um den Pfad zu wechseln, und galoppiere durch das Akazien-Tor mit dem richtigen Wort. Ein falsches Tor bringt den Löwen näher – vier richtige in Folge schaffen wieder Abstand.</li>
+  <li>Unterwegs: Fische und Krill bringen Punkte. Robben und Quallen bremsen. Turbo = doppelte Punkte, Schal und Blase schützen vor einem Fehler.</li>
+  <li>Jede richtige Antwort in Folge macht schneller. Am Ende jedes Kapitels verwandelt sich dein Tier und reist weiter – mit Stempel im Reisepass.</li>
+ </ol>
+ <p><button id="musikMenu" class="musik-menu" aria-pressed="true">♫ Musik: an</button></p>
+ <h2>Reisepass</h2>
+ <ul class="passliste" id="pass"></ul>
+ <h2>Kapitel wählen, dann Abschnitt und los!</h2>
+ <div id="levels"></div>
+ <p class="muted">Das Spiel ist zum Wiederholen da. Deine Lernfächer ändern sich dadurch nicht.</p>
+</section>
+<section id="stage" hidden>
+ <div class="bar"><button id="quit" aria-label="Spiel beenden">✕</button><span class="stat" id="floe">Tor 1/16</span><span class="stat" id="points">0 P</span><span class="stat" id="hearts">♥♥♥</span><button id="musik" aria-label="Musik" aria-pressed="true">♫</button><button id="pause" aria-label="Pause">II</button></div>
+ <div class="ask"><small>WIE HEISST DAS AUF ENGLISCH?</small><div id="prompt" lang="de" aria-live="polite"></div></div>
+ <div class="bild"><canvas id="spiel" aria-label="Spielbild: drei englische Wörter kommen entgegen. Die Antworten stehen auch als Knöpfe darunter."></canvas></div>
+ <div id="choices"></div>
+ <p class="hint" id="hint"></p>
+ <div id="reise" hidden role="dialog" aria-label="Reise zum nächsten Ort"></div>
+</section>
+<section id="over" hidden></section>
+</main>
+<script src="../climb/data.js?v=20261117-games"></script><script src="../figuren.js?v=20261117-games"></script><script src="musik.js?v=20261117-games"></script><script src="morph.js?v=20261117-games"></script><script src="reise.js?v=20261117-games"></script><script src="frage.js?v=20261117-games"></script><script src="pinguin.js?v=20261117-games"></script><script src="orca.js?v=20261117-games"></script><script src="pandafigur.js?v=20261117-games"></script><script src="panda.js?v=20261117-games"></script><script src="zebrafigur.js?v=20261117-games"></script><script src="zebra.js?v=20261117-games"></script><script src="game.js?v=20261117-games"></script>
+<script src="../../assets/feedback.js"></script>
+</body></html>
