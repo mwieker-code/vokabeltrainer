@@ -792,3 +792,6 @@ body{-webkit-tap-highlight-color:transparent}
   body.platz-karte .round-progress{margin:3px 0}
   body.platz-karte .sessionbar{margin-bottom:10px}
 }
+
+/* Games-Kachel: Controller-Symbol rechts */
+.games-tile{position:relative;padding-right:76px}.games-tile .g-icon{position:absolute;right:20px;top:50%;width:42px;height:42px;transform:translateY(-50%);color:#5d387f}
