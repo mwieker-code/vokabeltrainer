@@ -173,6 +173,21 @@ d.querySelector('[data-part="y6u2-intro"]').click();toAim();
 ok(G.modus==='profi'&&Math.abs(S.multiplier()-1.5)<1e-9,'Profi gibt anderthalbfache Punkte');
 ok(S.modus().sweet[1]-S.modus().sweet[0]<S.MODI.normal.sweet[1]-S.MODI.normal.sweet[0],'Profi: engeres Wischtempo');
 
+/* Torwart-Staerke: frei waehlbar, gespeichert, Punkte gleichen aus */
+d.getElementById('quit').click();
+ok(d.querySelectorAll('#keepers [data-torwart]').length===3&&d.querySelector('[data-torwart="normal"]').getAttribute('aria-pressed')==='true','drei Torwart-Stufen, Normal voreingestellt');
+d.querySelector('[data-modus="normal"]').click();
+const halten=tw=>{d.querySelector('[data-torwart="'+tw+'"]').click();
+ d.querySelector('[data-part="y6u2-intro"]').click();toAim();G.k=2*S.PER;G.noKeeper=false;
+ const r0=w.Math.random;let n=0;w.Math.random=()=>0;
+ for(const x of [1.6,2.0,2.4,2.8,3.1])for(const u of [900,1500,2100]){G.lean=0.4;G.kx=0.4;if(S.plan({tx:x,ty:1.6,u,c:0}).keeper.saved)n++;}
+ w.Math.random=r0;const m=S.multiplier();d.getElementById('quit').click();return {n,m};};
+const leicht=halten('leicht'),normal=halten('normal'),stark=halten('stark');
+ok(leicht.n<normal.n&&normal.n<stark.n,'leicht haelt weniger, stark mehr ('+leicht.n+' / '+normal.n+' / '+stark.n+')');
+ok(Math.abs(leicht.m-0.8)<1e-9&&normal.m===1&&Math.abs(stark.m-1.25)<1e-9,'Punkte: leicht ×0,8, stark ×1,25');
+ok(JSON.parse(w.localStorage.getItem('vt6:kick:v1')).torwart==='stark'&&d.querySelector('[data-torwart="stark"]').getAttribute('aria-pressed')==='true','Wahl gespeichert und sichtbar');
+d.querySelector('[data-torwart="normal"]').click();
+
 /* Einbindung */
 ok(fs.readFileSync(path.join(root,'assets/learning.js'),'utf8').includes('href="kick/"'),'Kachel in Year 6');
 ok(fs.readFileSync(path.join(root,'build.cjs'),'utf8').includes("'year6/kick'"),'Seite im Build');

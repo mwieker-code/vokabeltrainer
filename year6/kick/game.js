@@ -30,7 +30,13 @@ const r10=v=>Math.round(v/10)*10;
 const ruhig=window.matchMedia?matchMedia('(prefers-reduced-motion: reduce)').matches:false;
 
 /* ----------------------------------------------------------------- Regeln */
-const SHOTS=15,PER=5,HEARTS=3,UNLOCK=3,HECHT=2.0;   // HECHT: weitester Sprung des Torwarts (m)
+const SHOTS=15,PER=5,HEARTS=3,UNLOCK=3;
+/* Torwart in drei Stufen, frei waehlbar. hecht: weitester Sprung (m). Die
+   Punkte gleichen aus, damit der leichte Torwart keine Bestwerte verschenkt. */
+const TORWART={leicht:{name:'Leicht',read:-0.12,react:0.08,dive:0.85,hecht:1.5,punkte:0.8,info:'langsamer, rät öfter daneben'},
+               normal:{name:'Normal',read:0,react:0,dive:1,hecht:2.0,punkte:1,info:'wie gewohnt'},
+               stark:{name:'Stark',read:0.12,react:-0.04,dive:1.1,hecht:2.4,punkte:1.25,info:'schneller, ahnt mehr'}};
+const torwart=()=>TORWART[G.torwart]||TORWART.normal;
 const GW=3.66,GH=2.44,BR=0.11,POST=0.12,WALLZ=9.15,WALLH=1.95;
 const RUNUP=0.3,KRAFT_MAX=2800;      // Anlauf (s), hoechstes Tempo der Kraftleiste
 /* Zeitlupe: Der Flug wird etwas gedehnt gezeigt, aber nie laenger als 1,25 s. */
@@ -47,7 +53,7 @@ const MODI={normal:{name:'Normal',punkte:1,sweet:[600,2400],read:0,react:0,dive:
             profi:{name:'Profi',punkte:1.5,sweet:[750,2000],read:0.08,react:0.04,dive:1.12,wind:1.25}};
 const modus=()=>MODI[G.modus]||MODI.normal;
 const ort=()=>ORTE[Math.min(ORTE.length-1,Math.floor(G.k/PER))];
-const multiplier=()=>(1+0.1*Math.min(G.streak,10))*modus().punkte;
+const multiplier=()=>(1+0.1*Math.min(G.streak,10))*modus().punkte*torwart().punkte;
 const bestKey=id=>(G.modus==='profi'?'profi:':'')+id;
 /* Die vier Tafeln: 0 oben links, 1 oben rechts, 2 unten links, 3 unten rechts */
 const ZONEN=['oben links','oben rechts','unten links','unten rechts'];
@@ -62,8 +68,8 @@ function tafelAn(x,y,zeit){
   return -1;
 }
 
-let saved={best:{},tours:{},player:'leo',modus:'normal'};
-try{const p=JSON.parse(localStorage.getItem(KEY));if(p&&p.best&&typeof p.best==='object'&&p.tours&&typeof p.tours==='object')saved={best:p.best,tours:p.tours,player:['mia','flash'].includes(p.player)?p.player:'leo',modus:p.modus==='profi'?'profi':'normal'};}catch(e){}
+let saved={best:{},tours:{},player:'leo',modus:'normal',torwart:'normal'};
+try{const p=JSON.parse(localStorage.getItem(KEY));if(p&&p.best&&typeof p.best==='object'&&p.tours&&typeof p.tours==='object')saved={best:p.best,tours:p.tours,player:['mia','flash'].includes(p.player)?p.player:'leo',modus:p.modus==='profi'?'profi':'normal',torwart:TORWART[p.torwart]?p.torwart:'normal'};}catch(e){}
 const totalTours=()=>Object.values(saved.tours).reduce((a,b)=>a+(Number(b)||0),0);
 const unlocked=()=>totalTours()>=UNLOCK;
 const player=()=>saved.player==='mia'?'mia':saved.player==='flash'&&unlocked()?'flash':'leo';
@@ -76,7 +82,7 @@ const pool=D.parts.flatMap(p=>p.words);
 const frisch=()=>({mode:'menu',part:null,queue:[],k:0,q:null,options:[],right:0,hearts:HEARTS,score:0,streak:0,goals:0,
   missed:new Map(),requeued:new Set(),t:0,time:0,aimTime:0,paused:false,shot:null,ft:0,wind:0,wallX:0,lean:0,kx:0,golden:false,
   marker:null,markerZone:-1,charge:null,drag:null,bits:[],confetti:[],sparks:[],popups:[],rings:[],shake:0,jubel:0,flash:0,won:false,
-  noKeeper:false,modus:saved.modus,station:0});
+  noKeeper:false,modus:saved.modus,torwart:saved.torwart,station:0});
 const G=frisch();
 
 /* ------------------------------------------------------------- Ablauf */
@@ -150,12 +156,12 @@ function plan(inp){
   const zone=inGoal?tafelAn(fx,fy,zeit):-1;
   R.zone=zone;R.knew=zone===G.right;R.blocked=blocked;
   /* Torwart: ahnt er die Ecke, fliegt er dorthin, sonst bleibt er stehen oder
-     springt auf gut Glueck in eine Ecke. Weiter als HECHT Meter kommt er nicht - ein scharfer Schuss nah an
+     springt auf gut Glueck in eine Ecke. Weiter als torwart().hecht Meter kommt er nicht - ein scharfer Schuss nah an
      den Pfosten ist immer drin, auch wenn er sich schon zur Ecke lehnt. */
-  const read=clamp(o.read+md.read,0,0.95),react=Math.max(0.12,o.react-md.react),dive=o.dive*md.dive,kx0=G.kx;
+  const tw=torwart(),read=clamp(o.read+md.read+tw.read,0,0.95),react=Math.max(0.12,o.react-md.react+tw.react),dive=o.dive*md.dive*tw.dive,kx0=G.kx;
   const reads=Math.random()<read;
   const aimX=reads?fx:Math.random()<0.3?kx0:(Math.random()<0.5?-1:1)*2.4;
-  const reach=Math.max(0,T-react),dist=aimX-kx0,kxT=kx0+Math.sign(dist)*Math.min(Math.abs(dist),dive*reach,HECHT);
+  const reach=Math.max(0,T-react),dist=aimX-kx0,kxT=kx0+Math.sign(dist)*Math.min(Math.abs(dist),dive*reach,tw.hecht);
   const weit=fy>1.95?0.55:fy<0.45?0.6:0.75;
   const saved_=!G.noKeeper&&(Math.abs(fx-kxT)<weit||(Math.abs(kxT-kx0)<0.5&&Math.abs(fx-kx0)<0.55&&fy<1.4));
   R.keeper={kx0,kxT,aimX,aimY:reads?fy:1.25,react,reads,saved:saved_,caught:saved_&&Math.abs(fx-kxT)<0.4};
@@ -254,7 +260,7 @@ function finish(won){
     +'<p class="sterne" aria-label="'+sterne+' von 3 Sternen">'+'★'.repeat(sterne)+'<span>'+'★'.repeat(3-sterne)+'</span></p>'
     +'<p class="result">'+G.goals+' Tore aus '+G.k+' Schüssen · '+G.score+' Punkte'+(record&&G.score?' · <strong>neuer Bestwert!</strong>':'')+'</p>'
     +(fresh?'<p class="unlock">Neu freigeschaltet: Flash der Fuchs spielt jetzt in deinem Team!</p>':'')
-    +'<p class="muted">Bestwert'+(G.modus==='profi'?' (Profi)':'')+': '+(saved.best[key]||0)+' Punkte'+(won?'':' · Drei falsche Wörter beenden die Tour.')+'</p>'
+    +'<p class="muted">Torwart: '+torwart().name+' · Bestwert'+(G.modus==='profi'?' (Profi)':'')+': '+(saved.best[key]||0)+' Punkte'+(won?'':' · Drei falsche Wörter beenden die Tour.')+'</p>'
     +'<div class="actions"><button id="again" class="go">Nochmal spielen</button><button id="toMenu">Anderen Abschnitt wählen</button></div>'
     +(missed.length?'<h2>Diese Wörter solltest du noch üben</h2><ul class="missed">'+missed.map(w=>'<li><span>'+esc(w.de)+'</span><strong lang="en">'+esc(w.en)+'</strong></li>').join('')
       +'</ul><p><a class="train" href="../">Unit 2 im Vokabeltrainer üben →</a></p>':'<p class="muted">Kein einziges falsches Wort – stark!</p>');
@@ -284,8 +290,14 @@ function showModes(){
     +(k==='profi'?'stärkerer Torwart, mehr Wind, Punkte ×1,5':'zum Reinkommen')+'</small></button>').join('');
   box.querySelectorAll('[data-modus]').forEach(b=>b.onclick=()=>{saved.modus=b.dataset.modus;G.modus=saved.modus;save();showMenu();});
 }
+function showKeepers(){
+  const box=$('keepers');if(!box)return;
+  box.innerHTML=Object.entries(TORWART).map(([k,t])=>'<button data-torwart="'+k+'" aria-pressed="'+(saved.torwart===k)+'"><span>'+t.name+'</span><small>'
+    +t.info+(t.punkte!==1?', Punkte ×'+String(t.punkte).replace('.',','):'')+'</small></button>').join('');
+  box.querySelectorAll('[data-torwart]').forEach(b=>b.onclick=()=>{saved.torwart=b.dataset.torwart;G.torwart=saved.torwart;save();showKeepers();});
+}
 function showMenu(){
-  G.mode='menu';G.modus=saved.modus;document.querySelector('main.kick')?.classList.remove('spielt');stage.hidden=true;over.hidden=true;menu.hidden=false;showPlayers();showModes();M?.stop();musikKnopf();
+  G.mode='menu';G.modus=saved.modus;document.querySelector('main.kick')?.classList.remove('spielt');stage.hidden=true;over.hidden=true;menu.hidden=false;G.torwart=saved.torwart;showPlayers();showModes();showKeepers();M?.stop();musikKnopf();
   $('levels').innerHTML=[...D.parts,ALL].map(p=>{
     const n=wordsOf(p.id).length,best=saved.best[bestKey(p.id)]||0,fin=saved.tours[p.id]||0;
     return '<button data-part="'+p.id+'"'+(p.id==='all'?' class="all"':'')+'><span class="l-name">'+esc(p.name)+'</span>'
@@ -796,6 +808,7 @@ function status(){
     pills.push({w:58+n*8,draw:(x,y)=>{ctx.fillStyle='#A9B4C8';ctx.font='700 10px '+FONT;ctx.fillText('WIND',x+10,y+14);ctx.fillStyle='#FFFFFF';ctx.font='900 13px '+FONT;ctx.fillText(pf,x+44,y+14);}});}
   pills.push({w:50,draw:(x,y)=>{ctx.fillStyle='#FFFFFF';ctx.font='800 13px '+FONT;ctx.fillText('×'+multiplier().toFixed(1).replace('.',','),x+10,y+14);}});
   if(G.golden&&G.mode!=='result')pills.push({w:84,bg:'rgba(255,200,58,.95)',draw:(x,y)=>{ctx.fillStyle='#2A1C00';ctx.font='900 11px '+FONT;ctx.fillText('GOLDBALL ×2',x+9,y+14);}});
+  if(G.torwart!=='normal')pills.push({w:G.torwart==='stark'?92:96,bg:G.torwart==='stark'?'rgba(224,65,59,.92)':'rgba(127,224,208,.92)',draw:(x,y)=>{ctx.fillStyle='#10141C';ctx.font='900 10px '+FONT;ctx.fillText('TORWART '+torwart().name.toUpperCase(),x+9,y+14);}});
   if(G.modus==='profi')pills.push({w:52,bg:'rgba(185,147,255,.92)',draw:(x,y)=>{ctx.fillStyle='#1A0B33';ctx.font='900 11px '+FONT;ctx.fillText('PROFI',x+10,y+14);}});
   ctx.textBaseline='middle';ctx.textAlign='left';
   let x=8,y=8;
@@ -895,7 +908,7 @@ function loop(){
   requestAnimationFrame(frame);
 }
 
-window.KickGame={G,start,shoot,plan,update,finish,showMenu,pause,chip,auswerten,tafel,mitte,tafelAn,ort,ORTE,MODI,modus,multiplier,player,unlocked,
+window.KickGame={G,start,shoot,plan,TORWART,torwart,update,finish,showMenu,pause,chip,auswerten,tafel,mitte,tafelAn,ort,ORTE,MODI,modus,multiplier,player,unlocked,
   SHOTS,PER,HEARTS,UNLOCK,GW,GH,WALLZ,RUNUP,KRAFT_MAX,layout,SX,SY};
 showMenu();
 })();
