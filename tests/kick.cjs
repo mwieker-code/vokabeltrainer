@@ -7,9 +7,9 @@ const {JSDOM,VirtualConsole}=require('jsdom'),fs=require('node:fs'),path=require
 const root=path.join(__dirname,'..'),dir=path.join(root,'year6/kick');let checks=0;const ok=(v,m)=>{assert.ok(v,m);checks++;};
 const dom=new JSDOM(fs.readFileSync(path.join(dir,'index.html'),'utf8'),{runScripts:'outside-only',url:'https://example.org/year6/kick/',virtualConsole:new VirtualConsole()});
 const w=dom.window,d=w.document;
-w.eval(fs.readFileSync(path.join(root,'year6/climb/data.js'),'utf8'));
+w.eval(fs.readFileSync(path.join(root,'year6/games/data.js'),'utf8'));
 for(const f of ['spieler.js','game.js'])w.eval(fs.readFileSync(path.join(dir,f),'utf8'));
-const S=w.KickGame,G=S.G,D=w.CLIMB_DATA;
+const S=w.KickGame,G=S.G,D=w.GAME_DATA.units.find(u=>u.id==='y6u2'),TEILE=D.parts.filter(p=>!p.klein);
 const step=()=>S.update(0.02);
 const until=(cond,max)=>{let n=0;while(!cond()&&n++<(max||3000))step();return n;};
 /* Ein sauberer Schuss mitten auf Tafel i: Wind ausgeglichen, gutes Tempo,
@@ -23,7 +23,7 @@ const toAim=()=>{if(G.mode==='intro')d.getElementById('feld').dispatchEvent(new 
 let last=null;
 const fire=inp=>{const R=S.shoot(inp);last=R;until(()=>G.mode==='result');const k=R&&R.kind;until(()=>G.mode!=='result');return k;};
 
-ok(d.querySelectorAll('#levels [data-part]').length===D.parts.length+1,'Auswahl: alle Abschnitte und die ganze Unit');
+ok(d.querySelectorAll('#levels [data-part]').length===TEILE.length+1&&d.querySelector('[data-unit="y6u2"]').getAttribute('aria-pressed')==='true','Auswahl: Unit 2 voreingestellt, Abschnitte und die ganze Unit');
 ok(d.querySelectorAll('#players [data-player]').length===5,'fuenf Spieler zur Wahl');
 {const pp=d.querySelector('[data-player="popp"]');
  ok(!pp.disabled&&/Popp/.test(pp.textContent)&&/Nr\. 11/.test(pp.textContent),'Popp mit Nr. 11 sofort waehlbar');
@@ -42,7 +42,7 @@ d.querySelector('[data-player="leo"]').click();ok(S.player()==='leo','zurueck zu
 
 /* Volle Touren ohne Torwart: jeder Schuss sitzt */
 G.noKeeper=true;
-for(const id of [...D.parts.map(p=>p.id),'all']){
+for(const id of [...TEILE.map(p=>p.id),'all']){
  d.querySelector('[data-part="'+id+'"]').click();
  ok(!d.getElementById('stage').hidden&&G.mode==='intro'&&G.hearts===S.HEARTS,'Tour beginnt mit dem Bolzplatz: '+id);
  const orte=new Set();
@@ -217,6 +217,6 @@ ok(JSON.parse(w.localStorage.getItem('vt6:kick:v1')).torwart==='stark'&&d.queryS
 d.querySelector('[data-torwart="normal"]').click();
 
 /* Einbindung */
-ok(fs.readFileSync(path.join(root,'assets/learning.js'),'utf8').includes('href="kick/"'),'Kachel in Year 6');
+ok(fs.readFileSync(path.join(root,'year6/games/index.html'),'utf8').includes('href="../kick/"')&&fs.readFileSync(path.join(root,'assets/learning.js'),'utf8').includes('Free Kick Tour mit deinen Vokabeln'),'in der Games-Rubrik von Year 6');
 ok(fs.readFileSync(path.join(root,'build.cjs'),'utf8').includes("'year6/kick'"),'Seite im Build');
 console.log('Free Kick Tour: '+checks+' Pruefungen bestanden');

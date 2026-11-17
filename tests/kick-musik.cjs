@@ -24,7 +24,7 @@ function setup(stored,ohneAudio){
  const w=dom.window;if(!ohneAudio)fakeAudio(w,log);
  if(stored)w.localStorage.setItem('vt6:kick:musik',stored);
  let timers=[];w.setInterval=(f)=>{timers.push(f);return timers.length;};w.clearInterval=(i)=>{timers[i-1]=null;};
- w.eval(fs.readFileSync(path.join(root,'year6/climb/data.js'),'utf8'));
+ w.eval(fs.readFileSync(path.join(root,'year6/games/data.js'),'utf8'));
  for(const f of ['spieler.js','musik.js','game.js'])w.eval(fs.readFileSync(path.join(dir,f),'utf8'));
  return {dom,w,d:w.document,log,timers,M:w.KickMusik,S:w.KickGame};
 }

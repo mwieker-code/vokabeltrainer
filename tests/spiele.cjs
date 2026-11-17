@@ -1,4 +1,4 @@
-/* Games-Rubrik: Sled Run und Summit Climb in Year 6, Year 9 und History.
+/* Games-Rubrik: Sled Run, Summit Climb und Free Kick Tour in Year 6, Year 9 und History.
    Daten und Seiten kommen aus tools/spiele.cjs (auf dem Stand der
    Vokabelseiten), jedes Fach hat eine Spieleseite und eine Games-Kachel.
    Im Spiel waehlt man Unit und Abschnitt; Bestwerte sind je Fach getrennt.
@@ -26,13 +26,14 @@ for(const f of FAECHER){
  ok(Q.units.every(u=>u.parts.reduce((n,p)=>n+p.words.length,0)>=6),f.fach+': jede Unit hat genug Woerter');
  /* Spieleseite */
  const hub=fs.readFileSync(path.join(root,f.dir,'games/index.html'),'utf8');
- ok(hub.includes('href="../sled/"')&&hub.includes('href="../climb/"')&&hub.includes('← '+f.fach)&&/data-eigenes-design/.test(hub),f.fach+': Spieleseite mit beiden Spielen und Weg zurueck');
+ ok(hub.includes('href="../sled/"')&&hub.includes('href="../climb/"')&&hub.includes('href="../kick/"')&&hub.includes('← '+f.fach)&&/data-eigenes-design/.test(hub),f.fach+': Spieleseite mit beiden Spielen und Weg zurueck');
  const hw=new JSDOM(hub,{runScripts:'outside-only',url:'https://example.org/'+f.dir+'/games/',virtualConsole:new VirtualConsole()}).window;
  hw.localStorage.setItem(f.schluessel+':sled:v1',JSON.stringify({best:{x:120,y:340},finishes:{x:2,y:1}}));
+ hw.localStorage.setItem(f.schluessel+':kick:v1',JSON.stringify({best:{x:510},tours:{x:2}}));
  for(const m of hub.matchAll(/<script(?: src="([^"?]+)[^"]*")?>([\s\S]*?)<\/script>/g))hw.eval(m[1]?fs.readFileSync(path.resolve(root,f.dir,'games',m[1]),'utf8'):m[2]);
- ok(/Bestwert 340 P · 3× im Ziel/.test(hw.document.querySelector('[data-stand="sled"]').textContent)&&/Noch nicht gespielt/.test(hw.document.querySelector('[data-stand="climb"]').textContent),f.fach+': Spieleseite zeigt den eigenen Stand');
- for(const spiel of ['sled','climb']){
-  const w=laden(f.dir,spiel),d=w.document,S=spiel==='sled'?w.SledGame:w.ClimbGame;
+ ok(/Bestwert 340 P · 3× im Ziel/.test(hw.document.querySelector('[data-stand="sled"]').textContent)&&/Noch nicht gespielt/.test(hw.document.querySelector('[data-stand="climb"]').textContent)&&/Bestwert 510 P · 2× Tour geschafft/.test(hw.document.querySelector('[data-stand="kick"]').textContent),f.fach+': Spieleseite zeigt den eigenen Stand');
+ for(const spiel of ['sled','climb','kick']){
+  const w=laden(f.dir,spiel),d=w.document,S=spiel==='sled'?w.SledGame:spiel==='kick'?w.KickGame:w.ClimbGame;
   ok(d.querySelector('header a').getAttribute('href')==='../games/'&&d.title.includes(f.fach),f.fach+' '+spiel+': Titel und Weg zur Spieleseite');
   const units=d.querySelectorAll('#units [data-unit]');
   if(Q.units.length>1){
@@ -53,6 +54,7 @@ for(const f of FAECHER){
   d.querySelector('[data-part="all"]').click();
   if(spiel==='sled'){const G=S.G;let n=0;while(G.mode!=='ride'&&n++<200)S.update(0.02);
    ok(G.mode==='ride'&&G.options.length===3&&G.options.every(o=>unitWorte.has(o.en)),f.fach+' sled: drei Antworten aus der gewaehlten Unit');}
+  else if(spiel==='kick'){const G=S.G;ok((G.mode==='intro'||G.mode==='aim')&&G.options.length===4&&G.options.every(o=>unitWorte.has(o.en)),f.fach+' kick: vier Antworten aus der gewaehlten Unit');}
   else{const G=S.G;ok(G.holds.length===3&&G.holds.every(h=>unitWorte.has(h.w.en)),f.fach+' climb: drei Antworten aus der gewaehlten Unit');}
   ok(d.getElementById('stage').hidden===false,f.fach+' '+spiel+': Spiel laeuft');
  }

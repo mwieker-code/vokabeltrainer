@@ -1,5 +1,5 @@
 /* =========================================================================
-   FREE KICK TOUR – Freistoss-Tour mit den Vokabeln von Year 6, Unit 2
+   FREE KICK TOUR – Freistoss-Tour mit den Vokabeln (Year 6, Year 9, History)
    Ueber dem Tor steht das deutsche Wort, im Tor haengen vier Tafeln mit
    englischen Woertern - eine in jeder Ecke. Wer vom Ball zur richtigen
    Tafel wischt, schiesst dorthin. Fuenfzehn Schuesse an drei Orten:
@@ -12,13 +12,20 @@
    Fair bleibt es so: Nur eine falsche Tafel kostet ein Herz. Gehalten,
    Mauer, Pfosten oder daneben kosten die Serie, nie ein Herz.
    Wie bei den anderen Spielen zaehlt nichts in die Lernfaecher; gespeichert
-   werden nur Bestwerte, Touren und die Wahl (vt6:kick:v1). Die Vokabeln
-   kommen aus ../climb/data.js. Die Spiellogik (start, shoot, update)
+   werden nur Bestwerte, Touren und die Wahl - je Fach unter eigenem
+   Schluessel (z. B. vt6:kick:v1). Die Vokabeln kommen aus window.GAME_DATA
+   (games/data.js des Fachs, erzeugt von tools/spiele.cjs) mit allen Units;
+   im Menue waehlt man Unit und Abschnitt. Fehlt GAME_DATA, gilt CLIMB_DATA
+   (Year 6, Unit 2). Die Spiellogik (start, shoot, update)
    braucht keine Zeichenflaeche, damit die Tests sie ohne Browser spielen.
    ========================================================================= */
 (function(){
 'use strict';
-const D=window.CLIMB_DATA,KEY='vt6:kick:v1',M=window.KickMusik||null,SP=window.Spieler;
+/* Vokabelquelle: alle Units des Fachs; gespielt wird in der gewaehlten Unit */
+const QUELLE=window.GAME_DATA||{fach:'Year 6',schluessel:'vt6',trainer:'../',units:[{id:'y6u2',name:window.CLIMB_DATA.unit,parts:window.CLIMB_DATA.parts}]};
+const UNITS=QUELLE.units;
+let D=UNITS[0];
+const KEY=QUELLE.schluessel+':kick:v1',M=window.KickMusik||null,SP=window.Spieler;
 const $=id=>document.getElementById(id);
 const menu=$('menu'),stage=$('stage'),over=$('over'),canvas=$('feld'),promptEl=$('prompt'),chips=$('chips');
 let ctx=null;try{ctx=canvas.getContext?canvas.getContext('2d'):null;}catch(e){ctx=null;}
@@ -55,7 +62,7 @@ const MODI={normal:{name:'Normal',punkte:1,sweet:[600,2400],read:0,react:0,dive:
 const modus=()=>MODI[G.modus]||MODI.normal;
 const ort=()=>ORTE[Math.min(ORTE.length-1,Math.floor(G.k/PER))];
 const multiplier=()=>(1+0.1*Math.min(G.streak,10))*modus().punkte*torwart().punkte;
-const bestKey=id=>(G.modus==='profi'?'profi:':'')+id;
+const bestKey=id=>(G.modus==='profi'?'profi:':'')+teilKey(id);
 /* Die vier Tafeln: 0 oben links, 1 oben rechts, 2 unten links, 3 unten rechts */
 const ZONEN=['oben links','oben rechts','unten links','unten rechts'];
 const ZFARBE=['#FF7A59','#3CCFBE','#FFC857','#B993FF'];
@@ -69,16 +76,29 @@ function tafelAn(x,y,zeit){
   return -1;
 }
 
-let saved={best:{},tours:{},player:'leo',modus:'normal',torwart:'normal'};
-try{const p=JSON.parse(localStorage.getItem(KEY));if(p&&p.best&&typeof p.best==='object'&&p.tours&&typeof p.tours==='object')saved={best:p.best,tours:p.tours,player:['mia','messi','popp','flash'].includes(p.player)?p.player:'leo',modus:p.modus==='profi'?'profi':'normal',torwart:TORWART[p.torwart]?p.torwart:'normal'};}catch(e){}
+let saved={best:{},tours:{},player:'leo',modus:'normal',torwart:'normal',unit:null};
+try{const p=JSON.parse(localStorage.getItem(KEY));if(p&&p.best&&typeof p.best==='object'&&p.tours&&typeof p.tours==='object')saved={best:p.best,tours:p.tours,player:['mia','messi','popp','flash'].includes(p.player)?p.player:'leo',modus:p.modus==='profi'?'profi':'normal',torwart:TORWART[p.torwart]?p.torwart:'normal',unit:typeof p.unit==='string'?p.unit:null};}catch(e){}
 const totalTours=()=>Object.values(saved.tours).reduce((a,b)=>a+(Number(b)||0),0);
 const unlocked=()=>totalTours()>=UNLOCK;
 const player=()=>['mia','messi','popp'].includes(saved.player)?saved.player:saved.player==='flash'&&unlocked()?'flash':'leo';
 function save(){try{localStorage.setItem(KEY,JSON.stringify(saved));}catch(e){}}
 
-const ALL={id:'all',name:'Ganze Unit'};
+const waehleUnit=id=>{D=UNITS.find(u=>u.id===id)||UNITS.find(u=>u.id===QUELLE.start)||UNITS[0];};
+waehleUnit(saved.unit);
+/* "Ganze Unit": Bestwerte je Unit; Year 6, Unit 2 behaelt den alten Schluessel "all" */
+const teilKey=id=>id!=='all'||UNITS.length===1||D.id===QUELLE.altAll?id:'all:'+D.id;
+const ALL={id:'all',get name(){return QUELLE.alleName||'Ganze Unit';}};
 const wordsOf=id=>id==='all'?D.parts.flatMap(p=>p.words):(D.parts.find(p=>p.id===id)||{words:[]}).words;
-const pool=D.parts.flatMap(p=>p.words);
+const pool=()=>D.parts.flatMap(p=>p.words);
+/* Unit-Auswahl im Menue (nur wenn es mehrere gibt) */
+function zeigeUnits(){
+  let box=$('units');
+  if(UNITS.length<2){if(box)box.hidden=true;return;}
+  if(!box){box=document.createElement('div');box.id='units';box.className='units';box.setAttribute('role','group');box.setAttribute('aria-label','Unit wählen');$('levels').before(box);}
+  box.hidden=false;
+  box.innerHTML=UNITS.map(u=>'<button data-unit="'+esc(u.id)+'" aria-pressed="'+(u===D)+'">'+esc(u.name)+'</button>').join('');
+  box.querySelectorAll('[data-unit]').forEach(b=>b.onclick=()=>{waehleUnit(b.dataset.unit);saved.unit=D.id;save();showMenu();});
+}
 
 const frisch=()=>({mode:'menu',part:null,queue:[],k:0,q:null,options:[],right:0,hearts:HEARTS,score:0,streak:0,goals:0,
   missed:new Map(),requeued:new Set(),t:0,time:0,aimTime:0,paused:false,shot:null,ft:0,wind:0,wallX:0,lean:0,kx:0,golden:false,
@@ -97,7 +117,7 @@ function start(partId){
   M?.stop();M?.start();musikKnopf();M?.sfx('pfiff');
 }
 function distractors(q){
-  const others=pool.filter(w=>w.id!==q.id&&w.en!==q.en&&w.de!==q.de);
+  const others=pool().filter(w=>w.id!==q.id&&w.en!==q.en&&w.de!==q.de);
   const out=[];
   for(const w of [...shuffle(others.filter(w=>w.pos===q.pos)),...shuffle(others.filter(w=>w.pos!==q.pos))]){
     if(!out.some(o=>o.en===w.en||o.de===w.de))out.push(w);if(out.length===3)break;}
@@ -258,7 +278,7 @@ function finish(won){
   const id=G.part,key=bestKey(id),old=saved.best[key]||0,record=G.score>old;
   if(record)saved.best[key]=G.score;
   const before=unlocked();
-  if(won)saved.tours[id]=(saved.tours[id]||0)+1;
+  if(won)saved.tours[teilKey(id)]=(saved.tours[teilKey(id)]||0)+1;
   const fresh=!before&&unlocked();
   save();
   const missed=[...G.missed.values()];
@@ -271,7 +291,7 @@ function finish(won){
     +'<p class="muted">Torwart: '+torwart().name+' · Bestwert'+(G.modus==='profi'?' (Profi)':'')+': '+(saved.best[key]||0)+' Punkte'+(won?'':' · Drei falsche Wörter beenden die Tour.')+'</p>'
     +'<div class="actions"><button id="again" class="go">Nochmal spielen</button><button id="toMenu">Anderen Abschnitt wählen</button></div>'
     +(missed.length?'<h2>Diese Wörter solltest du noch üben</h2><ul class="missed">'+missed.map(w=>'<li><span>'+esc(w.de)+'</span><strong lang="en">'+esc(w.en)+'</strong></li>').join('')
-      +'</ul><p><a class="train" href="../">Unit 2 im Vokabeltrainer üben →</a></p>':'<p class="muted">Kein einziges falsches Wort – stark!</p>');
+      +'</ul><p><a class="train" href="'+esc(QUELLE.trainer||'../')+'">Im Vokabeltrainer üben →</a></p>':'<p class="muted">Kein einziges falsches Wort – stark!</p>');
   $('again').onclick=()=>start(id);$('toMenu').onclick=showMenu;
   const h=over.querySelector('h1');h.tabIndex=-1;h.focus();
   window.LearningFeedback?.tone?.('done');
@@ -306,8 +326,9 @@ function showKeepers(){
 }
 function showMenu(){
   G.mode='menu';G.modus=saved.modus;document.querySelector('main.kick')?.classList.remove('spielt');stage.hidden=true;over.hidden=true;menu.hidden=false;G.torwart=saved.torwart;showPlayers();showModes();showKeepers();M?.stop();musikKnopf();
-  $('levels').innerHTML=[...D.parts,ALL].map(p=>{
-    const n=wordsOf(p.id).length,best=saved.best[bestKey(p.id)]||0,fin=saved.tours[p.id]||0;
+  zeigeUnits();
+  $('levels').innerHTML=[...D.parts.filter(p=>!p.klein),ALL].map(p=>{
+    const n=wordsOf(p.id).length,best=saved.best[bestKey(p.id)]||0,fin=saved.tours[teilKey(p.id)]||0;
     return '<button data-part="'+p.id+'"'+(p.id==='all'?' class="all"':'')+'><span class="l-name">'+esc(p.name)+'</span>'
       +'<span class="l-info">'+n+' Wörter'+(best?' · Bestwert '+best+' P':'')+(fin?' · '+fin+'× Tour geschafft':'')+'</span></button>';
   }).join('');
