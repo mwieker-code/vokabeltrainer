@@ -1,5 +1,5 @@
 /* =========================================================================
-   SUMMIT CLIMB – Kletterspiel zu den Vokabeln von Year 6, Unit 2
+   SUMMIT CLIMB – Kletterspiel zu den Vokabeln (Year 6, Year 9, History)
    Oben steht das deutsche Wort, an der Wand haengen drei Griffe mit
    englischen Woertern. Wer den richtigen antippt, klettert hoeher; ein
    falscher Griff broeckelt, und der Nebel holt auf. Holt er einen ein,
@@ -21,14 +21,22 @@
    Das Timing entscheidet nur ueber den Bonus, nie ueber die Antwort.
 
    Das Spiel zaehlt nicht in die Lernfaecher; gespeichert werden nur
-   Bestwerte und die Wahl der Figur (vt6:climb:v1).
+   Bestwerte und die Wahl der Figur.
+   Woher die Vokabeln kommen: window.GAME_DATA (games/data.js des Fachs,
+   erzeugt von tools/spiele.cjs) mit allen Units; im Menue waehlt man Unit
+   und Abschnitt. Fehlt GAME_DATA, gilt CLIMB_DATA (Year 6, Unit 2).
+   Gespeichert wird je Fach unter eigenem Schluessel (z. B. vt6:climb:v1).
 
    Die Spiellogik (start, choose, update, answerChallenge) kommt ohne
    Zeichenflaeche aus, damit die Tests sie ohne Browser durchspielen.
    ========================================================================= */
 (function(){
 'use strict';
-const D=window.CLIMB_DATA,F=window.Figuren,M=window.ClimbMusik||null,KEY='vt6:climb:v1';
+/* Vokabelquelle: alle Units des Fachs; gespielt wird in der gewaehlten Unit */
+const QUELLE=window.GAME_DATA||{fach:'Year 6',schluessel:'vt6',trainer:'../',units:[{id:'y6u2',name:window.CLIMB_DATA.unit,parts:window.CLIMB_DATA.parts}]};
+const UNITS=QUELLE.units;
+let D=UNITS[0];
+const F=window.Figuren,M=window.ClimbMusik||null,KEY=QUELLE.schluessel+':climb:v1';
 const $=id=>document.getElementById(id);
 const menu=$('menu'),stage=$('stage'),over=$('over'),canvas=$('wall'),promptEl=$('prompt'),choices=$('choices'),box=$('challenge');
 let ctx=null;try{ctx=canvas.getContext?canvas.getContext('2d'):null;}catch(e){ctx=null;}
@@ -63,22 +71,35 @@ function laneFromSwipe(dx,dy){
 }
 
 /* ---------------------------------------------------------------- Stand */
-let saved={best:{},summits:{},rider:'kid'};
+let saved={best:{},summits:{},rider:'kid',unit:null};
 try{const p=JSON.parse(localStorage.getItem(KEY));if(p&&typeof p.best==='object'&&p.best&&typeof p.summits==='object'&&p.summits)
-  saved={best:p.best,summits:p.summits,rider:['silky','penguin'].includes(p.rider)?p.rider:'kid'};}catch(e){}
+  saved={best:p.best,summits:p.summits,rider:['silky','penguin'].includes(p.rider)?p.rider:'kid',unit:typeof p.unit==='string'?p.unit:null};}catch(e){}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(saved));}catch(e){}}
 /* Der Pinguin ist frei, sobald es dreimal ins Ziel ging - am Gipfel oder im Schlittenrennen. */
 function finishes(){
   let n=Object.values(saved.summits).reduce((a,b)=>a+(Number(b)||0),0);
-  try{const s=JSON.parse(localStorage.getItem('vt6:sled:v1'));if(s&&s.finishes)n+=Object.values(s.finishes).reduce((a,b)=>a+(Number(b)||0),0);}catch(e){}
+  try{const s=JSON.parse(localStorage.getItem(QUELLE.schluessel+':sled:v1'));if(s&&s.finishes)n+=Object.values(s.finishes).reduce((a,b)=>a+(Number(b)||0),0);}catch(e){}
   return n;
 }
 const unlocked=()=>finishes()>=UNLOCK;
 const rider=()=>saved.rider==='silky'?'silky':saved.rider==='penguin'&&unlocked()?'penguin':'kid';
 
-const ALL={id:'all',name:'Ganze Unit'};
+const waehleUnit=id=>{D=UNITS.find(u=>u.id===id)||UNITS.find(u=>u.id===QUELLE.start)||UNITS[0];};
+waehleUnit(saved.unit);
+/* "Ganze Unit": Bestwerte je Unit; Year 6, Unit 2 behaelt den alten Schluessel "all" */
+const teilKey=id=>id!=='all'||UNITS.length===1||D.id===QUELLE.altAll?id:'all:'+D.id;
+const ALL={id:'all',get name(){return QUELLE.alleName||'Ganze Unit';}};
 const wordsOf=id=>id==='all'?D.parts.flatMap(p=>p.words):(D.parts.find(p=>p.id===id)||{words:[]}).words;
-const pool=D.parts.flatMap(p=>p.words);
+const pool=()=>D.parts.flatMap(p=>p.words);
+/* Unit-Auswahl im Menue (nur wenn es mehrere gibt) */
+function zeigeUnits(){
+  let box=$('units');
+  if(UNITS.length<2){if(box)box.hidden=true;return;}
+  if(!box){box=document.createElement('div');box.id='units';box.className='units';box.setAttribute('role','group');box.setAttribute('aria-label','Unit wählen');$('levels').before(box);}
+  box.hidden=false;
+  box.innerHTML=UNITS.map(u=>'<button data-unit="'+esc(u.id)+'" aria-pressed="'+(u===D)+'">'+esc(u.name)+'</button>').join('');
+  box.querySelectorAll('[data-unit]').forEach(b=>b.onclick=()=>{waehleUnit(b.dataset.unit);saved.unit=D.id;save();showMenu();});
+}
 
 const G={mode:'menu',part:null,queue:[],k:0,goal:GOAL,q:null,tries:0,holds:[],old:[],
   climber:{x:W/2,y:0},from:null,to:null,t:0,rows:1,fog:0,cam:0,score:0,streak:0,correct:0,hearts:HEARTS,
@@ -102,7 +123,7 @@ function start(partId){
   M?.stop();M?.start();musikKnopf();
 }
 function distractors(q){
-  const others=pool.filter(w=>w.id!==q.id&&w.en!==q.en&&w.de!==q.de);
+  const others=pool().filter(w=>w.id!==q.id&&w.en!==q.en&&w.de!==q.de);
   const same=shuffle(others.filter(w=>w.pos===q.pos)),rest=shuffle(others.filter(w=>w.pos!==q.pos));
   const out=[];
   for(const w of [...same,...rest]){if(!out.some(o=>o.en===w.en||o.de===w.de))out.push(w);if(out.length===2)break;}
@@ -264,8 +285,8 @@ function camp(){
   const n=Math.floor(G.k/CAMP);G.banner='Lager '+n+' · '+(G.k*METER)+' m';G.bannerT=1.6;
   M?.lager();
   /* Bonusfrage: ein Wort dieser Fahrt, diesmal Englisch -> Deutsch */
-  const w=G.seen[Math.floor(Math.random()*G.seen.length)]||pool[0];
-  const others=shuffle(pool.filter(x=>x.de!==w.de&&x.en!==w.en));
+  const w=G.seen[Math.floor(Math.random()*G.seen.length)]||pool()[0];
+  const others=shuffle(pool().filter(x=>x.de!==w.de&&x.en!==w.en));
   const opts=[w];for(const o of others){if(!opts.some(p=>p.de===o.de))opts.push(o);if(opts.length===3)break;}
   G.challenge={w,options:shuffle(opts),done:false,ok:null,until:0};
   promptEl.textContent='Lager '+n+' – Bonusfrage';choices.innerHTML='';
@@ -295,9 +316,9 @@ function finish(won){
   G.mode='over';G.won=won;box.hidden=true;
   if(!won)M?.sturz();
   if(won)G.score+=50*G.hearts;
-  const id=G.part,old=saved.best[id]||0,record=G.score>old,before=unlocked();
-  if(record)saved.best[id]=G.score;
-  if(won)saved.summits[id]=(saved.summits[id]||0)+1;
+  const id=G.part,key=teilKey(id),old=saved.best[key]||0,record=G.score>old,before=unlocked();
+  if(record)saved.best[key]=G.score;
+  if(won)saved.summits[key]=(saved.summits[key]||0)+1;
   save();
   const fresh=!before&&unlocked();
   const missed=[...G.missed.values()];
@@ -306,10 +327,10 @@ function finish(won){
     +'<p class="result">'+(G.k*METER)+' m von '+(G.goal*METER)+' m · '+G.score+' Punkte'+(record&&G.score?' · <strong>neuer Bestwert!</strong>':'')+'</p>'
     +(won&&G.hearts?'<p class="muted">Gipfelbonus: '+G.hearts+' Herz'+(G.hearts>1?'en':'')+' × 50 Punkte</p>':'')
     +(fresh?'<p class="unlock">Neu freigeschaltet: Der Pinguin klettert jetzt mit!</p>':'')
-    +'<p class="muted">'+G.correct+' Wörter beim ersten Versuch richtig · '+G.perfects+' perfekte Sprünge · '+G.challenges+' Bonusfragen · '+G.eagles+' Adler-Boni · Bestwert: '+(saved.best[id]||0)+' Punkte</p>'
+    +'<p class="muted">'+G.correct+' Wörter beim ersten Versuch richtig · '+G.perfects+' perfekte Sprünge · '+G.challenges+' Bonusfragen · '+G.eagles+' Adler-Boni · Bestwert: '+(saved.best[key]||0)+' Punkte</p>'
     +'<div class="actions"><button id="again" class="go">Nochmal klettern</button><button id="toMenu">Anderen Abschnitt wählen</button></div>'
     +(missed.length?'<h2>Diese Wörter solltest du noch üben</h2><ul class="missed">'+missed.map(w=>'<li><span>'+esc(w.de)+'</span><strong lang="en">'+esc(w.en)+'</strong></li>').join('')
-      +'</ul><p><a class="train" href="../">Unit 2 im Vokabeltrainer üben →</a></p>':'<p class="muted">Kein einziger Fehlgriff – stark!</p>');
+      +'</ul><p><a class="train" href="'+esc(QUELLE.trainer||'../')+'">Im Vokabeltrainer üben →</a></p>':'<p class="muted">Kein einziger Fehlgriff – stark!</p>');
   $('again').onclick=()=>start(id);$('toMenu').onclick=showMenu;
   const h=over.querySelector('h1');h.tabIndex=-1;h.focus();
   window.LearningFeedback?.tone?.('done');
@@ -332,9 +353,9 @@ function showRiders(){
   });
 }
 function showMenu(){
-  G.mode='menu';stage.hidden=true;over.hidden=true;menu.hidden=false;box.hidden=true;showRiders();M?.stop();musikKnopf();
-  $('levels').innerHTML=[...D.parts,ALL].map(p=>{
-    const n=wordsOf(p.id).length,best=saved.best[p.id]||0,top=saved.summits[p.id]||0;
+  G.mode='menu';stage.hidden=true;over.hidden=true;menu.hidden=false;box.hidden=true;showRiders();M?.stop();musikKnopf();zeigeUnits();
+  $('levels').innerHTML=[...D.parts.filter(p=>!p.klein),ALL].map(p=>{
+    const n=wordsOf(p.id).length,best=saved.best[teilKey(p.id)]||0,top=saved.summits[teilKey(p.id)]||0;
     return '<button data-part="'+p.id+'"'+(p.id==='all'?' class="all"':'')+'><span class="l-name">'+esc(p.name)+'</span>'
       +'<span class="l-info">'+n+' Wörter'+(best?' · Bestwert '+best+' P':'')+(top?' · '+top+'× Gipfel':'')+'</span></button>';
   }).join('');

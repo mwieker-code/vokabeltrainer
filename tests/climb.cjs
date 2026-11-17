@@ -142,7 +142,7 @@ ok(saved.best.all>0&&saved.summits['y6u2-partb']===1,'Bestwert und Gipfel gespei
 ok(w.localStorage.getItem('vt6:progress')===null,'Lernfaecher unberuehrt');
 const html=fs.readFileSync(path.join(dir,'index.html'),'utf8');
 ok(/data-eigenes-design/.test(html)&&!/data-nacht/.test(html),'eigenes Design ohne Hell und Nacht');
-ok(fs.readFileSync(path.join(root,'assets/learning.js'),'utf8').includes('href="climb/"'),'Kachel in Year 6');
+ok(fs.readFileSync(path.join(root,'assets/learning.js'),'utf8').includes('href="games/"'),'Games-Kachel in Year 6');
 
 /* Musik: Noten lesbar, Geraeusche verschieden */
 const M=w.ClimbMusik;
