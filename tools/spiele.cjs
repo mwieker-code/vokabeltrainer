@@ -1,8 +1,9 @@
 /* Games-Rubrik: erzeugt fuer Year 6, Year 9 und History
      <fach>/games/data.js      alle Units und Abschnitte mit Vokabeln (window.GAME_DATA)
-     <fach>/games/index.html   Spieleseite mit Sled Run und Summit Climb
+     <fach>/games/index.html   Spieleseite mit Sled Run, Summit Climb und Free Kick Tour
      <fach>/sled/index.html    Sled Run   (Code bleibt in year6/sled/)
      <fach>/climb/index.html   Summit Climb (Code bleibt in year6/climb/)
+     <fach>/kick/index.html    Free Kick Tour (Code bleibt in year6/kick/)
    Quelle sind die Vokabelseiten des Fachs (TOPICS und SETS) und die
    Vorlagen in tools/vorlagen/. Die Versionsnummer kommt aus fassung.json.
    Aufruf:  node tools/spiele.cjs          schreibt alle Dateien
@@ -46,7 +47,7 @@ function seite(vorlage,f,unter){
   .replaceAll('{{FACH_GROSS}}',f.fach.toUpperCase())
   .replaceAll('{{FACH}}',f.fach)
   .replaceAll('{{V}}',v)
-  .replace('href="./style.css','href="style.css').replace(/src="\.\/(musik|game)\.js/g,'src="$1.js');
+  .replace('href="./style.css','href="style.css').replace(/src="\.\/(musik|game|spieler)\.js/g,'src="$1.js');
 }
 function dateien(){
  const out={};
@@ -55,6 +56,7 @@ function dateien(){
   out[f.dir+'/games/index.html']=seite('games.html',f,'games');
   out[f.dir+'/sled/index.html']=seite('sled.html',f,'sled');
   out[f.dir+'/climb/index.html']=seite('climb.html',f,'climb');
+  out[f.dir+'/kick/index.html']=seite('kick.html',f,'kick');
  }
  return out;
 }

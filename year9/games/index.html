@@ -36,10 +36,11 @@ h1{font-size:34px;line-height:1.1;margin:6px 0 6px}
 <div class="spiele">
  <a class="spiel" href="../sled/"><canvas data-bild="sled" width="640" height="320" aria-hidden="true"></canvas><div class="text"><h2>Sled Run</h2><p>Schlittenrennen: Wische in die Spur mit dem richtigen Wort und sammle Pinguine ein.</p><p class="stand" data-stand="sled"></p></div></a>
  <a class="spiel" href="../climb/"><canvas data-bild="climb" width="640" height="320" aria-hidden="true"></canvas><div class="text"><h2>Summit Climb</h2><p>Kletterspiel: Greif nach dem richtigen Wort und klettere vor dem Nebel bis zum Gipfel.</p><p class="stand" data-stand="climb"></p></div></a>
+ <a class="spiel" href="../kick/"><canvas data-bild="kick" width="640" height="320" aria-hidden="true"></canvas><div class="text"><h2>Free Kick Tour</h2><p>Freistöße: Wische vom Ball zum richtigen Wort im Tor – vorbei an Torwart und Mauer.</p><p class="stand" data-stand="kick"></p></div></a>
 </div>
 <p class="muted">Die Spiele zählen nicht in deine Lernfächer. Gespeichert werden nur Bestwerte.</p>
 </main>
-<script src="data.js?v=20261117-controller"></script><script src="../../year6/figuren.js?v=20261117-controller"></script>
+<script src="data.js?v=20261120-kick"></script><script src="../../year6/figuren.js?v=20261120-kick"></script>
 <script>
 /* Spieleseite: Vorschaubilder und eigener Stand je Spiel */
 (function(){
@@ -48,10 +49,11 @@ const Q=window.GAME_DATA||{schluessel:'vt6'};
 const lies=k=>{try{return JSON.parse(localStorage.getItem(k))||null;}catch(e){return null;}};
 const summe=o=>Object.values(o||{}).reduce((a,b)=>a+(Number(b)||0),0);
 const besterWert=o=>Object.values(o||{}).reduce((a,b)=>Math.max(a,Number(b)||0),0);
-const sled=lies(Q.schluessel+':sled:v1'),climb=lies(Q.schluessel+':climb:v1');
+const sled=lies(Q.schluessel+':sled:v1'),climb=lies(Q.schluessel+':climb:v1'),kick=lies(Q.schluessel+':kick:v1');
 const text=(best,n,wort)=>best?'Bestwert '+best+' P · '+n+'× '+wort:'Noch nicht gespielt';
 document.querySelector('[data-stand="sled"]').textContent=text(besterWert(sled&&sled.best),summe(sled&&sled.finishes),'im Ziel');
 document.querySelector('[data-stand="climb"]').textContent=text(besterWert(climb&&climb.best),summe(climb&&climb.summits),'am Gipfel');
+document.querySelector('[data-stand="kick"]').textContent=text(besterWert(kick&&kick.best),summe(kick&&kick.tours),'Tour geschafft');
 const F=window.Figuren;
 function bild(cv,art){
  const g=cv.getContext&&cv.getContext('2d');if(!g)return;const W=cv.width,H=cv.height;
@@ -68,6 +70,20 @@ function bild(cv,art){
   if(F){F.kind(g,0.6,0.1);F.pinguin(g,-30,-14,0.55,{wave:0.4,scarf:true,blush:true});}
   g.restore();
   for(let i=0;i<4;i++){const x=420+i*36;g.fillStyle='#FFE08A';g.beginPath();for(let k=0;k<10;k++){const a=k*Math.PI/5-Math.PI/2,r=k%2?6:14;g.lineTo(x+Math.cos(a)*r,130+i*10+Math.sin(a)*r);}g.fill();}
+ }else if(art==='kick'){
+  /* Stadion am Abend: Tor mit vier Worttafeln, Torwart, Ball auf dem Rasen */
+  let v=g.createLinearGradient(0,0,0,H);v.addColorStop(0,'#0B1030');v.addColorStop(0.55,'#24306A');v.addColorStop(0.56,'#2FA04C');v.addColorStop(1,'#1F7F3A');g.fillStyle=v;g.fillRect(0,0,W,H);
+  for(let i=0;i<70;i++){g.fillStyle=['#FF7A59','#FFC857','#3CCFBE','#F4F1EA','#B993FF'][i%5];g.beginPath();g.arc((i*97)%W,40+(i*37)%90,3,0,7);g.fill();}
+  for(let i=0;i<6;i++){g.fillStyle=i%2?'rgba(255,255,255,.07)':'rgba(255,255,255,0)';g.fillRect(0,178+i*24,W,24);}
+  g.strokeStyle='rgba(255,255,255,.35)';g.lineWidth=1.2;for(let x=150;x<=490;x+=17){g.beginPath();g.moveTo(x,95);g.lineTo(x,180);g.stroke();}for(let y=95;y<=180;y+=17){g.beginPath();g.moveTo(150,y);g.lineTo(490,y);g.stroke();}
+  for(const [x,y,c] of [[160,104,'#FF7A59'],[332,104,'#3CCFBE'],[160,142,'#FFC857'],[332,142,'#B993FF']]){g.fillStyle=c;g.beginPath();g.roundRect?g.roundRect(x,y,148,30,7):g.rect(x,y,148,30);g.fill();}
+  g.fillStyle='#F7F8FA';g.fillRect(142,88,8,94);g.fillRect(490,88,8,94);g.fillRect(142,88,356,8);
+  g.fillStyle='#C6F432';g.beginPath();g.arc(300,120,9,0,7);g.arc(342,120,9,0,7);g.fill();
+  g.fillStyle='#8DB81A';g.fillRect(306,118,30,40);g.fillStyle='#1C2333';g.fillRect(308,158,10,22);g.fillRect(324,158,10,22);
+  g.fillStyle='#D9A27A';g.beginPath();g.arc(321,108,10,0,7);g.fill();
+  g.strokeStyle='rgba(255,255,255,.8)';g.lineWidth=3;g.setLineDash([8,8]);g.beginPath();g.moveTo(330,285);g.quadraticCurveTo(250,200,215,128);g.stroke();g.setLineDash([]);
+  const b=g.createRadialGradient(326,282,3,330,288,22);b.addColorStop(0,'#FFFFFF');b.addColorStop(1,'#B8BEC8');g.fillStyle=b;g.beginPath();g.arc(330,288,20,0,7);g.fill();
+  g.fillStyle='#20242C';for(const [dx,dy] of [[0,0],[-11,-8],[11,-8],[-8,11],[8,11]]){g.beginPath();g.arc(330+dx,288+dy,4.5,0,7);g.fill();}
  }else{
   let v=g.createLinearGradient(0,0,0,H);v.addColorStop(0,'#7FB2E0');v.addColorStop(1,'#E3C7A6');g.fillStyle=v;g.fillRect(0,0,W,H);
   g.fillStyle='#A9BDD1';g.beginPath();g.moveTo(0,H);g.lineTo(140,90);g.lineTo(230,170);g.lineTo(330,40);g.lineTo(450,160);g.lineTo(560,80);g.lineTo(W,H);g.fill();
