@@ -24,7 +24,11 @@ let last=null;
 const fire=inp=>{const R=S.shoot(inp);last=R;until(()=>G.mode==='result');const k=R&&R.kind;until(()=>G.mode!=='result');return k;};
 
 ok(d.querySelectorAll('#levels [data-part]').length===TEILE.length+1&&d.querySelector('[data-unit="y6u2"]').getAttribute('aria-pressed')==='true','Auswahl: Unit 2 voreingestellt, Abschnitte und die ganze Unit');
-ok(d.querySelectorAll('#players [data-player]').length===5,'fuenf Spieler zur Wahl');
+ok(d.querySelectorAll('#players [data-player]').length===6,'sechs Spieler zur Wahl');
+{const r=d.querySelector('[data-player="ronaldo"]');
+ ok(!r.disabled&&/Ronaldo \(CR7\)/.test(r.textContent)&&/Nr\. 7/.test(r.textContent),'Ronaldo (CR7) mit Nr. 7 sofort waehlbar');
+ r.click();ok(S.player()==='ronaldo'&&JSON.parse(w.localStorage.getItem('vt6:kick:v1')).player==='ronaldo','Ronaldo gewaehlt und gespeichert');
+ ok(w.Spieler.KADER.ronaldo.name==='RONALDO'&&w.Spieler.KADER.ronaldo.nr==='7'&&w.Spieler.KADER.ronaldo.trikot==='#C8102E','Trikot: RONALDO, 7, Portugal-Rot');}
 {const pp=d.querySelector('[data-player="popp"]');
  ok(!pp.disabled&&/Popp/.test(pp.textContent)&&/Nr\. 11/.test(pp.textContent),'Popp mit Nr. 11 sofort waehlbar');
  pp.click();ok(S.player()==='popp'&&JSON.parse(w.localStorage.getItem('vt6:kick:v1')).player==='popp','Popp gewaehlt und gespeichert');

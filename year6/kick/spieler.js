@@ -28,6 +28,7 @@ const KADER={
   leo:  {name:'LEO',  nr:'9', trikot:'#E63946',dunkel:'#B4232F',schrift:'#FFFFFF',hose:'#F4F1EA',stutzen:'#E63946',haut:'#EDB98F',haar:'#4A2E1F'},
   mia:  {name:'MIA',  nr:'10',trikot:'#12B5A5',dunkel:'#0B8478',schrift:'#0E2A47',hose:'#0E2A47',stutzen:'#12B5A5',haut:'#B87A52',haar:'#1C1414'},
   messi:{name:'MESSI',nr:'10',trikot:'#75AADB',dunkel:'#4F86BC',schrift:'#14213D',hose:'#1A1F2B',stutzen:'#F4F1EA',haut:'#E6B08A',haar:'#5A3A22',streifen:'#FFFFFF'},
+  ronaldo:{name:'RONALDO',nr:'7',trikot:'#C8102E',dunkel:'#8E0B21',schrift:'#F2C94C',hose:'#0B6E3A',stutzen:'#C8102E',haut:'#D9A27A',haar:'#1C1414',saum:'#0B6E3A'},
   popp: {name:'POPP', nr:'11',trikot:'#F7F7F5',dunkel:'#D5D9DE',schrift:'#14161C',hose:'#F4F1EA',stutzen:'#F4F1EA',haut:'#F0C4A0',haar:'#D9B26A',flammen:true,binde:true},
   flash:{name:'FLASH',nr:'7', trikot:'#7C4DFF',dunkel:'#5A2FD6',schrift:'#FFD447',hose:'#2A1B5C',stutzen:'#2A1B5C',haut:'#F08A3C',haar:'#F08A3C',fuchs:true}
 };
@@ -108,9 +109,10 @@ function schuetze(ctx,X,Y,k,wer,o){
       ctx.quadraticCurveTo(s*10,schulter+4,s*23,schulter+18);ctx.closePath();ctx.fill();}
     ctx.restore();
   }
-  ctx.fillStyle=K.dunkel;ctx.fillRect(-17,huefte-12,34,3);
+  if(K.saum){ctx.fillStyle=K.saum;ctx.fillRect(-17,huefte-12,34,3);ctx.beginPath();ctx.moveTo(-9,schulter-3);ctx.quadraticCurveTo(0,schulter+1,9,schulter-3);ctx.lineTo(9,schulter-1);ctx.quadraticCurveTo(0,schulter+3.5,-9,schulter-1);ctx.closePath();ctx.fill();}
+  else{ctx.fillStyle=K.dunkel;ctx.fillRect(-17,huefte-12,34,3);}
   ctx.fillStyle=K.schrift;ctx.textAlign='center';ctx.textBaseline='middle';
-  ctx.font='800 7px Inter,system-ui,sans-serif';ctx.fillText(K.name,0,schulter+9);
+  ctx.font='800 '+(K.name.length>5?6:7)+'px Inter,system-ui,sans-serif';ctx.fillText(K.name,0,schulter+9);
   ctx.font='900 22px Inter,system-ui,sans-serif';ctx.fillText(K.nr,0,schulter+26);
   /* Kopf von hinten */
   ctx.save();ctx.translate(0,schulter-14);ctx.rotate(kopf);
@@ -125,7 +127,12 @@ function schuetze(ctx,X,Y,k,wer,o){
     ctx.fillStyle=K.haut;ctx.beginPath();ctx.ellipse(-13,-1,3,4.5,0,0,TAU);ctx.ellipse(13,-1,3,4.5,0,0,TAU);ctx.fill();
     ctx.beginPath();ctx.arc(0,-2,12.5,0,TAU);ctx.fill();
     ctx.fillStyle=K.haar;
-    if(wer==='popp'){
+    if(wer==='ronaldo'){
+      /* kurz, an den Seiten noch kuerzer, oben etwas voller */
+      ctx.beginPath();ctx.arc(0,-3.5,13,Math.PI*0.95,Math.PI*2.05);ctx.lineTo(11.5,1);ctx.quadraticCurveTo(0,4,-11.5,1);ctx.closePath();ctx.fill();
+      ctx.beginPath();ctx.ellipse(0,-13,11,5,0,Math.PI,0);ctx.fill();
+      ctx.strokeStyle='rgba(255,255,255,.12)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(-3,-17);ctx.quadraticCurveTo(-1,-8,-2,0);ctx.stroke();
+    }else if(wer==='popp'){
       /* blondes Haar, straff nach hinten, Dutt mit Haargummi */
       ctx.beginPath();ctx.arc(0,-3,13,Math.PI*0.9,Math.PI*2.1);ctx.lineTo(11,4);ctx.quadraticCurveTo(0,8,-11,4);ctx.closePath();ctx.fill();
       ctx.strokeStyle='rgba(120,85,30,.35)';ctx.lineWidth=1;for(const sx of [-8,-3,3,8]){ctx.beginPath();ctx.moveTo(sx,4);ctx.quadraticCurveTo(sx*0.5,-6,0,-11);ctx.stroke();}
