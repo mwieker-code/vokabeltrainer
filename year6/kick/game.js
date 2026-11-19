@@ -306,7 +306,7 @@ function showPlayers(){
   const box=$('players');if(!box)return;
   const missing=Math.max(0,UNLOCK-totalTours());
   const knopf=(id,name,frei,info)=>'<button data-player="'+id+'" aria-pressed="'+(player()===id)+'"'+(frei?'':' disabled')+'><canvas class="p-bild" width="120" height="132" aria-hidden="true"></canvas><span>'+name+(info?'<small>'+info+'</small>':'')+'</span></button>';
-  box.innerHTML=knopf('leo','Leo',true,'Nr. 9')+knopf('mia','Mia',true,'Nr. 10')+knopf('messi','Messi (GOAT)',true,'Nr. 10')+knopf('ronaldo','Ronaldo (CR7)',true,'Nr. 7')+knopf('popp','Popp',true,'Nr. 11')+knopf('flash','Flash',unlocked(),unlocked()?'der Fuchs':'noch '+missing+'× Tour');
+  box.innerHTML=knopf('leo','Leo',true,'Nr. 9')+knopf('mia','Mia',true,'Nr. 10')+knopf('messi','Messi',true,'Nr. 10')+knopf('ronaldo','Ronaldo (CR7)',true,'Nr. 7')+knopf('popp','Popp',true,'Nr. 11')+knopf('flash','Flash',unlocked(),unlocked()?'der Fuchs':'noch '+missing+'× Tour');
   box.querySelectorAll('[data-player]').forEach(b=>{
     b.onclick=()=>{if(b.disabled)return;saved.player=b.dataset.player;save();showPlayers();};
     vorschau(b.querySelector('canvas'),b.dataset.player);

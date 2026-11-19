@@ -34,7 +34,7 @@ ok(d.querySelectorAll('#players [data-player]').length===6,'sechs Spieler zur Wa
  pp.click();ok(S.player()==='popp'&&JSON.parse(w.localStorage.getItem('vt6:kick:v1')).player==='popp','Popp gewaehlt und gespeichert');
  ok(w.Spieler.KADER.popp.name==='POPP'&&w.Spieler.KADER.popp.nr==='11'&&w.Spieler.KADER.popp.flammen&&w.Spieler.KADER.popp.binde,'Trikot: POPP, 11, Schulterflammen, Kapitaensbinde');}
 {const m=d.querySelector('[data-player="messi"]');
- ok(!m.disabled&&/Messi \(GOAT\)/.test(m.textContent)&&/Nr\. 10/.test(m.textContent),'Messi (GOAT) mit Nr. 10 sofort waehlbar');
+ ok(!m.disabled&&/Messi/.test(m.textContent)&&!/GOAT/.test(m.textContent)&&/Nr\. 10/.test(m.textContent),'Messi mit Nr. 10 sofort waehlbar');
  m.click();ok(S.player()==='messi'&&JSON.parse(w.localStorage.getItem('vt6:kick:v1')).player==='messi','Messi gewaehlt und gespeichert');
  ok(w.Spieler.KADER.messi.name==='MESSI'&&w.Spieler.KADER.messi.nr==='10'&&w.Spieler.KADER.messi.streifen,'Trikot: MESSI, 10, gestreift');
  d.querySelector('[data-player="leo"]').click();}
