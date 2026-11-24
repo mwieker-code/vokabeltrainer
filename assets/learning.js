@@ -110,6 +110,10 @@
       wrap.innerHTML='<button class="topic pv-blitz-start" id="startBlitz">Blitzrunde – 60 Sekunden<br><span class="t-count">So viele Vokabeln wie möglich in einer Minute</span></button>';
       view.querySelector('.scope-options').after(wrap);
       document.getElementById('startBlitz').onclick=()=>startBlitz(topicId);
+      if(hoerenMoeglich()&&hoerPool(words).length>=4){
+        wrap.insertAdjacentHTML('beforeend','<button class="topic hr-start" id="startHoeren">Hörrunde – 10 Wörter<br><span class="t-count">Die Seite spricht ein Wort, du schreibst es auf</span></button>');
+        document.getElementById('startHoeren').onclick=()=>startHoeren(topicId);
+      }
     }
   }
   window.addEventListener('pagehide',checkpoint);
@@ -1180,6 +1184,168 @@ ${vocabulary}`;
     render();
   }
   /* =========================================================================
+     HOERRUNDE
+     Die Seite spricht ein Wort, man schreibt es auf. Zehn Woerter aus der
+     gewaehlten Auswahl; jedes laesst sich wieder und langsamer anhoeren.
+     Geprueft wird wie beim Tippen DE -> EN, ein kleiner Tippfehler ist
+     "fast". Wie die Blitzrunde ohne Lernfaecher. Uebernommen aus Camp de
+     Base, dem Franzoesisch-Trainer.
+
+     Gesprochen wird nur aus einem Tipp heraus (Start, Weiter, Anhoeren),
+     nie aus einem Zeitgeber: iOS spielt sonst nichts ab. Ohne englische
+     Stimme gibt es die Runde nicht.
+
+     Nicht abgefragt werden Eintraege mit Schraegstrich, Klammer,
+     Doppelpunkt oder Auslassungspunkten ("he/she/it", "AE: ...",
+     "by ...") und lange Wendungen - beim Hoeren laesst sich nicht
+     erraten, welche Variante oder welcher Teil gemeint ist. "(to)" und
+     sb./sth. werden nicht gesprochen.
+     ========================================================================= */
+  const sprechbarEn=text=>String(text).replace(/^\(to\)\s*/i,'').replace(/^to\s+/i,'')
+    .replace(KUERZEL,' ').replace(/\s+/g,' ').trim();
+  const hoerbar=v=>{
+    const roh=String(v.en||'');
+    if(/\b(?:sb|sth)'s\b/i.test(roh))return false;
+    const t=sprechbarEn(roh);
+    return !!t&&!/[\/…:()]|\.\.\./.test(t)&&t.split(' ').length<=4&&t.length<=32;
+  };
+  const hoerPool=woerter=>woerter.filter(hoerbar);
+  /* Auf iOS ist die Stimmenliste anfangs leer - dann wird die Runde
+     angeboten. Ausgeblendet wird sie nur, wenn das Geraet Stimmen meldet,
+     aber keine englische: Dann laese eine fremde Stimme vor. */
+  const hoerenMoeglich=()=>{
+    if(typeof Speech==='undefined'||!Speech.available||!synth)return false;
+    let alle=[];try{alle=synth.getVoices()||[];}catch(e){}
+    return !alle.length||enVoices().length>0;
+  };
+  /* Die Hoerrunde spricht selbst, statt Speech.say zu nehmen: Dort ist
+     ein Tipp waehrend des Sprechens ein Stopp. Auf iOS meldet die Stimme
+     aber manchmal noch "spricht", wenn sie laengst fertig ist - dann tat
+     "Langsam" gar nichts. Hier wird abgebrochen und nach einer kurzen
+     Pause neu gesprochen (cancel() direkt vor speak() liesse iOS stumm).
+
+     Langsam: In Camp de Base am iPhone gemessen (iOS 18, Stimme Thomas) dauerte ein Satz
+     bei Tempo 1 2,9 s, bei 0,5 3,8 s, bei 0,3 4,1 s - unter 1 bremst iOS
+     kaum noch. Deshalb das langsamste Tempo und dazu eine kurze Pause
+     zwischen den Woertern ("look, forward, to"). */
+  const TEMPO_NORMAL=0.9,TEMPO_LANGSAM=0.1;
+  /* Kurze Pause (Komma) zwischen den Woertern, laengere (Punkt) zwischen
+     Gruppen, die schon ein Komma trennt: "swing. swung. swung". */
+  const mitWortpausen=t=>t.split(/\s*,\s*/).map(g=>g.split(/\s+/).filter(Boolean).join(', ')).filter(Boolean).join('. ');
+  let sprichUhr=null;
+  function sprich(text,langsam,btn){
+    if(!synth||typeof SpeechSynthesisUtterance==='undefined')return;
+    const los=()=>{
+      sprichUhr=null;
+      try{
+        const gesagt=sprechbarEn(text);
+        const u=new SpeechSynthesisUtterance(langsam?mitWortpausen(gesagt):gesagt);
+        const voice=chosenVoice();
+        u.lang='en-GB';
+        if(voice){ try{ u.voice=voice; u.lang=voice.lang||'en-GB'; }catch(e){} }
+        u.rate=langsam?TEMPO_LANGSAM:TEMPO_NORMAL;
+        document.querySelectorAll('.hr-hoeren.on').forEach(b=>b.classList.remove('on'));
+        if(btn)btn.classList.add('on');
+        u.onend=u.onerror=()=>{ if(btn)btn.classList.remove('on'); };
+        synth.speak(u);
+        if(synth.paused){ try{ synth.resume(); }catch(e){} }
+      }catch(e){ if(btn)btn.classList.remove('on'); }
+    };
+    if(sprichUhr){clearTimeout(sprichUhr);sprichUhr=null;}
+    let laeuft=false;
+    try{ laeuft=synth.speaking||synth.pending; }catch(e){}
+    if(laeuft){ try{ synth.cancel(); }catch(e){} sprichUhr=setTimeout(los,250); }
+    else los();
+  }
+
+  function startHoeren(topicId,woerter){
+    const pool=hoerPool(woerter||wordsFor(topicId));
+    if(!pool.length)return;
+    S.hr={topicId,eigene:!!woerter,woerter:shuffle(pool).slice(0,10),i:0,antwort:null,falsch:[],richtig:[]};
+    S.view='hoeren';
+    render();
+    sprich(S.hr.woerter[0].en);
+  }
+  function renderHoeren(){
+    const hr=S.hr;
+    if(!hr){S.view='home';return render();}
+    if(hr.i>=hr.woerter.length)return renderHoerenDone();
+    const v=hr.woerter[hr.i],r=hr.antwort;
+    const grund=r&&r.ergebnis==='near'?'Fast – ein kleiner Tippfehler':'';
+    const urteil=!r?'':'<div class="hr-loesung '+r.ergebnis+'">'
+      +(r.ergebnis==='ok'?'✓ Richtig':r.ergebnis==='near'?grund:'✗ Gesprochen wurde')
+      +': <b lang="en">'+safe(v.en)+'</b><span class="hr-de">'+safe(v.de)+'</span></div>';
+    view.innerHTML='<div class="sessionbar"><button class="linkbtn" id="back">← Übersicht</button>'
+      +'<div class="switches"><span class="switch pv-tag" aria-disabled="true">Hörrunde</span></div></div>'
+      +'<div class="round-progress"><span>'+(hr.i+1)+' / '+hr.woerter.length+'</span>'
+      +'<progress max="'+hr.woerter.length+'" value="'+hr.i+'"></progress></div>'
+      +'<div class="stage"><div class="vcard deal hr-karte">'
+      +'<h2 class="prompt hr-frage">Was hörst du?</h2>'
+      +'<div class="hr-knoepfe"><button type="button" class="hr-hoeren" id="hrNochmal" aria-label="Noch einmal anhören">'+SPK+'<span>Anhören</span></button>'
+      +'<button type="button" class="hr-hoeren hr-langsam" id="hrLangsam" aria-label="Langsam anhören">'+SPK+'<span>Langsam</span></button></div>'
+      +'<div class="typebox"><input id="typeIn" lang="en" placeholder="English word" aria-label="Was du gehört hast, auf Englisch" autocomplete="off" autocapitalize="off" spellcheck="false"'
+      +(r?' disabled value="'+safe(r.eingabe)+'"':'')+'></div>'
+      +urteil+'</div></div>'
+      +'<div class="controls">'+(r?'<button class="primary" id="hrWeiter">Weiter (Enter)</button>'
+        :'<button class="primary" id="submit">Prüfen (Enter)</button>')+'</div>';
+    document.getElementById('back').onclick=exitHoeren;
+    document.getElementById('hrNochmal').onclick=e=>sprich(v.en,false,e.currentTarget);
+    document.getElementById('hrLangsam').onclick=e=>sprich(v.en,true,e.currentTarget);
+    const feld=document.getElementById('typeIn');
+    if(!r){
+      document.getElementById('submit').onclick=hoerenPruefen;
+      feld.onkeydown=e=>{ if(e.key==='Enter'){ e.preventDefault(); e.stopPropagation(); hoerenPruefen(); } };
+      try{feld.focus({preventScroll:true});}catch(e){}
+    } else document.getElementById('hrWeiter').onclick=hoerenWeiter;
+  }
+  function hoerenPruefen(){
+    const hr=S.hr;if(!hr||hr.antwort)return;
+    const feld=document.getElementById('typeIn'),eingabe=feld?feld.value:'';
+    const v=hr.woerter[hr.i];
+    /* Leeres Feld: noch einmal hoeren statt pruefen. */
+    if(!eingabe.trim()){sprich(v.en);return;}
+    const ergebnis=checkTyped(eingabe,v.en);
+    hr.antwort={eingabe,ergebnis};
+    (ergebnis==='ok'?hr.richtig:hr.falsch).push(v);
+    lerntagZaehlen();
+    render();
+    window.LearningFeedback?.signal(ergebnis);
+  }
+  function hoerenWeiter(){
+    const hr=S.hr;if(!hr||!hr.antwort)return;
+    hr.antwort=null;hr.i++;
+    render();
+    if(hr.i<hr.woerter.length)sprich(hr.woerter[hr.i].en);
+  }
+  function exitHoeren(){ try{ if(synth&&(synth.speaking||synth.pending))synth.cancel(); }catch(e){} S.hr=null; home(); }
+  function renderHoerenDone(){
+    const hr=S.hr,falsch=[...new Set(hr.falsch)],richtig=[...new Set(hr.richtig)].filter(v=>!falsch.includes(v));
+    view.innerHTML='<div class="done"><div class="summary-number">'+hr.richtig.length+' / '+hr.woerter.length+'</div><h2>Hörrunde geschafft</h2>'
+      +'<p>'+hr.richtig.length+' Wörter richtig aufgeschrieben, '+hr.falsch.length+' zum Weiterüben</p>'+rueckblick(falsch,richtig)
+      +'<div class="controls"><button class="primary" id="hrNeu">Neue Hörrunde</button><button id="hrHome">Zur Übersicht</button></div></div>';
+    document.getElementById('hrNeu').onclick=()=>startHoeren(hr.topicId,hr.eigene?hr.woerter:null);
+    document.getElementById('hrHome').onclick=exitHoeren;
+    const ueben=document.getElementById('missedPractice');
+    if(ueben){
+      ueben.textContent=falsch.length===1?'Dieses Wort noch einmal hören':'Diese '+falsch.length+' Wörter noch einmal hören';
+      ueben.onclick=()=>startHoeren(hr.topicId,falsch);
+    }
+    window.LearningFeedback?.tone('done');
+  }
+
+  const vorHoeren=render;
+  render=function(){
+    if(S.view==='hoeren')return renderHoeren();
+    return vorHoeren();
+  };
+  document.addEventListener('keydown',e=>{
+    if(e.defaultPrevented||e.altKey||e.ctrlKey||e.metaKey)return;
+    if(S.view==='hoeren'&&S.hr&&S.hr.antwort&&e.key==='Enter'&&!(e.target&&e.target.tagName==='BUTTON')){
+      e.preventDefault();hoerenWeiter();
+    }
+  });
+
+  /* =========================================================================
      LERNAUFTRAG  –  eine Vokabelauswahl als Link weitergeben.
      Der Link trägt die Auswahl selbst (Bitmaske über alle Wörter des
      Jahrgangs, lauflängenkodiert) und eine Prüfsumme des Vokabulars. Ändert
@@ -1686,7 +1852,7 @@ ${vocabulary}`;
     const antwortsprache = () =>
       /* In der Blitzrunde steht immer Deutsch da und Englisch wird
          getippt, ganz gleich, was in der Runde eingestellt war. */
-      S.view === 'pvblitz' ? 'en'
+      (S.view === 'pvblitz' || S.view === 'hoeren') ? 'en'
         : S.mode === 'cloze' ? 'en' : (S.dir === 'en2de' ? 'de' : 'en');
     const belegung = () => wahl || antwortsprache();
 
@@ -1750,7 +1916,7 @@ ${vocabulary}`;
         Math.round(feld.offsetTop + (feld.offsetHeight - hoehe) / 2) + 'px');
       box.style.setProperty('--eb-marke-links', Math.round(feld.offsetLeft) + 'px');
     }
-    const tippt = () => (S.view === 'session' || blitz()) && !!feldVon();
+    const tippt = () => (S.view === 'session' || blitz() || S.view === 'hoeren') && !!feldVon();
 
     /* Die Karte stand oben, das Tastenfeld unten, dazwischen bis zu 301
        Punkte Leere - der Blick musste ueber den halben Bildschirm
@@ -2047,7 +2213,7 @@ ${vocabulary}`;
          Dann gibt es nichts mehr zu pflegen. */
       if(typeof document === 'undefined' || !document.body) return;
       document.body.classList.toggle('eb-app', alsApp());
-      const runde = klein.matches && (S.view === 'session' || blitz());
+      const runde = klein.matches && (S.view === 'session' || blitz() || S.view === 'hoeren');
       document.body.classList.toggle('eb-runde', runde);
 
       /* Der Richtungsschalter zieht auf dem Telefon in die
