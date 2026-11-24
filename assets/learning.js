@@ -1229,7 +1229,9 @@ ${vocabulary}`;
      kaum noch. Deshalb das langsamste Tempo und dazu eine kurze Pause
      zwischen den Woertern ("look, forward, to"). */
   const TEMPO_NORMAL=0.9,TEMPO_LANGSAM=0.1;
-  const mitWortpausen=t=>t.split(/[\s,]+/).filter(Boolean).join(', ');
+  /* Kurze Pause (Komma) zwischen den Woertern, laengere (Punkt) zwischen
+     Gruppen, die schon ein Komma trennt: "swing. swung. swung". */
+  const mitWortpausen=t=>t.split(/\s*,\s*/).map(g=>g.split(/\s+/).filter(Boolean).join(', ')).filter(Boolean).join('. ');
   let sprichUhr=null;
   function sprich(text,langsam,btn){
     if(!synth||typeof SpeechSynthesisUtterance==='undefined')return;

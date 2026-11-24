@@ -54,13 +54,20 @@ for(const folder of ['year5','year6','year7','year8','year9','year10']){
   await warte(320);
   assert.equal(s.gesprochen.length,vorher+1,folder+': danach wird langsam neu gesprochen');
   assert.equal(s.gesprochen.at(-1).rate,0.1,folder+': langsam ist das langsamste Tempo');
+  /* Fest: ein Eintrag mit Komma-Gruppen (unregelmaessige Verben) */
+  {const alt=s.lauf('JSON.stringify(S.hr.woerter[0])');
+   s.lauf("S.hr.woerter[0]={en:'(to) swing, swung, swung',de:'schwingen'};S.hr.i=0;S.hr.antwort=null;render()");
+   s.d.getElementById('hrLangsam').click();assert.equal(s.gesprochen.at(-1).text,'swing. swung. swung',folder+': Gruppenpausen');
+   s.d.getElementById('hrNochmal').click();assert.equal(s.gesprochen.at(-1).text,'swing, swung, swung',folder+': normal unveraendert');
+   s.lauf('S.hr.woerter[0]='+alt+';render()');}
   /* Mehrteilige Eintraege bekommen langsam Pausen zwischen den Woertern */
   {const mehr=woerter.find(v=>/\s/.test(v.en.replace(/^\(to\)\s*/i,'').replace(/^to\s+/i,'').replace(/\b(?:sb|sth)\b\.?/gi,'').trim()));
    if(mehr){s.lauf('S.hr.i='+woerter.indexOf(mehr)+';render()');s.d.getElementById('hrLangsam').click();
      const langsam=s.gesprochen.at(-1).text;
      s.d.getElementById('hrNochmal').click();
-     const pausen=t=>(t.match(/, /g)||[]).length;
-     assert.ok(pausen(langsam)>pausen(s.gesprochen.at(-1).text),folder+': Wortpausen nur bei Langsam ('+mehr.en+')');
+     const normal=s.gesprochen.at(-1).text;
+     /* Langsam: hinter jedem Wort eine Pause; normal klingt anders */
+     assert.ok(langsam!==normal&&langsam.split(' ').slice(0,-1).every(w=>/[,.]$/.test(w)),folder+': Wortpausen nur bei Langsam ('+mehr.en+': '+langsam+' / '+normal+')');
      s.lauf('S.hr.i=0;render()');}}
   for(let i=0;i<10;i++){
     const v=woerter[i];
