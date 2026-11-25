@@ -83,8 +83,9 @@ const e0=G.liste[0];
 ok(S.oeffneWare(e0.id)&&!d.getElementById('ware').hidden,'Ware ansehen');
 d.getElementById('wNehmen').click();
 ok(G.korb[e0.id]===1&&d.querySelector('#zListe li.ok'),'in den Korb, Zeile abgehakt');
-S.nehmen('cake',1);ok(d.querySelector('#zListe li.extra'),'falsche Ware wird markiert');
-S.weglegen('cake');ok(!G.korb.cake,'zuruecklegen');
+const fremd=DAT.WAREN.find(x=>!G.liste.some(e=>e.id===x.id)).id;
+S.nehmen(fremd,1);ok(d.querySelector('#zListe li.extra'),'falsche Ware wird markiert');
+S.weglegen(fremd);ok(!G.korb[fremd],'zuruecklegen');
 /* Kasse mit unvollstaendiger Liste fragt nach */
 ok(!S.kasseOeffnen()&&/fehlt noch etwas/.test(d.getElementById('kasse').textContent),'Rueckfrage bei fehlenden Sachen');
 for(const e of G.liste)G.korb[e.id]=e.n;S.zettel();
