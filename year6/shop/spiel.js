@@ -597,6 +597,9 @@ function padStandard(b){const z=padZiele(b);return z.find(e=>e.matches('.primaer
 function padFokus(e){
  document.querySelectorAll('.pad-fokus').forEach(x=>x.classList.remove('pad-fokus'));
  PAD.fokus=e||null;PAD.fokusZeit=uhr();
+ /* Beim Geldzaehlen merken, an welcher Stelle man war - nach dem Antippen
+    wird die Muenzleiste neu gezeichnet */
+ PAD.geldStelle=e&&e.dataset&&e.dataset.geld!==undefined?[...e.parentNode.querySelectorAll('[data-geld]')].indexOf(e):null;
  if(e){e.classList.add('pad-fokus');try{e.focus({preventScroll:true});}catch(_){}try{e.scrollIntoView&&e.scrollIntoView({block:'nearest'});}catch(_){}}
 }
 function padSchritt(liste,d){if(!liste.length)return;let i=liste.indexOf(PAD.fokus);if(i<0)i=d>0?-1:liste.length;padFokus(liste[(i+d+liste.length)%liste.length]);}
@@ -616,7 +619,13 @@ function padTick(){
  if(b!==PAD.bereich){PAD.bereich=b;padFokus(b&&b.id!=='menu'&&b.id!=='over'||b&&neu.size?padStandard(b):null);return;}
  if(b){
   const z=padZiele(b);
-  if(PAD.fokus&&(!b.contains(PAD.fokus)||!sichtbar(PAD.fokus)))padFokus(b.id==='menu'||b.id==='over'?null:padStandard(b));
+  if(PAD.fokus&&(!b.contains(PAD.fokus)||!sichtbar(PAD.fokus))){
+   let wieder=null;
+   if(PAD.geldStelle!=null){const zahlen=$('kZahlen');
+    if(zahlen&&sichtbar(zahlen))wieder=zahlen;   // genug Geld auf der Theke: gleich zum Bezahlen
+    else{const g=[...b.querySelectorAll('[data-geld]')].filter(sichtbar);wieder=g[Math.min(PAD.geldStelle,g.length-1)]||null;}}
+   padFokus(wieder||(b.id==='menu'||b.id==='over'?null:padStandard(b)));
+  }
   const hoch=neu.has(KN.HOCH)||neu.has(KN.LINKS)||neu.has(KN.LB),runter=neu.has(KN.RUNTER)||neu.has(KN.RECHTS)||neu.has(KN.RB);
   if((hoch||runter)&&!PAD.fokus){padFokus(padStandard(b));return;}
   if(hoch)padSchritt(z,-1);
@@ -632,6 +641,8 @@ function padTick(){
  if(neu.has(KN.LB)||neu.has(KN.RB))padSchritt(hud,neu.has(KN.RB)?1:-1);
  if(neu.has(KN.A)){
   if(PAD.fokus&&hud.includes(PAD.fokus)&&uhr()-PAD.fokusZeit<6){const f=PAD.fokus;padFokus(null);f.click();}
+  /* vor der Kasse: Kreuz/A bezahlt */
+  else if(G.zustand==='laden'&&L.inKassenZone(welt,G.p)&&['liste','hoeren','budget'].includes(G.modus)&&!L.blickTreffer(welt,G.p,GREIF))kasseOeffnen();
   else if(G.zustand==='laden'||G.zustand==='frei'||(G.duell&&G.duell.phase==='suche'))nehmenMitte();
  }
  if(neu.has(KN.Y)&&$('korbKnopf')&&!$('korbKnopf').hidden)zeigeKorb();
@@ -762,7 +773,8 @@ function schleife(jetzt){
  const dt=(jetzt-zuletzt)/1000;zuletzt=jetzt;
  if(G.zustand!=='menu'&&G.zustand!=='ende'){
   update(dt);
-  const kb=$('zurKasse');if(kb){const an=G.zustand==='laden'&&(G.modus==='liste'||G.modus==='hoeren'||G.modus==='budget')&&L.inKassenZone(welt,G.p);kb.hidden=!an;}
+  const kb=$('zurKasse');if(kb){const an=G.zustand==='laden'&&(G.modus==='liste'||G.modus==='hoeren'||G.modus==='budget')&&L.inKassenZone(welt,G.p);kb.hidden=!an;
+   const t='🛒 Bezahlen an Kasse 1'+(PAD.stand.length?' (✕ / A)':'');if(an&&kb.textContent!==t)kb.textContent=t;}
   if(G.duell){const u=$('dUhr'),v=String(Math.ceil(Math.max(0,G.duell.rest)));if(u&&u.textContent!==v){if(G.duell.phase==='suche'&&+v<=10&&+v>0)sfx('tick');u.textContent=v;u.classList.toggle('knapp',G.duell.phase==='suche'&&G.duell.rest<=15);}}
   hinweis();geraeuscheImLaden();
   const leute=G.leute?G.leute.leute:[];
