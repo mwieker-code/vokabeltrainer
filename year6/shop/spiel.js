@@ -779,7 +779,7 @@ function schleife(jetzt){
   hinweis();geraeuscheImLaden();
   const leute=G.leute?G.leute.leute:[];
   if(R&&G.split&&G.p2)R.frame({t:G.t,leute,views:[{x:G.p.x,z:G.p.z,yaw:G.p.yaw,pitch:G.p.pitch,hover:G.hover},{x:G.p2.x,z:G.p2.z,yaw:G.p2.yaw,pitch:G.p2.pitch,hover:G.hover2}]});
-  else if(R)R.frame({leute,x:G.p.x,z:G.p.z,yaw:G.p.yaw,pitch:G.p.pitch,t:G.t,bob:Math.sin(G.schritt*5.2)*0.03,hover:G.ware?welt.plaetze.find(p=>p.id===G.ware.id):G.hover});
+  else if(R)R.frame({leute,kasse:G.zustand==='kasse',x:G.p.x,z:G.p.z,yaw:G.p.yaw,pitch:G.p.pitch,t:G.t,bob:Math.sin(G.schritt*5.2)*0.03,hover:G.ware?welt.plaetze.find(p=>p.id===G.ware.id):G.hover});
   zeichneKarte($('karte'));
   if(!$('grosskarte').hidden)zeichneKarte($('grosskarte').querySelector('canvas'),true);
  }

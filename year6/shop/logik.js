@@ -80,20 +80,24 @@ function bauen(daten){
 function frei(welt,x,z,r,leute){
  r=r===undefined?welt.R:r;
  for(const h of welt.hin)if(x>h.x1-r&&x<h.x2+r&&z>h.z1-r&&z<h.z2+r)return false;
- if(leute)for(const q of leute)if(Math.hypot(x-q.x,z-q.z)<r+0.26)return false;
+ if(leute)for(const q of leute){if(Math.hypot(x-q.x,z-q.z)<r+0.26)return false;
+  if(q.wagen){const w=wagenPunkt(q);if(Math.hypot(x-w.x,z-w.z)<r+0.38)return false;}}
  return true;
 }
 /* Schritt mit Gleiten an Kanten: erst x, dann z. leute: Personen, durch die
    man nicht hindurchlaeuft (wer schon drinsteht, kommt wieder heraus). */
 function bewegen(welt,p,dx,dz,leute){
  const n=Math.max(1,Math.ceil(Math.hypot(dx,dz)/0.1));
- const nah=leute?leute.filter(q=>Math.hypot(p.x-q.x,p.z-q.z)>=welt.R+0.26):null;
+ const nah=leute?leute.filter(q=>Math.hypot(p.x-q.x,p.z-q.z)>=welt.R+0.26&&(!q.wagen||Math.hypot(p.x-wagenPunkt(q).x,p.z-wagenPunkt(q).z)>=welt.R+0.38)):null;
  for(let i=0;i<n;i++){
   const nx=p.x+dx/n;if(frei(welt,nx,p.z,undefined,nah))p.x=nx;
   const nz=p.z+dz/n;if(frei(welt,p.x,nz,undefined,nah))p.z=nz;
  }
  return p;
 }
+
+/* Mitte des Einkaufswagens, den eine Person vor sich herschiebt */
+function wagenPunkt(q){return {x:q.x+Math.sin(q.yaw)*0.72,z:q.z-Math.cos(q.yaw)*0.72};}
 
 /* ---------- Kundschaft im Laden ----------
    Laeuft auf festen Bahnen: senkrecht durch die Gaenge, waagrecht vorn und
@@ -115,29 +119,41 @@ function kundschaft(welt,anzahl,rnd){
  rnd=rnd||Math.random;const B=bahnen(),out=[];
  for(let k=0;k<anzahl;k++){
   const start=(k*7+3)%B.knoten.length,n=B.knoten[start];
-  out.push({nr:k,x:n.x,z:n.z,yaw:0,knoten:start,ziel:B.kanten[start][0],vorher:-1,warte:1+rnd()*3,geht:false,tempo:0.75+rnd()*0.35,phase:rnd()*6});
+  out.push({nr:k,look:k,x:n.x,z:n.z,yaw:0,knoten:start,ziel:B.kanten[start][0],vorher:-1,warte:1+rnd()*3,geht:false,tempo:0.75+rnd()*0.35,phase:rnd()*6,wagen:k===1});
  }
+ /* ein Kind laeuft hinter einer Erwachsenen her */
+ const leit=anzahl>5?5:0;
+ if(anzahl>0)out.push({nr:anzahl,look:6,folgt:leit,x:out[leit].x,z:out[leit].z+0.7,yaw:0,geht:false,phase:0});
  /* eine Person steht fest am Blumenstand */
- out.push({nr:anzahl,x:26.05,z:20.5,yaw:Math.PI/2,fest:true,geht:false,phase:0});
+ out.push({nr:anzahl+1,look:7,x:26.05,z:20.5,yaw:Math.PI/2,fest:true,geht:false,phase:0});
  return {B,leute:out};
 }
 function kundschaftSchritt(welt,K,dt,spieler,rnd){
  rnd=rnd||Math.random;
  for(const q of K.leute){
   if(q.fest){q.geht=false;continue;}
-  if(q.warte>0){q.warte-=dt;q.geht=false;continue;}
+  if(q.folgt!=null){const l=K.leute.find(o=>o.nr===q.folgt);if(!l)continue;
+   const zx=l.x-Math.sin(l.yaw)*0.7+Math.cos(l.yaw)*0.32,zz=l.z+Math.cos(l.yaw)*0.7+Math.sin(l.yaw)*0.32,d=Math.hypot(zx-q.x,zz-q.z);
+   let geht=false;
+   if(d>0.02){const s=Math.min(d,1.6*dt),nx=q.x+(zx-q.x)/d*s,nz=q.z+(zz-q.z)/d*s;
+    /* nicht in andere hinein (auch nicht in die eigene Begleitung) */
+    const frei2=K.leute.every(o=>o===q||Math.hypot(nx-o.x,nz-o.z)>=0.5||Math.hypot(q.x-o.x,q.z-o.z)<Math.hypot(nx-o.x,nz-o.z))&&spieler.every(p=>!p||Math.hypot(nx-p.x,nz-p.z)>=0.6);
+    if(frei2&&frei(welt,nx,nz,0.15)){q.x=nx;q.z=nz;q.phase+=s*5.5;geht=d>0.05;}}
+   q.geht=geht;q.yaw=l.yaw;q.greift=false;continue;}
+  if(q.warte>0){q.warte-=dt;q.geht=false;if(q.warte<=0)q.greift=false;continue;}
   const z=K.B.knoten[q.ziel],dx=z.x-q.x,dz=z.z-q.z,d=Math.hypot(dx,dz);
   if(d<0.05){
    q.vorher=q.knoten;q.knoten=q.ziel;
    const nb=K.B.kanten[q.knoten],wahl=nb.filter(i=>i!==q.vorher);
    q.ziel=(wahl.length?wahl:nb)[Math.floor(rnd()*(wahl.length||nb.length))];
+   q.greift=false;
    if(rnd()<0.35){q.warte=2+rnd()*3;
-    /* im Gang: zum Regal drehen */
-    if(z.j===1&&z.i>0)q.yaw=rnd()<0.5?Math.PI/2:-Math.PI/2;}
+    /* im Gang: zum Regal drehen und etwas herausnehmen */
+    if(z.j===1&&z.i>0){q.yaw=rnd()<0.5?Math.PI/2:-Math.PI/2;q.greift=!q.wagen;q.griffStart=q.warte;}}
    continue;
   }
   const s=Math.min(d,q.tempo*dt),nx=q.x+dx/d*s,nz=q.z+dz/d*s;
-  const blockiert=spieler.some(p=>p&&Math.hypot(nx-p.x,nz-p.z)<0.75)||K.leute.some(o=>o!==q&&Math.hypot(nx-o.x,nz-o.z)<0.6&&Math.hypot(q.x-o.x,q.z-o.z)>=Math.hypot(nx-o.x,nz-o.z));
+  const blockiert=spieler.some(p=>p&&Math.hypot(nx-p.x,nz-p.z)<0.75)||K.leute.some(o=>o!==q&&Math.hypot(nx-o.x,nz-o.z)<(o.folgt===q.nr?0.34:0.6)&&Math.hypot(q.x-o.x,q.z-o.z)>=Math.hypot(nx-o.x,nz-o.z));
   q.yaw=Math.atan2(dx,-dz);
   if(blockiert){q.geht=false;q.stau=(q.stau||0)+dt;
    /* zu lange im Stau: umdrehen und zurueck */
@@ -374,5 +390,5 @@ function erreichbar(welt,schritt){
 window.ShopLogik={bauen,frei,bewegen,inKassenZone,richtung,strahl,strahlBox,treffer,blickTreffer,
  betrag,preis,gross,menge,zufall,mischen,liste,korbAnzahl,korbSumme,listeStand,budgetStand,minimum,vergleiche,
  wechselOptionen,bezahlt,kassenSchritte,duellAufgaben,duellPunkte,wo,ORTFARBE,bon,sterne,erreichbar,AUGE,ZAHL,
- bahnen,kundschaft,kundschaftSchritt,bereich,istPlural,nachbarn,nachbarText,lageSatz,kundenFrage,lageOptionen,raetsel,rezeptStand};
+ bahnen,kundschaft,kundschaftSchritt,wagenPunkt,bereich,istPlural,nachbarn,nachbarText,lageSatz,kundenFrage,lageOptionen,raetsel,rezeptStand};
 })();

@@ -124,7 +124,7 @@ export function init(canvas,welt,opts={}){
  const fuell=new THREE.DirectionalLight(0xDCE6FF,0.35);fuell.position.set(12,9,-10);scene.add(fuell);
  const glanz=(o)=>schoen?new THREE.MeshPhongMaterial(Object.assign({shininess:28,specular:0x1c1c1c},o)):new THREE.MeshLambertMaterial(o);
  const matFarbe=glanz({vertexColors:true});
- const S=new Sammler();           // alles Farbige
+ const S=new Sammler(),S0=S;      // alles Farbige
  const LEUCHT=new Sammler();      // Deckenlampen, Kuehlregal-Licht
  const GLAS=new Sammler();        // Scheiben
  const WAND=new Sammler();        // Waende (Putz)
@@ -505,8 +505,8 @@ export function init(canvas,welt,opts={}){
 
 
  /* ===== Einkaufswagen am Eingang ===== */
- function wagen(x,z,ry){
-  const T=mat(x,0,z,1,1,1,0,ry,0),dr='#C9CED3';
+ function wagen(x,z,ry,ziel){
+  const S=ziel||S0,T=mat(x,0,z,1,1,1,0,ry,0),dr='#C9CED3';
   const wb=(cx,cy,cz,sx,sy,sz,f,rx)=>S.add(V.box,T.clone().multiply(mat(cx,cy,cz,sx,sy,sz,rx||0,0,0)),f||dr);
   const d=0.012,B2=0.26,z1=-0.4,z2=0.45,y1=0.45,y2=0.9;
   for(const y of [y1,y2,0.67])for(const sx of [-1,1])wb(sx*B2,y,(z1+z2)/2,d,d,z2-z1);
@@ -575,28 +575,37 @@ export function init(canvas,welt,opts={}){
 
  /* ===== Menschen =====
     Rundliche Figuren aus Kapseln und Kugeln, Gesicht vorn (+z), Fuesse auf y=0.
-    bewege() laesst Arme und Beine schwingen. */
+    Arme mit Ellbogen und Hand mit Daumen; Kleidung: Hemd, Jacke, Kleid, Guertel,
+    Schuhe mit Sohle. Posen: gehen, greifen (ins Regal), schieben (Wagen),
+    scannen (Kassiererin), winken. */
  const farbMat={},mm=c=>farbMat[c]||(farbMat[c]=schoen?new THREE.MeshPhongMaterial({color:c,shininess:20,specular:0x111111}):new THREE.MeshLambertMaterial({color:c}));
  const GK=new THREE.CapsuleGeometry(1,1,4,12),GS=new THREE.SphereGeometry(1,20,14),GB=new THREE.BoxGeometry(1,1,1),GZ=new THREE.CylinderGeometry(1,1,1,14),GT2=new THREE.TorusGeometry(1,0.16,6,16);
- const GHalb=new THREE.SphereGeometry(1,20,12,0,Math.PI*2,0,Math.PI*0.55),GSchatten=new THREE.PlaneGeometry(1,1);
+ const GHalb=new THREE.SphereGeometry(1,20,12,0,Math.PI*2,0,Math.PI*0.55),GSchatten=new THREE.PlaneGeometry(1,1),GRock=new THREE.CylinderGeometry(0.62,1,1,18),GMund=new THREE.TorusGeometry(1,0.18,6,14,Math.PI);
  function stueck(el,geo,f,x,y,z,sx,sy,sz,rx,ry,rz){const m=new THREE.Mesh(geo,mm(f));m.position.set(x,y,z);m.scale.set(sx,sy,sz);m.rotation.set(rx||0,ry||0,rz||0);el.add(m);return m;}
  const kapsel=(el,f,x,y,z,r,h,tz)=>stueck(el,GK,f,x,y,z,r,h/3,r*(tz||1));
  function mensch(o){
   const g=new THREE.Group(),k=new THREE.Group();g.add(k);
-  if(o.kind)k.scale.setScalar(0.74);
-  const haut=o.haut,haar=o.haar||'#3B2A20',hemd=o.hemd,hose=o.hose||'#34495E',schuh=o.schuh||'#2B2B2B';
+  if(o.kind)k.scale.setScalar(0.72);
+  const haut=o.haut,haar=o.haar||'#3B2A20',hemd=o.hemd,hose=o.hose||'#34495E',schuh=o.schuh||'#2B2B2B',aermel=o.jacke||hemd;
+  /* Beine mit Schuhen (Sohle heller) */
   const beine=[-1,1].map(sx=>{const b=new THREE.Group();b.position.set(sx*0.085,0.86,0);k.add(b);
-   kapsel(b,hose,0,-0.4,0,0.074,0.8);stueck(b,GB,schuh,0,-0.825,0.045,0.11,0.07,0.23);return b;});
-  kapsel(k,hose,0,0.93,0,0.15,0.26,0.8).scale.x*=1.12;
-  kapsel(k,hemd,0,1.21,0,0.17,0.6,0.78).scale.x*=1.1;
-  stueck(k,GZ,haut,0,1.52,0,0.05,0.1,0.05);
+   kapsel(b,o.kleid?haut:hose,0,-0.4,0,o.kleid?0.06:0.074,0.8);
+   stueck(b,GB,schuh,0,-0.81,0.045,0.105,0.075,0.22);stueck(b,GB,'#D9D4CC',0,-0.852,0.045,0.11,0.018,0.235);return b;});
+  /* Rumpf */
+  if(o.kleid){stueck(k,GRock,o.kleid,0,0.78,0,0.24,0.42,0.2);kapsel(k,o.kleid,0,1.2,0,0.165,0.58,0.78).scale.x*=1.08;}
+  else{kapsel(k,hose,0,0.93,0,0.15,0.26,0.8).scale.x*=1.12;kapsel(k,hemd,0,1.21,0,0.17,0.6,0.78).scale.x*=1.1;
+   stueck(k,GZ,'#2B2B2B',0,0.99,0,0.183,0.035,0.14);stueck(k,GB,'#C9A64A',0,0.99,0.137,0.04,0.03,0.01);}
+  if(o.jacke){for(const sx of [-1,1])stueck(k,GB,o.jacke,sx*0.1,1.2,0.07,0.12,0.56,0.14);stueck(k,GB,o.jacke,0,1.2,-0.07,0.36,0.56,0.12);}
+  stueck(k,GT2,o.jacke||hemd,0,1.49,0,0.075,0.075,0.075,Math.PI/2);   // Kragen
+  stueck(k,GZ,haut,0,1.53,0,0.05,0.1,0.05);
+  /* Kopf */
   const kopf=new THREE.Group();kopf.position.set(0,1.67,0);k.add(kopf);
   stueck(kopf,GS,haut,0,0,0,0.13,0.14,0.13);
   for(const sx of [-1,1]){stueck(kopf,GS,'#FFFFFF',sx*0.046,0.015,0.112,0.024,0.027,0.012);stueck(kopf,GS,'#1D2A33',sx*0.046,0.012,0.122,0.013,0.016,0.008);
-   stueck(kopf,GB,haar,sx*0.047,0.055,0.118,0.04,0.009,0.01,0,0,sx*-0.12);stueck(kopf,GS,haut,sx*0.13,0,0,0.025,0.035,0.02);}
+   stueck(kopf,GB,haar,sx*0.047,0.055,0.118,0.04,0.009,0.01,0,0,sx*-0.12);stueck(kopf,GS,haut,sx*0.13,0,0,0.025,0.035,0.02);
+   stueck(kopf,GS,'#F2A7A0',sx*0.075,-0.035,0.1,0.022,0.014,0.008);}
   stueck(kopf,GS,haut,0,-0.02,0.13,0.018,0.022,0.016);
-  stueck(kopf,GT2,'#A0413A',0,-0.055,0.112,0.032,0.024,0.03,0,0,Math.PI).geometry=new THREE.TorusGeometry(1,0.18,6,14,Math.PI);
-  /* Haare */
+  stueck(kopf,GMund,'#A0413A',0,-0.055,0.112,0.032,0.024,0.03,0,0,Math.PI);
   const fr=o.frisur||'kurz';
   if(fr!=='glatze'&&fr!=='kappe')stueck(kopf,GHalb,haar,0,0.015,-0.01,0.142,0.15,0.146,-0.32);
   if(fr==='glatze')stueck(kopf,GHalb,haar,0,-0.01,-0.03,0.138,0.08,0.13,-1.6);
@@ -606,35 +615,56 @@ export function init(canvas,welt,opts={}){
   if(fr==='kappe'){stueck(kopf,GHalb,o.kappe||hemd,0,0.02,0,0.142,0.13,0.142);stueck(kopf,GB,o.kappe||hemd,0,0.045,0.15,0.2,0.016,0.13);}
   if(o.bart)stueck(kopf,GHalb,haar,0,-0.04,0.03,0.12,0.1,0.11,Math.PI);
   if(o.brille){for(const sx of [-1,1])stueck(kopf,GT2,'#2B2B2B',sx*0.046,0.015,0.132,0.03,0.03,0.03);stueck(kopf,GB,'#2B2B2B',0,0.015,0.135,0.03,0.006,0.006);}
-  /* Arme */
+  /* Arme: Oberarm, Ellbogen, Unterarm, Hand mit Daumen */
+  const ellbogen=[],haende=[];
   const arme=[-1,1].map(sx=>{const a=new THREE.Group();a.position.set(sx*0.215,1.43,0);a.rotation.z=sx*0.08;k.add(a);
-   kapsel(a,hemd,0,-0.16,0,0.058,0.34);kapsel(a,o.langarm?hemd:haut,0,-0.44,0,0.05,0.3);stueck(a,GS,haut,0,-0.62,0.01,0.052,0.06,0.052);return a;});
-  if(o.korb){const kb=new THREE.Group();kb.position.set(0,-0.68,0.08);arme[1].add(kb);stueck(kb,GB,'#D93B2B',0,-0.08,0.05,0.26,0.14,0.2);stueck(kb,GT2,'#A82A1E',0,0.0,0.05,0.12,0.12,0.12,0,Math.PI/2);}
+   kapsel(a,aermel,0,-0.15,0,0.058,0.32);
+   const e=new THREE.Group();e.position.set(0,-0.3,0);a.add(e);ellbogen.push(e);
+   kapsel(e,o.langarm||o.jacke?aermel:haut,0,-0.14,0,0.05,0.3);
+   const h=new THREE.Group();h.position.set(0,-0.31,0.01);e.add(h);haende.push(h);
+   stueck(h,GS,haut,0,0,0,0.045,0.058,0.03);kapsel(h,haut,-sx*0.035,0.01,0.02,0.016,0.06).rotation.z=sx*0.6;
+   return a;});
+  /* etwas in der Hand (beim Greifen sichtbar) */
+  const ding=stueck(haende[1],GB,['#E9573F','#3BAFDA','#F6BB42','#8CC152'][(o.haut.length+hemd.charCodeAt(2))%4],0,-0.06,0.03,0.07,0.1,0.05);ding.visible=false;
+  if(o.korb){const kb=new THREE.Group();kb.position.set(0,-0.06,0.08);haende[0].add(kb);stueck(kb,GB,'#D93B2B',0,-0.08,0.05,0.26,0.14,0.2);stueck(kb,GT2,'#A82A1E',0,0.0,0.05,0.12,0.12,0.12,0,Math.PI/2);}
   if(o.schuerze){stueck(k,GB,o.schuerze,0,1.12,0.135,0.3,0.42,0.02);stueck(k,GB,'#FFFFFF',0.08,1.3,0.148,0.07,0.03,0.005);}
-  const sch=new THREE.Mesh(GSchatten,rundSchatten);sch.rotation.x=-Math.PI/2;sch.position.y=0.007;sch.scale.setScalar(o.kind?0.55:0.7);g.add(sch);
-  g.userData={k,beine,arme,kopf,amt:0};
+  let wagenGruppe=null;
+  if(o.wagen){const W2=new Sammler();wagen(0,0.78,0,W2);wagenGruppe=W2.mesh(matFarbe);g.add(wagenGruppe);}
+  const sch=new THREE.Mesh(GSchatten,rundSchatten);sch.rotation.x=-Math.PI/2;sch.position.y=0.007;sch.scale.setScalar(o.kind?0.5:0.7);g.add(sch);
+  g.userData={k,beine,arme,ellbogen,haende,kopf,ding,amt:0,wagen:!!o.wagen};
   return g;
  }
+ /* Grundhaltung, dann Gehen; Posen ueberschreiben danach die Arme */
  function bewege(m,phase,ziel,dt){
   const u=m.userData;u.amt+=(ziel-u.amt)*Math.min(1,dt*8);const a=u.amt,s1=Math.sin(phase);
   u.beine[0].rotation.x=s1*0.55*a;u.beine[1].rotation.x=-s1*0.55*a;
-  u.arme[0].rotation.x=-s1*0.45*a;if(!u.winkt)u.arme[1].rotation.x=s1*0.45*a;
-  u.k.position.y=Math.abs(Math.cos(phase))*0.03*a;
+  u.arme[0].rotation.set(-s1*0.45*a,0,-0.08);u.arme[1].rotation.set(s1*0.45*a,0,0.08);
+  u.ellbogen[0].rotation.x=-0.15-0.25*a*Math.max(0,-s1);u.ellbogen[1].rotation.x=-0.15-0.25*a*Math.max(0,s1);
+  u.k.position.y=Math.abs(Math.cos(phase))*0.03*a;u.k.rotation.x=0;u.ding.visible=false;
+  if(u.wagen)schieben(m);
  }
+ function schieben(m){const u=m.userData;for(const i of [0,1]){u.arme[i].rotation.x=-1.05;u.arme[i].rotation.z=i?0.1:-0.1;u.ellbogen[i].rotation.x=-0.45;}u.k.rotation.x=0.06;}
+ /* f: 0 ... 1 ... 0 waehrend des Greifens; ab der Mitte liegt etwas in der Hand */
+ function greifen(m,f,hand){const u=m.userData;u.arme[1].rotation.x=-1.25*f;u.arme[1].rotation.z=0.08+0.1*f;u.ellbogen[1].rotation.x=-0.15-0.35*f;u.k.rotation.x=0.05*f;
+  u.kopf.rotation.x=-0.15*f;u.ding.visible=hand;}
+ function scannen(m,t){const u=m.userData,w=Math.sin(t*3.2);
+  u.arme[1].rotation.set(-1.15,0,0.1+w*0.35);u.ellbogen[1].rotation.x=-0.55;u.ding.visible=w>-0.2;
+  u.arme[0].rotation.set(-0.9,0,-0.1-w*0.15);u.ellbogen[0].rotation.x=-0.7;u.kopf.rotation.x=0.25;}
  /* Kassiererin */
  const kassiererin=mensch({haut:'#E8B48A',haar:'#5A3825',frisur:'zopf',hemd:'#2E9E4F',schuerze:'#FFC845',hose:'#2C3A44'});
  {const k=welt.KASSEN[0];kassiererin.position.set(k.x2+0.55,0,k.z2-0.6);kassiererin.rotation.y=-Math.PI/2;scene.add(kassiererin);}
- /* Kundschaft */
+ /* Kundschaft: Aussehen je look (aus logik.js) */
  const AUSSEHEN=[
-  {haut:'#F1C7A5',haar:'#CFCAC2',frisur:'dutt',hemd:'#8E5BA8',hose:'#4A4E69',brille:true,langarm:true,korb:true},
-  {haut:'#B07A50',haar:'#1E1A18',frisur:'kurz',hemd:'#3B82C4',hose:'#2C3E50',bart:true},
+  {haut:'#F1C7A5',haar:'#CFCAC2',frisur:'dutt',hemd:'#F2E6D8',jacke:'#8E5BA8',kleid:'#5E4A7A',brille:true,korb:true},
+  {haut:'#B07A50',haar:'#1E1A18',frisur:'kurz',hemd:'#DCE7F2',jacke:'#2F5D8A',hose:'#2C3E50',bart:true,wagen:true},
   {haut:'#F5D0B0',haar:'#D9A441',frisur:'zopf',hemd:'#F06292',hose:'#5C6BC0',kind:true},
-  {haut:'#E8B996',haar:'#A8A8A8',frisur:'glatze',hemd:'#6B8E23',hose:'#5D4037',brille:true,langarm:true,korb:true},
+  {haut:'#E8B996',haar:'#A8A8A8',frisur:'glatze',hemd:'#F4F1E8',jacke:'#6B8E23',hose:'#5D4037',brille:true,korb:true},
   {haut:'#8D5A3B',haar:'#151515',frisur:'kurz',hemd:'#FFB300',hose:'#1565C0',kind:true},
-  {haut:'#6B4226',haar:'#1A1A1A',frisur:'lang',hemd:'#E64A19',hose:'#263238',korb:true},
+  {haut:'#6B4226',haar:'#1A1A1A',frisur:'lang',hemd:'#E64A19',kleid:'#E64A19',korb:true},
+  {haut:'#5A3620',haar:'#121212',frisur:'zopf',hemd:'#4FC3F7',hose:'#F48FB1',kind:true},
   {haut:'#E9BFA0',haar:'#7B4A2E',frisur:'zopf',hemd:'#26A69A',hose:'#37474F',korb:true}];
- const kunden=[];
- function kundenFigur(i){while(kunden.length<=i){const m=mensch(AUSSEHEN[kunden.length%AUSSEHEN.length]);scene.add(m);kunden.push(m);}return kunden[i];}
+ const kunden={};
+ function kundenFigur(look){if(!kunden[look]){const m=mensch(AUSSEHEN[look%AUSSEHEN.length]);scene.add(m);kunden[look]=m;}return kunden[look];}
 
 
  /* ===== Raum und Stimmung ===== */
@@ -730,17 +760,21 @@ export function init(canvas,welt,opts={}){
   for(const tg of tueren){const ziel=nah?tg.userData.auf:tg.userData.zu;tg.position.x+=(ziel-tg.position.x)*0.12;}
   /* Kassiererin winkt, wenn jemand in der Naehe ist */
   const k=welt.KASSEN[0],dk=Math.min(...leute.map(v=>Math.hypot(v.x-k.x1,v.z-(k.z1+k.z2)/2))),ku=kassiererin.userData;
-  ku.winkt=dk<5;ku.arme[1].rotation.z=ku.winkt?2.4+Math.sin(t*7)*0.35:0.08;
-  ku.kopf.rotation.y=Math.sin(t*0.7)*0.2;bewege(kassiererin,0,0,dt);
+  bewege(kassiererin,0,0,dt);ku.kopf.rotation.set(0,Math.sin(t*0.7)*0.2,0);
+  if(st.kasse)scannen(kassiererin,t);
+  else if(dk<5){ku.arme[1].rotation.z=2.4+Math.sin(t*7)*0.35;ku.ellbogen[1].rotation.x=-0.3;}
+  else if(Math.sin(t*0.35)>0.55)scannen(kassiererin,t);
   /* Uhr */
   const jetzt=new Date(),min=jetzt.getMinutes()+jetzt.getSeconds()/60,std=(jetzt.getHours()%12)+min/60;
   zeiger[0].rotation.z=-std/12*Math.PI*2;zeiger[1].rotation.z=-min/60*Math.PI*2;
   /* Kundschaft */
   const kl=st.leute||[];
-  kl.forEach((q,i)=>{const m=kundenFigur(i);m.visible=true;m.position.set(q.x,0,q.z);
+  const sichtbar=new Set();
+  kl.forEach(q=>{const look=q.look!=null?q.look:q.nr,m=kundenFigur(look);sichtbar.add(look);m.visible=true;m.position.set(q.x,0,q.z);
    const ziel=Math.PI-q.yaw;let d=ziel-m.rotation.y;d=Math.atan2(Math.sin(d),Math.cos(d));m.rotation.y+=d*Math.min(1,dt*6);
-   bewege(m,q.phase||0,q.geht?1:0,dt);});
-  for(let i=kl.length;i<kunden.length;i++)kunden[i].visible=false;
+   bewege(m,q.phase||0,q.geht?1:0,dt);
+   if(q.greift&&q.griffStart){const p=1-Math.max(0,q.warte)/q.griffStart,f=Math.sin(Math.PI*Math.min(1,p*1.4));greifen(m,Math.max(0,f),p>0.35);}});
+  for(const [look,m] of Object.entries(kunden))if(!sichtbar.has(+look))m.visible=false;
  }
  function kamera(v,aspect){
   camera.position.set(v.x,AUGE+(v.bob||0),v.z);camera.rotation.set(v.pitch||0,-v.yaw,0,'YXZ');
