@@ -11,7 +11,18 @@ const w=dom.window,d=w.document,L=w.ShopLogik,S=w.ShopSpiel,welt=S.welt,DAT=w.SH
 const fassung=JSON.parse(fs.readFileSync(path.join(root,'fassung.json'),'utf8')).fassung;
 
 /* Seite */
-for(const m of html.matchAll(/<script (?:type="module" )?src="([^"?]+)\?v=([^"]+)"/g))ok(m[2]===fassung,m[1]+' mit aktueller Versionsnummer');
+/* Versionsnummer der Spieldateien: Der Offline-Speicher (sw.js) liefert Dateien
+   mit bekannter Nummer aus dem Lager. Aendert sich eine Datei, muss die Nummer
+   in index.html steigen - sonst spielen Geraete mit dem alten Stand weiter.
+   year6/shop/stand.json haelt Nummer und Pruefsumme fest. */
+const marken=[...html.matchAll(/(?:href|src)="((?:style\.css|[a-z]+\.js))\?v=([^"]+)"/g)];
+ok(marken.length===6&&new Set(marken.map(m=>m[2])).size===1&&/^\d{8}-[a-z]+$/.test(marken[0][2]),'alle Spieldateien mit derselben Versionsnummer');
+const marke=marken[0][2],stand=JSON.parse(fs.readFileSync(path.join(dir,'stand.json'),'utf8'));
+const summe=require('node:crypto').createHash('sha256');for(const m of marken)summe.update(fs.readFileSync(path.join(dir,m[1])));
+const pruef=summe.digest('hex').slice(0,16);
+ok(stand.marke===marke,'stand.json passt zur Versionsnummer in index.html ('+marke+')');
+ok(stand.pruefsumme===pruef,'Spieldateien geaendert: Versionsnummer in year6/shop/index.html erhoehen und year6/shop/stand.json auf {"marke":"<neu>","pruefsumme":"'+pruef+'"} setzen');
+ok(fs.readFileSync(path.join(root,'year6/games/index.html'),'utf8').includes('../shop/bild.js?v='+fassung),'Titelbild auf der Spieleseite');
 ok(/data-eigenes-design/.test(html)&&d.querySelector('header a').getAttribute('href')==='../games/','eigenes Design, Weg zur Spieleseite');
 ok(/from '\.\.\/schule\/vendor\/three\.module\.min\.js'/.test(fs.readFileSync(path.join(dir,'render.js'),'utf8')),'three.js aus dem Schul-Spiel');
 ok(['liste','hoeren','budget','rezept','wo','detektiv','duell','frei'].every(m=>d.querySelector('[data-modus="'+m+'"]')),'acht Spielarten im Menue');
