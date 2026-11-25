@@ -69,6 +69,8 @@ function bauen(daten){
  box(0.4,20.6,1.6,22.4,'koerbe');                         // Korbstapel am Eingang
  box(26.5,19.5,28.5,21.5,'aufsteller');                   // Angebots-Aufsteller
  box(0.35,17.9,1.65,20.35,'wagen');                        // Einkaufswagen am Eingang
+ for(const [x,z] of [[2.3,23.1],[8.2,23.1],[29.2,23.0]])box(x-0.32,z-0.32,x+0.32,z+0.32,'pflanze');   // Pflanzen im Eingangsbereich
+ box(9.0,21.4,9.7,22.2,'tafel');                           // Kreidetafel mit Angeboten
  for(const gx of GONDEL)box(gx-GT,GZ2,gx+GT,GZ2+0.55,'aktion');   // Aktionsware vor jedem Regal
  box(0,23.6,W,D,'tuerfeld');                               // nicht hinaus
  return {W,D,R,AUGE,daten,waren,byId,plaetze,hin,SEITEN,GAENGE,KASSEN,KASSEN_ZONE,START,TUER,GONDEL,GT,GZ1,GZ2,GH};
