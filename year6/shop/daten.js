@@ -93,7 +93,7 @@ window.SHOP_DATEN = {
   {id:'shampoo',    en:'a bottle of shampoo',    pl:'bottles of shampoo',     de:'eine Flasche Shampoo',            schild:'Shampoo',       p:250, ort:'pflege', form:'shampoo', farbe:'#7E57C2', akzent:'#FFFFFF', emo:'🧴'},
   {id:'showergel',  en:'a bottle of shower gel', pl:'bottles of shower gel',  de:'eine Flasche Duschgel',           schild:'Shower gel',    p:180, ort:'pflege', form:'shampoo', farbe:'#26A69A', akzent:'#FFFFFF', emo:'🚿'},
   /* Kuehlregal */
-  {id:'milk',       en:'a carton of milk',       pl:'cartons of milk',        de:'ein Karton Milch',                schild:'Milk',          p:95,  ort:'kuehl', form:'karton', farbe:'#FFFFFF', akzent:'#1976D2', emo:'🥛', menge:true},
+  {id:'milk',       en:'a bottle of milk',       pl:'bottles of milk',        de:'eine Flasche Milch',                schild:'Milk',          p:95,  ort:'kuehl', form:'milch', farbe:'#FFFFFF', akzent:'#1976D2', emo:'🥛', menge:true},
   {id:'butter',     en:'a pack of butter',       pl:'packs of butter',        de:'ein Stück Butter',                schild:'Butter',        p:210, ort:'kuehl', form:'butter', farbe:'#FFF59D', akzent:'#F9A825', emo:'🧈'},
   {id:'cheese',     en:'a piece of cheese',      pl:'pieces of cheese',       de:'ein Stück Käse',                  schild:'Cheese',        p:250, ort:'kuehl', form:'kaese', farbe:'#FFD54F', akzent:'#FFB300', emo:'🧀'},
   {id:'yoghurt',    en:'a pot of yoghurt',       pl:'pots of yoghurt',        de:'ein Becher Joghurt',              schild:'Yoghurt',       p:45,  ort:'kuehl', form:'becher', farbe:'#FFFFFF', akzent:'#E91E63', emo:'🍓', menge:true},
@@ -196,6 +196,17 @@ window.SHOP_DATEN = {
  KUNDEN: [
   {name:'Mrs Brown', emo:'👵', sie:'her'},{name:'Mr Patel', emo:'👨🏽', sie:'him'},{name:'Lucy', emo:'👧', sie:'her'},
   {name:'Mr Green', emo:'👴', sie:'him'},{name:'Tom', emo:'👦', sie:'him'},{name:'Mrs Okafor', emo:'👩🏿', sie:'her'}
+ ],
+
+ /* Lautsprecherdurchsagen im Laden (gesprochen und als Meldung) */
+ DURCHSAGEN: [
+  'Attention, shoppers! Today, strawberries are only two pounds twenty-five.',
+  'Good morning, everyone! Fresh bread is now available at the bakery.',
+  'Attention, please! Checkout one is now open.',
+  'Dear customers, please don\'t forget your shopping bags!',
+  'Special offer in aisle two: crisps and popcorn!',
+  'Hello, shoppers! The ice cream in aisle four is very cold today. Enjoy!',
+  'Lost and found: a small blue teddy bear is waiting at checkout one.'
  ],
 
  /* Glossar fuer den Knopf "Wörter" */

@@ -68,24 +68,81 @@ function bauen(daten){
  for(const k of KASSEN){box(k.x1,k.z1,k.x2,k.z2,'kasse');box(k.x2,k.z1+1,k.x2+1.1,k.z2,'kabine');}
  box(0.4,20.6,1.6,22.4,'koerbe');                         // Korbstapel am Eingang
  box(26.5,19.5,28.5,21.5,'aufsteller');                   // Angebots-Aufsteller
+ box(0.35,17.9,1.65,20.35,'wagen');                        // Einkaufswagen am Eingang
+ for(const gx of GONDEL)box(gx-GT,GZ2,gx+GT,GZ2+0.55,'aktion');   // Aktionsware vor jedem Regal
  box(0,23.6,W,D,'tuerfeld');                               // nicht hinaus
  return {W,D,R,AUGE,daten,waren,byId,plaetze,hin,SEITEN,GAENGE,KASSEN,KASSEN_ZONE,START,TUER,GONDEL,GT,GZ1,GZ2,GH};
 }
 
 /* ---------- Bewegung ---------- */
-function frei(welt,x,z,r){
+function frei(welt,x,z,r,leute){
  r=r===undefined?welt.R:r;
  for(const h of welt.hin)if(x>h.x1-r&&x<h.x2+r&&z>h.z1-r&&z<h.z2+r)return false;
+ if(leute)for(const q of leute)if(Math.hypot(x-q.x,z-q.z)<r+0.26)return false;
  return true;
 }
-/* Schritt mit Gleiten an Kanten: erst x, dann z. */
-function bewegen(welt,p,dx,dz){
+/* Schritt mit Gleiten an Kanten: erst x, dann z. leute: Personen, durch die
+   man nicht hindurchlaeuft (wer schon drinsteht, kommt wieder heraus). */
+function bewegen(welt,p,dx,dz,leute){
  const n=Math.max(1,Math.ceil(Math.hypot(dx,dz)/0.1));
+ const nah=leute?leute.filter(q=>Math.hypot(p.x-q.x,p.z-q.z)>=welt.R+0.26):null;
  for(let i=0;i<n;i++){
-  const nx=p.x+dx/n;if(frei(welt,nx,p.z))p.x=nx;
-  const nz=p.z+dz/n;if(frei(welt,p.x,nz))p.z=nz;
+  const nx=p.x+dx/n;if(frei(welt,nx,p.z,undefined,nah))p.x=nx;
+  const nz=p.z+dz/n;if(frei(welt,p.x,nz,undefined,nah))p.z=nz;
  }
  return p;
+}
+
+/* ---------- Kundschaft im Laden ----------
+   Laeuft auf festen Bahnen: senkrecht durch die Gaenge, waagrecht vorn und
+   hinten. Bleibt manchmal stehen und schaut ins Regal. Wartet, wenn jemand
+   im Weg steht. Nur Kulisse fuer die Aufgaben. */
+const BAHN_X=[2.65,7.55,12,17,22,27],BAHN_Z=[2.3,9.4,16.3];
+function bahnen(){
+ const knoten=[],kanten=[];
+ BAHN_X.forEach((x,i)=>BAHN_Z.forEach((z,j)=>knoten.push({x,z,i,j})));
+ const id=(i,j)=>i*BAHN_Z.length+j;
+ BAHN_X.forEach((x,i)=>BAHN_Z.forEach((z,j)=>{
+  const nb=[];
+  if(j>0)nb.push(id(i,j-1));if(j<BAHN_Z.length-1)nb.push(id(i,j+1));
+  if(j!==1){if(i>0)nb.push(id(i-1,j));if(i<BAHN_X.length-1)nb.push(id(i+1,j));}
+  kanten[id(i,j)]=nb;}));
+ return {knoten,kanten};
+}
+function kundschaft(welt,anzahl,rnd){
+ rnd=rnd||Math.random;const B=bahnen(),out=[];
+ for(let k=0;k<anzahl;k++){
+  const start=(k*7+3)%B.knoten.length,n=B.knoten[start];
+  out.push({nr:k,x:n.x,z:n.z,yaw:0,knoten:start,ziel:B.kanten[start][0],vorher:-1,warte:1+rnd()*3,geht:false,tempo:0.75+rnd()*0.35,phase:rnd()*6});
+ }
+ /* eine Person steht fest am Blumenstand */
+ out.push({nr:anzahl,x:26.05,z:20.5,yaw:Math.PI/2,fest:true,geht:false,phase:0});
+ return {B,leute:out};
+}
+function kundschaftSchritt(welt,K,dt,spieler,rnd){
+ rnd=rnd||Math.random;
+ for(const q of K.leute){
+  if(q.fest){q.geht=false;continue;}
+  if(q.warte>0){q.warte-=dt;q.geht=false;continue;}
+  const z=K.B.knoten[q.ziel],dx=z.x-q.x,dz=z.z-q.z,d=Math.hypot(dx,dz);
+  if(d<0.05){
+   q.vorher=q.knoten;q.knoten=q.ziel;
+   const nb=K.B.kanten[q.knoten],wahl=nb.filter(i=>i!==q.vorher);
+   q.ziel=(wahl.length?wahl:nb)[Math.floor(rnd()*(wahl.length||nb.length))];
+   if(rnd()<0.35){q.warte=2+rnd()*3;
+    /* im Gang: zum Regal drehen */
+    if(z.j===1&&z.i>0)q.yaw=rnd()<0.5?Math.PI/2:-Math.PI/2;}
+   continue;
+  }
+  const s=Math.min(d,q.tempo*dt),nx=q.x+dx/d*s,nz=q.z+dz/d*s;
+  const blockiert=spieler.some(p=>p&&Math.hypot(nx-p.x,nz-p.z)<0.75)||K.leute.some(o=>o!==q&&Math.hypot(nx-o.x,nz-o.z)<0.6&&Math.hypot(q.x-o.x,q.z-o.z)>=Math.hypot(nx-o.x,nz-o.z));
+  q.yaw=Math.atan2(dx,-dz);
+  if(blockiert){q.geht=false;q.stau=(q.stau||0)+dt;
+   /* zu lange im Stau: umdrehen und zurueck */
+   if(q.stau>1.2+rnd()){q.stau=0;const t=q.ziel;q.ziel=q.knoten;q.knoten=t;q.vorher=-1;}
+   continue;}
+  q.stau=0;q.x=nx;q.z=nz;q.geht=true;q.phase+=s*4.2;
+ }
 }
 function inKassenZone(welt,p){const k=welt.KASSEN_ZONE;return p.x>=k.x1&&p.x<=k.x2&&p.z>=k.z1&&p.z<=k.z2;}
 
@@ -315,5 +372,5 @@ function erreichbar(welt,schritt){
 window.ShopLogik={bauen,frei,bewegen,inKassenZone,richtung,strahl,strahlBox,treffer,blickTreffer,
  betrag,preis,gross,menge,zufall,mischen,liste,korbAnzahl,korbSumme,listeStand,budgetStand,minimum,vergleiche,
  wechselOptionen,bezahlt,kassenSchritte,duellAufgaben,duellPunkte,wo,ORTFARBE,bon,sterne,erreichbar,AUGE,ZAHL,
- bereich,istPlural,nachbarn,nachbarText,lageSatz,kundenFrage,lageOptionen,raetsel,rezeptStand};
+ bahnen,kundschaft,kundschaftSchritt,bereich,istPlural,nachbarn,nachbarText,lageSatz,kundenFrage,lageOptionen,raetsel,rezeptStand};
 })();
