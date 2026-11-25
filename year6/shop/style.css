@@ -315,7 +315,7 @@ body.tafel .w-name{font-size:30px}
 body.tafel .k-optionen button{font-size:24px}
 
 @media (max-width:560px){
- .zettel{max-width:calc(100vw - 130px);font-size:14px;max-height:40dvh;padding:8px 10px 10px;background-size:100% 26px}
+ .zettel{max-width:calc(100vw - 176px);font-size:14px;max-height:40dvh;padding:8px 10px 10px;background-size:100% 26px}
  .z-kopf b{font-size:17px}
  .z-info{display:none}
  #zListe li{font-size:14px;min-height:26px}
@@ -389,3 +389,10 @@ body.split #steuer,body.split .kartenbox{display:none}
 body.split .kartenbox{display:block;right:auto;left:50%;transform:translateX(-50%)}
 body.split #karte{width:150px;height:120px}
 body.split .d-auftrag{top:calc(max(10px,env(safe-area-inset-top)) + 92px)}
+
+/* Musikknopf */
+.hud .musik{font-size:20px}
+.hud .musik.aus{opacity:.55}
+body.split .hud .musik{display:none}
+.hud .rund+.rund{margin-left:-2px}
+@media (max-width:560px){.hud .musik{width:40px;height:40px}}

@@ -34,5 +34,5 @@ for(const f of ['spieler.js','musik.js','game.js'])new vm.Script(fs.readFileSync
 for(const d of ['year6','year9','bili/history'])new vm.Script(fs.readFileSync(path.join(out,d,'games/data.js'),'utf8'));
 for(const f of ['karte.js','logik.js','spiel.js'])new vm.Script(fs.readFileSync(path.join(out,'year6/schule',f),'utf8'));
 for(const f of ['render.js','vendor/three.module.min.js'])if(!fs.existsSync(path.join(out,'year6/schule',f)))throw new Error('Missing '+f);
-for(const f of ['daten.js','bild.js','logik.js','spiel.js'])new vm.Script(fs.readFileSync(path.join(out,'year6/shop',f),'utf8'));
+for(const f of ['daten.js','bild.js','logik.js','musik.js','spiel.js'])new vm.Script(fs.readFileSync(path.join(out,'year6/shop',f),'utf8'));
 if(!/from '\.\.\/schule\/vendor\/three\.module\.min\.js'/.test(fs.readFileSync(path.join(out,'year6/shop/render.js'),'utf8')))throw new Error('Shopping Trip: three.js-Pfad');

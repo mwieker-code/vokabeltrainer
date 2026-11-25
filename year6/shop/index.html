@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Basecamp">
 <meta name="theme-color" content="#0D1017"><title>Shopping Trip · Year 6</title>
-<link rel="stylesheet" href="../../assets/fonts.css?v=2"><link rel="stylesheet" href="style.css?v=20261125-schilder">
+<link rel="stylesheet" href="../../assets/fonts.css?v=2"><link rel="stylesheet" href="style.css?v=20261125-musik">
 </head><body><main class="shop">
 <section id="menu">
  <header><a href="../games/">← Games</a><span>SHOPPING TRIP · YEAR 6</span></header>
@@ -39,6 +39,8 @@
   </fieldset>
   <fieldset><legend>Bildschirm</legend>
    <label class="schalter"><input type="checkbox" id="tafel"> Tafel-Modus: große Schrift und Steuerkreuz</label>
+   <label class="schalter"><input type="checkbox" id="musikAn" checked> Musik im Laden (Geräusche hängen am Schalter „Töne“ unten)</label>
+   <label class="schalter"><input type="checkbox" id="schoen" checked> Schöne Grafik: Glanz, Spiegelungen und mehr Kundschaft (bei Ruckeln ausschalten, wirkt nach dem Neuladen)</label>
    <label class="name">Dein Name für den Kassenbon <input type="text" id="name" maxlength="30" autocomplete="off" placeholder="Vorname"></label>
   </fieldset>
   <fieldset id="duellEinst"><legend>Team duel</legend>
@@ -83,6 +85,7 @@
  <div id="halb0" class="halb-meldung" hidden role="status"></div><div id="halb1" class="halb-meldung" hidden role="status"></div>
  <div class="hud">
   <button id="quit" class="rund" aria-label="Spiel beenden">✕</button>
+  <button id="musik" class="rund musik" aria-label="Musik an oder aus" aria-pressed="true">♫</button>
   <div id="zettel" class="zettel">
    <div class="z-kopf"><b id="zTitel" lang="en">Shopping list</b><button id="falten" class="klein" aria-label="Liste zuklappen">▴</button></div>
    <p id="zInfo" class="z-info"></p>
@@ -120,7 +123,7 @@
 </section>
 <section id="over" hidden></section>
 </main>
-<script src="daten.js?v=20261125-schilder"></script><script src="bild.js?v=20261125-schilder"></script><script src="logik.js?v=20261125-schilder"></script><script src="spiel.js?v=20261125-schilder"></script>
-<script type="module" src="render.js?v=20261125-schilder"></script>
+<script src="daten.js?v=20261125-musik"></script><script src="bild.js?v=20261125-musik"></script><script src="logik.js?v=20261125-musik"></script><script src="musik.js?v=20261125-musik"></script><script src="spiel.js?v=20261125-musik"></script>
+<script type="module" src="render.js?v=20261125-musik"></script>
 <script src="../../assets/feedback.js"></script>
 </body></html>

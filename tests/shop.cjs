@@ -16,7 +16,7 @@ const fassung=JSON.parse(fs.readFileSync(path.join(root,'fassung.json'),'utf8'))
    in index.html steigen - sonst spielen Geraete mit dem alten Stand weiter.
    year6/shop/stand.json haelt Nummer und Pruefsumme fest. */
 const marken=[...html.matchAll(/(?:href|src)="((?:style\.css|[a-z]+\.js))\?v=([^"]+)"/g)];
-ok(marken.length===6&&new Set(marken.map(m=>m[2])).size===1&&/^\d{8}-[a-z]+$/.test(marken[0][2]),'alle Spieldateien mit derselben Versionsnummer');
+ok(marken.length===7&&new Set(marken.map(m=>m[2])).size===1&&/^\d{8}-[a-z]+$/.test(marken[0][2]),'alle Spieldateien mit derselben Versionsnummer');
 const marke=marken[0][2],stand=JSON.parse(fs.readFileSync(path.join(dir,'stand.json'),'utf8'));
 const summe=require('node:crypto').createHash('sha256');for(const m of marken)summe.update(fs.readFileSync(path.join(dir,m[1])));
 const pruef=summe.digest('hex').slice(0,16);
@@ -259,6 +259,25 @@ vor(G.p,ziel);S.update(0.01,ohne);
 ok(S.splitNehmen(0)&&DS.aktiv===0&&DS.teams[0].punkte>=100&&DS.teams[1].punkte===0,'richtige Ware: Punkte fuer Team 1');
 ok(DS.phase==='bonus'&&/Team Red/.test(d.getElementById('ansage').textContent),'Bonusfrage fuer das Siegerteam');
 anzahl=0;tick();S.padQuelle(()=>[]);
+
+/* ---------- Kundschaft, Einrichtung, Musik ---------- */
+{const K=L.kundschaft(welt,6,L.zufall(5)),r=L.zufall(6),spieler=[{x:5,z:22.3}];let inWand=0,zuNah=0;const felder=new Set();
+ for(let i=0;i<8000;i++){L.kundschaftSchritt(welt,K,0.05,spieler,r);
+  for(const q of K.leute){if(!L.frei(welt,q.x,q.z,0.2))inWand++;felder.add(Math.round(q.x/3)+','+Math.round(q.z/3));}
+  for(const a of K.leute)for(const b of K.leute)if(a!==b&&Math.hypot(a.x-b.x,a.z-b.z)<0.5)zuNah++;}
+ ok(inWand===0,'Kundschaft laeuft nie in Regale oder Waende');
+ ok(zuNah===0,'Kundschaft laeuft nicht ineinander');
+ ok(felder.size>=25,'Kundschaft verteilt sich im ganzen Laden ('+felder.size+' Bereiche)');
+ /* durch Personen laeuft man nicht hindurch */
+ const q0=K.leute.find(q=>q.fest),p={x:q0.x-1.2,z:q0.z};for(let i=0;i<40;i++)L.bewegen(welt,p,0.05,0,K.leute);
+ ok(Math.hypot(p.x-q0.x,p.z-q0.z)>=welt.R+0.25,'man laeuft nicht durch Personen hindurch');}
+ok(!L.frei(welt,1.0,19,0.1)&&!L.frei(welt,welt.GONDEL[1],15.3,0.1),'Einkaufswagen und Aktionsware sind Hindernisse');
+ok(DAT.DURCHSAGEN.length>=5&&DAT.DURCHSAGEN.every(t=>/^[A-Z].*[.!]$/.test(t)),'Lautsprecherdurchsagen');
+ok(DAT.WAREN.find(x=>x.id==='milk').form==='milch','Milch als Flasche mit Griff');
+{const w2={};new Function('window',fs.readFileSync(path.join(dir,'musik.js'),'utf8'))(w2);const M=w2.ShopMusik;
+ ok(M&&!M.verfuegbar&&M.geraeusche.includes('kasse')&&M.geraeusche.includes('scan'),'Musik-Modul vorhanden, ohne Web Audio still');
+ ok(M._bars.length===32&&M._bars.every(b=>b.melody.every(n=>n.n>=60&&n.n<=84)),'Ladenmusik: 32 Takte, Melodie im Vibraphon-Bereich');
+ M.start('duell');M.sfx('kasse');M.stop();ok(!M.laeuft,'Musik ohne Web Audio wirft keine Fehler');}
 
 /* Spieleseite */
 const hub=fs.readFileSync(path.join(root,'year6/games/index.html'),'utf8');
