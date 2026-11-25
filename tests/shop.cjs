@@ -288,6 +288,14 @@ ok(DAT.WAREN.find(x=>x.id==='milk').form==='milch','Milch als Flasche mit Griff'
  ok(M._bars.length===32&&M._bars.every(b=>b.melody.every(n=>n.n>=60&&n.n<=84)),'Ladenmusik: 32 Takte, Melodie im Vibraphon-Bereich');
  M.start('duell');M.sfx('kasse');M.stop();ok(!M.laeuft,'Musik ohne Web Audio wirft keine Fehler');}
 
+/* Ton gesperrt: Hinweis zum Antippen erscheint, nach dem Freischalten verschwindet er */
+{w.ShopMusik={blockiert:true,an:true,wecken(){this.geweckt=true;this.blockiert=false;},start(){},stop(){},leise(){},sfx(){}};
+ S.start('frei');for(let i=0;i<70;i++)S.tonHinweis();
+ ok(!d.getElementById('tonAus').hidden,'gesperrter Ton: Hinweis erscheint');
+ d.getElementById('tonAus').dispatchEvent(new w.Event('pointerdown',{bubbles:true}));S.tonHinweis();
+ ok(w.ShopMusik.geweckt&&d.getElementById('tonAus').hidden,'Antippen schaltet den Ton frei');
+ delete w.ShopMusik;S.menu();}
+
 /* Spieleseite */
 const hub=fs.readFileSync(path.join(root,'year6/games/index.html'),'utf8');
 ok(hub.includes('href="../shop/"')&&hub.includes('../shop/bild.js?v='+fassung),'Year 6: Kachel auf der Spieleseite');

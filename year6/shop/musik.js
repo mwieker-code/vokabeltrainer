@@ -169,6 +169,10 @@ function setze(on){
  an=!!on;try{localStorage.setItem(KEY,an?'an':'aus');}catch(e){}
  if(!an)stop();
 }
-window.ShopMusik={start,stop,leise,setze,sfx,geraeusche:Object.keys(GERAEUSCH),
+/* Browser geben Ton erst nach einer echten Eingabe frei (Klick, Tippen, Taste).
+   wecken() bei jeder solchen Eingabe aufrufen; blockiert sagt, ob der Ton gerade
+   gesperrt ist, obwohl er laufen soll. */
+function wecken(){if(!ac)return bereit();if(ac.state!=='running')try{ac.resume();}catch(e){}return true;}
+window.ShopMusik={start,stop,leise,setze,sfx,wecken,get blockiert(){return !!ac&&ac.state!=='running'&&(laeuft||toene());},geraeusche:Object.keys(GERAEUSCH),
  get an(){return an;},get laeuft(){return laeuft;},get art(){return art;},verfuegbar:!!AC,_bars:BARS,_midi:midi};
 })();

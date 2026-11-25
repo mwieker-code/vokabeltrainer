@@ -616,6 +616,7 @@ function padTick(){
  const P=padLesen();padAnzeige(P.length);
  if(!P.length)return;
  const S=padSumme(P),neu=S.neu,b=padBereich();
+ if(neu.size)musik('wecken');
  if(b!==PAD.bereich){PAD.bereich=b;padFokus(b&&b.id!=='menu'&&b.id!=='over'||b&&neu.size?padStandard(b):null);return;}
  if(b){
   const z=padZiele(b);
@@ -776,7 +777,7 @@ function schleife(jetzt){
   const kb=$('zurKasse');if(kb){const an=G.zustand==='laden'&&(G.modus==='liste'||G.modus==='hoeren'||G.modus==='budget')&&L.inKassenZone(welt,G.p);kb.hidden=!an;
    const t='🛒 Pay at checkout 1'+(PAD.stand.length?' (✕ / A)':'');if(an&&kb.textContent!==t)kb.textContent=t;}
   if(G.duell){const u=$('dUhr'),v=String(Math.ceil(Math.max(0,G.duell.rest)));if(u&&u.textContent!==v){if(G.duell.phase==='suche'&&+v<=10&&+v>0)sfx('tick');u.textContent=v;u.classList.toggle('knapp',G.duell.phase==='suche'&&G.duell.rest<=15);}}
-  hinweis();geraeuscheImLaden();
+  hinweis();geraeuscheImLaden();tonHinweis();
   const leute=G.leute?G.leute.leute:[];
   if(R&&G.split&&G.p2)R.frame({t:G.t,leute,views:[{x:G.p.x,z:G.p.z,yaw:G.p.yaw,pitch:G.p.pitch,hover:G.hover},{x:G.p2.x,z:G.p2.z,yaw:G.p2.yaw,pitch:G.p2.pitch,hover:G.hover2}]});
   else if(R)R.frame({leute,kasse:G.zustand==='kasse',x:G.p.x,z:G.p.z,yaw:G.p.yaw,pitch:G.p.pitch,t:G.t,bob:Math.sin(G.schritt*5.2)*0.03,hover:G.ware?welt.plaetze.find(p=>p.id===G.ware.id):G.hover});
@@ -872,6 +873,14 @@ function binden(){
 }
 einstellungenLaden();binden();menu();musikKnopf();
 /* Die gemeinsame Leiste "Toene / Animationen" (assets/feedback.js) hier englisch beschriften */
+/* Ton freischalten: jede echte Eingabe weckt ihn auf */
+for(const art of ['pointerdown','touchend','keydown','click'])addEventListener(art,()=>musik('wecken'),{capture:true,passive:true});
+function tonHinweis(){
+ const h=$('tonAus');if(!h)return;
+ const zu=!!(window.ShopMusik&&window.ShopMusik.blockiert)&&G.zustand!=='menu';
+ if(zu)G.tonGesperrt=(G.tonGesperrt||0)+1;else G.tonGesperrt=0;
+ h.hidden=!(G.tonGesperrt>60);
+}
 function leisteEnglisch(){document.querySelectorAll('[data-feedback-pref]').forEach(b=>{const t=b.textContent,neu=t.replace('Töne','Sound').replace('Animationen','Animations').replace(': an',': on').replace(': aus',': off');if(neu!==t)b.textContent=neu;});}
 if(typeof MutationObserver!=='undefined'&&document.body){new MutationObserver(leisteEnglisch).observe(document.body,{subtree:true,childList:true,characterData:true});}
 
@@ -879,5 +888,5 @@ if(typeof window!=='undefined'){addEventListener('gamepadconnected',()=>padTick(
 padAnzeige(0);if(typeof requestAnimationFrame==='function')requestAnimationFrame(padSchleife);
 
 window.ShopSpiel={G,welt,start,menu,update,oeffneWare,nehmen,weglegen,kasseOeffnen,antworte,zahleMit,bezahlen,weiterKasse,auswerten,ende,
- duellLos,duellWahl,duellBonusAntwort,duellWeiter,padTick,splitNehmen,padQuelle:f=>{padQuelle=f;},PAD,KN,woAntwort,missionWahl,missionWeiter,kochen,zettel,vorlesen,tippen,nehmenMitte,eingabe,bonSpeichern};
+ duellLos,duellWahl,duellBonusAntwort,duellWeiter,tonHinweis:()=>tonHinweis(),padTick,splitNehmen,padQuelle:f=>{padQuelle=f;},PAD,KN,woAntwort,missionWahl,missionWeiter,kochen,zettel,vorlesen,tippen,nehmenMitte,eingabe,bonSpeichern};
 })();
