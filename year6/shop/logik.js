@@ -242,6 +242,64 @@ function bon(welt,korb){
 }
 function sterne(anteil){return anteil>=0.9?3:anteil>=0.65?2:1;}
 
+/* ---------- Where is ...? und Price detective ---------- */
+/* Bereich einer Ware: Gang 1-4 (beide Regalseiten, Tiefkuehl zaehlt zu Gang 4)
+   oder eine eigene Abteilung. */
+function bereich(welt,id){
+ const w=welt.byId[id],g=welt.GAENGE.find(g=>g.orte.includes(w.ort));
+ if(g)return {key:'g'+g.nr,text:'in aisle '+g.nr,ort:w.ort==='tiefkuehl'?'in the freezer in aisle '+g.nr:'in aisle '+g.nr};
+ const T={kuehl:'in the fridge at the back',obst:'in the fruit section on the left',gemuese:'in the vegetable section',baeckerei:'at the bakery'};
+ return {key:w.ort,text:T[w.ort],ort:T[w.ort]};
+}
+function istPlural(welt,id){return /s$/.test(welt.byId[id].schild);}
+function nachbarn(welt,id){
+ const p=welt.plaetze.find(q=>q.id===id),reihe=welt.plaetze.filter(q=>q.seite===p.seite).sort((a,b)=>a.a-b.a),k=reihe.indexOf(p);
+ return [reihe[k-1],reihe[k+1]].filter(Boolean).map(q=>q.id);
+}
+function nachbarText(welt,id){
+ const n=nachbarn(welt,id),name=i=>'the '+welt.byId[i].schild.toLowerCase();
+ return n.length>1?'between '+name(n[0])+' and '+name(n[1]):'next to '+name(n[0]);
+}
+function lageSatz(welt,id){return 'It\'s '+bereich(welt,id).ort+', '+nachbarText(welt,id)+'.';}
+function kundenFrage(welt,id){return 'Excuse me, where '+(istPlural(welt,id)?'are':'is')+' the '+welt.byId[id].schild.toLowerCase()+'?';}
+/* Drei Antworten: richtig, falscher Ort, falsche Nachbarn */
+function lageOptionen(welt,id,rnd){
+ rnd=rnd||Math.random;
+ const richtig=lageSatz(welt,id),b=bereich(welt,id);
+ const orte=[...new Set(welt.waren.map(w=>bereich(welt,w.id).ort))].filter(o=>o!==b.ort);
+ const falschOrt='It\'s '+orte[Math.floor(rnd()*orte.length)]+', '+nachbarText(welt,id)+'.';
+ const andere=welt.waren.filter(w=>w.ort!==welt.byId[id].ort);
+ let falschNachbar=richtig;
+ for(let k=0;k<20&&(falschNachbar===richtig||falschNachbar===falschOrt);k++)falschNachbar='It\'s '+b.ort+', '+nachbarText(welt,andere[Math.floor(rnd()*andere.length)].id)+'.';
+ return {richtig,optionen:mischen([richtig,falschOrt,falschNachbar],rnd)};
+}
+/* Preisraetsel: genau eine Ware passt */
+function raetsel(welt,rnd,ohne){
+ rnd=rnd||Math.random;ohne=ohne||[];
+ for(let v=0;v<400;v++){
+  const t=welt.waren[Math.floor(rnd()*welt.waren.length)];if(ohne.includes(t.id))continue;
+  const b=bereich(welt,t.id),gruppe=welt.waren.filter(w=>bereich(welt,w.id).key===b.key);
+  if(gruppe.length<3||gruppe.some(w=>w!==t&&w.p===t.p))continue;
+  const teurer=gruppe.filter(w=>w.p>t.p).sort((a,c)=>a.p-c.p),billiger=gruppe.filter(w=>w.p<t.p).sort((a,c)=>c.p-a.p);
+  const name=w=>'the '+w.schild.toLowerCase();
+  let text;
+  if(!billiger.length)text='I\'m the cheapest thing '+b.text+'.';
+  else if(!teurer.length)text='I\'m the most expensive thing '+b.text+'.';
+  else{if(rnd()<0.15)continue;
+   text='I\'m '+b.text+'. I\'m cheaper than '+name(teurer[0])+', but more expensive than '+name(billiger[0])+'.';}
+  return {id:t.id,text:text+' What am I?'};
+ }
+ return null;
+}
+/* Recipe mission */
+function rezeptStand(welt,rezept,korb){
+ const ids=rezept.zutaten.map(z=>z[0]);
+ const zutaten=rezept.zutaten.map(([id,wort])=>({id,wort,ok:!!korb[id]}));
+ const extra=Object.entries(korb).filter(([id,n])=>n&&!ids.includes(id)).map(([id,n])=>({id,n}));
+ const anteil=Math.max(0,zutaten.filter(z=>z.ok).length-0.5*extra.length)/zutaten.length;
+ return {zutaten,extra,anteil,alle:zutaten.every(z=>z.ok)};
+}
+
 /* ---------- Wegnetz (fuer Tests und Karte) ---------- */
 function erreichbar(welt,schritt){
  schritt=schritt||0.25;
@@ -256,5 +314,6 @@ function erreichbar(welt,schritt){
 
 window.ShopLogik={bauen,frei,bewegen,inKassenZone,richtung,strahl,strahlBox,treffer,blickTreffer,
  betrag,preis,gross,menge,zufall,mischen,liste,korbAnzahl,korbSumme,listeStand,budgetStand,minimum,vergleiche,
- wechselOptionen,bezahlt,kassenSchritte,duellAufgaben,duellPunkte,wo,ORTFARBE,bon,sterne,erreichbar,AUGE,ZAHL};
+ wechselOptionen,bezahlt,kassenSchritte,duellAufgaben,duellPunkte,wo,ORTFARBE,bon,sterne,erreichbar,AUGE,ZAHL,
+ bereich,istPlural,nachbarn,nachbarText,lageSatz,kundenFrage,lageOptionen,raetsel,rezeptStand};
 })();

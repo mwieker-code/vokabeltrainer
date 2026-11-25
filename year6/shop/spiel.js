@@ -63,16 +63,17 @@ function start(modus,rnd){
  zeige('stage');
  $('steuer').hidden=!(G.tafel||modus==='duell');
  if(modus==='duell')duellStart(rnd);
+ G.mission=null;if(MISSIONEN.includes(modus))missionStart(modus,rnd);
  zettel();korbKnopf();
  if(R&&R.setProfi)R.setProfi(G.profi);
  starte3d();
- if(modus==='hoeren')setTimeout(()=>vorlesen(),600);
+ if(modus==='hoeren'||modus==='wo')setTimeout(()=>vorlesen(),600);
 }
 function menu(){
  if(window.speechSynthesis)try{speechSynthesis.cancel();}catch(e){}
  G.zustand='menu';zeige('menu');document.body.classList.remove('tafel');
  const d=laden(),b=d.best||{};
- for(const m of ['liste','hoeren','budget']){const el=document.querySelector('[data-best="'+m+'"]');if(el)el.textContent=b[m]?'Rekord: '+'★'.repeat(b[m])+'☆'.repeat(3-b[m]):'';}
+ for(const m of ['liste','hoeren','budget',...MISSIONEN]){const el=document.querySelector('[data-best="'+m+'"]');if(el)el.textContent=b[m]?'Rekord: '+'★'.repeat(b[m])+'☆'.repeat(3-b[m]):'';}
 }
 
 /* ---------------- Zettel (Liste oder Budget) ---------------- */
@@ -83,6 +84,8 @@ function zettel(){
  if(box.hidden)return;
  const ul=$('zListe'),bud=$('zBudget');
  $('woerter').innerHTML=DAT.WOERTER.map(([e,d])=>'<dt lang="en">'+esc(e)+'</dt><dd>'+esc(d)+'</dd>').join('');
+ $('zAufgabe').hidden=!G.mission;
+ if(G.mission){ul.innerHTML='';bud.hidden=true;return missionZettel();}
  if(G.liste){
   const st=L.listeStand(welt,G.liste,G.korb),hoeren=G.modus==='hoeren';
   $('zTitel').textContent=hoeren?'Listen and shop':'Shopping list';
@@ -117,6 +120,10 @@ function vorlesen(){
  if(G.liste){const z=G.liste.map(e=>e.text);return sprich('Please buy '+aufzaehlen(z)+'.',0.85);}
  if(G.auftrag)return sprich(G.auftrag.titel+'. You have got '+L.betrag(G.auftrag.budget).replace('£','')+' pounds. Please buy '+aufzaehlen(G.auftrag.gruppen.map(g=>g.en))+'.',0.9);
  if(G.duell&&G.duell.ziel)return sprich('Please find '+G.duell.ziel.en+'.',0.85);
+ const M=G.mission;
+ if(M&&M.art==='rezept')return sprich(M.rezept.titel+'. '+M.rezept.text,0.85);
+ if(M&&M.art==='wo')return sprich(M.frage,0.9);
+ if(M&&M.art==='detektiv'&&M.raetsel)return sprich(M.raetsel.text,0.85);
  return false;
 }
 
@@ -135,7 +142,8 @@ function oeffneWare(id){
 function zeichneWare(){
  const box=$('ware'),a=G.ware;if(!box||!a)return;
  const w=welt.byId[a.id],farbe=L.ORTFARBE[w.ort],imKorb=G.korb[a.id]||0,name=!G.profi;
- const frei=G.modus==='frei',duell=G.modus==='duell';
+ const M=G.mission,waehlen=!!M&&(M.art==='detektiv'||(M.art==='wo'&&M.phase==='zeigen'));
+ const frei=G.modus==='frei'||(!!M&&M.art==='wo'&&!waehlen),duell=G.modus==='duell'||waehlen;
  box.innerHTML='<button class="zu" id="wZu" aria-label="Schließen">✕</button>'
   +'<div class="w-kopf"><div class="w-bild" style="--a:'+w.farbe+';--b:'+w.akzent+'"><span aria-hidden="true">'+w.emo+'</span></div>'
   +'<div class="w-text"><span class="w-ort" style="--o:'+farbe+'" lang="en">'+esc(DAT.ORTE[w.ort].en)+'</span>'
@@ -143,7 +151,7 @@ function zeichneWare(){
   +'<span class="w-preis">'+L.preis(w.p)+(w.menge?' <small lang="en">each</small>':'')+'</span>'
   +(name?'<span class="w-de">'+(a.de?esc(w.de):'<button id="wDe" class="link">Auf Deutsch?</button>')+'</span>':'')
   +'</div></div>'
-  +(duell?'<div class="w-knoepfe"><button id="wNehmen" class="primaer gross">✔ Das nehmen wir!</button></div>'
+  +(duell?'<div class="w-knoepfe"><button id="wNehmen" class="primaer gross">'+(waehlen?'✔ Das ist es!':'✔ Das nehmen wir!')+'</button></div>'
    :frei?'<div class="w-knoepfe">'+(name?'<button id="wHoer" class="klein">🔊 Anhören</button>':'')+'</div>'
    :'<div class="w-menge"><button id="wMinus" aria-label="eins weniger">−</button><b id="wAnz">'+a.anz+'</b><button id="wPlus" aria-label="eins mehr">+</button></div>'
     +'<div class="w-knoepfe">'+(name?'<button id="wHoer" class="klein">🔊</button>':'')+'<button id="wNehmen" class="primaer">In den Korb · '+L.preis(w.p*a.anz)+'</button></div>'
@@ -154,7 +162,7 @@ function zeichneWare(){
  if($('wHoer'))$('wHoer').onclick=()=>sprich(w.en);
  if($('wMinus'))$('wMinus').onclick=()=>{a.anz=Math.max(1,a.anz-1);zeichneWare();};
  if($('wPlus'))$('wPlus').onclick=()=>{a.anz=Math.min(6,a.anz+1);zeichneWare();};
- if($('wNehmen'))$('wNehmen').onclick=()=>duell?duellWahl(a.id):nehmen(a.id,a.anz);
+ if($('wNehmen'))$('wNehmen').onclick=()=>waehlen?missionWahl(a.id):duell?duellWahl(a.id):nehmen(a.id,a.anz);
 }
 function schliesseWare(){G.ware=null;if($('ware'))$('ware').hidden=true;}
 function nehmen(id,anz){
@@ -166,7 +174,7 @@ function nehmen(id,anz){
 }
 function korbKnopf(hupf){
  const k=$('korbKnopf');if(!k)return;
- k.hidden=G.modus==='frei'||G.modus==='duell';
+ k.hidden=G.modus==='frei'||G.modus==='duell'||G.modus==='wo'||G.modus==='detektiv';
  $('korbZahl').textContent=L.korbAnzahl(G.korb);$('korbSumme').textContent=L.betrag(L.korbSumme(welt,G.korb));
  if(hupf){k.classList.remove('hupf');void k.offsetWidth;k.classList.add('hupf');}
 }
@@ -345,6 +353,115 @@ function konfetti(host){
  const farben=['#E9573F','#F6BB42','#8CC152','#3BAFDA','#D770AD'];
  for(let i=0;i<40;i++){const s=document.createElement('i');s.className='konfetti';s.style.left=(Math.random()*100)+'%';s.style.background=farben[i%5];
   s.style.animationDelay=(Math.random()*0.6)+'s';s.style.setProperty('--dx',(Math.random()*160-80)+'px');host.append(s);setTimeout(()=>s.remove(),3200);}
+}
+
+/* ---------------- Aufgaben 4-6: Recipe mission, Where is ...?, Price detective ---------------- */
+const MISSIONEN=['rezept','wo','detektiv'],RUNDEN=5;
+function missionStart(art,rnd){
+ rnd=rnd||Math.random;const d=laden();
+ if(art==='rezept'){const wahl=DAT.REZEPTE.filter(r=>r.id!==d.letztesRezept);const r=wahl[Math.floor(rnd()*wahl.length)];d.letztesRezept=r.id;sichern(d);
+  G.mission={art,rezept:r};}
+ else{G.mission={art,nr:0,punkte:0,max:art==='wo'?RUNDEN*3:RUNDEN*2,log:[],erledigt:[],rnd};missionRunde();}
+}
+function missionRunde(){
+ const M=G.mission,rnd=M.rnd;
+ if(M.art==='wo'){
+  let ziel;do{ziel=welt.waren[Math.floor(rnd()*welt.waren.length)];}while(M.erledigt.includes(ziel.id)||M.erledigt.some(id=>welt.byId[id].ort===ziel.ort)&&M.erledigt.length<6);
+  M.ziel=ziel;M.kunde=DAT.KUNDEN[M.nr%DAT.KUNDEN.length];M.frage=L.kundenFrage(welt,ziel.id);M.wahl=L.lageOptionen(welt,ziel.id,rnd);
+  M.phase='frage';M.rueck='';M.eintrag={frage:M.frage,richtig:M.wahl.richtig,antwort:false,gezeigt:false};
+ }else{
+  M.raetsel=L.raetsel(welt,rnd,M.erledigt);M.versuche=0;M.rueck='';M.eintrag={text:M.raetsel.text,id:M.raetsel.id,punkte:0};
+ }
+ zettel();
+}
+function missionZettel(){
+ const M=G.mission,zA=$('zAufgabe');
+ if(M.art==='rezept'){
+  $('zTitel').textContent=M.rezept.emo+' '+M.rezept.titel;
+  $('zInfo').textContent='Lies das Rezept. Was brauchst du dafür? Leg alle Zutaten in den Korb.';
+  const n=L.korbAnzahl(G.korb);
+  zA.innerHTML='<p class="m-text" lang="en">'+esc(M.rezept.text)+'</p><p class="m-stand">Im Korb: <b>'+n+'</b> '+(n===1?'Sache':'Sachen')+'</p><button id="mKochen" class="primaer">🍳 Fertig – jetzt kochen!</button>';
+  $('mKochen').onclick=kochen;
+ }else if(M.art==='wo'){
+  $('zTitel').textContent='Where is …? · '+(M.nr+1)+'/'+RUNDEN;
+  $('zInfo').textContent=M.phase==='frage'?'Du arbeitest im Laden. Wie antwortest du?':'Zeig '+M.kunde.name+' die Ware: Geh hin und tippe darauf.';
+  zA.innerHTML='<div class="m-kunde"><span class="m-emo" aria-hidden="true">'+M.kunde.emo+'</span><p lang="en"><small>'+esc(M.kunde.name)+'</small>„'+esc(M.frage)+'“</p></div>'
+   +(M.phase==='frage'?'<div class="m-optionen" lang="en">'+M.wahl.optionen.map((o,k)=>'<button data-mopt="'+k+'">'+esc(o)+'</button>').join('')+'</div>'
+    :'<p class="m-rueck">'+M.rueck+'</p><p lang="en" class="m-zeig">Show '+M.kunde.sie+' the '+esc(M.ziel.schild.toLowerCase())+'!</p><button id="mWeiter" class="klein">Überspringen →</button>');
+  zA.querySelectorAll('[data-mopt]').forEach(b=>b.onclick=()=>woAntwort(M.wahl.optionen[+b.dataset.mopt]));
+  if($('mWeiter'))$('mWeiter').onclick=missionWeiter;
+ }else{
+  $('zTitel').textContent='Price detective · '+(M.nr+1)+'/'+RUNDEN;
+  $('zInfo').textContent='Lies das Rätsel, vergleiche die Preisschilder und tippe auf die richtige Ware.';
+  zA.innerHTML='<p class="m-text m-raetsel" lang="en">🔍 '+esc(M.raetsel.text)+'</p>'+(M.rueck?'<p class="m-rueck">'+M.rueck+'</p>':'')
+   +'<p class="m-stand">'+(M.versuche?'Noch ein Versuch.':'Zwei Versuche.')+' Punkte: <b>'+M.punkte+'</b></p>';
+ }
+}
+function woAntwort(text){
+ const M=G.mission;if(!M||M.art!=='wo'||M.phase!=='frage')return false;
+ const ok=text===M.wahl.richtig;if(ok){M.punkte+=2;M.eintrag.antwort=true;}ton(ok?'ok':'no');
+ M.rueck=ok?'<b class="k-gut">Richtig!</b>':'<b class="k-schlecht">Nicht ganz.</b> Richtig ist: <span lang="en">'+esc(M.wahl.richtig)+'</span>';
+ M.phase='zeigen';sprich(M.wahl.richtig);zettel();return ok;
+}
+function missionWahl(id){
+ const M=G.mission;if(!M)return false;schliesseWare();
+ const w=welt.byId[id];
+ if(M.art==='wo'){
+  if(M.phase!=='zeigen')return false;
+  if(id===M.ziel.id){M.punkte+=1;M.eintrag.gezeigt=true;ton('ok');meldung(M.kunde.emo+' „Thank you so much!“',2600);sprich('Thank you so much!');missionWeiter();return true;}
+  ton('no');meldung('„No, that\'s '+w.en+'. Can you look again?“',3200);return false;
+ }
+ if(M.art==='detektiv'){
+  if(id===M.raetsel.id){const p=M.versuche?1:2;M.punkte+=p;M.eintrag.punkte=p;ton('ok');meldung('🔍 Yes! It\'s '+w.en+'. Great detective work!',3000);missionWeiter();return true;}
+  M.versuche++;ton('no');
+  if(M.versuche>=2){meldung('Leider nicht. Gesucht war: '+L.gross(welt.byId[M.raetsel.id].en)+'.',3600);missionWeiter();return false;}
+  M.rueck='<span lang="en">No – that\'s '+esc(w.en)+' ('+L.preis(w.p)+').</span> Lies das Rätsel noch einmal.';zettel();return false;
+ }
+ return false;
+}
+function missionWeiter(){
+ const M=G.mission;if(!M)return false;
+ M.log.push(M.eintrag);M.erledigt.push(M.art==='wo'?M.ziel.id:M.raetsel.id);M.nr++;
+ if(M.nr>=RUNDEN)return missionEnde();
+ missionRunde();if(M.art==='wo')setTimeout(vorlesen,500);return true;
+}
+function kochen(){
+ if(!L.korbAnzahl(G.korb)){meldung('Dein Korb ist noch leer.');return false;}
+ return missionEnde();
+}
+function markiere(text,zutaten){
+ let h=esc(text);
+ for(const z of zutaten){const re=new RegExp('\\b('+z.wort.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')\\b','i');h=h.replace(re,'<mark class="'+(z.ok?'ok':'nein')+'">$1</mark>');}
+ return h;
+}
+function missionEnde(){
+ if(window.speechSynthesis)try{speechSynthesis.cancel();}catch(e){}
+ const M=G.mission;schliesseWare();
+ let anteil,inhalt;
+ if(M.art==='rezept'){
+  const st=L.rezeptStand(welt,M.rezept,G.korb);anteil=st.anteil;M.stand=st;
+  inhalt='<section class="e-karte"><h2>'+M.rezept.emo+' '+esc(M.rezept.titel)+' <small>('+esc(M.rezept.de)+')</small></h2>'
+   +'<ul class="e-liste">'+st.zutaten.map(z=>'<li class="'+(z.ok?'ok':'nein')+'"><span>'+(z.ok?'✓':'✗')+'</span><span lang="en">'+esc(welt.byId[z.id].en)+'</span><small>'+(z.ok?esc(welt.byId[z.id].de):'fehlt')+'</small></li>').join('')
+   +st.extra.map(e=>'<li class="nein"><span>✗</span><span lang="en">'+esc(L.menge(welt.byId[e.id],e.n))+'</span><small>nicht im Rezept</small></li>').join('')+'</ul>'
+   +'<h3>Das Rezept</h3><p class="e-rezept" lang="en">'+markiere(M.rezept.text,st.zutaten)+'</p></section>';
+ }else if(M.art==='wo'){
+  anteil=M.punkte/M.max;
+  inhalt='<section class="e-karte"><h2>Where is …? · '+M.punkte+' / '+M.max+' Punkte</h2><ul class="e-saetze" lang="en">'
+   +M.log.map(e=>'<li class="'+(e.antwort&&e.gezeigt?'gut':'')+'"><b>'+esc(e.frage)+'</b><br>'+esc(e.richtig)+'<br><small lang="de">'+(e.antwort?'✓ Antwort':'✗ Antwort')+' · '+(e.gezeigt?'✓ gezeigt':'✗ nicht gezeigt')+'</small></li>').join('')+'</ul></section>';
+ }else{
+  anteil=M.punkte/M.max;
+  inhalt='<section class="e-karte"><h2>Price detective · '+M.punkte+' / '+M.max+' Punkte</h2><ul class="e-saetze" lang="en">'
+   +M.log.map(e=>'<li class="'+(e.punkte?'gut':'')+'">'+esc(e.text)+'<br><b>→ '+esc(L.gross(welt.byId[e.id].en))+' ('+L.preis(welt.byId[e.id].p)+')</b> <small lang="de">'+(e.punkte===2?'✓ sofort':e.punkte===1?'✓ im 2. Versuch':'✗')+'</small></li>').join('')+'</ul></section>';
+ }
+ const st=L.sterne(anteil);G.ergebnis={sterne:st,anteil};G.zustand='ende';
+ const d=laden();d.best=d.best||{};if(st>(d.best[G.modus]||0))d.best[G.modus]=st;d.einkaeufe=(d.einkaeufe||0)+1;sichern(d);
+ const o=$('over');if(!o)return true;
+ o.innerHTML='<div class="e-kopf"><h1 tabindex="-1">'+(st===3?'Brilliant!':st===2?'Well done!':'Good try!')+'</h1>'
+  +'<p class="e-sterne" aria-label="'+st+' von 3 Sternen">'+'★'.repeat(st)+'<span>'+'★'.repeat(3-st)+'</span></p></div>'
+  +'<div class="e-einzeln">'+inhalt+'<p class="e-knoepfe mitte"><button id="nochmal" class="primaer">Noch eine Runde</button> <button id="zumMenu" class="zweit">Zum Menü</button></p></div>';
+ zeige('over');$('nochmal').onclick=()=>start(G.modus);$('zumMenu').onclick=menu;
+ if(st===3)konfetti(o);o.querySelector('h1').focus();
+ return true;
 }
 
 /* ---------------- Team-Duell ---------------- */
@@ -583,5 +700,5 @@ function binden(){
 einstellungenLaden();binden();menu();
 
 window.ShopSpiel={G,welt,start,menu,update,oeffneWare,nehmen,weglegen,kasseOeffnen,antworte,zahleMit,bezahlen,weiterKasse,auswerten,ende,
- duellLos,duellWahl,duellBonusAntwort,duellWeiter,zettel,vorlesen,tippen,nehmenMitte,eingabe,bonSpeichern};
+ duellLos,duellWahl,duellBonusAntwort,duellWeiter,woAntwort,missionWahl,missionWeiter,kochen,zettel,vorlesen,tippen,nehmenMitte,eingabe,bonSpeichern};
 })();
