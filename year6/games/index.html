@@ -37,10 +37,11 @@ h1{font-size:34px;line-height:1.1;margin:6px 0 6px}
  <a class="spiel" href="../sled/"><canvas data-bild="sled" width="640" height="320" aria-hidden="true"></canvas><div class="text"><h2>Sled Run</h2><p>Schlittenrennen: Wische in die Spur mit dem richtigen Wort und sammle Pinguine ein.</p><p class="stand" data-stand="sled"></p></div></a>
  <a class="spiel" href="../climb/"><canvas data-bild="climb" width="640" height="320" aria-hidden="true"></canvas><div class="text"><h2>Summit Climb</h2><p>Kletterspiel: Greif nach dem richtigen Wort und klettere vor dem Nebel bis zum Gipfel.</p><p class="stand" data-stand="climb"></p></div></a>
  <a class="spiel" href="../kick/"><canvas data-bild="kick" width="640" height="320" aria-hidden="true"></canvas><div class="text"><h2>Free Kick Tour</h2><p>Freistöße: Wische vom Ball zum richtigen Wort im Tor – vorbei an Torwart und Mauer.</p><p class="stand" data-stand="kick"></p></div></a>
+ <a class="spiel" href="../shop/"><canvas data-bild="shop" width="640" height="320" aria-hidden="true"></canvas><div class="text"><h2>Shopping Trip</h2><p>Supermarkt in 3D: Einkaufsliste abarbeiten, auf Englisch an der Kasse bezahlen, Budget-Challenge und Team-Duell.</p><p class="stand" data-stand="shop"></p></div></a>
 </div>
 <p class="muted">Die Spiele zählen nicht in deine Lernfächer. Gespeichert werden nur Bestwerte.</p>
 </main>
-<script src="data.js?v=20261124-hoeren"></script><script src="../figuren.js?v=20261124-hoeren"></script>
+<script src="data.js?v=20261124-hoeren"></script><script src="../figuren.js?v=20261124-hoeren"></script><script src="../shop/bild.js?v=20261124-hoeren"></script>
 <script>
 /* Spieleseite: Vorschaubilder und eigener Stand je Spiel */
 (function(){
@@ -54,6 +55,9 @@ const text=(best,n,wort)=>best?'Bestwert '+best+' P · '+n+'× '+wort:'Noch nich
 document.querySelector('[data-stand="sled"]').textContent=text(besterWert(sled&&sled.best),summe(sled&&sled.finishes),'im Ziel');
 document.querySelector('[data-stand="climb"]').textContent=text(besterWert(climb&&climb.best),summe(climb&&climb.summits),'am Gipfel');
 document.querySelector('[data-stand="kick"]').textContent=text(besterWert(kick&&kick.best),summe(kick&&kick.tours),'Tour geschafft');
+/* Shopping Trip (nur Year 6): Sterne statt Punkte */
+const shopStand=document.querySelector('[data-stand="shop"]');
+if(shopStand){const sh=lies(Q.schluessel+':shop:v1'),b=Math.max(0,...Object.values((sh&&sh.best)||{}).map(Number));shopStand.textContent=b?'Bestwert '+'★'.repeat(b)+'☆'.repeat(3-b)+' · '+(sh.einkaeufe||0)+'× eingekauft':'Noch nicht gespielt';}
 const F=window.Figuren;
 function bild(cv,art){
  const g=cv.getContext&&cv.getContext('2d');if(!g)return;const W=cv.width,H=cv.height;
@@ -94,7 +98,7 @@ function bild(cv,art){
   if(F)F.kindKlettern(g,325,150,2,{reach:0.4,mood:'happy',lh:{x:-12,y:-28},rh:{x:22,y:0}});
  }
 }
-document.querySelectorAll('[data-bild]').forEach(cv=>{try{bild(cv,cv.dataset.bild);}catch(e){}});
+document.querySelectorAll('[data-bild]').forEach(cv=>{try{if(cv.dataset.bild==='shop'){if(window.ShopBild)window.ShopBild(cv);}else bild(cv,cv.dataset.bild);}catch(e){}});
 })();
 </script>
 </body></html>

@@ -1,0 +1,344 @@
+/* Shopping Trip: eigenes Design, unabhaengig von Hell und Nacht der App. */
+:root{--wald:#0F3B2E;--wald2:#14503D;--gruen:#2E9E4F;--gelb:#FFC845;--tomate:#E9573F;--papier:#FFF9EE;--ink:#1D2A33;--grau:#5B6670;--hell:#D7E6DE;--blau:#3BAFDA}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--wald);color:var(--papier);font:17px/1.5 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-text-size-adjust:100%}
+body{background:radial-gradient(120% 60% at 50% 0%,#1E6B50 0%,#14503D 45%,var(--wald) 100%) fixed}
+body.im-spiel{overflow:hidden;overscroll-behavior:none}
+button{font:inherit;cursor:pointer;color:inherit}
+input,select{font:inherit}
+:focus-visible{outline:3px solid var(--gelb);outline-offset:3px}
+h1,h2,h3,.marke,.m-name{font-family:"Bricolage Grotesque",Inter,system-ui,sans-serif}
+main.shop{max-width:760px;margin:0 auto;padding:12px 16px 28px}
+
+/* ---------- Menue ---------- */
+#menu>header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:12px}
+#menu>header a{color:var(--wald);background:var(--gelb);text-decoration:none;font-weight:700;padding:8px 16px;border-radius:999px;font-size:15px}
+#menu>header span{font:600 11px/1 "JetBrains Mono",ui-monospace,Menlo,monospace;letter-spacing:.14em;color:var(--hell)}
+.held{position:relative;border-radius:26px;overflow:hidden;box-shadow:0 18px 40px rgba(0,0,0,.35);background:#8FD0F0}
+.held canvas{display:block;width:100%;height:auto;aspect-ratio:960/420}
+.held-text{padding:16px 20px 20px;background:var(--papier);color:var(--ink)}
+.marke{margin:0;font-weight:800;color:var(--gruen);letter-spacing:.02em;font-size:15px;text-transform:uppercase}
+h1{font-size:clamp(34px,7vw,50px);line-height:1;letter-spacing:-.03em;margin:4px 0 8px}
+h1[tabindex="-1"]:focus{outline:none}
+.lead{margin:0;color:#3C4A54;font-size:17px}
+h2{font-size:22px;margin:26px 0 10px;letter-spacing:-.01em}
+.muted{color:var(--hell);font-size:14px;opacity:.85}
+.modi{display:grid;gap:10px;grid-template-columns:1fr}
+@media (min-width:620px){.modi{grid-template-columns:1fr 1fr}.modi .m-frei{grid-column:1/-1}}
+.modi button{display:flex;gap:14px;align-items:center;text-align:left;padding:14px 16px;border-radius:20px;border:0;background:var(--papier);color:var(--ink);
+ box-shadow:0 6px 0 rgba(0,0,0,.18);transition:transform .12s ease,box-shadow .12s ease;min-height:84px;position:relative;overflow:hidden}
+.modi button::after{content:"";position:absolute;left:0;top:0;bottom:0;width:7px;background:var(--f,var(--gruen))}
+.modi button:hover{transform:translateY(-2px);box-shadow:0 8px 0 rgba(0,0,0,.18)}
+.modi button:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.18)}
+.m-liste{--f:var(--gruen)}.m-hoeren{--f:var(--blau)}.m-budget{--f:var(--gelb)}.m-duell{--f:var(--tomate)}.m-frei{--f:#967ADC}
+.m-icon{font-size:34px;width:56px;height:56px;flex:none;display:grid;place-items:center;border-radius:16px;background:color-mix(in srgb,var(--f) 22%,#fff)}
+.m-text{display:flex;flex-direction:column;gap:2px}
+.m-name{font-weight:800;font-size:20px;line-height:1.15}
+.m-info{font-size:14px;color:#4B5862;line-height:1.35}
+.m-best{font-size:13px;color:#B7791F;font-weight:800}
+.m-best:empty{display:none}
+.einstellungen{display:grid;gap:10px;grid-template-columns:1fr}
+@media (min-width:620px){.einstellungen{grid-template-columns:1fr 1fr}}
+fieldset{margin:0;border:1px solid rgba(255,255,255,.16);border-radius:18px;padding:10px 14px 12px;background:rgba(255,255,255,.05)}
+legend{font-weight:800;padding:0 6px;color:var(--gelb);font-size:14px;text-transform:uppercase;letter-spacing:.06em}
+fieldset label{display:block;margin:7px 0;font-size:15px;padding-left:30px;text-indent:-30px}
+fieldset label input{vertical-align:middle;margin:0 8px 0 0;text-indent:0}
+fieldset .name{padding-left:0;text-indent:0}
+fieldset .name input{display:block;width:100%;margin-top:4px}
+fieldset input[type=radio],fieldset input[type=checkbox]{width:20px;height:20px;accent-color:var(--gelb);flex:none}
+fieldset input[type=text],fieldset select{border:1px solid rgba(255,255,255,.3);background:rgba(0,0,0,.2);color:var(--papier);border-radius:10px;padding:6px 10px;min-height:38px}
+.teams{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.teams label{display:flex;flex-direction:column;gap:2px;margin:0;padding:0;text-indent:0}
+.teams input{width:100%}
+ul.steuerung{margin:0;padding:12px 16px 12px 34px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:18px;font-size:15px}
+ul.steuerung li{margin:3px 0}
+.lehrkraft{margin-top:12px;background:var(--papier);color:var(--ink);border-radius:18px;padding:12px 16px}
+.lehrkraft summary{font-weight:800;cursor:pointer}
+.lehrkraft ul{padding-left:20px;margin:8px 0 2px;font-size:15px}
+.lehrkraft li{margin:6px 0}
+
+/* ---------- Spiel: ganzer Bildschirm ---------- */
+#stage{position:fixed;inset:0;z-index:5;background:#BFE3F5;touch-action:none;user-select:none;-webkit-user-select:none;color:var(--ink)}
+#stage[hidden],#menu[hidden],#over[hidden],[hidden]{display:none!important}
+#welt{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;-webkit-tap-highlight-color:transparent;cursor:grab}
+#welt:active{cursor:grabbing}
+#fadenkreuz{position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px;border-radius:50%;border:2px solid rgba(255,255,255,.95);box-shadow:0 0 0 2px rgba(0,0,0,.25);pointer-events:none}
+#hinweis{position:absolute;left:50%;top:calc(50% + 18px);transform:translateX(-50%);background:rgba(15,59,46,.9);color:#fff;border-radius:999px;padding:6px 14px;font-weight:800;white-space:nowrap;pointer-events:none;display:flex;gap:8px;align-items:baseline;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+#hinweis small{font-weight:600;color:var(--gelb);font-size:12px}
+.hud{position:absolute;left:0;right:0;top:0;display:flex;gap:8px;align-items:flex-start;padding:max(10px,env(safe-area-inset-top)) 10px 0;pointer-events:none}
+.hud>*{pointer-events:auto}
+.rund{width:46px;height:46px;flex:none;border-radius:14px;border:0;background:rgba(15,59,46,.88);color:#fff;font-weight:800;box-shadow:0 4px 12px rgba(0,0,0,.25)}
+
+/* Einkaufszettel */
+.zettel{flex:0 1 330px;max-width:330px;background:var(--papier);color:var(--ink);border-radius:6px 6px 16px 16px;padding:10px 14px 12px;
+ box-shadow:0 10px 24px rgba(0,0,0,.25);max-height:calc(100dvh - 220px);overflow:auto;position:relative;
+ background-image:linear-gradient(transparent 31px,rgba(59,175,218,.22) 32px);background-size:100% 32px;background-position:0 6px;transform:rotate(-.6deg)}
+.zettel::before{content:"";position:absolute;left:34px;top:0;bottom:0;width:2px;background:rgba(233,87,63,.35)}
+.z-kopf{display:flex;align-items:center;gap:8px;padding-left:28px}
+.z-kopf b{font:800 20px/1.2 "Bricolage Grotesque",Inter,sans-serif;flex:1}
+.z-info{margin:2px 0 4px 28px;font-size:13px;color:var(--grau);line-height:1.3}
+#zListe{list-style:none;margin:0;padding:0 0 0 6px}
+#zListe li{display:flex;align-items:center;gap:8px;min-height:32px;font-size:16px;line-height:1.2;font-weight:600}
+#zListe .haken{width:20px;flex:none;font-weight:900;color:var(--gruen);text-align:center}
+#zListe li.ok .txt{text-decoration:line-through;text-decoration-thickness:2px;color:#6F7C85}
+#zListe li.zuviel .haken,#zListe li.extra .haken{color:var(--tomate)}
+#zListe li small{color:var(--tomate);font-size:12px;font-weight:700}
+#zListe .txt small{color:var(--grau);font-weight:500}
+#zListe li.extra .txt{color:var(--tomate)}
+.hoer{border:0;background:var(--blau);color:#fff;border-radius:999px;padding:3px 12px;font-weight:800;font-size:15px}
+.wo{margin-left:auto;border:1px solid #C9D1D8;background:#fff;border-radius:50%;width:26px;height:26px;flex:none;font-weight:800;color:var(--grau);font-size:14px;line-height:1}
+.z-budget{margin:6px 0 2px 28px}
+.z-balken{height:12px;border-radius:999px;background:#E3E7EA;overflow:hidden}
+.z-balken span{display:block;height:100%;background:linear-gradient(90deg,var(--gruen),#8CC152);border-radius:999px;transition:width .3s ease}
+.z-budget.drueber .z-balken span{background:var(--tomate)}
+.z-budget p{margin:4px 0 0;font-size:13px;font-weight:700;color:var(--grau)}
+.z-budget.drueber p{color:var(--tomate)}
+.z-knoepfe{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 0 28px}
+.klein{border:1px solid #CBD3DB;background:#fff;color:var(--ink);border-radius:999px;padding:5px 12px;font-size:14px;font-weight:700;min-height:34px}
+#woerter{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;margin:8px 0 0 28px;font-size:13px;line-height:1.3}
+#woerter dt{font-weight:800}#woerter dd{margin:0;color:var(--grau)}
+.zettel.zu #zListe,.zettel.zu .z-knoepfe,.zettel.zu #woerter,.zettel.zu .z-info,.zettel.zu .z-budget{display:none}
+.korbknopf{margin-left:auto;display:flex;align-items:center;gap:6px;border:0;background:var(--gelb);color:var(--ink);border-radius:18px;padding:8px 14px;font-weight:800;box-shadow:0 4px 12px rgba(0,0,0,.25);min-height:46px;font-size:18px}
+.korbknopf small{font-size:13px;font-weight:700;opacity:.8}
+.korbknopf.hupf{animation:hupf .45s ease}
+@keyframes hupf{30%{transform:scale(1.15) rotate(-4deg)}60%{transform:scale(.96)}}
+
+/* Duell-Anzeige */
+.duell{flex:1;display:flex;justify-content:center;align-items:stretch;gap:8px;max-width:720px;margin:0 auto}
+.d-team{flex:1;max-width:250px;background:rgba(255,255,255,.92);border-radius:18px;padding:6px 12px;display:flex;flex-direction:column;align-items:center;border:4px solid transparent;transition:border-color .2s,transform .2s}
+.d-team[data-team="0"] .d-punkte{color:var(--tomate)}.d-team[data-team="1"] .d-punkte{color:#1F78B4}
+.d-team.dran{border-color:var(--gelb);transform:scale(1.04);box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.d-name{font-weight:800;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.d-punkte{font:800 32px/1 "Bricolage Grotesque",Inter,sans-serif}
+.d-mitte{display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--wald);color:#fff;border-radius:18px;padding:6px 14px;min-width:92px}
+.d-uhr{font:800 34px/1 "JetBrains Mono",ui-monospace,monospace}
+.d-uhr.knapp{color:var(--tomate);animation:puls 1s infinite}
+@keyframes puls{50%{transform:scale(1.12)}}
+.d-runde{font-size:12px;font-weight:700;color:var(--hell)}
+.d-auftrag{position:absolute;left:50%;transform:translateX(-50%);top:calc(max(10px,env(safe-area-inset-top)) + 92px);background:var(--papier);color:var(--ink);border-radius:999px;padding:8px 22px;font:700 22px/1.3 "Bricolage Grotesque",Inter,sans-serif;box-shadow:0 6px 18px rgba(0,0,0,.25);white-space:nowrap;max-width:94vw;overflow:hidden;text-overflow:ellipsis}
+
+/* Karte */
+.kartenbox{position:absolute;right:10px;bottom:max(12px,env(safe-area-inset-bottom))}
+#karte{display:block;width:180px;height:144px;border-radius:16px;border:3px solid #fff;box-shadow:0 6px 18px rgba(0,0,0,.3);background:var(--ink);cursor:zoom-in}
+#grosskarte{position:absolute;inset:0;background:rgba(10,25,20,.9);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;z-index:6}
+#grosskarte canvas{width:min(100%,960px);height:min(78dvh,768px);border-radius:16px}
+#grosskarte p{margin:8px 0 0;color:var(--hell);font-size:14px}
+
+/* Kasse-Knopf, Steuerkreuz, Stick */
+#zurKasse{position:absolute;left:50%;transform:translateX(-50%);bottom:max(26px,env(safe-area-inset-bottom));padding:14px 24px;border-radius:999px;border:0;background:var(--gruen);color:#fff;font-weight:800;font-size:19px;box-shadow:0 8px 20px rgba(0,0,0,.3);animation:hupf 1.6s ease infinite}
+#steuer{position:absolute;left:14px;bottom:max(14px,env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(3,68px);grid-template-rows:repeat(2,68px);gap:8px}
+#steuer button{border:0;border-radius:18px;background:rgba(15,59,46,.85);color:#fff;font-size:30px;font-weight:800;box-shadow:0 4px 12px rgba(0,0,0,.3);touch-action:none}
+#steuer button.an{background:var(--gelb);color:var(--ink)}
+#steuer [data-pad="vor"]{grid-column:2;grid-row:1}
+#steuer [data-pad="links"]{grid-column:1;grid-row:2}
+#steuer [data-pad="zurueck"]{grid-column:2;grid-row:2}
+#steuer [data-pad="rechts"]{grid-column:3;grid-row:2}
+#steuer .nehmen{grid-column:3;grid-row:1;background:var(--gelb);color:var(--ink)}
+#stick{position:absolute;width:100px;height:100px;margin:-50px 0 0 -50px;border-radius:50%;border:3px solid rgba(255,255,255,.8);background:rgba(15,59,46,.25);pointer-events:none}
+#stick span{position:absolute;left:31px;top:31px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.9)}
+#meldung{position:absolute;left:50%;transform:translateX(-50%);top:58%;background:var(--ink);color:#fff;border-radius:16px;padding:10px 18px;font-weight:700;max-width:min(92vw,520px);text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.3);pointer-events:none;animation:rein .25s ease}
+@keyframes rein{from{opacity:0;transform:translate(-50%,8px)}}
+#laden{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(15,59,46,.9);color:#fff;padding:12px 18px;border-radius:14px;font-weight:700}
+
+/* Blaetter: Ware und Korb */
+.blatt{position:absolute;left:50%;bottom:max(12px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(440px,calc(100% - 20px));background:var(--papier);color:var(--ink);border-radius:24px;padding:16px 18px 18px;box-shadow:0 16px 40px rgba(0,0,0,.4);z-index:4;animation:hoch .22s ease;max-height:calc(100dvh - 30px);overflow:auto}
+@keyframes hoch{from{transform:translate(-50%,30px);opacity:0}}
+.blatt .zu{position:absolute;right:10px;top:10px;width:36px;height:36px;border-radius:50%;border:0;background:#EDE6D8;font-weight:800}
+.w-kopf{display:flex;gap:14px;align-items:center}
+.w-bild{width:96px;height:112px;flex:none;border-radius:16px;background:linear-gradient(var(--a) 0 70%,var(--b) 70%);display:grid;place-items:center;box-shadow:inset 0 0 0 3px rgba(0,0,0,.08)}
+.w-bild span{font-size:46px;width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,.92);display:grid;place-items:center;margin-top:-18px}
+.w-text{display:flex;flex-direction:column;gap:2px;min-width:0;padding-right:28px}
+.w-ort{align-self:flex-start;font-size:12px;font-weight:800;color:#fff;background:var(--o);border-radius:999px;padding:2px 10px;text-transform:uppercase;letter-spacing:.04em}
+.w-name{font:800 23px/1.15 "Bricolage Grotesque",Inter,sans-serif}
+.w-profi small{display:block;font:600 12px Inter,sans-serif;color:var(--grau)}
+.w-preis{font:800 26px/1.1 "Bricolage Grotesque",Inter,sans-serif;color:var(--gruen)}
+.w-preis small{font-size:14px;color:var(--grau)}
+.w-de{font-size:14px;color:var(--grau)}
+.link{border:0;background:none;padding:0;color:#1F78B4;text-decoration:underline;font-size:14px;font-weight:600}
+.w-menge{display:flex;align-items:center;justify-content:center;gap:16px;margin:14px 0 6px}
+.w-menge button{width:46px;height:46px;border-radius:50%;border:2px solid #D3CBBB;background:#fff;font-size:24px;font-weight:800}
+.w-menge b{font:800 28px "Bricolage Grotesque",Inter,sans-serif;min-width:30px;text-align:center}
+.w-knoepfe{display:flex;gap:8px;align-items:center;justify-content:flex-end;margin-top:10px}
+.w-knoepfe .primaer{flex:1}
+.w-info{margin:8px 0 0;font-size:13px;color:var(--grau);text-align:center}
+.primaer{border:0;background:var(--tomate);color:#fff;font-weight:800;padding:12px 20px;border-radius:999px;font-size:17px;box-shadow:0 4px 0 #B53A26;min-height:48px}
+.primaer:active{transform:translateY(2px);box-shadow:0 2px 0 #B53A26}
+.primaer:disabled{background:#B9B2A6;box-shadow:none;cursor:default}
+.primaer.gross{font-size:21px;padding:14px 26px}
+.zweit{border:2px solid currentColor;background:transparent;font-weight:800;padding:10px 18px;border-radius:999px;min-height:46px}
+#korb h3{margin:0 0 8px;font-size:22px}
+.k-liste{list-style:none;margin:0;padding:0}
+.k-liste li{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed #D9D0C0}
+.k-emo{font-size:26px;width:34px;text-align:center}
+.k-name{flex:1;font-weight:600}
+.k-preis{font-weight:800}
+.k-liste button{width:34px;height:34px;border-radius:50%;border:1px solid #D3CBBB;background:#fff;font-weight:800}
+.k-summe{text-align:right;font-size:18px;margin:10px 0 0}
+.k-leer,.k-tipp{color:var(--grau);font-size:14px}
+
+/* ---------- Kasse ---------- */
+#kasse{position:absolute;inset:0;z-index:7;background:radial-gradient(90% 70% at 50% 20%,rgba(255,249,238,.97),rgba(233,224,206,.98));color:var(--ink);overflow:auto;padding:max(14px,env(safe-area-inset-top)) 16px 20px;display:flex;flex-direction:column;align-items:center}
+.k-buehne{width:min(760px,100%);display:grid;grid-template-columns:minmax(0,1fr) 150px;grid-template-areas:"blase person" "display person";gap:12px;align-items:end;margin-top:6px}
+.k-person{grid-area:person;display:flex;flex-direction:column;align-items:center}
+.avatar{position:relative;width:130px;height:184px}
+.avatar i{position:absolute;display:block}
+.avatar .koerper{left:15px;top:96px;width:100px;height:80px;border-radius:50px 50px 10px 10px;background:var(--gruen)}
+.avatar .koerper::after{content:"";position:absolute;left:30px;top:22px;width:40px;height:50px;border-radius:6px;background:var(--gelb)}
+.avatar .gesicht{left:30px;top:22px;width:70px;height:78px;border-radius:50%;background:#E8B48A}
+.avatar .gesicht::before,.avatar .gesicht::after{content:"";position:absolute;top:32px;width:9px;height:9px;border-radius:50%;background:var(--ink);left:18px;box-shadow:25px 0 0 var(--ink)}
+.avatar .gesicht::after{top:50px;left:22px;width:26px;height:12px;border-radius:0 0 26px 26px;background:#A0413A;box-shadow:none}
+.avatar .haar{left:24px;top:12px;width:82px;height:58px;border-radius:44px 44px 14px 14px;background:#5A3825}
+.avatar .haar::after{content:"";position:absolute;right:-18px;top:22px;width:28px;height:28px;border-radius:50%;background:#5A3825}
+.k-schild{font-weight:800;background:#fff;border-radius:999px;padding:2px 12px;font-size:14px;margin-top:-6px;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.k-blase{grid-area:blase;position:relative;background:#fff;border-radius:22px;padding:14px 18px;box-shadow:0 6px 18px rgba(0,0,0,.12);display:flex;gap:10px;align-items:center;min-height:70px}
+.k-blase::after{content:"";position:absolute;right:-14px;bottom:22px;border:12px solid transparent;border-left-color:#fff}
+.k-blase p{margin:0;flex:1;font:700 clamp(20px,3.4vw,28px)/1.25 "Bricolage Grotesque",Inter,sans-serif}
+.k-display{grid-area:display;background:#11241D;color:#9BF5B8;border-radius:16px;padding:10px 14px;font:500 14px/1.5 "JetBrains Mono",ui-monospace,monospace;box-shadow:inset 0 0 0 3px #2C4A3E}
+.k-posten{max-height:110px;overflow:auto}
+.k-posten div{display:flex;justify-content:space-between;gap:10px;animation:piep .3s both;animation-delay:calc(var(--i) * 90ms)}
+@keyframes piep{from{opacity:0;transform:translateX(-6px)}}
+.k-total{display:flex;justify-content:space-between;border-top:1px dashed #3E6B58;margin-top:6px;padding-top:6px;font-size:18px}
+.k-total b{color:var(--gelb)}
+.k-aufgabe{width:min(760px,100%);margin-top:14px}
+.k-hinweis{font-weight:700;margin:0 0 8px;font-size:17px}
+.k-optionen{display:grid;gap:10px}
+.k-optionen button{border:2px solid #D3CBBB;background:#fff;border-radius:18px;padding:14px 16px;font-weight:700;font-size:19px;text-align:left;min-height:56px;box-shadow:0 3px 0 rgba(0,0,0,.08)}
+.k-optionen button:hover:not(:disabled){border-color:var(--gruen)}
+.k-optionen button.richtig{border-color:var(--gruen);background:#E3F6E9}
+.k-optionen button.falsch{border-color:var(--tomate);background:#FDE7E3}
+.k-optionen button:disabled{cursor:default}
+.k-rueck{margin:10px 0 0;font-size:16px;line-height:1.5}
+.k-rueck .primaer{margin-left:8px;vertical-align:middle}
+.k-gut{color:var(--gruen)}.k-schlecht{color:var(--tomate)}
+.k-fort{color:var(--grau);font-size:13px;margin-top:auto;padding-top:14px}
+.k-karte{background:#fff;border-radius:22px;padding:20px;margin-top:20vh;max-width:460px;text-align:center;box-shadow:0 12px 30px rgba(0,0,0,.15)}
+.k-gross{font:800 22px/1.25 "Bricolage Grotesque",Inter,sans-serif}
+.k-karte .zweit{color:var(--ink)}
+/* Geld */
+.geld{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px;background:#E9DFC9;border-radius:18px;min-height:90px}
+.geld .platz{width:0}
+.geld button,.theke button{border:0;display:grid;place-items:center;font-weight:800;color:#2B2B2B;box-shadow:0 3px 0 rgba(0,0,0,.25),inset 0 0 0 3px rgba(255,255,255,.35);transition:transform .1s}
+.geld button:active{transform:scale(.94)}
+.schein{width:104px;height:56px;border-radius:8px;font-size:20px!important;letter-spacing:.02em}
+.s2000{background:linear-gradient(135deg,#B993FF,#6A3FB8)}.s1000{background:linear-gradient(135deg,#F2A65A,#C9692B)}.s500{background:linear-gradient(135deg,#7DD3C0,#2E8C7A)}
+.gold{background:radial-gradient(circle at 35% 30%,#FFE9A3,#D4A21B 70%)}
+.silber{background:radial-gradient(circle at 35% 30%,#FFFFFF,#AEB6BE 70%)}
+.kupfer{background:radial-gradient(circle at 35% 30%,#F8C9A2,#B86B3A 70%)}
+.m200{width:62px;height:62px;border-radius:50%;background:radial-gradient(circle,#FFE9A3 0 52%,#C9CFD4 54%);font-size:16px}
+.m100{width:56px;height:56px;border-radius:50%;font-size:16px;clip-path:polygon(50% 0,75% 7%,93% 25%,100% 50%,93% 75%,75% 93%,50% 100%,25% 93%,7% 75%,0 50%,7% 25%,25% 7%)}
+.m50{width:58px;height:58px;font-size:15px;clip-path:polygon(50% 0,89% 19%,98% 62%,72% 97%,28% 97%,2% 62%,11% 19%)}
+.m20{width:46px;height:46px;font-size:13px;clip-path:polygon(50% 0,89% 19%,98% 62%,72% 97%,28% 97%,2% 62%,11% 19%)}
+.m10{width:50px;height:50px;border-radius:50%;font-size:14px}
+.m5{width:40px;height:40px;border-radius:50%;font-size:12px}
+.m2{width:52px;height:52px;border-radius:50%;font-size:14px}
+.m1{width:42px;height:42px;border-radius:50%;font-size:12px}
+.theke{margin:10px 0;padding:10px 12px;border-radius:16px;background:#fff;border:2px dashed #D3CBBB;display:flex;flex-direction:column;gap:8px}
+.theke>div{display:flex;flex-wrap:wrap;gap:6px;min-height:40px;align-items:center}
+.theke .klein-geld{transform:scale(.8);margin:-4px}
+/* ---------- Duell-Karten ---------- */
+#ansage{position:absolute;inset:0;z-index:7;background:rgba(10,30,24,.72);display:flex;align-items:center;justify-content:center;padding:16px;color:var(--ink)}
+.a-karte{background:var(--papier);border-radius:28px;padding:24px 26px;width:min(620px,100%);text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.4);animation:hoch2 .25s ease}
+@keyframes hoch2{from{transform:translateY(20px);opacity:0}}
+.a-runde{margin:0;color:var(--grau);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:14px}
+.a-team{margin:4px 0 6px;font:800 40px/1.1 "Bricolage Grotesque",Inter,sans-serif}
+.a-auftrag{font:800 clamp(26px,5vw,40px)/1.2 "Bricolage Grotesque",Inter,sans-serif;margin:8px 0 16px;color:var(--wald)}
+.a-de{font-size:18px;font-weight:600;color:var(--grau)}
+.a-gut{font:800 34px/1.2 "Bricolage Grotesque",Inter,sans-serif;color:var(--gruen);margin:6px 0}
+.a-schlecht{font:800 30px/1.2 "Bricolage Grotesque",Inter,sans-serif;color:var(--tomate);margin:6px 0}
+.a-karte p:not([class]){font-size:18px}
+.a-karte .k-optionen{text-align:left;margin:14px 0 4px}
+.a-karte .zweit{color:var(--ink)}
+
+/* ---------- Ergebnis ---------- */
+#over{padding-top:8px}
+.e-kopf{text-align:center}
+.e-kopf h1{margin-top:14px}
+.e-sterne{font-size:48px;color:var(--gelb);letter-spacing:6px;margin:0}
+.e-sterne span{color:rgba(255,255,255,.25)}
+.e-raster{display:grid;gap:16px;grid-template-columns:1fr;align-items:start;margin-top:12px}
+@media (min-width:720px){.e-raster{grid-template-columns:1fr 330px}}
+.e-karten{display:grid;gap:12px}
+.e-karte{background:var(--papier);color:var(--ink);border-radius:20px;padding:14px 18px}
+.e-karte h2{margin:0 0 8px;font-size:20px}
+.e-karte h3{margin:12px 0 6px;font-size:17px}
+.e-liste{list-style:none;margin:0;padding:0}
+.e-liste li{display:flex;gap:8px;align-items:baseline;padding:3px 0;font-weight:600}
+.e-liste li span:first-child{width:18px;font-weight:900}
+.e-liste li.ok span:first-child{color:var(--gruen)}.e-liste li.nein span:first-child{color:var(--tomate)}
+.e-liste small{margin-left:auto;color:var(--grau);font-weight:500}
+.e-saetze{margin:0;padding-left:0;list-style:none}
+.e-saetze li{padding:6px 10px;border-radius:12px;background:#FFF1CC;margin:4px 0;font-weight:600}
+.e-saetze li.gut{background:#E3F6E9}
+.e-budget{font-weight:700;margin:0 0 8px}.e-budget.gut{color:var(--gruen)}.e-budget.schlecht{color:var(--tomate)}
+.e-aktion label{display:flex;flex-direction:column;gap:4px;font-weight:700;font-size:14px}
+.e-aktion input{border:2px solid #D3CBBB;border-radius:12px;padding:8px 12px;font-size:17px}
+.e-knoepfe{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 0}
+.e-knoepfe.mitte{justify-content:center}
+.e-karte .zweit{color:var(--ink)}
+#over>.e-knoepfe .zweit,.e-kopf+.e-duell+.e-knoepfe .zweit{color:var(--papier)}
+.pokal{font-size:80px;margin:10px 0 0;animation:hupf 1.2s ease infinite}
+.e-duell{display:flex;gap:12px;justify-content:center;margin:16px 0}
+.e-duell div{background:var(--papier);color:var(--ink);border-radius:20px;padding:14px 22px;min-width:150px;text-align:center}
+.e-duell div.sieg{background:var(--gelb);transform:scale(1.06)}
+.e-duell span{display:block;font-weight:800}
+.e-duell b{font:800 44px/1 "Bricolage Grotesque",Inter,sans-serif}
+/* Kassenbon */
+.bon{background:#FFFDF7;color:#1D2A33;font:500 14px/1.55 "JetBrains Mono",ui-monospace,Menlo,monospace;padding:22px 20px 26px;position:relative;box-shadow:0 14px 30px rgba(0,0,0,.3);transform:rotate(1deg)}
+.bon::before,.bon::after{content:"";position:absolute;left:0;right:0;height:10px;background:linear-gradient(135deg,#FFFDF7 5px,transparent 0) 0 0/12px 10px,linear-gradient(-135deg,#FFFDF7 5px,transparent 0) 0 0/12px 10px}
+.bon::before{top:-10px;transform:scaleY(-1)}
+.bon::after{bottom:-10px}
+.bon hr{border:0;border-top:2px dashed #9AA3AB;margin:10px 0}
+.b-laden{text-align:center;font-weight:800;font-size:22px;margin:0;letter-spacing:.04em;text-transform:uppercase}
+.b-klein{text-align:center;margin:0;font-size:12px;color:#4B5862}
+.b-zeile{display:flex;justify-content:space-between;gap:10px}
+.b-zeile small{color:#6F7C85}
+.b-total{font-weight:800;font-size:18px}
+.b-sterne{text-align:center;font-size:28px;color:#E0A100;margin:4px 0}
+.b-kunde{text-align:center;font-weight:800;margin:10px 0 6px}
+.b-code{height:46px;margin:8px 30px;background:repeating-linear-gradient(90deg,#1D2A33 0 2px,transparent 2px 4px,#1D2A33 4px 5px,transparent 5px 8px,#1D2A33 8px 11px,transparent 11px 12px)}
+.b-danke{text-align:center;margin:6px 0 0;font-size:13px}
+.konfetti{position:fixed;top:-12px;width:10px;height:16px;border-radius:3px;z-index:20;pointer-events:none;animation:faellt 2.8s ease-in forwards}
+@keyframes faellt{to{transform:translate(var(--dx),105vh) rotate(720deg)}}
+
+/* ---------- Tafel-Modus: alles groesser ---------- */
+body.tafel .zettel{flex-basis:420px;max-width:420px;font-size:20px}
+body.tafel #zListe li{font-size:21px;min-height:40px}
+body.tafel .z-kopf b{font-size:26px}
+body.tafel .rund{width:58px;height:58px;font-size:22px}
+body.tafel .korbknopf{font-size:22px;min-height:58px}
+body.tafel #hinweis{font-size:22px;padding:8px 20px}
+body.tafel #karte{width:240px;height:192px}
+body.tafel #steuer{grid-template-columns:repeat(3,88px);grid-template-rows:repeat(2,88px)}
+body.tafel #steuer button{font-size:38px}
+body.tafel .blatt{width:min(560px,calc(100% - 20px))}
+body.tafel .w-name{font-size:30px}
+body.tafel .k-optionen button{font-size:24px}
+
+@media (max-width:560px){
+ .zettel{max-width:calc(100vw - 130px);font-size:14px;max-height:40dvh;padding:8px 10px 10px;background-size:100% 26px}
+ .z-kopf b{font-size:17px}
+ .z-info{display:none}
+ #zListe li{font-size:14px;min-height:26px}
+ .z-knoepfe .klein{min-height:30px;padding:3px 10px;font-size:13px}
+ #karte{width:130px;height:104px}
+ .korbknopf small{display:none}
+ .k-buehne{grid-template-columns:minmax(0,1fr) 96px}
+ .avatar{transform:scale(.7);transform-origin:top center;height:120px}
+ .d-auftrag{font-size:17px;top:calc(max(10px,env(safe-area-inset-top)) + 80px)}
+ .d-punkte{font-size:24px}.d-uhr{font-size:26px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ---------- Druck: nur der Kassenbon ---------- */
+@media print{
+ body{background:#fff!important}
+ #menu,#stage,.e-kopf,.e-karten,.feedback-settings,.konfetti{display:none!important}
+ #over{display:block!important}
+ .e-raster{display:block}
+ .bon{box-shadow:none;transform:none;margin:0 auto;max-width:80mm;border:1px dashed #999}.bon::before,.bon::after{display:none}
+}
+
+/* Leiste fuer Toene und Animationen (aus assets/feedback.js) */
+.feedback-settings{display:flex;gap:8px;justify-content:center;margin:18px 0 0}
+.feedback-settings button{border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.06);color:var(--hell);border-radius:999px;padding:6px 14px;font-size:13px;font-weight:600}
+body.im-spiel .feedback-settings{display:none}
