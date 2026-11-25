@@ -90,7 +90,7 @@ export function init(canvas,welt,opts={}){
  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,opts.mobil?1.25:2));
  const scene=new THREE.Scene();
  scene.background=new THREE.Color('#BFE3F5');
- const camera=new THREE.PerspectiveCamera(70,1,0.05,120);camera.rotation.order='YXZ';
+ const camera=new THREE.PerspectiveCamera(70,1,0.1,120);camera.rotation.order='YXZ';
  scene.add(new THREE.HemisphereLight(0xFFFFFF,0xC9BBA0,2.1));
  const sonne=new THREE.DirectionalLight(0xFFF6E8,1.1);sonne.position.set(-8,20,14);scene.add(sonne);
 
@@ -314,14 +314,14 @@ export function init(canvas,welt,opts={}){
   /* Seitenblenden oben in der Abteilungsfarbe */
   for(const s of welt.SEITEN.filter(s=>s.achse==='z'&&(s.x1===x1||s.x2===x2)&&s.a===z1)){
    const fx=s.nx>0?x2:x1;S.quader(Math.min(fx,fx+s.nx*0.02),H,z1,Math.max(fx,fx+s.nx*0.02),H+0.32,z2,FARBE[s.ort]);
-   for(const zm of [z1+2.75,z2-2.75])schildFlaeche(ortSchild[s.ort],fx+s.nx*0.025,H+0.16,zm,1.1,0.28,blick(s.nx,0));
+   for(const zm of [z1+2.75,z2-2.75])schildFlaeche(ortSchild[s.ort],fx+s.nx*0.045,H+0.16,zm,1.1,0.28,blick(s.nx,0));
   }
   if(holz)S.quader(gx-0.05,0.12,z1,gx-0.03,H,z2,'#B8874F');
  }
  /* Gangschilder, von beiden Seiten lesbar */
  for(const a of welt.GAENGE){
   S.quader(a.x-0.01,2.9,9.5-0.01,a.x+0.01,DECKE,9.5+0.01,'#6E7880');
-  for(const s of [-1,1])schildFlaeche(gangSchild[a.nr],a.x,2.62,9.5+s*0.015,1.9,0.5,s>0?0:Math.PI);
+  for(const s of [-1,1])schildFlaeche(gangSchild[a.nr],a.x,2.62,9.5+s*0.035,1.9,0.5,s>0?0:Math.PI);
   S.quader(a.x-0.97,2.35,9.5-0.012,a.x+0.97,2.88,9.5+0.012,'#0F3B2E');
  }
 
@@ -363,12 +363,12 @@ export function init(canvas,welt,opts={}){
   else{for(const sx of [-1,1]){const xx=sx<0?s.x1:s.x2;preisschild(w,xx+sx*0.012,0.6,mitte,sx,0,0.28,0.12);}}
  }
  /* Obst-Wand: Schild und Markise */
- schildFlaeche(schild('Fresh Fruit & Veg','#2E7D32','Local and seasonal',720,150),0.02,2.68,9,3.2,0.66,Math.PI/2);
+ schildFlaeche(schild('Fresh Fruit & Veg','#2E7D32','Local and seasonal',720,150),0.04,2.68,9,3.2,0.66,Math.PI/2);
  for(let z=3;z<15;z+=1)S.add(V.box,mat(1.15,2.15,z+0.5,0.5,0.04,1.0,0,0,-0.35),z%2?'#2E9E4F':'#F4F1E6');
  /* Gemuese-Insel: Dach mit Schild */
  for(const [x,z] of [[4.05,5.05],[6.15,5.05],[4.05,12.95],[6.15,12.95]])S.quader(x-0.04,0,z-0.04,x+0.04,2.2,z+0.04,'#5B4636');
  S.quader(3.95,2.2,4.95,6.25,2.28,13.05,'#2E7D32');
- for(const s of [-1,1])schildFlaeche(ortSchild.gemuese,5.1,2.45,s>0?13.06:4.94,1.4,0.35,s>0?0:Math.PI);
+ for(const s of [-1,1])schildFlaeche(ortSchild.gemuese,5.1,2.45,s>0?13.09:4.91,1.4,0.35,s>0?0:Math.PI);
  S.quader(4.4,2.28,4.94,5.8,2.62,4.95,'#2E7D32');S.quader(4.4,2.28,13.05,5.8,2.62,13.06,'#2E7D32');
 
  /* ===== Kuehlregale (Norden) ===== */
@@ -377,7 +377,7 @@ export function init(canvas,welt,opts={}){
   LEUCHT.quader(s.a,2.02,0.1,s.b,2.05,s.z2-0.1,'#FFFFFF');
   for(const y of BOEDEN.slice(1).map(y=>y+0.03))S.quader(s.a,y-0.02,0.08,s.b,y,s.z2-0.12,'#C4CCD3');
   S.quader(s.a,2.1,0,s.b,2.45,s.z2,'#5DADE2');S.quader(s.a,2.1,s.z2-0.01,s.b,2.45,s.z2+0.01,'#3B8BC0');
-  for(let x=s.a+3;x<s.b-1;x+=6)schildFlaeche(ortSchild.kuehl,x,2.28,s.z2+0.015,1.25,0.31,0);
+  for(let x=s.a+3;x<s.b-1;x+=6)schildFlaeche(ortSchild.kuehl,x,2.28,s.z2+0.04,1.25,0.31,0);
   for(let x=s.a;x<=s.b+0.01;x+=1.25){S.quader(x-0.025,0.12,s.z2-0.06,x+0.025,2.1,s.z2,'#AEB7BF');if(x<s.b-0.5){GLAS.add(V.ebene,mat(x+0.625,1.11,s.z2-0.03,1.2,1.98,1),'#E4F4FC');S.quader(x+1.1,0.85,s.z2,x+1.13,1.45,s.z2+0.04,'#7A858F');}}
   for(const x of [s.a-0.02,s.b])S.quader(x,0,0,x+0.02,2.45,s.z2,'#AEB7BF');
   /* Eckschraenke */
@@ -389,7 +389,7 @@ export function init(canvas,welt,opts={}){
   LEUCHT.quader(s.x1+0.1,2.02,s.a,W-0.1,2.05,s.b,'#EAF6FF');
   for(const y of [0.15,0.58,1.01,1.44])S.quader(s.x1+0.12,y-0.02,s.a,W-0.08,y,s.b,'#C4CCD3');
   S.quader(s.x1,2.1,s.a,W,2.45,s.b,'#7FA6C9');
-  for(let z=s.a+2;z<s.b;z+=4)schildFlaeche(ortSchild.tiefkuehl,s.x1-0.015,2.28,z,1.25,0.31,-Math.PI/2);
+  for(let z=s.a+2;z<s.b;z+=4)schildFlaeche(ortSchild.tiefkuehl,s.x1-0.04,2.28,z,1.25,0.31,-Math.PI/2);
   for(let z=s.a;z<=s.b+0.01;z+=1.2){S.quader(s.x1,0.12,z-0.025,s.x1+0.06,2.1,z+0.025,'#AEB7BF');if(z<s.b-0.5){GLAS.add(V.ebene,mat(s.x1+0.03,1.11,z+0.6,1.15,1.98,1,0,Math.PI/2,0),'#D5ECFA');S.quader(s.x1-0.04,0.85,z+1.05,s.x1,1.45,z+1.08,'#7A858F');}}
   for(const z of [s.a-0.02,s.b])S.quader(s.x1,0,z,W,2.45,z+0.02,'#AEB7BF');
   S.quader(28.9,0,15.2,29.95,1.0,23.3,'#E6EAEE');S.quader(28.9,1.0,15.2,29.95,1.03,23.3,'#9AA3AB');
@@ -406,8 +406,8 @@ export function init(canvas,welt,opts={}){
   /* Saeule mit Nummer und Licht */
   S.add(V.zyl,mat(k.x1+0.1,1.5,k.z1+0.1,0.025,1.2,0.025),'#6E7880');
   S.add(V.kugel,mat(k.x1+0.1,2.13,k.z1+0.1,0.07,0.07,0.07),k.offen?'#36C26A':'#E04B4B');
-  schildFlaeche(kasseSchild[k.nr-1],k.x1+0.45,2.55,k.z1-0.02,1.0,0.36,Math.PI);
-  schildFlaeche(kasseSchild[k.nr-1],k.x1+0.45,2.55,k.z1+0.02,1.0,0.36,0);
+  schildFlaeche(kasseSchild[k.nr-1],k.x1+0.45,2.55,k.z1-0.035,1.0,0.36,Math.PI);
+  schildFlaeche(kasseSchild[k.nr-1],k.x1+0.45,2.55,k.z1+0.035,1.0,0.36,0);
   S.quader(k.x1-0.05,2.3,k.z1-0.01,k.x2+0.05,2.8,k.z1+0.01,'#2C3A44');
   /* Quengelware: kleines Regal am Band */
   S.quader(k.x1-0.35,0,k.z1+0.1,k.x1-0.02,1.1,k.z1+0.9,'#3A4750');
@@ -423,11 +423,11 @@ export function init(canvas,welt,opts={}){
    S.add(V.kugel0,mat(X,1.02,Z,0.13,0.08,0.13),'#4C8A43');}
   S.add(V.zyl,mat(x+1,1.6,z+1,0.02,1.2,0.02),'#6E7880');schildFlaeche(angebot,x+1,2.15,z+1.01,1.0,0.3,0);schildFlaeche(angebot,x+1,2.15,z+0.99,1.0,0.3,Math.PI);}
  /* Plakate an den Waenden */
- schildFlaeche(poster[0],0.02,1.85,17.2,1.2,0.43,Math.PI/2);
- schildFlaeche(poster[1],29.98,1.85,18.4,1.2,0.43,-Math.PI/2);
- schildFlaeche(poster[2],7.7,3.0,0.02,1.2,0.43,0);
+ schildFlaeche(poster[0],0.04,1.85,17.2,1.2,0.43,Math.PI/2);
+ schildFlaeche(poster[1],29.96,1.85,18.4,1.2,0.43,-Math.PI/2);
+ schildFlaeche(poster[2],7.7,3.0,0.04,1.2,0.43,0);
  /* Backwaren: Schild ueber der Holzseite */
- for(const s of [-1,1])schildFlaeche(ortSchild.baeckerei,7.9,2.62,9.5+s*0.015,1.3,0.33,s>0?0:Math.PI);
+ for(const s of [-1,1])schildFlaeche(ortSchild.baeckerei,7.9,2.62,9.5+s*0.035,1.3,0.33,s>0?0:Math.PI);
  S.add(V.zyl,mat(7.9,3.1,9.5,0.01,1.0,0.01),'#6E7880');
 
  /* ===== Kassiererin ===== */
