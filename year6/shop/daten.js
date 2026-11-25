@@ -142,27 +142,27 @@ window.SHOP_DATEN = {
     das Spiel mischt die Reihenfolge. "warum" erklaert die richtige Antwort. */
  KASSE: {
   gruss: [
-   {sagt:'Hello! How are you today?', ant:['Fine, thanks. And you?','I\'m eleven years old.','Yes, I am.'], warum:'Auf „How are you?“ antwortet man mit „Fine, thanks.“'},
-   {sagt:'Hi there! Did you find everything?', ant:['Yes, thanks.','Yes, I found it everything.','No, I am fine.'], warum:'Kurz und höflich: „Yes, thanks.“'}
+   {sagt:'Hello! How are you today?', ant:['Fine, thanks. And you?','I\'m eleven years old.','Yes, I am.'], warum:'When someone asks „How are you?“, you say „Fine, thanks.“'},
+   {sagt:'Hi there! Did you find everything?', ant:['Yes, thanks.','Yes, I found it everything.','No, I am fine.'], warum:'Short and polite: „Yes, thanks.“'}
   ],
   tuete: [
-   {sagt:'Do you need a bag?', ant:['Yes, please.','Yes, I need.','Yes, you\'re welcome.'], warum:'Wenn man etwas annimmt: „Yes, please.“'},
-   {sagt:'Would you like a bag?', ant:['No, thanks. I\'ve got one.','No, I don\'t like.','No, please.'], warum:'Ablehnen: „No, thanks.“ – „No, please“ sagt man nicht.'}
+   {sagt:'Do you need a bag?', ant:['Yes, please.','Yes, I need.','Yes, you\'re welcome.'], warum:'When you want something, you say „Yes, please.“'},
+   {sagt:'Would you like a bag?', ant:['No, thanks. I\'ve got one.','No, I don\'t like.','No, please.'], warum:'When you don\'t want something, you say „No, thanks.“ – not „No, please.“'}
   ],
   frage: [
-   {de:'Du möchtest wissen, was das Kaugummi kostet.', sagt:'', ant:['How much is the chewing gum?','How many is the chewing gum?','How much costs the chewing gum?'], antwort:'It\'s 60p.', warum:'Nach dem Preis fragt man mit „How much is …?“'},
-   {de:'Du möchtest wissen, was die Lollis kosten.', sagt:'', ant:['How much are the lollies?','How much is the lollies?','What cost the lollies?'], antwort:'They\'re 25p each.', warum:'Bei mehreren Dingen (Plural): „How much are …?“'},
-   {de:'Du möchtest wissen, was die Zeitschrift kostet.', sagt:'', ant:['How much is the magazine?','How much are the magazine?','How many costs the magazine?'], antwort:'It\'s £3.50.', warum:'Ein Ding (Singular): „How much is …?“'}
+   {de:'You want to know the price of the chewing gum. What do you ask?', sagt:'', ant:['How much is the chewing gum?','How many is the chewing gum?','How much costs the chewing gum?'], antwort:'It\'s 60p.', warum:'You ask for the price with „How much is …?“'},
+   {de:'You want to know the price of the lollies. What do you ask?', sagt:'', ant:['How much are the lollies?','How much is the lollies?','What cost the lollies?'], antwort:'They\'re 25p each.', warum:'For more than one thing (plural): „How much are …?“'},
+   {de:'You want to know the price of the magazine. What do you ask?', sagt:'', ant:['How much is the magazine?','How much are the magazine?','How many costs the magazine?'], antwort:'It\'s £3.50.', warum:'For one thing (singular): „How much is …?“'}
   ],
   zahlen: [
-   {sagt:'That\'s {SUMME}, please.', ant:['Here you are.','Here are you.','There you are it.'], warum:'Beim Geben: „Here you are.“'}
+   {sagt:'That\'s {SUMME}, please.', ant:['Here you are.','Here are you.','There you are it.'], warum:'When you give something to someone: „Here you are.“'}
   ],
   bon: [
-   {sagt:'Would you like your receipt?', ant:['Yes, please.','Yes, I like.','Yes, thank you please.'], warum:'„Yes, please.“ – kurz und höflich.'}
+   {sagt:'Would you like your receipt?', ant:['Yes, please.','Yes, I like.','Yes, thank you please.'], warum:'„Yes, please.“ – short and polite.'}
   ],
   tschuess: [
-   {sagt:'Thank you. Have a nice day!', ant:['Thanks, you too. Bye!','Yes, I have.','Good night, have it.'], warum:'Man wünscht zurück: „You too.“'},
-   {sagt:'Thanks a lot. See you soon!', ant:['Bye! See you!','Yes, I see you.','Thanks, me too soon.'], warum:'Verabschieden: „Bye! See you!“'}
+   {sagt:'Thank you. Have a nice day!', ant:['Thanks, you too. Bye!','Yes, I have.','Good night, have it.'], warum:'You wish the same back: „You too.“'},
+   {sagt:'Thanks a lot. See you soon!', ant:['Bye! See you!','Yes, I see you.','Thanks, me too soon.'], warum:'To say goodbye: „Bye! See you!“'}
   ]
  },
 
