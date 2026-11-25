@@ -266,9 +266,11 @@ anzahl=0;tick();S.padQuelle(()=>[]);
 {const K=L.kundschaft(welt,6,L.zufall(5)),r=L.zufall(6),spieler=[{x:5,z:22.3}];let inWand=0,zuNah=0;const felder=new Set();
  for(let i=0;i<8000;i++){L.kundschaftSchritt(welt,K,0.05,spieler,r);
   for(const q of K.leute){if(!L.frei(welt,q.x,q.z,0.2))inWand++;felder.add(Math.round(q.x/3)+','+Math.round(q.z/3));}
-  for(const a of K.leute)for(const b of K.leute)if(a!==b&&Math.hypot(a.x-b.x,a.z-b.z)<0.5)zuNah++;}
+  for(const a of K.leute)for(const b of K.leute)if(a!==b&&Math.hypot(a.x-b.x,a.z-b.z)<(a.folgt===b.nr||b.folgt===a.nr?0.3:0.5))zuNah++;}
  ok(inWand===0,'Kundschaft laeuft nie in Regale oder Waende');
  ok(zuNah===0,'Kundschaft laeuft nicht ineinander');
+ const kind=K.leute.find(q=>q.folgt!=null),mama=K.leute.find(q=>q.nr===kind.folgt);ok(Math.hypot(kind.x-mama.x,kind.z-mama.z)<2.5,'das Kind bleibt bei seiner Begleitung');
+ ok(K.leute.some(q=>q.wagen),'eine Person schiebt einen Einkaufswagen');
  ok(felder.size>=25,'Kundschaft verteilt sich im ganzen Laden ('+felder.size+' Bereiche)');
  /* durch Personen laeuft man nicht hindurch */
  const q0=K.leute.find(q=>q.fest),p={x:q0.x-1.2,z:q0.z};for(let i=0;i<40;i++)L.bewegen(welt,p,0.05,0,K.leute);
