@@ -5,12 +5,12 @@
    und Punkte; falsches: Abprall, ein Herz, dann durch das offene richtige Tor.
    Baby-Pandas schliessen sich der Kette an (Multiplikator) und purzeln bei
    einem Fehler weg, kommen aber wieder. Nach jeder vierten Vokabel eine
-   Lichtung: zurueckziehen und loslassen, im richtigen Buendel ein Baby
-   (Bonus). Nach 16 Vokabeln: Karte, Stempel, Ergebnis. Ohne Zeichenflaeche. */
+   Lichtung: die richtige Bambusstange antippen, Stabhochsprung ueber die
+   Mauer zum Baby (Bonus); falsche Stange: Knack, ein Herz. Nach 16 Vokabeln: Karte, Stempel, Ergebnis. Ohne Zeichenflaeche. */
 const {JSDOM,VirtualConsole}=require('jsdom'),fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const root=path.join(__dirname,'..'),dir=path.join(root,'year6/bw');let checks=0;const ok=(v,m)=>{assert.ok(v,m);checks++;};
 const dom=new JSDOM(fs.readFileSync(path.join(dir,'index.html'),'utf8'),{runScripts:'outside-only',url:'https://example.org/year6/bw/',virtualConsole:new VirtualConsole()});
-for(const f of ['year6/climb/data.js','year6/figuren.js','year6/bw/musik.js','year6/bw/morph.js','year6/bw/reise.js','year6/bw/frage.js','year6/bw/pinguin.js','year6/bw/orca.js','year6/bw/pandafigur.js','year6/bw/panda.js','year6/bw/zebrafigur.js','year6/bw/zebra.js','year6/bw/game.js'])dom.window.eval(fs.readFileSync(path.join(root,f),'utf8'));
+for(const f of ['year6/climb/data.js','year6/figuren.js','year6/bw/musik.js','year6/bw/morph.js','year6/bw/reise.js','year6/bw/frage.js','year6/bw/pinguin.js','year6/bw/orca.js','year6/bw/pandafigur.js','year6/bw/panda.js','year6/bw/zebrafigur.js','year6/bw/loewefigur.js','year6/bw/zebra.js','year6/bw/game.js'])dom.window.eval(fs.readFileSync(path.join(root,f),'utf8'));
 const w=dom.window,d=w.document,B=w.BWGame,P=w.BWPandaRoll,O=P.O,D=w.CLIMB_DATA;
 const tick=(n=1,dt=1/30)=>{for(let i=0;i<n;i++)P.update(dt);};
 const richtigLane=()=>{const o=(O.gate?O.gate.opts:O.lichtung.opts).find(o=>o.w===O.q);return o.lane;};
@@ -19,7 +19,7 @@ const falschLane=()=>{const o=(O.gate?O.gate.opts:O.lichtung.opts).find(o=>o.w!=
 const vokabel=(wahl,max=40)=>{const k=O.k;let t=0;
  while(O.k===k&&O.mode==='play'&&t<max){
   const L=O.lichtung;
-  if(L&&L.phase==='zielen')P.lane(wahl());
+  if(L&&L.phase==='waehlen')P.lane(wahl());
   else if(!L&&O.gate&&O.gate.offen<0&&!O.gate.erledigt){O.items=O.items.filter(i=>i.typ!=='stein');P.lane(wahl());}
   tick();t+=1/30;}
  return t;};
@@ -72,22 +72,26 @@ d.querySelector('[data-kap="2"]').click();d.querySelector('[data-part="y6u2-part
 {const s0=O.score;O.items.push({typ:'bambus',x:O.x+3,lane:Math.round(O.lane)});tick(3);ok(O.bambus>0&&O.score>s0,'Bambus gibt Punkte');
  O.streak=4;const h0=O.hearts;O.items.push({typ:'stein',x:O.x+3,lane:Math.round(O.lane)});tick(3);ok(O.stun>0&&O.streak===0&&O.hearts===h0,'Stein bremst, kostet kein Herz');
  O.items.push({typ:'bambus',x:O.x+3,lane:(Math.round(O.lane)+1)%3});const b=O.bambus;tick(3);ok(O.bambus===b,'Bambus auf anderem Weg bleibt liegen');}
-/* Lichtung: Ziehen und Loslassen */
+/* Lichtung: Stange antippen, Stabhochsprung */
 {let n=0;while(!O.lichtung&&O.mode==='play'&&n++<20)vokabel(richtigLane);
- let t=0;while(O.lichtung.phase!=='zielen'&&t<20){tick();t+=1/30;}
- ok(O.lichtung.phase==='zielen'&&P.speed()===0,'auf der Lichtung steht der Panda');
- const py=P.laneY(1),r=richtigLane();
- P.tipp(fake,P.PX,py);P.zeiger(fake,P.PX-8,py+2);P.wisch();ok(O.lichtung.phase==='zielen','zu wenig gezogen: nichts passiert');
- /* nach unten ziehen = nach hinten zielen */
- P.tipp(fake,P.PX,py);P.zeiger(fake,P.PX-90,py+70);ok(P.zielVonZug(O.lichtung.zug).lane===0,'nach unten gezogen: Ziel hinterer Weg');
- P.zeiger(fake,P.PX-90,py-70);ok(P.zielVonZug(O.lichtung.zug).lane===2,'nach oben gezogen: Ziel vorderer Weg');
- const ry=P.laneY(1)-(P.laneY(r)-P.laneY(1));P.zeiger(fake,P.PX-100,py-(P.laneY(r)-py)*0.55);
- const ziel=P.zielVonZug(O.lichtung.zug).lane;P.wisch();ok(O.lichtung.phase==='flug'&&O.lichtung.wahl===ziel,'loslassen: der Panda schiesst los');
- const b0=O.babys,h0=O.hearts,k=O.k;t=0;while(O.k===k&&t<10){tick();t+=1/30;}
- ok(ziel===r?O.babys===b0+1:(O.hearts===h0-1&&O.babys===b0),'Treffer: Baby; daneben: ein Herz, kein Baby');}
+ let t=0;while(O.lichtung.phase!=='waehlen'&&t<20){tick();t+=1/30;}
+ ok(O.lichtung.phase==='waehlen'&&P.speed()===0,'auf der Lichtung steht der Panda vor den Stangen');
+ P.tipp(fake,2,5);tick();ok(O.lichtung.phase==='waehlen','Tippen ins Leere: nichts passiert');
+ const r=richtigLane(),px=P.stangeX(O.lichtung,r)-O.x+P.PX;
+ ok(P.stangeBei({x:px+4,y:P.laneY(r)-40})===r,'Stange wird am Finger erkannt');
+ P.tipp(fake,px+4,P.laneY(r)-40);ok(O.lichtung.phase==='hin'&&O.lichtung.wahl===r,'Antippen: der Panda rollt zur Stange');
+ const b0=O.babys,h0=O.hearts,j0=O.jumps,k=O.k;let hub=0,gebogen=0,phasen=new Set();t=0;
+ while(O.k===k&&t<10){tick();t+=1/30;if(O.lichtung){phasen.add(O.lichtung.phase);gebogen=Math.max(gebogen,O.lichtung.opts.find(o=>o.lane===r).biege);}hub=Math.max(hub,O.hub);}
+ ok(['hin','hoch','flug','landung'].every(p=>phasen.has(p)),'hin, hoch, Flug, Landung');
+ ok(gebogen>0.3&&hub>P.laneY(1)-P.laneY(0)+60,'die Stange biegt sich, der Panda fliegt ueber die Mauer');
+ ok(O.babys===b0+1&&O.hearts===h0&&O.jumps===j0+1&&O.hub===0,'Landung beim Baby: gerettet');}
 /* daneben auf der Lichtung */
 {O.hearts=3;let n=0;while(!O.lichtung&&O.mode==='play'&&n++<20)vokabel(richtigLane);
  const b0=O.babys,g0=O.gerettet;vokabel(falschLane);ok(O.hearts===2&&O.babys===b0&&O.gerettet===g0,'Lichtung daneben: ein Herz, das Baby bleibt Bonus');}
+/* falsche Stange: Knack, dann mit der richtigen hinueber */
+{O.hearts=3;let n=0;while(!O.lichtung&&O.mode==='play'&&n++<20)vokabel(richtigLane);
+ const f=falschLane(),k=O.k;let knack=false,kaputt=false,t=0;while(O.k===k&&t<15){if(O.lichtung&&O.lichtung.phase==='waehlen')P.lane(f);if(O.lichtung&&O.lichtung.phase==='knack')knack=true;if(O.lichtung&&O.lichtung.opts.find(o=>o.lane===f).kaputt)kaputt=true;tick();t+=1/30;}
+ ok(knack&&kaputt&&O.hearts===2&&O.k===k+1,'falsche Stange: Knack, ein Herz, dann weiter');}
 /* verlieren */
 {let n=0;while(O.mode==='play'&&n++<10)vokabel(falschLane);}
 ruhe();ok(B.G.mode==='over'&&/Nickerchen/.test(d.getElementById('over').textContent)&&/noch üben/.test(d.getElementById('over').textContent),'ohne Herzen ist Schluss');
@@ -96,6 +100,7 @@ d.getElementById('again').click();ok(B.G.kap===2&&O.mode==='play'&&O.hearts===P.
 d.querySelector('#choices [data-lane="2"]').click();ok(O.ziel===2,'Knopf waehlt den Weg');
 d.dispatchEvent(new w.KeyboardEvent('keydown',{key:'1'}));ok(O.ziel===0,'Zifferntaste waehlt den Weg');
 P.zeiger(fake,200,P.laneY(1)+5);ok(O.ziel===1,'Finger waehlt den Weg');
+{let n=0;while(!(O.gate&&!O.gate.ergebnis&&O.x>O.gate.x-P.ruheStrecke())&&n++<400)tick();P.lane(1);const r=P.schildRechteck(O.gate,0);P.tipp(fake,r.x+r.b/2,r.y+r.h/2);ok(O.ziel===0,'Tippen auf ein Wortschild waehlt den Weg');P.lane(1);}
 P.taste(1,0.3);ok(O.ziel===2,'Pfeiltaste: ein Weg weiter');
 B.pause(true);const x0=O.x;P.update(0.5);ok(O.x===x0,'Pause haelt an');B.pause(false);P.update(0.05);ok(O.x>x0,'und weiter');
 /* Musik */

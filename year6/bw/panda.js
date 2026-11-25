@@ -11,17 +11,19 @@
      das richtige Tor. Unterwegs: Bambussprossen (Punkte), Steine (bremsen,
      kosten die Serie) und Baby-Pandas am Wegrand, die sich der Kette
      anschliessen und den Punkte-Multiplikator heben.
-   - Lichtung (nach jeder vierten Vokabel): drei Bambusbuendel mit Woertern.
-     Zurueckziehen, zielen, loslassen - der Panda schiesst los. Im richtigen
-     Buendel sitzt ein Baby-Panda (Bonus). Daneben: ein Herz.
+   - Lichtung (nach jeder vierten Vokabel): vor einer hohen Bambusmauer stehen
+     drei Bambusstangen mit Woertern. Antippen - der Panda rollt hin, packt
+     die Stange, sie biegt sich, und er fliegt im Stabhochsprung ueber die
+     Mauer zum Baby-Panda dahinter (Bonus). Falsche Stange: Knack! Ein Herz,
+     das Baby laeuft weg, dann geht es mit der richtigen Stange hinueber.
    Vor jeder Wand ist die Strecke frei, damit man in Ruhe lesen kann.
 
-   Die Logik (start, update, lane, zeiger, ziehen) braucht keine Zeichenflaeche.
+   Die Logik (start, update, lane, zeiger, tipp) braucht keine Zeichenflaeche.
    ========================================================================= */
 (function(){
 'use strict';
-/* Lichtung: die Buendel stehen schraeg versetzt, hinten weiter rechts */
-const VERSATZ=[48,0,-48];
+/* Lichtung: die Stangen stehen schraeg versetzt, hinten weiter rechts */
+const VERSATZ=[18,0,-18];
 const W=360,GOAL=16,HEARTS=3,PX=92,MINREAD=3.2,LICHTUNG_ALLE=4;
 const LANE_COL=['#FF8A5B','#3CCFBE','#FFC857'],LANE_ZEICHEN=['▲','●','▼'];
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),lerp=(a,b,t)=>a+(b-a)*t;
@@ -32,7 +34,7 @@ const ruhig=typeof matchMedia==='function'?matchMedia('(prefers-reduced-motion: 
 const SCHLEIFEN=()=>(window.PandaFigur&&window.PandaFigur.SCHLEIFEN)||['#FF6FA3'];
 
 const O={mode:'aus',intro:false,H:600,k:0,hearts:HEARTS,score:0,streak:0,best:0,x:0,lane:1,ziel:1,dreh:0,stun:0,abprall:0,
- hitstop:0,shake:0,time:0,items:[],gate:null,lichtung:null,kette:[],spur:[],babys:0,gerettet:0,verloren:0,bambus:0,jumps:0,
+ hitstop:0,shake:0,time:0,items:[],gate:null,lichtung:null,kette:[],spur:[],babys:0,gerettet:0,verloren:0,bambus:0,jumps:0,hub:0,
  pops:[],parts:[],q:null,queue:[],pool:[],missed:new Map(),onEnd:null,onFrage:null,anim:0,tasteCd:0,naechsteSchleife:0};
 
 /* drei Wege in die Tiefe: hinten kleiner, vorn groesser */
@@ -42,14 +44,14 @@ const skala=l=>{const i=Math.floor(clamp(l,0,1.999)),f=clamp(l,0,2)-i;return ler
 const yAus=l=>{const i=Math.floor(clamp(l,0,1.999)),f=clamp(l,0,2)-i;return lerp(laneY(i),laneY(Math.min(2,i+1)),f);};
 const tempo=()=>1+0.05*Math.min(O.streak,10);
 const grundTempo=()=>(165+3*O.k)*tempo();
-const speed=()=>{if(O.lichtung&&O.lichtung.phase!=='flug')return O.lichtung.v;return grundTempo()*(O.stun>0?0.5:1)*(O.abprall>0?0:1);};
+const speed=()=>{if(O.lichtung)return O.lichtung.v;return grundTempo()*(O.stun>0?0.5:1)*(O.abprall>0?0:1);};
 const mult=()=>tempo()*(1+0.2*O.babys);
 const PK=0.95,ROLL_R=35*PK;   // Groesse und Radius der Panda-Kugel
 
 /* ---------------------------------------------------------------- Ablauf */
 function start(opt){
  Object.assign(O,{mode:'play',intro:false,H:opt.H||O.H,k:0,hearts:HEARTS,score:opt.score||0,streak:0,best:0,x:0,lane:1,ziel:1,dreh:0,stun:0,abprall:0,
-  hitstop:0,shake:0,time:0,items:[],gate:null,lichtung:null,kette:[],spur:[],babys:0,gerettet:0,verloren:0,bambus:0,jumps:0,pops:[],parts:[],
+  hitstop:0,shake:0,time:0,items:[],gate:null,lichtung:null,kette:[],spur:[],babys:0,gerettet:0,verloren:0,bambus:0,jumps:0,hub:0,pops:[],parts:[],
   missed:new Map(),anim:0,tasteCd:0,naechsteSchleife:0,onEnd:opt.onEnd||null,onFrage:opt.onFrage||null,pool:opt.words,queue:mische(opt.words)});
  abschnitt(120);
 }
@@ -82,9 +84,19 @@ function abschnitt(s0){
 function lichtungBauen(s0,opts){
  const L=320;
  O.gate=null;
- O.lichtung={x0:s0,stopp:s0+L,ziel:s0+L+190,opts:opts.map(o=>({...o,kaputt:0})),phase:'anrollen',v:grundTempo(),zug:null,wahl:-1,t:0,
-  baby:SCHLEIFEN()[O.naechsteSchleife++%SCHLEIFEN().length],ergebnis:null,ersteMal:O.k===LICHTUNG_ALLE-1};
+ O.lichtung={x0:s0,stopp:s0+L,ziel:s0+L+120,opts:opts.map(o=>({...o,kaputt:0,biege:0})),phase:'anrollen',v:grundTempo(),wahl:-1,t:0,
+  baby:SCHLEIFEN()[O.naechsteSchleife++%SCHLEIFEN().length],ergebnis:null,ersteMal:O.k===LICHTUNG_ALLE-1,zweit:false};
 }
+/* Lage von Stange und Mauer (Weltkoordinate x, Bildschirm y) */
+const STANGE=120,MAUER_H=172;
+const stangeX=(L,i)=>L.ziel+VERSATZ[i];
+const mauerX=(L,i)=>L.ziel+66+(2-i)*4;
+/* Punkt auf der (gebogenen) Stange, t 0 = Fuss, 1 = Spitze; b = Biegung (+ = zur Mauer) */
+function stangePunkt(L,i,t,b){
+ const x=stangeX(L,i),y=laneY(i),l=STANGE*SKALA[i],tx=x+b*l*0.6,ty=y-l*(1-Math.abs(b)*0.25),cx=x,cy=y-l*0.55;
+ return [(1-t)*(1-t)*x+2*(1-t)*t*cx+t*t*tx,(1-t)*(1-t)*y+2*(1-t)*t*cy+t*t*ty];
+}
+const GRIFF=0.62;
 function pop(text,farbe,y){O.pops.push({text,farbe:farbe||'#FFFFFF',t:0,y:y==null?yAus(O.lane)-90:y});}
 function teilchen(x,y,n,farben,kraft,art){
  if(ruhig)n=Math.ceil(n/3);
@@ -101,41 +113,44 @@ function wortFalsch(){
 /* --------------------------------------------------------------- Steuerung */
 function lane(i){
  if(O.mode!=='play')return false;i=clamp(i|0,0,2);
- const L=O.lichtung;
- if(L){if(L.phase==='zielen'||L.phase==='anrollen'){werfen(i,1);return true;}return false;}
+ if(O.lichtung)return waehle(i);
  O.ziel=i;return true;
 }
 function laneOf(y){let best=0,bd=1e9;for(let i=0;i<3;i++){const d=Math.abs(y-laneY(i));if(d<bd){bd=d;best=i;}}return best;}
-/* Finger: auf der Strecke = Weg waehlen; auf der Lichtung = zurueckziehen */
+/* Finger: auf der Strecke = Weg waehlen (oder direkt auf ein Wortschild); auf der Lichtung = Stange antippen */
 function punkt(cv,cx,cy){const r=cv.getBoundingClientRect();return {x:(cx-r.left)/r.width*W,y:(cy-r.top)/r.width*W};}
 function zeiger(cv,cx,cy){
- if(O.mode!=='play')return;const p=punkt(cv,cx,cy),L=O.lichtung;
- if(L){if(L.phase==='zielen'&&L.zug){L.zug.x=p.x;L.zug.y=p.y;}return;}
+ if(O.mode!=='play'||O.lichtung)return;const p=punkt(cv,cx,cy);
  O.ziel=laneOf(p.y);
 }
-function wisch(){/* Finger los */
- const L=O.lichtung;if(!L||L.phase!=='zielen'||!L.zug)return;
- const z=zielVonZug(L.zug);L.zug=null;
- if(z.kraft<0.3){pop('Weiter zurückziehen!','#FFE08A');return;}
- werfen(z.lane,z.kraft);
+function wisch(){}
+/* Wortschild an der Wand (Bildschirm) */
+function schildRechteck(g,i){const sk=SKALA[i],bw=122*sk,bh=40*sk,cx=Math.min(sx(g.x),W-66*sk);return {x:clamp(cx-bw/2,4,W-bw-4),y:laneY(i)-76*sk,b:bw,h:bh};}
+/* Lichtung: naechste Stange zum Fingerpunkt (Schild an der Spitze zaehlt mit) */
+function stangeBei(p){
+ const L=O.lichtung;let best=-1,bd=1e9;
+ for(let i=0;i<3;i++){const x=sx(stangeX(L,i)),y0=laneY(i),y1=y0-STANGE*SKALA[i]-40;
+  const dx=Math.abs(p.x-x),dy=p.y>y0?p.y-y0:p.y<y1?y1-p.y:0,d=Math.hypot(dx,dy);if(d<bd){bd=d;best=i;}}
+ return bd<90?best:-1;
 }
-/* Zug -> Richtung: nach unten ziehen = nach oben (hinterer Weg) zielen */
-function zielVonZug(z){
- const dx=z.x0-z.x,dy=z.y0-z.y,len=Math.hypot(dx,dy),kraft=clamp(len/110,0,1);
- if(len<4)return {lane:Math.round(O.lane),kraft:0};
- /* Ziel-y = Panda-y + Richtung, auf den naechsten Weg gerundet */
- const zy=yAus(O.lane)+dy/Math.max(12,Math.abs(dx)+12)*190;
- return {lane:laneOf(zy),kraft};
+function tipp(cv,cx,cy){
+ if(O.mode!=='play')return;const p=punkt(cv,cx,cy),L=O.lichtung;
+ if(L){if(L.phase==='anrollen'||L.phase==='waehlen'){const i=stangeBei(p);if(i>=0)waehle(i);}return;}
+ const g=O.gate;
+ if(g&&!g.ergebnis&&O.x>g.x-ruheStrecke()-40)for(let i=0;i<3;i++){const r=schildRechteck(g,i);if(p.x>=r.x-6&&p.x<=r.x+r.b+6&&p.y>=r.y-6&&p.y<=r.y+r.h+6){O.ziel=i;return;}}
+ O.ziel=laneOf(p.y);
 }
 function taste(d,dt){
  O.tasteCd-=dt;if(O.tasteCd>0)return;O.tasteCd=0.2;
  if(O.lichtung){return;}
  O.ziel=clamp(O.ziel+(d>0?1:-1),0,2);
 }
-function werfen(i,kraft){
- const L=O.lichtung;if(!L)return;
- L.wahl=i;L.phase='flug';L.t=0;L.kraft=Math.max(0.6,kraft);L.x0f=O.x;L.l0=O.lane;O.jumps++;sfx('wurf');
- teilchen(PX,yAus(O.lane),14,['#E8DCC0','#FFFFFF'],120,'staub');
+/* Stange gewaehlt: der Panda rollt hin */
+function waehle(i){
+ const L=O.lichtung;if(!L||(L.phase!=='anrollen'&&L.phase!=='waehlen'))return false;
+ L.wahl=i;L.phase='hin';L.t=0;L.x0f=O.x;L.l0=O.lane;sfx('wurf');
+ teilchen(PX,yAus(O.lane),10,['#E8DCC0','#FFFFFF'],100,'staub');
+ return true;
 }
 
 /* ------------------------------------------------------------- Auswertung */
@@ -218,40 +233,68 @@ function update(dt){
  if(g&&g.erledigt&&O.x>=g.x+60){O.gate=null;weiter();}
 }
 function spurMerken(){O.spur.unshift(O.lane);if(O.spur.length>80)O.spur.length=80;}
+/* Stabhochsprung: anrollen - waehlen - hin - hoch - (knack - fallen) - flug - landung */
+const HIN=0.45,HOCH=0.5,FLUG=0.85,KNACK=1.1;
+function griffPose(L,i,b){
+ /* Panda haengt links neben dem Griff an der Stange */
+ const [gx,gy]=stangePunkt(L,i,GRIFF,b),sk=SKALA[i];
+ return {x:gx-42*sk,hub:laneY(i)-(gy+10*sk+ROLL_R*sk)};
+}
 function lichtungUpdate(L,dt){
  L.t+=dt;
+ for(const o of L.opts)if(o.lane!==L.wahl||L.phase==='waehlen')o.biege*=Math.max(0,1-dt*6);
  if(L.phase==='anrollen'){
-  /* sanft bis zum Abwurfpunkt rollen und stehen bleiben */
+  /* sanft bis vor die Stangen rollen und stehen bleiben */
   const rest=L.stopp-O.x;L.v=Math.max(0,Math.min(grundTempo(),rest*2.4));
   O.x+=L.v*dt;O.dreh+=L.v*dt/ROLL_R;O.lane+=(1-O.lane)*Math.min(1,dt*6);O.ziel=1;spurMerken();
-  if(rest<2){O.x=L.stopp;L.v=0;L.phase='zielen';L.t=0;}
+  if(rest<2){O.x=L.stopp;L.v=0;L.phase='waehlen';L.t=0;}
+  return;
+ }
+ if(L.phase==='waehlen'){L.v=0;return;}
+ const i=L.wahl,o=L.opts.find(o=>o.lane===i),richtig=o.w===O.q;
+ if(L.phase==='hin'){
+  const t=Math.min(1,L.t/HIN),e=ease(t),ziel=griffPose(L,i,0).x;L.v=0;
+  const x=lerp(L.x0f,ziel,e);O.dreh+=(x-O.x)/ROLL_R;O.x=x;O.lane=lerp(L.l0,i,e);spurMerken();
+  if(t>=1){L.phase='hoch';L.t=0;L.x0f=O.x;sfx('bambus');}
+ }else if(L.phase==='hoch'){
+  /* packen: die Stange biegt sich zur Mauer, der Panda wird hochgehoben */
+  const t=Math.min(1,L.t/HOCH),e=ease(t);
+  if(!richtig&&!L.zweit&&t>0.6){knack(L,o);return;}
+  o.biege=0.45*e;const gp=griffPose(L,i,o.biege);O.x=gp.x;O.hub=gp.hub*e;
+  if(t>=1){L.phase='flug';L.t=0;L.x0f=O.x;L.h0=O.hub;L.l0=O.lane;O.jumps++;sfx('wurf');teilchen(PX+30,yAus(O.lane)-O.hub,12,['#8BC34A','#C5E1A5'],140,'splitter');}
+ }else if(L.phase==='knack'){
+  /* falsche Stange bricht, der Panda plumpst herunter und ist benommen */
+  const t=Math.min(1,L.t/0.35);O.hub=L.h0*(1-t*t);
+  if(L.t>=KNACK){/* jetzt mit der richtigen Stange */
+   const r=L.opts.find(o=>o.w===O.q).lane;L.zweit=true;L.wahl=r;L.phase='hin';L.t=0;L.x0f=O.x;L.l0=O.lane;O.hub=0;}
  }else if(L.phase==='flug'){
-  const dauer=0.5,t=Math.min(1,L.t/dauer),e=1-Math.pow(1-t,2);
-  const ziel=L.ziel+VERSATZ[L.wahl]-40;O.x=lerp(L.x0f,ziel,e);O.lane=lerp(L.l0,L.wahl,e);O.dreh+=dt*22*L.kraft;spurMerken();
-  if(t>=1)treffen(L);
- }else if(L.phase==='treffer'){
-  if(L.t>(L.ergebnis==='richtig'?1.0:1.1)){
-   /* weiter auf dem Weg; die uebrigen Buendel fallen um */
-   for(const o of L.opts)if(o.kaputt<1){o.kaputt=1;teilchen(sx(L.ziel)+VERSATZ[o.lane],laneY(o.lane)-30*SKALA[o.lane],14,['#8BC34A','#C5E1A5','#6D9F3A'],160,'splitter');}
-   O.lichtung=null;O.ziel=Math.round(O.lane);weiter();
-  }else if(L.ergebnis!=='richtig'){const t=L.t/0.5;if(t<1){O.x-=(1-t)*160*dt;O.dreh-=(1-t)*160*dt/ROLL_R;}}
+  /* im Bogen ueber die Mauer, Landung auf dem mittleren Weg dahinter */
+  const t=Math.min(1,L.t/FLUG),zielX=mauerX(L,1)+100,spitze=MAUER_H*SKALA[1]+30;
+  O.x=lerp(L.x0f,zielX,t);O.lane=lerp(L.l0,1,t);
+  O.hub=Math.max(0,lerp(L.h0,0,t)+Math.sin(t*Math.PI)*(spitze-L.h0*0.5));O.dreh+=dt*14;spurMerken();
+  o.biege=-0.15*Math.sin(Math.min(1,t*3)*Math.PI)*(1-t);
+  if(t>=1)landen(L);
+ }else if(L.phase==='landung'){
+  if(L.t>0.9){O.lichtung=null;O.hub=0;O.ziel=1;weiter();}
  }
 }
-function treffen(L){
- const opt=L.opts.find(o=>o.lane===L.wahl),y=laneY(L.wahl);
- L.phase='treffer';L.t=0;
- if(opt.w===O.q){
-  L.ergebnis='richtig';opt.kaputt=1;O.streak++;O.best=Math.max(O.best,O.streak);
-  const p=Math.round(15*mult());O.score+=p;O.babys++;O.gerettet++;O.kette.push({schleife:L.baby,dazu:O.time});
-  pop('Volltreffer! +'+p+' · Baby gerettet!','#FFE08A');
-  O.hitstop=0.14;O.shake=ruhig?0:11;
-  teilchen(PX+40,y-30,46,['#8BC34A','#C5E1A5','#6D9F3A','#FFFFFF','#FFD6E5'],300,'splitter');sfx('rumms');sfx('baby');
- }else{
-  L.ergebnis='falsch';wortFalsch();O.hearts--;O.stun=1.1;O.shake=ruhig?0:5;opt.kaputt=0.3;
-  pop('Daneben! Das Baby wartet.','#FF9A8A');sfx('abprall');musik(M=>M.fehler());
-  L.baby=null;O.naechsteSchleife--;
-  if(O.hearts<=0){O.mode='lost';O.anim=0;musik(M=>M.ende());}
- }
+function knack(L,o){
+ L.phase='knack';L.t=0;L.h0=O.hub;o.kaputt=1;o.biege=0;
+ L.ergebnis='falsch';wortFalsch();O.hearts--;O.stun=1.2;O.shake=ruhig?0:6;
+ pop('Knack! Falsche Stange – das Baby läuft weg.','#FF9A8A');sfx('knack');sfx('abprall');musik(M=>M.fehler());
+ teilchen(sx(stangeX(L,o.lane)),laneY(o.lane)-STANGE*SKALA[o.lane]*0.5,18,['#8BC34A','#C5E1A5','#E8D9A6'],180,'splitter');
+ L.baby=null;O.naechsteSchleife--;
+ if(O.hearts<=0){O.mode='lost';O.anim=0;O.hub=0;musik(M=>M.ende());}
+}
+function landen(L){
+ L.phase='landung';L.t=0;O.hub=0;O.lane=1;
+ if(!L.zweit){
+  L.ergebnis='richtig';O.streak++;O.best=Math.max(O.best,O.streak);
+  const p=Math.round(15*mult());O.score+=p;O.babys++;O.gerettet++;O.kette.push({schleife:L.baby,dazu:O.time});L.baby=null;
+  pop('Stabhochsprung! +'+p+' · Baby gerettet!','#FFE08A');
+  O.hitstop=0.12;O.shake=ruhig?0:8;
+  teilchen(PX,laneY(1)-20,40,['#8BC34A','#C5E1A5','#6D9F3A','#FFFFFF','#FFD6E5'],260,'splitter');sfx('rumms');sfx('baby');
+ }else{teilchen(PX,laneY(1)-6,14,['#E8DCC0','#FFFFFF'],120,'staub');sfx('stein');}
 }
 
 /* ---------------------------------------------------------------- Klang */
@@ -276,6 +319,7 @@ const KLANG={
  stein:t=>{ton(t,160,70,0.2,'square',0.12);zisch(t,1200,300,0.15,0.25,1);},
  baby:t=>{[1046,1318,1568].forEach((f,i)=>ton(t+i*0.07,f,f*1.06,0.12,'sine',0.14));},
  wurf:t=>{zisch(t,400,3000,0.3,0.3,0.7);ton(t,200,500,0.25,'triangle',0.12);},
+ knack:t=>{zisch(t,3000,900,0.12,0.5,2);ton(t,700,180,0.15,'square',0.12);zisch(t+0.05,1500,400,0.2,0.3,1.5);},
  ziel:t=>{[523,659,784,1047,1319].forEach((f,i)=>ton(t+i*0.09,f,f,0.6,'triangle',0.15));}
 };
 function sfx(n){if(!audio()||!KLANG[n])return;try{KLANG[n](ac.currentTime+0.01);}catch(e){}}
@@ -369,55 +413,58 @@ function schilderZeichnen(g){
   if(g.erledigt&&g.ergebnis==='richtig'&&O.x>g.x+10)al*=Math.max(0,1-(O.x-g.x-10)/40);
   wortschild(x,y,opt,zust,al,sk);}
 }
-function buendel(o,cx){
- const i=o.lane,y=laneY(i),sk=SKALA[i];
- if(o.kaputt>=1)return;
- const wack=o.kaputt>0?Math.sin(O.time*40)*3*sk:0;
- ctx.save();ctx.translate(cx+wack,y);
- ctx.fillStyle='rgba(30,50,20,.25)';ctx.beginPath();ctx.ellipse(0,0,36*sk,7*sk,0,0,7);ctx.fill();
- for(let k=-3;k<=3;k++){const x=k*8.5*sk,h=(92+Math.abs(k)*-5+rnd(k+i*9)*10)*sk;stange(x,0,-h,7*sk,k%2?'#7DB35A':'#6FA64E','#A5D17F');blatt(x,-h+6,14*sk,4*sk,k*0.3-0.6,'#9CCB7A');}
- ctx.fillStyle='#B5652F';ctx.fillRect(-31*sk,-22*sk,62*sk,7*sk);ctx.fillStyle='#8E4B20';ctx.fillRect(-31*sk,-17*sk,62*sk,2*sk);
+/* Bambusstange der Lichtung (gebogen oder geknickt) */
+function stangeZeichnen(L,o){
+ const i=o.lane,sk=SKALA[i],P=t=>{const [x,y]=stangePunkt(L,i,t,o.biege);return [sx(x),y];},n=o.kaputt?0.5:1;
+ ctx.save();ctx.lineCap='round';
+ ctx.fillStyle='rgba(30,50,20,.25)';ctx.beginPath();ctx.ellipse(P(0)[0],laneY(i)+1,12*sk,3.5*sk,0,0,7);ctx.fill();
+ const linie=(dx)=>{ctx.beginPath();for(let t=0;t<=n+0.001;t+=0.05){const [a,c]=P(Math.min(t,n));t?ctx.lineTo(a+dx,c):ctx.moveTo(a+dx,c);}ctx.stroke();};
+ ctx.strokeStyle='#6FA64E';ctx.lineWidth=8*sk;linie(0);
+ ctx.strokeStyle='#A5D17F';ctx.lineWidth=2.4*sk;linie(-2*sk);
+ ctx.strokeStyle='#4F7F35';ctx.lineWidth=9.5*sk;ctx.lineCap='butt';
+ for(let t=0.15;t<n;t+=0.17){const [a,c]=P(t),[a2,c2]=P(t+0.01),l=Math.hypot(a2-a,c2-c)||1,ux=(a2-a)/l,uy=(c2-c)/l;ctx.beginPath();ctx.moveTo(a-ux*1.3*sk,c-uy*1.3*sk);ctx.lineTo(a+ux*1.3*sk,c+uy*1.3*sk);ctx.stroke();}
+ if(o.kaputt){const [a,c]=P(0.5);ctx.fillStyle='#E8D9A6';for(let k=0;k<4;k++){ctx.beginPath();ctx.moveTo(a-4*sk+k*2.6*sk,c);ctx.lineTo(a-3*sk+k*2.6*sk,c-7*sk-(k%2)*3*sk);ctx.lineTo(a-1.5*sk+k*2.6*sk,c);ctx.fill();}
+  /* das abgebrochene Stueck liegt am Boden */
+  ctx.save();ctx.translate(P(0)[0]+10*sk,laneY(i)-3);ctx.rotate(0.08);ctx.fillStyle='#6FA64E';rund(0,-4*sk,STANGE*sk*0.5,8*sk,4*sk);ctx.fill();ctx.restore();}
+ else{const [a,c]=P(1);for(const r of [-0.9,-2.2,-0.3])blatt(a,c,13*sk,3.8*sk,r+o.biege,'#8BC34A');}
  ctx.restore();
 }
+/* hohe Bambusmauer schraeg ueber alle Wege, Stangen von hinten nach vorn */
+function mauerZeichnen(L){
+ /* dichtes Bambus-Dickicht quer ueber alle Wege: mehrere Reihen, von hinten nach vorn */
+ const reihen=7,breit=54;
+ for(let r=0;r<=reihen;r++){const t=r/reihen,l=t*2,y=lerp(laneY(0)+2,laneY(2)+6,t),sk=skala(l),x0=sx(mauerX(L,l));
+  for(let j=0;j<6;j++){const n=r*11+j,x=x0+(j*breit/5+rnd(n)*6)*sk,h=MAUER_H*sk*(0.88+0.12*rnd(n*3.3)),yy=y+(rnd(n+7)-0.5)*6*sk;
+   stange(x,yy,yy-h,10*sk,j%2?'#5F9440':'#6FA64E',j%2?'#86BB5E':'#A5D17F');
+   blatt(x,yy-h+6,14*sk,4*sk,-0.6-rnd(n)*0.8,'#8BC34A');blatt(x,yy-h+12,12*sk,3.5*sk,-2.4+rnd(n)*0.5,'#7DB35A');}
+  ctx.fillStyle='#8E4B20';for(const f of [0.3,0.72])ctx.fillRect(x0-6*sk,y-MAUER_H*sk*f,breit*sk+12*sk,4.5*sk);}
+}
 function lichtungZeichnen(L,H){
- /* helle Lichtung */
+ /* helle Lichtung; dahinter: Baby hinter der Mauer, die Mauer selbst */
  const lx=sx(L.stopp+110);
  const gl=ctx.createRadialGradient(lx,laneY(1),20,lx,laneY(1),260);gl.addColorStop(0,'rgba(255,248,210,.55)');gl.addColorStop(1,'rgba(255,248,210,0)');ctx.fillStyle=gl;ctx.fillRect(0,0,W,H);
  for(let n=0;n<16;n++){const x=sx(L.stopp-60+rnd(n)*380),y=laneY(0)-6+rnd(n+3)*(laneY(2)-laneY(0)+20);ctx.fillStyle=['#FFFFFF','#FFD6E5','#FFE08A'][n%3];ctx.beginPath();ctx.arc(x,y,2.2,0,7);ctx.fill();}
+ if(L.baby&&window.PandaFigur){const bx=sx(mauerX(L,1)+92),hops=Math.abs(Math.sin(O.time*5))*3;
+  window.PandaFigur.panda(ctx,bx,laneY(1)-hops,0.42,{baby:true,arme:Math.sin(O.time*4)>0?1:0.3,mood:'froh',schleife:L.baby,wippen:O.time*3});}
+ mauerZeichnen(L);
 }
 function lichtungVorn(L){
- /* Buendel und Schilder, von hinten nach vorn */
- for(const o of L.opts.slice().sort((a,b)=>a.lane-b.lane)){
-  const bx=sx(L.ziel)+VERSATZ[o.lane];
-  if(L.ergebnis==='richtig'&&o.kaputt>=1&&o.w===O.q&&L.t<1){/* Baby purzelt heraus */
-   const t=L.t,y=laneY(o.lane)-Math.sin(Math.min(1,t*1.6)*Math.PI)*70;if(window.PandaFigur)window.PandaFigur.panda(ctx,bx-t*60,y,0.45*SKALA[o.lane],{baby:true,arme:1,mood:'lachen',schleife:O.kette.length?O.kette[O.kette.length-1].schleife:'#FF6FA3'});}
- }
+ /* Wortschilder an den Spitzen der Stangen */
  const sichtbar=L.phase!=='anrollen'||O.x>L.stopp-ruheStrecke();
  if(sichtbar)for(const o of L.opts){const sk=SKALA[o.lane];let zust='normal',a=1;
-  if(L.ergebnis){if(o.w===O.q)zust='richtig';else if(o.lane===L.wahl)zust='falsch';else a=0.3;}
-  else if(L.phase==='zielen'&&L.zug&&zielVonZug(L.zug).lane===o.lane)zust='hell';
-  if(L.ergebnis==='richtig'&&L.t>0.7)a*=Math.max(0,1-(L.t-0.7)*3);
-  const bx=sx(L.ziel)+VERSATZ[o.lane];wortschild(Math.min(bx,W-66*sk),laneY(o.lane)-74*sk,o,zust,a,sk);}
+  if(L.ergebnis==='falsch'){if(o.w===O.q)zust='richtig';else if(o.lane===L.wahl&&o.kaputt)zust='falsch';else a=0.3;}
+  else if(L.phase!=='waehlen'&&L.phase!=='anrollen'){if(o.lane===L.wahl)zust=L.phase==='landung'?'richtig':'hell';else a=0.3;}
+  if(L.phase==='landung')a*=Math.max(0,1-L.t*2);
+  const x=sx(stangeX(L,o.lane));wortschild(x,laneY(o.lane)-STANGE*sk-44*sk,o,zust,a,sk);}
 }
 function zielhilfe(L){
- if(L.phase!=='zielen')return;
- const py=yAus(O.lane)-ROLL_R*skala(O.lane);
- if(!L.zug){
-  /* Hinweis: Finger zieht zurueck */
-  const t=(O.time*0.9)%1,hx=PX+20-t*50,hy=py+10+t*18;
-  ctx.save();ctx.globalAlpha=Math.sin(t*Math.PI);ctx.fillStyle='#FFFFFF';ctx.strokeStyle='rgba(16,21,28,.7)';ctx.lineWidth=2;ctx.beginPath();ctx.arc(hx,hy,9,0,7);ctx.fill();ctx.stroke();ctx.restore();
-  ctx.fillStyle='rgba(16,21,28,.85)';rund(W/2-140,58,280,30,15);ctx.fill();ctx.fillStyle='#FFFFFF';ctx.font='700 13px Inter, system-ui, sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
-  ctx.fillText('Zurückziehen, zielen und loslassen!',W/2,73.5);
-  return;
- }
- const z=zielVonZug(L.zug),ty=laneY(z.lane)-30*SKALA[z.lane],tx=sx(L.ziel)+VERSATZ[z.lane];
- /* Gummiband */
- ctx.strokeStyle='rgba(255,255,255,.8)';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(PX,py);ctx.lineTo(PX-(L.zug.x0-L.zug.x)*-1*0.6,py-(L.zug.y0-L.zug.y)*-1*0.6);ctx.stroke();
- /* Flugbahn */
- ctx.setLineDash([6,7]);ctx.strokeStyle=z.kraft>=0.3?LANE_COL[z.lane]:'rgba(255,255,255,.5)';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(PX+10,py);ctx.quadraticCurveTo((PX+tx)/2,Math.min(py,ty)-30,tx-20,ty);ctx.stroke();ctx.setLineDash([]);
- /* Kraftring */
- ctx.strokeStyle='rgba(16,21,28,.5)';ctx.lineWidth=5;ctx.beginPath();ctx.arc(PX,py,ROLL_R+8,0,7);ctx.stroke();
- ctx.strokeStyle=z.kraft>=0.3?'#FFE08A':'#FFFFFF';ctx.beginPath();ctx.arc(PX,py,ROLL_R+8,-Math.PI/2,-Math.PI/2+z.kraft*Math.PI*2);ctx.stroke();
+ if(L.phase!=='waehlen')return;
+ /* Hinweis und pulsierender Finger an der mittleren Stange */
+ const t=(O.time*1.2)%1,x=sx(stangeX(L,1))-18,y=laneY(1)-STANGE*SKALA[1]*0.5;
+ ctx.save();ctx.globalAlpha=0.9*(1-t);ctx.strokeStyle='#FFFFFF';ctx.lineWidth=3;ctx.beginPath();ctx.arc(x,y,8+t*18,0,7);ctx.stroke();ctx.restore();
+ if(!L.ersteMal&&L.t>2.5)return;
+ ctx.fillStyle='rgba(16,21,28,.85)';rund(W/2-130,58,260,30,15);ctx.fill();ctx.fillStyle='#FFFFFF';ctx.font='700 13px Inter, system-ui, sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+ ctx.fillText('Tippe auf die richtige Stange!',W/2,73.5);
 }
 function itemZeichnen(it){
  const x=sx(it.x),i=it.lane,y=laneY(i),sk=SKALA[i];if(it.weg||x<-40||x>W+40)return;
@@ -433,16 +480,26 @@ function itemZeichnen(it){
 }
 function pandaZeichnen(){
  if(!window.PandaFigur||O.intro)return;
- const l=O.lane,sk=skala(l),y=yAus(l);
+ const l=O.lane,sk=skala(l),y=yAus(l)-(O.hub||0);
  /* Kette der Babys hinter der Mama */
  O.kette.forEach((b,n)=>{const l2=O.spur[Math.min(O.spur.length-1,6+n*6)]??l,sk2=skala(l2),hop=Math.abs(Math.sin(O.time*9+n))*3;
   window.PandaFigur.panda(ctx,PX-(42+n*30)*sk2,yAus(l2)-hop,0.95*sk2,{pose:'kugel',baby:true,dreh:O.dreh*1.4+n,schleife:b.schleife,mood:'froh'});});
- const mood=O.stun>0?'schwindlig':(O.gate&&O.gate.ergebnis==='richtig'&&O.x<O.gate.x+60)||(O.lichtung&&O.lichtung.ergebnis==='richtig')?'lachen':'froh';
+ const L=O.lichtung,mood=O.stun>0?'schwindlig':(O.gate&&O.gate.ergebnis==='richtig'&&O.x<O.gate.x+60)||(L&&(L.ergebnis==='richtig'||L.phase==='flug'||L.phase==='hoch'))?'lachen':'froh';
  const quetsch=O.hitstop>0?1.12:1;
  ctx.save();ctx.translate(PX+(O.mode==='abgang'?O.abX:0),y-(O.mode==='abgang'?Math.abs(Math.sin(O.anim*7))*30:0));ctx.scale(quetsch,2-quetsch);
  window.PandaFigur.panda(ctx,0,0,PK*sk,{pose:'kugel',dreh:O.dreh,mood,zeit:O.time});
  ctx.restore();
  if(O.stun>0){for(let i=0;i<3;i++){const a=O.time*6+i*2.1;ctx.fillStyle='#FFE08A';stern(PX+Math.cos(a)*22*sk,y-ROLL_R*2*sk-6+Math.sin(a)*6,4.5);}}
+ /* beim Hochschwingen: Pfoten an der Stange */
+ if(L&&L.phase==='hoch'){const o=L.opts.find(o=>o.lane===L.wahl),[gx,gy]=stangePunkt(L,L.wahl,GRIFF,o.biege);arme(PX+14*sk,y-ROLL_R*sk-8*sk,sx(gx),gy,sk);}
+}
+/* kurze, dicke Arme aus der Kugel; die Pfoten umfassen die Stange */
+function arme(px,py,gx,gy,sk){
+ ctx.save();ctx.lineCap='round';
+ for(const d of [-8,8]){const ex=gx-3*sk,ey=gy+d*sk,v=ctx.createLinearGradient(px,py,ex,ey);v.addColorStop(0,'#1B1E24');v.addColorStop(1,'#2E333D');
+  ctx.strokeStyle=v;ctx.lineWidth=13*sk;ctx.beginPath();ctx.moveTo(px,py+d*0.6*sk);ctx.quadraticCurveTo((px+ex)/2,(py+ey)/2+d*0.4*sk,ex,ey);ctx.stroke();
+  ctx.fillStyle='#2E333D';ctx.beginPath();ctx.ellipse(gx+1*sk,ey,7*sk,6*sk,0,0,7);ctx.fill();ctx.fillStyle='#5B5F69';ctx.beginPath();ctx.ellipse(gx+3*sk,ey,2.8*sk,2.4*sk,0,0,7);ctx.fill();}
+ ctx.restore();
 }
 function stern(x,y,r){ctx.beginPath();for(let i=0;i<10;i++){const a=i*Math.PI/5-Math.PI/2,rr=i%2?r*0.45:r;ctx.lineTo(x+Math.cos(a)*rr,y+Math.sin(a)*rr);}ctx.closePath();ctx.fill();}
 function hud(H){
@@ -481,7 +538,7 @@ function zeichne(cv,breite,hoehe){
  for(let i=0;i<3;i++){
   for(const it of O.items)if(it.lane===i)itemZeichnen(it);
   if(O.gate)wandZeichnen(O.gate,i);
-  if(L){const o=L.opts.find(o=>o.lane===i);if(o)buendel(o,sx(L.ziel)+VERSATZ[i]);}
+  if(L){const o=L.opts.find(o=>o.lane===i);if(o)stangeZeichnen(L,o);}
   if(i===pl)pandaZeichnen();
  }
  if(L)lichtungVorn(L);
@@ -499,24 +556,18 @@ function zeichne(cv,breite,hoehe){
  if(O.hitstop>0){ctx.fillStyle='rgba(255,255,255,'+Math.min(0.35,O.hitstop*3)+')';ctx.fillRect(0,0,W,H);}
  /* deutsche Vokabel als Karte ueber der Wand bzw. den Buendeln */
  if(window.BWFrage&&(O.mode==='play'||O.mode==='pause')&&!O.intro&&(O.gate||L)){
-  const cx=O.gate?Math.min(sx(O.gate.x),W-66*SKALA[0]):sx(L.ziel)+VERSATZ[0],vorbei=(O.gate&&O.gate.ergebnis==='richtig')||(L&&L.ergebnis);
-  window.BWFrage.karte(ctx,{text:O.q.de,cx,unten:laneY(0)-64,W,H,t:O.time-(O.frageT||0),alpha:vorbei?0.25:1});}
+  const cx=O.gate?Math.min(sx(O.gate.x),W-66*SKALA[0]):sx(stangeX(L,1)),vorbei=(O.gate&&O.gate.ergebnis==='richtig')||(L&&L.ergebnis);
+  window.BWFrage.karte(ctx,{text:O.q.de,cx,unten:L?laneY(0)-STANGE*SKALA[0]-52*SKALA[0]:laneY(0)-64,W,H,t:O.time-(O.frageT||0),alpha:vorbei?0.25:1});}
  hud(H);
 
-}
-/* Tippen: auf der Strecke = Weg waehlen; auf der Lichtung beginnt das Ziehen */
-function tipp(cv,cx,cy){
- const L=O.lichtung;
- if(L){if(O.mode==='play'&&L.phase==='zielen'){const p=punkt(cv,cx,cy);L.zug={x0:p.x,y0:p.y,x:p.x,y:p.y};}return;}
- zeiger(cv,cx,cy);
 }
 /* Lage der Panda-Kugel (fuer den Uebergang aus morph.js) */
 const pose=()=>({x:PX,y:yAus(O.lane),k:PK*skala(O.lane),rot:0,dreh:O.dreh,hoehe:75,figur:(c,x,y,k)=>window.PandaFigur&&window.PandaFigur.panda(c,x,y,k,{pose:'kugel',dreh:O.dreh,mood:'froh'})});
 function abgang(){Object.assign(O,{mode:'abgang',anim:0,abX:0,gate:null,lichtung:null,pops:[],kette:[]});O.items=[];}
 const abgangPunkt=cv=>{const k=cv.clientWidth/W;return {x:Math.min(W-30,PX+O.abX)*k,y:(yAus(O.lane)-35)*k};};
 
-window.BWPandaRoll={O,start,abgang,abgangPunkt,ABGANG_RICHTUNG:1,update,zeichne,lane,zeiger,wisch,taste,tipp,pose,werfen,zielVonZug,laneY,laneOf,yAus,GOAL,HEARTS,MINREAD,PX,LICHTUNG_ALLE,
+window.BWPandaRoll={O,start,abgang,abgangPunkt,ABGANG_RICHTUNG:1,update,zeichne,lane,zeiger,wisch,taste,tipp,pose,waehle,stangeBei,stangeX,schildRechteck,laneY,laneOf,yAus,GOAL,HEARTS,MINREAD,PX,LICHTUNG_ALLE,
  speed,grundTempo,ruheStrecke,mult,istLichtung,LANE_COL,LANE_ZEICHEN,ding:'Wand',
- hinweis:'Ziehen = Weg wählen · durch das richtige Tor krachen | Lichtung: zurückziehen und loslassen | Tastatur: 1 2 3 · P = Pause',
+ hinweis:'Tippe auf das richtige Wort (oder ziehe) · durch das richtige Tor krachen | Lichtung: Tippe auf die richtige Stange – Stabhochsprung! | Tastatur: 1 2 3 · P = Pause',
  pause(an){if(an&&O.mode==='play')O.mode='pause';else if(!an&&O.mode==='pause')O.mode='play';}};
 })();

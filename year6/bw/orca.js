@@ -390,14 +390,20 @@ function zeichne(cv,breite,hoehe){
 function zeigerY(cv,clientY){const r=cv.getBoundingClientRect();return (clientY-r.top)/r.width*W;}
 
 function zeiger(cv,clientX,clientY){steerTo(zeigerY(cv,clientY));}
+/* Tippen: auf einen Schwarm oder sein Wortschild = genau dorthin; sonst wie Ziehen (oben an der Oberflaeche: Sprung) */
+function tipp(cv,clientX,clientY){
+ if(O.mode!=='play')return;const y=zeigerY(cv,clientY);
+ for(let i=0;i<3;i++){const yc=laneY(i);if(y>=yc-52&&y<=yc+40){lane(i);return;}}
+ steerTo(y);
+}
 function taste(richtung,dt){steerTo(O.ty+richtung*330*dt);}
 /* wo der Orca im Spiel schwimmt (fuer den Uebergang aus morph.js) */
 /* nach Karte und Stempel: Sprung aus dem Wasser (morph.js uebernimmt danach) */
 function abgang(){Object.assign(O,{mode:'absprung',anim:0,abX:0,raus:false,y:SURF()+50,rot:-0.85,gate:null,old:[],pops:[]});}
 const abgangPunkt=cv=>{const k=cv.clientWidth/W;return {x:(ORCA_X+O.abX)*k,y:O.y*k};};
 const pose=()=>({x:ORCA_X,y:O.y,k:GROESSE,rot:O.rot||0,schlag:O.tail||0});
-window.BWOrca={O,start,pose,abgang,abgangPunkt,ABGANG_RICHTUNG:-1,update,zeichne,steerTo,lane,laneY,laneOf,SURF,BED,zeigerY,zeiger,taste,GOAL,HEARTS,MINREAD,ORCA_X,speed,gapFor,mult,LANE_COL,LANE_ZEICHEN,
- ding:'Schwarm',hinweis:'Ziehen = lenken · schnell nach oben = Sprung | Tastatur: ↑ ↓ oder 1 2 3 · Leertaste = Sprung · P = Pause',
+window.BWOrca={O,start,pose,abgang,abgangPunkt,ABGANG_RICHTUNG:-1,update,zeichne,steerTo,lane,laneY,laneOf,SURF,BED,zeigerY,zeiger,tipp,taste,GOAL,HEARTS,MINREAD,ORCA_X,speed,gapFor,mult,LANE_COL,LANE_ZEICHEN,
+ ding:'Schwarm',hinweis:'Tippe auf den richtigen Schwarm (oder ziehe) · ganz nach oben = Sprung | Tastatur: ↑ ↓ oder 1 2 3 · Leertaste = Sprung · P = Pause',
  sprung(){steerTo(SURF()-70);},
  pause(an){if(an&&O.mode==='play')O.mode='pause';else if(!an&&O.mode==='pause')O.mode='play';}};
 })();

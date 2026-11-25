@@ -128,7 +128,7 @@ function finish(won){
  if(st.pinguin)zeilen.push('Pinguin: '+st.pinguin.k+'/'+window.BWPinguin.GOAL+' Schollen · Serie '+st.pinguin.best+' · Fische '+st.pinguin.extra);
  if(st.orca)zeilen.push('Orca: '+st.orca.k+'/'+window.BWOrca.GOAL+' Schwärme · Serie '+st.orca.best+' · Sprünge '+st.orca.jumps+' · Krill '+st.orca.extra);
  if(st.panda)zeilen.push('Panda: '+st.panda.k+'/'+window.BWPandaRoll.GOAL+' Wände · Serie '+st.panda.best+' · Baby-Pandas '+st.panda.extra);
- if(st.zebra)zeilen.push('Zebra: '+st.zebra.k+'/'+window.BWZebra.GOAL+' Tore · Serie '+st.zebra.best+' · Gras '+st.zebra.extra);
+ if(st.zebra)zeilen.push('Zebra: '+st.zebra.k+'/'+window.BWZebra.GOAL+' Tore · Serie '+st.zebra.best+' · Sprünge '+st.zebra.jumps+' · Gras '+st.zebra.extra);
  o.innerHTML='<h1 tabindex="-1">'+(won?'Etappe geschafft!':({pinguin:'Bauchlandung!',orca:'Der Orca braucht eine Pause.',panda:'Der Panda braucht ein Nickerchen.',zebra:'Der Löwe war schneller – nochmal!'}[k.id]||'Pause!'))+'</h1>'
   +'<p class="lead">'+(won?(KAPITEL[FERTIG]?'Weiter geht die Reise nach '+esc(ORTE()[FERTIG].ort)+' – zum '+esc(KAPITEL[FERTIG].name)+' (folgt).':'Alle vier Stempel – die Reise ist geschafft!'):'Kapitel '+(G.kap+1)+' ('+esc(k.titel)+') ist noch nicht geschafft.')+'</p>'
   +'<p class="result">'+G.score+' Punkte'+(rekord&&G.score?' · <strong>neuer Bestwert!</strong>':'')+'</p>'

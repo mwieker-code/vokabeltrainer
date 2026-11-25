@@ -60,6 +60,8 @@ S.move(-1);S.move(-1);ok(G.lane===0,'links ist Schluss');S.move(1);S.move(1);S.m
 d.querySelector('#chips [data-lane="1"]').click();ok(G.lane===1&&d.querySelector('#chips [data-lane="1"]').getAttribute('aria-pressed')==='true','Knopf waehlt die Spur');
 d.dispatchEvent(new w.KeyboardEvent('keydown',{key:'ArrowLeft'}));ok(G.lane===0,'Pfeiltaste lenkt');
 d.dispatchEvent(new w.KeyboardEvent('keydown',{key:'3'}));ok(G.lane===2,'Zifferntaste waehlt die Spur');
+{const m0=G.mode;G.mode='ride';G.gate.hit=[{x:20,y:100,b:80,h:60},{x:140,y:100,b:80,h:60},{x:260,y:100,b:80,h:60}];
+ ok(w.SledGame.schildBei(300,130)===2&&w.SledGame.schildBei(60,120)===0&&w.SledGame.schildBei(180,400)===-1,'Tippen auf ein Wortschild trifft dessen Spur');G.mode=m0;}
 S.pause(true);const z=G.gate.z;S.update(1);ok(G.gate.z===z,'Pause haelt die Fahrt an');S.pause(false);
 
 /* Sterne und Felsen */

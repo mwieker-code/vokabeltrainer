@@ -105,7 +105,7 @@ function distractors(q){
 }
 function next(){
   G.q=G.queue.shift();G.options=shuffle([G.q,...distractors(G.q)]);G.result=null;G.mode='ride';
-  G.gate={z:GAP,right:G.options.indexOf(G.q),labels:[null,null,null]};
+  G.gate={z:GAP,right:G.options.indexOf(G.q),labels:[null,null,null],hit:[null,null,null]};
   G.speed=gateSpeed();
   /* Unterwegs, jedes in seiner eigenen Reihe und alles vor dem Tor, damit
      die Spurwahl am Tor frei bleibt: Sterne, ein Power-up, Pinguine und ab
@@ -328,7 +328,9 @@ canvas.addEventListener('pointermove',e=>{
 });
 canvas.addEventListener('pointerup',e=>{
   if(!touch)return;
-  if(!touch.moved){const r=canvas.getBoundingClientRect();move(e.clientX<r.left+r.width/2?-1:1);}   // Tippen: links oder rechts
+  if(!touch.moved){const r=canvas.getBoundingClientRect(),gx=(e.clientX-r.left)/r.width*W,gy=(e.clientY-r.top)/r.height*H;
+    const i=schildBei(gx,gy);if(i>=0)steer(i);   // Tippen auf ein Wortschild: genau diese Spur
+    else move(e.clientX<r.left+r.width/2?-1:1);}   // sonst: links oder rechts eine Spur
   touch=null;
 });
 canvas.addEventListener('pointercancel',()=>{touch=null;});
@@ -462,6 +464,12 @@ function fitLabel(text,max,size){
   if(lines.length>2){lines=lines.slice(0,2);lines[1]=lines[1].replace(/.{0,2}$/,'…');}
   return lines;
 }
+/* Wortschild unter dem Finger (Spielkoordinaten), -1 = keins; kleine Schilder bekommen etwas Rand */
+function schildBei(x,y){
+  const h=G.gate&&G.gate.hit;if(!h||G.mode!=='ride')return -1;
+  for(let i=0;i<3;i++){const r=h[i];if(!r)continue;const m=Math.max(0,24-r.b*0.25);if(x>=r.x-m&&x<=r.x+r.b+m&&y>=r.y-m&&y<=r.y+r.h+m)return i;}
+  return -1;
+}
 function drawGate(z,finish){
   if(z>ZFAR||z<-CAM*0.6)return;
   const s=sc(z),Y=PY(z),xl=PX(-1.7,z),xr=PX(1.7,z),hp=168*s,beam=20*s;
@@ -482,6 +490,7 @@ function drawGate(z,finish){
     let col=LANE[i],glow=null;
     if(G.result){if(i===G.gate.right){col='#35C46A';glow='#35C46A';}else if(!G.result.ok&&i===G.result.lane){col='#E0413B';}}
     if(glow){ctx.shadowColor=glow;ctx.shadowBlur=lite?0:24*s;}
+    if(G.gate.hit)G.gate.hit[i]={x:cx-bw/2,y:by,b:bw,h:bh+10*s};
     ctx.fillStyle=col;ctx.beginPath();ctx.moveTo(cx-bw/2,by);ctx.lineTo(cx+bw/2,by);ctx.lineTo(cx+bw/2,by+bh);ctx.lineTo(cx,by+bh+10*s);ctx.lineTo(cx-bw/2,by+bh);ctx.closePath();ctx.fill();
     ctx.shadowBlur=0;
     ctx.fillStyle='rgba(255,255,255,.22)';ctx.fillRect(cx-bw/2,by,bw,5*s);
@@ -742,6 +751,6 @@ function loop(){
   requestAnimationFrame(frame);
 }
 
-window.SledGame={G,start,_next:next,steer,move,update,finish,showMenu,pause,GOAL,HEARTS,GAP,MIN_READ,MODI,modus,TURBO_GATES,MAX_PENGUINS,UNLOCK,tempoOf,multiplier,gateSpeed,rider,unlocked};
+window.SledGame={G,start,_next:next,steer,move,schildBei,update,finish,showMenu,pause,GOAL,HEARTS,GAP,MIN_READ,MODI,modus,TURBO_GATES,MAX_PENGUINS,UNLOCK,tempoOf,multiplier,gateSpeed,rider,unlocked};
 showMenu();
 })();

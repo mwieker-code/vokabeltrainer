@@ -9,7 +9,7 @@
 const {JSDOM,VirtualConsole}=require('jsdom'),fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const root=path.join(__dirname,'..'),dir=path.join(root,'year6/bw');let checks=0;const ok=(v,m)=>{assert.ok(v,m);checks++;};
 const dom=new JSDOM(fs.readFileSync(path.join(dir,'index.html'),'utf8'),{runScripts:'outside-only',url:'https://example.org/year6/bw/',virtualConsole:new VirtualConsole()});
-for(const f of ['year6/climb/data.js','year6/figuren.js','year6/bw/musik.js','year6/bw/morph.js','year6/bw/reise.js','year6/bw/frage.js','year6/bw/pinguin.js','year6/bw/orca.js','year6/bw/pandafigur.js','year6/bw/panda.js','year6/bw/zebrafigur.js','year6/bw/zebra.js','year6/bw/game.js'])dom.window.eval(fs.readFileSync(path.join(root,f),'utf8'));
+for(const f of ['year6/climb/data.js','year6/figuren.js','year6/bw/musik.js','year6/bw/morph.js','year6/bw/reise.js','year6/bw/frage.js','year6/bw/pinguin.js','year6/bw/orca.js','year6/bw/pandafigur.js','year6/bw/panda.js','year6/bw/zebrafigur.js','year6/bw/loewefigur.js','year6/bw/zebra.js','year6/bw/game.js'])dom.window.eval(fs.readFileSync(path.join(root,f),'utf8'));
 const w=dom.window,d=w.document,B=w.BWGame,R=w.BWOrca,O=R.O,D=w.CLIMB_DATA;
 const richtig=()=>O.gate.opts.find(o=>o.w===O.q),falsch=()=>O.gate.opts.find(o=>o.w!==O.q);
 /* bis zum naechsten Schwarm schwimmen; Luft auffuellen, damit nur die Antwort zaehlt */
@@ -22,6 +22,9 @@ d.querySelector('[data-kap="1"]').click();ok(B.G.startKap===1&&d.querySelector('
 /* drei Tiefen, sauber getrennt */
 ok(R.laneY(0)<R.laneY(1)&&R.laneY(1)<R.laneY(2)&&R.laneY(0)>R.SURF(),'drei Tiefen unter der Oberflaeche');
 for(let i=0;i<3;i++)ok(R.laneOf(R.laneY(i))===i,'Tiefe '+i+' wird erkannt');
+{const f={getBoundingClientRect:()=>({left:0,top:0,width:360,height:640})};O.mode='play';
+ for(let i=0;i<3;i++){R.tipp(f,250,R.laneY(i)-34);ok(Math.abs(O.ty-R.laneY(i))<1,'Tippen auf Wortschild '+i+': genau in diese Tiefe');}
+ R.tipp(f,250,R.SURF()-30);ok(O.ty<R.laneY(0)-40,'Tippen ueber den Schwaermen: nach oben (Sprung)');O.mode='aus';}
 ok(R.laneOf(R.SURF()-20)===-1,'ueber dem Wasser: keine Tiefe');
 /* jeder Abschnitt fehlerfrei bis zur Kueste */
 for(const id of [...D.parts.map(p=>p.id),'all']){

@@ -5,6 +5,7 @@
    BWFrage.karte(ctx, {text, cx, unten, W, H, t, alpha})
      cx, unten  Mitte und Unterkante am Zielort (Spielkoordinaten)
      t          Sekunden seit der neuen Vokabel
+     schnell    true = kuerzer in der Mitte, fliegt rasch an ihren Platz (Pinguin)
    Die Karte im DOM (#prompt) bleibt fuer Screenreader erhalten. */
 (function(){
 'use strict';
@@ -20,16 +21,17 @@ function zeilen(g,text,maxB){
   if((z.length<=2&&z.every(l=>g.measureText(l).width<=maxB))||fs<=12)break;fs--;}
  return {z:z.slice(0,2),fs};
 }
-const DAUER=1.55;
+const DAUER=1.55,SCHNELL=0.75;
 function karte(g,o){
  if(!o||!o.text)return;const W=o.W,H=o.H,t=o.t==null?9:o.t;let a=o.alpha==null?1:o.alpha;if(a<=0.01)return;
  const maxB=Math.min(W-40,280),{z,fs}=zeilen(g,o.text,maxB);
  let tw=0;for(const l of z)tw=Math.max(tw,g.measureText(l).width);
  const b=Math.max(150,Math.min(W-12,tw+34)),h=28+z.length*fs*1.15;
  let cx=clamp(o.cx,b/2+6,W-b/2-6),cy=o.unten-h/2,sk=1;
- if(!ruhig&&t<DAUER){
+ const ende=o.schnell?SCHNELL:DAUER;
+ if(!ruhig&&t<ende){
   /* gross in der Mitte, dann zum Zielort */
-  const ein=weich(0,0.28,t),flug=weich(1.0,DAUER,t);
+  const ein=weich(0,o.schnell?0.18:0.28,t),flug=o.schnell?weich(0.4,SCHNELL,t):weich(1.0,DAUER,t);
   cx=lerp(W/2,cx,flug);cy=lerp(H*0.36,cy,flug);sk=lerp(1.4,1,flug)*(0.75+0.25*ein);a*=ein;
   if(flug<1){g.save();g.globalAlpha=0.35*(1-flug)*ein;g.fillStyle='#10151C';g.fillRect(0,0,W,H);g.restore();}
  }
@@ -45,5 +47,5 @@ function karte(g,o){
  z.forEach((l,n)=>g.fillText(l,0,-h/2+22+fs*0.62+n*fs*1.15));
  g.restore();
 }
-window.BWFrage={karte,DAUER};
+window.BWFrage={karte,DAUER,SCHNELL};
 })();

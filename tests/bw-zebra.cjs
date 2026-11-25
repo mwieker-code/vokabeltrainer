@@ -9,7 +9,7 @@
 const {JSDOM,VirtualConsole}=require('jsdom'),fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const root=path.join(__dirname,'..'),dir=path.join(root,'year6/bw');let checks=0;const ok=(v,m)=>{assert.ok(v,m);checks++;};
 const dom=new JSDOM(fs.readFileSync(path.join(dir,'index.html'),'utf8'),{runScripts:'outside-only',url:'https://example.org/year6/bw/',virtualConsole:new VirtualConsole()});
-for(const f of ['year6/climb/data.js','year6/figuren.js','year6/bw/musik.js','year6/bw/morph.js','year6/bw/reise.js','year6/bw/frage.js','year6/bw/pinguin.js','year6/bw/orca.js','year6/bw/pandafigur.js','year6/bw/panda.js','year6/bw/zebrafigur.js','year6/bw/zebra.js','year6/bw/game.js'])dom.window.eval(fs.readFileSync(path.join(root,f),'utf8'));
+for(const f of ['year6/climb/data.js','year6/figuren.js','year6/bw/musik.js','year6/bw/morph.js','year6/bw/reise.js','year6/bw/frage.js','year6/bw/pinguin.js','year6/bw/orca.js','year6/bw/pandafigur.js','year6/bw/panda.js','year6/bw/zebrafigur.js','year6/bw/loewefigur.js','year6/bw/zebra.js','year6/bw/game.js'])dom.window.eval(fs.readFileSync(path.join(root,f),'utf8'));
 const w=dom.window,d=w.document,B=w.BWGame,Z=w.BWZebra,O=Z.O,D=w.CLIMB_DATA;
 const tick=(n=1,dt=1/30)=>{for(let i=0;i<n;i++)Z.update(dt);};
 const richtig=()=>O.gate.opts.find(o=>o.w===O.q).lane,falsch=()=>O.gate.opts.find(o=>o.w!==O.q).lane;
@@ -24,7 +24,7 @@ ok(Z.xAus(0,Z.Z0)<Z.xAus(1,Z.Z0)&&Z.xAus(1,Z.Z0)<Z.xAus(2,Z.Z0)&&Z.yAus(40)<Z.yA
 for(const id of [...D.parts.map(p=>p.id),'all']){
  d.querySelector('[data-kap="3"]').click();d.querySelector('[data-part="'+id+'"]').click();
  ok(B.G.mode==='play'&&B.G.kap===3&&O.mode==='play'&&/^Tor 1\/16/.test(d.getElementById('floe').textContent),id+': Zebra-Kapitel laeuft');
- ok(/Wischen/.test(d.getElementById('hint').textContent),id+': Hinweis');
+ ok(/Tippe auf das richtige Wort/.test(d.getElementById('hint').textContent),id+': Hinweis');
  for(let k=0;k<Z.GOAL;k++){
   const g=O.gate;
   ok(g.opts.length===3&&g.opts.filter(o=>o.w===O.q).length===1,id+': genau ein richtiges Tor');
@@ -55,11 +55,28 @@ d.querySelector('[data-kap="3"]').click();d.querySelector('[data-part="y6u2-part
  for(let i=0;i<4;i++)tor(richtig);ok(O.hearts===Z.HEARTS,'nie mehr als volle Herzen');}
 /* Gras und Hindernisse */
 {const s0=O.score;O.items.push({typ:'gras',d:O.dist+Z.Z0+0.2,lane:Math.round(O.lane)});tick(2);ok(O.gras>0&&O.score>s0,'Gras gibt Punkte');
- O.streak=3;const h0=O.hearts,v0=Z.speed();O.items.push({typ:'stein',d:O.dist+Z.Z0+0.2,lane:Math.round(O.lane)});
- const sicher=O.gate.d;O.gate.d=O.dist+500;tick(2);ok(O.stolpern>0&&O.streak===0&&O.hearts===h0&&Z.speed()<v0,'Stein: stolpern, langsamer, kein Herz');
- O.items.push({typ:'huegel',d:O.dist+Z.Z0+0.2,lane:(Math.round(O.lane)+1)%3});const st=O.stolpern;O.stolpern=0;tick(2);ok(O.stolpern===0,'Hindernis auf anderem Pfad: nichts');O.gate.d=sicher;}
+ const sicher=O.gate.d;O.gate.d=O.dist+500;
+ for(const typ of ['dornbusch','termiten']){O.stolpern=0;O.sprung=0;O.streak=3;const h0=O.hearts,v0=Z.speed();O.items.push({typ,d:O.dist+Z.Z0+0.2,lane:Math.round(O.lane)});
+  tick(2);ok(O.stolpern>0&&O.streak===0&&O.hearts===h0&&Z.speed()<v0,typ+': stolpern, langsamer, kein Herz');}
+ O.stolpern=0;tick(30);
+ O.items.push({typ:'termiten',d:O.dist+Z.Z0+0.2,lane:(Math.round(O.lane)+1)%3});tick(2);ok(O.stolpern===0,'Hindernis auf anderem Pfad: nichts');
+ /* Baumstamm: das Zebra springt drueber, Bonus, kein Stolpern */
+ O.streak=2;const s1=O.score,j0=O.spruenge;let hoch=0;O.items.push({typ:'stamm',d:O.dist+Z.Z0+0.2,lane:Math.round(O.lane)});
+ for(let i=0;i<30;i++){tick();hoch=Math.max(hoch,Z.sprungHoehe());}
+ ok(O.spruenge===j0+1&&O.score>s1&&O.stolpern===0&&O.streak===2&&hoch>0.9,'Baumstamm: Sprung mit Bonus, Serie bleibt');
+ /* im Sprung ueber den Dornbusch: kein Stolpern */
+ O.sprung=Z.SPRUNG;O.items.push({typ:'dornbusch',d:O.dist+Z.Z0+0.2,lane:Math.round(O.lane)});tick(2);ok(O.stolpern===0,'im Sprung kein Stolpern');
+ tick(30);O.gate.d=sicher;
+ ok(!O.items.some(i=>i.typ==='stein'||i.typ==='huegel'),'keine Steine mehr');}
+/* jeder Abschnitt hat einen Stamm, Hindernisse liegen nicht auf dessen Pfad */
+{let st=0;tor(()=>O.gate.opts.find(o=>o.w===O.q).lane);
+ st=O.items.filter(i=>i.typ==='stamm').length;ok(st>=1,'Baumstaemme unterwegs');}
+/* Loewe greift bei einem Fehler an */
+{O.hearts=3;let max=0;const k=O.k;while(O.k===k&&O.mode==='play'){O.items=O.items.filter(i=>i.typ==='gras');if(O.gate&&!O.gate.ergebnis)Z.lane(falsch());max=Math.max(max,O.angriff);tick();}
+ ok(max>Z.ANGRIFF*0.9&&O.angriff<max,'falsches Tor: Sprungangriff des Loewen');O.hearts=3;}
 /* Steuerung */
 {Z.lane(1);tick(20);Z.tipp(fake,330,300);ok(O.ziel===2,'Tippen rechts: rechter Pfad');Z.tipp(fake,20,300);ok(O.ziel===0,'Tippen links: linker Pfad');
+ {let n=0;while(!(O.gate&&!O.gate.ergebnis)&&n++<200)tick();const ry=Z.reiheY(O.gate);Z.lane(1);Z.tipp(fake,180-116,ry+20);ok(O.ziel===0,'Tippen auf das linke Wortschild');Z.tipp(fake,180+116,ry+20);ok(O.ziel===2,'Tippen auf das rechte Wortschild');}
  Z.lane(1);tick(20);Z.tipp(fake,180,300);Z.wisch(fake,180,260);ok(O.ziel===2,'nach rechts wischen');
  Z.tipp(fake,180,300);Z.wisch(fake,180,100);ok(O.ziel===0||O.ziel===1,'nach links wischen');
  Z.lane(1);Z.tipp(fake,180,300);Z.wisch(fake,180,190);ok(O.ziel===1,'kleine Bewegung ist kein Wischen');
