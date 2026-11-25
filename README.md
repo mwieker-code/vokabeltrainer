@@ -19,6 +19,12 @@ Statischer Englisch-Trainer für Jahrgang 5, 6, 9, 10 und Oberstufe. Die HTML-Se
 - Die Startseite (`index.html`) bringt ihre Gestaltung selbst mit. Die Lernseiten behalten ihre Stylesheets; `tools/nacht.cjs` erzeugt zu jeder Farbregel ein dunkles Gegenstück (`*-nacht.css` bzw. `<style data-nacht>`), `assets/nacht-marke.css` legt die Marke darüber. Alles davon gilt nur für den Bildschirm – der Druck bleibt hell.
 - Nach jeder Farbänderung in einer Seite oder unter `assets/`: `node tools/nacht.cjs`. `npm test` meldet, wenn das vergessen wurde.
 
+## Shopping Trip (Year 6)
+
+3D-Supermarkt unter `year6/shop/` (Kachel auf der Year-6-Spieleseite): Shopping list, Listen and shop, Budget challenge, Recipe mission, Where is …?, Price detective, Team duel (auch mit zwei Controllern im Splitscreen) und Look around. Musik und Geräusche entstehen im Browser (`musik.js`).
+
+Wichtig bei Änderungen an den Spieldateien: Die Versionsnummer hinter den Dateien in `year6/shop/index.html` erhöhen und `year6/shop/stand.json` anpassen – sonst liefert der Offline-Speicher den alten Stand aus. `tests/shop.cjs` meldet eine vergessene Erhöhung.
+
 ## Starten und prüfen
 
 Die Ordnerstruktur inklusive `assets/` vollständig beibehalten. Zum lokalen Start beispielsweise `python3 -m http.server 8765`, danach http://localhost:8765 öffnen. Für GitHub Pages die sechs HTML-Seiten und `assets/` gemeinsam übernehmen; die Sites-Konfiguration ist dafür nicht erforderlich.
