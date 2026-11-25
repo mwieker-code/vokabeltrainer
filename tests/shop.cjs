@@ -225,15 +225,17 @@ druck(0,K_.Y);ok(!d.getElementById('korb').hidden,'Dreieck/Y oeffnet den Korb');
 /* Kasse komplett mit dem Controller */
 for(const k of Object.keys(G.korb))delete G.korb[k];
 for(const e of G.liste)G.korb[e.id]=e.n;S.zettel();
-Object.assign(G.p,{x:13.2,z:19.5});S.kasseOeffnen();tick();
+Object.assign(G.p,{x:13.2,z:19.5,yaw:Math.PI,pitch:0.3});S.update(0.01,ohne);
+ok(L.inKassenZone(welt,G.p),'vor Kasse 1');
+druck(0,K_.A);ok(G.zustand==='kasse','Kreuz/A vor der Kasse: bezahlen');tick();
 let sicher=0;
 while(G.zustand==='kasse'&&sicher++<600){
  const KS=G.kasse,x=KS.schritte[KS.i];
  if(x.art==='geld'){ /* Muenzen nacheinander auf die Theke, bis es reicht */
   const f=d.querySelector('#kasse .pad-fokus');
-  if(KS.gezahlt>=KS.summe){while(!d.querySelector('#kasse .pad-fokus#kZahlen'))druck(0,K_.RECHTS);druck(0,K_.A);tick();continue;}
+  if(KS.gezahlt>=KS.summe){ok(d.querySelector('#kasse .pad-fokus#kZahlen'),'genug Geld: Bezahlen ist ausgewaehlt');druck(0,K_.A);tick();continue;}
   if(!f||!f.dataset.geld){druck(0,K_.RUNTER);continue;}
-  druck(0,K_.A);tick();continue;}
+  druck(0,K_.A);tick();ok(d.querySelector('#kasse .pad-fokus'),'nach einer Muenze bleibt eine Auswahl');continue;}
  const f=d.querySelector('#kasse .pad-fokus');
  if(f&&f.id==='kWeiter'){druck(0,K_.A);tick();continue;}
  if(x.optionen&&!x.beantwortet){while(!(d.querySelector('#kasse .pad-fokus')||{}).dataset||d.querySelector('#kasse .pad-fokus').textContent!==x.richtig)druck(0,K_.RUNTER);druck(0,K_.A);tick();continue;}
