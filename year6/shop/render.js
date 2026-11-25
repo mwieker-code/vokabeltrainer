@@ -29,8 +29,28 @@ const V={
  ebene:new THREE.PlaneGeometry(1,1).toNonIndexed(),
  flasche:new THREE.LatheGeometry([[0,0],[0.92,0],[1,0.04],[1,0.6],[0.93,0.7],[0.5,0.84],[0.4,0.88],[0.4,1],[0,1]].map(([x,y])=>new THREE.Vector2(x,y)),12).toNonIndexed(),
  milch:new THREE.LatheGeometry([[0,0],[0.9,0],[1,0.05],[1,0.55],[0.86,0.7],[0.45,0.84],[0.45,0.96],[0,0.96]].map(([x,y])=>new THREE.Vector2(x,y)),12).toNonIndexed(),
- keil:new THREE.CylinderGeometry(1,1,1,3,1).toNonIndexed()
+ keil:new THREE.CylinderGeometry(1,1,1,3,1).toNonIndexed(),
+ banane:bananenFinger()
 };
+/* Eine Banane: kantiger (fuenfeckiger) Querschnitt, der Bogen nach oben,
+   duenner Stielansatz, dicker Bauch, braune Spitze. Farben je Ecke. */
+function bananenFinger(){
+ const N=16,K=5,R=0.13,A=1.15,pos=[],col=[],idx=[],c=new THREE.Color();
+ for(let i=0;i<=N;i++){
+  const t=i/N,a=A*t,px=R*Math.sin(a),py=R*(1-Math.cos(a)),tx=Math.cos(a),ty=Math.sin(a);
+  let r=t<0.1?0.0055:0.0035+0.0155*Math.pow(Math.sin(Math.PI*Math.min(1,(t-0.1)/0.92)),0.55);
+  if(i===N)r=0.0025;
+  c.set(t<0.1?'#7F8F3A':t<0.2?'#C9C24A':t>0.95?'#3B2A1A':'#F2D23C');
+  for(let k=0;k<K;k++){
+   const w=k/K*Math.PI*2,cw=Math.cos(w),sw=Math.sin(w);
+   pos.push(px+(-ty)*cw*r,py+tx*cw*r,sw*r*0.92);
+   const kante=(k%2)?0.92:1;col.push(c.r*kante,c.g*kante,c.b*kante);
+  }
+ }
+ for(let i=0;i<N;i++)for(let k=0;k<K;k++){const a=i*K+k,b=i*K+(k+1)%K,d=(i+1)*K+k,e=(i+1)*K+(k+1)%K;idx.push(a,d,b,b,d,e);}
+ const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setAttribute('color',new THREE.Float32BufferAttribute(col,3));
+ g.setIndex(idx);g.computeVertexNormals();return g.toNonIndexed();
+}
 const _q=new THREE.Quaternion(),_e=new THREE.Euler(),_v=new THREE.Vector3(),_n=new THREE.Vector3(),_c=new THREE.Color(),_nm=new THREE.Matrix3();
 function mat(x,y,z,sx,sy,sz,rx,ry,rz){_e.set(rx||0,ry||0,rz||0);_q.setFromEuler(_e);return new THREE.Matrix4().compose(new THREE.Vector3(x,y,z),_q.clone(),new THREE.Vector3(sx,sy,sz));}
 
@@ -38,12 +58,12 @@ function mat(x,y,z,sx,sy,sz,rx,ry,rz){_e.set(rx||0,ry||0,rz||0);_q.setFromEuler(
 class Sammler{
  constructor(){this.p=[];this.n=[];this.c=[];this.u=[];}
  add(geo,m,farbe,rect){
-  const P=geo.attributes.position,N=geo.attributes.normal,U=geo.attributes.uv;
+  const P=geo.attributes.position,N=geo.attributes.normal,U=geo.attributes.uv,C=farbe?null:geo.attributes.color;
   _nm.getNormalMatrix(m);_c.set(farbe||'#FFFFFF');
   for(let i=0;i<P.count;i++){
    _v.fromBufferAttribute(P,i).applyMatrix4(m);this.p.push(_v.x,_v.y,_v.z);
    _n.fromBufferAttribute(N,i).applyMatrix3(_nm).normalize();this.n.push(_n.x,_n.y,_n.z);
-   this.c.push(_c.r,_c.g,_c.b);
+   if(C)this.c.push(C.getX(i),C.getY(i),C.getZ(i));else this.c.push(_c.r,_c.g,_c.b);
    if(rect&&U)this.u.push(rect[0]+U.getX(i)*(rect[2]-rect[0]),rect[1]+U.getY(i)*(rect[3]-rect[1]));else this.u.push(0,0);
   }
  }
@@ -271,7 +291,8 @@ export function init(canvas,welt,opts={}){
   kugel:{r:0.042,bau(M,w,_,k){teil(V.kugel,M,0,0,0,0.042,0.04,0.042,k%3?w.farbe:w.akzent);if(w.id==='apple'||w.id==='tomatoes'){teil(V.zyl,M,0,0.042,0,0.004,0.018,0.004,w.id==='apple'?'#6B4E33':'#3E8E41');if(k%3===0)teil(V.kugel0,M,0.013,0.047,0,0.015,0.004,0.008,'#5E9C3A');}}},
   zitrone:{r:0.035,bau(M,w){teil(V.kugel,M,0,0,0,0.045,0.034,0.034,w.farbe);}},
   kartoffel:{r:0.042,bau(M,w,_,k){teil(V.kugel0,M,0,0,0,0.05,0.035,0.04,k%2?w.farbe:w.akzent,0,k);}},
-  banane:{r:0.08,bau(M,w,_,k){for(let i=0;i<4;i++)teil(V.bogen,M,0,0.005+i*0.012,-0.02+i*0.012,0.1,0.06,0.04,w.farbe,Math.PI/2,k*0.7+i*0.25,0);teil(V.box,M,0.0,0.03,-0.07,0.02,0.02,0.03,w.akzent,0,k*0.7);}},
+  banane:{r:0.072,bau(M,w,_,k){const lage=BASIS.clone().multiply(mat(-0.05,0.0,0,1,1,1,-1.25+(k%2)*0.2,0,0));for(let i=0;i<5;i++){const d=i-2;S.add(V.banane,lage.clone().multiply(mat(0,Math.abs(d)*0.006,d*0.022,1,1,1,d*0.1,d*0.12+(k%3-1)*0.05,0.05)),null);}
+   S.add(V.zyl,lage.clone().multiply(mat(-0.004,0.004,0,0.012,0.03,0.022,0,0,Math.PI/2)),'#6B6A2E');S.add(V.zyl,lage.clone().multiply(mat(-0.022,0.01,0,0.006,0.03,0.006,0,0,1.2)),'#5A4A2A');}},
   traube:{r:0.07,bau(M,w){for(let i=0;i<9;i++){const a=i*2.4,rr=0.02+0.008*(i%3);teil(V.kugel0,M,Math.cos(a)*rr,0.015+(i%3)*0.018,Math.sin(a)*rr*1.6,0.018,0.018,0.018,i%2?w.farbe:w.akzent);}}},
   schale:{r:0.07,bau(M,w){teil(V.box,M,0,0.02,0,0.12,0.04,0.1,'#58B368');for(let i=0;i<6;i++)teil(V.kugel0,M,-0.035+(i%3)*0.035,0.045,-0.02+Math.floor(i/3)*0.04,0.02,0.022,0.02,w.farbe);}},
   karotte:{r:0.06,bau(M,w,_,k){for(let i=0;i<3;i++){teil(V.spitz,M,-0.03+i*0.03,0.02,0,0.016,0.16,0.016,w.farbe,Math.PI/2,k*0.4);teil(V.spitz,M,-0.03+i*0.03,0.02,-0.09,0.012,0.05,0.012,w.akzent,-Math.PI/2,k*0.4);}}},
