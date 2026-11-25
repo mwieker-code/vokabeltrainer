@@ -14,7 +14,7 @@ const fassung=JSON.parse(fs.readFileSync(path.join(root,'fassung.json'),'utf8'))
 for(const m of html.matchAll(/<script (?:type="module" )?src="([^"?]+)\?v=([^"]+)"/g))ok(m[2]===fassung,m[1]+' mit aktueller Versionsnummer');
 ok(/data-eigenes-design/.test(html)&&d.querySelector('header a').getAttribute('href')==='../games/','eigenes Design, Weg zur Spieleseite');
 ok(/from '\.\.\/schule\/vendor\/three\.module\.min\.js'/.test(fs.readFileSync(path.join(dir,'render.js'),'utf8')),'three.js aus dem Schul-Spiel');
-ok(['liste','hoeren','budget','duell','frei'].every(m=>d.querySelector('[data-modus="'+m+'"]')),'fuenf Spielarten im Menue');
+ok(['liste','hoeren','budget','rezept','wo','detektiv','duell','frei'].every(m=>d.querySelector('[data-modus="'+m+'"]')),'acht Spielarten im Menue');
 
 /* Daten */
 const ids=new Set(DAT.WAREN.map(x=>x.id));
@@ -134,6 +134,56 @@ const falsch=welt.waren.find(x=>x.id!==D.ziel.id).id;S.duellWahl(falsch);
 ok(D.teams[1].punkte===0&&/Leider nicht/.test(d.getElementById('ansage').textContent),'Duell: falsche Ware gibt keine Punkte');
 while(G.zustand!=='ende'){S.duellWeiter();if(G.zustand==='ende')break;S.duellLos();S.duellWahl(D.ziel.id);if(D.phase==='bonus')S.duellBonusAntwort('x');}
 ok(/wins!|draw/.test(d.getElementById('over').textContent),'Duell: Sieger angezeigt');
+
+/* ---------- Aufgaben 4-6 ---------- */
+/* Lage: Satz passt zu den Nachbarn im Regal, genau eine richtige Antwort */
+for(const x of DAT.WAREN){
+ const satz=L.lageSatz(welt,x.id),n=L.nachbarn(welt,x.id);
+ ok(n.length>=1&&n.every(id=>welt.plaetze.find(p=>p.id===id).seite===welt.plaetze.find(p=>p.id===x.id).seite),x.id+': Nachbarn im selben Regal');
+ ok(/^It's (in|at) .+, (next to|between) the .+\.$/.test(satz)&&!satz.includes('undefined'),x.id+': Lagesatz '+satz);
+ const o=L.lageOptionen(welt,x.id,rnd);ok(o.optionen.length===3&&new Set(o.optionen).size===3&&o.optionen.filter(t=>t===satz).length===1,x.id+': drei verschiedene Antworten, eine richtig');
+ ok(/^Excuse me, where (is|are) the .+\?$/.test(L.kundenFrage(welt,x.id)),x.id+': Kundenfrage');
+}
+ok(L.kundenFrage(welt,'apple')==='Excuse me, where are the apples?'&&L.kundenFrage(welt,'honey')==='Excuse me, where is the honey?','is / are');
+ok(L.lageSatz(welt,'cola')==='It\'s in aisle 1, between the lemonade and the apple juice.','Beispiel: Cola');
+/* Raetsel: genau eine Ware im Bereich passt */
+for(let k=0;k<200;k++){
+ const q=L.raetsel(welt,rnd);ok(q&&welt.byId[q.id],'Raetsel erzeugt');
+ const b=L.bereich(welt,q.id),gruppe=welt.waren.filter(x=>L.bereich(welt,x.id).key===b.key),name=x=>'the '+x.schild.toLowerCase();
+ let passt;
+ if(/the cheapest/.test(q.text))passt=gruppe.filter(x=>gruppe.every(y=>y.p>=x.p));
+ else if(/the most expensive/.test(q.text))passt=gruppe.filter(x=>gruppe.every(y=>y.p<=x.p));
+ else{const m=q.text.match(/cheaper than (.+), but more expensive than (.+)\. What/);const A=gruppe.find(x=>name(x)===m[1]),B=gruppe.find(x=>name(x)===m[2]);
+  ok(A&&B,'Raetsel nennt Waren aus demselben Bereich: '+q.text);passt=gruppe.filter(x=>x.p<A.p&&x.p>B.p);}
+ ok(passt.length===1&&passt[0].id===q.id,'Raetsel eindeutig: '+q.text);
+}
+/* Rezepte */
+for(const r of DAT.REZEPTE){
+ ok(r.zutaten.length>=4&&r.zutaten.every(([id,wort])=>ids.has(id)&&new RegExp('\\b'+wort+'\\b','i').test(r.text)),r.id+': Zutaten bekannt und im Text');
+ const korb={};r.zutaten.forEach(([id])=>korb[id]=1);ok(L.rezeptStand(welt,r,korb).anteil===1,r.id+': alle Zutaten = volle Punktzahl');
+ korb.cola=1;ok(L.rezeptStand(welt,r,korb).extra.length===1,r.id+': falsche Ware erkannt');
+}
+/* Ablauf: Recipe mission */
+S.start('rezept',L.zufall(11));
+const R0=G.mission.rezept;ok(/kochen/.test(d.getElementById('zAufgabe').textContent)&&d.getElementById('zListe').children.length===0,'Rezept im Zettel');
+for(const [id] of R0.zutaten)S.nehmen(id,1);
+ok(S.kochen()&&G.ergebnis.sterne===3&&d.querySelectorAll('#over mark.ok').length===R0.zutaten.length,'Rezept komplett: drei Sterne, Zutaten markiert');
+/* Ablauf: Where is ...? */
+S.start('wo',L.zufall(12));
+for(let k=0;k<5;k++){const M=G.mission;
+ ok(d.querySelectorAll('[data-mopt]').length===3,'Where is: drei Antworten (Runde '+(k+1)+')');
+ ok(S.woAntwort(M.wahl.richtig)&&M.phase==='zeigen','Where is: richtige Antwort');
+ S.oeffneWare(M.ziel.id);ok(/Das ist es/.test(d.getElementById('ware').textContent),'Where is: Ware zeigen');
+ ok(S.missionWahl(M.ziel.id),'Where is: gezeigt');}
+ok(G.zustand==='ende'&&G.ergebnis.sterne===3,'Where is: alles richtig = drei Sterne');
+/* Ablauf: Price detective */
+S.start('detektiv',L.zufall(13));
+const M3=G.mission,erstes=M3.raetsel.id,falsch3=welt.waren.find(x=>x.id!==erstes).id;
+ok(!S.missionWahl(falsch3)&&M3.versuche===1&&M3.nr===0,'Detektiv: falsche Ware, zweiter Versuch');
+ok(S.missionWahl(erstes)&&M3.punkte===1,'Detektiv: im zweiten Versuch ein Punkt');
+while(G.zustand!=='ende')S.missionWahl(G.mission.raetsel.id);
+ok(M3.punkte===9&&new Set(M3.log.map(e=>e.id)).size===5,'Detektiv: fuenf verschiedene Raetsel');
+ok(['rezept','wo','detektiv'].every(m=>JSON.parse(w.localStorage.getItem('vt6:shop:v1')).best[m]),'Bestwerte der neuen Spielarten gespeichert');
 
 /* Spieleseite */
 const hub=fs.readFileSync(path.join(root,'year6/games/index.html'),'utf8');

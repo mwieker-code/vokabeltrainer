@@ -169,6 +169,35 @@ window.SHOP_DATEN = {
  /* Geldbeutel: Scheine und Muenzen in Pence */
  GELD: [1000, 500, 200, 200, 100, 100, 50, 20, 20, 10, 5, 2, 2, 1],
 
+ /* Recipe mission: Das Rezept nennt die Zutaten nur im Text.
+    zutaten: [Waren-id, Wort im Text zum Hervorheben] */
+ REZEPTE: [
+  {id:'pancakes', titel:'Pancakes', emo:'🥞', de:'Pfannkuchen',
+   text:'Put the flour in a bowl. Add two eggs and the milk and mix it all. Cook the pancakes in a hot pan. Then put some sugar and lemon juice on top.',
+   zutaten:[['flour','flour'],['eggs','eggs'],['milk','milk'],['sugar','sugar'],['lemon','lemon']]},
+  {id:'fruitsalad', titel:'Fruit salad', emo:'🥗', de:'Obstsalat',
+   text:'Cut the apples, the bananas and the oranges into small pieces. Add some grapes. Put a pot of yoghurt on top.',
+   zutaten:[['apple','apples'],['bananas','bananas'],['oranges','oranges'],['grapes','grapes'],['yoghurt','yoghurt']]},
+  {id:'sandwich', titel:'Cheese and ham sandwich', emo:'🥪', de:'Sandwich mit Käse und Schinken',
+   text:'Put butter on two slices of bread. Add a piece of cheese and some ham. Then add a few slices of tomato and a lettuce leaf.',
+   zutaten:[['bread','bread'],['butter','butter'],['cheese','cheese'],['ham','ham'],['tomatoes','tomato'],['lettuce','lettuce']]},
+  {id:'spaghetti', titel:'Spaghetti with tomato sauce', emo:'🍝', de:'Spaghetti mit Tomatensoße',
+   text:'Cook the spaghetti in hot water for ten minutes. Heat a tin of tomatoes and a jar of pasta sauce in a pan. Put the sauce on the spaghetti and add some cheese.',
+   zutaten:[['spaghetti','spaghetti'],['tintomatoes','tin of tomatoes'],['pastasauce','pasta sauce'],['cheese','cheese']]},
+  {id:'potato', titel:'Baked potatoes', emo:'🥔', de:'Ofenkartoffeln',
+   text:'Bake the potatoes in the oven for one hour. Heat the baked beans in a pan. Put some butter, the beans and some cheese on the hot potatoes.',
+   zutaten:[['potatoes','potatoes'],['beans','baked beans'],['butter','butter'],['cheese','cheese']]},
+  {id:'fryup', titel:'English breakfast', emo:'🍳', de:'Englisches Frühstück',
+   text:'Fry the sausages and the eggs. Heat the baked beans and cut some tomatoes. Make toast with the bread. And drink a nice cup of tea!',
+   zutaten:[['sausages','sausages'],['eggs','eggs'],['beans','baked beans'],['tomatoes','tomatoes'],['bread','bread'],['tea','tea']]}
+ ],
+
+ /* Where is ...? Kundinnen und Kunden, die etwas suchen */
+ KUNDEN: [
+  {name:'Mrs Brown', emo:'👵', sie:'her'},{name:'Mr Patel', emo:'👨🏽', sie:'him'},{name:'Lucy', emo:'👧', sie:'her'},
+  {name:'Mr Green', emo:'👴', sie:'him'},{name:'Tom', emo:'👦', sie:'him'},{name:'Mrs Okafor', emo:'👩🏿', sie:'her'}
+ ],
+
  /* Glossar fuer den Knopf "Wörter" */
  WOERTER: [
   ['a bottle of …','eine Flasche …'],['a carton of …','ein Karton (Tetrapak) …'],['a can / a tin of …','eine Dose …'],
@@ -178,6 +207,6 @@ window.SHOP_DATEN = {
   ['a pot / a tub of …','ein Becher …'],['a piece of …','ein Stück …'],['How much is / are …?','Was kostet / kosten …?'],
   ['cheap – cheaper – the cheapest','billig – billiger – am billigsten'],['expensive – more expensive','teuer – teurer'],
   ['the change','das Wechselgeld'],['the receipt','der Kassenbon'],['the checkout / the till','die Kasse'],
-  ['aisle','der Gang im Supermarkt'],['basket / trolley','Korb / Einkaufswagen']
+  ['aisle','der Gang im Supermarkt'],['next to …','neben …'],['between … and …','zwischen … und …'],['on the left / right','links / rechts'],['at the back','hinten'],['the cheapest / the most expensive','am billigsten / am teuersten'],['more expensive than','teurer als'],['basket / trolley','Korb / Einkaufswagen']
  ]
 };

@@ -20,6 +20,9 @@
   <button data-modus="liste" class="m-liste"><span class="m-icon" aria-hidden="true">📝</span><span class="m-text"><span class="m-name">Shopping list</span><span class="m-info">Lies die Einkaufsliste, kauf alles ein und bezahle an der Kasse.</span><span class="m-best" data-best="liste"></span></span></button>
   <button data-modus="hoeren" class="m-hoeren"><span class="m-icon" aria-hidden="true">🎧</span><span class="m-text"><span class="m-name">Listen and shop</span><span class="m-info">Die Liste wird nur vorgelesen. Hör genau hin!</span><span class="m-best" data-best="hoeren"></span></span></button>
   <button data-modus="budget" class="m-budget"><span class="m-icon" aria-hidden="true">💷</span><span class="m-text"><span class="m-name">Budget challenge</span><span class="m-info">Du hast nur wenig Geld. Vergleiche die Preise und kauf günstig ein.</span><span class="m-best" data-best="budget"></span></span></button>
+  <button data-modus="rezept" class="m-rezept"><span class="m-icon" aria-hidden="true">🍳</span><span class="m-text"><span class="m-name">Recipe mission</span><span class="m-info">Lies ein englisches Rezept und kauf alle Zutaten dafür ein.</span><span class="m-best" data-best="rezept"></span></span></button>
+  <button data-modus="wo" class="m-wo"><span class="m-icon" aria-hidden="true">🙋</span><span class="m-text"><span class="m-name">Where is …?</span><span class="m-info">Du arbeitest im Laden: Erkläre, wo etwas steht, und zeig es der Kundschaft.</span><span class="m-best" data-best="wo"></span></span></button>
+  <button data-modus="detektiv" class="m-detektiv"><span class="m-icon" aria-hidden="true">🔍</span><span class="m-text"><span class="m-name">Price detective</span><span class="m-info">Löse Rätsel mit <i lang="en">cheaper than</i> und <i lang="en">the cheapest</i>.</span><span class="m-best" data-best="detektiv"></span></span></button>
   <button data-modus="duell" class="m-duell"><span class="m-icon" aria-hidden="true">🏆</span><span class="m-text"><span class="m-name">Team duel</span><span class="m-info">Für die Tafel: Zwei Teams suchen abwechselnd Waren auf Zeit.</span></span></button>
   <button data-modus="frei" class="m-frei"><span class="m-icon" aria-hidden="true">🧭</span><span class="m-text"><span class="m-name">Look around</span><span class="m-info">Ohne Aufgabe durch den Laden laufen und Preise ansehen.</span></span></button>
  </div>
@@ -58,6 +61,9 @@
    <li><b>Shopping list im Plenum:</b> Ein Kind steuert, die Klasse liest die Liste vor und lotst: <i lang="en">Go straight on. Turn left. It's in aisle 2.</i></li>
    <li><b>Kassengespräch:</b> Die Antworten an der Kasse im Chor sprechen, danach in Partnerarbeit frei nachspielen.</li>
    <li><b>Team duel:</b> Zwei Teams, abwechselnd kommt ein Kind an die Tafel. Mit „Auftrag nur vorlesen“ wird es zur Hörübung.</li>
+   <li><b>Recipe mission:</b> Das Rezept gemeinsam lesen und vorher sammeln lassen: <i lang="en">What do we need?</i> Danach im Laden einkaufen.</li>
+   <li><b>Where is …?</b> Die Klasse wählt die Antwort, ein Kind läuft an der Tafel hin und zeigt die Ware. Gut zum Üben von <i lang="en">next to, between, at the back</i>.</li>
+   <li><b>Price detective:</b> In Partnerarbeit eigene Rätsel nach dem Muster schreiben: <i lang="en">I'm in aisle 2. I'm cheaper than … but more expensive than …</i></li>
    <li><b>Budget challenge:</b> Hinterher die Sätze auf dem Ergebnis nutzen: <i lang="en">The water is cheaper than the lemonade.</i></li>
    <li><b>Hausaufgabe:</b> Eine Runde spielen, den Kassenbon mit Namen speichern oder ausdrucken und abgeben.</li>
   </ul>
@@ -74,6 +80,7 @@
   <div id="zettel" class="zettel">
    <div class="z-kopf"><b id="zTitel" lang="en">Shopping list</b><button id="falten" class="klein" aria-label="Liste zuklappen">▴</button></div>
    <p id="zInfo" class="z-info"></p>
+   <div id="zAufgabe" class="z-aufgabe" hidden aria-live="polite"></div>
    <ul id="zListe" lang="en" aria-live="polite"></ul>
    <div id="zBudget" class="z-budget" hidden><div class="z-balken"><span></span></div><p></p></div>
    <div class="z-knoepfe"><button id="vorlesen" class="klein">🔊 Vorlesen</button><button id="woerterKnopf" class="klein" aria-expanded="false">Wörter</button></div>
