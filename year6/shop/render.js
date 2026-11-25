@@ -31,7 +31,11 @@ const V={
  milch:new THREE.LatheGeometry([[0,0],[0.9,0],[1,0.05],[1,0.55],[0.86,0.7],[0.45,0.84],[0.45,0.96],[0,0.96]].map(([x,y])=>new THREE.Vector2(x,y)),12).toNonIndexed(),
  keil:new THREE.CylinderGeometry(1,1,1,3,1).toNonIndexed(),
  banane:bananenFinger(),
- etikettRund:new THREE.CylinderGeometry(1,1,1,14,1,true,-Math.PI/2,Math.PI).toNonIndexed()
+ etikettRund:new THREE.CylinderGeometry(1,1,1,14,1,true,-Math.PI/2,Math.PI).toNonIndexed(),
+ topf:new THREE.CylinderGeometry(1,0.76,1,24,1,true).toNonIndexed(),
+ boden:new THREE.CircleGeometry(1,24).toNonIndexed(),
+ rand:new THREE.TorusGeometry(1,0.07,6,32).toNonIndexed(),
+ blatt:new THREE.SphereGeometry(1,14,10).toNonIndexed()
 };
 /* Eine Banane: kantiger (fuenfeckiger) Querschnitt, der Bogen nach oben,
    duenner Stielansatz, dicker Bauch, braune Spitze. Farben je Ecke. */
@@ -677,12 +681,29 @@ export function init(canvas,welt,opts={}){
   for(let x=4;x<W-2;x+=6){S.add(V.zyl,mat(x,3.1,z,0.09,0.06,0.09),'#A9AFB5');S.add(V.zyl,mat(x,3.06,z,0.16,0.02,0.16),'#D7DBDF');}
  }
  /* Pflanzen im Eingangsbereich */
+ /* Zimmerpflanze: offener Topf mit Rand, Erde knapp unter dem Rand (nicht
+    gleich hoch - sonst flimmert es), breite Blaetter an duennen Stielen. */
  function pflanze(x,z,gross){
-  S.add(V.becher,mat(x,0.25,z,0.26,0.5,0.26,Math.PI,0,0),'#E8E2D8');S.add(V.zyl,mat(x,0.5,z,0.27,0.03,0.27),'#D6CEC0');
-  S.add(V.zyl,mat(x,0.505,z,0.23,0.02,0.23),'#4A3A2A');
-  const n=gross?14:10;
-  for(let i=0;i<n;i++){const a=i*2.4,h=0.45+(i%4)*0.18*(gross?1.4:1),r=0.08+(i%3)*0.05;
-   S.add(V.kugel,mat(x+Math.cos(a)*r,0.5+h,z+Math.sin(a)*r,0.06,0.28*(gross?1.3:1),0.025,Math.sin(a)*0.5,a,Math.cos(a)*0.5),i%3?'#3F8A43':'#5FAA4E');}
+  const H=0.44,R=0.26;
+  S.add(V.topf,mat(x,H/2,z,R,H,R),'#E8E2D8');S.add(V.boden,mat(x,0.004,z,R*0.76,R*0.76,1,-Math.PI/2,0,0),'#D6CEC0');
+  S.add(V.rand,mat(x,H,z,R+0.005,R+0.005,R*0.9,Math.PI/2,0,0),'#D6CEC0');
+  S.add(V.boden,mat(x,H-0.025,z,R*0.985,R*0.985,1,-Math.PI/2,0,0),'#4A3A2A');
+  for(let i=0;i<5;i++)S.add(V.kugel0,mat(x+Math.cos(i*1.7)*0.12,H-0.022,z+Math.sin(i*1.7)*0.12,0.025,0.008,0.02),'#3B2E22');
+  const n=gross?11:8,Y=new THREE.Vector3(0,1,0),q=new THREE.Quaternion(),q2=new THREE.Quaternion(),m=new THREE.Matrix4();
+  for(let i=0;i<n;i++){
+   const a=i*2.4,e=0.18+(i%4)*0.17,L=(0.32+(i%3)*0.13)*(gross?1.35:1);
+   const d=new THREE.Vector3(Math.sin(e)*Math.cos(a),Math.cos(e),Math.sin(e)*Math.sin(a)).normalize();
+   const fuss=new THREE.Vector3(x,H-0.02,z),ende=fuss.clone().addScaledVector(d,L);
+   q.setFromUnitVectors(Y,d);
+   m.compose(fuss.clone().addScaledVector(d,L/2),q,new THREE.Vector3(0.007,L,0.007));S.add(V.zyl,m.clone(),'#5C8A3A');
+   /* Blatt: etwas nach aussen geneigt, flach, laenglich, mit heller Mittelrippe */
+   const db=d.clone().add(new THREE.Vector3(Math.cos(a)*0.5,-0.15,Math.sin(a)*0.5)).normalize();
+   q.setFromUnitVectors(Y,db);q2.setFromAxisAngle(Y,-a+Math.PI/2);q.multiply(q2);
+   const breit=(0.06+(i%3)*0.012)*(gross?1.2:1),lang=(0.15+(i%2)*0.04)*(gross?1.25:1);
+   const mitte=ende.clone().addScaledVector(db,lang*0.9);
+   m.compose(mitte,q,new THREE.Vector3(breit,lang,0.006));S.add(V.blatt,m.clone(),i%3?'#2F6B33':'#3F8A43');
+   m.compose(mitte,q,new THREE.Vector3(0.006,lang*0.95,0.0075));S.add(V.blatt,m.clone(),'#8DBF6A');
+  }
  }
  pflanze(2.3,23.1,true);pflanze(8.2,23.1,false);pflanze(29.2,23.0,true);
  /* Kreidetafel mit Angeboten */
@@ -691,7 +712,8 @@ export function init(canvas,welt,opts={}){
   g.fillStyle='#FFFFFF';g.textAlign='center';g.font='700 36px '+SCHRIFT;g.fillText("Today's",w/2,62);g.fillText('offers',w/2,100);
   g.font='600 26px '+SCHRIFT;g.fillStyle='#FFD8E4';g.fillText('Strawberries',w/2,160);g.font='800 34px '+SCHRIFT;g.fillText('£2.25',w/2,198);
   g.fillStyle='#FFE9A8';g.font='600 26px '+SCHRIFT;g.fillText('Fresh bread',w/2,250);g.font='800 34px '+SCHRIFT;g.fillText('£1.25',w/2,288);});
- {const x=9.35,z=21.8;for(const s2 of [-1,1]){const T=mat(x,0.52,z+s2*0.16,1,1,1,s2*0.28,0,0);
+ {const x=9.35,z=21.8;S.add(V.zyl,mat(x,1.035,z,0.02,0.6,0.02,0,0,Math.PI/2),'#5A3A20');
+  for(const s2 of [-1,1]){const T=mat(x,0.52,z+s2*0.16,1,1,1,-s2*0.28,0,0);
    S.add(V.box,T.clone().multiply(mat(0,0,0,0.62,1.04,0.03)),'#8A5A32');
    SCH.add(V.ebene,T.clone().multiply(mat(0,0,s2*0.017,0.58,0.98,1,0,s2>0?0:Math.PI,0)),'#FFFFFF',kreide);}}
  /* Tageslicht: helle Flecken auf dem Boden und schwache Lichtbahnen aus den Schaufenstern */
