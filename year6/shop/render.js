@@ -185,9 +185,15 @@ export function init(canvas,welt,opts={}){
  decke.rotation.x=Math.PI/2;decke.position.set(W/2,DECKE,D/2);scene.add(decke);
  for(let x=3;x<W;x+=4.5)for(let z=2;z<D-1;z+=3){LEUCHT.quader(x-0.9,DECKE-0.03,z-0.3,x+0.9,DECKE-0.01,z+0.3,'#FFFFFF');S.quader(x-0.95,DECKE-0.025,z-0.35,x+0.95,DECKE-0.005,z+0.35,'#C9CDD2');}
  /* Waende mit Farbband */
- const wand=(x1,z1,x2,z2,band)=>{S.quader(x1,0,z1,x2,DECKE,z2,'#F6F1E7');if(band){const dx=x2-x1>z2-z1;
-  if(dx)S.quader(x1,2.35,z1+(z1<1?0.0:-0.01),x2,3.0,z2+(z1<1?0.01:0),band);else S.quader(x1+(x1<1?0:-0.01),2.35,z1,x2+(x1<1?0.01:0),3.0,z2,band);}
-  S.quader(Math.min(x1,x2),0,Math.min(z1,z2),Math.max(x1,x2),0.12,Math.max(z1,z2),'#5B6670');};
+ /* Wand mit Farbband und Fussleiste. Band und Leiste ragen ein Stueck in den
+    Raum - deckungsgleiche Flaechen flimmern, weil die Grafikkarte nicht
+    entscheiden kann, welche vorne liegt. */
+ const wand=(x1,z1,x2,z2,band)=>{
+  S.quader(x1,0,z1,x2,DECKE,z2,'#F6F1E7');
+  const vor=(d)=>x2-x1>z2-z1?[x1,z1,x2,z2+d]:x1<1?[x1,z1,x2+d,z2]:[x1-d,z1,x2,z2];
+  if(band){const [a1,b1,a2,b2]=vor(0.012);S.quader(a1,2.35,b1,a2,3.0,b2,band);}
+  const [a1,b1,a2,b2]=vor(0.025);S.quader(a1,0,b1,a2,0.12,b2,'#5B6670');
+ };
  wand(-0.2,-0.2,0,D,'#8CC152');        // Westen: Obst und Gemuese
  wand(0,-0.2,W,0,'#5DADE2');           // Norden: Kuehlregale
  wand(W,-0.2,W+0.2,D,'#7FA6C9');       // Osten: Tiefkuehl
