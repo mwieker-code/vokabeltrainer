@@ -30,7 +30,8 @@ const V={
  flasche:new THREE.LatheGeometry([[0,0],[0.92,0],[1,0.04],[1,0.6],[0.93,0.7],[0.5,0.84],[0.4,0.88],[0.4,1],[0,1]].map(([x,y])=>new THREE.Vector2(x,y)),12).toNonIndexed(),
  milch:new THREE.LatheGeometry([[0,0],[0.9,0],[1,0.05],[1,0.55],[0.86,0.7],[0.45,0.84],[0.45,0.96],[0,0.96]].map(([x,y])=>new THREE.Vector2(x,y)),12).toNonIndexed(),
  keil:new THREE.CylinderGeometry(1,1,1,3,1).toNonIndexed(),
- banane:bananenFinger()
+ banane:bananenFinger(),
+ etikettRund:new THREE.CylinderGeometry(1,1,1,14,1,true,-Math.PI/2,Math.PI).toNonIndexed()
 };
 /* Eine Banane: kantiger (fuenfeckiger) Querschnitt, der Bogen nach oben,
    duenner Stielansatz, dicker Bauch, braune Spitze. Farben je Ecke. */
@@ -98,6 +99,7 @@ class Atlas{
 }
 function rund(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath();}
 function passend(g,text,max,gewicht,groesse,schrift){let s=groesse;g.font=gewicht+' '+s+'px '+schrift;while(g.measureText(text).width>max&&s>10){s-=2;g.font=gewicht+' '+s+'px '+schrift;}return s;}
+const mischen=(a,b,t)=>{const x=new THREE.Color(a),y=new THREE.Color(b);x.lerp(y,t);return '#'+x.getHexString();};
 const hell=hex=>{_c.set(hex);return 0.2126*_c.r+0.7152*_c.g+0.0722*_c.b>0.45;};
 
 /* ---------- Texturen ---------- */
@@ -131,14 +133,25 @@ export function init(canvas,welt,opts={}){
  /* ===== Atlanten ===== */
  const AE=new Atlas(2048,1024),AS=new Atlas(2048,2048),AG=new Atlas(2048,2048);
  const etikett={};
+ const MARKE={getraenke:'Clearbrook',fruehstueck:'Sunrise',snacks:'Crunchy Co.',kochen:'Bella Pasta',dosen:'Hilltop',haushalt:'HomeCare',pflege:'Fresh & Clean',kuehl:'Green Meadow',tiefkuehl:'Polar'};
+ const MENGE={flasche:'1.5 L',milch:'2 pints',dose:'330 ml',konserve:'400 g',flachdose:'160 g',karton:'1 L',muesli:'500 g',teebox:'80 bags',glas:'340 g',tuete:'150 g',keksrolle:'300 g',tafel:'100 g',nudeln:'500 g',sack:'1 kg',ketchup:'460 g',mehl:'1.5 kg',klopapier:'9 rolls',spueli:'450 ml',tube:'75 ml',seife:'100 g',shampoo:'250 ml',butter:'250 g',becher:'125 g',eier:'6',flach:'200 g',eisbox:'1 L',pizza:'350 g'};
  for(const w of welt.waren){
-  etikett[w.id]=AE.add(120,150,(g,W,H)=>{
-   g.fillStyle=w.farbe;g.fillRect(0,0,W,H);
-   g.fillStyle=w.akzent;g.fillRect(0,H*0.74,W,H*0.26);
-   g.fillStyle=w.akzent;g.beginPath();g.arc(W/2,H*0.4,W*0.36,0,7);g.fill();
-   g.fillStyle='rgba(255,255,255,.92)';g.beginPath();g.arc(W/2,H*0.4,W*0.31,0,7);g.fill();
-   g.font=Math.round(W*0.42)+'px '+EMOJI;g.textAlign='center';g.textBaseline='middle';g.fillText(w.emo,W/2,H*0.42);
-   g.fillStyle=hell(w.akzent)?'#1D2A33':'#FFFFFF';g.font='800 '+Math.round(H*0.11)+'px '+SCHRIFT;g.fillText('★ ★ ★',W/2,H*0.87);
+  etikett[w.id]=AE.add(140,176,(g,W,H)=>{
+   /* Verpackung: Farbverlauf, Schwung, Marke oben, Bild in der Mitte, Menge unten.
+      Kein Warenname - im Profi-Modus soll man die Ware am Bild erkennen. */
+   const v=g.createLinearGradient(0,0,0,H);v.addColorStop(0,mischen(w.farbe,'#FFFFFF',0.22));v.addColorStop(1,mischen(w.farbe,'#000000',0.12));
+   g.fillStyle=v;g.fillRect(0,0,W,H);
+   g.fillStyle=w.akzent;g.beginPath();g.moveTo(0,H*0.66);g.bezierCurveTo(W*0.35,H*0.56,W*0.65,H*0.8,W,H*0.68);g.lineTo(W,H);g.lineTo(0,H);g.closePath();g.fill();
+   g.fillStyle='rgba(255,255,255,.18)';g.beginPath();g.moveTo(0,H*0.62);g.bezierCurveTo(W*0.35,H*0.52,W*0.65,H*0.76,W,H*0.64);g.lineTo(W,H*0.68);g.bezierCurveTo(W*0.65,H*0.8,W*0.35,H*0.56,0,H*0.66);g.fill();
+   const marke=MARKE[w.ort];
+   if(marke){g.fillStyle='rgba(0,0,0,.28)';g.fillRect(0,0,W,H*0.17);g.fillStyle='#FFFFFF';g.textAlign='center';g.textBaseline='middle';
+    passend(g,marke,W-14,'800',20,SCHRIFT);g.fillText(marke,W/2,H*0.09);}
+   g.fillStyle=w.akzent;g.beginPath();g.arc(W/2,H*0.42,W*0.3,0,7);g.fill();
+   g.fillStyle='rgba(255,255,255,.95)';g.beginPath();g.arc(W/2,H*0.42,W*0.26,0,7);g.fill();
+   g.font=Math.round(W*0.32)+'px '+EMOJI;g.textAlign='center';g.textBaseline='middle';g.fillText(w.emo,W/2,H*0.44);
+   const menge=MENGE[w.form];
+   if(menge){g.font='800 17px '+TEXT;const bw=g.measureText(menge).width+16;g.fillStyle='rgba(255,255,255,.9)';rund(g,W/2-bw/2,H*0.82,bw,24,12);g.fill();
+    g.fillStyle='#1D2A33';g.fillText(menge,W/2,H*0.82+13);}
   });
  }
  /* Preisschilder: gelb mit Name und Preis, Profi nur Preis */
@@ -252,21 +265,21 @@ export function init(canvas,welt,opts={}){
     Jede Form baut eine Ware in lokalen Koordinaten (Front = +z, Boden y=0).
     Rueckgabe: Groesse fuer die Aufstellung. */
  const F={
-  flasche:{w:0.085,h:0.3,d:0.085,bau(M,w,r){teil(V.flasche,M,0,0,0,0.042,0.29,0.042,w.farbe);teil(V.zyl,M,0,0.296,0,0.018,0.022,0.018,w.akzent);etik(M,0,0.11,0.0435,0.064,0.09,r);}},
-  milch:{w:0.13,h:0.25,d:0.11,bau(M,w,r){teil(V.milch,M,0,0,0,0.055,0.25,0.055,'#F4F4EF');teil(V.zyl,M,0,0.244,0,0.026,0.024,0.026,w.akzent);teil(V.ring,M,0.058,0.15,0,0.03,0.046,0.03,'#F4F4EF');etik(M,0,0.09,0.0565,0.07,0.1,r);}},
-  dose:{w:0.07,h:0.125,d:0.07,bau(M,w,r){teil(V.zyl,M,0,0.06,0,0.033,0.12,0.033,w.farbe);teil(V.zyl,M,0,0.122,0,0.031,0.006,0.031,'#C9CED3');etik(M,0,0.06,0.034,0.05,0.08,r);}},
-  konserve:{w:0.082,h:0.115,d:0.082,bau(M,w,r){teil(V.zyl,M,0,0.057,0,0.038,0.11,0.038,'#B9C0C7');teil(V.zyl,M,0,0.057,0,0.0385,0.085,0.0385,w.farbe);etik(M,0,0.057,0.039,0.06,0.075,r);}},
-  flachdose:{w:0.085,h:0.045,d:0.085,stapel:3,bau(M,w,r){teil(V.zyl,M,0,0.022,0,0.04,0.044,0.04,'#B9C0C7');teil(V.zyl,M,0,0.022,0,0.0405,0.03,0.0405,w.farbe);etik(M,0,0.022,0.041,0.06,0.028,r);}},
+  flasche:{w:0.085,h:0.3,d:0.085,bau(M,w,r){teil(V.flasche,M,0,0,0,0.042,0.29,0.042,w.farbe);teil(V.zyl,M,0,0.296,0,0.018,0.022,0.018,w.akzent);etikR(M,0.11,0.042,0.09,r);}},
+  milch:{w:0.13,h:0.25,d:0.11,bau(M,w,r){teil(V.milch,M,0,0,0,0.055,0.25,0.055,'#F4F4EF');teil(V.zyl,M,0,0.244,0,0.026,0.024,0.026,w.akzent);teil(V.ring,M,0.058,0.15,0,0.03,0.046,0.03,'#F4F4EF');etikR(M,0.09,0.055,0.1,r);}},
+  dose:{w:0.07,h:0.125,d:0.07,bau(M,w,r){teil(V.zyl,M,0,0.06,0,0.033,0.12,0.033,w.farbe);teil(V.zyl,M,0,0.122,0,0.031,0.006,0.031,'#C9CED3');etikR(M,0.06,0.033,0.08,r);}},
+  konserve:{w:0.082,h:0.115,d:0.082,bau(M,w,r){teil(V.zyl,M,0,0.057,0,0.038,0.11,0.038,'#B9C0C7');teil(V.zyl,M,0,0.057,0,0.0385,0.085,0.0385,w.farbe);etikR(M,0.057,0.0385,0.075,r);}},
+  flachdose:{w:0.085,h:0.045,d:0.085,stapel:3,bau(M,w,r){teil(V.zyl,M,0,0.022,0,0.04,0.044,0.04,'#B9C0C7');teil(V.zyl,M,0,0.022,0,0.0405,0.03,0.0405,w.farbe);etikR(M,0.022,0.0405,0.03,r);}},
   karton:{w:0.075,h:0.23,d:0.075,bau(M,w,r){teil(V.box,M,0,0.1,0,0.072,0.2,0.072,w.farbe);teil(V.box,M,0,0.212,0,0.072,0.03,0.05,w.farbe,Math.PI/4);teil(V.zyl,M,0.015,0.23,0.015,0.012,0.015,0.012,w.akzent);etik(M,0,0.1,0.0365,0.068,0.14,r);}},
   muesli:{w:0.19,h:0.28,d:0.065,bau(M,w,r){teil(V.box,M,0,0.14,0,0.19,0.28,0.065,w.farbe);etik(M,0,0.14,0.0335,0.18,0.26,r);}},
   teebox:{w:0.13,h:0.085,d:0.08,stapel:2,bau(M,w,r){teil(V.box,M,0,0.042,0,0.13,0.084,0.08,w.farbe);etik(M,0,0.042,0.0405,0.12,0.078,r);}},
-  glas:{w:0.085,h:0.125,d:0.085,stapel:2,bau(M,w,r){teil(V.zyl,M,0,0.05,0,0.04,0.1,0.04,w.farbe);teil(V.zyl,M,0,0.11,0,0.042,0.024,0.042,w.akzent);etik(M,0,0.05,0.041,0.06,0.06,r);}},
+  glas:{w:0.085,h:0.125,d:0.085,stapel:2,bau(M,w,r){teil(V.zyl,M,0,0.05,0,0.04,0.1,0.04,w.farbe);teil(V.zyl,M,0,0.11,0,0.042,0.024,0.042,w.akzent);etikR(M,0.05,0.04,0.06,r);}},
   tuete:{w:0.16,h:0.23,d:0.07,bau(M,w,r){teil(V.kugel,M,0,0.11,0,0.078,0.11,0.032,w.farbe);teil(V.box,M,0,0.218,0,0.15,0.016,0.02,w.akzent);teil(V.box,M,0,0.005,0,0.15,0.012,0.03,w.akzent);etik(M,0,0.11,0.031,0.1,0.13,r);}},
   keksrolle:{w:0.21,h:0.065,d:0.065,stapel:3,bau(M,w,r){teil(V.zyl,M,0,0.032,0,0.032,0.2,0.032,w.farbe,0,0,Math.PI/2);teil(V.zyl,M,0.1,0.032,0,0.033,0.01,0.033,w.akzent,0,0,Math.PI/2);teil(V.zyl,M,-0.1,0.032,0,0.033,0.01,0.033,w.akzent,0,0,Math.PI/2);etik(M,0,0.032,0.0335,0.12,0.05,r);}},
   tafel:{w:0.09,h:0.16,d:0.016,bau(M,w,r){teil(V.box,M,0,0.08,0,0.09,0.16,0.016,w.farbe);etik(M,0,0.08,0.0085,0.085,0.13,r);}},
   nudeln:{w:0.075,h:0.28,d:0.04,bau(M,w,r){teil(V.box,M,0,0.14,0,0.075,0.28,0.04,w.farbe);etik(M,0,0.15,0.0205,0.07,0.16,r);}},
   sack:{w:0.13,h:0.19,d:0.065,bau(M,w,r){teil(V.box,M,0,0.09,0,0.13,0.18,0.06,w.farbe);teil(V.box,M,0,0.185,0,0.12,0.012,0.03,w.akzent);etik(M,0,0.09,0.031,0.11,0.13,r);}},
-  ketchup:{w:0.075,h:0.22,d:0.075,bau(M,w,r){teil(V.zyl,M,0,0.08,0,0.035,0.16,0.035,w.farbe);teil(V.kegel,M,0,0.175,0,0.035,0.03,0.035,w.farbe);teil(V.zyl,M,0,0.205,0,0.014,0.03,0.014,w.akzent);etik(M,0,0.08,0.036,0.055,0.09,r);}},
+  ketchup:{w:0.075,h:0.22,d:0.075,bau(M,w,r){teil(V.zyl,M,0,0.08,0,0.035,0.16,0.035,w.farbe);teil(V.kegel,M,0,0.175,0,0.035,0.03,0.035,w.farbe);teil(V.zyl,M,0,0.205,0,0.014,0.03,0.014,w.akzent);etikR(M,0.08,0.035,0.09,r);}},
   mehl:{w:0.11,h:0.18,d:0.075,bau(M,w,r){teil(V.box,M,0,0.09,0,0.11,0.18,0.075,w.farbe);etik(M,0,0.09,0.0385,0.1,0.15,r);}},
   klopapier:{w:0.23,h:0.23,d:0.12,bau(M,w,r){teil(V.box,M,0,0.115,0,0.23,0.23,0.115,'#F4F7FA');for(const x of [-0.057,0.057])teil(V.zyl,M,x,0.231,0,0.05,0.004,0.05,'#E3E8EE');etik(M,0,0.12,0.058,0.2,0.14,r);}},
   spueli:{w:0.075,h:0.25,d:0.045,bau(M,w,r){teil(V.box,M,0,0.1,0,0.07,0.2,0.04,w.farbe);teil(V.kegel,M,0,0.215,0,0.025,0.03,0.018,w.farbe);teil(V.zyl,M,0,0.24,0,0.01,0.025,0.01,w.akzent);etik(M,0,0.1,0.0205,0.06,0.12,r);}},
@@ -276,31 +289,45 @@ export function init(canvas,welt,opts={}){
   shampoo:{w:0.09,h:0.23,d:0.06,bau(M,w,r){teil(V.zyl,M,0,0.095,0,0.043,0.19,0.028,w.farbe);teil(V.zyl,M,0,0.205,0,0.022,0.035,0.016,w.akzent);etik(M,0,0.095,0.029,0.06,0.11,r);}},
   butter:{w:0.12,h:0.05,d:0.075,stapel:3,bau(M,w,r){teil(V.box,M,0,0.025,0,0.12,0.05,0.075,w.farbe);etik(M,0,0.025,0.038,0.11,0.044,r);}},
   kaese:{w:0.14,h:0.1,d:0.09,stapel:2,bau(M,w){teil(V.keil,M,0,0.035,0,0.07,0.085,0.07,w.farbe,Math.PI/2,0,Math.PI);for(const [x,y] of [[-0.02,0.045],[0.022,0.03],[0.003,0.012],[-0.035,0.015]])teil(V.kugel0,M,x,y,0.043,0.009,0.009,0.004,w.akzent);}},
-  becher:{w:0.08,h:0.08,d:0.08,stapel:2,bau(M,w,r){teil(V.becher,M,0,0.035,0,0.036,0.07,0.036,w.farbe);teil(V.zyl,M,0,0.072,0,0.038,0.006,0.038,w.akzent);etik(M,0,0.035,0.037,0.05,0.04,r);}},
+  becher:{w:0.08,h:0.08,d:0.08,stapel:2,bau(M,w,r){teil(V.becher,M,0,0.035,0,0.036,0.07,0.036,w.farbe);teil(V.zyl,M,0,0.072,0,0.038,0.006,0.038,w.akzent);etikR(M,0.035,0.034,0.04,r);}},
   eier:{w:0.16,h:0.13,d:0.12,bau(M,w,r){teil(V.box,M,0,0.018,0.01,0.15,0.035,0.1,w.farbe);for(let i=0;i<3;i++)for(let j=0;j<2;j++)teil(V.kugel,M,-0.045+i*0.045,0.046,-0.012+j*0.044,0.02,0.027,0.02,(i+j)%2?'#F3E6D3':'#D9B48F');teil(V.box,M,0,0.085,-0.045,0.15,0.1,0.008,w.farbe,-0.2);etik(M,0,0.09,-0.039,0.13,0.07,r);}},
   flach:{w:0.15,h:0.035,d:0.11,stapel:4,bau(M,w,r){teil(V.box,M,0,0.017,0,0.15,0.034,0.11,w.farbe);etik(M,0,0.017,0.0555,0.14,0.03,r);}},
   eisbox:{w:0.17,h:0.115,d:0.12,stapel:2,bau(M,w,r){teil(V.box,M,0,0.05,0,0.17,0.1,0.12,w.farbe);teil(V.box,M,0,0.105,0,0.175,0.014,0.125,w.akzent);etik(M,0,0.05,0.0605,0.15,0.08,r);}},
   pizza:{w:0.26,h:0.26,d:0.04,bau(M,w,r){teil(V.box,M,0,0.13,0,0.26,0.26,0.035,w.farbe);etik(M,0,0.13,0.018,0.24,0.24,r);}},
   /* Backwaren ohne Verpackung */
-  brot:{w:0.25,h:0.13,d:0.13,stapel:2,bau(M,w){teil(V.box,M,0,0.035,0,0.24,0.07,0.12,w.farbe);teil(V.zyl,M,0,0.07,0,0.06,0.24,0.06,w.farbe,0,0,Math.PI/2);for(let i=0;i<3;i++)teil(V.box,M,-0.06+i*0.06,0.125,0,0.012,0.008,0.1,w.akzent,0,0.6);}},
-  broetchen:{w:0.1,h:0.06,d:0.1,stapel:3,bau(M,w){teil(V.kugel,M,0,0.03,0,0.05,0.032,0.045,w.farbe);teil(V.box,M,0,0.058,0,0.05,0.006,0.008,w.akzent);}},
+  brot:{w:0.25,h:0.13,d:0.13,stapel:2,bau(M,w,_,k){teil(V.box,M,0,0.025,0,0.22,0.05,0.11,w.akzent);teil(V.kugel,M,0,0.05,0,0.122,0.06,0.064,w.farbe);
+   for(let i=0;i<3;i++)teil(V.box,M,-0.055+i*0.055,0.1,0,0.012,0.008,0.07,'#D9A96A',0,0.5);
+   for(let i=0;i<7;i++)teil(V.kugel0,M,-0.08+((i*37+k*11)%16)*0.01,0.1+(i%3)*0.004,-0.03+((i*23+k*7)%7)*0.01,0.008,0.002,0.008,'#F4EFE6');}},
+  broetchen:{w:0.1,h:0.06,d:0.1,stapel:3,bau(M,w,_,k){teil(V.kugel,M,0,0.03,0,0.05,0.032,0.045,w.farbe);teil(V.box,M,0,0.058,0,0.05,0.006,0.008,'#E8C28A',0,0.4+k*0.3);teil(V.box,M,0,0.058,0,0.008,0.006,0.04,'#E8C28A',0,0.4+k*0.3);
+   for(let i=0;i<4;i++)teil(V.kugel0,M,-0.02+i*0.013,0.06,0.012-(i%2)*0.02,0.006,0.002,0.006,'#F4EFE6');}},
   kuchen:{w:0.23,h:0.12,d:0.23,bau(M,w){teil(V.zyl,M,0,0.04,0,0.105,0.08,0.105,'#B9783F');teil(V.zyl,M,0,0.085,0,0.107,0.018,0.107,w.farbe);for(let i=0;i<6;i++){const a=i*Math.PI/3;teil(V.kugel0,M,Math.cos(a)*0.07,0.1,Math.sin(a)*0.07,0.012,0.012,0.012,w.akzent);}teil(V.zyl,M,0,0.115,0,0.004,0.04,0.004,'#FFFFFF');}},
-  donut:{w:0.11,h:0.04,d:0.11,stapel:3,bau(M,w){teil(V.ring,M,0,0.018,0,0.04,0.04,0.04,w.farbe,Math.PI/2);teil(V.ring,M,0,0.026,0,0.04,0.04,0.025,w.akzent,Math.PI/2);}},
-  croissant:{w:0.14,h:0.05,d:0.08,stapel:3,bau(M,w){teil(V.bogen,M,0,0.02,0.02,0.06,0.06,0.07,w.farbe,Math.PI/2);}},
+  donut:{w:0.11,h:0.04,d:0.11,stapel:3,bau(M,w,_,k){teil(V.ring,M,0,0.018,0,0.04,0.04,0.04,w.farbe,Math.PI/2);teil(V.ring,M,0,0.026,0,0.04,0.04,0.025,w.akzent,Math.PI/2);
+   const st=['#FFFFFF','#4FC3F7','#FFD54F','#81C784','#BA68C8'];for(let i=0;i<10;i++){const a=i*0.63+k;teil(V.box,M,Math.cos(a)*0.04,0.037,Math.sin(a)*0.04,0.008,0.003,0.003,st[i%5],0,a*2);}}},
+  croissant:{w:0.15,h:0.05,d:0.09,stapel:3,bau(M,w){const gr=[0.014,0.022,0.03,0.022,0.014];for(let i=0;i<5;i++){const a=-1.0+i*0.5,r=gr[i];
+   teil(V.kugel,M,Math.sin(a)*0.05,r*0.85,0.02-Math.cos(a)*0.03,r*1.25,r*0.9,r,i%2?w.akzent:w.farbe,0,a);}}},
   /* Obst und Gemuese (fuer Kisten) */
   kugel:{r:0.042,bau(M,w,_,k){teil(V.kugel,M,0,0,0,0.042,0.04,0.042,k%3?w.farbe:w.akzent);if(w.id==='apple'||w.id==='tomatoes'){teil(V.zyl,M,0,0.042,0,0.004,0.018,0.004,w.id==='apple'?'#6B4E33':'#3E8E41');if(k%3===0)teil(V.kugel0,M,0.013,0.047,0,0.015,0.004,0.008,'#5E9C3A');}}},
-  zitrone:{r:0.035,bau(M,w){teil(V.kugel,M,0,0,0,0.045,0.034,0.034,w.farbe);}},
+  zitrone:{r:0.035,bau(M,w){teil(V.kugel,M,0,0,0,0.045,0.033,0.034,w.farbe);for(const sx of [-1,1])teil(V.kugel,M,sx*0.044,0,0,0.009,0.009,0.009,w.akzent);}},
   kartoffel:{r:0.042,bau(M,w,_,k){teil(V.kugel0,M,0,0,0,0.05,0.035,0.04,k%2?w.farbe:w.akzent,0,k);}},
   banane:{r:0.072,bau(M,w,_,k){const lage=BASIS.clone().multiply(mat(-0.05,0.0,0,1,1,1,-1.25+(k%2)*0.2,0,0));for(let i=0;i<5;i++){const d=i-2;S.add(V.banane,lage.clone().multiply(mat(0,Math.abs(d)*0.006,d*0.022,1,1,1,d*0.1,d*0.12+(k%3-1)*0.05,0.05)),null);}
    S.add(V.zyl,lage.clone().multiply(mat(-0.004,0.004,0,0.012,0.03,0.022,0,0,Math.PI/2)),'#6B6A2E');S.add(V.zyl,lage.clone().multiply(mat(-0.022,0.01,0,0.006,0.03,0.006,0,0,1.2)),'#5A4A2A');}},
-  traube:{r:0.07,bau(M,w){for(let i=0;i<9;i++){const a=i*2.4,rr=0.02+0.008*(i%3);teil(V.kugel0,M,Math.cos(a)*rr,0.015+(i%3)*0.018,Math.sin(a)*rr*1.6,0.018,0.018,0.018,i%2?w.farbe:w.akzent);}}},
-  schale:{r:0.07,bau(M,w){teil(V.box,M,0,0.02,0,0.12,0.04,0.1,'#58B368');for(let i=0;i<6;i++)teil(V.kugel0,M,-0.035+(i%3)*0.035,0.045,-0.02+Math.floor(i/3)*0.04,0.02,0.022,0.02,w.farbe);}},
-  karotte:{r:0.06,bau(M,w,_,k){for(let i=0;i<3;i++){teil(V.spitz,M,-0.03+i*0.03,0.02,0,0.016,0.16,0.016,w.farbe,Math.PI/2,k*0.4);teil(V.spitz,M,-0.03+i*0.03,0.02,-0.09,0.012,0.05,0.012,w.akzent,-Math.PI/2,k*0.4);}}},
-  gurke:{r:0.06,bau(M,w,_,k){teil(V.zyl,M,0,0.022,0,0.022,0.26,0.022,k%2?w.farbe:w.akzent,Math.PI/2,k*0.5);}},
-  salat:{r:0.075,bau(M,w){teil(V.kugel,M,0,0.03,0,0.075,0.055,0.075,w.farbe);teil(V.kugel,M,0,0.05,0,0.05,0.04,0.05,w.akzent);}}
+  traube:{r:0.075,bau(M,w,_,k){let n=0;for(let lage=0;lage<2;lage++)for(let row=0;row<5-lage;row++){const breit=5-row-lage;for(let c=0;c<breit;c++){const x=-0.06+row*0.026+lage*0.013,z=(c-(breit-1)/2)*0.021;
+    teil(V.kugel,M,x,0.014+lage*0.019+((c+row)%2)*0.005,z,0.0125,0.0125,0.0125,(n++)%3?w.farbe:w.akzent);}}
+   teil(V.zyl,M,-0.075,0.03,0,0.003,0.035,0.003,'#6B5A2E',0,0,Math.PI/2);}},
+  schale:{r:0.07,bau(M,w){teil(V.box,M,0,0.003,0,0.12,0.006,0.1,'#58B368');for(const [x,z,sx,sz] of [[0,0.05,0.12,0.004],[0,-0.05,0.12,0.004],[0.06,0,0.004,0.1],[-0.06,0,0.004,0.1]])teil(V.box,M,x,0.022,z,sx,0.04,sz,'#58B368');
+   for(let i=0;i<8;i++){const x=-0.04+(i%4)*0.027,z=-0.022+Math.floor(i/4)*0.044,y=0.03+(i%2)*0.006;teil(V.spitz,M,x,y,z,0.016,0.032,0.016,w.farbe,Math.PI+0.5,i);teil(V.spitz,M,x+0.006,y+0.014,z,0.015,0.006,0.015,'#2E8B3A',0.5,i);}}},
+  karotte:{r:0.06,bau(M,w,_,k){for(let i=0;i<4;i++){const z=-0.03+i*0.02,dr=(i-1.5)*0.08;teil(V.spitz,M,0.03,0.018,z,0.014,0.17,0.014,w.farbe,0,dr,-Math.PI/2);
+    for(let b=0;b<3;b++)teil(V.spitz,M,-0.08,0.03+b*0.006,z+(b-1)*0.01,0.006,0.09,0.006,b%2?'#3E8E41':'#5FA845',0,dr+(b-1)*0.3,Math.PI/2+0.25);}
+   teil(V.zyl,M,-0.045,0.018,0.0,0.012,0.008,0.04,'#C9A16A',Math.PI/2);}},
+  gurke:{r:0.06,bau(M,w,_,k){const ry=k*0.5;teil(V.zyl,M,0,0.022,0,0.022,0.22,0.022,w.farbe,Math.PI/2,ry);for(const e of [-1,1])teil(V.kugel,M,Math.sin(ry)*e*0.11,0.022,Math.cos(ry)*e*0.11,0.022,0.022,0.022,w.farbe);
+   teil(V.box,M,0,0.043,0,0.006,0.002,0.2,w.akzent,0,ry);}},
+  salat:{r:0.075,bau(M,w,_,k){for(let i=0;i<6;i++){const a=i*1.05+k,r=0.03;teil(V.kugel,M,Math.cos(a)*r,0.028,Math.sin(a)*r,0.06,0.035,0.045,i%2?w.farbe:mischen(w.farbe,'#000000',0.18),0.3*Math.sin(a),a,0.25);}
+   teil(V.kugel,M,0,0.05,0,0.045,0.035,0.045,w.akzent);}},
  };
  let BASIS=null;
  function teil(geo,M,x,y,z,sx,sy,sz,farbe,rx,ry,rz){S.add(geo,BASIS.clone().multiply(mat(x,y,z,sx,sy,sz,rx,ry,rz)),farbe);}
+ /* Etikett um die vordere Haelfte einer runden Ware gelegt */
+ function etikR(M,y,r,h,rect){if(rect)ET.add(V.etikettRund,BASIS.clone().multiply(mat(0,y,0,r*1.012,h,r*1.012)),'#FFFFFF',rect);}
  function etik(M,x,y,z,w,h,rect){if(rect&&w>0)ET.add(V.ebene,BASIS.clone().multiply(mat(x,y,z,w,h,1)),'#FFFFFF',rect);}
  function ware(w,x,y,z,ry,k){const f=F[w.form];BASIS=mat(x,y,z,1,1,1,0,ry,0);f.bau(BASIS,w,etikett[w.id],k||0);}
  const blick=(nx,nz)=>Math.atan2(nx,nz);   // +z auf (nx,nz) drehen
@@ -311,6 +338,8 @@ export function init(canvas,welt,opts={}){
  }
 
  /* Waren entlang einer Regalseite auf mehreren Boeden aufstellen */
+ const OFFEN=new Set(['brot','broetchen','kuchen','donut','croissant']);
+ const RUND=new Set(['flasche','milch','dose','konserve','flachdose','glas','ketchup','becher','shampoo','eisbox']);
  function reihe(p,w,boeden,tiefe,frontXZ,maxZahl){
   const f=F[w.form],n=[p.nx,p.nz],ry=blick(p.nx,p.nz);
   const len=p.b-p.a-0.14,zahl=Math.max(1,Math.min(maxZahl||14,Math.floor(len/(f.w+0.025))));
@@ -325,7 +354,9 @@ export function init(canvas,welt,opts={}){
      ware(w,X,yy,Z,ry,i);
      /* dahinter: schlichte Kloetze in der Warenfarbe, damit das Regal voll wirkt */
      if(tiefe>0.3){const X2=p.seite.achse==='z'?X-n[0]*(f.d+0.02):X,Z2=p.seite.achse==='z'?Z:Z-n[1]*(f.d+0.02);
-      S.add(V.box,mat(X2,yy+f.h*0.45,Z2,f.w*0.95,f.h*0.9,f.d,0,ry,0),w.farbe);}
+      if(OFFEN.has(w.form))ware(w,X2,yy,Z2,ry,i+3);
+      else if(RUND.has(w.form))S.add(V.zyl,mat(X2,yy+f.h*0.45,Z2,f.w*0.47,f.h*0.9,f.d*0.47,0,ry,0),w.farbe);
+      else S.add(V.box,mat(X2,yy+f.h*0.45,Z2,f.w*0.95,f.h*0.9,f.d,0,ry,0),w.farbe);}
     }
    }
   }
