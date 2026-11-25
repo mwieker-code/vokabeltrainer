@@ -25,6 +25,10 @@ ok(stand.pruefsumme===pruef,'Spieldateien geaendert: Versionsnummer in year6/sho
 ok(fs.readFileSync(path.join(root,'year6/games/index.html'),'utf8').includes('../shop/bild.js?v='+fassung),'Titelbild auf der Spieleseite');
 ok(/data-eigenes-design/.test(html)&&d.querySelector('header a').getAttribute('href')==='../games/','eigenes Design, Weg zur Spieleseite');
 ok(/from '\.\.\/schule\/vendor\/three\.module\.min\.js'/.test(fs.readFileSync(path.join(dir,'render.js'),'utf8')),'three.js aus dem Schul-Spiel');
+/* Das Spiel ist englisch; nur der Kasten fuer Lehrkraefte bleibt deutsch */
+{const kopie=d.body.cloneNode(true);kopie.querySelectorAll('.lehrkraft,script').forEach(e=>e.remove());
+ const t=kopie.textContent+' '+[...kopie.querySelectorAll('[aria-label],[placeholder]')].map(e=>(e.getAttribute('aria-label')||'')+' '+(e.getAttribute('placeholder')||'')).join(' ');
+ ok(!/[äöüÄÖÜß]|\b(und|oder|der|die|das|nicht|Spiel|Ware|Korb|Kasse)\b/.test(t),'Menue und Spielflaeche ohne deutsche Texte');}
 ok(['liste','hoeren','budget','rezept','wo','detektiv','duell','frei'].every(m=>d.querySelector('[data-modus="'+m+'"]')),'acht Spielarten im Menue');
 
 /* Daten */
@@ -98,7 +102,7 @@ const fremd=DAT.WAREN.find(x=>!G.liste.some(e=>e.id===x.id)).id;
 S.nehmen(fremd,1);ok(d.querySelector('#zListe li.extra'),'falsche Ware wird markiert');
 S.weglegen(fremd);ok(!G.korb[fremd],'zuruecklegen');
 /* Kasse mit unvollstaendiger Liste fragt nach */
-ok(!S.kasseOeffnen()&&/fehlt noch etwas/.test(d.getElementById('kasse').textContent),'Rueckfrage bei fehlenden Sachen');
+ok(!S.kasseOeffnen()&&/still missing/.test(d.getElementById('kasse').textContent),'Rueckfrage bei fehlenden Sachen');
 for(const e of G.liste)G.korb[e.id]=e.n;S.zettel();
 ok(S.kasseOeffnen()&&G.zustand==='kasse','an die Kasse');
 const K=G.kasse;
@@ -110,6 +114,7 @@ const ws=K.schritte[K.i];ok(ws.art==='wechsel'&&ws.richtig===L.betrag(1500-K.sum
 S.antworte(ws.richtig);S.weiterKasse();
 while(K.schritte[K.i]){S.antworte(K.schritte[K.i].richtig);S.weiterKasse();}
 ok(G.zustand==='ende'&&!d.getElementById('over').hidden,'Ergebnis angezeigt');
+ok(!/[äöüÄÖÜß]|\b(und|nicht|Runde|Antworten)\b/.test(d.getElementById('over').textContent),'Ergebnis auf Englisch');
 ok(G.ergebnis.sterne===3&&G.ergebnis.richtig===G.ergebnis.anzahl,'alles richtig = drei Sterne');
 const bonText=d.getElementById('bon').textContent;
 ok(bonText.includes('TOTAL')&&bonText.includes(L.betrag(K.summe))&&bonText.includes('CHANGE'),'Kassenbon mit Summe und Wechselgeld');
@@ -143,7 +148,7 @@ ok(S.duellWahl(D.ziel.id)&&D.phase==='bonus'&&D.teams[0].punkte>=100,'Duell: ric
 S.duellBonusAntwort(D.bonus.richtig);ok(D.teams[0].punkte>=150&&D.phase==='ergebnis','Duell: Bonusfrage');
 S.duellWeiter();S.duellLos();
 const falsch=welt.waren.find(x=>x.id!==D.ziel.id).id;S.duellWahl(falsch);
-ok(D.teams[1].punkte===0&&/Leider nicht/.test(d.getElementById('ansage').textContent),'Duell: falsche Ware gibt keine Punkte');
+ok(D.teams[1].punkte===0&&/Sorry, wrong/.test(d.getElementById('ansage').textContent),'Duell: falsche Ware gibt keine Punkte');
 while(G.zustand!=='ende'){S.duellWeiter();if(G.zustand==='ende')break;S.duellLos();S.duellWahl(D.ziel.id);if(D.phase==='bonus')S.duellBonusAntwort('x');}
 ok(/wins!|draw/.test(d.getElementById('over').textContent),'Duell: Sieger angezeigt');
 
@@ -177,7 +182,7 @@ for(const r of DAT.REZEPTE){
 }
 /* Ablauf: Recipe mission */
 S.start('rezept',L.zufall(11));
-const R0=G.mission.rezept;ok(/kochen/.test(d.getElementById('zAufgabe').textContent)&&d.getElementById('zListe').children.length===0,'Rezept im Zettel');
+const R0=G.mission.rezept;ok(/cook/.test(d.getElementById('zAufgabe').textContent)&&d.getElementById('zListe').children.length===0,'Rezept im Zettel');
 for(const [id] of R0.zutaten)S.nehmen(id,1);
 ok(S.kochen()&&G.ergebnis.sterne===3&&d.querySelectorAll('#over mark.ok').length===R0.zutaten.length,'Rezept komplett: drei Sterne, Zutaten markiert');
 /* Ablauf: Where is ...? */
@@ -185,7 +190,7 @@ S.start('wo',L.zufall(12));
 for(let k=0;k<5;k++){const M=G.mission;
  ok(d.querySelectorAll('[data-mopt]').length===3,'Where is: drei Antworten (Runde '+(k+1)+')');
  ok(S.woAntwort(M.wahl.richtig)&&M.phase==='zeigen','Where is: richtige Antwort');
- S.oeffneWare(M.ziel.id);ok(/Das ist es/.test(d.getElementById('ware').textContent),'Where is: Ware zeigen');
+ S.oeffneWare(M.ziel.id);ok(/That's it/.test(d.getElementById('ware').textContent),'Where is: Ware zeigen');
  ok(S.missionWahl(M.ziel.id),'Where is: gezeigt');}
 ok(G.zustand==='ende'&&G.ergebnis.sterne===3,'Where is: alles richtig = drei Sterne');
 /* Ablauf: Price detective */
@@ -204,7 +209,7 @@ const K_=S.KN,tick=()=>S.padTick();
 const druck=(i,k)=>{FAKE[i].buttons[k].pressed=true;tick();FAKE[i].buttons[k].pressed=false;tick();};
 const ohne={keys:new Set(),pad:new Set(),look:{x:0,y:0},stick:{x:0,y:0}};
 S.menu();tick();
-ok(/1 Controller verbunden/.test(d.getElementById('padStatus').textContent),'Controller wird erkannt');
+ok(/1 controller connected/.test(d.getElementById('padStatus').textContent),'Controller wird erkannt');
 druck(0,K_.RUNTER);ok(d.activeElement&&d.activeElement.dataset.modus&&d.querySelector('.pad-fokus'),'Menue mit dem Steuerkreuz waehlen');
 while(d.activeElement.dataset.modus!=='liste')druck(0,K_.RUNTER);
 druck(0,K_.A);ok(G.modus==='liste'&&!d.getElementById('stage').hidden,'Kreuz/A startet die Spielart');
@@ -245,7 +250,7 @@ ok(G.zustand==='ende'&&G.ergebnis.richtig===G.ergebnis.anzahl,'Kassengespraech u
 
 /* Geteilter Bildschirm mit zwei Controllern */
 anzahl=2;S.menu();tick();
-ok(/2 Controller verbunden/.test(d.getElementById('padStatus').textContent),'zwei Controller erkannt');
+ok(/2 controllers connected/.test(d.getElementById('padStatus').textContent),'zwei Controller erkannt');
 d.getElementById('duellSplit').checked=true;S.start('duell',L.zufall(21));
 const DS=G.duell;ok(G.split&&DS.split&&G.p2&&d.body.classList.contains('split'),'Splitscreen-Duell startet');
 tick();druck(0,K_.A);ok(DS.phase==='suche','Los mit Kreuz/A');

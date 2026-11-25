@@ -478,7 +478,8 @@ export function init(canvas,welt,opts={}){
   S.quader(k.x1+0.12,0.9,k.z1+0.1,k.x2-0.12,0.92,k.z2-1.0,'#1E2328');                // Band
   GLAS.add(V.ebene,mat(k.x1+0.45,0.921,k.z2-0.7,0.3,0.3,1,-Math.PI/2,0,0),'#9AD3F5');    // Scanner
   S.quader(k.x2,0,k.z1+1,k.x2+1.1,0.75,k.z1+1.05,'#3A4750');                         // Kabinenwand
-  S.add(V.zyl,mat(k.x2+0.55,0.25,k.z2-0.6,0.05,0.5,0.05),'#555F68');S.add(V.zyl,mat(k.x2+0.55,0.52,k.z2-0.6,0.22,0.06,0.22),'#2E3A44');
+  /* Hocker steht hinter der Kassiererin (sie arbeitet im Stehen) */
+  S.add(V.zyl,mat(k.x2+0.92,0.3,k.z2-0.2,0.04,0.6,0.04),'#555F68');S.add(V.zyl,mat(k.x2+0.92,0.02,k.z2-0.2,0.18,0.04,0.18),'#555F68');S.add(V.zyl,mat(k.x2+0.92,0.62,k.z2-0.2,0.17,0.05,0.17),'#2E3A44');
   S.quader(k.x2-0.05,0.9,k.z2-0.45,k.x2+0.1,1.25,k.z2-0.3,'#2C3A44');S.quader(k.x2-0.06,1.05,k.z2-0.45,k.x2-0.05,1.23,k.z2-0.3,'#7CC4F0');
   /* Saeule mit Nummer und Licht */
   S.add(V.zyl,mat(k.x1+0.1,1.5,k.z1+0.1,0.025,1.2,0.025),'#6E7880');

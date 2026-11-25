@@ -84,7 +84,7 @@ function menu(){
  if(window.speechSynthesis)try{speechSynthesis.cancel();}catch(e){}
  G.zustand='menu';zeige('menu');musik('stop');document.body.classList.remove('tafel');
  const d=laden(),b=d.best||{};
- for(const m of ['liste','hoeren','budget',...MISSIONEN]){const el=document.querySelector('[data-best="'+m+'"]');if(el)el.textContent=b[m]?'Rekord: '+'★'.repeat(b[m])+'☆'.repeat(3-b[m]):'';}
+ for(const m of ['liste','hoeren','budget',...MISSIONEN]){const el=document.querySelector('[data-best="'+m+'"]');if(el)el.textContent=b[m]?'Best: '+'★'.repeat(b[m])+'☆'.repeat(3-b[m]):'';}
 }
 
 /* ---------------- Zettel (Liste oder Budget) ---------------- */
@@ -100,31 +100,31 @@ function zettel(){
  if(G.liste){
   const st=L.listeStand(welt,G.liste,G.korb),hoeren=G.modus==='hoeren';
   $('zTitel').textContent=hoeren?'Listen and shop':'Shopping list';
-  $('zInfo').textContent=hoeren?'Tippe auf 🔊, um eine Zeile zu hören.':'Finde alles im Laden und leg es in deinen Korb.';
+  $('zInfo').textContent=hoeren?'Tap 🔊 to hear a line.':'Find everything in the shop and put it in your basket.';
   ul.innerHTML=st.zeilen.map((z,k)=>{
    const offen=!hoeren||z.ok;
    return '<li class="'+(z.ok?'ok':z.zuviel?'zuviel':'')+'">'
     +'<span class="haken" aria-hidden="true">'+(z.ok?'✓':z.zuviel?'!':'')+'</span>'
     +(offen?'<span class="txt">'+esc(z.text)+'</span>':'<button class="hoer" data-hoer="'+k+'">🔊 Item '+(k+1)+'</button>')
-    +(z.zuviel?'<small>zu viele im Korb</small>':'')
-    +(!hoeren&&!z.ok?'<button class="wo" data-wo="'+z.id+'" aria-label="Wo finde ich das?">?</button>':'')
+    +(z.zuviel?'<small>too many in your basket</small>':'')
+    +(!hoeren&&!z.ok?'<button class="wo" data-wo="'+z.id+'" aria-label="Where is it?">?</button>':'')
     +'</li>';}).join('')
-   +st.extra.map(e=>'<li class="extra"><span class="haken" aria-hidden="true">✗</span><span class="txt">'+esc(L.menge(welt.byId[e.id],e.n))+'</span><small>nicht auf der Liste</small></li>').join('');
+   +st.extra.map(e=>'<li class="extra"><span class="haken" aria-hidden="true">✗</span><span class="txt">'+esc(L.menge(welt.byId[e.id],e.n))+'</span><small>not on your list</small></li>').join('');
   bud.hidden=true;
-  if(st.alleDa&&!G.fertigGemeldet&&G.zustand==='laden'){G.fertigGemeldet=true;meldung(st.extra.length?'Alles da – aber im Korb ist auch etwas, das nicht auf der Liste steht.':'Alles da! Geh zur Kasse 1 und bezahle. 🛒',4000);ton('ok');}
+  if(st.alleDa&&!G.fertigGemeldet&&G.zustand==='laden'){G.fertigGemeldet=true;meldung(st.extra.length?'You\'ve got everything – but there is something in your basket that isn\'t on your list.':'You\'ve got everything! Go to checkout 1 and pay. 🛒',4000);ton('ok');}
   if(!st.alleDa)G.fertigGemeldet=false;
  }else if(G.auftrag){
   const st=L.budgetStand(welt,G.auftrag,G.korb);
   $('zTitel').textContent=G.auftrag.titel;
-  $('zInfo').innerHTML='Du hast <b>'+L.betrag(G.auftrag.budget)+'</b>. <span lang="en">Buy:</span>';
+  $('zInfo').innerHTML='You\'ve got <b>'+L.betrag(G.auftrag.budget)+'</b>. Buy:';
   ul.innerHTML=st.gruppen.map(g=>'<li class="'+(g.ok?'ok':'')+'"><span class="haken" aria-hidden="true">'+(g.ok?'✓':'')+'</span><span class="txt">'+esc(g.en)
    +(g.ids.length?' <small>('+g.ids.map(id=>esc(welt.byId[id].schild)+(G.korb[id]>1?' ×'+G.korb[id]:'')).join(', ')+')</small>':'')+'</span></li>').join('')
-   +st.extra.map(e=>'<li class="extra"><span class="haken" aria-hidden="true">✗</span><span class="txt">'+esc(L.menge(welt.byId[e.id],e.n))+'</span><small>nicht auf dem Zettel</small></li>').join('');
+   +st.extra.map(e=>'<li class="extra"><span class="haken" aria-hidden="true">✗</span><span class="txt">'+esc(L.menge(welt.byId[e.id],e.n))+'</span><small>not on your list</small></li>').join('');
   bud.hidden=false;
   const anteil=Math.min(1,st.summe/st.budget);
   bud.querySelector('span').style.width=(anteil*100)+'%';
   bud.classList.toggle('drueber',!st.imBudget);
-  bud.querySelector('p').textContent=st.imBudget?'Ausgegeben: '+L.betrag(st.summe)+' · übrig: '+L.betrag(st.rest):'Zu teuer! '+L.betrag(-st.rest)+' über dem Budget.';
+  bud.querySelector('p').textContent=st.imBudget?'Spent: '+L.betrag(st.summe)+' · left: '+L.betrag(st.rest):'Too expensive! '+L.betrag(-st.rest)+' over your budget.';
  }
 }
 function vorlesen(){
@@ -155,18 +155,18 @@ function zeichneWare(){
  const w=welt.byId[a.id],farbe=L.ORTFARBE[w.ort],imKorb=G.korb[a.id]||0,name=!G.profi;
  const M=G.mission,waehlen=!!M&&(M.art==='detektiv'||(M.art==='wo'&&M.phase==='zeigen'));
  const frei=G.modus==='frei'||(!!M&&M.art==='wo'&&!waehlen),duell=G.modus==='duell'||waehlen;
- box.innerHTML='<button class="zu" id="wZu" aria-label="Schließen">✕</button>'
+ box.innerHTML='<button class="zu" id="wZu" aria-label="Close">✕</button>'
   +'<div class="w-kopf"><div class="w-bild" style="--a:'+w.farbe+';--b:'+w.akzent+'"><span aria-hidden="true">'+w.emo+'</span></div>'
   +'<div class="w-text"><span class="w-ort" style="--o:'+farbe+'" lang="en">'+esc(DAT.ORTE[w.ort].en)+'</span>'
-  +(name?'<b class="w-name" lang="en">'+esc(L.gross(w.en))+'</b>':'<b class="w-name w-profi">Was ist das? <small>Profi: kein Name</small></b>')
+  +(name?'<b class="w-name" lang="en">'+esc(L.gross(w.en))+'</b>':'<b class="w-name w-profi">What is it? <small>Pro mode: no name</small></b>')
   +'<span class="w-preis">'+L.preis(w.p)+(w.menge?' <small lang="en">each</small>':'')+'</span>'
-  +(name?'<span class="w-de">'+(a.de?esc(w.de):'<button id="wDe" class="link">Auf Deutsch?</button>')+'</span>':'')
+  +(name?'<span class="w-de">'+(a.de?esc(w.de):'<button id="wDe" class="link">In German?</button>')+'</span>':'')
   +'</div></div>'
-  +(duell?'<div class="w-knoepfe"><button id="wNehmen" class="primaer gross">'+(waehlen?'✔ Das ist es!':'✔ Das nehmen wir!')+'</button></div>'
-   :frei?'<div class="w-knoepfe">'+(name?'<button id="wHoer" class="klein">🔊 Anhören</button>':'')+'</div>'
-   :'<div class="w-menge"><button id="wMinus" aria-label="eins weniger">−</button><b id="wAnz">'+a.anz+'</b><button id="wPlus" aria-label="eins mehr">+</button></div>'
-    +'<div class="w-knoepfe">'+(name?'<button id="wHoer" class="klein">🔊</button>':'')+'<button id="wNehmen" class="primaer">In den Korb · '+L.preis(w.p*a.anz)+'</button></div>'
-    +(imKorb?'<p class="w-info">Schon im Korb: '+imKorb+'</p>':''));
+  +(duell?'<div class="w-knoepfe"><button id="wNehmen" class="primaer gross">'+(waehlen?'✔ That\'s it!':'✔ We\'ll take it!')+'</button></div>'
+   :frei?'<div class="w-knoepfe">'+(name?'<button id="wHoer" class="klein">🔊 Listen</button>':'')+'</div>'
+   :'<div class="w-menge"><button id="wMinus" aria-label="one less">−</button><b id="wAnz">'+a.anz+'</b><button id="wPlus" aria-label="one more">+</button></div>'
+    +'<div class="w-knoepfe">'+(name?'<button id="wHoer" class="klein">🔊</button>':'')+'<button id="wNehmen" class="primaer">Put in basket · '+L.preis(w.p*a.anz)+'</button></div>'
+    +(imKorb?'<p class="w-info">Already in your basket: '+imKorb+'</p>':''));
  box.hidden=false;
  $('wZu').onclick=schliesseWare;
  if($('wDe'))$('wDe').onclick=()=>{a.de=true;zeichneWare();};
@@ -180,7 +180,7 @@ function nehmen(id,anz){
  if(G.zustand!=='laden')return false;
  G.korb[id]=(G.korb[id]||0)+(anz||1);sfx('korb');
  schliesseWare();korbKnopf(true);zettel();
- meldung('🧺 '+L.gross(L.menge(welt.byId[id],anz||1))+' im Korb.');
+ meldung('🧺 '+L.gross(L.menge(welt.byId[id],anz||1))+' – in your basket.');
  return true;
 }
 function korbKnopf(hupf){
@@ -192,12 +192,12 @@ function korbKnopf(hupf){
 function zeigeKorb(){
  const box=$('korb');if(!box)return;
  const z=Object.entries(G.korb).filter(([,n])=>n>0);
- box.innerHTML='<button class="zu" id="kZu" aria-label="Schließen">✕</button><h3>Dein Korb</h3>'
+ box.innerHTML='<button class="zu" id="kZu" aria-label="Close">✕</button><h3>Your basket</h3>'
   +(z.length?'<ul class="k-liste">'+z.map(([id,n])=>{const w=welt.byId[id];return '<li><span class="k-emo" aria-hidden="true">'+w.emo+'</span><span class="k-name" lang="en">'+esc(L.menge(w,n))+'</span><span class="k-preis">'+L.betrag(w.p*n)+'</span>'
-    +'<button data-weg="'+id+'" aria-label="eins zurücklegen">−</button></li>';}).join('')+'</ul>'
-    +'<p class="k-summe">Zusammen: <b>'+L.betrag(L.korbSumme(welt,G.korb))+'</b></p>'
-   :'<p class="k-leer">Noch leer. Tippe im Regal auf eine Ware.</p>')
-  +'<p class="k-tipp">Bezahlt wird an Kasse 1 vorne rechts neben dem Eingang.</p>';
+    +'<button data-weg="'+id+'" aria-label="put one back">−</button></li>';}).join('')+'</ul>'
+    +'<p class="k-summe">Total: <b>'+L.betrag(L.korbSumme(welt,G.korb))+'</b></p>'
+   :'<p class="k-leer">Your basket is empty. Tap something on a shelf.</p>')
+  +'<p class="k-tipp">You pay at checkout 1, at the front next to the entrance.</p>';
  box.hidden=false;
  $('kZu').onclick=()=>{box.hidden=true;};
  box.querySelectorAll('[data-weg]').forEach(b=>b.onclick=()=>{weglegen(b.dataset.weg);zeigeKorb();});
@@ -207,12 +207,12 @@ function weglegen(id){if(!G.korb[id])return false;G.korb[id]--;if(!G.korb[id])de
 /* ---------------- Kasse ---------------- */
 function kasseOeffnen(trotzdem){
  if(G.zustand!=='laden')return false;
- if(!L.korbAnzahl(G.korb)){meldung('Dein Korb ist noch leer.');return false;}
+ if(!L.korbAnzahl(G.korb)){meldung('Your basket is empty.');return false;}
  const box=$('kasse');
  const fertig=G.liste?L.listeStand(welt,G.liste,G.korb).alleDa:L.budgetStand(welt,G.auftrag,G.korb).gruppen.every(g=>g.ok);
  if(!fertig&&!trotzdem){
-  if(box){box.innerHTML='<div class="k-karte k-frage"><p class="k-gross">Auf deinem Zettel fehlt noch etwas.</p><p>Möchtest du trotzdem bezahlen?</p>'
-   +'<p><button id="kWeiterSuchen" class="primaer">Weiter einkaufen</button> <button id="kTrotzdem" class="zweit">Trotzdem bezahlen</button></p></div>';
+  if(box){box.innerHTML='<div class="k-karte k-frage"><p class="k-gross">Something on your list is still missing.</p><p>Do you want to pay anyway?</p>'
+   +'<p><button id="kWeiterSuchen" class="primaer">Keep shopping</button> <button id="kTrotzdem" class="zweit">Pay anyway</button></p></div>';
    box.hidden=false;$('kWeiterSuchen').onclick=()=>{box.hidden=true;};$('kTrotzdem').onclick=()=>kasseOeffnen(true);}
   return false;
  }
@@ -227,25 +227,25 @@ function kasseOeffnen(trotzdem){
 function kasseSchritt(){
  const K=G.kasse,box=$('kasse');if(!K)return;
  const s=K.schritte[K.i];if(!s)return ende();
- if(s.art==='wechsel'){K.wechsel=K.gezahlt-K.summe;if(K.wechsel===0){s.sagt='Thank you. That\'s exactly right!';s.exakt=true;}else{s.sagt='Here\'s your change.';s.optionen=L.wechselOptionen(K.wechsel).map(L.betrag);s.richtig=L.betrag(K.wechsel);s.de='Wie viel Wechselgeld bekommst du?';s.warum='Bezahlt '+L.betrag(K.gezahlt)+' − '+L.betrag(K.summe)+' = '+L.betrag(K.wechsel);}}
+ if(s.art==='wechsel'){K.wechsel=K.gezahlt-K.summe;if(K.wechsel===0){s.sagt='Thank you. That\'s exactly right!';s.exakt=true;}else{s.sagt='Here\'s your change.';s.optionen=L.wechselOptionen(K.wechsel).map(L.betrag);s.richtig=L.betrag(K.wechsel);s.de='How much change do you get?';s.warum='You paid '+L.betrag(K.gezahlt)+' − '+L.betrag(K.summe)+' = '+L.betrag(K.wechsel);}}
  if(s.art==='geld'){s.sagt=K.schritte[K.i-1]?K.schritte[K.i-1].sagt:'That\'s '+L.betrag(K.summe)+', please.';}
  const bon=L.bon(welt,G.korb);
  const sagt=s.art==='frage'?(K.antwort||'…'):s.sagt;
  if(!box)return;
  box.innerHTML='<div class="k-buehne">'
-  +'<div class="k-display" aria-label="Kassendisplay"><div class="k-posten">'+bon.zeilen.map((z,k)=>'<div style="--i:'+k+'"><span>'+(z.n>1?z.n+'× ':'')+esc(z.name)+'</span><span>'+L.betrag(z.summe)+'</span></div>').join('')+'</div>'
+  +'<div class="k-display" aria-label="Till display"><div class="k-posten">'+bon.zeilen.map((z,k)=>'<div style="--i:'+k+'"><span>'+(z.n>1?z.n+'× ':'')+esc(z.name)+'</span><span>'+L.betrag(z.summe)+'</span></div>').join('')+'</div>'
   +'<div class="k-total"><span>TOTAL</span><b>'+L.betrag(K.summe)+'</b></div></div>'
   +'<div class="k-person"><div class="avatar" aria-hidden="true"><i class="haar"></i><i class="gesicht"></i><i class="koerper"></i></div><span class="k-schild">'+KASSIERERIN+'</span></div>'
-  +'<div class="k-blase" lang="en"><p id="kSagt">'+esc(sagt)+'</p>'+(sagt&&sagt!=='…'?'<button id="kHoer" class="klein" aria-label="Anhören">🔊</button>':'')+'</div>'
+  +'<div class="k-blase" lang="en"><p id="kSagt">'+esc(sagt)+'</p>'+(sagt&&sagt!=='…'?'<button id="kHoer" class="klein" aria-label="Listen">🔊</button>':'')+'</div>'
   +'</div><div class="k-aufgabe" id="kAufgabe"></div>'
-  +'<p class="k-fort">Kasse · Schritt '+(K.i+1)+' von '+K.schritte.length+'</p>';
+  +'<p class="k-fort">Checkout · step '+(K.i+1)+' of '+K.schritte.length+'</p>';
  box.hidden=false;
  if($('kHoer'))$('kHoer').onclick=()=>sprich(sagt);
  if(sagt&&sagt!=='…')sprich(sagt);
  const auf=$('kAufgabe');
  if(s.art==='geld')return geldAuswahl(auf);
- if(s.exakt){K.richtig++;K.anzahl++;auf.innerHTML='<p class="k-gut">Passend bezahlt – kein Wechselgeld. 👍</p><button id="kWeiter" class="primaer">Weiter</button>';$('kWeiter').onclick=weiterKasse;return;}
- const hinweis=s.art==='frage'?s.de:s.art==='wechsel'?s.de:'Was antwortest du?';
+ if(s.exakt){K.richtig++;K.anzahl++;auf.innerHTML='<p class="k-gut">The exact amount – no change. 👍</p><button id="kWeiter" class="primaer">Next</button>';$('kWeiter').onclick=weiterKasse;return;}
+ const hinweis=s.art==='frage'?s.de:s.art==='wechsel'?s.de:'What do you say?';
  auf.innerHTML='<p class="k-hinweis">'+esc(hinweis)+'</p><div class="k-optionen" lang="en">'+s.optionen.map((o,k)=>'<button data-opt="'+k+'">'+esc(o)+'</button>').join('')+'</div><p id="kRueck" class="k-rueck" aria-live="polite"></p>';
  auf.querySelectorAll('[data-opt]').forEach(b=>b.onclick=()=>antworte(s.optionen[+b.dataset.opt]));
 }
@@ -255,7 +255,7 @@ function antworte(text){
  ton(ok?'ok':'no');
  const auf=$('kAufgabe');
  if(auf){auf.querySelectorAll('[data-opt]').forEach(b=>{const t=s.optionen[+b.dataset.opt];b.disabled=true;if(t===s.richtig)b.classList.add('richtig');else if(t===text)b.classList.add('falsch');});
-  const r=$('kRueck');if(r)r.innerHTML=(ok?'<b class="k-gut">Richtig!</b> ':'<b class="k-schlecht">Nicht ganz.</b> ')+esc(s.warum||'')+' <button id="kWeiter" class="primaer">Weiter</button>';
+  const r=$('kRueck');if(r)r.innerHTML=(ok?'<b class="k-gut">Right!</b> ':'<b class="k-schlecht">Not quite.</b> ')+esc(s.warum||'')+' <button id="kWeiter" class="primaer">Next</button>';
   if($('kWeiter'))$('kWeiter').onclick=weiterKasse;}
  if(s.art==='frage'){K.antwort=s.antwort;const p=$('kSagt');if(p)p.textContent=s.antwort;sprich(s.antwort);}
  return ok;
@@ -266,10 +266,10 @@ function geldAuswahl(auf){
  const K=G.kasse;
  const zeichne=()=>{
   K.gezahlt=L.bezahlt({GELD:K.geld},K.auswahl);
-  auf.innerHTML='<p class="k-hinweis">Bezahle <b>'+L.betrag(K.summe)+'</b>. Tippe auf Scheine und Münzen.</p>'
+  auf.innerHTML='<p class="k-hinweis">Pay <b>'+L.betrag(K.summe)+'</b>. Tap the notes and coins.</p>'
    +'<div class="geld">'+K.geld.map((v,i)=>K.auswahl.includes(i)?'<span class="platz"></span>':'<button class="'+MUENZE(v)+'" data-geld="'+i+'" aria-label="'+L.preis(v)+'">'+(v>=100?'£'+v/100:v+'p')+'</button>').join('')+'</div>'
-   +'<div class="theke"><span>Auf der Theke: <b>'+L.betrag(K.gezahlt)+'</b></span><div>'+K.auswahl.map(i=>'<button class="'+MUENZE(K.geld[i])+' klein-geld" data-zurueck="'+i+'" aria-label="'+L.preis(K.geld[i])+' zurücknehmen">'+(K.geld[i]>=100?'£'+K.geld[i]/100:K.geld[i]+'p')+'</button>').join('')+'</div></div>'
-   +'<button id="kZahlen" class="primaer"'+(K.gezahlt<K.summe?' disabled':'')+'>'+(K.gezahlt<K.summe?'Noch '+L.betrag(K.summe-K.gezahlt)+' fehlen':'Bezahlen')+'</button>';
+   +'<div class="theke"><span>On the counter: <b>'+L.betrag(K.gezahlt)+'</b></span><div>'+K.auswahl.map(i=>'<button class="'+MUENZE(K.geld[i])+' klein-geld" data-zurueck="'+i+'" aria-label="'+L.preis(K.geld[i])+' – take back">'+(K.geld[i]>=100?'£'+K.geld[i]/100:K.geld[i]+'p')+'</button>').join('')+'</div></div>'
+   +'<button id="kZahlen" class="primaer"'+(K.gezahlt<K.summe?' disabled':'')+'>'+(K.gezahlt<K.summe?L.betrag(K.summe-K.gezahlt)+' still missing':'Pay')+'</button>';
   auf.querySelectorAll('[data-geld]').forEach(b=>b.onclick=()=>{K.auswahl.push(+b.dataset.geld);sfx('muenze');zeichne();});
   auf.querySelectorAll('[data-zurueck]').forEach(b=>b.onclick=()=>{K.auswahl=K.auswahl.filter(i=>i!==+b.dataset.zurueck);zeichne();});
   $('kZahlen').onclick=bezahlen;
@@ -305,20 +305,20 @@ function ende(){
  const o=$('over');if(!o)return;
  const bon=L.bon(welt,G.korb),K=G.kasse,datum=new Date();
  let einkauf='';
- if(E.liste)einkauf='<ul class="e-liste">'+E.liste.zeilen.map(z=>'<li class="'+(z.ok?'ok':'nein')+'"><span>'+(z.ok?'✓':'✗')+'</span><span lang="en">'+esc(z.text)+'</span>'+(z.ok?'':'<small>'+(z.hat?'im Korb: '+z.hat:'fehlt')+'</small>')+'</li>').join('')
-  +E.liste.extra.map(e=>'<li class="nein"><span>✗</span><span lang="en">'+esc(L.menge(welt.byId[e.id],e.n))+'</span><small>nicht auf der Liste</small></li>').join('')+'</ul>';
- if(E.budget)einkauf='<p class="e-budget '+(E.budget.imBudget?'gut':'schlecht')+'">'+(E.budget.imBudget?'Im Budget geblieben: ':'Über dem Budget: ')+L.betrag(E.budget.summe)+' von '+L.betrag(E.budget.budget)
-  +(E.sparsam&&E.budget.imBudget?' – sehr sparsam! 💚':E.budget.imBudget?' – das ginge noch günstiger.':'')+'</p>'
+ if(E.liste)einkauf='<ul class="e-liste">'+E.liste.zeilen.map(z=>'<li class="'+(z.ok?'ok':'nein')+'"><span>'+(z.ok?'✓':'✗')+'</span><span lang="en">'+esc(z.text)+'</span>'+(z.ok?'':'<small>'+(z.hat?'in your basket: '+z.hat:'missing')+'</small>')+'</li>').join('')
+  +E.liste.extra.map(e=>'<li class="nein"><span>✗</span><span lang="en">'+esc(L.menge(welt.byId[e.id],e.n))+'</span><small>not on your list</small></li>').join('')+'</ul>';
+ if(E.budget)einkauf='<p class="e-budget '+(E.budget.imBudget?'gut':'schlecht')+'">'+(E.budget.imBudget?'You stayed in your budget: ':'Over your budget: ')+L.betrag(E.budget.summe)+' of '+L.betrag(E.budget.budget)
+  +(E.sparsam&&E.budget.imBudget?' – very thrifty! 💚':E.budget.imBudget?' – you could buy cheaper things.':'')+'</p>'
   +'<ul class="e-liste">'+E.budget.gruppen.map(g=>'<li class="'+(g.ok?'ok':'nein')+'"><span>'+(g.ok?'✓':'✗')+'</span><span lang="en">'+esc(g.en)+'</span></li>').join('')+'</ul>'
   +(E.vergleiche.length?'<h3>Cheaper or the cheapest?</h3><ul class="e-saetze" lang="en">'+E.vergleiche.map(v=>'<li class="'+(v.gut?'gut':'')+'">'+(v.gut?'👍 ':'💡 ')+esc(v.text)+'</li>').join('')+'</ul>':'');
  o.innerHTML='<div class="e-kopf"><h1 tabindex="-1">'+(E.sterne===3?'Brilliant!':E.sterne===2?'Well done!':'Good try!')+'</h1>'
-  +'<p class="e-sterne" aria-label="'+E.sterne+' von 3 Sternen">'+'★'.repeat(E.sterne)+'<span>'+'★'.repeat(3-E.sterne)+'</span></p></div>'
+  +'<p class="e-sterne" aria-label="'+E.sterne+' of 3 stars">'+'★'.repeat(E.sterne)+'<span>'+'★'.repeat(3-E.sterne)+'</span></p></div>'
   +'<div class="e-raster"><div class="e-karten">'
-  +'<section class="e-karte"><h2>'+(G.auftrag?esc(G.auftrag.titel):'Deine Einkaufsliste')+'</h2>'+einkauf+'</section>'
-  +'<section class="e-karte"><h2>An der Kasse</h2><p>'+E.richtig+' von '+E.anzahl+' Antworten richtig.</p></section>'
-  +'<section class="e-karte e-aktion"><label>Name auf dem Kassenbon <input id="bonName" type="text" maxlength="30" value="'+esc(G.name)+'" placeholder="Vorname"></label>'
-  +'<p class="e-knoepfe"><button id="bonDruck" class="zweit">🖨 Drucken</button> <button id="bonBild" class="zweit">💾 Als Bild speichern</button></p>'
-  +'<p class="e-knoepfe"><button id="nochmal" class="primaer">Noch eine Runde</button> <button id="zumMenu" class="zweit">Zum Menü</button></p></section></div>'
+  +'<section class="e-karte"><h2>'+(G.auftrag?esc(G.auftrag.titel):'Your shopping list')+'</h2>'+einkauf+'</section>'
+  +'<section class="e-karte"><h2>At the checkout</h2><p>'+E.richtig+' of '+E.anzahl+' answers right.</p></section>'
+  +'<section class="e-karte e-aktion"><label>Your name for the receipt <input id="bonName" type="text" maxlength="30" value="'+esc(G.name)+'" placeholder="First name"></label>'
+  +'<p class="e-knoepfe"><button id="bonDruck" class="zweit">🖨 Print</button> <button id="bonBild" class="zweit">💾 Save as picture</button></p>'
+  +'<p class="e-knoepfe"><button id="nochmal" class="primaer">Play again</button> <button id="zumMenu" class="zweit">Menu</button></p></section></div>'
   +'<div class="bon" id="bon" lang="en">'+bonHtml(bon,K,datum,E)+'</div></div>';
  zeige('over');
  const nameFeld=$('bonName');
@@ -359,7 +359,7 @@ function bonSpeichern(bon,K,datum,E){
  mitte('Customer: '+(G.name||'________________'),'700 16px '+mono);y+=28;
  for(let i=0;i<60;i++){const b=(i*7919)%5;g.fillRect(70+i*4.6,y,b>2?3:1.5,46);}y+=76;
  mitte('Thank you for shopping','400 14px '+mono);y+=20;mitte('at '+DAT.laden+'!','400 14px '+mono);
- try{const a=document.createElement('a');a.href=c.toDataURL('image/png');a.download='kassenbon'+(G.name?'-'+G.name.replace(/[^\wäöüÄÖÜß-]+/g,'_'):'')+'.png';document.body.append(a);a.click();a.remove();}catch(e){return false;}
+ try{const a=document.createElement('a');a.href=c.toDataURL('image/png');a.download='receipt'+(G.name?'-'+G.name.replace(/[^\wäöüÄÖÜß-]+/g,'_'):'')+'.png';document.body.append(a);a.click();a.remove();}catch(e){return false;}
  return true;
 }
 function konfetti(host){
@@ -391,29 +391,29 @@ function missionZettel(){
  const M=G.mission,zA=$('zAufgabe');
  if(M.art==='rezept'){
   $('zTitel').textContent=M.rezept.emo+' '+M.rezept.titel;
-  $('zInfo').textContent='Lies das Rezept. Was brauchst du dafür? Leg alle Zutaten in den Korb.';
+  $('zInfo').textContent='Read the recipe. What do you need? Put all the ingredients in your basket.';
   const n=L.korbAnzahl(G.korb);
-  zA.innerHTML='<p class="m-text" lang="en">'+esc(M.rezept.text)+'</p><p class="m-stand">Im Korb: <b>'+n+'</b> '+(n===1?'Sache':'Sachen')+'</p><button id="mKochen" class="primaer">🍳 Fertig – jetzt kochen!</button>';
+  zA.innerHTML='<p class="m-text" lang="en">'+esc(M.rezept.text)+'</p><p class="m-stand">In your basket: <b>'+n+'</b> '+(n===1?'thing':'things')+'</p><button id="mKochen" class="primaer">🍳 Done – let\'s cook!</button>';
   $('mKochen').onclick=kochen;
  }else if(M.art==='wo'){
   $('zTitel').textContent='Where is …? · '+(M.nr+1)+'/'+RUNDEN;
-  $('zInfo').textContent=M.phase==='frage'?'Du arbeitest im Laden. Wie antwortest du?':'Zeig '+M.kunde.name+' die Ware: Geh hin und tippe darauf.';
+  $('zInfo').textContent=M.phase==='frage'?'You work in the shop. What do you say?':'Show '+M.kunde.name+' the product: go there and tap it.';
   zA.innerHTML='<div class="m-kunde"><span class="m-emo" aria-hidden="true">'+M.kunde.emo+'</span><p lang="en"><small>'+esc(M.kunde.name)+'</small>„'+esc(M.frage)+'“</p></div>'
    +(M.phase==='frage'?'<div class="m-optionen" lang="en">'+M.wahl.optionen.map((o,k)=>'<button data-mopt="'+k+'">'+esc(o)+'</button>').join('')+'</div>'
-    :'<p class="m-rueck">'+M.rueck+'</p><p lang="en" class="m-zeig">Show '+M.kunde.sie+' the '+esc(M.ziel.schild.toLowerCase())+'!</p><button id="mWeiter" class="klein">Überspringen →</button>');
+    :'<p class="m-rueck">'+M.rueck+'</p><p lang="en" class="m-zeig">Show '+M.kunde.sie+' the '+esc(M.ziel.schild.toLowerCase())+'!</p><button id="mWeiter" class="klein">Skip →</button>');
   zA.querySelectorAll('[data-mopt]').forEach(b=>b.onclick=()=>woAntwort(M.wahl.optionen[+b.dataset.mopt]));
   if($('mWeiter'))$('mWeiter').onclick=missionWeiter;
  }else{
   $('zTitel').textContent='Price detective · '+(M.nr+1)+'/'+RUNDEN;
-  $('zInfo').textContent='Lies das Rätsel, vergleiche die Preisschilder und tippe auf die richtige Ware.';
+  $('zInfo').textContent='Read the riddle, compare the price tags and tap the right product.';
   zA.innerHTML='<p class="m-text m-raetsel" lang="en">🔍 '+esc(M.raetsel.text)+'</p>'+(M.rueck?'<p class="m-rueck">'+M.rueck+'</p>':'')
-   +'<p class="m-stand">'+(M.versuche?'Noch ein Versuch.':'Zwei Versuche.')+' Punkte: <b>'+M.punkte+'</b></p>';
+   +'<p class="m-stand">'+(M.versuche?'One more try.':'Two tries.')+' Points: <b>'+M.punkte+'</b></p>';
  }
 }
 function woAntwort(text){
  const M=G.mission;if(!M||M.art!=='wo'||M.phase!=='frage')return false;
  const ok=text===M.wahl.richtig;if(ok){M.punkte+=2;M.eintrag.antwort=true;}ton(ok?'ok':'no');
- M.rueck=ok?'<b class="k-gut">Richtig!</b>':'<b class="k-schlecht">Nicht ganz.</b> Richtig ist: <span lang="en">'+esc(M.wahl.richtig)+'</span>';
+ M.rueck=ok?'<b class="k-gut">Right!</b>':'<b class="k-schlecht">Not quite.</b> The right answer is: <span lang="en">'+esc(M.wahl.richtig)+'</span>';
  M.phase='zeigen';sprich(M.wahl.richtig);zettel();return ok;
 }
 function missionWahl(id){
@@ -427,8 +427,8 @@ function missionWahl(id){
  if(M.art==='detektiv'){
   if(id===M.raetsel.id){const p=M.versuche?1:2;M.punkte+=p;M.eintrag.punkte=p;ton('ok');meldung('🔍 Yes! It\'s '+w.en+'. Great detective work!',3000);missionWeiter();return true;}
   M.versuche++;ton('no');
-  if(M.versuche>=2){meldung('Leider nicht. Gesucht war: '+L.gross(welt.byId[M.raetsel.id].en)+'.',3600);missionWeiter();return false;}
-  M.rueck='<span lang="en">No – that\'s '+esc(w.en)+' ('+L.preis(w.p)+').</span> Lies das Rätsel noch einmal.';zettel();return false;
+  if(M.versuche>=2){meldung('Sorry, no. The answer was: '+L.gross(welt.byId[M.raetsel.id].en)+'.',3600);missionWeiter();return false;}
+  M.rueck='<span lang="en">No – that\'s '+esc(w.en)+' ('+L.preis(w.p)+').</span> Read the riddle again.';zettel();return false;
  }
  return false;
 }
@@ -439,7 +439,7 @@ function missionWeiter(){
  missionRunde();if(M.art==='wo')setTimeout(vorlesen,500);return true;
 }
 function kochen(){
- if(!L.korbAnzahl(G.korb)){meldung('Dein Korb ist noch leer.');return false;}
+ if(!L.korbAnzahl(G.korb)){meldung('Your basket is empty.');return false;}
  return missionEnde();
 }
 function markiere(text,zutaten){
@@ -454,25 +454,25 @@ function missionEnde(){
  if(M.art==='rezept'){
   const st=L.rezeptStand(welt,M.rezept,G.korb);anteil=st.anteil;M.stand=st;
   inhalt='<section class="e-karte"><h2>'+M.rezept.emo+' '+esc(M.rezept.titel)+' <small>('+esc(M.rezept.de)+')</small></h2>'
-   +'<ul class="e-liste">'+st.zutaten.map(z=>'<li class="'+(z.ok?'ok':'nein')+'"><span>'+(z.ok?'✓':'✗')+'</span><span lang="en">'+esc(welt.byId[z.id].en)+'</span><small>'+(z.ok?esc(welt.byId[z.id].de):'fehlt')+'</small></li>').join('')
-   +st.extra.map(e=>'<li class="nein"><span>✗</span><span lang="en">'+esc(L.menge(welt.byId[e.id],e.n))+'</span><small>nicht im Rezept</small></li>').join('')+'</ul>'
-   +'<h3>Das Rezept</h3><p class="e-rezept" lang="en">'+markiere(M.rezept.text,st.zutaten)+'</p></section>';
+   +'<ul class="e-liste">'+st.zutaten.map(z=>'<li class="'+(z.ok?'ok':'nein')+'"><span>'+(z.ok?'✓':'✗')+'</span><span lang="en">'+esc(welt.byId[z.id].en)+'</span><small>'+(z.ok?'✓':'missing')+'</small></li>').join('')
+   +st.extra.map(e=>'<li class="nein"><span>✗</span><span lang="en">'+esc(L.menge(welt.byId[e.id],e.n))+'</span><small>not in the recipe</small></li>').join('')+'</ul>'
+   +'<h3>The recipe</h3><p class="e-rezept" lang="en">'+markiere(M.rezept.text,st.zutaten)+'</p></section>';
  }else if(M.art==='wo'){
   anteil=M.punkte/M.max;
-  inhalt='<section class="e-karte"><h2>Where is …? · '+M.punkte+' / '+M.max+' Punkte</h2><ul class="e-saetze" lang="en">'
-   +M.log.map(e=>'<li class="'+(e.antwort&&e.gezeigt?'gut':'')+'"><b>'+esc(e.frage)+'</b><br>'+esc(e.richtig)+'<br><small lang="de">'+(e.antwort?'✓ Antwort':'✗ Antwort')+' · '+(e.gezeigt?'✓ gezeigt':'✗ nicht gezeigt')+'</small></li>').join('')+'</ul></section>';
+  inhalt='<section class="e-karte"><h2>Where is …? · '+M.punkte+' / '+M.max+' points</h2><ul class="e-saetze" lang="en">'
+   +M.log.map(e=>'<li class="'+(e.antwort&&e.gezeigt?'gut':'')+'"><b>'+esc(e.frage)+'</b><br>'+esc(e.richtig)+'<br><small lang="de">'+(e.antwort?'✓ answer':'✗ answer')+' · '+(e.gezeigt?'✓ shown':'✗ not shown')+'</small></li>').join('')+'</ul></section>';
  }else{
   anteil=M.punkte/M.max;
-  inhalt='<section class="e-karte"><h2>Price detective · '+M.punkte+' / '+M.max+' Punkte</h2><ul class="e-saetze" lang="en">'
-   +M.log.map(e=>'<li class="'+(e.punkte?'gut':'')+'">'+esc(e.text)+'<br><b>→ '+esc(L.gross(welt.byId[e.id].en))+' ('+L.preis(welt.byId[e.id].p)+')</b> <small lang="de">'+(e.punkte===2?'✓ sofort':e.punkte===1?'✓ im 2. Versuch':'✗')+'</small></li>').join('')+'</ul></section>';
+  inhalt='<section class="e-karte"><h2>Price detective · '+M.punkte+' / '+M.max+' points</h2><ul class="e-saetze" lang="en">'
+   +M.log.map(e=>'<li class="'+(e.punkte?'gut':'')+'">'+esc(e.text)+'<br><b>→ '+esc(L.gross(welt.byId[e.id].en))+' ('+L.preis(welt.byId[e.id].p)+')</b> <small lang="de">'+(e.punkte===2?'✓ first try':e.punkte===1?'✓ second try':'✗')+'</small></li>').join('')+'</ul></section>';
  }
  const st=L.sterne(anteil);G.ergebnis={sterne:st,anteil};G.zustand='ende';
  musik('stop');if(st===3)sfx('fanfare');
  const d=laden();d.best=d.best||{};if(st>(d.best[G.modus]||0))d.best[G.modus]=st;d.einkaeufe=(d.einkaeufe||0)+1;sichern(d);
  const o=$('over');if(!o)return true;
  o.innerHTML='<div class="e-kopf"><h1 tabindex="-1">'+(st===3?'Brilliant!':st===2?'Well done!':'Good try!')+'</h1>'
-  +'<p class="e-sterne" aria-label="'+st+' von 3 Sternen">'+'★'.repeat(st)+'<span>'+'★'.repeat(3-st)+'</span></p></div>'
-  +'<div class="e-einzeln">'+inhalt+'<p class="e-knoepfe mitte"><button id="nochmal" class="primaer">Noch eine Runde</button> <button id="zumMenu" class="zweit">Zum Menü</button></p></div>';
+  +'<p class="e-sterne" aria-label="'+st+' of 3 stars">'+'★'.repeat(st)+'<span>'+'★'.repeat(3-st)+'</span></p></div>'
+  +'<div class="e-einzeln">'+inhalt+'<p class="e-knoepfe mitte"><button id="nochmal" class="primaer">Play again</button> <button id="zumMenu" class="zweit">Menu</button></p></div>';
  zeige('over');$('nochmal').onclick=()=>start(G.modus);$('zumMenu').onclick=menu;
  if(st===3)konfetti(o);o.querySelector('h1').focus();
  return true;
@@ -486,7 +486,7 @@ function duellStart(rnd){
   aufgaben:L.duellAufgaben(welt,2*n,rnd),nr:0,phase:'ansage',ziel:null,letzte:null,rnd:rnd||Math.random,aktiv:0,split:false};
  if($('duellSplit')&&$('duellSplit').checked){
   if(padLesen().length>=2){G.split=true;G.duell.split=true;G.p.x=4.3;G.p2={x:5.7,z:welt.START.z,yaw:welt.START.yaw,pitch:0};G.sperre=[0,0];G.hover2=null;}
-  else meldung('Für den geteilten Bildschirm braucht es zwei verbundene Controller (je eine Taste drücken). Das Duell läuft jetzt abwechselnd.',6000);
+  else meldung('Split screen needs two connected controllers (press a button on each). The teams will take turns instead.',6000);
  }
  document.body.classList.toggle('split',G.split);
  duellAnzeige();duellAnsage();
@@ -496,19 +496,19 @@ function duellAnzeige(){
  document.querySelectorAll('#duell .d-team').forEach(el=>{const t=D.teams[+el.dataset.team];el.querySelector('.d-name').textContent=t.name;el.querySelector('.d-punkte').textContent=t.punkte;el.classList.toggle('dran',!D.split&&+el.dataset.team===D.nr%2);});
  D.teams.forEach((t,i)=>{const n=$('halbName'+i);if(n)n.textContent=t.name;});
  $('dUhr').textContent=Math.ceil(D.rest);$('dUhr').classList.toggle('knapp',D.phase==='suche'&&D.rest<=15);
- $('dRunde').textContent=D.split?'Runde '+(D.nr+1)+'/'+2*D.runden:'Runde '+(Math.floor(D.nr/2)+1)+'/'+D.runden;
+ $('dRunde').textContent=D.split?'Round '+(D.nr+1)+'/'+2*D.runden:'Round '+(Math.floor(D.nr/2)+1)+'/'+D.runden;
  const a=$('dAuftrag');
- if(a){a.hidden=D.phase!=='suche';if(D.phase==='suche')a.innerHTML=D.hoeren?'<button id="dHoer" class="klein">🔊 Find … (nochmal hören)</button>':'Find <b>'+esc(D.ziel.en)+'</b>';
+ if(a){a.hidden=D.phase!=='suche';if(D.phase==='suche')a.innerHTML=D.hoeren?'<button id="dHoer" class="klein">🔊 Find … (listen again)</button>':'Find <b>'+esc(D.ziel.en)+'</b>';
   if($('dHoer'))$('dHoer').onclick=vorlesen;}
 }
 function duellAnsage(){
  const D=G.duell,box=$('ansage');D.phase='ansage';D.ziel=D.aufgaben[D.nr];D.rest=D.frist;
  D.aktiv=D.split?null:D.nr%2;G.zustand='duell';
- const teamName=D.split?D.teams.map(t=>t.name).join(' gegen '):D.teams[D.aktiv].name;
- if(box){box.innerHTML='<div class="a-karte"><p class="a-runde">Runde '+(D.split?(D.nr+1)+' von '+2*D.runden:(Math.floor(D.nr/2)+1)+' von '+D.runden)+'</p><p class="a-team">'+esc(teamName)+'</p>'
+ const teamName=D.split?D.teams.map(t=>t.name).join(' vs '):D.teams[D.aktiv].name;
+ if(box){box.innerHTML='<div class="a-karte"><p class="a-runde">Round '+(D.split?(D.nr+1)+' of '+2*D.runden:(Math.floor(D.nr/2)+1)+' of '+D.runden)+'</p><p class="a-team">'+esc(teamName)+'</p>'
   +'<p class="a-auftrag" lang="en">'+(D.hoeren?'🎧 Listen carefully!':'Find '+esc(D.ziel.en)+'!')+'</p>'
-  +(D.hoeren?'<p><button id="aHoer" class="zweit">🔊 Anhören</button></p>':'')
-  +'<button id="aLos" class="primaer gross">Los geht’s! ⏱ '+D.frist+' s</button></div>';
+  +(D.hoeren?'<p><button id="aHoer" class="zweit">🔊 Listen</button></p>':'')
+  +'<button id="aLos" class="primaer gross">Go! ⏱ '+D.frist+' s</button></div>';
   box.hidden=false;$('aLos').onclick=duellLos;if($('aHoer'))$('aHoer').onclick=vorlesen;}
  if(D.hoeren)setTimeout(vorlesen,1500);
  sfx('gong');duellAnzeige();
@@ -525,8 +525,8 @@ function duellBonus(){
  const D=G.duell,box=$('ansage');D.phase='bonus';
  const K=DAT.KASSE,arten=['gruss','tuete','frage','bon','tschuess'],art=arten[Math.floor(D.rnd()*arten.length)],v=K[art][Math.floor(D.rnd()*K[art].length)];
  const opt=L.mischen(v.ant,D.rnd);D.bonus={richtig:v.ant[0],warum:v.warum};
- if(box){box.innerHTML='<div class="a-karte">'+(D.split?'<p class="a-team">'+esc(D.teams[D.aktiv].name)+'</p>':'')+'<p class="a-gut">✔ Richtig! +'+D.letzte.punkte+'</p><p class="a-runde">Bonusfrage: +50</p>'
-  +(art==='frage'?'<p class="a-de">'+esc(v.de)+'</p>':'<p class="a-auftrag" lang="en">„'+esc(v.sagt)+'“</p><p class="a-de">Was antwortest du?</p>')
+ if(box){box.innerHTML='<div class="a-karte">'+(D.split?'<p class="a-team">'+esc(D.teams[D.aktiv].name)+'</p>':'')+'<p class="a-gut">✔ Right! +'+D.letzte.punkte+'</p><p class="a-runde">Bonus question: +50</p>'
+  +(art==='frage'?'<p class="a-de">'+esc(v.de)+'</p>':'<p class="a-auftrag" lang="en">„'+esc(v.sagt)+'“</p><p class="a-de">What do you say?</p>')
   +'<div class="k-optionen" lang="en">'+opt.map(o=>'<button data-bonus="'+esc(o)+'">'+esc(o)+'</button>').join('')+'</div></div>';
   box.hidden=false;box.querySelectorAll('[data-bonus]').forEach(b=>b.onclick=()=>duellBonusAntwort(b.dataset.bonus));}
  duellAnzeige();
@@ -540,11 +540,11 @@ function duellErgebnis(){
  const D=G.duell,box=$('ansage'),l=D.letzte||{ok:false,punkte:0};D.phase='ergebnis';
  const naechstes=D.nr+1<2*D.runden;
  let txt;
- if(l.ok)txt='<p class="a-gut">+'+l.punkte+' Punkte</p>'+(l.bonus===undefined?'':l.bonus?'<p>Bonusfrage richtig! 🎉</p>':'<p>Bonusfrage: <span lang="en">„'+esc(D.bonus.richtig)+'“</span> wäre richtig gewesen.</p>');
- else if(l.zeit)txt='<p class="a-schlecht">⏱ Die Zeit ist um!</p><p lang="en">'+esc(L.gross(D.ziel.en))+': '+esc(L.wo(welt,D.ziel.id))+'</p>';
- else txt='<p class="a-schlecht">✗ Leider nicht.</p><p lang="en">That\'s '+esc(welt.byId[l.id].en)+'.<br>'+esc(L.gross(D.ziel.en))+': '+esc(L.wo(welt,D.ziel.id))+'</p>';
- if(box){box.innerHTML='<div class="a-karte"><p class="a-team">'+esc(D.aktiv==null?'Beide Teams':D.teams[D.aktiv].name)+'</p>'+txt
-  +'<button id="aWeiter" class="primaer gross">'+(naechstes?(D.split?'Nächste Runde →':'Weiter: '+esc(D.teams[(D.nr+1)%2].name)):'Zum Ergebnis 🏆')+'</button></div>';
+ if(l.ok)txt='<p class="a-gut">+'+l.punkte+' points</p>'+(l.bonus===undefined?'':l.bonus?'<p>Bonus question right! 🎉</p>':'<p>Bonus question – the right answer was: <span lang="en">„'+esc(D.bonus.richtig)+'“</span></p>');
+ else if(l.zeit)txt='<p class="a-schlecht">⏱ Time\'s up!</p><p lang="en">'+esc(L.gross(D.ziel.en))+': '+esc(L.wo(welt,D.ziel.id))+'</p>';
+ else txt='<p class="a-schlecht">✗ Sorry, wrong.</p><p lang="en">That\'s '+esc(welt.byId[l.id].en)+'.<br>'+esc(L.gross(D.ziel.en))+': '+esc(L.wo(welt,D.ziel.id))+'</p>';
+ if(box){box.innerHTML='<div class="a-karte"><p class="a-team">'+esc(D.aktiv==null?'Both teams':D.teams[D.aktiv].name)+'</p>'+txt
+  +'<button id="aWeiter" class="primaer gross">'+(naechstes?(D.split?'Next round →':'Next: '+esc(D.teams[(D.nr+1)%2].name)):'See the results 🏆')+'</button></div>';
   box.hidden=false;$('aWeiter').onclick=duellWeiter;}
  duellAnzeige();
 }
@@ -557,7 +557,7 @@ function duellEnde(){
  const o=$('over');
  o.innerHTML='<div class="e-kopf"><p class="pokal" aria-hidden="true">🏆</p><h1 tabindex="-1">'+(sieg?esc(sieg.name)+' wins!':'It\'s a draw!')+'</h1></div>'
   +'<div class="e-duell">'+D.teams.map(t=>'<div class="'+(t===sieg?'sieg':'')+'"><span>'+esc(t.name)+'</span><b>'+t.punkte+'</b></div>').join('')+'</div>'
-  +'<p class="e-knoepfe mitte"><button id="nochmal" class="primaer">Noch ein Duell</button> <button id="zumMenu" class="zweit">Zum Menü</button></p>';
+  +'<p class="e-knoepfe mitte"><button id="nochmal" class="primaer">Play again</button> <button id="zumMenu" class="zweit">Menu</button></p>';
  zeige('over');$('nochmal').onclick=()=>start('duell');$('zumMenu').onclick=menu;konfetti(o);o.querySelector('h1').focus();
 }
 
@@ -609,7 +609,7 @@ function padZurueck(b){
 }
 function padAnzeige(n){
  if(n===PAD.anzahl)return;PAD.anzahl=n;
- const el=$('padStatus');if(el){el.textContent=n?'🎮 '+n+' Controller verbunden'+(n>=2?' – geteilter Bildschirm im Team duel möglich.':'.'):'🎮 Kein Controller erkannt. Controller per Bluetooth koppeln und eine Taste drücken.';el.classList.toggle('an',n>0);}
+ const el=$('padStatus');if(el){el.textContent=n?'🎮 '+n+(n===1?' controller connected':' controllers connected')+(n>=2?' – split screen is possible in Team duel.':'.'):'🎮 No controller found. Connect a controller (Bluetooth or cable) and press a button.';el.classList.toggle('an',n>0);}
  const sp=$('duellSplit');if(sp)sp.closest('label').classList.toggle('aus',n<2);
 }
 function padTick(){
@@ -656,9 +656,9 @@ function splitNehmen(i){
  const D=G.duell;if(!D||!D.split||D.phase!=='suche')return false;
  if(uhr()<G.sperre[i])return false;
  const p=i?G.p2:G.p,h=L.blickTreffer(welt,p,GREIF);
- if(!h){halbMeldung(i,'Schau direkt auf eine Ware und geh nah heran.');return false;}
+ if(!h){halbMeldung(i,'Look straight at a product and go closer.');return false;}
  if(h.platz.id===D.ziel.id){D.aktiv=i;return duellWahl(h.platz.id);}
- G.sperre[i]=uhr()+3;sfx('falsch');halbMeldung(i,'✗ That\'s '+welt.byId[h.platz.id].en+'. 3 Sekunden Pause!');
+ G.sperre[i]=uhr()+3;sfx('falsch');halbMeldung(i,'✗ That\'s '+welt.byId[h.platz.id].en+'. Wait 3 seconds!');
  return false;
 }
 const halbUhr=[null,null];
@@ -709,7 +709,7 @@ function update(dt,inp){
  const h=L.blickTreffer(welt,p,GREIF);G.hover=h?h.platz:null;
  if(G.split&&G.p2){const h2=L.blickTreffer(welt,G.p2,GREIF);G.hover2=h2?h2.platz:null;}
 }
-function nehmenMitte(){const h=L.blickTreffer(welt,G.p,GREIF);if(h)return oeffneWare(h.platz.id);meldung('Schau direkt auf eine Ware und geh nah heran.');return false;}
+function nehmenMitte(){const h=L.blickTreffer(welt,G.p,GREIF);if(h)return oeffneWare(h.platz.id);meldung('Look straight at a product and go closer.');return false;}
 
 /* ---------------- Karte ---------------- */
 let plan=null;
@@ -755,18 +755,18 @@ const beruehrung=typeof window!=='undefined'&&('ontouchstart' in window||(naviga
 function starte3d(){
  if(R||!window.ShopRender)return;
  try{R=window.ShopRender.init($('welt'),welt,{mobil:beruehrung,profi:G.profi,schoen:G.schoen});const l=$('laden');if(l)l.hidden=true;}
- catch(e){const l=$('laden');if(l){l.hidden=false;l.textContent='3D lässt sich auf diesem Gerät nicht starten.';}return;}
+ catch(e){const l=$('laden');if(l){l.hidden=false;l.textContent='Sorry, 3D does not work on this device.';}return;}
  if(!laeuft&&typeof requestAnimationFrame==='function'){laeuft=true;zuletzt=performance.now();requestAnimationFrame(schleife);}
 }
 window.addEventListener('shoprender',()=>{if(G.zustand!=='menu')starte3d();});
 function hinweis(){
  if(G.split){[G.hover,G.hover2].forEach((hv,i)=>{const e=$(i?'hinweis2':'hinweis');if(!e)return;const an=!!hv&&G.duell&&G.duell.phase==='suche';e.hidden=!an;if(!an)return;
-  const txt=L.preis(welt.byId[hv.id].p);if(e.dataset.t!==txt){e.dataset.t=txt;e.innerHTML='<span lang="en">'+esc(txt)+'</span><small>✕ / A = nehmen</small>';}});return;}
+  const txt=L.preis(welt.byId[hv.id].p);if(e.dataset.t!==txt){e.dataset.t=txt;e.innerHTML='<span lang="en">'+esc(txt)+'</span><small>✕ / A = take</small>';}});return;}
  const h=$('hinweis');if(!h)return;
  const zeigen=G.hover&&!G.ware&&(G.zustand==='laden'||G.zustand==='frei'||(G.duell&&G.duell.phase==='suche'));
  h.hidden=!zeigen;if(!zeigen)return;
  const w=welt.byId[G.hover.id],txt=(G.profi||G.modus==='duell'?'':w.schild+' · ')+L.preis(w.p)+(w.menge?' each':'');
- const wie=PAD.stand.length?'✕ / A':beruehrung?'antippen':'klicken oder E';
+ const wie=PAD.stand.length?'✕ / A':beruehrung?'tap':'click or E';
  if(h.dataset.t!==txt+wie){h.dataset.t=txt+wie;h.innerHTML='<span lang="en">'+esc(txt)+'</span><small>'+wie+'</small>';}
 }
 function schleife(jetzt){
@@ -774,7 +774,7 @@ function schleife(jetzt){
  if(G.zustand!=='menu'&&G.zustand!=='ende'){
   update(dt);
   const kb=$('zurKasse');if(kb){const an=G.zustand==='laden'&&(G.modus==='liste'||G.modus==='hoeren'||G.modus==='budget')&&L.inKassenZone(welt,G.p);kb.hidden=!an;
-   const t='🛒 Bezahlen an Kasse 1'+(PAD.stand.length?' (✕ / A)':'');if(an&&kb.textContent!==t)kb.textContent=t;}
+   const t='🛒 Pay at checkout 1'+(PAD.stand.length?' (✕ / A)':'');if(an&&kb.textContent!==t)kb.textContent=t;}
   if(G.duell){const u=$('dUhr'),v=String(Math.ceil(Math.max(0,G.duell.rest)));if(u&&u.textContent!==v){if(G.duell.phase==='suche'&&+v<=10&&+v>0)sfx('tick');u.textContent=v;u.classList.toggle('knapp',G.duell.phase==='suche'&&G.duell.rest<=15);}}
   hinweis();geraeuscheImLaden();
   const leute=G.leute?G.leute.leute:[];
@@ -810,7 +810,7 @@ function tippen(cx,cy){
  const s=L.strahl(G.p,((cx-r.left)/w)*2-1,-(((cy-r.top)/h)*2-1),FOV,w/h);
  const t=L.treffer(welt,s.o,s.d,12);
  if(!t)return false;
- if(t.t>GREIF){meldung('Geh näher heran!');return false;}
+ if(t.t>GREIF){meldung('Go closer!');return false;}
  return oeffneWare(t.platz.id);
 }
 function binden(){
@@ -859,7 +859,7 @@ function binden(){
  if($('musikAn'))$('musikAn').onchange=()=>{const m=window.ShopMusik;if(m)m.setze($('musikAn').checked);};
  $('vorlesen').onclick=vorlesen;
  $('woerterKnopf').onclick=()=>{const w=$('woerter');w.hidden=!w.hidden;$('woerterKnopf').setAttribute('aria-expanded',String(!w.hidden));};
- $('falten').onclick=()=>{const b=$('zettel');b.classList.toggle('zu');const zu=b.classList.contains('zu');$('falten').textContent=zu?'▾':'▴';$('falten').setAttribute('aria-label',zu?'Liste aufklappen':'Liste zuklappen');};
+ $('falten').onclick=()=>{const b=$('zettel');b.classList.toggle('zu');const zu=b.classList.contains('zu');$('falten').textContent=zu?'▾':'▴';$('falten').setAttribute('aria-label',zu?'Open the list':'Close the list');};
  $('zListe').addEventListener('click',e=>{const h=e.target.closest('[data-hoer]');if(h){const z=G.liste[+h.dataset.hoer];if(z)sprich(z.text,0.8);}
   const w=e.target.closest('[data-wo]');if(w)meldung(L.gross(welt.byId[w.dataset.wo].en)+' – '+L.wo(welt,w.dataset.wo),4200);});
  $('korbKnopf').onclick=()=>{if($('korb').hidden)zeigeKorb();else $('korb').hidden=true;};
@@ -871,6 +871,10 @@ function binden(){
  if($('heldBild')&&window.ShopBild)try{window.ShopBild($('heldBild'));}catch(e){}
 }
 einstellungenLaden();binden();menu();musikKnopf();
+/* Die gemeinsame Leiste "Toene / Animationen" (assets/feedback.js) hier englisch beschriften */
+function leisteEnglisch(){document.querySelectorAll('[data-feedback-pref]').forEach(b=>{const t=b.textContent,neu=t.replace('Töne','Sound').replace('Animationen','Animations').replace(': an',': on').replace(': aus',': off');if(neu!==t)b.textContent=neu;});}
+if(typeof MutationObserver!=='undefined'&&document.body){new MutationObserver(leisteEnglisch).observe(document.body,{subtree:true,childList:true,characterData:true});}
+
 if(typeof window!=='undefined'){addEventListener('gamepadconnected',()=>padTick());addEventListener('gamepaddisconnected',()=>padTick());}
 padAnzeige(0);if(typeof requestAnimationFrame==='function')requestAnimationFrame(padSchleife);
 
