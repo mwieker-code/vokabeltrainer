@@ -186,6 +186,69 @@ while(G.zustand!=='ende')S.missionWahl(G.mission.raetsel.id);
 ok(M3.punkte===9&&new Set(M3.log.map(e=>e.id)).size===5,'Detektiv: fuenf verschiedene Raetsel');
 ok(['rezept','wo','detektiv'].every(m=>JSON.parse(w.localStorage.getItem('vt6:shop:v1')).best[m]),'Bestwerte der neuen Spielarten gespeichert');
 
+/* ---------- Controller ---------- */
+const FAKE=[0,1].map(i=>({index:i,connected:true,axes:[0,0,0,0],buttons:Array.from({length:17},()=>({pressed:false,value:0}))}));
+let anzahl=1;S.padQuelle(()=>FAKE.slice(0,anzahl));
+const K_=S.KN,tick=()=>S.padTick();
+const druck=(i,k)=>{FAKE[i].buttons[k].pressed=true;tick();FAKE[i].buttons[k].pressed=false;tick();};
+const ohne={keys:new Set(),pad:new Set(),look:{x:0,y:0},stick:{x:0,y:0}};
+S.menu();tick();
+ok(/1 Controller verbunden/.test(d.getElementById('padStatus').textContent),'Controller wird erkannt');
+druck(0,K_.RUNTER);ok(d.activeElement&&d.activeElement.dataset.modus&&d.querySelector('.pad-fokus'),'Menue mit dem Steuerkreuz waehlen');
+while(d.activeElement.dataset.modus!=='liste')druck(0,K_.RUNTER);
+druck(0,K_.A);ok(G.modus==='liste'&&!d.getElementById('stage').hidden,'Kreuz/A startet die Spielart');
+tick();
+/* laufen und umsehen */
+Object.assign(G.p,{x:12,z:12,yaw:0,pitch:0});
+FAKE[0].axes=[0,-1,0,0];for(let i=0;i<20;i++){tick();S.update(0.05,ohne);}FAKE[0].axes=[0,0,0,0];tick();
+ok(G.p.z<11,'linker Stick: vorwaerts laufen');
+const yaw0=G.p.yaw;FAKE[0].axes=[0,0,1,0];tick();S.update(0.05,ohne);FAKE[0].axes=[0,0,0,0];tick();
+ok(G.p.yaw>yaw0,'rechter Stick: umsehen');
+/* Ware in der Mitte ansehen und in den Korb */
+Object.assign(G.p,{x:12,z:9,yaw:-Math.PI/2,pitch:-0.1});S.update(0.01,ohne);
+druck(0,K_.A);ok(!d.getElementById('ware').hidden,'Kreuz/A: Ware in der Bildmitte ansehen');
+tick();ok(d.querySelector('#ware .pad-fokus')&&d.querySelector('#ware .pad-fokus').id==='wNehmen','„In den Korb“ ist vorausgewaehlt');
+druck(0,K_.A);ok(L.korbAnzahl(G.korb)===1&&d.getElementById('ware').hidden,'Kreuz/A: in den Korb');
+druck(0,K_.A);tick();druck(0,K_.B);ok(d.getElementById('ware').hidden,'Kreis/B schliesst');
+druck(0,K_.Y);ok(!d.getElementById('korb').hidden,'Dreieck/Y oeffnet den Korb');druck(0,K_.B);ok(d.getElementById('korb').hidden,'und Kreis/B schliesst ihn');
+/* Kasse komplett mit dem Controller */
+for(const k of Object.keys(G.korb))delete G.korb[k];
+for(const e of G.liste)G.korb[e.id]=e.n;S.zettel();
+Object.assign(G.p,{x:13.2,z:19.5});S.kasseOeffnen();tick();
+let sicher=0;
+while(G.zustand==='kasse'&&sicher++<600){
+ const KS=G.kasse,x=KS.schritte[KS.i];
+ if(x.art==='geld'){ /* Muenzen nacheinander auf die Theke, bis es reicht */
+  const f=d.querySelector('#kasse .pad-fokus');
+  if(KS.gezahlt>=KS.summe){while(!d.querySelector('#kasse .pad-fokus#kZahlen'))druck(0,K_.RECHTS);druck(0,K_.A);tick();continue;}
+  if(!f||!f.dataset.geld){druck(0,K_.RUNTER);continue;}
+  druck(0,K_.A);tick();continue;}
+ const f=d.querySelector('#kasse .pad-fokus');
+ if(f&&f.id==='kWeiter'){druck(0,K_.A);tick();continue;}
+ if(x.optionen&&!x.beantwortet){while(!(d.querySelector('#kasse .pad-fokus')||{}).dataset||d.querySelector('#kasse .pad-fokus').textContent!==x.richtig)druck(0,K_.RUNTER);druck(0,K_.A);tick();continue;}
+ druck(0,K_.RUNTER);
+}
+ok(G.zustand==='ende'&&G.ergebnis.richtig===G.ergebnis.anzahl,'Kassengespraech und Bezahlen komplett mit dem Controller');
+
+/* Geteilter Bildschirm mit zwei Controllern */
+anzahl=2;S.menu();tick();
+ok(/2 Controller verbunden/.test(d.getElementById('padStatus').textContent),'zwei Controller erkannt');
+d.getElementById('duellSplit').checked=true;S.start('duell',L.zufall(21));
+const DS=G.duell;ok(G.split&&DS.split&&G.p2&&d.body.classList.contains('split'),'Splitscreen-Duell startet');
+tick();druck(0,K_.A);ok(DS.phase==='suche','Los mit Kreuz/A');
+const a0={x:G.p.x,z:G.p.z},b0={x:G.p2.x,z:G.p2.z};
+FAKE[1].axes=[0,-1,0,0];for(let i=0;i<10;i++){tick();S.update(0.05,ohne);}FAKE[1].axes=[0,0,0,0];tick();
+ok(G.p.z===a0.z&&G.p2.z<b0.z,'jeder Controller steuert sein eigenes Team');
+/* Team 2 nimmt die falsche Ware: Pause; Team 1 die richtige: Punkte fuer Team 1 */
+const ziel=welt.plaetze.find(q=>q.id===DS.ziel.id),falschP=welt.plaetze.find(q=>q.seite.art==='regal'&&q.id!==DS.ziel.id);
+const vor=(p,q)=>{const v=q.vorne[0];Object.assign(p,{x:v.x,z:v.z,pitch:-0.25,yaw:Math.atan2((q.x1+q.x2)/2-v.x,-((q.z1+q.z2)/2-v.z))});};
+vor(G.p2,falschP);S.update(0.01,ohne);
+ok(!S.splitNehmen(1)&&G.sperre[1]>0&&!d.getElementById('halb1').hidden,'falsche Ware: Team 2 hat 3 Sekunden Pause');
+vor(G.p,ziel);S.update(0.01,ohne);
+ok(S.splitNehmen(0)&&DS.aktiv===0&&DS.teams[0].punkte>=100&&DS.teams[1].punkte===0,'richtige Ware: Punkte fuer Team 1');
+ok(DS.phase==='bonus'&&/Team Red/.test(d.getElementById('ansage').textContent),'Bonusfrage fuer das Siegerteam');
+anzahl=0;tick();S.padQuelle(()=>[]);
+
 /* Spieleseite */
 const hub=fs.readFileSync(path.join(root,'year6/games/index.html'),'utf8');
 ok(hub.includes('href="../shop/"')&&hub.includes('../shop/bild.js?v='+fassung),'Year 6: Kachel auf der Spieleseite');
