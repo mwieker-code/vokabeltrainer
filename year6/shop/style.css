@@ -366,3 +366,26 @@ body.im-spiel .feedback-settings{display:none}
 .e-saetze small{font-weight:500;color:var(--grau)}
 #over .e-einzeln .e-knoepfe .zweit{color:var(--papier)}
 body.tafel .m-text{font-size:20px}body.tafel .m-raetsel,body.tafel .m-kunde p{font-size:22px}body.tafel .m-optionen button{font-size:19px}
+
+/* ---------- Controller ---------- */
+.pad-status{margin:0 0 8px;font-size:14px;color:var(--hell);background:rgba(255,255,255,.06);border:1px dashed rgba(255,255,255,.2);border-radius:14px;padding:8px 12px}
+.pad-status.an{color:var(--wald);background:var(--gelb);border-style:solid;font-weight:700}
+label.aus{opacity:.6}
+.pad-fokus{outline:4px solid var(--gelb)!important;outline-offset:3px!important;box-shadow:0 0 0 8px rgba(255,200,69,.35)!important}
+/* ---------- Geteilter Bildschirm ---------- */
+.nur-split,#hinweis2{display:none}
+body.split .nur-split{display:block}
+body.split #fadenkreuz{left:25%}
+body.split #fadenkreuz2{position:absolute;left:75%;top:50%;width:14px;height:14px;margin:-7px;border-radius:50%;border:2px solid rgba(255,255,255,.95);box-shadow:0 0 0 2px rgba(0,0,0,.25);pointer-events:none}
+body.split .trenner{position:absolute;left:50%;top:0;bottom:0;width:6px;margin-left:-3px;background:var(--wald);pointer-events:none}
+body.split #hinweis{left:25%}
+body.split #hinweis2:not([hidden]){display:flex;position:absolute;left:75%;top:calc(50% + 18px);transform:translateX(-50%);background:rgba(15,59,46,.9);color:#fff;border-radius:999px;padding:6px 14px;font-weight:800;white-space:nowrap;pointer-events:none;gap:8px;align-items:baseline}
+#hinweis2 small,#hinweis small{font-weight:600;color:var(--gelb);font-size:12px}
+.halb-name{position:absolute;bottom:max(14px,env(safe-area-inset-bottom));padding:6px 16px;border-radius:999px;color:#fff;font:800 20px/1.2 "Bricolage Grotesque",Inter,sans-serif;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.25)}
+.halb-name.t0{left:14px;background:var(--tomate)}.halb-name.t1{right:14px;background:#1F78B4}
+.halb-meldung{position:absolute;top:60%;transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:16px;padding:10px 16px;font-weight:700;max-width:44vw;text-align:center;pointer-events:none;z-index:3}
+#halb0{left:25%}#halb1{left:75%}
+body.split #steuer,body.split .kartenbox{display:none}
+body.split .kartenbox{display:block;right:auto;left:50%;transform:translateX(-50%)}
+body.split #karte{width:150px;height:120px}
+body.split .d-auftrag{top:calc(max(10px,env(safe-area-inset-top)) + 92px)}

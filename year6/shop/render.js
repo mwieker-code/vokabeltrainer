@@ -464,24 +464,58 @@ export function init(canvas,welt,opts={}){
 
  function resize(){const w=canvas.clientWidth||300,h=canvas.clientHeight||300;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
  resize();
- function frame(st){
-  const t=st.t||0;
-  camera.position.set(st.x,AUGE+(st.bob||0),st.z);
-  camera.rotation.set(st.pitch||0,-st.yaw,0,'YXZ');
-  /* Tueren oeffnen sich, wenn man nah ist */
-  const nah=Math.hypot(st.x-(welt.TUER.x1+welt.TUER.x2)/2,st.z-welt.D)<3.6;
-  for(const tg of tueren){const ziel=nah?tg.userData.auf:tg.userData.zu;tg.position.x+=(ziel-tg.position.x)*0.12;}
-  /* Kassiererin winkt, wenn man in der Naehe ist */
-  const k=welt.KASSEN[0],dk=Math.hypot(st.x-k.x1,st.z-(k.z1+k.z2)/2),arme=kassiererin.userData.arme;
-  arme[1].rotation.z=dk<5?2.4+Math.sin(t*7)*0.35:0.1;arme[0].rotation.z=-0.1;
-  kassiererin.children[2].rotation.y=Math.sin(t*0.7)*0.15;
-  kassiererin.position.y=Math.sin(t*1.6)*0.006;
-  if(st.hover){const h=st.hover;marke.visible=markeFlaeche.visible=true;
+ /* Spielfiguren der Teams (nur im geteilten Bildschirm sichtbar) */
+ const figuren=['#E9573F','#1F78B4'].map(farbe=>{
+  const g=new THREE.Group(),m=c=>new THREE.MeshLambertMaterial({color:c});
+  const bein=new THREE.Mesh(new THREE.CylinderGeometry(0.14,0.16,0.7,12),m('#2C3A44'));bein.position.y=0.35;g.add(bein);
+  const koerper=new THREE.Mesh(new THREE.CylinderGeometry(0.2,0.22,0.55,14),m(farbe));koerper.position.y=0.95;g.add(koerper);
+  const kopf=new THREE.Mesh(new THREE.SphereGeometry(0.15,16,12),m('#E8B48A'));kopf.position.y=1.38;g.add(kopf);
+  const kappe=new THREE.Mesh(new THREE.SphereGeometry(0.155,16,12,0,Math.PI*2,0,Math.PI/2),m(farbe));kappe.position.y=1.42;g.add(kappe);
+  const schirm=new THREE.Mesh(new THREE.BoxGeometry(0.2,0.02,0.14),m(farbe));schirm.position.set(0,1.43,0.17);g.add(schirm);
+  const korb=new THREE.Mesh(new THREE.BoxGeometry(0.34,0.18,0.22),m('#D93B2B'));korb.position.set(0.28,0.75,0.12);g.add(korb);
+  for(const sx of [-1,1]){const auge=new THREE.Mesh(new THREE.SphereGeometry(0.02,8,6),m('#1D2A33'));auge.position.set(sx*0.05,1.4,0.135);g.add(auge);}
+  g.visible=false;scene.add(g);return g;
+ });
+ function markieren(h,t){
+  if(h){marke.visible=markeFlaeche.visible=true;
    const pad=0.02,sx=h.x2-h.x1+pad,sy=h.y2-h.y1+pad,sz=h.z2-h.z1+pad;
    marke.position.set((h.x1+h.x2)/2,(h.y1+h.y2)/2,(h.z1+h.z2)/2);marke.scale.set(sx,sy,sz);
    markeFlaeche.position.copy(marke.position);markeFlaeche.scale.copy(marke.scale);
    markeFlaeche.material.opacity=0.07+Math.sin(t*4)*0.03;}
   else marke.visible=markeFlaeche.visible=false;
+ }
+ function welt3d(st,t){
+  /* Tueren oeffnen sich, wenn jemand nah ist */
+  const leute=st.views||[st];
+  const nah=leute.some(v=>Math.hypot(v.x-(welt.TUER.x1+welt.TUER.x2)/2,v.z-welt.D)<3.6);
+  for(const tg of tueren){const ziel=nah?tg.userData.auf:tg.userData.zu;tg.position.x+=(ziel-tg.position.x)*0.12;}
+  /* Kassiererin winkt, wenn jemand in der Naehe ist */
+  const k=welt.KASSEN[0],dk=Math.min(...leute.map(v=>Math.hypot(v.x-k.x1,v.z-(k.z1+k.z2)/2))),arme=kassiererin.userData.arme;
+  arme[1].rotation.z=dk<5?2.4+Math.sin(t*7)*0.35:0.1;arme[0].rotation.z=-0.1;
+  kassiererin.children[2].rotation.y=Math.sin(t*0.7)*0.15;
+  kassiererin.position.y=Math.sin(t*1.6)*0.006;
+ }
+ function kamera(v,aspect){
+  camera.position.set(v.x,AUGE+(v.bob||0),v.z);camera.rotation.set(v.pitch||0,-v.yaw,0,'YXZ');
+  if(camera.aspect!==aspect){camera.aspect=aspect;camera.updateProjectionMatrix();}
+ }
+ function frame(st){
+  const t=st.t||0,w=canvas.clientWidth||300,h=canvas.clientHeight||300;
+  welt3d(st,t);
+  if(st.views){
+   /* Geteilter Bildschirm: links Team 1, rechts Team 2 */
+   renderer.setScissorTest(true);
+   st.views.forEach((v,i)=>{
+    figuren.forEach((f,j)=>{const o=st.views[j];f.visible=j!==i&&!!o;if(o){f.position.set(o.x,Math.abs(Math.sin(t*9))*0.0,o.z);f.rotation.y=Math.PI-o.yaw;}});
+    kamera(v,(w/2)/h);markieren(v.hover,t);
+    renderer.setViewport(i*w/2,0,w/2,h);renderer.setScissor(i*w/2,0,w/2,h);
+    renderer.render(scene,camera);
+   });
+   renderer.setScissorTest(false);renderer.setViewport(0,0,w,h);
+   return;
+  }
+  figuren.forEach(f=>f.visible=false);
+  kamera(st,w/h);markieren(st.hover,t);
   renderer.render(scene,camera);
  }
  return {frame,resize,setProfi,renderer};

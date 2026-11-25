@@ -34,7 +34,7 @@ function einstellungen(){
  G.tafel=!!($('tafel')&&$('tafel').checked);
  G.name=($('name')&&$('name').value.trim())||'';
  const d=laden();d.einst={lang:G.lang,profi:G.profi,tafel:G.tafel,name:G.name,
-  team1:$('team1')?$('team1').value:'',team2:$('team2')?$('team2').value:'',runden:$('runden')?$('runden').value:'4',frist:$('frist')?$('frist').value:'90',duellHoeren:!!($('duellHoeren')&&$('duellHoeren').checked)};
+  team1:$('team1')?$('team1').value:'',team2:$('team2')?$('team2').value:'',runden:$('runden')?$('runden').value:'4',frist:$('frist')?$('frist').value:'90',duellHoeren:!!($('duellHoeren')&&$('duellHoeren').checked),duellSplit:!!($('duellSplit')&&$('duellSplit').checked)};
  sichern(d);
 }
 function einstellungenLaden(){
@@ -45,12 +45,14 @@ function einstellungenLaden(){
  if($('team1')&&e.team1)$('team1').value=e.team1;if($('team2')&&e.team2)$('team2').value=e.team2;
  if($('runden')&&e.runden)$('runden').value=e.runden;if($('frist')&&e.frist)$('frist').value=e.frist;
  if($('duellHoeren'))$('duellHoeren').checked=!!e.duellHoeren;
+ if($('duellSplit'))$('duellSplit').checked=!!e.duellSplit;
 }
 
 /* ---------------- Start ---------------- */
 function zeige(id){for(const s of ['menu','stage','over'])if($(s))$(s).hidden=s!==id;document.body.classList.toggle('im-spiel',id==='stage');}
 function start(modus,rnd){
  einstellungen();
+ G.split=false;G.p2=null;G.hover2=null;G.sperre=[0,0];document.body.classList.remove('split');
  G.modus=modus;G.korb={};G.liste=null;G.auftrag=null;G.kasse=null;G.duell=null;G.ergebnis=null;G.ware=null;G.hover=null;G.gelaufen=0;G.t=0;
  Object.assign(G.p,{x:welt.START.x,z:welt.START.z,yaw:welt.START.yaw,pitch:0});
  document.body.classList.toggle('tafel',G.tafel||modus==='duell');
@@ -469,22 +471,29 @@ function duellStart(rnd){
  const n=+($('runden')?$('runden').value:4)||4,frist=+($('frist')?$('frist').value:90)||90;
  const namen=[($('team1')&&$('team1').value.trim())||'Team Red',($('team2')&&$('team2').value.trim())||'Team Blue'];
  G.duell={teams:namen.map(name=>({name,punkte:0})),runden:n,frist,rest:frist,hoeren:!!($('duellHoeren')&&$('duellHoeren').checked),
-  aufgaben:L.duellAufgaben(welt,2*n,rnd),nr:0,phase:'ansage',ziel:null,letzte:null,rnd:rnd||Math.random};
+  aufgaben:L.duellAufgaben(welt,2*n,rnd),nr:0,phase:'ansage',ziel:null,letzte:null,rnd:rnd||Math.random,aktiv:0,split:false};
+ if($('duellSplit')&&$('duellSplit').checked){
+  if(padLesen().length>=2){G.split=true;G.duell.split=true;G.p.x=4.3;G.p2={x:5.7,z:welt.START.z,yaw:welt.START.yaw,pitch:0};G.sperre=[0,0];G.hover2=null;}
+  else meldung('Für den geteilten Bildschirm braucht es zwei verbundene Controller (je eine Taste drücken). Das Duell läuft jetzt abwechselnd.',6000);
+ }
+ document.body.classList.toggle('split',G.split);
  duellAnzeige();duellAnsage();
 }
 function duellAnzeige(){
  const D=G.duell;if(!D)return;
- document.querySelectorAll('#duell .d-team').forEach(el=>{const t=D.teams[+el.dataset.team];el.querySelector('.d-name').textContent=t.name;el.querySelector('.d-punkte').textContent=t.punkte;el.classList.toggle('dran',+el.dataset.team===D.nr%2);});
+ document.querySelectorAll('#duell .d-team').forEach(el=>{const t=D.teams[+el.dataset.team];el.querySelector('.d-name').textContent=t.name;el.querySelector('.d-punkte').textContent=t.punkte;el.classList.toggle('dran',!D.split&&+el.dataset.team===D.nr%2);});
+ D.teams.forEach((t,i)=>{const n=$('halbName'+i);if(n)n.textContent=t.name;});
  $('dUhr').textContent=Math.ceil(D.rest);$('dUhr').classList.toggle('knapp',D.phase==='suche'&&D.rest<=15);
- $('dRunde').textContent='Runde '+(Math.floor(D.nr/2)+1)+'/'+D.runden;
+ $('dRunde').textContent=D.split?'Runde '+(D.nr+1)+'/'+2*D.runden:'Runde '+(Math.floor(D.nr/2)+1)+'/'+D.runden;
  const a=$('dAuftrag');
  if(a){a.hidden=D.phase!=='suche';if(D.phase==='suche')a.innerHTML=D.hoeren?'<button id="dHoer" class="klein">🔊 Find … (nochmal hören)</button>':'Find <b>'+esc(D.ziel.en)+'</b>';
   if($('dHoer'))$('dHoer').onclick=vorlesen;}
 }
 function duellAnsage(){
  const D=G.duell,box=$('ansage');D.phase='ansage';D.ziel=D.aufgaben[D.nr];D.rest=D.frist;
- const team=D.teams[D.nr%2];G.zustand='duell';
- if(box){box.innerHTML='<div class="a-karte"><p class="a-runde">Runde '+(Math.floor(D.nr/2)+1)+' von '+D.runden+'</p><p class="a-team">'+esc(team.name)+'</p>'
+ D.aktiv=D.split?null:D.nr%2;G.zustand='duell';
+ const teamName=D.split?D.teams.map(t=>t.name).join(' gegen '):D.teams[D.aktiv].name;
+ if(box){box.innerHTML='<div class="a-karte"><p class="a-runde">Runde '+(D.split?(D.nr+1)+' von '+2*D.runden:(Math.floor(D.nr/2)+1)+' von '+D.runden)+'</p><p class="a-team">'+esc(teamName)+'</p>'
   +'<p class="a-auftrag" lang="en">'+(D.hoeren?'🎧 Listen carefully!':'Find '+esc(D.ziel.en)+'!')+'</p>'
   +(D.hoeren?'<p><button id="aHoer" class="zweit">🔊 Anhören</button></p>':'')
   +'<button id="aLos" class="primaer gross">Los geht’s! ⏱ '+D.frist+' s</button></div>';
@@ -496,7 +505,7 @@ function duellLos(){const D=G.duell;if(!D||D.phase!=='ansage')return false;D.pha
 function duellWahl(id){
  const D=G.duell;if(!D||D.phase!=='suche')return false;
  schliesseWare();
- if(id===D.ziel.id){const p=L.duellPunkte(D.rest,D.frist);D.teams[D.nr%2].punkte+=p;D.letzte={ok:true,punkte:p};ton('ok');duellBonus();}
+ if(id===D.ziel.id){const p=L.duellPunkte(D.rest,D.frist);D.teams[D.aktiv].punkte+=p;D.letzte={ok:true,punkte:p};ton('ok');duellBonus();}
  else{D.letzte={ok:false,punkte:0,id};ton('no');duellErgebnis();}
  return true;
 }
@@ -504,7 +513,7 @@ function duellBonus(){
  const D=G.duell,box=$('ansage');D.phase='bonus';
  const K=DAT.KASSE,arten=['gruss','tuete','frage','bon','tschuess'],art=arten[Math.floor(D.rnd()*arten.length)],v=K[art][Math.floor(D.rnd()*K[art].length)];
  const opt=L.mischen(v.ant,D.rnd);D.bonus={richtig:v.ant[0],warum:v.warum};
- if(box){box.innerHTML='<div class="a-karte"><p class="a-gut">✔ Richtig! +'+D.letzte.punkte+'</p><p class="a-runde">Bonusfrage: +50</p>'
+ if(box){box.innerHTML='<div class="a-karte">'+(D.split?'<p class="a-team">'+esc(D.teams[D.aktiv].name)+'</p>':'')+'<p class="a-gut">✔ Richtig! +'+D.letzte.punkte+'</p><p class="a-runde">Bonusfrage: +50</p>'
   +(art==='frage'?'<p class="a-de">'+esc(v.de)+'</p>':'<p class="a-auftrag" lang="en">„'+esc(v.sagt)+'“</p><p class="a-de">Was antwortest du?</p>')
   +'<div class="k-optionen" lang="en">'+opt.map(o=>'<button data-bonus="'+esc(o)+'">'+esc(o)+'</button>').join('')+'</div></div>';
   box.hidden=false;box.querySelectorAll('[data-bonus]').forEach(b=>b.onclick=()=>duellBonusAntwort(b.dataset.bonus));}
@@ -512,7 +521,7 @@ function duellBonus(){
 }
 function duellBonusAntwort(text){
  const D=G.duell;if(!D||D.phase!=='bonus')return false;
- const ok=text===D.bonus.richtig;if(ok){D.teams[D.nr%2].punkte+=50;D.letzte.punkte+=50;}D.letzte.bonus=ok;ton(ok?'ok':'no');
+ const ok=text===D.bonus.richtig;if(ok){D.teams[D.aktiv].punkte+=50;D.letzte.punkte+=50;}D.letzte.bonus=ok;ton(ok?'ok':'no');
  duellErgebnis();return ok;
 }
 function duellErgebnis(){
@@ -522,8 +531,8 @@ function duellErgebnis(){
  if(l.ok)txt='<p class="a-gut">+'+l.punkte+' Punkte</p>'+(l.bonus===undefined?'':l.bonus?'<p>Bonusfrage richtig! 🎉</p>':'<p>Bonusfrage: <span lang="en">„'+esc(D.bonus.richtig)+'“</span> wäre richtig gewesen.</p>');
  else if(l.zeit)txt='<p class="a-schlecht">⏱ Die Zeit ist um!</p><p lang="en">'+esc(L.gross(D.ziel.en))+': '+esc(L.wo(welt,D.ziel.id))+'</p>';
  else txt='<p class="a-schlecht">✗ Leider nicht.</p><p lang="en">That\'s '+esc(welt.byId[l.id].en)+'.<br>'+esc(L.gross(D.ziel.en))+': '+esc(L.wo(welt,D.ziel.id))+'</p>';
- if(box){box.innerHTML='<div class="a-karte"><p class="a-team">'+esc(D.teams[D.nr%2].name)+'</p>'+txt
-  +'<button id="aWeiter" class="primaer gross">'+(naechstes?'Weiter: '+esc(D.teams[(D.nr+1)%2].name):'Zum Ergebnis 🏆')+'</button></div>';
+ if(box){box.innerHTML='<div class="a-karte"><p class="a-team">'+esc(D.aktiv==null?'Beide Teams':D.teams[D.aktiv].name)+'</p>'+txt
+  +'<button id="aWeiter" class="primaer gross">'+(naechstes?(D.split?'Nächste Runde →':'Weiter: '+esc(D.teams[(D.nr+1)%2].name)):'Zum Ergebnis 🏆')+'</button></div>';
   box.hidden=false;$('aWeiter').onclick=duellWeiter;}
  duellAnzeige();
 }
@@ -539,7 +548,115 @@ function duellEnde(){
  zeige('over');$('nochmal').onclick=()=>start('duell');$('zumMenu').onclick=menu;konfetti(o);o.querySelector('h1').focus();
 }
 
+/* ---------------- Controller (PlayStation, Xbox, ... ueber die Gamepad-Schnittstelle) ----------------
+   Standard-Belegung: 0 = Kreuz/A, 1 = Kreis/B, 2 = Quadrat/X, 3 = Dreieck/Y, 4/5 = L1/R1 (LB/RB),
+   8 = Share/View, 9 = Options/Menu, 12-15 = Steuerkreuz. In Fenstern waehlt das Steuerkreuz,
+   Kreuz/A bestaetigt. Im Laden laeuft man mit dem linken Stick und sieht sich mit dem rechten um. */
+const KN={A:0,B:1,X:2,Y:3,LB:4,RB:5,SELECT:8,START:9,HOCH:12,RUNTER:13,LINKS:14,RECHTS:15};
+const uhr=()=>(typeof performance!=='undefined'?performance.now():Date.now())/1000;
+let padQuelle=()=>{try{return navigator.getGamepads?[...navigator.getGamepads()]:[];}catch(e){return [];}};
+const PAD={alt:new Map(),stand:[],fokus:null,fokusZeit:0,bereich:undefined,anzahl:-1};
+const tot=v=>Math.abs(v||0)<0.2?0:(v-Math.sign(v)*0.2)/0.8;
+function padLesen(){
+ const liste=(padQuelle()||[]).filter(p=>p&&p.connected!==false&&p.buttons).sort((a,b)=>a.index-b.index);
+ PAD.stand=liste.map(p=>{
+  const alt=PAD.alt.get(p.index)||[],halt=new Set(),neu=new Set();
+  const jetzt=[...p.buttons].map(b=>!!(b&&(b.pressed||b.value>0.5)));
+  jetzt.forEach((d,i)=>{if(d){halt.add(i);if(!alt[i])neu.add(i);}});PAD.alt.set(p.index,jetzt);
+  const a=p.axes||[];return {index:p.index,lx:tot(a[0]),ly:tot(a[1]),rx:tot(a[2]),ry:tot(a[3]),halt,neu};});
+ return PAD.stand;
+}
+function padSumme(liste){
+ const s={lx:0,ly:0,rx:0,ry:0,halt:new Set(),neu:new Set()},k=v=>Math.max(-1,Math.min(1,v));
+ for(const p of liste){s.lx=k(s.lx+p.lx);s.ly=k(s.ly+p.ly);s.rx=k(s.rx+p.rx);s.ry=k(s.ry+p.ry);p.halt.forEach(i=>s.halt.add(i));p.neu.forEach(i=>s.neu.add(i));}
+ return s;
+}
+const DIALOGE=['kasse','ansage','ware','korb','grosskarte'];
+function padBereich(){
+ if($('stage')&&!$('stage').hidden){for(const id of DIALOGE){const e=$(id);if(e&&!e.hidden)return e;}return null;}
+ if($('over')&&!$('over').hidden)return $('over');
+ if($('menu')&&!$('menu').hidden)return $('menu');
+ return null;
+}
+const sichtbar=e=>!!e&&!e.disabled&&!e.closest('[hidden]');
+function padZiele(b){return b?[...b.querySelectorAll('button,input,select,summary,a[href]')].filter(sichtbar):[];}
+function padStandard(b){const z=padZiele(b);return z.find(e=>e.matches('.primaer'))||z.find(e=>e.matches('[data-opt],[data-mopt],[data-bonus],[data-geld],[data-modus]'))||z[0]||null;}
+function padFokus(e){
+ document.querySelectorAll('.pad-fokus').forEach(x=>x.classList.remove('pad-fokus'));
+ PAD.fokus=e||null;PAD.fokusZeit=uhr();
+ if(e){e.classList.add('pad-fokus');try{e.focus({preventScroll:true});}catch(_){}try{e.scrollIntoView&&e.scrollIntoView({block:'nearest'});}catch(_){}}
+}
+function padSchritt(liste,d){if(!liste.length)return;let i=liste.indexOf(PAD.fokus);if(i<0)i=d>0?-1:liste.length;padFokus(liste[(i+d+liste.length)%liste.length]);}
+function padZurueck(b){
+ if(b.id==='ware')schliesseWare();
+ else if(b.id==='korb'||b.id==='grosskarte')b.hidden=true;
+}
+function padAnzeige(n){
+ if(n===PAD.anzahl)return;PAD.anzahl=n;
+ const el=$('padStatus');if(el){el.textContent=n?'🎮 '+n+' Controller verbunden'+(n>=2?' – geteilter Bildschirm im Team duel möglich.':'.'):'🎮 Kein Controller erkannt. Controller per Bluetooth koppeln und eine Taste drücken.';el.classList.toggle('an',n>0);}
+ const sp=$('duellSplit');if(sp)sp.closest('label').classList.toggle('aus',n<2);
+}
+function padTick(){
+ const P=padLesen();padAnzeige(P.length);
+ if(!P.length)return;
+ const S=padSumme(P),neu=S.neu,b=padBereich();
+ if(b!==PAD.bereich){PAD.bereich=b;padFokus(b&&b.id!=='menu'&&b.id!=='over'||b&&neu.size?padStandard(b):null);return;}
+ if(b){
+  const z=padZiele(b);
+  if(PAD.fokus&&(!b.contains(PAD.fokus)||!sichtbar(PAD.fokus)))padFokus(b.id==='menu'||b.id==='over'?null:padStandard(b));
+  const hoch=neu.has(KN.HOCH)||neu.has(KN.LINKS)||neu.has(KN.LB),runter=neu.has(KN.RUNTER)||neu.has(KN.RECHTS)||neu.has(KN.RB);
+  if((hoch||runter)&&!PAD.fokus){padFokus(padStandard(b));return;}
+  if(hoch)padSchritt(z,-1);
+  if(runter)padSchritt(z,1);
+  if(neu.has(KN.A)){if(PAD.fokus){const f=PAD.fokus;f.click();}else padFokus(padStandard(b));}
+  if(neu.has(KN.B))padZurueck(b);
+  if(neu.has(KN.START)&&b.id==='grosskarte')b.hidden=true;
+  return;
+ }
+ /* im Laden, kein Fenster offen */
+ if(G.split&&G.duell&&G.duell.phase==='suche'){P.slice(0,2).forEach((p,i)=>{if(p.neu.has(KN.A))splitNehmen(i);});return;}
+ const hud=padZiele($('stage')).filter(e=>e.closest('#zAufgabe')||e.id==='zurKasse');
+ if(neu.has(KN.LB)||neu.has(KN.RB))padSchritt(hud,neu.has(KN.RB)?1:-1);
+ if(neu.has(KN.A)){
+  if(PAD.fokus&&hud.includes(PAD.fokus)&&uhr()-PAD.fokusZeit<6){const f=PAD.fokus;padFokus(null);f.click();}
+  else if(G.zustand==='laden'||G.zustand==='frei'||(G.duell&&G.duell.phase==='suche'))nehmenMitte();
+ }
+ if(neu.has(KN.Y)&&$('korbKnopf')&&!$('korbKnopf').hidden)zeigeKorb();
+ if(neu.has(KN.X))vorlesen();
+ if(neu.has(KN.START))$('grosskarte').hidden=false;
+}
+function padSchleife(){try{padTick();}catch(e){}requestAnimationFrame(padSchleife);}
+
+/* Geteilter Bildschirm: jedes Team nimmt mit Kreuz/A die Ware in seiner Bildmitte */
+function splitNehmen(i){
+ const D=G.duell;if(!D||!D.split||D.phase!=='suche')return false;
+ if(uhr()<G.sperre[i])return false;
+ const p=i?G.p2:G.p,h=L.blickTreffer(welt,p,GREIF);
+ if(!h){halbMeldung(i,'Schau direkt auf eine Ware und geh nah heran.');return false;}
+ if(h.platz.id===D.ziel.id){D.aktiv=i;return duellWahl(h.platz.id);}
+ G.sperre[i]=uhr()+3;ton('no');halbMeldung(i,'✗ That\'s '+welt.byId[h.platz.id].en+'. 3 Sekunden Pause!');
+ return false;
+}
+const halbUhr=[null,null];
+function halbMeldung(i,text){const m=$('halb'+i);if(!m)return;m.textContent=text;m.hidden=false;clearTimeout(halbUhr[i]);halbUhr[i]=setTimeout(()=>{m.hidden=true;},2800);}
+
 /* ---------------- Bewegung ---------------- */
+function laufe(p,vor,seit,dt){
+ const m=Math.hypot(vor,seit);if(m>1){vor/=m;seit/=m;}
+ if(m<=0.02)return 0;
+ const fx=Math.sin(p.yaw),fz=-Math.cos(p.yaw),rx=Math.cos(p.yaw),rz=Math.sin(p.yaw);
+ const x0=p.x,z0=p.z;
+ L.bewegen(welt,p,(fx*vor+rx*seit)*TEMPO*dt,(fz*vor+rz*seit)*TEMPO*dt);
+ return Math.hypot(p.x-x0,p.z-z0);
+}
+/* Controller-Achsen und Steuerkreuz auf eine Spielfigur */
+function padLaufen(p,c,dt){
+ if(!c)return 0;
+ const h=c.halt,vor=-c.ly+(h.has(KN.HOCH)?1:0)-(h.has(KN.RUNTER)?1:0),seit=c.lx;
+ p.yaw+=(c.rx*2.4+((h.has(KN.RECHTS)?1:0)-(h.has(KN.LINKS)?1:0))*DREH)*dt;
+ p.pitch=Math.max(-1.0,Math.min(0.9,p.pitch-c.ry*1.7*dt));
+ return laufe(p,vor,seit,dt);
+}
 function update(dt,inp){
  inp=inp||eingabe;
  const D=G.duell;
@@ -554,14 +671,18 @@ function update(dt,inp){
  p.yaw+=dreh*DREH*dt;
  if(inp.look){p.yaw+=inp.look.x;p.pitch=Math.max(-1.0,Math.min(0.9,p.pitch-inp.look.y));inp.look.x=0;inp.look.y=0;}
  if(pad.size&&!inp.look.y)p.pitch*=Math.pow(0.1,dt);
- const m=Math.hypot(vor,seit);if(m>1){vor/=m;seit/=m;}
- if(m>0.02){
-  const fx=Math.sin(p.yaw),fz=-Math.cos(p.yaw),rx=Math.cos(p.yaw),rz=Math.sin(p.yaw);
-  const x0=p.x,z0=p.z;
-  L.bewegen(welt,p,(fx*vor+rx*seit)*TEMPO*dt,(fz*vor+rz*seit)*TEMPO*dt);
-  const s=Math.hypot(p.x-x0,p.z-z0);G.gelaufen+=s;G.schritt+=s;
+ let s=laufe(p,vor,seit,dt);
+ /* Controller: ohne geteilten Bildschirm steuern alle Controller dieselbe Figur */
+ const frei=!padBereich(),jetzt=uhr();
+ if(PAD.stand.length&&frei){
+  if(G.split){
+   if(jetzt>=G.sperre[0])s+=padLaufen(p,PAD.stand[0],dt);
+   if(jetzt>=G.sperre[1]&&G.p2)padLaufen(G.p2,PAD.stand[1],dt);
+  }else s+=padLaufen(p,padSumme(PAD.stand),dt);
  }
+ G.gelaufen+=s;G.schritt+=s;
  const h=L.blickTreffer(welt,p,GREIF);G.hover=h?h.platz:null;
+ if(G.split&&G.p2){const h2=L.blickTreffer(welt,G.p2,GREIF);G.hover2=h2?h2.platz:null;}
 }
 function nehmenMitte(){const h=L.blickTreffer(welt,G.p,GREIF);if(h)return oeffneWare(h.platz.id);meldung('Schau direkt auf eine Ware und geh nah heran.');return false;}
 
@@ -597,9 +718,10 @@ function zeichneKarte(cv,gross){
  g.fillStyle='#1D2A33';g.fillRect(0,0,Wc,Hc);
  g.drawImage(P.c,ox,oy,welt.W*sk,welt.D*sk);
  if(G.ware||G.hover){const pl=welt.plaetze.find(p=>p.id===(G.ware?G.ware.id:G.hover.id));if(pl){g.strokeStyle='#FFC845';g.lineWidth=gross?4:2;g.strokeRect(ox+pl.x1*sk,oy+pl.z1*sk,(pl.x2-pl.x1)*sk,(pl.z2-pl.z1)*sk);}}
- const p=G.p;g.save();g.translate(ox+p.x*sk,oy+p.z*sk);g.rotate(p.yaw);
- g.fillStyle='rgba(255,200,69,.35)';g.beginPath();g.moveTo(0,0);g.arc(0,0,gross?60:22,-Math.PI/2-0.55,-Math.PI/2+0.55);g.closePath();g.fill();
- const s=gross?1.8:1;g.fillStyle='#E9573F';g.strokeStyle='#fff';g.lineWidth=2;g.beginPath();g.moveTo(0,-8*s);g.lineTo(6*s,6*s);g.lineTo(0,3*s);g.lineTo(-6*s,6*s);g.closePath();g.fill();g.stroke();g.restore();
+ const figuren=G.split&&G.p2?[[G.p,'#E9573F'],[G.p2,'#1F78B4']]:[[G.p,'#E9573F']];
+ for(const [p,farbe] of figuren){g.save();g.translate(ox+p.x*sk,oy+p.z*sk);g.rotate(p.yaw);
+  g.fillStyle='rgba(255,200,69,.35)';g.beginPath();g.moveTo(0,0);g.arc(0,0,gross?60:22,-Math.PI/2-0.55,-Math.PI/2+0.55);g.closePath();g.fill();
+  const s=gross?1.8:1;g.fillStyle=farbe;g.strokeStyle='#fff';g.lineWidth=2;g.beginPath();g.moveTo(0,-8*s);g.lineTo(6*s,6*s);g.lineTo(0,3*s);g.lineTo(-6*s,6*s);g.closePath();g.fill();g.stroke();g.restore();}
 }
 
 /* ---------------- 3D und Schleife ---------------- */
@@ -613,11 +735,14 @@ function starte3d(){
 }
 window.addEventListener('shoprender',()=>{if(G.zustand!=='menu')starte3d();});
 function hinweis(){
+ if(G.split){[G.hover,G.hover2].forEach((hv,i)=>{const e=$(i?'hinweis2':'hinweis');if(!e)return;const an=!!hv&&G.duell&&G.duell.phase==='suche';e.hidden=!an;if(!an)return;
+  const txt=L.preis(welt.byId[hv.id].p);if(e.dataset.t!==txt){e.dataset.t=txt;e.innerHTML='<span lang="en">'+esc(txt)+'</span><small>✕ / A = nehmen</small>';}});return;}
  const h=$('hinweis');if(!h)return;
  const zeigen=G.hover&&!G.ware&&(G.zustand==='laden'||G.zustand==='frei'||(G.duell&&G.duell.phase==='suche'));
  h.hidden=!zeigen;if(!zeigen)return;
  const w=welt.byId[G.hover.id],txt=(G.profi||G.modus==='duell'?'':w.schild+' · ')+L.preis(w.p)+(w.menge?' each':'');
- if(h.dataset.t!==txt){h.dataset.t=txt;h.innerHTML='<span lang="en">'+esc(txt)+'</span><small>'+(beruehrung?'antippen':'klicken oder E')+'</small>';}
+ const wie=PAD.stand.length?'✕ / A':beruehrung?'antippen':'klicken oder E';
+ if(h.dataset.t!==txt+wie){h.dataset.t=txt+wie;h.innerHTML='<span lang="en">'+esc(txt)+'</span><small>'+wie+'</small>';}
 }
 function schleife(jetzt){
  const dt=(jetzt-zuletzt)/1000;zuletzt=jetzt;
@@ -626,7 +751,8 @@ function schleife(jetzt){
   const kb=$('zurKasse');if(kb){const an=G.zustand==='laden'&&(G.modus==='liste'||G.modus==='hoeren'||G.modus==='budget')&&L.inKassenZone(welt,G.p);kb.hidden=!an;}
   if(G.duell){const u=$('dUhr'),v=String(Math.ceil(Math.max(0,G.duell.rest)));if(u&&u.textContent!==v){u.textContent=v;u.classList.toggle('knapp',G.duell.phase==='suche'&&G.duell.rest<=15);}}
   hinweis();
-  if(R)R.frame({x:G.p.x,z:G.p.z,yaw:G.p.yaw,pitch:G.p.pitch,t:G.t,bob:Math.sin(G.schritt*5.2)*0.03,hover:G.ware?welt.plaetze.find(p=>p.id===G.ware.id):G.hover});
+  if(R&&G.split&&G.p2)R.frame({t:G.t,views:[{x:G.p.x,z:G.p.z,yaw:G.p.yaw,pitch:G.p.pitch,hover:G.hover},{x:G.p2.x,z:G.p2.z,yaw:G.p2.yaw,pitch:G.p2.pitch,hover:G.hover2}]});
+  else if(R)R.frame({x:G.p.x,z:G.p.z,yaw:G.p.yaw,pitch:G.p.pitch,t:G.t,bob:Math.sin(G.schritt*5.2)*0.03,hover:G.ware?welt.plaetze.find(p=>p.id===G.ware.id):G.hover});
   zeichneKarte($('karte'));
   if(!$('grosskarte').hidden)zeichneKarte($('grosskarte').querySelector('canvas'),true);
  }
@@ -698,7 +824,9 @@ function binden(){
  if($('heldBild')&&window.ShopBild)try{window.ShopBild($('heldBild'));}catch(e){}
 }
 einstellungenLaden();binden();menu();
+if(typeof window!=='undefined'){addEventListener('gamepadconnected',()=>padTick());addEventListener('gamepaddisconnected',()=>padTick());}
+padAnzeige(0);if(typeof requestAnimationFrame==='function')requestAnimationFrame(padSchleife);
 
 window.ShopSpiel={G,welt,start,menu,update,oeffneWare,nehmen,weglegen,kasseOeffnen,antworte,zahleMit,bezahlen,weiterKasse,auswerten,ende,
- duellLos,duellWahl,duellBonusAntwort,duellWeiter,woAntwort,missionWahl,missionWeiter,kochen,zettel,vorlesen,tippen,nehmenMitte,eingabe,bonSpeichern};
+ duellLos,duellWahl,duellBonusAntwort,duellWeiter,padTick,splitNehmen,padQuelle:f=>{padQuelle=f;},PAD,KN,woAntwort,missionWahl,missionWeiter,kochen,zettel,vorlesen,tippen,nehmenMitte,eingabe,bonSpeichern};
 })();

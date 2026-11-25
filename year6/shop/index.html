@@ -46,13 +46,16 @@
    <label>Runden je Team <select id="runden"><option>3</option><option selected>4</option><option>5</option></select></label>
    <label>Zeit je Runde <select id="frist"><option value="60">60 s</option><option value="90" selected>90 s</option><option value="120">120 s</option></select></label>
    <label class="schalter"><input type="checkbox" id="duellHoeren"> Auftrag nur vorlesen (Hörverstehen)</label>
+   <label class="schalter"><input type="checkbox" id="duellSplit"> Zwei Controller: geteilter Bildschirm, beide Teams suchen gleichzeitig</label>
   </fieldset>
  </div>
 
  <h2>Steuerung</h2>
+ <p id="padStatus" class="pad-status" aria-live="polite"></p>
  <ul class="steuerung">
   <li><b>Handy und Tablet:</b> links auf dem Bild ziehen = gehen, rechts ziehen = umsehen, auf eine Ware tippen = ansehen.</li>
   <li><b>Computer:</b> W A S D oder Pfeiltasten, mit der Maus ziehen = umsehen, klicken oder E = Ware ansehen, M = große Karte.</li>
+  <li><b>Controller (PlayStation oder Xbox):</b> linker Stick = gehen, rechter Stick = umsehen, ✕ / A = Ware ansehen und bestätigen, ○ / B = schließen, Steuerkreuz oder L1 / R1 = Antwort wählen, △ / Y = Korb, □ / X = vorlesen, Options / Menu = große Karte.</li>
   <li><b>Digitale Tafel:</b> Tafel-Modus einschalten und mit dem Steuerkreuz laufen.</li>
  </ul>
  <details class="lehrkraft"><summary>Für Lehrkräfte: Ideen für den Unterricht</summary>
@@ -75,6 +78,9 @@
  <canvas id="welt" aria-label="3D-Ansicht des Supermarkts. Die Einkaufsliste steht oben links."></canvas>
  <div id="fadenkreuz" aria-hidden="true"></div>
  <div id="hinweis" hidden aria-live="polite"></div>
+ <div class="nur-split" aria-hidden="true"><div id="fadenkreuz2"></div><div class="trenner"></div><span id="halbName0" class="halb-name t0"></span><span id="halbName1" class="halb-name t1"></span></div>
+ <div id="hinweis2" hidden></div>
+ <div id="halb0" class="halb-meldung" hidden role="status"></div><div id="halb1" class="halb-meldung" hidden role="status"></div>
  <div class="hud">
   <button id="quit" class="rund" aria-label="Spiel beenden">✕</button>
   <div id="zettel" class="zettel">
