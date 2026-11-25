@@ -13,7 +13,9 @@ const fs=require('node:fs'),path=require('node:path');
 const ROOT=path.resolve(__dirname,'..');
 const MIN_TEIL=6;   // kleinere Abschnitte gibt es nur ueber "Ganze Unit" bzw. "Alle Themen"
 const FAECHER=[
- {dir:'year6',fach:'Year 6',schluessel:'vt6',start:'y6u2',altAll:'y6u2'},
+ {dir:'year6',fach:'Year 6',schluessel:'vt6',start:'y6u2',altAll:'y6u2',
+  extraKachel:'\n <a class="spiel" href="../shop/"><canvas data-bild="shop" width="640" height="320" aria-hidden="true"></canvas><div class="text"><h2>Shopping Trip</h2><p>Supermarkt in 3D: Einkaufsliste abarbeiten, auf Englisch an der Kasse bezahlen, Budget-Challenge und Team-Duell.</p><p class="stand" data-stand="shop"></p></div></a>',
+  extraSkript:'<script src="../shop/bild.js?v={{V}}"></script>'},
  {dir:'year9',fach:'Year 9',schluessel:'vt9',ohne:['Skills – Writing a discussion']},
  {dir:'bili/history',fach:'History',schluessel:'vt:bili:history',eineUnit:'History',alleName:'Alle Themen'}
 ];
@@ -44,6 +46,8 @@ function seite(vorlage,f,unter){
   .replaceAll('{{WURZEL}}',rel(ort,'')+'/')
   .replaceAll('{{CODE}}',(rel(ort,'year6/'+vorlage.replace('.html',''))||'.')+'/')
   .replaceAll('{{FIGUREN}}',rel(ort,'year6/figuren.js'))
+  .replaceAll('{{EXTRA_KACHEL}}',vorlage==='games.html'?f.extraKachel||'':'')
+  .replaceAll('{{EXTRA_SKRIPT}}',vorlage==='games.html'?f.extraSkript||'':'')
   .replaceAll('{{FACH_GROSS}}',f.fach.toUpperCase())
   .replaceAll('{{FACH}}',f.fach)
   .replaceAll('{{V}}',v)

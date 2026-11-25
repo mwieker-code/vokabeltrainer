@@ -54,6 +54,9 @@ const text=(best,n,wort)=>best?'Bestwert '+best+' P · '+n+'× '+wort:'Noch nich
 document.querySelector('[data-stand="sled"]').textContent=text(besterWert(sled&&sled.best),summe(sled&&sled.finishes),'im Ziel');
 document.querySelector('[data-stand="climb"]').textContent=text(besterWert(climb&&climb.best),summe(climb&&climb.summits),'am Gipfel');
 document.querySelector('[data-stand="kick"]').textContent=text(besterWert(kick&&kick.best),summe(kick&&kick.tours),'Tour geschafft');
+/* Shopping Trip (nur Year 6): Sterne statt Punkte */
+const shopStand=document.querySelector('[data-stand="shop"]');
+if(shopStand){const sh=lies(Q.schluessel+':shop:v1'),b=Math.max(0,...Object.values((sh&&sh.best)||{}).map(Number));shopStand.textContent=b?'Bestwert '+'★'.repeat(b)+'☆'.repeat(3-b)+' · '+(sh.einkaeufe||0)+'× eingekauft':'Noch nicht gespielt';}
 const F=window.Figuren;
 function bild(cv,art){
  const g=cv.getContext&&cv.getContext('2d');if(!g)return;const W=cv.width,H=cv.height;
@@ -94,7 +97,7 @@ function bild(cv,art){
   if(F)F.kindKlettern(g,325,150,2,{reach:0.4,mood:'happy',lh:{x:-12,y:-28},rh:{x:22,y:0}});
  }
 }
-document.querySelectorAll('[data-bild]').forEach(cv=>{try{bild(cv,cv.dataset.bild);}catch(e){}});
+document.querySelectorAll('[data-bild]').forEach(cv=>{try{if(cv.dataset.bild==='shop'){if(window.ShopBild)window.ShopBild(cv);}else bild(cv,cv.dataset.bild);}catch(e){}});
 })();
 </script>
 </body></html>

@@ -1,0 +1,113 @@
+<!doctype html><html lang="de" data-eigenes-design><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="apple-touch-icon" sizes="180x180" href="../../assets/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Basecamp">
+<meta name="theme-color" content="#0D1017"><title>Shopping Trip · Year 6</title>
+<link rel="stylesheet" href="../../assets/fonts.css?v=2"><link rel="stylesheet" href="style.css?v=20261124-hoeren">
+</head><body><main class="shop">
+<section id="menu">
+ <header><a href="../games/">← Games</a><span>SHOPPING TRIP · YEAR 6</span></header>
+ <div class="held">
+  <canvas id="heldBild" width="960" height="420" aria-hidden="true"></canvas>
+  <div class="held-text"><p class="marke" lang="en">Hilltop Market</p><h1>Shopping Trip</h1>
+  <p class="lead">Ein Supermarkt in 3D: Lauf durch die Gänge, finde die Sachen auf deiner Liste und bezahle auf Englisch an der Kasse.</p></div>
+ </div>
+
+ <h2>Was möchtest du spielen?</h2>
+ <div class="modi">
+  <button data-modus="liste" class="m-liste"><span class="m-icon" aria-hidden="true">📝</span><span class="m-text"><span class="m-name">Shopping list</span><span class="m-info">Lies die Einkaufsliste, kauf alles ein und bezahle an der Kasse.</span><span class="m-best" data-best="liste"></span></span></button>
+  <button data-modus="hoeren" class="m-hoeren"><span class="m-icon" aria-hidden="true">🎧</span><span class="m-text"><span class="m-name">Listen and shop</span><span class="m-info">Die Liste wird nur vorgelesen. Hör genau hin!</span><span class="m-best" data-best="hoeren"></span></span></button>
+  <button data-modus="budget" class="m-budget"><span class="m-icon" aria-hidden="true">💷</span><span class="m-text"><span class="m-name">Budget challenge</span><span class="m-info">Du hast nur wenig Geld. Vergleiche die Preise und kauf günstig ein.</span><span class="m-best" data-best="budget"></span></span></button>
+  <button data-modus="duell" class="m-duell"><span class="m-icon" aria-hidden="true">🏆</span><span class="m-text"><span class="m-name">Team duel</span><span class="m-info">Für die Tafel: Zwei Teams suchen abwechselnd Waren auf Zeit.</span></span></button>
+  <button data-modus="frei" class="m-frei"><span class="m-icon" aria-hidden="true">🧭</span><span class="m-text"><span class="m-name">Look around</span><span class="m-info">Ohne Aufgabe durch den Laden laufen und Preise ansehen.</span></span></button>
+ </div>
+
+ <h2>Einstellungen</h2>
+ <div class="einstellungen">
+  <fieldset><legend>Einkaufsliste</legend>
+   <label><input type="radio" name="laenge" value="kurz" checked> Kurz: 5 Sachen</label>
+   <label><input type="radio" name="laenge" value="lang"> Lang: 7 Sachen, auch mit Mengen <i lang="en">(two, three …)</i></label>
+  </fieldset>
+  <fieldset><legend>Preisschilder im Regal</legend>
+   <label><input type="radio" name="schild" value="leicht" checked> Mit Namen der Ware</label>
+   <label><input type="radio" name="schild" value="profi"> Profi: nur der Preis – erkenne die Ware am Bild</label>
+  </fieldset>
+  <fieldset><legend>Bildschirm</legend>
+   <label class="schalter"><input type="checkbox" id="tafel"> Tafel-Modus: große Schrift und Steuerkreuz</label>
+   <label class="name">Dein Name für den Kassenbon <input type="text" id="name" maxlength="30" autocomplete="off" placeholder="Vorname"></label>
+  </fieldset>
+  <fieldset id="duellEinst"><legend>Team duel</legend>
+   <div class="teams"><label>Team 1 <input type="text" id="team1" maxlength="18" value="Team Red"></label><label>Team 2 <input type="text" id="team2" maxlength="18" value="Team Blue"></label></div>
+   <label>Runden je Team <select id="runden"><option>3</option><option selected>4</option><option>5</option></select></label>
+   <label>Zeit je Runde <select id="frist"><option value="60">60 s</option><option value="90" selected>90 s</option><option value="120">120 s</option></select></label>
+   <label class="schalter"><input type="checkbox" id="duellHoeren"> Auftrag nur vorlesen (Hörverstehen)</label>
+  </fieldset>
+ </div>
+
+ <h2>Steuerung</h2>
+ <ul class="steuerung">
+  <li><b>Handy und Tablet:</b> links auf dem Bild ziehen = gehen, rechts ziehen = umsehen, auf eine Ware tippen = ansehen.</li>
+  <li><b>Computer:</b> W A S D oder Pfeiltasten, mit der Maus ziehen = umsehen, klicken oder E = Ware ansehen, M = große Karte.</li>
+  <li><b>Digitale Tafel:</b> Tafel-Modus einschalten und mit dem Steuerkreuz laufen.</li>
+ </ul>
+ <details class="lehrkraft"><summary>Für Lehrkräfte: Ideen für den Unterricht</summary>
+  <ul>
+   <li><b>Einstieg an der Tafel:</b> „Look around“ öffnen, gemeinsam durch den Laden gehen und Abteilungen benennen lassen: <i lang="en">Where can you find the milk? – In the fridge, next to the butter.</i></li>
+   <li><b>Shopping list im Plenum:</b> Ein Kind steuert, die Klasse liest die Liste vor und lotst: <i lang="en">Go straight on. Turn left. It's in aisle 2.</i></li>
+   <li><b>Kassengespräch:</b> Die Antworten an der Kasse im Chor sprechen, danach in Partnerarbeit frei nachspielen.</li>
+   <li><b>Team duel:</b> Zwei Teams, abwechselnd kommt ein Kind an die Tafel. Mit „Auftrag nur vorlesen“ wird es zur Hörübung.</li>
+   <li><b>Budget challenge:</b> Hinterher die Sätze auf dem Ergebnis nutzen: <i lang="en">The water is cheaper than the lemonade.</i></li>
+   <li><b>Hausaufgabe:</b> Eine Runde spielen, den Kassenbon mit Namen speichern oder ausdrucken und abgeben.</li>
+  </ul>
+ </details>
+ <p class="muted">Das Spiel ist zum Üben da. Deine Lernfächer ändern sich dadurch nicht. Die Preise sind ausgedacht.</p>
+</section>
+
+<section id="stage" hidden>
+ <canvas id="welt" aria-label="3D-Ansicht des Supermarkts. Die Einkaufsliste steht oben links."></canvas>
+ <div id="fadenkreuz" aria-hidden="true"></div>
+ <div id="hinweis" hidden aria-live="polite"></div>
+ <div class="hud">
+  <button id="quit" class="rund" aria-label="Spiel beenden">✕</button>
+  <div id="zettel" class="zettel">
+   <div class="z-kopf"><b id="zTitel" lang="en">Shopping list</b><button id="falten" class="klein" aria-label="Liste zuklappen">▴</button></div>
+   <p id="zInfo" class="z-info"></p>
+   <ul id="zListe" lang="en" aria-live="polite"></ul>
+   <div id="zBudget" class="z-budget" hidden><div class="z-balken"><span></span></div><p></p></div>
+   <div class="z-knoepfe"><button id="vorlesen" class="klein">🔊 Vorlesen</button><button id="woerterKnopf" class="klein" aria-expanded="false">Wörter</button></div>
+   <dl id="woerter" hidden></dl>
+  </div>
+  <div id="duell" class="duell" hidden>
+   <div class="d-team" data-team="0"><span class="d-name"></span><b class="d-punkte">0</b></div>
+   <div class="d-mitte"><span id="dUhr" class="d-uhr">90</span><span id="dRunde" class="d-runde"></span></div>
+   <div class="d-team" data-team="1"><span class="d-name"></span><b class="d-punkte">0</b></div>
+  </div>
+  <button id="korbKnopf" class="korbknopf" aria-label="Einkaufskorb öffnen"><span aria-hidden="true">🧺</span> <b id="korbZahl">0</b><small id="korbSumme">£0.00</small></button>
+ </div>
+ <div id="dAuftrag" class="d-auftrag" hidden lang="en"></div>
+ <div class="kartenbox"><canvas id="karte" aria-label="Karte des Supermarkts: tippen für den ganzen Grundriss"></canvas></div>
+ <button id="zurKasse" hidden>🛒 Bezahlen an Kasse 1</button>
+ <div id="steuer" hidden aria-label="Steuerkreuz">
+  <button data-pad="vor" aria-label="vorwärts">▲</button>
+  <button data-pad="links" aria-label="nach links drehen">↶</button>
+  <button data-pad="zurueck" aria-label="rückwärts">▼</button>
+  <button data-pad="rechts" aria-label="nach rechts drehen">↷</button>
+  <button data-pad="nehmen" class="nehmen" aria-label="Ware in der Mitte ansehen">👆</button>
+ </div>
+ <div id="stick" hidden aria-hidden="true"><span></span></div>
+ <div id="meldung" hidden role="status"></div>
+ <div id="ware" class="blatt" hidden role="dialog" aria-label="Ware"></div>
+ <div id="korb" class="blatt" hidden role="dialog" aria-label="Einkaufskorb"></div>
+ <div id="kasse" hidden role="dialog" aria-label="An der Kasse"></div>
+ <div id="ansage" hidden role="dialog" aria-label="Team duel"></div>
+ <div id="grosskarte" hidden role="dialog" aria-label="Grundriss, tippen zum Schließen"><canvas></canvas><p>Tippen zum Schließen</p></div>
+ <div id="laden">3D wird geladen …</div>
+</section>
+<section id="over" hidden></section>
+</main>
+<script src="daten.js?v=20261124-hoeren"></script><script src="bild.js?v=20261124-hoeren"></script><script src="logik.js?v=20261124-hoeren"></script><script src="spiel.js?v=20261124-hoeren"></script>
+<script type="module" src="render.js?v=20261124-hoeren"></script>
+<script src="../../assets/feedback.js"></script>
+</body></html>
