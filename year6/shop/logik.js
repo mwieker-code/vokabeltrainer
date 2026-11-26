@@ -107,7 +107,7 @@ function bewegen(welt,p,dx,dz,leute){
 }
 
 /* Mitte des Einkaufswagens, den eine Person vor sich herschiebt */
-function wagenPunkt(q){return {x:q.x+Math.sin(q.yaw)*0.72,z:q.z-Math.cos(q.yaw)*0.72};}
+function wagenPunkt(q){return {x:q.x+Math.sin(q.yaw)*0.95,z:q.z-Math.cos(q.yaw)*0.95};}
 
 /* ---------- Kundschaft im Laden ----------
    Laeuft auf festen Bahnen: senkrecht durch die Gaenge, waagrecht vorn und
