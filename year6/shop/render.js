@@ -893,9 +893,10 @@ export function init(canvas,welt,opts={}){
     if(z<4)geste(m,art,Math.sin(Math.PI*z/4));}});
   for(const [look,m] of Object.entries(kunden))if(!sichtbar.has(+look))m.visible=false;
  }
- function kamera(v,aspect){
+ function kamera(v,aspect,fov){
   camera.position.set(v.x,AUGE+(v.bob||0),v.z);camera.rotation.set(v.pitch||0,-v.yaw,0,'YXZ');
-  if(camera.aspect!==aspect){camera.aspect=aspect;camera.updateProjectionMatrix();}
+  fov=fov||70;
+  if(camera.aspect!==aspect||Math.abs(camera.fov-fov)>0.01){camera.aspect=aspect;camera.fov=fov;camera.updateProjectionMatrix();}
  }
  function frame(st){
   const t=st.t||0,w=canvas.clientWidth||300,h=canvas.clientHeight||300;
@@ -917,7 +918,7 @@ export function init(canvas,welt,opts={}){
    return;
   }
   figuren.forEach(f=>f.visible=false);
-  kamera(st,w/h);markieren(st.hover,t);
+  kamera(st,w/h,st.fov);markieren(st.hover,t);
   renderer.render(scene,camera);
  }
  /* Alles freigeben (Neuaufbau bei "Shuffle day") */

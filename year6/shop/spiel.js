@@ -60,6 +60,7 @@ function einstellungenLaden(){
 function zeige(id){for(const s of ['menu','stage','over'])if($(s))$(s).hidden=s!==id;document.body.classList.toggle('im-spiel',id==='stage');}
 function start(modus,rnd){
  einstellungen();
+ G.vel={v:0,s:0};G.fov=FOV;G.zuletzt=[];
  G.split=false;G.p2=null;G.hover2=null;G.sperre=[0,0];document.body.classList.remove('split');
  /* Shuffle day: bei jedem Spiel eine neue Anordnung */
  const neu=G.mischen?L.bauen(DAT,{mischen:1+Math.floor((rnd||Math.random)()*2147483000)}):(welt.gemischt?L.bauen(DAT):welt);
@@ -186,14 +187,28 @@ function schliesseWare(){G.ware=null;if($('ware'))$('ware').hidden=true;}
 function nehmen(id,anz){
  if(G.zustand!=='laden'&&!(preisDuell()&&G.duell.phase==='suche'&&!G.split))return false;
  G.korb[id]=(G.korb[id]||0)+(anz||1);sfx('korb');
+ G.zuletzt=(G.zuletzt||[]).filter(x=>x!==id).concat(id);flieg(welt.byId[id].emo,anz||1);
  schliesseWare();korbKnopf(true);zettel();
  meldung('🧺 '+L.gross(L.menge(welt.byId[id],anz||1))+' – in your basket.');
  return true;
+}
+/* Die Ware fliegt sichtbar von der Bildmitte in den Korb oben rechts */
+function flieg(emo,n){
+ const k=$('korbKnopf'),st=$('stage');if(!k||!st||k.hidden)return;
+ const ziel=k.getBoundingClientRect(),start={x:innerWidth/2,y:innerHeight/2};
+ for(let i=0;i<Math.min(3,n);i++){
+  const e=document.createElement('span');e.className='flug';e.textContent=emo;e.setAttribute('aria-hidden','true');st.append(e);
+  const dx=ziel.left+ziel.width*0.25-start.x,dy=ziel.top+ziel.height/2-start.y;
+  e.style.left=start.x+'px';e.style.top=start.y+'px';
+  if(e.animate){const a=e.animate([{transform:'translate(-50%,-50%) scale(1.6)',opacity:1},{transform:'translate(calc(-50% + '+dx*0.5+'px),calc(-50% + '+(dy*0.5-90)+'px)) scale(1.3)',opacity:1,offset:0.45},{transform:'translate(calc(-50% + '+dx+'px),calc(-50% + '+dy+'px)) scale(0.5)',opacity:0.2}],{duration:650,delay:i*110,easing:'ease-in',fill:'forwards'});a.onfinish=()=>e.remove();}
+  else e.remove();
+ }
 }
 function korbKnopf(hupf){
  const k=$('korbKnopf');if(!k)return;
  k.hidden=G.modus==='frei'||(G.modus==='duell'&&!(preisDuell()&&!G.split))||G.modus==='wo'||G.modus==='detektiv';
  $('korbZahl').textContent=L.korbAnzahl(G.korb);$('korbSumme').textContent=L.betrag(L.korbSumme(welt,G.korb));
+ const em=$('korbEmo');if(em){G.zuletzt=(G.zuletzt||[]).filter(id=>G.korb[id]);em.textContent=G.zuletzt.slice(-4).map(id=>welt.byId[id].emo).join('');}
  if(hupf){k.classList.remove('hupf');void k.offsetWidth;k.classList.add('hupf');}
 }
 function zeigeKorb(){
@@ -240,6 +255,7 @@ function kasseSchritt(){
  const sagt=s.art==='frage'?(K.antwort||'…'):s.sagt;
  if(!box)return;
  box.innerHTML='<div class="k-buehne">'
+  +(K.i===0?'<div class="k-band" aria-hidden="true"><div class="k-band-lauf"></div>'+bon.zeilen.slice(0,10).map((z,k)=>'<span style="--i:'+k+'">'+welt.byId[z.id].emo+'</span>').join('')+'<i class="k-scanner"></i></div>':'')
   +'<div class="k-display" aria-label="Till display"><div class="k-posten">'+bon.zeilen.map((z,k)=>'<div style="--i:'+k+'"><span>'+(z.n>1?z.n+'× ':'')+esc(z.name)+'</span><span>'+L.betrag(z.summe)+'</span></div>').join('')+'</div>'
   +'<div class="k-total"><span>TOTAL</span><b>'+L.betrag(K.summe)+'</b></div></div>'
   +'<div class="k-person"><div class="avatar" aria-hidden="true"><i class="haar"></i><i class="gesicht"></i><i class="koerper"></i></div><span class="k-schild">'+KASSIERERIN+'</span></div>'
@@ -809,7 +825,9 @@ function update(dt,inp){
  p.yaw+=dreh*DREH*dt;
  if(inp.look){p.yaw+=inp.look.x;p.pitch=Math.max(-1.0,Math.min(0.9,p.pitch-inp.look.y));inp.look.x=0;inp.look.y=0;}
  if(pad.size&&!inp.look.y)p.pitch*=Math.pow(0.1,dt);
- let s=laufe(p,vor,seit,dt);
+ G.vel=G.vel||{v:0,s:0};const glatt=Math.min(1,dt*9);G.vel.v+=(vor-G.vel.v)*glatt;G.vel.s+=(seit-G.vel.s)*glatt;
+ if(Math.abs(G.vel.v)<0.01&&!vor)G.vel.v=0;if(Math.abs(G.vel.s)<0.01&&!seit)G.vel.s=0;
+ let s=laufe(p,G.vel.v,G.vel.s,dt);
  /* Controller: ohne geteilten Bildschirm steuern alle Controller dieselbe Figur */
  const frei=!padBereich(),jetzt=uhr();
  if(PAD.stand.length&&frei){
@@ -890,11 +908,12 @@ function schleife(jetzt){
   const kb=$('zurKasse');if(kb){const an=G.zustand==='laden'&&(G.modus==='liste'||G.modus==='hoeren'||G.modus==='budget')&&L.inKassenZone(welt,G.p);kb.hidden=!an;
    const t='🛒 Pay at checkout 1'+(PAD.stand.length?' (✕ / A)':'');if(an&&kb.textContent!==t)kb.textContent=t;}
   if(G.duell){const u=$('dUhr'),v=String(Math.ceil(Math.max(0,G.duell.rest)));if(u&&u.textContent!==v){if(G.duell.phase==='suche'&&+v<=10&&+v>0)sfx('tick');u.textContent=v;u.classList.toggle('knapp',G.duell.phase==='suche'&&G.duell.rest<=15);}}
+  G.fov=(G.fov||FOV)+((G.ware?56:FOV)-(G.fov||FOV))*Math.min(1,dt*6);
   hinweis();geraeuscheImLaden();tonHinweis();
   const fb=$('fragen');if(fb){const an=!G.frage&&!G.ware&&fragenErlaubt()&&L.nahBeiPersonal(welt,G.p);fb.hidden=!an;const t='💬 Talk to '+PERSONAL_NAME+(PAD.stand.length?' (✕ / A)':'');if(an&&fb.textContent!==t)fb.textContent=t;}
   const leute=G.leute?G.leute.leute:[];
   if(R&&G.split&&G.p2)R.frame({t:G.t,leute,views:[{x:G.p.x,z:G.p.z,yaw:G.p.yaw,pitch:G.p.pitch,hover:G.hover},{x:G.p2.x,z:G.p2.z,yaw:G.p2.yaw,pitch:G.p2.pitch,hover:G.hover2}]});
-  else if(R)R.frame({leute,kasse:G.zustand==='kasse',x:G.p.x,z:G.p.z,yaw:G.p.yaw,pitch:G.p.pitch,t:G.t,bob:Math.sin(G.schritt*5.2)*0.03,hover:G.ware?welt.plaetze.find(p=>p.id===G.ware.id):G.hover});
+  else if(R)R.frame({leute,fov:G.fov,kasse:G.zustand==='kasse',x:G.p.x,z:G.p.z,yaw:G.p.yaw,pitch:G.p.pitch,t:G.t,bob:Math.sin(G.schritt*5.2)*0.03,hover:G.ware?welt.plaetze.find(p=>p.id===G.ware.id):G.hover});
   zeichneKarte($('karte'));
   if(!$('grosskarte').hidden)zeichneKarte($('grosskarte').querySelector('canvas'),true);
  }
@@ -923,7 +942,7 @@ function musikKnopf(){
 /* ---------------- Eingabe ---------------- */
 function tippen(cx,cy){
  const cv=$('welt'),r=cv.getBoundingClientRect(),w=r.width||1,h=r.height||1;
- const s=L.strahl(G.p,((cx-r.left)/w)*2-1,-(((cy-r.top)/h)*2-1),FOV,w/h);
+ const s=L.strahl(G.p,((cx-r.left)/w)*2-1,-(((cy-r.top)/h)*2-1),G.fov||FOV,w/h);
  const t=L.treffer(welt,s.o,s.d,12);
  if(!t)return false;
  if(t.t>GREIF){meldung('Go closer!');return false;}
