@@ -166,19 +166,24 @@ export function init(canvas,welt,opts={}){
  }
  /* Preisschilder: gelb mit Name und Preis, Profi nur Preis */
  const tagL={},tagP={};
+ /* SALE: roter Streifen oben, alter Preis durchgestrichen links unten */
+ const sale=(g,W,H)=>{const w=g.__w;g.fillStyle='#E53935';g.fillRect(0,0,W,H*0.42);g.fillStyle='#FFFFFF';g.textAlign='left';g.textBaseline='middle';g.font='900 34px '+SCHRIFT;g.fillText('SALE!',10,H*0.22);
+  if(w){g.fillStyle='#7A848C';g.font='700 24px '+SCHRIFT;g.textAlign='left';const t=L.preis(w.alt);g.fillText(t,10,H*0.72);const b=g.measureText(t).width;g.strokeStyle='#E53935';g.lineWidth=3;g.beginPath();g.moveTo(8,H*0.74);g.lineTo(12+b,H*0.66);g.stroke();}};
  for(const w of welt.waren){
   const preis=L.preis(w.p);
-  tagL[w.id]=AS.add(240,104,(g,W,H)=>{
+  tagL[w.id]=AS.add(240,104,(g,W,H)=>{g.__w=w;
    g.fillStyle='#FFFFFF';g.fillRect(0,0,W,H);g.fillStyle='#FFD43B';g.fillRect(0,0,W,H*0.42);
    g.fillStyle='#1D2A33';g.textAlign='left';g.textBaseline='middle';passend(g,w.schild,W-20,'800',34,SCHRIFT);g.fillText(w.schild,10,H*0.22);
    g.textAlign='right';g.font='800 48px '+SCHRIFT;g.fillText(preis,W-10,H*0.71);
-   if(w.menge){g.textAlign='left';g.font='600 20px '+TEXT;g.fillStyle='#55606A';g.fillText('each',10,H*0.76);}
+   if(w.menge&&!w.alt){g.textAlign='left';g.font='600 20px '+TEXT;g.fillStyle='#55606A';g.fillText('each',10,H*0.76);}
+   if(w.alt)sale(g,W,H);
   });
-  tagP[w.id]=AS.add(240,104,(g,W,H)=>{
+  tagP[w.id]=AS.add(240,104,(g,W,H)=>{g.__w=w;
    g.fillStyle='#FFFFFF';g.fillRect(0,0,W,H);g.fillStyle='#FFD43B';g.fillRect(0,0,W,H*0.42);
    g.fillStyle='#1D2A33';g.textAlign='left';g.textBaseline='middle';g.font='800 30px '+SCHRIFT;g.fillText('? ? ?',10,H*0.22);
    g.textAlign='right';g.font='800 48px '+SCHRIFT;g.fillText(preis,W-10,H*0.71);
-   if(w.menge){g.textAlign='left';g.font='600 20px '+TEXT;g.fillStyle='#55606A';g.fillText('each',10,H*0.76);}
+   if(w.menge&&!w.alt){g.textAlign='left';g.font='600 20px '+TEXT;g.fillStyle='#55606A';g.fillText('each',10,H*0.76);}
+   if(w.alt)sale(g,W,H);
   });
  }
  /* Grosse Schilder */
@@ -341,7 +346,7 @@ export function init(canvas,welt,opts={}){
  /* Etikett um die vordere Haelfte einer runden Ware gelegt */
  function etikR(M,y,r,h,rect){if(rect)ET.add(V.etikettRund,BASIS.clone().multiply(mat(0,y,0,r*1.012,h,r*1.012)),'#FFFFFF',rect);}
  function etik(M,x,y,z,w,h,rect){if(rect&&w>0)ET.add(V.ebene,BASIS.clone().multiply(mat(x,y,z,w,h,1)),'#FFFFFF',rect);}
- function ware(w,x,y,z,ry,k){const f=F[w.form];BASIS=mat(x,y,z,1,1,1,0,ry,0);f.bau(BASIS,w,etikett[w.id],k||0);}
+ function ware(w,x,y,z,ry,k,rx){const f=F[w.form];BASIS=mat(x,y,z,1,1,1,0,ry,0);if(rx)BASIS.multiply(mat(0,0,0,1,1,1,rx,0,0));f.bau(BASIS,w,etikett[w.id],k||0);}
  const blick=(nx,nz)=>Math.atan2(nx,nz);   // +z auf (nx,nz) drehen
 
  /* Preisschild an Stelle (x,y,z), schaut nach (nx,nz) */
@@ -363,7 +368,14 @@ export function init(canvas,welt,opts={}){
      const yy=y+s*(f.h+0.004);
      /* vorne: echte Ware */
      const X=p.seite.achse==='z'?frontXZ-n[0]*(f.d/2+0.03):t,Z=p.seite.achse==='z'?t:frontXZ-n[1]*(f.d/2+0.03);
-     ware(w,X,yy,Z,ry,i);
+     /* Unordnung wie im echten Laden: Luecken, schief, nach hinten gerutscht, umgefallen */
+     const h=Math.abs(Math.floor(Math.sin(i*12.9898+y*78.233+p.a*37.719+s*3.1)*43758.5453))%97;
+     if(s===0&&h<7)continue;
+     const um=s===0&&!f.stapel&&h>=7&&h<9&&f.h>f.d*1.4;
+     const rueck=h%5===0?0.04:0;
+     const Xr=p.seite.achse==='z'?X-n[0]*rueck:X,Zr=p.seite.achse==='z'?Z:Z-n[1]*rueck;
+     if(um)ware(w,Xr-(p.seite.achse==='z'?n[0]*0.02:0),yy+f.d/2,Zr-(p.seite.achse==='z'?0:n[1]*0.02),ry,i,-Math.PI/2);
+     else ware(w,Xr,yy,Zr,ry+((h%9)-4)*0.035,i);
      /* dahinter: schlichte Kloetze in der Warenfarbe, damit das Regal voll wirkt */
      if(tiefe>0.3){const X2=p.seite.achse==='z'?X-n[0]*(f.d+0.02):X,Z2=p.seite.achse==='z'?Z:Z-n[1]*(f.d+0.02);
       if(OFFEN.has(w.form))ware(w,X2,yy,Z2,ry,i+3);
@@ -698,6 +710,9 @@ export function init(canvas,welt,opts={}){
  /* Kassiererin */
  const kassiererin=mensch({haut:'#E8B48A',haar:'#5A3825',frisur:'zopf',hemd:'#2E9E4F',schuerze:'#FFC845',hose:'#2C3A44'});
  {const k=welt.KASSEN[0];kassiererin.position.set(k.x2+0.55,0,k.z2-0.6);kassiererin.rotation.y=-Math.PI/2;scene.add(kassiererin);}
+ /* Mitarbeiterin beim Auffuellen */
+ const personal=mensch({haut:'#C68B5E',haar:'#2B1B12',frisur:'dutt',hemd:'#2E9E4F',schuerze:'#FFC845',hose:'#2C3A44',langarm:true});
+ {const P=welt.PERSONAL;personal.position.set(P.x,0,P.z);personal.rotation.y=Math.PI-P.yaw;scene.add(personal);}
  /* Kundschaft: Aussehen je look (aus logik.js) */
  const AUSSEHEN=[
   {haut:'#F1C7A5',haar:'#CFCAC2',frisur:'dutt',hemd:'#F2E6D8',jacke:'#8E5BA8',kleid:'#5E4A7A',brille:true,korb:true},
@@ -761,6 +776,28 @@ export function init(canvas,welt,opts={}){
  for(let x=1;x<W;x+=2){if(x+1>welt.TUER.x1&&x-1<welt.TUER.x2)continue;
   STRAHL.add(V.ebene,mat(x+0.35,0.009,D-1.6,1.5,2.2,1,-Math.PI/2,0,0.18),'#FFFFFF',[0,0,1,1]);
   STRAHL.add(V.ebene,mat(x+0.2,1.25,D-0.9,1.5,2.6,1,-0.62,0.18,0),'#FFFFFF',[0,0,1,1]);}
+ /* ===== Rollwagen der Mitarbeiterin mit Kartons ===== */
+ {const P=welt.PERSONAL;const x1=P.wx1,x2=P.wx2,z1=P.wz1,z2=P.wz2;
+  S.quader(x1,0.12,z1,x2,0.16,z2,'#5B6670');for(const [x,z] of [[x1+0.06,z1+0.06],[x2-0.06,z1+0.06],[x1+0.06,z2-0.06],[x2-0.06,z2-0.06]])S.add(V.zyl,mat(x,0.06,z,0.05,0.04,0.05,0,0,Math.PI/2),'#22272B');
+  S.quader(x2-0.03,0.16,z1,x2,1.0,z1+0.03,'#7A858F');S.quader(x2-0.03,0.16,z2-0.03,x2,1.0,z2,'#7A858F');S.quader(x2-0.03,0.97,z1,x2,1.0,z2,'#D93B2B');
+  const karton=(x,y,z,w,h,d)=>{S.quader(x-w/2,y,z-d/2,x+w/2,y+h,z+d/2,'#C69A6B');S.quader(x-w/2-0.002,y+h-0.002,z-0.03,x+w/2+0.002,y+h+0.002,z+0.03,'#E2C9A0');S.quader(x-w/2-0.002,y+h*0.35,z-d/2-0.002,x-w/2+0.002,y+h*0.6,z+d/2+0.002,'#3BAFDA');};
+  karton((x1+x2)/2-0.08,0.16,z1+0.17,0.4,0.3,0.3);karton((x1+x2)/2-0.08,0.46,z1+0.2,0.36,0.26,0.28);karton((x1+x2)/2-0.1,0.16,z2-0.16,0.36,0.28,0.26);
+  schildFlaeche(schild('Sorry for the mess!','#2E9E4F','We are filling the shelves',520,150),(x1+x2)/2,1.25,z2+0.02,0.7,0.2,0);
+  S.add(V.zyl,mat((x1+x2)/2,1.12,z2,0.008,0.24,0.008),'#6E7880');}
+ /* ===== Schild 'Caution: wet floor' mit Eimer und Mopp ===== */
+ {const N=welt.NASS;
+  const nass=AG.add(256,340,(g,w,h)=>{g.fillStyle='#FFD43B';g.fillRect(0,0,w,h);g.fillStyle='#1D2A33';g.textAlign='center';g.textBaseline='middle';
+   g.font='900 46px '+SCHRIFT;g.fillText('CAUTION',w/2,52);g.beginPath();g.moveTo(w/2,92);g.lineTo(w/2+62,198);g.lineTo(w/2-62,198);g.closePath();g.lineWidth=10;g.lineJoin='round';g.stroke();
+   g.font='900 70px '+SCHRIFT;g.fillText('!',w/2,165);g.font='800 40px '+SCHRIFT;g.fillText('WET',w/2,250);g.fillText('FLOOR',w/2,296);});
+  S.add(V.zyl,mat(N.x,0.825,N.z,0.012,0.03,0.25,0,0,Math.PI/2),'#E0A800');
+  for(const s2 of [-1,1]){const T=mat(N.x,0.42,N.z+s2*0.13,1,1,1,-s2*0.3,0,0);
+   S.add(V.box,T.clone().multiply(mat(0,0,0,0.34,0.84,0.02)),'#FFC107');
+   SCH.add(V.ebene,T.clone().multiply(mat(0,0.02,s2*0.012,0.3,0.4,1,0,s2>0?0:Math.PI,0)),'#FFFFFF',nass);}
+  const bx=N.x+0.42,bz=N.z+0.05;S.add(V.becher,mat(bx,0.16,bz,0.15,0.32,0.15,Math.PI,0,0),'#3B82C4');S.add(V.zyl,mat(bx,0.3,bz,0.135,0.01,0.135),'#9CC9E8');
+  S.add(V.ring,mat(bx,0.38,bz,0.12,0.12,0.12,0,0,Math.PI/2),'#6E7880');
+  S.add(V.zyl,mat(bx+0.06,0.85,bz-0.02,0.012,1.4,0.012,0.08,0,-0.25),'#B8874F');S.add(V.kugel,mat(bx-0.06,0.2,bz,0.1,0.06,0.1),'#E8E2D8');
+  /* nasse Stelle auf dem Boden */
+  BODEN.add(V.ebene,mat(N.x+0.1,0.011,N.z+0.9,1.4,0.9,1,-Math.PI/2,0,0.3),'#FFFFFF',AG.add(128,96,(g,w,h)=>{const v=g.createRadialGradient(w/2,h/2,4,w/2,h/2,w/2);v.addColorStop(0,'rgba(170,210,235,.55)');v.addColorStop(1,'rgba(170,210,235,0)');g.fillStyle=v;g.fillRect(0,0,w,h);}));}
  AG.malen();
  /* ===== Meshes erzeugen ===== */
  scene.add(S.mesh(matFarbe));
@@ -824,6 +861,7 @@ export function init(canvas,welt,opts={}){
   /* Kassiererin winkt, wenn jemand in der Naehe ist */
   const k=welt.KASSEN[0],dk=Math.min(...leute.map(v=>Math.hypot(v.x-k.x1,v.z-(k.z1+k.z2)/2))),ku=kassiererin.userData;
   bewege(kassiererin,0,0,dt);
+  bewege(personal,0,0,dt);{const z=(t*0.45)%2;greifen(personal,Math.sin(Math.PI*Math.min(1,z)),z>0.4&&z<1);}
   if(st.kasse)scannen(kassiererin,t);
   else if(dk<5){ku.arme[1].rotation.z=2.4+Math.sin(t*7)*0.35;ku.ellbogen[1].rotation.x=-0.3;}
   else if(Math.sin(t*0.35)>0.55)scannen(kassiererin,t);

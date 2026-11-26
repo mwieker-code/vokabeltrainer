@@ -35,6 +35,10 @@ const GANG_X=[(6.2+GONDEL[0]-GT)/2,(GONDEL[0]+GT+GONDEL[1]-GT)/2,(GONDEL[1]+GT+G
 const KASSEN=[14,18.5,23].map((x,k)=>({nr:k+1,x1:x,x2:x+0.9,z1:18,z2:21,offen:k===0}));
 const KASSEN_ZONE={x1:12.4,x2:14,z1:17.4,z2:21.6};
 const START={x:5,z:22.3,yaw:0};
+/* Mitarbeiterin mit Rollwagen (Gang 3, an der Grenze zweier Regalplaetze) und
+   das Schild 'Caution: wet floor' (hinten vor dem Tiefkuehlgang) */
+const PERSONAL={x:GONDEL[1]+GT+0.35,z:GZ1+2.2*2,yaw:-Math.PI/2,wx1:GONDEL[1]+GT+0.65,wx2:GONDEL[1]+GT+1.3,wz1:GZ1+2.2*2-0.3,wz2:GZ1+2.2*2+0.35};
+const NASS={x:24.6,z:3.15};
 const TUER={x1:3,x2:7};
 
 /* bauen(daten, {mischen: zahl}) - mit "mischen" ist "Shuffle day": Die
@@ -43,9 +47,12 @@ const TUER={x1:3,x2:7};
    Kuehl- und Tiefkuehlregal bleiben, wo sie sind. */
 function bauen(daten,opt){
  opt=opt||{};
- const waren=daten.WAREN, byId={};
- waren.forEach(w=>byId[w.id]=w);
  const seiten=SEITEN.map(s=>({...s})),rnd=opt.mischen?zufall(opt.mischen):null;
+ /* Mit "mischen" gibt es auch drei Sonderangebote (SALE): Preis rund 25 % billiger,
+    auf 5p gerundet; der alte Preis steht in "alt". Kuehlware ausgenommen nicht. */
+ let waren=daten.WAREN;
+ if(rnd){waren=waren.map(w=>({...w}));for(const w of mischen(waren.filter(x=>x.p>=80&&x.id!=='strawberries'&&x.id!=='bread'),rnd).slice(0,3)){w.alt=w.p;w.p=Math.max(5,Math.round(w.p*0.75/5)*5);}}
+ const byId={};waren.forEach(w=>byId[w.id]=w);
  if(rnd){
   const regal=seiten.filter(s=>s.art==='regal'||s.art==='holz'),orte=mischen(regal.map(s=>s.ort),rnd);
   regal.forEach((s,k)=>{s.ort=orte[k];s.art=s.ort==='baeckerei'?'holz':'regal';});
@@ -80,10 +87,13 @@ function bauen(daten,opt){
  box(0.35,17.9,1.65,20.35,'wagen');                        // Einkaufswagen am Eingang
  for(const [x,z] of [[2.3,23.1],[8.2,23.1],[29.2,23.0]])box(x-0.32,z-0.32,x+0.32,z+0.32,'pflanze');   // Pflanzen im Eingangsbereich
  box(9.0,21.4,9.7,22.2,'tafel');                           // Kreidetafel mit Angeboten
+ box(PERSONAL.x-0.25,PERSONAL.z-0.25,PERSONAL.x+0.25,PERSONAL.z+0.25,'personal');   // Mitarbeiterin beim Auffuellen
+ box(PERSONAL.wx1,PERSONAL.wz1,PERSONAL.wx2,PERSONAL.wz2,'rollwagen');
+ box(NASS.x-0.3,NASS.z-0.3,NASS.x+0.3,NASS.z+0.3,'nass');                             // Schild 'wet floor' mit Eimer
  for(const gx of GONDEL)box(gx-GT,GZ2,gx+GT,GZ2+0.55,'aktion');   // Aktionsware vor jedem Regal
  box(0,23.6,W,D,'tuerfeld');                               // nicht hinaus
- const layout=plaetze.map(p=>p.id).join(',');
- return {W,D,R,AUGE,daten,waren,byId,plaetze,hin,SEITEN:seiten,GAENGE,layout,gemischt:!!rnd,KASSEN,KASSEN_ZONE,START,TUER,GONDEL,GT,GZ1,GZ2,GH};
+ const layout=plaetze.map(p=>p.id).join(',')+'|'+waren.filter(w=>w.alt).map(w=>w.id+':'+w.p).join(',');
+ return {W,D,R,AUGE,daten,waren,byId,plaetze,hin,SEITEN:seiten,GAENGE,layout,gemischt:!!rnd,PERSONAL,NASS,angebote:waren.filter(w=>w.alt),KASSEN,KASSEN_ZONE,START,TUER,GONDEL,GT,GZ1,GZ2,GH};
 }
 
 /* ---------- Bewegung ---------- */

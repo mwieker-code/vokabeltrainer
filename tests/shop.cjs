@@ -312,6 +312,14 @@ ok(DAT.WAREN.find(x=>x.id==='milk').form==='milch','Milch als Flasche mit Griff'
  ok(S.welt.layout!==l1&&S.welt.gemischt,'Spielstart mit Shuffle day mischt neu');
  d.getElementById('mischen').checked=false;S.start('frei');ok(!S.welt.gemischt&&S.welt.layout===welt.layout,'ohne Shuffle day: feste Anordnung');S.menu();}
 
+/* ---------- SALE, Mitarbeiterin, Wischschild ---------- */
+{ok(welt.angebote.length===0&&DAT.WAREN.every(x=>!x.alt),'ohne Shuffle day keine Angebote, Daten unveraendert');
+ for(let k=1;k<=10;k++){const m=L.bauen(DAT,{mischen:k*104729});
+  ok(m.angebote.length===3&&m.angebote.every(x=>x.alt>x.p&&x.p%5===0&&x.id!=='strawberries'&&x.id!=='bread'),'Shuffle '+k+': drei echte Angebote');
+  const a=m.angebote[0];ok(L.korbSumme(m,{[a.id]:1})===a.p&&L.bon(m,{[a.id]:1}).summe===a.p,'Shuffle '+k+': Angebotspreis gilt im Korb und auf dem Bon');}
+ ok(!L.frei(welt,welt.PERSONAL.x,welt.PERSONAL.z,0.1)&&!L.frei(welt,(welt.PERSONAL.wx1+welt.PERSONAL.wx2)/2,(welt.PERSONAL.wz1+welt.PERSONAL.wz2)/2,0.1)&&!L.frei(welt,welt.NASS.x,welt.NASS.z,0.1),'Mitarbeiterin, Rollwagen und Wischschild sind Hindernisse');
+ const e=L.erreichbar(welt);ok(e(welt.PERSONAL.x+1.6,welt.PERSONAL.z)&&e(welt.NASS.x+1.2,welt.NASS.z)&&e(welt.NASS.x,welt.NASS.z-0.9),'man kommt an ihnen vorbei');}
+
 /* ---------- Team duel: Customer service ---------- */
 {const ids=new Set(DAT.WAREN.map(x=>x.id));
  ok(DAT.WUENSCHE.length>=15&&DAT.WUENSCHE.every(x=>x.aus.length&&x.aus.every(i=>ids.has(i))&&/[.?!]$/.test(x.sagt)),'Kundenanliegen vollstaendig');
