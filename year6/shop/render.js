@@ -633,7 +633,7 @@ export function init(canvas,welt,opts={}){
   if(o.korb){const kb=new THREE.Group();kb.position.set(0,-0.06,0.08);haende[0].add(kb);stueck(kb,GB,'#D93B2B',0,-0.08,0.05,0.26,0.14,0.2);stueck(kb,GT2,'#A82A1E',0,0.0,0.05,0.12,0.12,0.12,0,Math.PI/2);}
   if(o.schuerze){stueck(k,GB,o.schuerze,0,1.12,0.135,0.3,0.42,0.02);stueck(k,GB,'#FFFFFF',0.08,1.3,0.148,0.07,0.03,0.005);}
   let wagenGruppe=null;
-  if(o.wagen){const W2=new Sammler();wagen(0,0.78,0,W2);wagenGruppe=W2.mesh(matFarbe);g.add(wagenGruppe);}
+  if(o.wagen){const W2=new Sammler();wagen(0,0.92,0,W2);wagenGruppe=W2.mesh(matFarbe);g.add(wagenGruppe);}
   const sch=new THREE.Mesh(GSchatten,rundSchatten);sch.rotation.x=-Math.PI/2;sch.position.y=0.007;sch.scale.setScalar(o.kind?0.5:0.7);g.add(sch);
   g.userData={k,beine,arme,ellbogen,haende,kopf,ding,amt:0,wagen:!!o.wagen};
   return g;
@@ -647,7 +647,10 @@ export function init(canvas,welt,opts={}){
   u.k.position.y=Math.abs(Math.cos(phase))*0.03*a;u.k.rotation.x=0;u.ding.visible=false;
   if(u.wagen)schieben(m);
  }
- function schieben(m){const u=m.userData;for(const i of [0,1]){u.arme[i].rotation.x=-1.05;u.arme[i].rotation.z=i?0.1:-0.1;u.ellbogen[i].rotation.x=-0.45;}u.k.rotation.x=0.06;}
+ /* Schieben: Schulter (y 1.43) -> Ellbogen 0,30 m -> Hand 0,31 m. Oberarm 20 Grad,
+    Unterarm weitere 52 Grad nach vorn: Hand auf y ~1,05 und 0,40 m vor dem Koerper =
+    Griff des Wagens (Wagen bei z 0,92, Griff 0,52 davor auf 1,0 m Hoehe). */
+ function schieben(m){const u=m.userData;for(const i of [0,1]){u.arme[i].rotation.set(-0.35,0,0);u.ellbogen[i].rotation.x=-0.9;}u.k.rotation.x=0;}
  /* f: 0 ... 1 ... 0 waehrend des Greifens; ab der Mitte liegt etwas in der Hand */
  function greifen(m,f,hand){const u=m.userData;u.arme[1].rotation.x=-1.25*f;u.arme[1].rotation.z=0.08+0.1*f;u.ellbogen[1].rotation.x=-0.15-0.35*f;u.k.rotation.x=0.05*f;
   u.kopf.rotation.x=-0.15*f;u.ding.visible=hand;}
