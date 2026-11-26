@@ -413,3 +413,6 @@ body.split .hud .musik{display:none}
 .p-karte p{margin:4px 0;font-size:15px}
 .p-karte .a-gut{font-size:22px}
 #zAufgabe #pFertig{width:100%;margin-top:6px}
+
+.w-sale{background:#E53935;color:#fff;border-radius:6px;padding:0 6px;font:900 15px Inter,sans-serif;vertical-align:middle}
+.w-preis s{color:#8A949C;font-size:18px}

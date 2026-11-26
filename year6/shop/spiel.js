@@ -165,7 +165,7 @@ function zeichneWare(){
   +'<div class="w-kopf"><div class="w-bild" style="--a:'+w.farbe+';--b:'+w.akzent+'"><span aria-hidden="true">'+w.emo+'</span></div>'
   +'<div class="w-text"><span class="w-ort" style="--o:'+farbe+'" lang="en">'+esc(DAT.ORTE[w.ort].en)+'</span>'
   +(name?'<b class="w-name" lang="en">'+esc(L.gross(w.en))+'</b>':'<b class="w-name w-profi">What is it? <small>Pro mode: no name</small></b>')
-  +'<span class="w-preis">'+L.preis(w.p)+(w.menge?' <small lang="en">each</small>':'')+'</span>'
+  +'<span class="w-preis">'+(w.alt?'<span class="w-sale">SALE</span> <s>'+L.preis(w.alt)+'</s> ':'')+L.preis(w.p)+(w.menge?' <small lang="en">each</small>':'')+'</span>'
   +(name?'<span class="w-de">'+(a.de?esc(w.de):'<button id="wDe" class="link">In German?</button>')+'</span>':'')
   +'</div></div>'
   +(duell?'<div class="w-knoepfe"><button id="wNehmen" class="primaer gross">'+(waehlen?'✔ That\'s it!':'✔ We\'ll take it!')+'</button></div>'
@@ -825,7 +825,7 @@ function hinweis(){
  const h=$('hinweis');if(!h)return;
  const zeigen=G.hover&&!G.ware&&(G.zustand==='laden'||G.zustand==='frei'||(G.duell&&G.duell.phase==='suche'));
  h.hidden=!zeigen;if(!zeigen)return;
- const w=welt.byId[G.hover.id],txt=(G.profi||(G.modus==='duell'&&!preisDuell())?'':w.schild+' · ')+L.preis(w.p)+(w.menge?' each':'');
+ const w=welt.byId[G.hover.id],txt=(w.alt?'SALE! ':'')+(G.profi||(G.modus==='duell'&&!preisDuell())?'':w.schild+' · ')+L.preis(w.p)+(w.menge?' each':'');
  const wie=PAD.stand.length?'✕ / A':beruehrung?'tap':'click or E';
  if(h.dataset.t!==txt+wie){h.dataset.t=txt+wie;h.innerHTML='<span lang="en">'+esc(txt)+'</span><small>'+wie+'</small>';}
 }
@@ -855,7 +855,8 @@ function geraeuscheImLaden(){
  if(ruhig||G.t<G.naechsteDurchsage)return;
  G.naechsteDurchsage=G.t+70+Math.random()*50;
  try{if(window.speechSynthesis&&speechSynthesis.speaking)return;}catch(e){}
- const text=DAT.DURCHSAGEN[Math.floor(Math.random()*DAT.DURCHSAGEN.length)];
+ const sale=welt.angebote.map(w=>'Special offer today: '+w.schild.toLowerCase()+' – now only '+L.preis(w.p)+'! The old price was '+L.preis(w.alt)+'.');
+ const pool=DAT.DURCHSAGEN.concat(sale,sale),text=pool[Math.floor(Math.random()*pool.length)];
  sfx('gong');setTimeout(()=>{if(G.zustand==='laden'||G.zustand==='frei'){meldung('📢 '+text,6000);sprich(text,0.9);}},1700);
 }
 function musikKnopf(){
