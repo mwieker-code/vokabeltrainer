@@ -275,7 +275,10 @@ anzahl=0;tick();S.padQuelle(()=>[]);
   for(const a of K.leute)for(const b of K.leute)if(a!==b&&Math.hypot(a.x-b.x,a.z-b.z)<(a.folgt===b.nr||b.folgt===a.nr?0.3:0.5))zuNah++;}
  ok(inWand===0,'Kundschaft laeuft nie in Regale oder Waende');
  ok(zuNah===0,'Kundschaft laeuft nicht ineinander');
- const kind=K.leute.find(q=>q.folgt!=null),mama=K.leute.find(q=>q.nr===kind.folgt);ok(Math.hypot(kind.x-mama.x,kind.z-mama.z)<2.5,'das Kind bleibt bei seiner Begleitung');
+ const kind=K.leute.find(q=>q.folgt!=null),mama=K.leute.find(q=>q.nr===kind.folgt);
+ {let beide=0,nurMama=0;const K2=L.kundschaft(welt,6,L.zufall(8)),r2=L.zufall(9),k2=K2.leute.find(q=>q.folgt!=null),m2=K2.leute.find(q=>q.nr===k2.folgt);
+  for(let i=0;i<3000;i++){L.kundschaftSchritt(welt,K2,0.05,[],r2);if(m2.geht){if(k2.geht)beide++;else nurMama++;}}
+  ok(beide>10*nurMama,'das Kind bewegt die Beine, wenn es hinter der Mutter herlaeuft ('+beide+' / '+nurMama+')');}ok(Math.hypot(kind.x-mama.x,kind.z-mama.z)<2.5,'das Kind bleibt bei seiner Begleitung');
  ok(K.leute.some(q=>q.wagen),'eine Person schiebt einen Einkaufswagen');
  ok(felder.size>=25,'Kundschaft verteilt sich im ganzen Laden ('+felder.size+' Bereiche)');
  /* durch Personen laeuft man nicht hindurch */
