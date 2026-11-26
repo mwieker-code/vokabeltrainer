@@ -587,26 +587,42 @@ export function init(canvas,welt,opts={}){
  const GHalb=new THREE.SphereGeometry(1,20,12,0,Math.PI*2,0,Math.PI*0.55),GSchatten=new THREE.PlaneGeometry(1,1),GRock=new THREE.CylinderGeometry(0.62,1,1,18),GMund=new THREE.TorusGeometry(1,0.18,6,14,Math.PI);
  function stueck(el,geo,f,x,y,z,sx,sy,sz,rx,ry,rz){const m=new THREE.Mesh(geo,mm(f));m.position.set(x,y,z);m.scale.set(sx,sy,sz);m.rotation.set(rx||0,ry||0,rz||0);el.add(m);return m;}
  const kapsel=(el,f,x,y,z,r,h,tz)=>stueck(el,GK,f,x,y,z,r,h/3,r*(tz||1));
+ /* Weiche Rumpfform (Drehkoerper): Huefte, Taille, Brust, Schultern */
+ const GRumpf=new THREE.LatheGeometry([[0,0],[0.15,0],[0.165,0.07],[0.142,0.24],[0.158,0.4],[0.198,0.52],[0.19,0.57],[0.12,0.62],[0,0.64]].map(([x,y])=>new THREE.Vector2(x,y)),18);
+ const GBecken=new THREE.LatheGeometry([[0,0],[0.13,0],[0.158,0.06],[0.162,0.12],[0,0.13]].map(([x,y])=>new THREE.Vector2(x,y)),18);
+ const GFinger=new THREE.CapsuleGeometry(1,1,3,8);
  function mensch(o){
   const g=new THREE.Group(),k=new THREE.Group();g.add(k);
   if(o.kind)k.scale.setScalar(0.72);
   const haut=o.haut,haar=o.haar||'#3B2A20',hemd=o.hemd,hose=o.hose||'#34495E',schuh=o.schuh||'#2B2B2B',aermel=o.jacke||hemd;
-  /* Beine mit Schuhen (Sohle heller) */
-  const beine=[-1,1].map(sx=>{const b=new THREE.Group();b.position.set(sx*0.085,0.86,0);k.add(b);
-   kapsel(b,o.kleid?haut:hose,0,-0.4,0,o.kleid?0.06:0.074,0.8);
-   stueck(b,GB,schuh,0,-0.81,0.045,0.105,0.075,0.22);stueck(b,GB,'#D9D4CC',0,-0.852,0.045,0.11,0.018,0.235);return b;});
+  /* Beine: Huefte -> Knie -> Fussgelenk, Fuss mit heller Sohle */
+  const beine=[],knie=[],fuesse=[];
+  for(const sx of [-1,1]){
+   const b=new THREE.Group();b.position.set(sx*0.088,0.9,0);k.add(b);beine.push(b);
+   kapsel(b,o.kleid?haut:hose,0,-0.21,0,o.kleid?0.062:0.078,0.42);
+   const kn=new THREE.Group();kn.position.set(0,-0.43,0);b.add(kn);knie.push(kn);
+   stueck(kn,GS,o.kleid?haut:hose,0,0,0,o.kleid?0.058:0.072,0.07,o.kleid?0.058:0.072);   // Kniegelenk
+   kapsel(kn,o.kleid?haut:hose,0,-0.19,0,o.kleid?0.055:0.066,0.38);
+   const f=new THREE.Group();f.position.set(0,-0.41,0);kn.add(f);fuesse.push(f);
+   stueck(f,GS,o.kleid?haut:hose,0,0.01,0,0.055,0.05,0.055);   // Knoechel
+   stueck(f,GB,schuh,0,-0.03,0.04,0.105,0.07,0.22);stueck(f,GS,schuh,0,-0.03,0.15,0.052,0.035,0.05);stueck(f,GB,'#D9D4CC',0,-0.068,0.045,0.11,0.016,0.24);
+  }
   /* Rumpf */
-  if(o.kleid){stueck(k,GRock,o.kleid,0,0.78,0,0.24,0.42,0.2);kapsel(k,o.kleid,0,1.2,0,0.165,0.58,0.78).scale.x*=1.08;}
-  else{kapsel(k,hose,0,0.93,0,0.15,0.26,0.8).scale.x*=1.12;kapsel(k,hemd,0,1.21,0,0.17,0.6,0.78).scale.x*=1.1;
-   stueck(k,GZ,'#2B2B2B',0,0.99,0,0.183,0.035,0.14);stueck(k,GB,'#C9A64A',0,0.99,0.137,0.04,0.03,0.01);}
-  if(o.jacke){for(const sx of [-1,1])stueck(k,GB,o.jacke,sx*0.1,1.2,0.07,0.12,0.56,0.14);stueck(k,GB,o.jacke,0,1.2,-0.07,0.36,0.56,0.12);}
-  stueck(k,GT2,o.jacke||hemd,0,1.49,0,0.075,0.075,0.075,Math.PI/2);   // Kragen
-  stueck(k,GZ,haut,0,1.53,0,0.05,0.1,0.05);
+  const rumpfFarbe=o.kleid||o.jacke||hemd;
+  stueck(k,GBecken,o.kleid||hose,0,0.84,0,1,1,0.78);
+  const rumpf=stueck(k,GRumpf,rumpfFarbe,0,0.88,0,1,1,0.74);
+  if(o.kleid)stueck(k,GRock,o.kleid,0,0.78,0,0.25,0.4,0.2);
+  else{stueck(k,GZ,'#2B2B2B',0,0.985,0,0.168,0.035,0.126);stueck(k,GB,'#C9A64A',0,0.985,0.122,0.04,0.03,0.01);}
+  if(o.jacke){stueck(k,GB,hemd,0,1.24,0.118,0.13,0.5,0.02);for(const sx of [-1,1])stueck(k,GB,o.jacke,sx*0.075,1.42,0.11,0.05,0.12,0.02,0,0,sx*0.5);}
+  stueck(k,GT2,o.jacke||hemd,0,1.5,0,0.072,0.072,0.07,Math.PI/2);   // Kragen
+  stueck(k,GZ,haut,0,1.54,0,0.05,0.1,0.05);
   /* Kopf */
   const kopf=new THREE.Group();kopf.position.set(0,1.67,0);k.add(kopf);
   stueck(kopf,GS,haut,0,0,0,0.13,0.14,0.13);
-  for(const sx of [-1,1]){stueck(kopf,GS,'#FFFFFF',sx*0.046,0.015,0.112,0.024,0.027,0.012);stueck(kopf,GS,'#1D2A33',sx*0.046,0.012,0.122,0.013,0.016,0.008);
-   stueck(kopf,GB,haar,sx*0.047,0.055,0.118,0.04,0.009,0.01,0,0,sx*-0.12);stueck(kopf,GS,haut,sx*0.13,0,0,0.025,0.035,0.02);
+  const augen=[];
+  for(const sx of [-1,1]){const au=new THREE.Group();au.position.set(sx*0.046,0.015,0.112);kopf.add(au);augen.push(au);
+   stueck(au,GS,'#FFFFFF',0,0,0,0.024,0.027,0.012);stueck(au,GS,'#1D2A33',0,-0.003,0.01,0.013,0.016,0.008);
+   stueck(kopf,GB,haar,sx*0.047,0.058,0.12,0.042,0.01,0.01,0,0,sx*-0.15);stueck(kopf,GS,haut,sx*0.13,0,0,0.025,0.035,0.02);
    stueck(kopf,GS,'#F2A7A0',sx*0.075,-0.035,0.1,0.022,0.014,0.008);}
   stueck(kopf,GS,haut,0,-0.02,0.13,0.018,0.022,0.016);
   stueck(kopf,GMund,'#A0413A',0,-0.055,0.112,0.032,0.024,0.03,0,0,Math.PI);
@@ -619,37 +635,59 @@ export function init(canvas,welt,opts={}){
   if(fr==='kappe'){stueck(kopf,GHalb,o.kappe||hemd,0,0.02,0,0.142,0.13,0.142);stueck(kopf,GB,o.kappe||hemd,0,0.045,0.15,0.2,0.016,0.13);}
   if(o.bart)stueck(kopf,GHalb,haar,0,-0.04,0.03,0.12,0.1,0.11,Math.PI);
   if(o.brille){for(const sx of [-1,1])stueck(kopf,GT2,'#2B2B2B',sx*0.046,0.015,0.132,0.03,0.03,0.03);stueck(kopf,GB,'#2B2B2B',0,0.015,0.135,0.03,0.006,0.006);}
-  /* Arme: Oberarm, Ellbogen, Unterarm, Hand mit Daumen */
+  /* Arme: Schulter -> Ellbogen (0,30) -> Hand (0,31); Hand mit Fingern und Daumen */
   const ellbogen=[],haende=[];
-  const arme=[-1,1].map(sx=>{const a=new THREE.Group();a.position.set(sx*0.215,1.43,0);a.rotation.z=sx*0.08;k.add(a);
-   kapsel(a,aermel,0,-0.15,0,0.058,0.32);
+  const arme=[-1,1].map(sx=>{const a=new THREE.Group();a.position.set(sx*0.205,1.42,0);a.rotation.z=sx*0.08;k.add(a);
+   stueck(a,GS,aermel,0,0,0,0.07,0.07,0.07);kapsel(a,aermel,0,-0.15,0,0.056,0.32);
    const e=new THREE.Group();e.position.set(0,-0.3,0);a.add(e);ellbogen.push(e);
-   kapsel(e,o.langarm||o.jacke?aermel:haut,0,-0.14,0,0.05,0.3);
+   kapsel(e,o.langarm||o.jacke?aermel:haut,0,-0.14,0,0.048,0.3);
    const h=new THREE.Group();h.position.set(0,-0.31,0.01);e.add(h);haende.push(h);
-   stueck(h,GS,haut,0,0,0,0.045,0.058,0.03);kapsel(h,haut,-sx*0.035,0.01,0.02,0.016,0.06).rotation.z=sx*0.6;
+   stueck(h,GS,haut,0,0,0,0.042,0.05,0.032);
+   stueck(h,GFinger,haut,0,-0.045,0.012,0.016,0.012,0.016,0,0,Math.PI/2).scale.set(0.016,0.03,0.016);   // gekruemmte Finger
+   kapsel(h,haut,-sx*0.036,0.008,0.02,0.015,0.055).rotation.z=sx*0.6;                                   // Daumen
    return a;});
-  /* etwas in der Hand (beim Greifen sichtbar) */
   const ding=stueck(haende[1],GB,['#E9573F','#3BAFDA','#F6BB42','#8CC152'][(o.haut.length+hemd.charCodeAt(2))%4],0,-0.06,0.03,0.07,0.1,0.05);ding.visible=false;
   if(o.korb){const kb=new THREE.Group();kb.position.set(0,-0.06,0.08);haende[0].add(kb);stueck(kb,GB,'#D93B2B',0,-0.08,0.05,0.26,0.14,0.2);stueck(kb,GT2,'#A82A1E',0,0.0,0.05,0.12,0.12,0.12,0,Math.PI/2);}
-  if(o.schuerze){stueck(k,GB,o.schuerze,0,1.12,0.135,0.3,0.42,0.02);stueck(k,GB,'#FFFFFF',0.08,1.3,0.148,0.07,0.03,0.005);}
+  if(o.schuerze){stueck(k,GB,o.schuerze,0,1.12,0.13,0.3,0.42,0.02);stueck(k,GB,'#FFFFFF',0.08,1.3,0.143,0.07,0.03,0.005);}
   let wagenGruppe=null;
   if(o.wagen){const W2=new Sammler();wagen(0,0.92,0,W2);wagenGruppe=W2.mesh(matFarbe);g.add(wagenGruppe);}
   const sch=new THREE.Mesh(GSchatten,rundSchatten);sch.rotation.x=-Math.PI/2;sch.position.y=0.007;sch.scale.setScalar(o.kind?0.5:0.7);g.add(sch);
-  g.userData={k,beine,arme,ellbogen,haende,kopf,ding,amt:0,wagen:!!o.wagen};
+  g.userData={k,beine,knie,fuesse,arme,ellbogen,haende,kopf,augen,ding,amt:0,wagen:!!o.wagen,versatz:(o.haut.charCodeAt(2)+hemd.charCodeAt(3))%17,kopfYaw:0};
   return g;
  }
- /* Grundhaltung, dann Gehen; Posen ueberschreiben danach die Arme */
+ /* Zeit und Spielerpositionen fuer Blinzeln und Hinschauen (in welt3d gesetzt) */
+ let ZEIT=0,SPIELER=[];
+ /* Grundhaltung und Gehen: Oberschenkel pendeln, Knie beugen sich beim Vorschwingen,
+    Fuesse rollen ab, Huefte schwingt leicht, Arme pendeln gegengleich. */
  function bewege(m,phase,ziel,dt){
-  const u=m.userData;u.amt+=(ziel-u.amt)*Math.min(1,dt*8);const a=u.amt,s1=Math.sin(phase);
-  u.beine[0].rotation.x=s1*0.55*a;u.beine[1].rotation.x=-s1*0.55*a;
-  u.arme[0].rotation.set(-s1*0.45*a,0,-0.08);u.arme[1].rotation.set(s1*0.45*a,0,0.08);
-  u.ellbogen[0].rotation.x=-0.15-0.25*a*Math.max(0,-s1);u.ellbogen[1].rotation.x=-0.15-0.25*a*Math.max(0,s1);
-  u.k.position.y=Math.abs(Math.cos(phase))*0.03*a;u.k.rotation.x=0;u.ding.visible=false;
+  const u=m.userData;u.amt+=(ziel-u.amt)*Math.min(1,dt*8);const a=u.amt;
+  for(const i of [0,1]){const ph=phase+(i?Math.PI:0),sw=Math.sin(ph);
+   u.beine[i].rotation.x=sw*0.5*a;
+   u.knie[i].rotation.x=(0.08+0.75*Math.max(0,Math.sin(ph-0.9)))*a;
+   u.fuesse[i].rotation.x=(-sw*0.25-0.2*Math.max(0,Math.sin(ph-0.9)))*a;}
+  const s1=Math.sin(phase);
+  u.arme[0].rotation.set(-s1*0.42*a,0,-0.08);u.arme[1].rotation.set(s1*0.42*a,0,0.08);
+  u.ellbogen[0].rotation.x=-0.18-0.3*a*Math.max(0,-s1);u.ellbogen[1].rotation.x=-0.18-0.3*a*Math.max(0,s1);
+  u.k.position.y=Math.abs(Math.cos(phase))*0.028*a+Math.sin(ZEIT*1.6+u.versatz)*0.004*(1-a);   // Schritt / Atmen
+  u.k.rotation.set(0,Math.sin(phase)*0.07*a,Math.sin(phase)*0.035*a);
+  u.ding.visible=false;
+  /* Blinzeln: alle paar Sekunden kurz die Augen zu */
+  const z=(ZEIT+u.versatz*0.37)%3.8,zu=z<0.12?0.15:1;u.augen[0].scale.y=u.augen[1].scale.y=zu;
+  /* Hinschauen: Kopf dreht sich zur naechsten Spielfigur in der Naehe */
+  let gw=0;
+  if(SPIELER.length&&m.visible){const p=m.getWorldPosition(_v);let best=null;
+   for(const sp of SPIELER){const d=Math.hypot(sp.x-p.x,sp.z-p.z);if(d<3.2&&d>0.4&&(!best||d<best.d))best={d,sp};}
+   if(best){const welt=Math.atan2(best.sp.x-p.x,best.sp.z-p.z);let r=welt-m.rotation.y;r=Math.atan2(Math.sin(r),Math.cos(r));if(Math.abs(r)<1.6)gw=Math.max(-0.9,Math.min(0.9,r));}}
+  u.kopfYaw+=(gw-u.kopfYaw)*Math.min(1,dt*4);u.kopf.rotation.set(0,u.kopfYaw,0);
   if(u.wagen)schieben(m);
  }
- /* Schieben: Schulter (y 1.43) -> Ellbogen 0,30 m -> Hand 0,31 m. Oberarm 20 Grad,
-    Unterarm weitere 52 Grad nach vorn: Hand auf y ~1,05 und 0,40 m vor dem Koerper =
-    Griff des Wagens (Wagen bei z 0,92, Griff 0,52 davor auf 1,0 m Hoehe). */
+ /* Gesten im Stehen. f: 0..1..0 */
+ function geste(m,art,f){
+  const u=m.userData;
+  if(art==='uhr'){u.arme[0].rotation.set(-1.1*f,0.3*f,-0.08);u.ellbogen[0].rotation.x=-0.18-1.5*f;u.kopf.rotation.x=0.35*f;u.kopf.rotation.y*=1-f;}
+  if(art==='kratzen'){u.arme[1].rotation.set(-0.4*f,0,0.08+2.3*f);u.ellbogen[1].rotation.x=-0.18-1.6*f;u.haende[1].rotation.z=Math.sin(ZEIT*14)*0.3*f;u.kopf.rotation.z=-0.12*f;}
+  if(art==='denken'){u.arme[1].rotation.set(-0.9*f,0,0.15*f);u.ellbogen[1].rotation.x=-0.18-1.9*f;u.kopf.rotation.x=-0.12*f;}
+ }
  function schieben(m){const u=m.userData;for(const i of [0,1]){u.arme[i].rotation.set(-0.35,0,0);u.ellbogen[i].rotation.x=-0.9;}u.k.rotation.x=0;}
  /* f: 0 ... 1 ... 0 waehrend des Greifens; ab der Mitte liegt etwas in der Hand */
  function greifen(m,f,hand){const u=m.userData;u.arme[1].rotation.x=-1.25*f;u.arme[1].rotation.z=0.08+0.1*f;u.ellbogen[1].rotation.x=-0.15-0.35*f;u.k.rotation.x=0.05*f;
@@ -780,12 +818,12 @@ export function init(canvas,welt,opts={}){
  function welt3d(st,t){
   const dt=Math.max(0,Math.min(0.1,t-tAlt));tAlt=t;
   /* Tueren oeffnen sich, wenn jemand nah ist */
-  const leute=st.views||[st];
+  const leute=st.views||[st];ZEIT=t;SPIELER=leute;
   const nah=leute.some(v=>Math.hypot(v.x-(welt.TUER.x1+welt.TUER.x2)/2,v.z-welt.D)<3.6);
   for(const tg of tueren){const ziel=nah?tg.userData.auf:tg.userData.zu;tg.position.x+=(ziel-tg.position.x)*0.12;}
   /* Kassiererin winkt, wenn jemand in der Naehe ist */
   const k=welt.KASSEN[0],dk=Math.min(...leute.map(v=>Math.hypot(v.x-k.x1,v.z-(k.z1+k.z2)/2))),ku=kassiererin.userData;
-  bewege(kassiererin,0,0,dt);ku.kopf.rotation.set(0,Math.sin(t*0.7)*0.2,0);
+  bewege(kassiererin,0,0,dt);
   if(st.kasse)scannen(kassiererin,t);
   else if(dk<5){ku.arme[1].rotation.z=2.4+Math.sin(t*7)*0.35;ku.ellbogen[1].rotation.x=-0.3;}
   else if(Math.sin(t*0.35)>0.55)scannen(kassiererin,t);
@@ -798,7 +836,11 @@ export function init(canvas,welt,opts={}){
   kl.forEach(q=>{const look=q.look!=null?q.look:q.nr,m=kundenFigur(look);sichtbar.add(look);m.visible=true;m.position.set(q.x,0,q.z);
    const ziel=Math.PI-q.yaw;let d=ziel-m.rotation.y;d=Math.atan2(Math.sin(d),Math.cos(d));m.rotation.y+=d*Math.min(1,dt*6);
    bewege(m,q.phase||0,q.geht?1:0,dt);
-   if(q.greift&&q.griffStart){const p=1-Math.max(0,q.warte)/q.griffStart,f=Math.sin(Math.PI*Math.min(1,p*1.4));greifen(m,Math.max(0,f),p>0.35);}});
+   if(q.greift&&q.griffStart){const p=1-Math.max(0,q.warte)/q.griffStart,f=Math.sin(Math.PI*Math.min(1,p*1.4));greifen(m,Math.max(0,f),p>0.35);}
+   else if(!q.geht&&!q.wagen&&m.userData.amt<0.2){
+    /* Gesten im Stehen: abwechselnd, je Person zeitversetzt, jeweils 4 s von 9 s */
+    const z=(t+m.userData.versatz*1.3)%9,art=['uhr','kratzen','denken'][Math.floor((t+m.userData.versatz*1.3)/9+look)%3];
+    if(z<4)geste(m,art,Math.sin(Math.PI*z/4));}});
   for(const [look,m] of Object.entries(kunden))if(!sichtbar.has(+look))m.visible=false;
  }
  function kamera(v,aspect){
