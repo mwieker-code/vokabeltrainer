@@ -5,7 +5,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Basecamp">
 <meta name="theme-color" content="#0D1017"><title>Shopping Trip · Year 6</title>
-<link rel="stylesheet" href="../../assets/fonts.css?v=2"><link rel="stylesheet" href="style.css?v=20261126-ton">
+<link rel="stylesheet" href="../../assets/fonts.css?v=2"><link rel="stylesheet" href="style.css?v=20261126-duell">
 </head><body><main class="shop">
 <section id="menu">
  <header><a href="../games/">← Games</a><span>SHOPPING TRIP · YEAR 6</span></header>
@@ -23,7 +23,7 @@
   <button data-modus="rezept" class="m-rezept"><span class="m-icon" aria-hidden="true">🍳</span><span class="m-text"><span class="m-name">Recipe mission</span><span class="m-info">Read a recipe and buy all the ingredients.</span><span class="m-best" data-best="rezept"></span></span></button>
   <button data-modus="wo" class="m-wo"><span class="m-icon" aria-hidden="true">🙋</span><span class="m-text"><span class="m-name">Where is …?</span><span class="m-info">You work in the shop: say where things are and show them to the customers.</span><span class="m-best" data-best="wo"></span></span></button>
   <button data-modus="detektiv" class="m-detektiv"><span class="m-icon" aria-hidden="true">🔍</span><span class="m-text"><span class="m-name">Price detective</span><span class="m-info">Solve riddles with <i>cheaper than</i> and <i>the cheapest</i>.</span><span class="m-best" data-best="detektiv"></span></span></button>
-  <button data-modus="duell" class="m-duell"><span class="m-icon" aria-hidden="true">🏆</span><span class="m-text"><span class="m-name">Team duel</span><span class="m-info">For the whiteboard: two teams take turns and find things against the clock.</span></span></button>
+  <button data-modus="duell" class="m-duell"><span class="m-icon" aria-hidden="true">🏆</span><span class="m-text"><span class="m-name">Team duel</span><span class="m-info">For the whiteboard: two teams play against the clock – Find it, Customer service or Price war.</span></span></button>
   <button data-modus="frei" class="m-frei"><span class="m-icon" aria-hidden="true">🧭</span><span class="m-text"><span class="m-name">Look around</span><span class="m-info">Walk around the shop and look at the prices – no task.</span></span></button>
  </div>
 
@@ -32,6 +32,9 @@
   <fieldset><legend>Shopping list</legend>
    <label><input type="radio" name="laenge" value="kurz" checked> Short: 5 things</label>
    <label><input type="radio" name="laenge" value="lang"> Long: 7 things, also with numbers <i>(two, three …)</i></label>
+  </fieldset>
+  <fieldset><legend>The shop</legend>
+   <label class="schalter"><input type="checkbox" id="mischen" checked> Shuffle day: the shop looks different in every game</label>
   </fieldset>
   <fieldset><legend>Price tags on the shelves</legend>
    <label><input type="radio" name="schild" value="leicht" checked> With the name of the product</label>
@@ -44,6 +47,7 @@
    <label class="name">Your name for the receipt <input type="text" id="name" maxlength="30" autocomplete="off" placeholder="First name"></label>
   </fieldset>
   <fieldset id="duellEinst"><legend>Team duel</legend>
+   <label>Duel type <select id="duellArt"><option value="finden">Find it – find the product</option><option value="kunde">Customer service – help the customers</option><option value="preis">Price war – shop cheaply with a budget</option></select></label>
    <div class="teams"><label>Team 1 <input type="text" id="team1" maxlength="18" value="Team Red"></label><label>Team 2 <input type="text" id="team2" maxlength="18" value="Team Blue"></label></div>
    <label>Rounds per team <select id="runden"><option>3</option><option selected>4</option><option>5</option></select></label>
    <label>Time per round <select id="frist"><option value="60">60 s</option><option value="90" selected>90 s</option><option value="120">120 s</option></select></label>
@@ -69,6 +73,9 @@
    <li><b>Recipe mission:</b> Das Rezept gemeinsam lesen und vorher sammeln lassen: <i lang="en">What do we need?</i> Danach im Laden einkaufen.</li>
    <li><b>Where is …?</b> Die Klasse wählt die Antwort, ein Kind läuft an der Tafel hin und zeigt die Ware. Gut zum Üben von <i lang="en">next to, between, at the back</i>.</li>
    <li><b>Price detective:</b> In Partnerarbeit eigene Rätsel nach dem Muster schreiben: <i lang="en">I'm in aisle 2. I'm cheaper than … but more expensive than …</i></li>
+   <li><b>Shuffle day</b> (Einstellungen): Die Abteilungen stehen bei jedem Spiel woanders. Die Kinder müssen die englischen Gangschilder lesen, statt sich Wege zu merken.</li>
+   <li><b>Team duel · Customer service:</b> Kundschaft beschreibt ein Problem (<i lang="en">My kitchen is dirty …</i>), die Teams suchen eine passende Ware. Danach gut für eigene Kundenanliegen in Partnerarbeit.</li>
+   <li><b>Team duel · Price war:</b> Beide Teams kaufen denselben Zettel mit Budget ein – vollständig und am günstigsten gewinnt. Im Splitscreen gleichzeitig: ✕/A nehmen, ○/B zurücklegen, □/X fertig.</li>
    <li><b>Budget challenge:</b> Hinterher die Sätze auf dem Ergebnis nutzen: <i lang="en">The water is cheaper than the lemonade.</i></li>
    <li><b>Hausaufgabe:</b> Eine Runde spielen, den Kassenbon mit Namen speichern oder ausdrucken und abgeben.</li>
   </ul>
@@ -124,7 +131,7 @@
 </section>
 <section id="over" hidden></section>
 </main>
-<script src="daten.js?v=20261126-ton"></script><script src="bild.js?v=20261126-ton"></script><script src="logik.js?v=20261126-ton"></script><script src="musik.js?v=20261126-ton"></script><script src="spiel.js?v=20261126-ton"></script>
-<script type="module" src="render.js?v=20261126-ton"></script>
+<script src="daten.js?v=20261126-duell"></script><script src="bild.js?v=20261126-duell"></script><script src="logik.js?v=20261126-duell"></script><script src="musik.js?v=20261126-duell"></script><script src="spiel.js?v=20261126-duell"></script>
+<script type="module" src="render.js?v=20261126-duell"></script>
 <script src="../../assets/feedback.js"></script>
 </body></html>

@@ -8,6 +8,7 @@ const html=fs.readFileSync(path.join(dir,'index.html'),'utf8');
 const dom=new JSDOM(html,{runScripts:'outside-only',url:'https://example.org/year6/shop/',virtualConsole:new VirtualConsole()});
 for(const f of ['daten.js','bild.js','logik.js','spiel.js'])dom.window.eval(fs.readFileSync(path.join(dir,f),'utf8'));
 const w=dom.window,d=w.document,L=w.ShopLogik,S=w.ShopSpiel,welt=S.welt,DAT=w.SHOP_DATEN,G=S.G;
+d.getElementById('mischen').checked=false;   // feste Anordnung fuer die Tests; Shuffle day wird unten eigens geprueft
 const fassung=JSON.parse(fs.readFileSync(path.join(root,'fassung.json'),'utf8')).fassung;
 
 /* Seite */
@@ -162,7 +163,7 @@ for(const x of DAT.WAREN){
  ok(/^Excuse me, where (is|are) the .+\?$/.test(L.kundenFrage(welt,x.id)),x.id+': Kundenfrage');
 }
 ok(L.kundenFrage(welt,'apple')==='Excuse me, where are the apples?'&&L.kundenFrage(welt,'honey')==='Excuse me, where is the honey?','is / are');
-ok(L.lageSatz(welt,'cola')==='It\'s in aisle 1, between the lemonade and the apple juice.','Beispiel: Cola');
+ok(L.lageSatz(welt,'cola')==='It\'s in aisle 2, between the lemonade and the apple juice.','Beispiel: Cola');
 /* Raetsel: genau eine Ware im Bereich passt */
 for(let k=0;k<200;k++){
  const q=L.raetsel(welt,rnd);ok(q&&welt.byId[q.id],'Raetsel erzeugt');
@@ -295,6 +296,68 @@ ok(DAT.WAREN.find(x=>x.id==='milk').form==='milch','Milch als Flasche mit Griff'
  d.getElementById('tonAus').dispatchEvent(new w.Event('pointerdown',{bubbles:true}));S.tonHinweis();
  ok(w.ShopMusik.geweckt&&d.getElementById('tonAus').hidden,'Antippen schaltet den Ton frei');
  delete w.ShopMusik;S.menu();}
+
+/* ---------- Shuffle day ---------- */
+{const lagen=new Set();
+ for(let k=1;k<=12;k++){const m=L.bauen(DAT,{mischen:k*7919});lagen.add(m.layout);
+  const e=L.erreichbar(m);
+  ok(m.plaetze.length===DAT.WAREN.length&&m.plaetze.every(p=>p.vorne.some(v=>e(v.x,v.z))),'Shuffle '+k+': alle Waren erreichbar');
+  ok(m.plaetze.filter(p=>p.ort==='kuehl').every(p=>p.seite.art==='kuehl')&&m.plaetze.filter(p=>p.ort==='tiefkuehl').every(p=>p.seite.art==='tiefkuehl'),'Shuffle '+k+': Kuehlware bleibt im Kuehlregal');
+  ok(m.GAENGE.length===5&&m.GAENGE.every(g=>g.orte.length>=1),'Shuffle '+k+': fuenf Gaenge mit Abteilungen');
+  ok(m.plaetze.every(p=>/^It's in /.test(L.wo(m,p.id))),'Shuffle '+k+': Ortsangaben');
+  for(let r=0;r<20;r++){const q=L.raetsel(m,L.zufall(k*100+r));const b=L.bereich(m,q.id),gr=m.waren.filter(x=>L.bereich(m,x.id).key===b.key);
+   if(/the cheapest/.test(q.text))ok(gr.every(y=>y.p>=m.byId[q.id].p),'Shuffle-Raetsel eindeutig');}}
+ ok(lagen.size>=10,'Shuffle day: jedes Mal eine andere Anordnung');
+ d.getElementById('mischen').checked=true;S.start('frei');const l1=S.welt.layout;S.start('frei');
+ ok(S.welt.layout!==l1&&S.welt.gemischt,'Spielstart mit Shuffle day mischt neu');
+ d.getElementById('mischen').checked=false;S.start('frei');ok(!S.welt.gemischt&&S.welt.layout===welt.layout,'ohne Shuffle day: feste Anordnung');S.menu();}
+
+/* ---------- Team duel: Customer service ---------- */
+{const ids=new Set(DAT.WAREN.map(x=>x.id));
+ ok(DAT.WUENSCHE.length>=15&&DAT.WUENSCHE.every(x=>x.aus.length&&x.aus.every(i=>ids.has(i))&&/[.?!]$/.test(x.sagt)),'Kundenanliegen vollstaendig');
+ ok(DAT.WUENSCHE.every(x=>x.aus.every(i=>!new RegExp('\\b'+DAT.WAREN.find(y=>y.id===i).schild.toLowerCase()+'\\b').test(x.sagt.toLowerCase()))),'Anliegen nennen die Ware nicht beim Namen');
+ d.getElementById('duellArt').value='kunde';d.getElementById('duellSplit').checked=false;d.getElementById('runden').value='3';
+ S.start('duell',L.zufall(31));const D=G.duell;
+ ok(D.typ==='kunde'&&D.aufgaben.length===6&&/Find something that helps/.test(d.getElementById('ansage').textContent),'Customer service: Ansage mit Anliegen');
+ S.duellLos();const zweite=D.ziel.aus[D.ziel.aus.length-1];
+ ok(S.duellWahl(zweite)&&D.phase==='bonus'&&D.teams[0].punkte>=100,'Customer service: jede passende Ware zaehlt');
+ S.duellBonusAntwort('x');S.duellWeiter();S.duellLos();
+ const falsch=DAT.WAREN.find(x=>!D.ziel.aus.includes(x.id)).id;S.duellWahl(falsch);
+ ok(D.teams[1].punkte===0&&/Good ideas:/.test(d.getElementById('ansage').textContent),'Customer service: falsche Ware, gute Ideen werden gezeigt');}
+
+/* ---------- Team duel: Price war ---------- */
+{d.getElementById('duellArt').value='preis';d.getElementById('runden').value='3';
+ S.start('duell',L.zufall(41));const D=G.duell;
+ ok(D.typ==='preis'&&D.aufgaben.length===3&&D.frist>=120,'Price war: drei Auftraege, mehr Zeit');
+ ok(/Buy:/.test(d.getElementById('ansage').textContent),'Price war: Ansage mit Einkaufszettel');
+ S.duellLos();
+ ok(!d.getElementById('zettel').hidden&&!d.getElementById('zBudget').hidden&&d.getElementById('pFertig'),'Price war: Budget-Zettel und Fertig-Knopf');
+ /* Team 1 kauft die billigste Loesung */
+ const A=D.ziel;for(const g of A.gruppen){const b=g.aus.map(id=>welt.byId[id]).sort((x,y)=>x.p-y.p)[0];for(let i=0;i<(g.n||1);i++){S.oeffneWare(b.id);d.getElementById('wNehmen').click();}}
+ const soll=100+Math.round((A.budget-L.minimum(welt,A))/5);
+ d.getElementById('pFertig').click();
+ ok(D.teams[0].punkte===soll&&/points/.test(d.getElementById('ansage').textContent),'Price war: Punkte = 100 + gespartes Geld ('+soll+')');
+ S.duellWeiter();ok(D.ziel===A&&L.korbAnzahl(G.korb)===0,'Price war: Team 2 bekommt denselben Zettel und einen leeren Korb');
+ S.duellLos();
+ for(const g of A.gruppen){const t=g.aus.map(id=>welt.byId[id]).sort((x,y)=>y.p-x.p)[0];for(let i=0;i<(g.n||1);i++)S.nehmen(t.id,1);}
+ d.getElementById('pFertig').click();
+ ok(D.teams[1].punkte<D.teams[0].punkte,'Price war: teurer einkaufen gibt weniger Punkte');
+ ok(/cheaper than/.test(d.getElementById('ansage').textContent)||L.vergleiche(welt,L.budgetStand(welt,A,G.korb)).every(v=>v.gut),'Price war: Tipp mit cheaper than');
+ S.menu();d.getElementById('duellArt').value='finden';}
+/* Price war im Splitscreen: beide gleichzeitig, B legt zurueck, X ist fertig */
+{S.padQuelle(()=>FAKE.slice(0,2));S.padTick();
+ d.getElementById('duellArt').value='preis';d.getElementById('duellSplit').checked=true;d.getElementById('runden').value='3';
+ S.start('duell',L.zufall(51));const D=G.duell;
+ ok(D.split&&D.typ==='preis'&&D.aufgaben.length===3,'Price war Splitscreen: drei gemeinsame Runden');
+ S.duellLos();const A=D.ziel;
+ const vor=(p,q)=>{const v=q.vorne[0];Object.assign(p,{x:v.x,z:v.z,pitch:-0.25,yaw:Math.atan2((q.x1+q.x2)/2-v.x,-((q.z1+q.z2)/2-v.z))});};
+ for(const g of A.gruppen){const b=g.aus.map(id=>welt.byId[id]).sort((x,y)=>x.p-y.p)[0],q=welt.plaetze.find(x=>x.id===b.id);
+  for(let i=0;i<(g.n||1);i++){vor(G.p,q);S.update(0.01,ohne);ok(S.splitNehmen(0),'Team 1 nimmt '+b.id);}}
+ const g0=A.gruppen[0],t=welt.plaetze.find(x=>x.id===g0.aus[0]);vor(G.p2,t);S.update(0.01,ohne);S.splitNehmen(1);S.splitNehmen(1);
+ druck(1,K_.B);ok(L.korbAnzahl(D.koerbe[1])===1,'Kreis/B legt die letzte Ware zurueck');
+ druck(0,K_.X);ok(D.fertig[0]&&D.phase==='suche','Team 1 ist fertig, Team 2 sucht weiter');
+ druck(1,K_.X);ok(D.phase==='ergebnis'&&D.teams[0].punkte>D.teams[1].punkte&&/wins this round/.test(d.getElementById('ansage').textContent),'beide fertig: Wertung, Team 1 gewinnt die Runde');
+ S.menu();d.getElementById('duellArt').value='finden';d.getElementById('duellSplit').checked=false;S.padQuelle(()=>[]);}
 
 /* Spieleseite */
 const hub=fs.readFileSync(path.join(root,'year6/games/index.html'),'utf8');

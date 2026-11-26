@@ -17,36 +17,45 @@ const GONDEL=[9.5,14.5,19.5,24.5], GT=0.6, GZ1=4, GZ2=15, GH=1.95;
 const SEITEN=[
  {ort:'obst',       achse:'z', a:3,  b:15, x1:0,      x2:1.3,    nx:1,  nz:0, h:1.25, art:'kisten'},
  {ort:'gemuese',    achse:'z', a:5,  b:13, x1:4,      x2:6.2,    nx:1,  nz:0, h:0.95, art:'insel'},
- {ort:'baeckerei',  achse:'z', a:GZ1,b:GZ2,x1:GONDEL[0]-GT,x2:GONDEL[0],nx:-1,nz:0,h:GH,art:'holz'},
- {ort:'getraenke',  achse:'z', a:GZ1,b:GZ2,x1:GONDEL[0],x2:GONDEL[0]+GT,nx:1,nz:0,h:GH,art:'regal'},
- {ort:'fruehstueck',achse:'z', a:GZ1,b:GZ2,x1:GONDEL[1]-GT,x2:GONDEL[1],nx:-1,nz:0,h:GH,art:'regal'},
- {ort:'snacks',     achse:'z', a:GZ1,b:GZ2,x1:GONDEL[1],x2:GONDEL[1]+GT,nx:1,nz:0,h:GH,art:'regal'},
- {ort:'kochen',     achse:'z', a:GZ1,b:GZ2,x1:GONDEL[2]-GT,x2:GONDEL[2],nx:-1,nz:0,h:GH,art:'regal'},
- {ort:'dosen',      achse:'z', a:GZ1,b:GZ2,x1:GONDEL[2],x2:GONDEL[2]+GT,nx:1,nz:0,h:GH,art:'regal'},
- {ort:'haushalt',   achse:'z', a:GZ1,b:GZ2,x1:GONDEL[3]-GT,x2:GONDEL[3],nx:-1,nz:0,h:GH,art:'regal'},
- {ort:'pflege',     achse:'z', a:GZ1,b:GZ2,x1:GONDEL[3],x2:GONDEL[3]+GT,nx:1,nz:0,h:GH,art:'regal'},
+ {ort:'baeckerei',  achse:'z', a:GZ1,b:GZ2,x1:GONDEL[0]-GT,x2:GONDEL[0],nx:-1,nz:0,h:GH,art:'holz',gang:1},
+ {ort:'getraenke',  achse:'z', a:GZ1,b:GZ2,x1:GONDEL[0],x2:GONDEL[0]+GT,nx:1,nz:0,h:GH,art:'regal',gang:2},
+ {ort:'fruehstueck',achse:'z', a:GZ1,b:GZ2,x1:GONDEL[1]-GT,x2:GONDEL[1],nx:-1,nz:0,h:GH,art:'regal',gang:2},
+ {ort:'snacks',     achse:'z', a:GZ1,b:GZ2,x1:GONDEL[1],x2:GONDEL[1]+GT,nx:1,nz:0,h:GH,art:'regal',gang:3},
+ {ort:'kochen',     achse:'z', a:GZ1,b:GZ2,x1:GONDEL[2]-GT,x2:GONDEL[2],nx:-1,nz:0,h:GH,art:'regal',gang:3},
+ {ort:'dosen',      achse:'z', a:GZ1,b:GZ2,x1:GONDEL[2],x2:GONDEL[2]+GT,nx:1,nz:0,h:GH,art:'regal',gang:4},
+ {ort:'haushalt',   achse:'z', a:GZ1,b:GZ2,x1:GONDEL[3]-GT,x2:GONDEL[3],nx:-1,nz:0,h:GH,art:'regal',gang:4},
+ {ort:'pflege',     achse:'z', a:GZ1,b:GZ2,x1:GONDEL[3],x2:GONDEL[3]+GT,nx:1,nz:0,h:GH,art:'regal',gang:5},
  {ort:'kuehl',      achse:'x', a:2,  b:27, z1:0,      z2:1.0,    nx:0,  nz:1, h:2.1, art:'kuehl'},
- {ort:'tiefkuehl',  achse:'z', a:3,  b:15, x1:29,     x2:30,     nx:-1, nz:0, h:2.1, art:'tiefkuehl'}
+ {ort:'tiefkuehl',  achse:'z', a:3,  b:15, x1:29,     x2:30,     nx:-1, nz:0, h:2.1, art:'tiefkuehl',gang:5}
 ];
-/* Gaenge: Schild ueber dem Gang, links und rechts eine Regalseite */
-const GAENGE=[
- {nr:1, x:(GONDEL[0]+GT+GONDEL[1]-GT)/2, orte:['getraenke','fruehstueck']},
- {nr:2, x:(GONDEL[1]+GT+GONDEL[2]-GT)/2, orte:['snacks','kochen']},
- {nr:3, x:(GONDEL[2]+GT+GONDEL[3]-GT)/2, orte:['dosen','haushalt']},
- {nr:4, x:(GONDEL[3]+GT+29)/2,           orte:['pflege','tiefkuehl']}
-];
+/* Gaenge: Schild ueber dem Gang; welche Abteilungen dort stehen, ergibt
+   sich aus den Regalseiten (siehe bauen, wegen "Shuffle day"). */
+const GANG_X=[(6.2+GONDEL[0]-GT)/2,(GONDEL[0]+GT+GONDEL[1]-GT)/2,(GONDEL[1]+GT+GONDEL[2]-GT)/2,(GONDEL[2]+GT+GONDEL[3]-GT)/2,(GONDEL[3]+GT+29)/2];
 /* Kassen: Band von z 18 bis 21, Kundenseite im Westen. Kasse 1 ist besetzt. */
 const KASSEN=[14,18.5,23].map((x,k)=>({nr:k+1,x1:x,x2:x+0.9,z1:18,z2:21,offen:k===0}));
 const KASSEN_ZONE={x1:12.4,x2:14,z1:17.4,z2:21.6};
 const START={x:5,z:22.3,yaw:0};
 const TUER={x1:3,x2:7};
 
-function bauen(daten){
+/* bauen(daten, {mischen: zahl}) - mit "mischen" ist "Shuffle day": Die
+   Abteilungen der acht Regalseiten werden neu verteilt, Obst und Gemuese
+   tauschen vielleicht die Plaetze, die Waren stehen in neuer Reihenfolge.
+   Kuehl- und Tiefkuehlregal bleiben, wo sie sind. */
+function bauen(daten,opt){
+ opt=opt||{};
  const waren=daten.WAREN, byId={};
  waren.forEach(w=>byId[w.id]=w);
+ const seiten=SEITEN.map(s=>({...s})),rnd=opt.mischen?zufall(opt.mischen):null;
+ if(rnd){
+  const regal=seiten.filter(s=>s.art==='regal'||s.art==='holz'),orte=mischen(regal.map(s=>s.ort),rnd);
+  regal.forEach((s,k)=>{s.ort=orte[k];s.art=s.ort==='baeckerei'?'holz':'regal';});
+  if(rnd()<0.5){const a=seiten.find(s=>s.art==='kisten'),b=seiten.find(s=>s.art==='insel');[a.ort,b.ort]=[b.ort,a.ort];}
+ }
+ const GAENGE=GANG_X.map((x,k)=>({nr:k+1,x,orte:seiten.filter(s=>s.gang===k+1).map(s=>s.ort)}));
  const plaetze=[];
- for(const s of SEITEN){
-  const liste=waren.filter(w=>w.ort===s.ort),n=liste.length,len=(s.b-s.a)/n;
+ for(const s of seiten){
+  let liste=waren.filter(w=>w.ort===s.ort);if(rnd)liste=mischen(liste,rnd);
+  const n=liste.length,len=(s.b-s.a)/n;
   liste.forEach((w,k)=>{
    const a=s.a+k*len,b=a+len,m=(a+b)/2;
    const p={id:w.id,ort:s.ort,seite:s,a,b,y1:0,y2:s.h,nx:s.nx,nz:s.nz};
@@ -62,7 +71,7 @@ function bauen(daten){
  const box=(x1,z1,x2,z2,art)=>hin.push({x1,z1,x2,z2,art});
  box(-1,-1,W+1,0,'wand');box(-1,D,W+1,D+1,'wand');box(-1,-1,0,D+1,'wand');box(W,-1,W+1,D+1,'wand');
  box(0,0,2,1.0,'kuehl');box(27,0,W,1.0,'kuehl');            // Ecken neben den Kuehlregalen
- for(const s of SEITEN){
+ for(const s of seiten){
   if(s.achse==='z')box(s.x1,s.a,s.x2,s.b,s.art);else box(s.a,s.z1,s.b,s.z2,s.art);
  }
  for(const k of KASSEN){box(k.x1,k.z1,k.x2,k.z2,'kasse');box(k.x2,k.z1+1,k.x2+1.1,k.z2,'kabine');}
@@ -73,7 +82,8 @@ function bauen(daten){
  box(9.0,21.4,9.7,22.2,'tafel');                           // Kreidetafel mit Angeboten
  for(const gx of GONDEL)box(gx-GT,GZ2,gx+GT,GZ2+0.55,'aktion');   // Aktionsware vor jedem Regal
  box(0,23.6,W,D,'tuerfeld');                               // nicht hinaus
- return {W,D,R,AUGE,daten,waren,byId,plaetze,hin,SEITEN,GAENGE,KASSEN,KASSEN_ZONE,START,TUER,GONDEL,GT,GZ1,GZ2,GH};
+ const layout=plaetze.map(p=>p.id).join(',');
+ return {W,D,R,AUGE,daten,waren,byId,plaetze,hin,SEITEN:seiten,GAENGE,layout,gemischt:!!rnd,KASSEN,KASSEN_ZONE,START,TUER,GONDEL,GT,GZ1,GZ2,GH};
 }
 
 /* ---------- Bewegung ---------- */
@@ -298,16 +308,27 @@ function duellAufgaben(welt,n,rnd){
  return out;
 }
 /* Wo steht eine Ware? Ein englischer Satz fuer Hilfe und Duell. */
+function seiteVon(welt,id){return welt.plaetze.find(p=>p.id===id).seite;}
 function wo(welt,id){
- const w=welt.byId[id],g=welt.GAENGE.find(g=>g.orte.includes(w.ort)),name=welt.daten.ORTE[w.ort].en;
- if(w.ort==='kuehl')return 'It\'s in the fridge at the back of the shop.';
- if(w.ort==='tiefkuehl')return 'It\'s in the freezer in aisle 4.';
- if(w.ort==='obst'||w.ort==='gemuese')return 'It\'s in the '+name.toLowerCase()+' section on the left.';
- if(w.ort==='baeckerei')return 'It\'s at the bakery, next to the fruit and vegetables.';
- return 'It\'s in aisle '+g.nr+' ('+name+').';
+ const s=seiteVon(welt,id),name=welt.daten.ORTE[s.ort].en;
+ if(s.art==='kuehl')return 'It\'s in the fridge at the back of the shop.';
+ if(s.art==='tiefkuehl')return 'It\'s in the freezer in aisle '+s.gang+'.';
+ if(s.art==='kisten')return 'It\'s in the '+name.toLowerCase()+' section on the left.';
+ if(s.art==='insel')return 'It\'s in the '+name.toLowerCase()+' section, near aisle 1.';
+ return 'It\'s in aisle '+s.gang+' ('+name+').';
 }
 const ORTFARBE={obst:'#E9573F',gemuese:'#8CC152',baeckerei:'#C8863E',getraenke:'#3BAFDA',fruehstueck:'#F6BB42',snacks:'#D770AD',
  kochen:'#DA4453',dosen:'#967ADC',haushalt:'#37BC9B',pflege:'#4A89DC',kuehl:'#5DADE2',tiefkuehl:'#7FA6C9'};
+/* Customer service: n Anliegen in zufaelliger Reihenfolge */
+function wuensche(welt,n,rnd){const a=mischen(welt.daten.WUENSCHE,rnd||Math.random),out=[];for(let i=0;i<n;i++)out.push(a[i%a.length]);return out;}
+/* Price war: Punkte fuer einen Einkauf mit Budget. Alles da und im Budget:
+   100 Punkte plus 1 Punkt je 5p, die uebrig bleiben. Sonst Punkte je Gruppe. */
+function preisWertung(welt,auftrag,korb){
+ const st=budgetStand(welt,auftrag,korb),ok=st.gruppen.filter(g=>g.ok).length;
+ const voll=st.gruppen.every(g=>g.ok)&&!st.extra.length;
+ const punkte=voll&&st.imBudget?100+Math.round(st.rest/5):st.imBudget?15*ok:5*ok;
+ return {...st,ok,voll,punkte};
+}
 function duellPunkte(sekundenUebrig,frist){return 100+Math.max(0,Math.round(50*sekundenUebrig/frist));}
 
 /* ---------- Bon ---------- */
@@ -321,10 +342,10 @@ function sterne(anteil){return anteil>=0.9?3:anteil>=0.65?2:1;}
 /* Bereich einer Ware: Gang 1-4 (beide Regalseiten, Tiefkuehl zaehlt zu Gang 4)
    oder eine eigene Abteilung. */
 function bereich(welt,id){
- const w=welt.byId[id],g=welt.GAENGE.find(g=>g.orte.includes(w.ort));
- if(g)return {key:'g'+g.nr,text:'in aisle '+g.nr,ort:w.ort==='tiefkuehl'?'in the freezer in aisle '+g.nr:'in aisle '+g.nr};
- const T={kuehl:'in the fridge at the back',obst:'in the fruit section on the left',gemuese:'in the vegetable section',baeckerei:'at the bakery'};
- return {key:w.ort,text:T[w.ort],ort:T[w.ort]};
+ const s=seiteVon(welt,id),name=welt.daten.ORTE[s.ort].en.toLowerCase();
+ if(s.gang)return {key:'g'+s.gang,text:'in aisle '+s.gang,ort:s.art==='tiefkuehl'?'in the freezer in aisle '+s.gang:'in aisle '+s.gang};
+ const T={kuehl:'in the fridge at the back',kisten:'in the '+name+' section on the left',insel:'in the '+name+' section'};
+ return {key:s.art,text:T[s.art],ort:T[s.art]};
 }
 function istPlural(welt,id){return /s$/.test(welt.byId[id].schild);}
 function nachbarn(welt,id){
@@ -389,6 +410,6 @@ function erreichbar(welt,schritt){
 
 window.ShopLogik={bauen,frei,bewegen,inKassenZone,richtung,strahl,strahlBox,treffer,blickTreffer,
  betrag,preis,gross,menge,zufall,mischen,liste,korbAnzahl,korbSumme,listeStand,budgetStand,minimum,vergleiche,
- wechselOptionen,bezahlt,kassenSchritte,duellAufgaben,duellPunkte,wo,ORTFARBE,bon,sterne,erreichbar,AUGE,ZAHL,
+ wechselOptionen,bezahlt,kassenSchritte,duellAufgaben,duellPunkte,wuensche,preisWertung,seiteVon,wo,ORTFARBE,bon,sterne,erreichbar,AUGE,ZAHL,
  bahnen,kundschaft,kundschaftSchritt,wagenPunkt,bereich,istPlural,nachbarn,nachbarText,lageSatz,kundenFrage,lageOptionen,raetsel,rezeptStand};
 })();

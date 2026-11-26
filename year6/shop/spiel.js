@@ -5,7 +5,8 @@
    ========================================================================= */
 (function(){
 'use strict';
-const L=window.ShopLogik,DAT=window.SHOP_DATEN,welt=L.bauen(DAT);
+const L=window.ShopLogik,DAT=window.SHOP_DATEN;
+let welt=L.bauen(DAT);   // wird bei "Shuffle day" je Spiel neu gebaut
 const KEY='vt6:shop:v1',TEMPO=2.7,DREH=2.0,FOV=70,GREIF=4.6,KASSIERERIN='Amy';
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -36,8 +37,9 @@ function einstellungen(){
  G.lang=wert('laenge')==='lang';G.profi=wert('schild')==='profi';
  G.tafel=!!($('tafel')&&$('tafel').checked);
  G.schoen=!$('schoen')||$('schoen').checked;
+ G.mischen=!!($('mischen')&&$('mischen').checked);
  G.name=($('name')&&$('name').value.trim())||'';
- const d=laden();d.einst={schoen:G.schoen,lang:G.lang,profi:G.profi,tafel:G.tafel,name:G.name,
+ const d=laden();d.einst={mischen:G.mischen,duellArt:$('duellArt')?$('duellArt').value:'finden',schoen:G.schoen,lang:G.lang,profi:G.profi,tafel:G.tafel,name:G.name,
   team1:$('team1')?$('team1').value:'',team2:$('team2')?$('team2').value:'',runden:$('runden')?$('runden').value:'4',frist:$('frist')?$('frist').value:'90',duellHoeren:!!($('duellHoeren')&&$('duellHoeren').checked),duellSplit:!!($('duellSplit')&&$('duellSplit').checked)};
  sichern(d);
 }
@@ -47,7 +49,7 @@ function einstellungenLaden(){
  if(!e){try{if($('schoen')&&typeof screen!=='undefined'&&('ontouchstart' in window)&&Math.min(screen.width,screen.height)<600)$('schoen').checked=false;}catch(_){}return;}
  const setze=(n,v)=>{const el=document.querySelector('input[name="'+n+'"][value="'+v+'"]');if(el)el.checked=true;};
  setze('laenge',e.lang?'lang':'kurz');setze('schild',e.profi?'profi':'leicht');
- if($('tafel'))$('tafel').checked=!!e.tafel;if($('schoen')&&e.schoen!==undefined)$('schoen').checked=!!e.schoen;if($('name'))$('name').value=e.name||'';
+ if($('tafel'))$('tafel').checked=!!e.tafel;if($('mischen')&&e.mischen!==undefined)$('mischen').checked=!!e.mischen;if($('duellArt')&&e.duellArt)$('duellArt').value=e.duellArt;if($('schoen')&&e.schoen!==undefined)$('schoen').checked=!!e.schoen;if($('name'))$('name').value=e.name||'';
  if($('team1')&&e.team1)$('team1').value=e.team1;if($('team2')&&e.team2)$('team2').value=e.team2;
  if($('runden')&&e.runden)$('runden').value=e.runden;if($('frist')&&e.frist)$('frist').value=e.frist;
  if($('duellHoeren'))$('duellHoeren').checked=!!e.duellHoeren;
@@ -59,6 +61,9 @@ function zeige(id){for(const s of ['menu','stage','over'])if($(s))$(s).hidden=s!
 function start(modus,rnd){
  einstellungen();
  G.split=false;G.p2=null;G.hover2=null;G.sperre=[0,0];document.body.classList.remove('split');
+ /* Shuffle day: bei jedem Spiel eine neue Anordnung */
+ const neu=G.mischen?L.bauen(DAT,{mischen:1+Math.floor((rnd||Math.random)()*2147483000)}):(welt.gemischt?L.bauen(DAT):welt);
+ if(neu!==welt){welt=neu;plan=null;if(R){try{R.weg();}catch(e){}R=null;}}
  G.modus=modus;G.korb={};G.liste=null;G.auftrag=null;G.kasse=null;G.duell=null;G.ergebnis=null;G.ware=null;G.hover=null;G.gelaufen=0;G.t=0;
  Object.assign(G.p,{x:welt.START.x,z:welt.START.z,yaw:welt.START.yaw,pitch:0});
  G.leute=L.kundschaft(welt,G.schoen?6:3,rnd);
@@ -77,7 +82,7 @@ function start(modus,rnd){
  G.mission=null;if(MISSIONEN.includes(modus))missionStart(modus,rnd);
  zettel();korbKnopf();
  if(R&&R.setProfi)R.setProfi(G.profi);
- starte3d();
+ if(!R){const l=$('laden');if(l){l.hidden=false;l.textContent=G.mischen?'Shuffle day! The shop looks different today …':'Loading 3D …';}setTimeout(starte3d,60);}else starte3d();
  if(modus==='hoeren'||modus==='wo')setTimeout(()=>vorlesen(),600);
 }
 function menu(){
@@ -90,12 +95,12 @@ function menu(){
 /* ---------------- Zettel (Liste oder Budget) ---------------- */
 function zettel(){
  const box=$('zettel');if(!box)return;
- box.hidden=G.modus==='frei'||G.modus==='duell';
+ box.hidden=G.modus==='frei'||(G.modus==='duell'&&!(preisDuell()&&!G.split));
  $('duell').hidden=G.modus!=='duell';
  if(box.hidden)return;
  const ul=$('zListe'),bud=$('zBudget');
  $('woerter').innerHTML=DAT.WOERTER.map(([e,d])=>'<dt lang="en">'+esc(e)+'</dt><dd>'+esc(d)+'</dd>').join('');
- $('zAufgabe').hidden=!G.mission;
+ $('zAufgabe').hidden=!G.mission&&!preisDuell();
  if(G.mission){ul.innerHTML='';bud.hidden=true;return missionZettel();}
  if(G.liste){
   const st=L.listeStand(welt,G.liste,G.korb),hoeren=G.modus==='hoeren';
@@ -124,13 +129,14 @@ function zettel(){
   const anteil=Math.min(1,st.summe/st.budget);
   bud.querySelector('span').style.width=(anteil*100)+'%';
   bud.classList.toggle('drueber',!st.imBudget);
+  if(preisDuell()){const zA=$('zAufgabe');zA.innerHTML='<button id="pFertig" class="primaer">✔ We\'re done!</button>';$('pFertig').onclick=()=>preisFertig(G.duell.aktiv);}
   bud.querySelector('p').textContent=st.imBudget?'Spent: '+L.betrag(st.summe)+' · left: '+L.betrag(st.rest):'Too expensive! '+L.betrag(-st.rest)+' over your budget.';
  }
 }
 function vorlesen(){
  if(G.liste){const z=G.liste.map(e=>e.text);return sprich('Please buy '+aufzaehlen(z)+'.',0.85);}
  if(G.auftrag)return sprich(G.auftrag.titel+'. You have got '+L.betrag(G.auftrag.budget).replace('£','')+' pounds. Please buy '+aufzaehlen(G.auftrag.gruppen.map(g=>g.en))+'.',0.9);
- if(G.duell&&G.duell.ziel)return sprich('Please find '+G.duell.ziel.en+'.',0.85);
+ if(G.duell&&G.duell.ziel)return sprich(G.duell.typ==='kunde'?G.duell.ziel.sagt:'Please find '+G.duell.ziel.en+'.',0.85);
  const M=G.mission;
  if(M&&M.art==='rezept')return sprich(M.rezept.titel+'. '+M.rezept.text,0.85);
  if(M&&M.art==='wo')return sprich(M.frage,0.9);
@@ -154,7 +160,7 @@ function zeichneWare(){
  const box=$('ware'),a=G.ware;if(!box||!a)return;
  const w=welt.byId[a.id],farbe=L.ORTFARBE[w.ort],imKorb=G.korb[a.id]||0,name=!G.profi;
  const M=G.mission,waehlen=!!M&&(M.art==='detektiv'||(M.art==='wo'&&M.phase==='zeigen'));
- const frei=G.modus==='frei'||(!!M&&M.art==='wo'&&!waehlen),duell=G.modus==='duell'||waehlen;
+ const frei=G.modus==='frei'||(!!M&&M.art==='wo'&&!waehlen),duell=(G.modus==='duell'&&!preisDuell())||waehlen;
  box.innerHTML='<button class="zu" id="wZu" aria-label="Close">✕</button>'
   +'<div class="w-kopf"><div class="w-bild" style="--a:'+w.farbe+';--b:'+w.akzent+'"><span aria-hidden="true">'+w.emo+'</span></div>'
   +'<div class="w-text"><span class="w-ort" style="--o:'+farbe+'" lang="en">'+esc(DAT.ORTE[w.ort].en)+'</span>'
@@ -177,7 +183,7 @@ function zeichneWare(){
 }
 function schliesseWare(){G.ware=null;if($('ware'))$('ware').hidden=true;}
 function nehmen(id,anz){
- if(G.zustand!=='laden')return false;
+ if(G.zustand!=='laden'&&!(preisDuell()&&G.duell.phase==='suche'&&!G.split))return false;
  G.korb[id]=(G.korb[id]||0)+(anz||1);sfx('korb');
  schliesseWare();korbKnopf(true);zettel();
  meldung('🧺 '+L.gross(L.menge(welt.byId[id],anz||1))+' – in your basket.');
@@ -185,7 +191,7 @@ function nehmen(id,anz){
 }
 function korbKnopf(hupf){
  const k=$('korbKnopf');if(!k)return;
- k.hidden=G.modus==='frei'||G.modus==='duell'||G.modus==='wo'||G.modus==='detektiv';
+ k.hidden=G.modus==='frei'||(G.modus==='duell'&&!(preisDuell()&&!G.split))||G.modus==='wo'||G.modus==='detektiv';
  $('korbZahl').textContent=L.korbAnzahl(G.korb);$('korbSumme').textContent=L.betrag(L.korbSumme(welt,G.korb));
  if(hupf){k.classList.remove('hupf');void k.offsetWidth;k.classList.add('hupf');}
 }
@@ -478,46 +484,72 @@ function missionEnde(){
  return true;
 }
 
-/* ---------------- Team-Duell ---------------- */
+/* ---------------- Team-Duell ----------------
+   Drei Arten (Auswahl "Duel type"):
+     finden  Find it: eine bestimmte Ware finden, dann Bonusfrage
+     kunde   Customer service: ein Anliegen, jede passende Ware zaehlt
+     preis   Price war: Einkauf mit Budget - alles da und am guenstigsten gewinnt
+   Abwechselnd (ein Team ist dran) oder mit zwei Controllern im Splitscreen. */
+const preisDuell=()=>!!(G.duell&&G.duell.typ==='preis');
 function duellStart(rnd){
+ rnd=rnd||Math.random;
  const n=+($('runden')?$('runden').value:4)||4,frist=+($('frist')?$('frist').value:90)||90;
+ const typ=($('duellArt')&&$('duellArt').value)||'finden';
  const namen=[($('team1')&&$('team1').value.trim())||'Team Red',($('team2')&&$('team2').value.trim())||'Team Blue'];
- G.duell={teams:namen.map(name=>({name,punkte:0})),runden:n,frist,rest:frist,hoeren:!!($('duellHoeren')&&$('duellHoeren').checked),
-  aufgaben:L.duellAufgaben(welt,2*n,rnd),nr:0,phase:'ansage',ziel:null,letzte:null,rnd:rnd||Math.random,aktiv:0,split:false};
+ const aufgaben=typ==='kunde'?L.wuensche(welt,2*n,rnd):typ==='preis'?L.mischen(DAT.BUDGET,rnd).concat(L.mischen(DAT.BUDGET,rnd)).slice(0,n):L.duellAufgaben(welt,2*n,rnd);
+ G.duell={typ,teams:namen.map(name=>({name,punkte:0})),runden:n,frist:typ==='preis'?Math.max(120,Math.round(frist*1.5)):frist,rest:frist,
+  hoeren:typ!=='preis'&&!!($('duellHoeren')&&$('duellHoeren').checked),aufgaben,nr:0,phase:'ansage',ziel:null,letzte:null,rnd,aktiv:0,split:false,koerbe:[{},{}],stapel:[[],[]],fertig:[false,false]};
  if($('duellSplit')&&$('duellSplit').checked){
   if(padLesen().length>=2){G.split=true;G.duell.split=true;G.p.x=4.3;G.p2={x:5.7,z:welt.START.z,yaw:welt.START.yaw,pitch:0};G.sperre=[0,0];G.hover2=null;}
   else meldung('Split screen needs two connected controllers (press a button on each). The teams will take turns instead.',6000);
  }
  document.body.classList.toggle('split',G.split);
+ document.body.dataset.duell=typ;
  duellAnzeige();duellAnsage();
+}
+/* Wie viele Zuege gibt es, und welcher Auftrag gehoert zu Zug nr? */
+const duellZuege=D=>D.typ==='preis'?(D.split?D.runden:2*D.runden):2*D.runden;
+const duellAuftrag=(D,nr)=>D.typ==='preis'&&!D.split?D.aufgaben[Math.floor(nr/2)]:D.aufgaben[nr];
+const rundeText=D=>D.split?'Round '+(D.nr+1)+' of '+duellZuege(D):'Round '+(Math.floor(D.nr/2)+1)+' of '+D.runden;
+function passt(D,id){return D.typ==='kunde'?D.ziel.aus.includes(id):D.ziel.id===id;}
+function auftragHtml(D,kurz){
+ if(D.typ==='kunde')return D.hoeren?'🎧 Listen to the customer!':(kurz?'':'<span class="a-kunde">'+D.ziel.wer+'</span> ')+'„'+esc(D.ziel.sagt)+'“'+(kurz?'':'<br><small>Find something that helps '+esc(D.ziel.name)+'!</small>');
+ if(D.typ==='preis')return esc(D.ziel.titel)+' · '+L.betrag(D.ziel.budget)+(kurz?': '+D.ziel.gruppen.map(g=>esc(g.en)).join(' · '):'<br><small>Buy: '+D.ziel.gruppen.map(g=>esc(g.en)).join(' · ')+'</small><br><small>Everything on the list, and spend as little as you can!</small>');
+ return D.hoeren?'🎧 Listen carefully!':'Find '+esc(D.ziel.en)+'!';
 }
 function duellAnzeige(){
  const D=G.duell;if(!D)return;
  document.querySelectorAll('#duell .d-team').forEach(el=>{const t=D.teams[+el.dataset.team];el.querySelector('.d-name').textContent=t.name;el.querySelector('.d-punkte').textContent=t.punkte;el.classList.toggle('dran',!D.split&&+el.dataset.team===D.nr%2);});
- D.teams.forEach((t,i)=>{const n=$('halbName'+i);if(n)n.textContent=t.name;});
+ D.teams.forEach((t,i)=>{const n=$('halbName'+i);if(!n)return;
+  if(D.typ==='preis'&&D.split&&D.ziel){const st=L.budgetStand(welt,D.ziel,D.koerbe[i]);n.textContent=t.name+' · '+L.betrag(st.summe)+' / '+L.betrag(D.ziel.budget)+' · '+st.gruppen.filter(g=>g.ok).length+'/'+st.gruppen.length+(D.fertig[i]?' ✔':'');}
+  else n.textContent=t.name;});
  $('dUhr').textContent=Math.ceil(D.rest);$('dUhr').classList.toggle('knapp',D.phase==='suche'&&D.rest<=15);
- $('dRunde').textContent=D.split?'Round '+(D.nr+1)+'/'+2*D.runden:'Round '+(Math.floor(D.nr/2)+1)+'/'+D.runden;
+ $('dRunde').textContent=rundeText(D).replace(' of ','/');
  const a=$('dAuftrag');
- if(a){a.hidden=D.phase!=='suche';if(D.phase==='suche')a.innerHTML=D.hoeren?'<button id="dHoer" class="klein">🔊 Find … (listen again)</button>':'Find <b>'+esc(D.ziel.en)+'</b>';
+ if(a){const zeigen=D.phase==='suche'&&!(D.typ==='preis'&&!D.split);a.hidden=!zeigen;
+  if(zeigen)a.innerHTML=D.hoeren?'<button id="dHoer" class="klein">🔊 Listen again</button>':auftragHtml(D,true)+(D.typ==='preis'?'<small class="d-tipp"> ✕/A take · ○/B put back · □/X done</small>':'');
   if($('dHoer'))$('dHoer').onclick=vorlesen;}
 }
 function duellAnsage(){
- const D=G.duell,box=$('ansage');D.phase='ansage';D.ziel=D.aufgaben[D.nr];D.rest=D.frist;
+ const D=G.duell,box=$('ansage');D.phase='ansage';D.ziel=duellAuftrag(D,D.nr);D.rest=D.frist;
  D.aktiv=D.split?null:D.nr%2;G.zustand='duell';
+ if(D.typ==='preis'){D.koerbe=[{},{}];D.stapel=[[],[]];D.fertig=[false,false];G.auftrag=D.ziel;G.korb=D.split?{}:D.koerbe[D.aktiv];}
  const teamName=D.split?D.teams.map(t=>t.name).join(' vs '):D.teams[D.aktiv].name;
- if(box){box.innerHTML='<div class="a-karte"><p class="a-runde">Round '+(D.split?(D.nr+1)+' of '+2*D.runden:(Math.floor(D.nr/2)+1)+' of '+D.runden)+'</p><p class="a-team">'+esc(teamName)+'</p>'
-  +'<p class="a-auftrag" lang="en">'+(D.hoeren?'🎧 Listen carefully!':'Find '+esc(D.ziel.en)+'!')+'</p>'
+ if(box){box.innerHTML='<div class="a-karte"><p class="a-runde">'+rundeText(D)+'</p><p class="a-team">'+esc(teamName)+'</p>'
+  +'<p class="a-auftrag" lang="en">'+auftragHtml(D,false)+'</p>'
   +(D.hoeren?'<p><button id="aHoer" class="zweit">🔊 Listen</button></p>':'')
   +'<button id="aLos" class="primaer gross">Go! ⏱ '+D.frist+' s</button></div>';
   box.hidden=false;$('aLos').onclick=duellLos;if($('aHoer'))$('aHoer').onclick=vorlesen;}
  if(D.hoeren)setTimeout(vorlesen,1500);
- sfx('gong');duellAnzeige();
+ sfx('gong');duellAnzeige();zettel();korbKnopf();
 }
-function duellLos(){const D=G.duell;if(!D||D.phase!=='ansage')return false;D.phase='suche';$('ansage').hidden=true;duellAnzeige();return true;}
+function duellLos(){const D=G.duell;if(!D||D.phase!=='ansage')return false;D.phase='suche';$('ansage').hidden=true;duellAnzeige();zettel();korbKnopf();return true;}
 function duellWahl(id){
- const D=G.duell;if(!D||D.phase!=='suche')return false;
+ const D=G.duell;if(!D||D.phase!=='suche'||D.typ==='preis')return false;
  schliesseWare();
- if(id===D.ziel.id){const p=L.duellPunkte(D.rest,D.frist);D.teams[D.aktiv].punkte+=p;D.letzte={ok:true,punkte:p};ton('ok');duellBonus();}
+ if(passt(D,id)){const p=L.duellPunkte(D.rest,D.frist);D.teams[D.aktiv].punkte+=p;D.letzte={ok:true,punkte:p,id};ton('ok');
+  if(D.typ==='kunde'){sprich('Oh, thank you! That\'s perfect.');}
+  duellBonus();}
  else{D.letzte={ok:false,punkte:0,id};ton('no');duellErgebnis();}
  return true;
 }
@@ -525,7 +557,9 @@ function duellBonus(){
  const D=G.duell,box=$('ansage');D.phase='bonus';
  const K=DAT.KASSE,arten=['gruss','tuete','frage','bon','tschuess'],art=arten[Math.floor(D.rnd()*arten.length)],v=K[art][Math.floor(D.rnd()*K[art].length)];
  const opt=L.mischen(v.ant,D.rnd);D.bonus={richtig:v.ant[0],warum:v.warum};
- if(box){box.innerHTML='<div class="a-karte">'+(D.split?'<p class="a-team">'+esc(D.teams[D.aktiv].name)+'</p>':'')+'<p class="a-gut">✔ Right! +'+D.letzte.punkte+'</p><p class="a-runde">Bonus question: +50</p>'
+ if(box){box.innerHTML='<div class="a-karte">'+(D.split?'<p class="a-team">'+esc(D.teams[D.aktiv].name)+'</p>':'')+'<p class="a-gut">✔ Right! +'+D.letzte.punkte+'</p>'
+  +(D.typ==='kunde'?'<p lang="en">'+D.ziel.wer+' „Thank you! '+esc(L.gross(welt.byId[D.letzte.id].en))+' is perfect.“</p>':'')
+  +'<p class="a-runde">Bonus question: +50</p>'
   +(art==='frage'?'<p class="a-de">'+esc(v.de)+'</p>':'<p class="a-auftrag" lang="en">„'+esc(v.sagt)+'“</p><p class="a-de">What do you say?</p>')
   +'<div class="k-optionen" lang="en">'+opt.map(o=>'<button data-bonus="'+esc(o)+'">'+esc(o)+'</button>').join('')+'</div></div>';
   box.hidden=false;box.querySelectorAll('[data-bonus]').forEach(b=>b.onclick=()=>duellBonusAntwort(b.dataset.bonus));}
@@ -536,11 +570,30 @@ function duellBonusAntwort(text){
  const ok=text===D.bonus.richtig;if(ok){D.teams[D.aktiv].punkte+=50;D.letzte.punkte+=50;}D.letzte.bonus=ok;ton(ok?'ok':'no');
  duellErgebnis();return ok;
 }
+/* Price war: Ein Team (oder im Splitscreen beide) ist fertig */
+function preisFertig(i){
+ const D=G.duell;if(!D||D.typ!=='preis'||D.phase!=='suche')return false;
+ if(D.split){D.fertig[i]=true;duellAnzeige();if(!D.fertig.every(Boolean)){halbMeldung(i,'✔ Done! Wait for the other team.');return true;}}
+ schliesseWare();$('korb').hidden=true;
+ const teams=D.split?[0,1]:[D.aktiv];
+ D.letzte={preis:teams.map(t=>{const w=L.preisWertung(welt,D.ziel,D.koerbe[t]);D.teams[t].punkte+=w.punkte;return {t,w};})};
+ ton('ok');duellErgebnis();return true;
+}
+function preisKarte(D,t,w){
+ return '<div class="p-karte">'+(D.split?'<b>'+esc(D.teams[t].name)+'</b>':'')+'<ul>'+w.gruppen.map(g=>'<li class="'+(g.ok?'ok':'nein')+'">'+(g.ok?'✓ ':'✗ ')+esc(g.en)+(g.ids.length?' <small>('+g.ids.map(id=>esc(welt.byId[id].schild)).join(', ')+')</small>':'')+'</li>').join('')
+  +w.extra.map(e=>'<li class="nein">✗ '+esc(welt.byId[e.id].schild)+' <small>not on the list</small></li>').join('')+'</ul>'
+  +'<p>'+(w.imBudget?'Spent '+L.betrag(w.summe)+' · left '+L.betrag(w.rest):'Over budget: '+L.betrag(w.summe))+'</p><p class="a-gut">+'+w.punkte+' points</p></div>';
+}
 function duellErgebnis(){
  const D=G.duell,box=$('ansage'),l=D.letzte||{ok:false,punkte:0};D.phase='ergebnis';
- const naechstes=D.nr+1<2*D.runden;
+ const naechstes=D.nr+1<duellZuege(D);
+ const gute=()=>D.ziel.aus.map(id=>esc(welt.byId[id].en)).join(', ');
  let txt;
- if(l.ok)txt='<p class="a-gut">+'+l.punkte+' points</p>'+(l.bonus===undefined?'':l.bonus?'<p>Bonus question right! 🎉</p>':'<p>Bonus question – the right answer was: <span lang="en">„'+esc(D.bonus.richtig)+'“</span></p>');
+ if(l.preis){txt='<div class="p-raster">'+l.preis.map(x=>preisKarte(D,x.t,x.w)).join('')+'</div>';
+  if(l.preis.length===2){const [a,b]=l.preis;txt+='<p class="a-runde">'+(a.w.punkte===b.w.punkte?'Draw!':esc(D.teams[a.w.punkte>b.w.punkte?0:1].name)+' wins this round!')+'</p>';}
+  const v=L.vergleiche(welt,l.preis[0].w).filter(x=>!x.gut)[0];if(v)txt+='<p lang="en">💡 '+esc(v.text)+'</p>';}
+ else if(l.ok)txt='<p class="a-gut">+'+l.punkte+' points</p>'+(l.bonus===undefined?'':l.bonus?'<p>Bonus question right! 🎉</p>':'<p>Bonus question – the right answer was: <span lang="en">„'+esc(D.bonus.richtig)+'“</span></p>');
+ else if(D.typ==='kunde')txt='<p class="a-schlecht">'+(l.zeit?'⏱ Time\'s up!':'✗ That doesn\'t help.')+'</p>'+(l.id?'<p lang="en">'+D.ziel.wer+' „Hmm, '+esc(welt.byId[l.id].en)+'? That doesn\'t help me.“</p>':'')+'<p lang="en">Good ideas: '+gute()+'</p>';
  else if(l.zeit)txt='<p class="a-schlecht">⏱ Time\'s up!</p><p lang="en">'+esc(L.gross(D.ziel.en))+': '+esc(L.wo(welt,D.ziel.id))+'</p>';
  else txt='<p class="a-schlecht">✗ Sorry, wrong.</p><p lang="en">That\'s '+esc(welt.byId[l.id].en)+'.<br>'+esc(L.gross(D.ziel.en))+': '+esc(L.wo(welt,D.ziel.id))+'</p>';
  if(box){box.innerHTML='<div class="a-karte"><p class="a-team">'+esc(D.aktiv==null?'Both teams':D.teams[D.aktiv].name)+'</p>'+txt
@@ -548,8 +601,8 @@ function duellErgebnis(){
   box.hidden=false;$('aWeiter').onclick=duellWeiter;}
  duellAnzeige();
 }
-function duellWeiter(){const D=G.duell;if(!D||D.phase!=='ergebnis')return false;D.nr++;if(D.nr>=2*D.runden)return duellEnde();duellAnsage();return true;}
-function duellZeitAus(){const D=G.duell;D.rest=0;D.letzte={ok:false,punkte:0,zeit:true};schliesseWare();sfx('falsch');duellErgebnis();}
+function duellWeiter(){const D=G.duell;if(!D||D.phase!=='ergebnis')return false;D.nr++;if(D.nr>=duellZuege(D))return duellEnde();duellAnsage();return true;}
+function duellZeitAus(){const D=G.duell;D.rest=0;if(D.typ==='preis'){D.fertig=[true,true];return preisFertig(D.aktiv||0);}D.letzte={ok:false,punkte:0,zeit:true};schliesseWare();sfx('falsch');duellErgebnis();}
 function duellEnde(){
  const D=G.duell;G.zustand='ende';$('ansage').hidden=true;
  musik('stop');sfx('fanfare');
@@ -617,7 +670,7 @@ function padTick(){
  if(!P.length)return;
  const S=padSumme(P),neu=S.neu,b=padBereich();
  if(neu.size)musik('wecken');
- if(b!==PAD.bereich){PAD.bereich=b;padFokus(b&&b.id!=='menu'&&b.id!=='over'||b&&neu.size?padStandard(b):null);return;}
+ if(b!==PAD.bereich){PAD.bereich=b;padFokus(b&&b.id!=='menu'&&b.id!=='over'||b&&neu.size?padStandard(b):null);if(b)return;}
  if(b){
   const z=padZiele(b);
   if(PAD.fokus&&(!b.contains(PAD.fokus)||!sichtbar(PAD.fokus))){
@@ -637,7 +690,7 @@ function padTick(){
   return;
  }
  /* im Laden, kein Fenster offen */
- if(G.split&&G.duell&&G.duell.phase==='suche'){P.slice(0,2).forEach((p,i)=>{if(p.neu.has(KN.A))splitNehmen(i);});return;}
+ if(G.split&&G.duell&&G.duell.phase==='suche'){P.slice(0,2).forEach((p,i)=>{if(p.neu.has(KN.A))splitNehmen(i);if(p.neu.has(KN.B))splitZurueck(i);if(p.neu.has(KN.X)&&preisDuell())preisFertig(i);});return;}
  const hud=padZiele($('stage')).filter(e=>e.closest('#zAufgabe')||e.id==='zurKasse');
  if(neu.has(KN.LB)||neu.has(KN.RB))padSchritt(hud,neu.has(KN.RB)?1:-1);
  if(neu.has(KN.A)){
@@ -658,10 +711,15 @@ function splitNehmen(i){
  if(uhr()<G.sperre[i])return false;
  const p=i?G.p2:G.p,h=L.blickTreffer(welt,p,GREIF);
  if(!h){halbMeldung(i,'Look straight at a product and go closer.');return false;}
- if(h.platz.id===D.ziel.id){D.aktiv=i;return duellWahl(h.platz.id);}
- G.sperre[i]=uhr()+3;sfx('falsch');halbMeldung(i,'✗ That\'s '+welt.byId[h.platz.id].en+'. Wait 3 seconds!');
+ const id=h.platz.id;
+ if(D.typ==='preis'){if(D.fertig[i])return false;const k=D.koerbe[i];k[id]=(k[id]||0)+1;D.stapel[i].push(id);sfx('korb');
+  halbMeldung(i,'+ '+welt.byId[id].schild+' · '+L.preis(welt.byId[id].p));duellAnzeige();return true;}
+ if(passt(D,id)){D.aktiv=i;return duellWahl(id);}
+ G.sperre[i]=uhr()+3;sfx('falsch');halbMeldung(i,'✗ That\'s '+welt.byId[id].en+'. Wait 3 seconds!');
  return false;
 }
+function splitZurueck(i){const D=G.duell;if(!D||D.typ!=='preis'||D.phase!=='suche'||D.fertig[i])return false;const id=D.stapel[i].pop();if(!id)return false;
+ const k=D.koerbe[i];k[id]--;if(!k[id])delete k[id];halbMeldung(i,'− '+welt.byId[id].schild);duellAnzeige();return true;}
 const halbUhr=[null,null];
 function halbMeldung(i,text){const m=$('halb'+i);if(!m)return;m.textContent=text;m.hidden=false;clearTimeout(halbUhr[i]);halbUhr[i]=setTimeout(()=>{m.hidden=true;},2800);}
 
@@ -730,7 +788,8 @@ function grundriss(){
  for(const a of welt.GAENGE){g.font='800 30px Inter, system-ui, sans-serif';g.fillText(String(a.nr),a.x*k,9.5*k);}
  g.font='700 19px Inter, system-ui, sans-serif';
  const t=(s,x,z,rot)=>{g.save();g.translate(x*k,z*k);if(rot)g.rotate(rot);g.fillText(s,0,0);g.restore();};
- t('Fruit',2.1,9,-Math.PI/2);t('Veg',5.1,9,-Math.PI/2);t('Dairy & Meat',14.5,1.6);t('Frozen',28.2,9,Math.PI/2);t('Bakery',8.3,9.5,-Math.PI/2);
+ const kurz=o=>DAT.ORTE[o].en.split(' ')[0];const ws=a=>welt.SEITEN.find(q=>q.art===a).ort;
+ t(kurz(ws('kisten')),2.1,9,-Math.PI/2);t(kurz(ws('insel')),5.1,9,-Math.PI/2);t('Dairy & Meat',14.5,1.6);t('Frozen',28.2,9,Math.PI/2);
  t('Checkout',18.5,22.2);t('Entrance',5,23.2);
  return plan={c,k};
 }
@@ -762,11 +821,11 @@ function starte3d(){
 window.addEventListener('shoprender',()=>{if(G.zustand!=='menu')starte3d();});
 function hinweis(){
  if(G.split){[G.hover,G.hover2].forEach((hv,i)=>{const e=$(i?'hinweis2':'hinweis');if(!e)return;const an=!!hv&&G.duell&&G.duell.phase==='suche';e.hidden=!an;if(!an)return;
-  const txt=L.preis(welt.byId[hv.id].p);if(e.dataset.t!==txt){e.dataset.t=txt;e.innerHTML='<span lang="en">'+esc(txt)+'</span><small>✕ / A = take</small>';}});return;}
+  const txt=(preisDuell()&&!G.profi?welt.byId[hv.id].schild+' · ':'')+L.preis(welt.byId[hv.id].p);if(e.dataset.t!==txt){e.dataset.t=txt;e.innerHTML='<span lang="en">'+esc(txt)+'</span><small>✕ / A = take</small>';}});return;}
  const h=$('hinweis');if(!h)return;
  const zeigen=G.hover&&!G.ware&&(G.zustand==='laden'||G.zustand==='frei'||(G.duell&&G.duell.phase==='suche'));
  h.hidden=!zeigen;if(!zeigen)return;
- const w=welt.byId[G.hover.id],txt=(G.profi||G.modus==='duell'?'':w.schild+' · ')+L.preis(w.p)+(w.menge?' each':'');
+ const w=welt.byId[G.hover.id],txt=(G.profi||(G.modus==='duell'&&!preisDuell())?'':w.schild+' · ')+L.preis(w.p)+(w.menge?' each':'');
  const wie=PAD.stand.length?'✕ / A':beruehrung?'tap':'click or E';
  if(h.dataset.t!==txt+wie){h.dataset.t=txt+wie;h.innerHTML='<span lang="en">'+esc(txt)+'</span><small>'+wie+'</small>';}
 }
@@ -887,6 +946,6 @@ if(typeof MutationObserver!=='undefined'&&document.body){new MutationObserver(le
 if(typeof window!=='undefined'){addEventListener('gamepadconnected',()=>padTick());addEventListener('gamepaddisconnected',()=>padTick());}
 padAnzeige(0);if(typeof requestAnimationFrame==='function')requestAnimationFrame(padSchleife);
 
-window.ShopSpiel={G,welt,start,menu,update,oeffneWare,nehmen,weglegen,kasseOeffnen,antworte,zahleMit,bezahlen,weiterKasse,auswerten,ende,
+window.ShopSpiel={G,get welt(){return welt;},start,menu,update,oeffneWare,nehmen,weglegen,kasseOeffnen,antworte,zahleMit,bezahlen,weiterKasse,auswerten,ende,
  duellLos,duellWahl,duellBonusAntwort,duellWeiter,tonHinweis:()=>tonHinweis(),padTick,splitNehmen,padQuelle:f=>{padQuelle=f;},PAD,KN,woAntwort,missionWahl,missionWeiter,kochen,zettel,vorlesen,tippen,nehmenMitte,eingabe,bonSpeichern};
 })();
