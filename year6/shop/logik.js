@@ -369,6 +369,14 @@ function nachbarText(welt,id){
 function lageSatz(welt,id){return 'It\'s '+bereich(welt,id).ort+', '+nachbarText(welt,id)+'.';}
 function kundenFrage(welt,id){return 'Excuse me, where '+(istPlural(welt,id)?'are':'is')+' the '+welt.byId[id].schild.toLowerCase()+'?';}
 /* Drei Antworten: richtig, falscher Ort, falsche Nachbarn */
+/* Die Mitarbeiterin fragen: richtige Frage und zwei typische Fehler (is/are, Wortstellung) */
+function frageFormen(welt,id,rnd){
+ const ding='the '+welt.byId[id].schild.toLowerCase(),pl=istPlural(welt,id);
+ const richtig='Excuse me, where '+(pl?'are ':'is ')+ding+'?';
+ return {richtig,optionen:mischen([richtig,'Excuse me, where '+(pl?'is ':'are ')+ding+'?','Excuse me, where '+ding+(pl?' are?':' is?')],rnd||Math.random)};
+}
+function nahBeiPersonal(welt,p){const P=welt.PERSONAL,d=Math.hypot(p.x-P.x,p.z-P.z);if(d>2.4)return false;
+ const f=[Math.sin(p.yaw),-Math.cos(p.yaw)],r=[(P.x-p.x)/d,(P.z-p.z)/d];return f[0]*r[0]+f[1]*r[1]>0.35;}
 function lageOptionen(welt,id,rnd){
  rnd=rnd||Math.random;
  const richtig=lageSatz(welt,id),b=bereich(welt,id);
@@ -421,5 +429,5 @@ function erreichbar(welt,schritt){
 window.ShopLogik={bauen,frei,bewegen,inKassenZone,richtung,strahl,strahlBox,treffer,blickTreffer,
  betrag,preis,gross,menge,zufall,mischen,liste,korbAnzahl,korbSumme,listeStand,budgetStand,minimum,vergleiche,
  wechselOptionen,bezahlt,kassenSchritte,duellAufgaben,duellPunkte,wuensche,preisWertung,seiteVon,wo,ORTFARBE,bon,sterne,erreichbar,AUGE,ZAHL,
- bahnen,kundschaft,kundschaftSchritt,wagenPunkt,bereich,istPlural,nachbarn,nachbarText,lageSatz,kundenFrage,lageOptionen,raetsel,rezeptStand};
+ bahnen,kundschaft,kundschaftSchritt,frageFormen,nahBeiPersonal,wagenPunkt,bereich,istPlural,nachbarn,nachbarText,lageSatz,kundenFrage,lageOptionen,raetsel,rezeptStand};
 })();

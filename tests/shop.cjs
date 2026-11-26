@@ -320,6 +320,21 @@ ok(DAT.WAREN.find(x=>x.id==='milk').form==='milch','Milch als Flasche mit Griff'
  ok(!L.frei(welt,welt.PERSONAL.x,welt.PERSONAL.z,0.1)&&!L.frei(welt,(welt.PERSONAL.wx1+welt.PERSONAL.wx2)/2,(welt.PERSONAL.wz1+welt.PERSONAL.wz2)/2,0.1)&&!L.frei(welt,welt.NASS.x,welt.NASS.z,0.1),'Mitarbeiterin, Rollwagen und Wischschild sind Hindernisse');
  const e=L.erreichbar(welt);ok(e(welt.PERSONAL.x+1.6,welt.PERSONAL.z)&&e(welt.NASS.x+1.2,welt.NASS.z)&&e(welt.NASS.x,welt.NASS.z-0.9),'man kommt an ihnen vorbei');}
 
+/* ---------- Jess fragen ---------- */
+{for(const x of DAT.WAREN){const f=L.frageFormen(welt,x.id,rnd);ok(f.optionen.length===3&&new Set(f.optionen).size===3&&f.optionen.includes(f.richtig)&&f.richtig===L.kundenFrage(welt,x.id),x.id+': Fragen an Jess');}
+ const P=welt.PERSONAL;
+ ok(L.nahBeiPersonal(welt,{x:P.x+1.5,z:P.z,yaw:-Math.PI/2})&&!L.nahBeiPersonal(welt,{x:P.x+1.5,z:P.z,yaw:Math.PI/2})&&!L.nahBeiPersonal(welt,{x:P.x+4,z:P.z,yaw:-Math.PI/2}),'nah und hinschauen: ansprechbar');
+ S.start('liste',L.zufall(61));Object.assign(G.p,{x:P.x+1.5,z:P.z,yaw:-Math.PI/2,pitch:0});
+ ok(S.fragenOeffnen()&&!d.getElementById('frag').hidden,'Jess: Gespraech oeffnet');
+ const fehlt=G.liste.map(e=>e.id);ok(G.frage.waren.slice(0,G.liste.length).every(id=>fehlt.includes(id)),'Jess: bietet die fehlenden Sachen der Liste an');
+ const id=G.frage.waren[0];S.fragenWas(id);
+ const falsch=G.frage.formen.optionen.find(o=>o!==G.frage.formen.richtig);
+ ok(!S.fragenWie(falsch)&&G.frage.sagt.includes(L.lageSatz(welt,id))&&/Better:/.test(d.getElementById('frag').textContent),'Jess: falsche Frage - sie verbessert und antwortet trotzdem');
+ S.fragenZu();S.fragenOeffnen();S.fragenWas(id);
+ ok(S.fragenWie(G.frage.formen.richtig)&&/Well asked/.test(d.getElementById('frag').textContent),'Jess: richtige Frage wird gelobt');
+ const x0=G.p.x;S.update(0.5,{keys:new Set(['w']),pad:new Set(),look:{x:0,y:0},stick:{x:0,y:0}});ok(G.p.x===x0,'im Gespraech bleibt man stehen');
+ S.fragenZu();S.start('wo',L.zufall(62));Object.assign(G.p,{x:P.x+1.5,z:P.z,yaw:-Math.PI/2});ok(!S.fragenOeffnen(),'bei Where is …? nicht ansprechbar (man ist selbst Verkaeufer)');S.menu();}
+
 /* ---------- Team duel: Customer service ---------- */
 {const ids=new Set(DAT.WAREN.map(x=>x.id));
  ok(DAT.WUENSCHE.length>=15&&DAT.WUENSCHE.every(x=>x.aus.length&&x.aus.every(i=>ids.has(i))&&/[.?!]$/.test(x.sagt)),'Kundenanliegen vollstaendig');
