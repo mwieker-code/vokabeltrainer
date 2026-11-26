@@ -416,3 +416,18 @@ body.split .hud .musik{display:none}
 
 .w-sale{background:#E53935;color:#fff;border-radius:6px;padding:0 6px;font:900 15px Inter,sans-serif;vertical-align:middle}
 .w-preis s{color:#8A949C;font-size:18px}
+
+/* ---------- Jess fragen ---------- */
+#fragen{position:absolute;left:50%;transform:translateX(-50%);bottom:max(26px,env(safe-area-inset-bottom));padding:14px 24px;border-radius:999px;border:0;background:#2E9E4F;color:#fff;font-weight:800;font-size:19px;box-shadow:0 8px 20px rgba(0,0,0,.3)}
+#frag{position:absolute;inset:0;z-index:7;background:rgba(10,30,24,.55);display:flex;align-items:center;justify-content:center;padding:16px;color:var(--ink)}
+.f-karte{position:relative;margin:0;max-width:720px;width:100%;text-align:left;background:var(--papier)}
+.f-karte .zu{position:absolute;right:10px;top:10px;width:36px;height:36px;border-radius:50%;border:0;background:#EDE6D8;font-weight:800}
+.f-buehne{grid-template-areas:"blase person";margin-top:0}
+.f-waren{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.f-waren button{text-align:left}
+body.tafel .f-karte .k-optionen button{font-size:22px}
+
+/* Atmosphaere ("Nice graphics"): warmer Ton und dunklere Bildraender ueber dem 3D-Bild */
+.stimmung{display:none;position:absolute;inset:0;pointer-events:none}
+body.schoen .stimmung{display:block;background:radial-gradient(ellipse 80% 75% at 50% 48%,rgba(0,0,0,0) 55%,rgba(40,24,10,.32) 100%)}
+body.schoen .stimmung::after{content:"";position:absolute;inset:0;background:rgba(255,186,110,.07);mix-blend-mode:soft-light}

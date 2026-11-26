@@ -69,7 +69,8 @@ function start(modus,rnd){
  G.leute=L.kundschaft(welt,G.schoen?6:3,rnd);
  document.body.classList.toggle('tafel',G.tafel||modus==='duell');
  document.body.dataset.modus=modus;
- for(const id of ['ware','korb','kasse','ansage','grosskarte','meldung'])if($(id))$(id).hidden=true;
+ document.body.classList.toggle('schoen',!!G.schoen);
+ for(const id of ['ware','korb','kasse','frag','ansage','grosskarte','meldung'])if($(id))$(id).hidden=true;G.frage=null;
  if(modus==='liste'||modus==='hoeren')G.liste=L.liste(welt,{n:G.lang?7:5,mengen:G.lang},rnd);
  if(modus==='budget'){const b=DAT.BUDGET,d=laden(),letzte=d.letztesBudget;
   const wahl=b.filter(x=>x.id!==letzte);G.auftrag=wahl[Math.floor((rnd||Math.random)()*wahl.length)];d.letztesBudget=G.auftrag.id;sichern(d);}
@@ -484,6 +485,57 @@ function missionEnde(){
  return true;
 }
 
+/* ---------------- Mitarbeiterin Jess ansprechen ----------------
+   Man waehlt, was man sucht, dann die richtige Frage; Jess antwortet mit
+   der Lage im Laden (lageSatz). Nicht im Duell und nicht in den Rollen-
+   spielen "Where is ...?" und "Price detective". */
+const PERSONAL_NAME='Jess';
+const fragenErlaubt=()=>(G.zustand==='laden'||G.zustand==='frei')&&!['wo','detektiv','duell'].includes(G.modus)&&!G.split;
+function gesuchteWaren(){
+ let ids=[];
+ if(G.liste)ids=L.listeStand(welt,G.liste,G.korb).zeilen.filter(z=>!z.ok).map(z=>z.id);
+ else if(G.auftrag)ids=L.budgetStand(welt,G.auftrag,G.korb).gruppen.filter(g=>!g.ok).flatMap(g=>g.aus);
+ else if(G.mission&&G.mission.art==='rezept')ids=G.mission.rezept.zutaten.map(z=>z[0]).filter(id=>!G.korb[id]);
+ if(ids.length<4){const rest=L.mischen(welt.waren.map(w=>w.id).filter(id=>!ids.includes(id)),Math.random);ids=ids.concat(rest.slice(0,6-ids.length));}
+ return [...new Set(ids)].slice(0,6);
+}
+function fragenOeffnen(){
+ if(!fragenErlaubt()||!L.nahBeiPersonal(welt,G.p))return false;
+ schliesseWare();G.frage={phase:'was',waren:gesuchteWaren()};
+ sprich('Hi! Can I help you?');zeichneFrage();return true;
+}
+function zeichneFrage(){
+ const box=$('frag'),F=G.frage;if(!box||!F)return;
+ const kopf='<div class="k-buehne f-buehne"><div class="k-person"><div class="avatar" aria-hidden="true"><i class="haar"></i><i class="gesicht"></i><i class="koerper"></i></div><span class="k-schild">'+PERSONAL_NAME+'</span></div>'
+  +'<div class="k-blase" lang="en"><p id="fSagt">'+esc(F.sagt||'Hi! Can I help you?')+'</p><button id="fHoer" class="klein" aria-label="Listen">🔊</button></div></div>';
+ let unten='';
+ if(F.phase==='was')unten='<p class="k-hinweis">What are you looking for?</p><div class="k-optionen f-waren" lang="en">'
+  +F.waren.map(id=>'<button data-fware="'+id+'"><span aria-hidden="true">'+welt.byId[id].emo+'</span> '+esc(welt.byId[id].schild.toLowerCase())+'</button>').join('')
+  +'<button data-fware="">No, thanks. I\'m just looking.</button></div>';
+ else if(F.phase==='wie')unten='<p class="k-hinweis">How do you ask?</p><div class="k-optionen" lang="en">'+F.formen.optionen.map((o,k)=>'<button data-fform="'+k+'">'+esc(o)+'</button>').join('')+'</div>';
+ else unten='<p class="k-rueck">'+F.rueck+'</p><p><button id="fNochmal" class="zweit">Ask something else</button> <button id="fZu" class="primaer">Thank you!</button></p>';
+ box.innerHTML='<div class="k-karte f-karte"><button class="zu" id="fX" aria-label="Close">✕</button>'+kopf+'<div class="k-aufgabe">'+unten+'</div></div>';
+ box.hidden=false;
+ $('fX').onclick=fragenZu;$('fHoer').onclick=()=>sprich(F.sagt||'Hi! Can I help you?');
+ box.querySelectorAll('[data-fware]').forEach(b=>b.onclick=()=>fragenWas(b.dataset.fware));
+ box.querySelectorAll('[data-fform]').forEach(b=>b.onclick=()=>fragenWie(F.formen.optionen[+b.dataset.fform]));
+ if($('fNochmal'))$('fNochmal').onclick=()=>{G.frage={phase:'was',waren:gesuchteWaren(),sagt:'Anything else?'};sprich('Anything else?');zeichneFrage();};
+ if($('fZu'))$('fZu').onclick=()=>{sprich('You\'re welcome! Have a nice day!');fragenZu();};
+}
+function fragenWas(id){
+ const F=G.frage;if(!F||F.phase!=='was')return false;
+ if(!id){sprich('OK, no problem!');fragenZu();return true;}
+ F.id=id;F.formen=L.frageFormen(welt,id);F.phase='wie';zeichneFrage();return true;
+}
+function fragenWie(text){
+ const F=G.frage;if(!F||F.phase!=='wie')return false;
+ const ok=text===F.formen.richtig,lage=L.lageSatz(welt,F.id);
+ F.sagt=(ok?'':'Sorry? Oh, you mean: „'+F.formen.richtig+'“ ')+lage;
+ F.rueck=ok?'<b class="k-gut">Well asked! 👍</b>':'<b class="k-schlecht">Better:</b> <span lang="en">'+esc(F.formen.richtig)+'</span>';
+ F.phase='antwort';F.ok=ok;ton(ok?'ok':'no');sprich(ok?lage:F.formen.richtig+' '+lage);zeichneFrage();return ok;
+}
+function fragenZu(){G.frage=null;if($('frag'))$('frag').hidden=true;}
+
 /* ---------------- Team-Duell ----------------
    Drei Arten (Auswahl "Duel type"):
      finden  Find it: eine bestimmte Ware finden, dann Bonusfrage
@@ -637,7 +689,7 @@ function padSumme(liste){
  for(const p of liste){s.lx=k(s.lx+p.lx);s.ly=k(s.ly+p.ly);s.rx=k(s.rx+p.rx);s.ry=k(s.ry+p.ry);p.halt.forEach(i=>s.halt.add(i));p.neu.forEach(i=>s.neu.add(i));}
  return s;
 }
-const DIALOGE=['kasse','ansage','ware','korb','grosskarte'];
+const DIALOGE=['kasse','frag','ansage','ware','korb','grosskarte'];
 function padBereich(){
  if($('stage')&&!$('stage').hidden){for(const id of DIALOGE){const e=$(id);if(e&&!e.hidden)return e;}return null;}
  if($('over')&&!$('over').hidden)return $('over');
@@ -658,6 +710,7 @@ function padFokus(e){
 function padSchritt(liste,d){if(!liste.length)return;let i=liste.indexOf(PAD.fokus);if(i<0)i=d>0?-1:liste.length;padFokus(liste[(i+d+liste.length)%liste.length]);}
 function padZurueck(b){
  if(b.id==='ware')schliesseWare();
+ else if(b.id==='frag')fragenZu();
  else if(b.id==='korb'||b.id==='grosskarte')b.hidden=true;
 }
 function padAnzeige(n){
@@ -696,6 +749,7 @@ function padTick(){
  if(neu.has(KN.A)){
   if(PAD.fokus&&hud.includes(PAD.fokus)&&uhr()-PAD.fokusZeit<6){const f=PAD.fokus;padFokus(null);f.click();}
   /* vor der Kasse: Kreuz/A bezahlt */
+  else if(fragenErlaubt()&&L.nahBeiPersonal(welt,G.p)&&!L.blickTreffer(welt,G.p,GREIF))fragenOeffnen();
   else if(G.zustand==='laden'&&L.inKassenZone(welt,G.p)&&['liste','hoeren','budget'].includes(G.modus)&&!L.blickTreffer(welt,G.p,GREIF))kasseOeffnen();
   else if(G.zustand==='laden'||G.zustand==='frei'||(G.duell&&G.duell.phase==='suche'))nehmenMitte();
  }
@@ -746,7 +800,7 @@ function update(dt,inp){
  if(D&&D.phase==='suche'){D.rest-=Math.min(dt,0.5);if(D.rest<=0)duellZeitAus();}
  dt=Math.min(dt,0.05);G.t+=dt;
  if(G.leute&&G.zustand!=='menu'&&G.zustand!=='ende')L.kundschaftSchritt(welt,G.leute,dt,[G.p,G.p2]);
- const laufen=G.zustand==='laden'||G.zustand==='frei'||(D&&D.phase==='suche');
+ const laufen=!G.frage&&(G.zustand==='laden'||G.zustand==='frei'||(D&&D.phase==='suche'));
  if(!laufen)return;
  const p=G.p,k=inp.keys||new Set(),pad=inp.pad||new Set();
  let vor=(k.has('w')||k.has('arrowup')||pad.has('vor')?1:0)-(k.has('s')||k.has('arrowdown')||pad.has('zurueck')?1:0)-(inp.stick?inp.stick.y:0);
@@ -837,6 +891,7 @@ function schleife(jetzt){
    const t='🛒 Pay at checkout 1'+(PAD.stand.length?' (✕ / A)':'');if(an&&kb.textContent!==t)kb.textContent=t;}
   if(G.duell){const u=$('dUhr'),v=String(Math.ceil(Math.max(0,G.duell.rest)));if(u&&u.textContent!==v){if(G.duell.phase==='suche'&&+v<=10&&+v>0)sfx('tick');u.textContent=v;u.classList.toggle('knapp',G.duell.phase==='suche'&&G.duell.rest<=15);}}
   hinweis();geraeuscheImLaden();tonHinweis();
+  const fb=$('fragen');if(fb){const an=!G.frage&&!G.ware&&fragenErlaubt()&&L.nahBeiPersonal(welt,G.p);fb.hidden=!an;const t='💬 Talk to '+PERSONAL_NAME+(PAD.stand.length?' (✕ / A)':'');if(an&&fb.textContent!==t)fb.textContent=t;}
   const leute=G.leute?G.leute.leute:[];
   if(R&&G.split&&G.p2)R.frame({t:G.t,leute,views:[{x:G.p.x,z:G.p.z,yaw:G.p.yaw,pitch:G.p.pitch,hover:G.hover},{x:G.p2.x,z:G.p2.z,yaw:G.p2.yaw,pitch:G.p2.pitch,hover:G.hover2}]});
   else if(R)R.frame({leute,kasse:G.zustand==='kasse',x:G.p.x,z:G.p.z,yaw:G.p.yaw,pitch:G.p.pitch,t:G.t,bob:Math.sin(G.schritt*5.2)*0.03,hover:G.ware?welt.plaetze.find(p=>p.id===G.ware.id):G.hover});
@@ -925,6 +980,7 @@ function binden(){
   const w=e.target.closest('[data-wo]');if(w)meldung(L.gross(welt.byId[w.dataset.wo].en)+' – '+L.wo(welt,w.dataset.wo),4200);});
  $('korbKnopf').onclick=()=>{if($('korb').hidden)zeigeKorb();else $('korb').hidden=true;};
  $('zurKasse').onclick=()=>kasseOeffnen();
+ if($('fragen'))$('fragen').onclick=fragenOeffnen;
  $('karte').onclick=()=>{$('grosskarte').hidden=false;};
  $('grosskarte').onclick=()=>{$('grosskarte').hidden=true;};
  addEventListener('resize',()=>{if(R)R.resize();});
@@ -948,5 +1004,5 @@ if(typeof window!=='undefined'){addEventListener('gamepadconnected',()=>padTick(
 padAnzeige(0);if(typeof requestAnimationFrame==='function')requestAnimationFrame(padSchleife);
 
 window.ShopSpiel={G,get welt(){return welt;},start,menu,update,oeffneWare,nehmen,weglegen,kasseOeffnen,antworte,zahleMit,bezahlen,weiterKasse,auswerten,ende,
- duellLos,duellWahl,duellBonusAntwort,duellWeiter,tonHinweis:()=>tonHinweis(),padTick,splitNehmen,padQuelle:f=>{padQuelle=f;},PAD,KN,woAntwort,missionWahl,missionWeiter,kochen,zettel,vorlesen,tippen,nehmenMitte,eingabe,bonSpeichern};
+ fragenOeffnen,fragenWas,fragenWie,fragenZu,duellLos,duellWahl,duellBonusAntwort,duellWeiter,tonHinweis:()=>tonHinweis(),padTick,splitNehmen,padQuelle:f=>{padQuelle=f;},PAD,KN,woAntwort,missionWahl,missionWeiter,kochen,zettel,vorlesen,tippen,nehmenMitte,eingabe,bonSpeichern};
 })();

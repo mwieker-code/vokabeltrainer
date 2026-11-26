@@ -136,6 +136,8 @@ export function init(canvas,welt,opts={}){
  const STRUKTUR=new Sammler();    // Fliesen, Holz (Texturen in Weltmassen)
  const HOLZ=new Sammler();
  const STRAHL=new Sammler();      // Tageslicht
+ const KONTAKT=new Sammler();     // weiche Schatten unter den Waren
+ const GLUEH=new Sammler();       // Lichtschein (additiv)
  const ET=new Sammler();          // Etiketten der Waren (Atlas)
  const SCH=new Sammler();         // Schilder (Atlas, unbeleuchtet)
  const TAG_L=new Sammler(),TAG_P=new Sammler();   // Preisschilder mit Namen / nur Preis
@@ -233,7 +235,7 @@ export function init(canvas,welt,opts={}){
   g.fillStyle='#EFECE6';g.fillRect(0,0,w,h);for(let i=0;i<500;i++){g.fillStyle=i%2?'rgba(0,0,0,.05)':'rgba(255,255,255,.2)';g.fillRect(zufall()*w,zufall()*h,1.5,1.5);}
   g.fillStyle='#B9B4AA';g.fillRect(0,0,w,4);g.fillRect(0,0,4,h);g.fillStyle='rgba(0,0,0,.06)';g.fillRect(4,4,w-4,3);g.fillRect(4,4,3,h-4);},[W/1.2,D/1.2])}));
  decke.rotation.x=Math.PI/2;decke.position.set(W/2,DECKE,D/2);scene.add(decke);
- for(let x=3;x<W;x+=4.5)for(let z=2;z<D-1;z+=3){LEUCHT.quader(x-0.9,DECKE-0.03,z-0.3,x+0.9,DECKE-0.01,z+0.3,'#FFFFFF');S.quader(x-0.95,DECKE-0.025,z-0.35,x+0.95,DECKE-0.005,z+0.35,'#C9CDD2');}
+ for(let x=3;x<W;x+=4.5)for(let z=2;z<D-1;z+=3){GLUEH.add(V.ebene,mat(x,DECKE-0.045,z,3.0,1.7,1,Math.PI/2,0,0),'#FFF4DC',[0,0,1,1]);LEUCHT.quader(x-0.9,DECKE-0.03,z-0.3,x+0.9,DECKE-0.01,z+0.3,'#FFFFFF');S.quader(x-0.95,DECKE-0.025,z-0.35,x+0.95,DECKE-0.005,z+0.35,'#C9CDD2');}
  /* Waende mit Farbband */
  /* Wand mit Farbband und Fussleiste. Band und Leiste ragen ein Stueck in den
     Raum - deckungsgleiche Flaechen flimmern, weil die Grafikkarte nicht
@@ -362,6 +364,9 @@ export function init(canvas,welt,opts={}){
   const len=p.b-p.a-0.14,zahl=Math.max(1,Math.min(maxZahl||14,Math.floor(len/(f.w+0.025))));
   const ab=len/zahl;
   for(const y of boeden){
+   {const tief=Math.min(0.56,tiefe>0.3?f.d*2+0.08:f.d+0.06),m2=(p.a+p.b)/2;
+    if(p.seite.achse==='z')KONTAKT.add(V.ebene,mat(frontXZ-n[0]*(tief/2+0.01),y+0.003,m2,tief,len+0.06,1,-Math.PI/2,0,0),'#FFFFFF',[0,0,1,1]);
+    else KONTAKT.add(V.ebene,mat(m2,y+0.003,frontXZ-n[1]*(tief/2+0.01),len+0.06,tief,1,-Math.PI/2,0,0),'#FFFFFF',[0,0,1,1]);}
    for(let i=0;i<zahl;i++){
     const t=p.a+0.07+ab*(i+0.5);
     for(let s=0;s<(f.stapel||1);s++){
@@ -465,6 +470,7 @@ export function init(canvas,welt,opts={}){
  {const s=welt.SEITEN.find(s=>s.ort==='kuehl');
   S.quader(s.a,0,0,s.b,0.12,s.z2,'#46515B');S.quader(s.a,0.12,0,s.b,2.1,0.08,'#E9F3FA');
   LEUCHT.quader(s.a,2.02,0.1,s.b,2.05,s.z2-0.1,'#FFFFFF');
+  GLUEH.add(V.ebene,mat((s.a+s.b)/2,1.1,s.z2+0.05,s.b-s.a,2.2,1),'#9FE3FF',[0,0,1,1]);
   for(const y of BOEDEN.slice(1).map(y=>y+0.03))S.quader(s.a,y-0.02,0.08,s.b,y,s.z2-0.12,'#C4CCD3');
   S.quader(s.a,2.1,0,s.b,2.45,s.z2,'#5DADE2');S.quader(s.a,2.1,s.z2-0.01,s.b,2.45,s.z2+0.01,'#3B8BC0');
   for(let x=s.a+3;x<s.b-1;x+=6)schildFlaeche(ortSchild.kuehl,x,2.28,s.z2+0.04,1.25,0.31,0);
@@ -477,6 +483,7 @@ export function init(canvas,welt,opts={}){
  {const s=welt.SEITEN.find(s=>s.ort==='tiefkuehl');
   S.quader(s.x1,0,s.a,W,0.12,s.b,'#46515B');S.quader(W-0.08,0.12,s.a,W,2.1,s.b,'#E1EEF8');
   LEUCHT.quader(s.x1+0.1,2.02,s.a,W-0.1,2.05,s.b,'#EAF6FF');
+  GLUEH.add(V.ebene,mat(s.x1-0.05,1.1,(s.a+s.b)/2,s.b-s.a,2.2,1,0,-Math.PI/2,0),'#9FE3FF',[0,0,1,1]);
   for(const y of [0.15,0.58,1.01,1.44])S.quader(s.x1+0.12,y-0.02,s.a,W-0.08,y,s.b,'#C4CCD3');
   S.quader(s.x1,2.1,s.a,W,2.45,s.b,'#7FA6C9');
   for(let z=s.a+2;z<s.b;z+=4)schildFlaeche(ortSchild.tiefkuehl,s.x1-0.04,2.28,z,1.25,0.31,-Math.PI/2);
@@ -582,6 +589,11 @@ export function init(canvas,welt,opts={}){
   SCHATTEN.add(V.ebene,mat((h.x1+h.x2)/2,0.008,(h.z1+h.z2)/2,h.x2-h.x1+2*pad,h.z2-h.z1+2*pad,1,-Math.PI/2,0,0),'#FFFFFF',[0,0,1,1]);}
  const schattenMat=new THREE.MeshBasicMaterial({map:schattenBild(false),color:'#2A2218',transparent:true,opacity:0.5,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2});
  scene.add(SCHATTEN.mesh(schattenMat));
+ if(schoen){
+  scene.add(KONTAKT.mesh(new THREE.MeshBasicMaterial({map:schattenBild(false),color:'#1E1208',transparent:true,opacity:0.42,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2})));
+  const gl=(()=>{const c=document.createElement('canvas');c.width=c.height=128;const g=c.getContext('2d');const v=g.createRadialGradient(64,64,2,64,64,62);v.addColorStop(0,'rgba(255,255,255,.9)');v.addColorStop(0.35,'rgba(255,255,255,.35)');v.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=v;g.fillRect(0,0,128,128);const t=new THREE.CanvasTexture(c);return t;})();
+  const gm=GLUEH.mesh(new THREE.MeshBasicMaterial({map:gl,vertexColors:true,transparent:true,opacity:0.32,depthWrite:false,blending:THREE.AdditiveBlending,side:THREE.DoubleSide}));gm.renderOrder=4;scene.add(gm);
+ }
  const rundSchatten=new THREE.MeshBasicMaterial({map:schattenBild(true),color:'#2A2218',transparent:true,opacity:0.45,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-3});
  /* Spiegelung der Deckenlampen im glatten Boden */
  if(schoen){const SP=new Sammler();for(let x=3;x<W;x+=4.5)for(let z=2;z<D-1;z+=3)SP.add(V.ebene,mat(x,0.006,z,2.4,1.1,1,-Math.PI/2,0,0),'#FFFFFF',[0,0,1,1]);
