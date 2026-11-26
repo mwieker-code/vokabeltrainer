@@ -377,7 +377,7 @@ export function init(canvas,welt,opts={}){
  /* ===== Gondeln (Regale in der Mitte) ===== */
  const BOEDEN=[0.12,0.55,0.98,1.41];
  for(const gx of welt.GONDEL){
-  const holz=gx===welt.GONDEL[0];
+  const bseite=welt.SEITEN.find(q=>q.ort==='baeckerei'&&q.achse==='z'&&(q.x1===gx-welt.GT&&q.x2===gx||q.x1===gx&&q.x2===gx+welt.GT)),holz=!!bseite;
   const x1=gx-welt.GT,x2=gx+welt.GT,z1=welt.GZ1,z2=welt.GZ2,H=welt.GH;
   S.quader(x1+0.03,0,z1,x2-0.03,0.12,z2,'#46515B');                                  // Sockel
   S.quader(gx-0.03,0.12,z1,gx+0.03,H,z2,'#F3F4F5');                                   // Rueckwand
@@ -393,7 +393,7 @@ export function init(canvas,welt,opts={}){
    const fx=s.nx>0?x2:x1;S.quader(Math.min(fx,fx+s.nx*0.02),H,z1,Math.max(fx,fx+s.nx*0.02),H+0.32,z2,FARBE[s.ort]);
    for(const zm of [z1+2.75,z2-2.75])schildFlaeche(ortSchild[s.ort],fx+s.nx*0.045,H+0.16,zm,1.1,0.28,blick(s.nx,0));
   }
-  if(holz){S.quader(gx-0.05,0.12,z1,gx-0.03,H,z2,'#B8874F');HOLZ.add(V.ebene,mat(gx-0.056,(0.12+H)/2,(z1+z2)/2,z2-z1,H-0.12,1,0,-Math.PI/2,0),'#FFFFFF','welt');}
+  if(holz){const sx=bseite.nx;S.quader(gx+sx*0.03,0.12,z1,gx+sx*0.05,H,z2,'#B8874F');HOLZ.add(V.ebene,mat(gx+sx*0.056,(0.12+H)/2,(z1+z2)/2,z2-z1,H-0.12,1,0,sx*Math.PI/2,0),'#FFFFFF','welt');}
  }
  /* Gangschilder, von beiden Seiten lesbar */
  for(const a of welt.GAENGE){
@@ -445,7 +445,8 @@ export function init(canvas,welt,opts={}){
  /* Gemuese-Insel: Dach mit Schild */
  for(const [x,z] of [[4.05,5.05],[6.15,5.05],[4.05,12.95],[6.15,12.95]])S.quader(x-0.04,0,z-0.04,x+0.04,2.2,z+0.04,'#5B4636');
  S.quader(3.95,2.2,4.95,6.25,2.28,13.05,'#2E7D32');
- for(const s of [-1,1])schildFlaeche(ortSchild.gemuese,5.1,2.45,s>0?13.09:4.91,1.4,0.35,s>0?0:Math.PI);
+ const inselOrt=welt.SEITEN.find(q=>q.art==='insel').ort;
+ for(const s of [-1,1])schildFlaeche(ortSchild[inselOrt],5.1,2.45,s>0?13.09:4.91,1.4,0.35,s>0?0:Math.PI);
  S.quader(4.4,2.28,4.94,5.8,2.62,4.95,'#2E7D32');S.quader(4.4,2.28,13.05,5.8,2.62,13.06,'#2E7D32');
 
  /* ===== Kuehlregale (Norden) ===== */
@@ -505,8 +506,6 @@ export function init(canvas,welt,opts={}){
  schildFlaeche(poster[1],29.96,1.85,18.4,1.2,0.43,-Math.PI/2);
  schildFlaeche(poster[2],7.7,3.0,0.04,1.2,0.43,0);
  /* Backwaren: Schild ueber der Holzseite */
- for(const s of [-1,1])schildFlaeche(ortSchild.baeckerei,7.9,2.62,9.5+s*0.035,1.3,0.33,s>0?0:Math.PI);
- S.add(V.zyl,mat(7.9,3.1,9.5,0.01,1.0,0.01),'#6E7880');
 
 
  /* ===== Einkaufswagen am Eingang ===== */
@@ -826,7 +825,9 @@ export function init(canvas,welt,opts={}){
   kamera(st,w/h);markieren(st.hover,t);
   renderer.render(scene,camera);
  }
- return {frame,resize,setProfi,renderer};
+ /* Alles freigeben (Neuaufbau bei "Shuffle day") */
+ function weg(){scene.traverse(o=>{if(o.geometry)o.geometry.dispose();const m=o.material;(Array.isArray(m)?m:m?[m]:[]).forEach(x=>{if(x.map)x.map.dispose();x.dispose();});});renderer.dispose();}
+ return {frame,resize,setProfi,renderer,weg,layout:welt.layout};
 }
 window.ShopRender={init};
 window.dispatchEvent(new Event('shoprender'));

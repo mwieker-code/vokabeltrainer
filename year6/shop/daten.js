@@ -198,6 +198,31 @@ window.SHOP_DATEN = {
   {name:'Mr Green', emo:'👴', sie:'him'},{name:'Tom', emo:'👦', sie:'him'},{name:'Mrs Okafor', emo:'👩🏿', sie:'her'}
  ],
 
+ /* Customer service (Team duel): Kundschaft mit einem Anliegen. aus = alle
+    Waren, die passen. Das Anliegen nennt die Ware nie beim Namen. */
+ WUENSCHE: [
+  {wer:'👵',name:'Mrs Brown',  sagt:'I want to make a sandwich. I\'ve got bread. What can I put on it?', aus:['cheese','ham','butter','jam','honey']},
+  {wer:'👨🏽',name:'Mr Patel',  sagt:'My kitchen is dirty. I need to wash all the plates and cups.',       aus:['washingup']},
+  {wer:'👩🏿',name:'Mrs Okafor',sagt:'It\'s my son\'s birthday tomorrow! What do I need for the party?', aus:['cake','candles','balloons']},
+  {wer:'👦',name:'Tom',        sagt:'I\'m really thirsty. I want something cold and fizzy.',            aus:['cola','lemonade']},
+  {wer:'👧',name:'Lucy',       sagt:'I want to clean my teeth before bed.',                               aus:['toothpaste','toothbrush']},
+  {wer:'👴',name:'Mr Green',   sagt:'We want to watch a film tonight. We need something to eat on the sofa.', aus:['popcorn','crisps','sweets','chocolate']},
+  {wer:'👩🏼',name:'Ms Wood',   sagt:'My torch doesn\'t work any more. What do I need?',                  aus:['batteries']},
+  {wer:'👱🏽',name:'Sam',        sagt:'I want to wash my hair after swimming.',                             aus:['shampoo','showergel']},
+  {wer:'👦🏿',name:'Josh',       sagt:'It\'s a really hot day. I want something sweet and very cold.',     aus:['icecream']},
+  {wer:'👩',name:'Mrs Taylor', sagt:'I want to bake bread at home. What do I need first?',                aus:['flour']},
+  {wer:'👧🏻',name:'Emma',       sagt:'My rabbit is hungry. It loves orange vegetables.',                   aus:['carrots']},
+  {wer:'👨',name:'Mr Hall',    sagt:'Monkeys love this yellow fruit. I want some for my lunch box.',      aus:['bananas']},
+  {wer:'👩🏾',name:'Mrs Ahmed', sagt:'I want to make a fruit salad. What can I put in it?',               aus:['apple','bananas','oranges','grapes','strawberries']},
+  {wer:'👨🏼',name:'Mr King',    sagt:'I want fish for dinner, but quick and from the freezer, please.',   aus:['fishfingers']},
+  {wer:'🧓',name:'Mr Evans',   sagt:'Oh no! There\'s no paper left in the bathroom!',                     aus:['toiletrolls']},
+  {wer:'👩🏻',name:'Ms Lee',    sagt:'I\'m cooking spaghetti tonight. What can I make the sauce with?',    aus:['pastasauce','tintomatoes']},
+  {wer:'👦🏽',name:'Leo',        sagt:'I need something from a chicken to make pancakes.',                  aus:['eggs']},
+  {wer:'👵🏿',name:'Mrs Clark', sagt:'I want a hot drink in the morning, please. Not milk!',              aus:['tea','coffee']},
+  {wer:'👨🏾',name:'Mr Scott',  sagt:'My hands are dirty after the garden. What do I need?',              aus:['soap']},
+  {wer:'👧🏼',name:'Mia',        sagt:'I want a green vegetable for my salad. It\'s long and thin.',        aus:['cucumber']}
+ ],
+
  /* Lautsprecherdurchsagen im Laden (gesprochen und als Meldung) */
  DURCHSAGEN: [
   'Attention, shoppers! Today, strawberries are only two pounds twenty-five.',
