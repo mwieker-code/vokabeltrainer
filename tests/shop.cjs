@@ -221,6 +221,17 @@ FAKE[0].axes=[0,-1,0,0];for(let i=0;i<20;i++){tick();S.update(0.05,ohne);}FAKE[0
 ok(G.p.z<11,'linker Stick: vorwaerts laufen');
 const yaw0=G.p.yaw;FAKE[0].axes=[0,0,1,0];tick();S.update(0.05,ohne);FAKE[0].axes=[0,0,0,0];tick();
 ok(G.p.yaw>yaw0,'rechter Stick: umsehen');
+/* R2 / RT: schnell laufen, L2 / LT: zoomen */
+{const strecke=r2=>{Object.assign(G.p,{x:12,z:13,yaw:0,pitch:0});G.vel={v:0,s:0};FAKE[0].axes=[0,-1,0,0];FAKE[0].buttons[7]={pressed:r2>0.5,value:r2};
+  for(let i=0;i<20;i++){tick();S.update(0.05,ohne);}FAKE[0].axes=[0,0,0,0];FAKE[0].buttons[7]={pressed:false,value:0};tick();return 13-G.p.z;};
+ const normal=strecke(0),schnell=strecke(1),halb=strecke(0.5);
+ ok(schnell>normal*1.5&&halb>normal*1.2&&halb<schnell,'R2: schneller laufen, stufenlos ('+normal.toFixed(2)+' / '+halb.toFixed(2)+' / '+schnell.toFixed(2)+' m)');
+ FAKE[0].buttons[6]={pressed:true,value:1};for(let i=0;i<30;i++){tick();S.update(0.05,ohne);}
+ ok(G.fov<40,'L2: heranzoomen (Blickwinkel '+G.fov.toFixed(0)+')');
+ FAKE[0].buttons[6]={pressed:false,value:0};for(let i=0;i<30;i++){tick();S.update(0.05,ohne);}
+ ok(G.fov>68,'L2 loslassen: Zoom geht zurueck');
+ const k2={keys:new Set(['z']),pad:new Set(),look:{x:0,y:0},stick:{x:0,y:0}};for(let i=0;i<30;i++)S.update(0.05,k2);ok(G.fov<40,'Taste Z zoomt');
+ for(let i=0;i<30;i++)S.update(0.05,ohne);}
 /* Ware in der Mitte ansehen und in den Korb */
 Object.assign(G.p,{x:12,z:9,yaw:-Math.PI/2,pitch:-0.1});S.update(0.01,ohne);
 druck(0,K_.A);ok(!d.getElementById('ware').hidden,'Kreuz/A: Ware in der Bildmitte ansehen');

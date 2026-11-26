@@ -60,7 +60,7 @@ function einstellungenLaden(){
 function zeige(id){for(const s of ['menu','stage','over'])if($(s))$(s).hidden=s!==id;document.body.classList.toggle('im-spiel',id==='stage');}
 function start(modus,rnd){
  einstellungen();
- G.vel={v:0,s:0};G.fov=FOV;G.zuletzt=[];
+ G.vel={v:0,s:0};G.fov=FOV;G.fov2=FOV;G.sprint=0;G.zuletzt=[];
  G.split=false;G.p2=null;G.hover2=null;G.sperre=[0,0];document.body.classList.remove('split');
  /* Shuffle day: bei jedem Spiel eine neue Anordnung */
  const neu=G.mischen?L.bauen(DAT,{mischen:1+Math.floor((rnd||Math.random)()*2147483000)}):(welt.gemischt?L.bauen(DAT):welt);
@@ -697,12 +697,13 @@ function padLesen(){
   const alt=PAD.alt.get(p.index)||[],halt=new Set(),neu=new Set();
   const jetzt=[...p.buttons].map(b=>!!(b&&(b.pressed||b.value>0.5)));
   jetzt.forEach((d,i)=>{if(d){halt.add(i);if(!alt[i])neu.add(i);}});PAD.alt.set(p.index,jetzt);
-  const a=p.axes||[];return {index:p.index,lx:tot(a[0]),ly:tot(a[1]),rx:tot(a[2]),ry:tot(a[3]),halt,neu};});
+  const a=p.axes||[],wert=i=>{const b=p.buttons[i];return b?Math.max(b.value||0,b.pressed?1:0):0;};
+  return {index:p.index,lx:tot(a[0]),ly:tot(a[1]),rx:tot(a[2]),ry:tot(a[3]),l2:wert(6),r2:wert(7),halt,neu};});
  return PAD.stand;
 }
 function padSumme(liste){
- const s={lx:0,ly:0,rx:0,ry:0,halt:new Set(),neu:new Set()},k=v=>Math.max(-1,Math.min(1,v));
- for(const p of liste){s.lx=k(s.lx+p.lx);s.ly=k(s.ly+p.ly);s.rx=k(s.rx+p.rx);s.ry=k(s.ry+p.ry);p.halt.forEach(i=>s.halt.add(i));p.neu.forEach(i=>s.neu.add(i));}
+ const s={lx:0,ly:0,rx:0,ry:0,l2:0,r2:0,halt:new Set(),neu:new Set()},k=v=>Math.max(-1,Math.min(1,v));
+ for(const p of liste){s.lx=k(s.lx+p.lx);s.ly=k(s.ly+p.ly);s.rx=k(s.rx+p.rx);s.ry=k(s.ry+p.ry);s.l2=Math.max(s.l2,p.l2||0);s.r2=Math.max(s.r2,p.r2||0);p.halt.forEach(i=>s.halt.add(i));p.neu.forEach(i=>s.neu.add(i));}
  return s;
 }
 const DIALOGE=['kasse','frag','ansage','ware','korb','grosskarte'];
@@ -794,21 +795,26 @@ const halbUhr=[null,null];
 function halbMeldung(i,text){const m=$('halb'+i);if(!m)return;m.textContent=text;m.hidden=false;clearTimeout(halbUhr[i]);halbUhr[i]=setTimeout(()=>{m.hidden=true;},2800);}
 
 /* ---------------- Bewegung ---------------- */
-function laufe(p,vor,seit,dt){
+/* faktor: 1 = normal, bis 1,8 = schnell laufen (R2 / RT oder Shift) */
+const SPRINT=0.8,ZOOM=34;
+function laufe(p,vor,seit,dt,faktor){
+ faktor=faktor||1;
  const m=Math.hypot(vor,seit);if(m>1){vor/=m;seit/=m;}
  if(m<=0.02)return 0;
  const fx=Math.sin(p.yaw),fz=-Math.cos(p.yaw),rx=Math.cos(p.yaw),rz=Math.sin(p.yaw);
  const x0=p.x,z0=p.z;
- L.bewegen(welt,p,(fx*vor+rx*seit)*TEMPO*dt,(fz*vor+rz*seit)*TEMPO*dt,G.leute?G.leute.leute:null);
+ L.bewegen(welt,p,(fx*vor+rx*seit)*TEMPO*faktor*dt,(fz*vor+rz*seit)*TEMPO*faktor*dt,G.leute?G.leute.leute:null);
  return Math.hypot(p.x-x0,p.z-z0);
 }
 /* Controller-Achsen und Steuerkreuz auf eine Spielfigur */
 function padLaufen(p,c,dt){
  if(!c)return 0;
  const h=c.halt,vor=-c.ly+(h.has(KN.HOCH)?1:0)-(h.has(KN.RUNTER)?1:0),seit=c.lx;
- p.yaw+=(c.rx*2.4+((h.has(KN.RECHTS)?1:0)-(h.has(KN.LINKS)?1:0))*DREH)*dt;
- p.pitch=Math.max(-1.0,Math.min(0.9,p.pitch-c.ry*1.7*dt));
- return laufe(p,vor,seit,dt);
+ const ruhig=1-0.55*(c.l2||0);
+ p.yaw+=(c.rx*2.4*ruhig+((h.has(KN.RECHTS)?1:0)-(h.has(KN.LINKS)?1:0))*DREH)*dt;
+ p.pitch=Math.max(-1.0,Math.min(0.9,p.pitch-c.ry*1.7*ruhig*dt));
+ /* beim Zoomen langsamer umsehen, damit man zielen kann */
+ return laufe(p,vor,seit,dt,1+SPRINT*(c.r2||0));
 }
 function update(dt,inp){
  inp=inp||eingabe;
@@ -827,7 +833,13 @@ function update(dt,inp){
  if(pad.size&&!inp.look.y)p.pitch*=Math.pow(0.1,dt);
  G.vel=G.vel||{v:0,s:0};const glatt=Math.min(1,dt*9);G.vel.v+=(vor-G.vel.v)*glatt;G.vel.s+=(seit-G.vel.s)*glatt;
  if(Math.abs(G.vel.v)<0.01&&!vor)G.vel.v=0;if(Math.abs(G.vel.s)<0.01&&!seit)G.vel.s=0;
- let s=laufe(p,G.vel.v,G.vel.s,dt);
+ const P1=PAD.stand.length?(G.split?PAD.stand[0]:padSumme(PAD.stand)):null;
+ G.sprint=Math.max(k.has('shift')?1:0,P1?P1.r2||0:0);
+ let s=laufe(p,G.vel.v,G.vel.s,dt,1+SPRINT*G.sprint);
+ /* Zoom: L2 / LT (stufenlos) oder Z; Warenkarte zoomt leicht */
+ const z1=Math.max(k.has('z')?1:0,P1?P1.l2||0:0),z2=G.split&&PAD.stand[1]?PAD.stand[1].l2||0:0;
+ G.fov=(G.fov||FOV)+(((G.ware?56:FOV)-ZOOM*z1)-(G.fov||FOV))*Math.min(1,dt*8);
+ G.fov2=(G.fov2||FOV)+((FOV-ZOOM*z2)-(G.fov2||FOV))*Math.min(1,dt*8);
  /* Controller: ohne geteilten Bildschirm steuern alle Controller dieselbe Figur */
  const frei=!padBereich(),jetzt=uhr();
  if(PAD.stand.length&&frei){
@@ -908,12 +920,11 @@ function schleife(jetzt){
   const kb=$('zurKasse');if(kb){const an=G.zustand==='laden'&&(G.modus==='liste'||G.modus==='hoeren'||G.modus==='budget')&&L.inKassenZone(welt,G.p);kb.hidden=!an;
    const t='🛒 Pay at checkout 1'+(PAD.stand.length?' (✕ / A)':'');if(an&&kb.textContent!==t)kb.textContent=t;}
   if(G.duell){const u=$('dUhr'),v=String(Math.ceil(Math.max(0,G.duell.rest)));if(u&&u.textContent!==v){if(G.duell.phase==='suche'&&+v<=10&&+v>0)sfx('tick');u.textContent=v;u.classList.toggle('knapp',G.duell.phase==='suche'&&G.duell.rest<=15);}}
-  G.fov=(G.fov||FOV)+((G.ware?56:FOV)-(G.fov||FOV))*Math.min(1,dt*6);
   hinweis();geraeuscheImLaden();tonHinweis();
   const fb=$('fragen');if(fb){const an=!G.frage&&!G.ware&&fragenErlaubt()&&L.nahBeiPersonal(welt,G.p);fb.hidden=!an;const t='💬 Talk to '+PERSONAL_NAME+(PAD.stand.length?' (✕ / A)':'');if(an&&fb.textContent!==t)fb.textContent=t;}
   const leute=G.leute?G.leute.leute:[];
-  if(R&&G.split&&G.p2)R.frame({t:G.t,leute,views:[{x:G.p.x,z:G.p.z,yaw:G.p.yaw,pitch:G.p.pitch,hover:G.hover},{x:G.p2.x,z:G.p2.z,yaw:G.p2.yaw,pitch:G.p2.pitch,hover:G.hover2}]});
-  else if(R)R.frame({leute,fov:G.fov,kasse:G.zustand==='kasse',x:G.p.x,z:G.p.z,yaw:G.p.yaw,pitch:G.p.pitch,t:G.t,bob:Math.sin(G.schritt*5.2)*0.03,hover:G.ware?welt.plaetze.find(p=>p.id===G.ware.id):G.hover});
+  if(R&&G.split&&G.p2)R.frame({t:G.t,leute,views:[{x:G.p.x,z:G.p.z,yaw:G.p.yaw,pitch:G.p.pitch,hover:G.hover,fov:G.fov},{x:G.p2.x,z:G.p2.z,yaw:G.p2.yaw,pitch:G.p2.pitch,hover:G.hover2,fov:G.fov2}]});
+  else if(R)R.frame({leute,fov:G.fov,kasse:G.zustand==='kasse',x:G.p.x,z:G.p.z,yaw:G.p.yaw,pitch:G.p.pitch,t:G.t,bob:Math.sin(G.schritt*5.2)*(0.03+0.02*(G.sprint||0)),hover:G.ware?welt.plaetze.find(p=>p.id===G.ware.id):G.hover});
   zeichneKarte($('karte'));
   if(!$('grosskarte').hidden)zeichneKarte($('grosskarte').querySelector('canvas'),true);
  }
@@ -950,7 +961,7 @@ function tippen(cx,cy){
 }
 function binden(){
  const cv=$('welt');if(!cv)return;
- const tasten=['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright'];
+ const tasten=['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright','shift','z'];
  addEventListener('keydown',e=>{
   if(G.zustand==='menu'||G.zustand==='ende')return;
   if(e.target&&/input|select|textarea/i.test(e.target.tagName))return;

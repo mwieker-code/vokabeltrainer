@@ -910,7 +910,7 @@ export function init(canvas,welt,opts={}){
    renderer.setScissorTest(true);
    st.views.forEach((v,i)=>{
     figuren.forEach((f,j)=>{const o=st.views[j];f.visible=j!==i&&!!o;});
-    kamera(v,(w/2)/h);markieren(v.hover,t);
+    kamera(v,(w/2)/h,v.fov);markieren(v.hover,t);
     renderer.setViewport(i*w/2,0,w/2,h);renderer.setScissor(i*w/2,0,w/2,h);
     renderer.render(scene,camera);
    });
