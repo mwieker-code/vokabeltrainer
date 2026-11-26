@@ -158,8 +158,10 @@ function kundschaftSchritt(welt,K,dt,spieler,rnd){
    if(d>0.02){const s=Math.min(d,1.6*dt),nx=q.x+(zx-q.x)/d*s,nz=q.z+(zz-q.z)/d*s;
     /* nicht in andere hinein (auch nicht in die eigene Begleitung) */
     const frei2=K.leute.every(o=>o===q||Math.hypot(nx-o.x,nz-o.z)>=0.5||Math.hypot(q.x-o.x,q.z-o.z)<Math.hypot(nx-o.x,nz-o.z))&&spieler.every(p=>!p||Math.hypot(nx-p.x,nz-p.z)>=0.6);
-    if(frei2&&frei(welt,nx,nz,0.15)){q.x=nx;q.z=nz;q.phase+=s*5.5;geht=d>0.05;}}
-   q.geht=geht;q.yaw=l.yaw;q.greift=false;continue;}
+    if(frei2&&frei(welt,nx,nz,0.15)){q.x=nx;q.z=nz;q.phase+=s*5.5;geht=dt>0&&s/dt>0.2;}}
+   /* "geht" nach der echten Geschwindigkeit (das Kind bleibt dicht dran, der Abstand
+      sagt darum nichts); kurz nachlaufen lassen, damit die Beine nicht flackern */
+   q.nachlauf=geht?0.25:Math.max(0,(q.nachlauf||0)-dt);q.geht=geht||q.nachlauf>0;q.yaw=l.yaw;q.greift=false;continue;}
   if(q.warte>0){q.warte-=dt;q.geht=false;if(q.warte<=0)q.greift=false;continue;}
   const z=K.B.knoten[q.ziel],dx=z.x-q.x,dz=z.z-q.z,d=Math.hypot(dx,dz);
   if(d<0.05){
