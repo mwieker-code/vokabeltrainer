@@ -25,6 +25,12 @@ Statischer Englisch-Trainer für Jahrgang 5, 6, 9, 10 und Oberstufe. Die HTML-Se
 
 Wichtig bei Änderungen an den Spieldateien: Die Versionsnummer hinter den Dateien in `year6/shop/index.html` erhöhen und `year6/shop/stand.json` anpassen – sonst liefert der Offline-Speicher den alten Stand aus. `tests/shop.cjs` meldet eine vergessene Erhöhung.
 
+## Town Race (Year 6)
+
+Go-Kart-Rennen durch eine kleine englische Stadt unter `year6/stadt/` (Kachel auf der Year-6-Spieleseite), passend zu Unit 3 „Out and about“. Ein Navigator gibt Wegbeschreibungen (*Turn left at the post office. Go straight on past the church. At the roundabout, turn right.*); wer falsch abbiegt, bekommt eine neue Route und verliert Zeit. Spielarten: Navigator race (allein oder zwei Teams im Splitscreen mit zwei Controllern oder W A S D / Pfeiltasten) und Free drive mit Karte. Läden und Straßennamen werden bei jedem Rennen neu verteilt. Die Logik (`logik.js`) läuft ohne 3D und wird in `tests/stadt.cjs` mit einem Autopiloten durchgefahren.
+
+Auch hier gilt: Nach Änderungen an den Spieldateien die Versionsnummer in `year6/stadt/index.html` erhöhen und `year6/stadt/stand.json` anpassen.
+
 ## Starten und prüfen
 
 Die Ordnerstruktur inklusive `assets/` vollständig beibehalten. Zum lokalen Start beispielsweise `python3 -m http.server 8765`, danach http://localhost:8765 öffnen. Für GitHub Pages die sechs HTML-Seiten und `assets/` gemeinsam übernehmen; die Sites-Konfiguration ist dafür nicht erforderlich.

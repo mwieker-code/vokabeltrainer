@@ -1,0 +1,126 @@
+<!doctype html><html lang="en" data-eigenes-design><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="../../manifest.webmanifest">
+<link rel="apple-touch-icon" sizes="180x180" href="../../assets/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Basecamp">
+<meta name="theme-color" content="#0D1017"><title>Town Race · Year 6</title>
+<link rel="stylesheet" href="../../assets/fonts.css?v=2"><link rel="stylesheet" href="style.css?v=20261128-start">
+</head><body><main class="stadt">
+<section id="menu">
+ <header><a href="../games/">← Games</a><span>TOWN RACE · YEAR 6</span></header>
+ <div class="held">
+  <canvas id="heldBild" width="960" height="420" aria-hidden="true"></canvas>
+  <div class="held-text"><p class="marke">Hilltop Town</p><h1>Town Race</h1>
+  <p class="lead">Go-kart race through a little English town. There is no map and no arrow – listen to the directions and find the way to the finish!</p></div>
+ </div>
+
+ <h2>What do you want to play?</h2>
+ <div class="modi">
+  <button data-modus="rennen" class="m-rennen"><span class="m-icon" aria-hidden="true">🏁</span><span class="m-text"><span class="m-name">Navigator race</span><span class="m-info">The navigator tells you the way: <i>Turn left at the post office.</i> Drive fast, but turn the right way!</span><span class="m-best" data-best="rennen"></span></span></button>
+  <button data-modus="frei" class="m-frei"><span class="m-icon" aria-hidden="true">🗺️</span><span class="m-text"><span class="m-name">Free drive</span><span class="m-info">Drive around the town with a map. Find the station, the church, the bank …</span></span></button>
+ </div>
+
+ <h2>Settings</h2>
+ <div class="einstellungen">
+  <fieldset><legend>Players</legend>
+   <label><input type="radio" name="spieler" value="1" checked> One player</label>
+   <label><input type="radio" name="spieler" value="2"> Two teams: split screen <i>(two controllers, or keyboard: W A S D and arrow keys)</i></label>
+  </fieldset>
+  <fieldset><legend>The route</legend>
+   <label><input type="radio" name="laenge" value="kurz"> Short: 5 turns</label>
+   <label><input type="radio" name="laenge" value="mittel" checked> Medium: 8 turns</label>
+   <label><input type="radio" name="laenge" value="lang"> Long: 11 turns</label>
+  </fieldset>
+  <fieldset><legend>Directions</legend>
+   <label><input type="radio" name="ansage" value="beides" checked> Read and listen</label>
+   <label><input type="radio" name="ansage" value="hoeren"> Listen only – no text</label>
+   <label><input type="radio" name="ansage" value="lesen"> Read only – no voice</label>
+  </fieldset>
+  <fieldset><legend>The town</legend>
+   <label class="schalter"><input type="checkbox" id="mischen" checked> New town every race: the shops and street names change</label>
+   <label class="schalter"><input type="checkbox" id="autogas"> Easy driving: the kart drives by itself – you only steer and brake</label>
+  </fieldset>
+  <fieldset><legend>Screen and sound</legend>
+   <label class="schalter"><input type="checkbox" id="tafel"> Whiteboard mode: big buttons on the screen</label>
+   <label class="schalter"><input type="checkbox" id="musikAn" checked> Music (sound effects: see the sound button at the bottom)</label>
+   <label class="schalter"><input type="checkbox" id="schoen" checked> Nice graphics: more people in the streets (switch off if it is slow)</label>
+  </fieldset>
+  <fieldset><legend>Teams</legend>
+   <div class="teams"><label>Team 1 <input type="text" id="team1" maxlength="18" value="Team Red"></label><label>Team 2 <input type="text" id="team2" maxlength="18" value="Team Blue"></label></div>
+  </fieldset>
+ </div>
+
+ <h2>Controls</h2>
+ <p id="padStatus" class="pad-status" aria-live="polite"></p>
+ <ul class="steuerung">
+  <li><b>Controller (PlayStation or Xbox):</b> left stick = steer, R2 / RT = go, L2 / LT = brake and reverse, □ / X or R1 = turbo, △ / Y = hear the directions again, L1 = horn, Options / Menu = pause.</li>
+  <li><b>Keyboard, one player:</b> W A S D or arrow keys, Space = turbo, R = hear the directions again, Esc = pause, M = map (free drive).</li>
+  <li><b>Keyboard, two teams:</b> Team 1: W A S D, E = turbo, Q = directions again. Team 2: arrow keys, Enter = turbo, Backspace = directions again.</li>
+  <li><b>Phone, tablet, whiteboard:</b> the buttons on the screen. Tip: switch on <i>easy driving</i>.</li>
+  <li><b>Turbo:</b> every right turn gives you one turbo (⚡, up to three).</li>
+ </ul>
+ <details class="lehrkraft" lang="de"><summary>Für Lehrkräfte: Ideen für den Unterricht</summary>
+  <ul>
+   <li><b>Worum es geht:</b> Wegbeschreibungen aus Unit 3 (<i lang="en">turn left/right, go straight on, past, just after, cross, on the corner of, opposite, roundabout, pedestrian zone</i>) verstehen – unter Zeitdruck. Es gibt keine Karte und keinen Pfeil. Wer falsch abbiegt, verliert Zeit, der Navigator plant neu.</li>
+   <li><b>Einstieg mit „Free drive“:</b> An der Tafel gemeinsam durch die Stadt fahren und Orte benennen. Die Klasse lotst: <i lang="en">Turn right at the bank. Go past the church.</i></li>
+   <li><b>Duell im Splitscreen:</b> Zwei Kinder fahren gleichzeitig dieselbe Strecke (zwei Controller, oder Tastatur: W A S D und Pfeiltasten). Die Klasse feuert an und spricht die Anweisungen mit.</li>
+   <li><b>Hörverstehen:</b> „Listen only“ blendet den Text aus. Mit △ / Y bzw. R hören die Kinder die Anweisung noch einmal.</li>
+   <li><b>Lesen:</b> „Read only“ für leise Arbeitsphasen oder Geräte ohne englische Stimme.</li>
+   <li><b>Sicherung:</b> Auf der Ergebnisseite stehen alle Anweisungen der Fahrt mit ✔ / ✗ und eine Karte mit der gefahrenen Strecke. Gut zum Nachbesprechen: <i lang="en">Where did you go wrong?</i></li>
+   <li><b>Transfer:</b> Paare beschreiben sich mit der Karte aus „Free drive“ gegenseitig den Weg zu einem Ort und schreiben eigene Wegbeschreibungen.</li>
+   <li><b>Neue Stadt:</b> Bei jedem Rennen ändern sich Läden und Straßennamen (abschaltbar), damit niemand Wege auswendig lernt.</li>
+  </ul>
+ </details>
+</section>
+
+<section id="stage" hidden>
+ <canvas id="welt" aria-label="Town Race 3D"></canvas>
+ <div id="halb0" class="halb">
+  <div class="karte" aria-live="polite"><div class="k-kopf"><span class="k-team"></span><button class="k-hoer" type="button" data-hoer="0" aria-label="Hear the directions again">🔊</button></div><p class="k-text" lang="en"></p></div>
+  <div class="status"><span class="s-zeit">0:00.0</span><span class="s-fehler" title="wrong turns">✗ 0</span><span class="s-turbo" title="turbo">⚡</span></div>
+  <p class="meldung" hidden></p>
+  <div class="ziel-banner" hidden></div>
+  <div class="touch links"><button type="button" data-t="links" aria-label="steer left">◀</button><button type="button" data-t="rechts" aria-label="steer right">▶</button></div>
+  <div class="touch rechts"><button type="button" data-t="turbo" class="t-turbo" aria-label="turbo">⚡</button><button type="button" data-t="bremse" aria-label="brake">▼</button><button type="button" data-t="gas" class="t-gas" aria-label="go">▲</button></div>
+ </div>
+ <div id="halb1" class="halb">
+  <div class="karte" aria-live="polite"><div class="k-kopf"><span class="k-team"></span><button class="k-hoer" type="button" data-hoer="1" aria-label="Hear the directions again">🔊</button></div><p class="k-text" lang="en"></p></div>
+  <div class="status"><span class="s-zeit">0:00.0</span><span class="s-fehler" title="wrong turns">✗ 0</span><span class="s-turbo" title="turbo">⚡</span></div>
+  <p class="meldung" hidden></p>
+  <div class="ziel-banner" hidden></div>
+  <div class="touch links"><button type="button" data-t="links" aria-label="steer left">◀</button><button type="button" data-t="rechts" aria-label="steer right">▶</button></div>
+  <div class="touch rechts"><button type="button" data-t="turbo" class="t-turbo" aria-label="turbo">⚡</button><button type="button" data-t="bremse" aria-label="brake">▼</button><button type="button" data-t="gas" class="t-gas" aria-label="go">▲</button></div>
+ </div>
+ <div id="frei" class="frei-hud" hidden><p id="freiOrt" lang="en"></p><canvas id="mini" width="220" height="180" aria-hidden="true"></canvas></div>
+ <div id="countdown" hidden></div>
+ <div class="oben-rechts"><button id="pauseKnopf" class="rund" type="button" aria-label="Pause"><span class="pause-icon" aria-hidden="true"></span></button></div>
+ <button id="tonAus" type="button" hidden>🔇 No sound? Tap here</button>
+ <div id="laden" class="laden">Loading the town …</div>
+ <div id="pause" class="dialog" hidden><div class="d-karte"><h2>Pause</h2>
+  <button id="weiter" class="primaer gross" type="button">Continue ▶</button>
+  <button id="nochmal" type="button">Start again</button>
+  <button id="woerterKnopf" type="button">Words</button>
+  <button id="karteKnopf" type="button" hidden>Map</button>
+  <button id="zumMenu" type="button">Back to the menu</button></div></div>
+ <div id="woerter" class="dialog" hidden><div class="d-karte"><h2>Words for directions</h2><table id="woerterListe"></table><button id="woerterZu" class="primaer" type="button">Close</button></div></div>
+ <div id="grosskarte" class="dialog" hidden><div class="d-karte gross-karte"><h2>Map of Hilltop Town</h2><canvas id="karteBild" width="900" height="720" aria-label="map"></canvas><button id="karteZu" class="primaer" type="button">Close</button></div></div>
+</section>
+
+<section id="over" hidden>
+ <header><span>TOWN RACE · RESULTS</span></header>
+ <h1 id="overTitel" tabindex="-1">Finish!</h1>
+ <div id="ergebnis"></div>
+ <canvas id="ergebnisKarte" width="900" height="720" aria-label="map with your route"></canvas>
+ <p class="legende"><span class="l-plan">- - - the route of the navigator</span> <span class="l-0">— Team 1</span> <span class="l-1">— Team 2</span></p>
+ <div id="protokoll"></div>
+ <div class="over-knoepfe"><button id="gleich" class="primaer gross" type="button">Same route again</button><button id="neu" type="button">New race</button><button id="overMenu" type="button">Menu</button></div>
+</section>
+</main>
+<script src="daten.js?v=20261128-start"></script>
+<script src="bild.js?v=20261128-start"></script>
+<script src="logik.js?v=20261128-start"></script>
+<script src="musik.js?v=20261128-start"></script>
+<script src="spiel.js?v=20261128-start"></script>
+<script type="module" src="render.js?v=20261128-start"></script>
+</body></html>

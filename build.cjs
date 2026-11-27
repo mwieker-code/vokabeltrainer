@@ -7,7 +7,7 @@ fs.mkdirSync(out,{recursive:true});
 for(const item of ['index.html','manifest.webmanifest','fassung.json','sw.js','year8','year5','year7','year6','year9','year10','oberstufe','bili','all','assets','probe']){
  fs.cpSync(path.join(root,item),path.join(out,item),{recursive:true});
 }
-for(const dir of ['', 'year8','year5','year7','year6','year9','year10','oberstufe','oberstufe/analysis','bili/history','bili/geography','all','all/analysis','year9/discussion','year6/grammar','year6/grammar/simple-past','year6/grammar/irregular-verbs','year6/grammar/comparison','year6/climb','year6/sled','year6/schule','year6/shop','year6/games','year9/games','year9/sled','year9/climb','bili/history/games','bili/history/sled','bili/history/climb','year6/kick','year9/kick','bili/history/kick']){
+for(const dir of ['', 'year8','year5','year7','year6','year9','year10','oberstufe','oberstufe/analysis','bili/history','bili/geography','all','all/analysis','year9/discussion','year6/grammar','year6/grammar/simple-past','year6/grammar/irregular-verbs','year6/grammar/comparison','year6/climb','year6/sled','year6/schule','year6/shop','year6/stadt','year6/games','year9/games','year9/sled','year9/climb','bili/history/games','bili/history/sled','bili/history/climb','year6/kick','year9/kick','bili/history/kick']){
  const html=fs.readFileSync(path.join(out,dir,'index.html'),'utf8');
  for(const match of html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g))new vm.Script(match[1]);
  for(const match of html.replace(/<script[\s\S]*?<\/script>/g,'').matchAll(/(?:href|src)="([^"#]+)"/g)){
@@ -36,3 +36,5 @@ for(const f of ['karte.js','logik.js','spiel.js'])new vm.Script(fs.readFileSync(
 for(const f of ['render.js','vendor/three.module.min.js'])if(!fs.existsSync(path.join(out,'year6/schule',f)))throw new Error('Missing '+f);
 for(const f of ['daten.js','bild.js','logik.js','musik.js','spiel.js'])new vm.Script(fs.readFileSync(path.join(out,'year6/shop',f),'utf8'));
 if(!/from '\.\.\/schule\/vendor\/three\.module\.min\.js'/.test(fs.readFileSync(path.join(out,'year6/shop/render.js'),'utf8')))throw new Error('Shopping Trip: three.js-Pfad');
+for(const f of ['daten.js','bild.js','logik.js','musik.js','spiel.js'])new vm.Script(fs.readFileSync(path.join(out,'year6/stadt',f),'utf8'));
+if(!/from '\.\.\/schule\/vendor\/three\.module\.min\.js'/.test(fs.readFileSync(path.join(out,'year6/stadt/render.js'),'utf8')))throw new Error('Town Race: three.js-Pfad');
