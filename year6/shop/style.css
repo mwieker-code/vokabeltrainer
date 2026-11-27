@@ -241,6 +241,8 @@ ul.steuerung li{margin:3px 0}
 @keyframes hoch2{from{transform:translateY(20px);opacity:0}}
 .a-runde{margin:0;color:var(--grau);font-weight:700;text-transform:uppercase;letter-spacing:.08em;font-size:14px}
 .a-team{margin:4px 0 6px;font:800 40px/1.1 "Bricolage Grotesque",Inter,sans-serif}
+.a-team.t0{color:var(--tomate)}.a-team.t1{color:#1F78B4}
+.a-nur{margin:-2px 0 8px;font-weight:700;color:var(--grau)}
 .a-auftrag{font:800 clamp(26px,5vw,40px)/1.2 "Bricolage Grotesque",Inter,sans-serif;margin:8px 0 16px;color:var(--wald)}
 .a-de{font-size:18px;font-weight:600;color:var(--grau)}
 .a-gut{font:800 34px/1.2 "Bricolage Grotesque",Inter,sans-serif;color:var(--gruen);margin:6px 0}

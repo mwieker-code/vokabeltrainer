@@ -277,6 +277,9 @@ ok(!S.splitNehmen(1)&&G.sperre[1]>0&&!d.getElementById('halb1').hidden,'falsche 
 vor(G.p,ziel);S.update(0.01,ohne);
 ok(S.splitNehmen(0)&&DS.aktiv===0&&DS.teams[0].punkte>=100&&DS.teams[1].punkte===0,'richtige Ware: Punkte fuer Team 1');
 ok(DS.phase==='bonus'&&/Team Red/.test(d.getElementById('ansage').textContent),'Bonusfrage fuer das Siegerteam');
+{const vorher=DS.teams[0].punkte;tick();for(let i=0;i<3;i++){druck(1,K_.RUNTER);druck(1,K_.A);}
+ok(DS.phase==='bonus'&&DS.teams[0].punkte===vorher&&/Only Team Red can answer/.test(d.getElementById('ansage').textContent),'Bonusfrage: der Controller des anderen Teams kann nicht antworten');}
+druck(0,K_.A);ok(DS.phase==='ergebnis','Bonusfrage: das Siegerteam antwortet mit seinem Controller');
 anzahl=0;tick();S.padQuelle(()=>[]);
 
 /* ---------- Kundschaft, Einrichtung, Musik ---------- */

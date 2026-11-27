@@ -625,7 +625,7 @@ function duellBonus(){
  const D=G.duell,box=$('ansage');D.phase='bonus';
  const K=DAT.KASSE,arten=['gruss','tuete','frage','bon','tschuess'],art=arten[Math.floor(D.rnd()*arten.length)],v=K[art][Math.floor(D.rnd()*K[art].length)];
  const opt=L.mischen(v.ant,D.rnd);D.bonus={richtig:v.ant[0],warum:v.warum};
- if(box){box.innerHTML='<div class="a-karte">'+(D.split?'<p class="a-team">'+esc(D.teams[D.aktiv].name)+'</p>':'')+'<p class="a-gut">✔ Right! +'+D.letzte.punkte+'</p>'
+ if(box){box.innerHTML='<div class="a-karte">'+(D.split?'<p class="a-team t'+D.aktiv+'">'+esc(D.teams[D.aktiv].name)+'</p><p class="a-nur">🎮 Only '+esc(D.teams[D.aktiv].name)+' can answer.</p>':'')+'<p class="a-gut">✔ Right! +'+D.letzte.punkte+'</p>'
   +(D.typ==='kunde'?'<p lang="en">'+D.ziel.wer+' „Thank you! '+esc(L.gross(welt.byId[D.letzte.id].en))+' is perfect.“</p>':'')
   +'<p class="a-runde">Bonus question: +50</p>'
   +(art==='frage'?'<p class="a-de">'+esc(v.de)+'</p>':'<p class="a-auftrag" lang="en">„'+esc(v.sagt)+'“</p><p class="a-de">What do you say?</p>')
@@ -738,8 +738,11 @@ function padAnzeige(n){
 function padTick(){
  const P=padLesen();padAnzeige(P.length);
  if(!P.length)return;
- const S=padSumme(P),neu=S.neu,b=padBereich();
- if(neu.size)musik('wecken');
+ const S=padSumme(P),b=padBereich();
+ if(S.neu.size)musik('wecken');
+ /* Bonusfrage im Splitscreen: nur der Controller des Teams, das die Ware gefunden hat */
+ const D0=G.duell,nurTeam=G.split&&D0&&D0.phase==='bonus'&&b&&b.id==='ansage'?P[D0.aktiv]:null;
+ const neu=nurTeam?nurTeam.neu:S.neu;
  if(b!==PAD.bereich){PAD.bereich=b;padFokus(b&&b.id!=='menu'&&b.id!=='over'||b&&neu.size?padStandard(b):null);if(b)return;}
  if(b){
   const z=padZiele(b);
