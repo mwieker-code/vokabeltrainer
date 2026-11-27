@@ -57,6 +57,9 @@ document.querySelector('[data-stand="kick"]').textContent=text(besterWert(kick&&
 /* Shopping Trip (nur Year 6): Sterne statt Punkte */
 const shopStand=document.querySelector('[data-stand="shop"]');
 if(shopStand){const sh=lies(Q.schluessel+':shop:v1'),b=Math.max(0,...Object.values((sh&&sh.best)||{}).map(Number));shopStand.textContent=b?'Bestwert '+'★'.repeat(b)+'☆'.repeat(3-b)+' · '+(sh.einkaeufe||0)+'× eingekauft':'Noch nicht gespielt';}
+/* Town Race (nur Year 6): Bestzeit */
+const stadtStand=document.querySelector('[data-stand="stadt"]');
+if(stadtStand){const st=lies(Q.schluessel+':stadt:v1'),z=Object.values((st&&st.best)||{}).map(Number).filter(x=>x>0);stadtStand.textContent=z.length?'Bestzeit '+Math.floor(Math.min(...z)/60)+':'+String((Math.min(...z)%60).toFixed(1)).padStart(4,'0')+' · '+(st.rennen||0)+'× gefahren':'Noch nicht gespielt';}
 const F=window.Figuren;
 function bild(cv,art){
  const g=cv.getContext&&cv.getContext('2d');if(!g)return;const W=cv.width,H=cv.height;
@@ -97,7 +100,7 @@ function bild(cv,art){
   if(F)F.kindKlettern(g,325,150,2,{reach:0.4,mood:'happy',lh:{x:-12,y:-28},rh:{x:22,y:0}});
  }
 }
-document.querySelectorAll('[data-bild]').forEach(cv=>{try{if(cv.dataset.bild==='shop'){if(window.ShopBild)window.ShopBild(cv);}else bild(cv,cv.dataset.bild);}catch(e){}});
+document.querySelectorAll('[data-bild]').forEach(cv=>{try{if(cv.dataset.bild==='shop'){if(window.ShopBild)window.ShopBild(cv);}else if(cv.dataset.bild==='stadt'){if(window.StadtBild)window.StadtBild(cv);}else bild(cv,cv.dataset.bild);}catch(e){}});
 })();
 </script>
 </body></html>

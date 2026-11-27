@@ -1,0 +1,160 @@
+/* Town Race: eigenes Design, unabhaengig von Hell und Nacht der App. */
+:root{--nacht:#14213D;--nacht2:#1C2E52;--gelb:#FFC845;--rot:#E9573F;--blau:#1F78B4;--gruen:#2E9E4F;--papier:#FFF9EE;--ink:#1D2A33;--grau:#5B6670;--hell:#D6DEEA;--team:#E9573F}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--nacht);color:var(--papier);font:17px/1.5 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-text-size-adjust:100%}
+body{background:radial-gradient(120% 60% at 50% 0%,#2B4A7E 0%,#1C2E52 45%,var(--nacht) 100%) fixed}
+body.im-spiel{overflow:hidden;overscroll-behavior:none}
+button{font:inherit;cursor:pointer;color:inherit}
+input,select{font:inherit}
+:focus-visible{outline:3px solid var(--gelb);outline-offset:3px}
+h1,h2,h3,.marke,.m-name{font-family:"Bricolage Grotesque",Inter,system-ui,sans-serif}
+main.stadt{max-width:760px;margin:0 auto;padding:12px 16px 28px}
+[hidden]{display:none!important}
+
+/* ---------- Menue ---------- */
+#menu>header,#over>header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:12px}
+#menu>header a{color:var(--nacht);background:var(--gelb);text-decoration:none;font-weight:700;padding:8px 16px;border-radius:999px;font-size:15px}
+#menu>header span,#over>header span{font:600 11px/1 "JetBrains Mono",ui-monospace,Menlo,monospace;letter-spacing:.14em;color:var(--hell)}
+.held{position:relative;border-radius:26px;overflow:hidden;box-shadow:0 18px 40px rgba(0,0,0,.35);background:#5FA8D8}
+.held canvas{display:block;width:100%;height:auto;aspect-ratio:960/420}
+.held-text{padding:16px 20px 20px;background:var(--papier);color:var(--ink)}
+.marke{margin:0;font-weight:800;color:var(--rot);letter-spacing:.02em;font-size:15px;text-transform:uppercase}
+h1{font-size:clamp(34px,7vw,50px);line-height:1;letter-spacing:-.03em;margin:4px 0 8px}
+h1[tabindex="-1"]:focus{outline:none}
+.lead{margin:0;color:#3C4A54;font-size:17px}
+h2{font-size:22px;margin:26px 0 10px;letter-spacing:-.01em}
+.modi{display:grid;gap:10px;grid-template-columns:1fr}
+@media (min-width:620px){.modi{grid-template-columns:1fr 1fr}}
+.modi button{display:flex;gap:14px;align-items:center;text-align:left;padding:14px 16px;border-radius:20px;border:0;background:var(--papier);color:var(--ink);
+ box-shadow:0 6px 0 rgba(0,0,0,.22);transition:transform .12s ease,box-shadow .12s ease;min-height:84px;position:relative;overflow:hidden}
+.modi button::after{content:"";position:absolute;left:0;top:0;bottom:0;width:7px;background:var(--f,var(--rot))}
+.modi button:hover{transform:translateY(-2px);box-shadow:0 8px 0 rgba(0,0,0,.22)}
+.modi button:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.22)}
+.m-rennen{--f:var(--rot)}.m-frei{--f:var(--blau)}
+.m-icon{font-size:34px;width:56px;height:56px;flex:none;display:grid;place-items:center;border-radius:16px;background:color-mix(in srgb,var(--f) 22%,#fff)}
+.m-text{display:flex;flex-direction:column;gap:2px}
+.m-name{font-weight:800;font-size:20px;line-height:1.15}
+.m-info{font-size:14px;color:#4B5862;line-height:1.35}
+.m-best{font-size:13px;color:#B7791F;font-weight:800}
+.m-best:empty{display:none}
+.einstellungen{display:grid;gap:10px;grid-template-columns:1fr}
+@media (min-width:620px){.einstellungen{grid-template-columns:1fr 1fr}}
+fieldset{margin:0;border:1px solid rgba(255,255,255,.16);border-radius:18px;padding:10px 14px 12px;background:rgba(255,255,255,.05)}
+legend{font-weight:800;padding:0 6px;color:var(--gelb);font-size:14px;text-transform:uppercase;letter-spacing:.06em}
+fieldset label{display:block;margin:7px 0;font-size:15px;padding-left:30px;text-indent:-30px}
+fieldset label input{vertical-align:middle;margin:0 8px 0 0;text-indent:0}
+fieldset input[type=radio],fieldset input[type=checkbox]{width:20px;height:20px;accent-color:var(--gelb);flex:none}
+fieldset input[type=text]{border:1px solid rgba(255,255,255,.3);background:rgba(0,0,0,.2);color:var(--papier);border-radius:10px;padding:6px 10px;min-height:38px}
+.teams{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.teams label{display:flex;flex-direction:column;gap:2px;margin:0;padding:0;text-indent:0}
+.teams input{width:100%}
+ul.steuerung{margin:0;padding:12px 16px 12px 34px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:18px;font-size:15px}
+ul.steuerung li{margin:3px 0}
+.pad-status{margin:0 0 8px;font-size:14px;color:var(--hell);background:rgba(255,255,255,.06);border:1px dashed rgba(255,255,255,.2);border-radius:14px;padding:8px 12px}
+.pad-status.an{color:var(--nacht);background:var(--gelb);border-style:solid;font-weight:700}
+.pad-fokus{outline:4px solid var(--gelb)!important;outline-offset:3px!important;box-shadow:0 0 0 8px rgba(255,200,69,.35)!important}
+.lehrkraft{margin-top:12px;background:var(--papier);color:var(--ink);border-radius:18px;padding:12px 16px}
+.lehrkraft summary{font-weight:800;cursor:pointer}
+.lehrkraft ul{padding-left:20px;margin:8px 0 2px;font-size:15px}
+.lehrkraft li{margin:6px 0}
+
+/* ---------- Spiel ---------- */
+#stage{position:fixed;inset:0;z-index:5;background:#DCEBF2;touch-action:none;user-select:none;-webkit-user-select:none;color:var(--ink);overflow:hidden}
+#welt{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+.halb{position:absolute;top:0;bottom:0;left:0;width:100%;pointer-events:none}
+body.split .halb{width:50%}
+body.split #halb1{left:50%}
+body.split #halb0{border-right:3px solid #111}
+.halb>*{pointer-events:auto}
+/* Anweisung des Navigators */
+.karte{position:absolute;left:50%;top:max(12px,env(safe-area-inset-top));transform:translateX(-50%);width:min(620px,calc(100% - 140px));background:var(--papier);color:var(--ink);border-radius:18px;
+ box-shadow:0 10px 26px rgba(0,0,0,.28);padding:10px 64px 12px 16px;border-left:8px solid var(--team)}
+body.split .karte{width:calc(100% - 24px);top:max(64px,env(safe-area-inset-top))}
+.k-kopf{display:block}
+.k-team{display:block;font-weight:800;font-size:14px;color:var(--team);text-transform:uppercase;letter-spacing:.05em}
+.k-team:empty{display:none}
+.k-hoer{position:absolute;right:10px;top:50%;transform:translateY(-50%);border:0;background:var(--gelb);border-radius:12px;width:46px;height:46px;font-size:22px}
+.k-text{margin:0;font:800 clamp(20px,2.6vw,30px)/1.22 "Bricolage Grotesque",Inter,sans-serif}
+body.split .k-text{font-size:clamp(17px,2vw,24px)}
+.karte.neu{animation:neu .6s ease}
+.karte.spricht .k-hoer{animation:puls .8s ease infinite}
+.karte.wende{background:#FFE7E0}
+@keyframes neu{0%{transform:translateX(-50%) scale(1.06);box-shadow:0 0 0 8px rgba(255,200,69,.7)}100%{transform:translateX(-50%) scale(1)}}
+@keyframes puls{50%{transform:translateY(-50%) scale(1.12)}}
+.status{position:absolute;left:12px;bottom:max(14px,env(safe-area-inset-bottom));display:flex;gap:8px;font-weight:800}
+.status span{background:rgba(20,33,61,.86);color:#fff;border-radius:12px;padding:6px 12px;font-size:20px;font-variant-numeric:tabular-nums}
+.status .s-fehler{color:#FFB4A6}
+.status .s-turbo{color:var(--gelb);letter-spacing:2px}
+.status .s-turbo.leer{opacity:.55}
+body.beruehrung .status{bottom:calc(max(14px,env(safe-area-inset-bottom)) + 92px)}
+body.beruehrung.tafel .status{bottom:calc(max(14px,env(safe-area-inset-bottom)) + 120px)}
+body.split.beruehrung .status{bottom:calc(max(14px,env(safe-area-inset-bottom)) + 78px)}
+.meldung{position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);margin:0;padding:12px 22px;border-radius:999px;font:800 26px/1.1 "Bricolage Grotesque",Inter,sans-serif;background:rgba(20,33,61,.9);color:#fff;white-space:nowrap;max-width:94%;text-align:center;white-space:normal;pointer-events:none}
+.meldung.gut{background:var(--gruen)}
+.meldung.schlecht{background:var(--rot)}
+.meldung.info{background:#7A5300}
+.ziel-banner{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--papier);border-radius:24px;padding:18px 28px;text-align:center;box-shadow:0 18px 40px rgba(0,0,0,.35);border:6px solid var(--team)}
+.ziel-banner b{display:block;font:800 34px/1.1 "Bricolage Grotesque",Inter,sans-serif}
+.ziel-banner span{font:800 26px/1.4 Inter,sans-serif;font-variant-numeric:tabular-nums}
+#countdown{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);font:900 140px/1 "Bricolage Grotesque",Inter,sans-serif;color:#fff;text-shadow:0 8px 0 rgba(0,0,0,.35),0 0 30px rgba(0,0,0,.4);pointer-events:none}
+#countdown.go{color:var(--gelb)}
+.oben-rechts{position:absolute;right:10px;top:max(10px,env(safe-area-inset-top));display:flex;gap:8px;z-index:6}
+.pause-icon{display:inline-block;width:16px;height:18px;border-left:5px solid #fff;border-right:5px solid #fff;vertical-align:middle}
+.rund{width:48px;height:48px;border-radius:14px;border:0;background:rgba(20,33,61,.88);color:#fff;font-weight:800;font-size:20px;box-shadow:0 4px 12px rgba(0,0,0,.25)}
+body.split .oben-rechts{right:50%;transform:translateX(50%)}
+#tonAus{position:absolute;left:50%;bottom:90px;transform:translateX(-50%);z-index:8;border:0;border-radius:999px;padding:10px 18px;background:var(--rot);color:#fff;font-weight:800;font-size:16px;box-shadow:0 6px 18px rgba(0,0,0,.3)}
+.laden{position:absolute;inset:0;display:grid;place-items:center;font:800 24px "Bricolage Grotesque",Inter,sans-serif;color:var(--nacht);background:#DCEBF2}
+/* Touch-Knoepfe */
+.touch{position:absolute;bottom:max(14px,env(safe-area-inset-bottom));display:none;gap:10px}
+body.beruehrung .touch{display:flex}
+.touch.links{left:12px}.touch.rechts{right:12px}
+.touch button{width:78px;height:78px;border-radius:22px;border:0;background:rgba(20,33,61,.78);color:#fff;font-size:30px;box-shadow:0 6px 0 rgba(0,0,0,.3);touch-action:none}
+.touch button.an{transform:translateY(3px);background:var(--team)}
+.touch .t-gas{background:rgba(46,158,79,.85)}.touch .t-turbo{background:rgba(122,83,0,.85)}
+body.tafel .touch button{width:104px;height:104px;font-size:40px}
+body.split .touch button{width:64px;height:64px;font-size:26px}
+body.split.tafel .touch button{width:86px;height:86px}
+body.split .status{left:8px}
+/* Freie Fahrt */
+.frei-hud{position:absolute;right:10px;bottom:max(14px,env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:flex-end;gap:6px;pointer-events:none}
+#freiOrt{margin:0;background:rgba(20,33,61,.88);color:#fff;font-weight:800;border-radius:12px;padding:6px 12px;font-size:17px}
+#mini{width:220px;height:180px;border-radius:14px;border:3px solid #fff;box-shadow:0 6px 16px rgba(0,0,0,.3)}
+body.beruehrung .frei-hud{bottom:auto;top:calc(max(10px,env(safe-area-inset-top)) + 62px)}
+/* Dialoge */
+.dialog{position:absolute;inset:0;background:rgba(10,16,30,.55);display:grid;place-items:center;z-index:9;padding:16px}
+.d-karte{background:var(--papier);color:var(--ink);border-radius:24px;padding:18px 20px;display:flex;flex-direction:column;gap:10px;min-width:min(340px,100%);max-height:calc(100dvh - 32px);overflow:auto}
+.d-karte h2{margin:0 0 6px}
+.d-karte button{border:0;border-radius:14px;padding:12px 16px;background:#E6E9EE;font-weight:800;font-size:17px}
+button.primaer{background:var(--gelb);color:var(--nacht)}
+button.gross{font-size:20px;padding:14px 20px}
+#woerterListe{border-collapse:collapse;font-size:16px}
+#woerterListe td{padding:6px 10px;border-bottom:1px solid #E2DED5;vertical-align:top}
+#woerterListe td:first-child{font-weight:700}
+.gross-karte{max-width:min(920px,100%)}
+#karteBild{width:100%;height:auto;border-radius:12px}
+/* ---------- Ergebnis ---------- */
+#over{padding-top:8px}
+.e-raster{display:grid;gap:10px;grid-template-columns:1fr}
+body.zwei .e-raster{grid-template-columns:1fr 1fr}
+.e-karte{background:var(--papier);color:var(--ink);border-radius:20px;padding:12px 16px;border-top:8px solid var(--team)}
+.e-karte p{margin:2px 0}
+.e-name{font:800 22px/1.2 "Bricolage Grotesque",Inter,sans-serif}
+.e-sterne{font-size:34px;color:#F2A900;letter-spacing:3px}
+.e-zeit{font:800 30px/1.2 Inter,sans-serif;font-variant-numeric:tabular-nums}
+.e-ziel{color:var(--hell)}
+#ergebnisKarte{display:block;width:100%;height:auto;border-radius:18px;margin:8px 0 4px;box-shadow:0 12px 28px rgba(0,0,0,.3)}
+.legende{display:flex;gap:16px;flex-wrap:wrap;font-size:14px;font-weight:700;margin:0 0 10px}
+.l-plan{color:var(--gelb)}.l-0{color:var(--rot)}.l-1{color:#5FB0F0}
+body:not(.zwei) .l-1{display:none}
+#protokoll{display:grid;gap:10px;grid-template-columns:1fr}
+body.zwei #protokoll{grid-template-columns:1fr 1fr}
+.p-spalte{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:10px 14px;border-left:6px solid var(--team)}
+.p-spalte h3{margin:0 0 6px;font-size:18px}
+.p-spalte ol{margin:0;padding-left:20px;font-size:15px}
+.p-spalte li{margin:4px 0}
+.p-spalte li.nein{color:#FFB4A6}
+.over-knoepfe{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.over-knoepfe button{border:0;border-radius:14px;padding:12px 18px;background:rgba(255,255,255,.12);color:#fff;font-weight:800;font-size:17px}
+.over-knoepfe button.primaer{background:var(--gelb);color:var(--nacht)}
+@media (max-width:500px){.touch button{width:62px;height:62px;font-size:24px}.touch{gap:8px}.touch.links{left:8px}.touch.rechts{right:8px}}
+@media (max-width:620px){body.zwei .e-raster,body.zwei #protokoll{grid-template-columns:1fr}.karte{width:calc(100% - 24px);top:calc(max(10px,env(safe-area-inset-top)) + 54px)}}
